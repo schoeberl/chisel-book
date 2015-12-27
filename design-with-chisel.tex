@@ -1,0 +1,102 @@
+\documentclass[a4paper,twocolumn]{article}
+%\documentclass[10pt, conference, compsocconf]{IEEEtran}
+%\documentclass[a4paper, conference]{IEEEtran}
+
+
+\usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
+\usepackage[colorlinks=false,bookmarks=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{cite}
+%\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
+
+\newcommand{\code}[1]{{\small{\texttt{#1}}}}
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage{listings}
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% uncomment following for final submission
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
+%\renewcommand{\author2}[1]{}
+
+\begin{document}
+
+\title{Hardware Design with Chisel}
+
+\author{Martin and maybe Jonatan}
+
+% Most conferences have their own commands for author headings.
+
+%\author{\IEEEauthorblockN{Edgar Lakis, Martin Schoeberl}\\
+%\IEEEauthorblockA{Department of Applied Mathematics and Computer Science\\
+%Technical University of Denmark\\
+%Email: \texttt{edgar.lakis@gmail.com}, \texttt{masca@imm.dtu.dk}}
+%}
+
+
+\maketitle \thispagestyle{empty}
+
+\begin{abstract}
+A good paper has a short, concise abstract. The abstract
+states the field of the research, the purpose, and the findings (results).
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:intro}
+
+\todo{A brief introduction what the paper is about. It shall include briefly the
+main contributions and findings. The contributions can be bullet listed.}
+
+This paper... \todo{purpose statement, latest in 4th paragraph}
+
+\todo{Test the bib with a reference that gives background on time-predictable
+computer architecture~\cite{tpca:jes}.}
+
+
+\begin{figure}
+  \centering
+  \includegraphics{figures/broken-mux}
+
+  \caption{A figure.}
+  \label{fig:mux}
+\end{figure}
+
+A paper is cited \cite{paper:example}.
+
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\todo{Rephrase what this paper is about and list the main contributions and results.}
+
+\subsection*{Acknowledgment}
+
+\todo{Sometimes we received some help. Sometimes external funding.}
+
+
+
+\subsection*{Source Access}
+
+\martin{I love doing papers with available source under an
+open-source license. It gives credit and good karma.}
+
+\bibliographystyle{plain}
+% Please do not add any references to msbib.bib.
+% They get lost when I 'generate' is again (see Makefile)
+\bibliography{chisel,msbib}
+
+\end{document}
