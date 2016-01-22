@@ -1,10 +1,10 @@
-\documentclass[a4paper,twocolumn]{article}
+\documentclass[a4paper]{article}
 %\documentclass[10pt, conference, compsocconf]{IEEEtran}
 %\documentclass[a4paper, conference]{IEEEtran}
 
 
 \usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
-\usepackage[colorlinks=false,bookmarks=false]{hyperref}
+\usepackage[colorlinks=true,bookmarks=false]{hyperref}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -21,6 +21,74 @@
 % \usepackage[T1]{fontenc} % needed as well?
 
 \usepackage{listings}
+
+\hypersetup{
+  linkcolor  = black,
+%  citecolor  = blue,
+  urlcolor   = blue,
+  colorlinks = true,
+}
+
+% not really used
+\newenvironment{comment}
+{ \vspace{-0.1in}
+  \begin{quotation}
+  \noindent
+  \small \em
+  \rule{\linewidth}{0.5pt}\\
+}
+{
+  \\
+  \rule{\linewidth}{0.5pt}
+  \end{quotation}
+}
+
+\lstdefinelanguage{chisel}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+% Default settings for code listings
+\lstset{frame=lines,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=fixed, % basewidth=\mybasewidth,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\footnotesize\color{gray},
+  % identifierstyle=\color{red},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+%  procnamekeys={def, val, var, class, trait, object, extends},
+%  procnamestyle=\ttfamily\color{red},
+  tabsize=2
+}
+
+\lstnewenvironment{chisel}[1][]
+{\lstset{language=chisel,#1}}
+{}
 
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
@@ -49,8 +117,11 @@
 \maketitle \thispagestyle{empty}
 
 \begin{abstract}
-A good paper has a short, concise abstract. The abstract
-states the field of the research, the purpose, and the findings (results).
+This paper (book) is an introduction into hardware design with the focus
+on using the hardware construction language
+\href{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
+is to present small to medium sized typical hardware components.
+We will walk through these examples in detail.
 \end{abstract}
 
 
@@ -84,6 +155,56 @@ computer architecture~\cite{tpca:jes}.}
 
 A paper is cited \cite{paper:example}.
 
+\section{Components}
+
+\subsection{FIFO Buffer}
+
+To decouple a write (sender) and a reader (receiver) some form
+of buffering between the writer and the reader is inserted.
+A common buffer is a first-in, first-out
+(\href{https://en.wikipedia.org/wiki/FIFO_%28computing_and_electronics%29}{FIFO})
+buffer. Figure~\ref{fig:fifo} shows a writer, the FIFO, and a reader.
+Data is put into the FIFO by the writer on \code{din} with an active
+\code{write} signal. Data is read from the the FIFO by the reader on
+\code{dout} with an active \code{read} signal.
+
+\begin{figure}
+  \centering
+  \includegraphics{figures/fifo}
+
+  \caption{A writer, a FIFO buffer, and a reader.}
+  \label{fig:fifo}
+\end{figure}
+
+A FIFO is initially empty, singled by the \code{empty} signal. Reading
+from an empty FIFO is usually undefined. When data is written and never
+read a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
+and the data lost. In other words, the signals \code{empty} and \code{full}
+serve as handshake signals 
+
+Several different implementations of a FIFO are possible: E.g., using on-chip
+memory and read and write pointers or simply a chain of registers with a
+tiny state machine. For small buffers (up to tens of elements) a FIFO organized
+with individual registers connected into a chain of buffers is a simple and efficient
+implementation.
+
+We start by defining the IO signals for the writer and the reader. The size of
+the data is configurable with \code{size}.
+
+\begin{chisel}
+class WriterIO(size: Int) extends Bundle {
+  val din = UInt(INPUT, size)
+  val write = Bool(INPUT)
+  val full = Bool(OUTPUT)
+}
+
+class ReaderIO(size: Int) extends Bundle {
+  val dout = UInt(OUTPUT, size)
+  val read = Bool(INPUT)
+  val empty = Bool(OUTPUT)
+}
+\end{chisel}
+
 
 
 \section{Conclusion}
@@ -99,8 +220,9 @@ A paper is cited \cite{paper:example}.
 
 \subsection*{Source Access}
 
-\martin{I love doing papers with available source under an
-open-source license. It gives credit and good karma.}
+All code examples are available in open source from:
+
+\url{https://github.com/schoeberl/chisel-examples}
 
 \bibliographystyle{plain}
 % Please do not add any references to msbib.bib.
