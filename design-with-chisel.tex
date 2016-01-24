@@ -145,11 +145,25 @@ computer architecture~\cite{tpca:jes}.}
   \label{fig:mux}
 \end{figure}
 
+\section{Basic Components}
+
+In this section we introduce the base components for digital design.
+These basic elements can be combined to build larger, interesting
+circuits.
+
+\subsection{Multiplexor}
+
+A multiplexor is a circuit that selects between alternatives. In the most
+basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
+such a 2:1 multiplexer, or mux for short. Depending on the value of the
+select signal (\code{sel}) signal \code{y} will represent signal \code{a} or
+signale \code{b}.
+
 \begin{figure}
   \centering
   \includegraphics{figures/mux}
 
-  \caption{A figure from graffle.}
+  \caption{A basic 2:1 multiplexor.}
   \label{fig:mux}
 \end{figure}
 
