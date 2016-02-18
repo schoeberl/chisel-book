@@ -101,9 +101,9 @@
 
 \begin{document}
 
-\title{Hardware Design with Chisel}
+\title{Digital System Design with Chisel}
 
-\author{Martin and maybe Jonatan}
+\author{Martin Schoeberl}
 
 % Most conferences have their own commands for author headings.
 
@@ -117,7 +117,7 @@
 \maketitle \thispagestyle{empty}
 
 \begin{abstract}
-This paper (book) is an introduction into hardware design with the focus
+This lecture notes (to become a book) is an introduction into hardware design with the focus
 on using the hardware construction language
 \href{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
 is to present small to medium sized typical hardware components.
@@ -141,14 +141,14 @@ computer architecture~\cite{tpca:jes}.}
   \centering
   \includegraphics{figures/broken-mux}
 
-  \caption{An inkscape figure.}
+  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
   \label{fig:mux}
 \end{figure}
 
 \section{Basic Components}
 
 In this section we introduce the base components for digital design.
-These basic elements can be combined to build larger, interesting
+These basic elements can be combined to build larger, more interesting
 circuits.
 
 \subsection{Multiplexor}
@@ -168,6 +168,51 @@ signale \code{b}.
 \end{figure}
 
 A paper is cited \cite{paper:example}.
+
+\subsection{Counting}
+
+Counting is a very basic operation in digital systems. On might count events.
+However, more often counting is used to define a time interval. Counting the
+clock cycles an triggering an action when the time interval has expired.
+
+A simple approach is counting up to a value. However, in computer science,
+and in digital design, counting starts at 0. Therefore, if we want to count till
+10 we count from 0 to 9. The following code shows such a counter that counts
+till 9 and wraps around to 0 when reaching 9.
+
+If we want to count N, we start with 0 and count till N-1.
+
+\todo{counter code}
+
+
+
+This is straight forward. However, one might ask if this is the most efficient
+implementation of counting. The comparison agains an end value, 10 in our
+example, involves some combinational circuit in an ASIC. More efficient in an
+ASIC (and as well in loops of programs) is counting down and exit when 0
+is reached.
+
+If we want to count N, we start with N-1 and count till 0.
+
+\todo{down counting code}
+
+With a comparison against 0 we need only a NOR gat to detect the 0 condition.
+This optimization is valid for an ASIC, but not for an FPGA based on LUTs.
+With comparison using LUTs there is no difference comparing against a '0' or
+'1' bit. In that case use the better readable counting logic towards the end value.
+
+However, there is still one more trick a clever hardware designer can pull off.
+Counting up or down needed a comparison agains all counting bis, so far.
+What about counting down \emph{one to many}? In that case the counter
+becomes negative. Detecting a negative value is simply comparing the
+most significant bit against 'a'.
+
+If we want to count N, we start with N-2 and count till -1.
+
+\todo{Show optimized down counting code.}
+
+
+\todo{discuss >= and so on}
 
 \section{Components}
 
