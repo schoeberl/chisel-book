@@ -130,7 +130,7 @@ We will walk through these examples in detail.
 \label{sec:intro}
 
 This book is an introduction to digital system design using a modern hardware
-construction language, Chisel.
+construction language, Chisel~\cite{chisel:dac2012}.
 
 Hardware is now commonly described with a hardware design language (HDL).
 The time of drawing hardware components, even with CAD tools, is definitely
@@ -151,6 +151,8 @@ Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
 
 \todo{Describe sbt installation -- or at least have pointer to it.}
+
+\todo{Mention Quartus and Xilinx Vivado as FPGA tools.}
 
 \subsection{Hello World}
 
@@ -206,6 +208,14 @@ class Hello extends Module {
 
 \end{chisel}
 
+It is not important that you understand the details of this code example.
+We will cover those in the following chapters. Just note that the circuit is
+usually clocked with a high frequency, e.g., 20 MHz, and we need a counter
+to derive timing in the Hz range to achieve a visible blinking. In the above
+example we count up to about 10000000 and then toggle the blinking signal
+(\code{blkReg := ~blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
+
+
 
 \begin{figure}
   \centering
@@ -237,7 +247,6 @@ signale \code{b}.
   \label{fig:mux}
 \end{figure}
 
-A paper is cited \cite{paper:example}.
 
 \subsection{Counting}
 
@@ -356,6 +365,6 @@ All code examples are available in open source from:
 \bibliographystyle{plain}
 % Please do not add any references to msbib.bib.
 % They get lost when I 'generate' is again (see Makefile)
-\bibliography{chisel,msbib}
+\bibliography{chisel}
 
 \end{document}
