@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title{Digital System Design with Chisel}
+\title{Digital (System) Design with Chisel}
 
 \author{Martin Schoeberl}
 
@@ -117,10 +117,11 @@
 \maketitle \thispagestyle{empty}
 
 \begin{abstract}
-This lecture notes (to become a book) is an introduction into hardware design with the focus
+This lecture notes (to become a book) are an introduction into hardware design with the focus
 on using the hardware construction language
 \href{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
-is to present small to medium sized typical hardware components.
+is to present small to medium sized typical hardware components to explore
+hardware design with Chisel.
 We will walk through these examples in detail.
 \end{abstract}
 
@@ -128,13 +129,82 @@ We will walk through these examples in detail.
 \section{Introduction}
 \label{sec:intro}
 
-\todo{A brief introduction what the paper is about. It shall include briefly the
-main contributions and findings. The contributions can be bullet listed.}
+This book is an introduction to digital system design using a modern hardware
+construction language, Chisel.
 
-This paper... \todo{purpose statement, latest in 4th paragraph}
+Hardware is now commonly described with a hardware design language (HDL).
+The time of drawing hardware components, even with CAD tools, is definitely
+over. Some high level schematics can give an overview of the system, but are
+not intended to describe the system.
 
-\todo{Test the bib with a reference that gives background on time-predictable
-computer architecture~\cite{tpca:jes}.}
+The two most common HDLs are Verilog and VHDL. Both languages are old,
+care a lot of legacy, and have a moving line of what constructions of the language
+are synthesisable to hardware.
+
+Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
+blocks that can be synthesized in an AISC. This is shown at ....
+However, ... more stuff I have access to, helpers on the road?
+
+\subsection{Getting Started with the Tools}
+
+Chisel is a Scala library and the easiest way to install Chisel and Scala is
+with \code{sbt}, the Scala build tool.
+
+\todo{Describe sbt installation -- or at least have pointer to it.}
+
+\subsection{Hello World}
+
+Each book on a programming language shall start with a minimal example,
+called the \emph{Hello World} example. Following code is a first approach:
+
+\begin{chisel}
+TODO: add Scala printf
+\end{chisel}
+
+Compiling and executing this short program with \code{sbt}:
+
+\begin{chisel}
+TODO: sbt command
+\end{chisel}
+
+leads to the expected output of a Hello World program:
+
+\begin{chisel}
+TODO: output
+\end{chisel}
+
+However, is this Chisel? Is this hardware generated to print a string?
+Ho, this is actually plain Scala code and not a representative Hello World
+program for a hardware design.
+
+\subsection{Hardware Hello World}
+
+What is then the equivalent of a Hello World program for a hardware design?
+The minimal useful and visible design? A blinking LED is the hardware (or even
+embedded software) version of Hello World. If a LED blinks, we are ready to
+solve bigger problems.
+
+Following code shows a blinking LED, described in Chisel:
+
+\begin{chisel}
+class Hello extends Module {
+  val io = new Bundle {
+    val led = UInt(OUTPUT, 1)
+  }
+  val CNT_MAX = UInt(20000000 / 2 - 1);
+  
+  val cntReg = Reg(init = UInt(0, 25))
+  val blkReg = Reg(init = UInt(0, 1))
+
+  cntReg := cntReg + UInt(1)
+  when(cntReg === CNT_MAX) {
+    cntReg := UInt(0)
+    blkReg := ~blkReg
+  }
+  io.led := blkReg
+}
+
+\end{chisel}
 
 
 \begin{figure}
@@ -147,7 +217,7 @@ computer architecture~\cite{tpca:jes}.}
 
 \section{Basic Components}
 
-In this section we introduce the base components for digital design.
+In this section we introduce the basic components for digital design.
 These basic elements can be combined to build larger, more interesting
 circuits.
 
@@ -173,7 +243,7 @@ A paper is cited \cite{paper:example}.
 
 Counting is a very basic operation in digital systems. On might count events.
 However, more often counting is used to define a time interval. Counting the
-clock cycles an triggering an action when the time interval has expired.
+clock cycles and triggering an action when the time interval has expired.
 
 A simple approach is counting up to a value. However, in computer science,
 and in digital design, counting starts at 0. Therefore, if we want to count till
