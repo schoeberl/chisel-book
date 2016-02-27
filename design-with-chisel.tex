@@ -66,7 +66,7 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 % Default settings for code listings
-\lstset{frame=lines,
+\lstset{%frame=lines,
   language=scala,
   aboveskip=3mm,
   belowskip=3mm,
@@ -101,7 +101,7 @@
 
 \begin{document}
 
-\title{Digital (System) Design with Chisel}
+\title{Digital Design with Chisel}
 
 \author{Martin Schoeberl}
 
@@ -139,11 +139,10 @@ not intended to describe the system.
 
 The two most common HDLs are Verilog and VHDL. Both languages are old,
 care a lot of legacy, and have a moving line of what constructions of the language
-are synthesisable to hardware.
+are synthesizable to hardware.
 
 Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
-blocks that can be synthesized in an AISC. This is shown at ....
-However, ... more stuff I have access to, helpers on the road?
+blocks that can be synthesized in an AISC.
 
 \subsection{Getting Started with the Tools}
 
@@ -159,32 +158,37 @@ with \code{sbt}, the Scala build tool.
 Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is a first approach:
 
-\begin{chisel}
-TODO: add Scala printf
-\end{chisel}
 
-Compiling and executing this short program with \code{sbt}:
+\lstinputlisting[language=chisel]{src/main/scala/Hello.scala}
+
+
+Compiling and executing this short program with \code{sbt}
 
 \begin{chisel}
-TODO: sbt command
+sbt "run-main Hello"
 \end{chisel}
 
 leads to the expected output of a Hello World program:
 
 \begin{chisel}
-TODO: output
+[info] Running Hello 
+Hello World!
 \end{chisel}
 
 However, is this Chisel? Is this hardware generated to print a string?
-Ho, this is actually plain Scala code and not a representative Hello World
+No, this is actually plain Scala code and not a representative Hello World
 program for a hardware design.
+
+\subsection{Chisel Testing Hello World}
+
+\todo{Show the testing printout like on the GitHub page of Chisel}
 
 \subsection{Hardware Hello World}
 
 What is then the equivalent of a Hello World program for a hardware design?
 The minimal useful and visible design? A blinking LED is the hardware (or even
 embedded software) version of Hello World. If a LED blinks, we are ready to
-solve bigger problems.
+solve bigger problems!
 
 Following code shows a blinking LED, described in Chisel:
 
@@ -212,18 +216,18 @@ It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
 usually clocked with a high frequency, e.g., 20 MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
-example we count up to about 10000000 and then toggle the blinking signal
-(\code{blkReg := ~blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
+example we count from 0 up to 10000000-1 and then toggle the blinking signal
+(\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
 
 
 
-\begin{figure}
-  \centering
-  \includegraphics{figures/broken-mux}
-
-  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
-  \label{fig:mux}
-\end{figure}
+%\begin{figure}
+%  \centering
+%  \includegraphics{figures/broken-mux}
+%
+%  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
+%  \label{fig:mux}
+%\end{figure}
 
 \section{Basic Components}
 
@@ -348,7 +352,6 @@ class ReaderIO(size: Int) extends Bundle {
 \section{Conclusion}
 \label{sec:conclusion}
 
-\todo{Rephrase what this paper is about and list the main contributions and results.}
 
 \subsection*{Acknowledgment}
 
