@@ -1,0 +1,111 @@
+\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
+\usepackage{epsfig,graphicx}
+\usepackage{palatino}
+\usepackage{fancybox}
+\usepackage{relsize}
+\usepackage[procnames]{listings}
+\usepackage{hyperref}
+
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage[procnames]{listings}
+
+\input{../shared/chisel.tex}
+
+\hypersetup{
+  linkcolor  = black,
+%  citecolor  = blue,
+  urlcolor   = blue,
+  colorlinks = true,
+}
+
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% uncomment following for final submission
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
+%\renewcommand{\author2}[1]{}
+
+
+\title{Digital Design in the 21st Century: Chisel}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{DTU Compute}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Goals for this Intro}
+\begin{itemize}
+\item Get an idea what Chisel is
+\item Reconsider how to describe hardware
+\item Some experience report from usage at DTU
+\item Know where to get more information
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Talk abstract}
+
+Date: Tu 19/04/2016, 11:00-12:00
+Room: 170/324
+
+Title: Hardware Design in the 21st Century: with the Object Oriented
+and Functional Language Chisel
+
+Chisel is a hardware construction language implemented as a
+domain specific language in Scala. Therefore, the full power of
+a modern programming language is available to describe hardware
+and, more important, hardware generators. Chisel has been developed
+at UC Berkeley and successfully used for several tape outs of RISC-V.
+Here at DTU we used Chisel in the T-CREST project and in teaching
+advanced computer architecture. Besides presenting small code
+examples in Chisel I will report on experiences on using Chisel in
+the t-CREST project and in teaching.
+
+Martin Schoeberl
+\end{frame}
+
+\begin{frame}{yyy}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hello World in Chisel}
+\begin{chisel}
+class Hello extends Module {
+  val io = new Bundle {
+    val led = UInt(OUTPUT, 1)
+  }
+  val CNT_MAX = UInt(16000000 / 2 - 1);
+  val r1 = Reg(init = UInt(0, 25))
+  val blk = Reg(init = UInt(0, 1))
+
+  r1 := r1 + UInt(1)
+  when(r1 === CNT_MAX) {
+    r1 := UInt(0)
+    blk := ~blk
+  }
+  io.led := blk
+}
+\end{chisel}
+\end{frame}
+
+
+
+\end{document}
