@@ -46,19 +46,33 @@
 \titlepage
 \end{frame}
 
-\begin{frame}{Goals for this Intro}
+\begin{frame}[fragile]{Notes}
 \begin{itemize}
-\item Get an idea what Chisel is
-\item Reconsider how to describe hardware
-\item Some experience report from usage at DTU
-\item Know where to get more information
+\item a Mux for any data type
+\item generation of logic in code, e.g. ROM or binary to BCD instead of Java program
+\item Connectors
+\item Tester (e.g. the counter)
+\item xxx
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Talk abstract}
+
+\begin{frame}[fragile]{Goals for this Intro}
+\begin{itemize}
+\item Get an idea what Chisel is
+\begin{itemize}
+\item Will show you code snippets
+\end{itemize}
+\item Reconsider how to describe hardware
+\item Some experience report from usage at DTU
+\item Pointers to more information
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Talk abstract}
 
 Date: Tu 19/04/2016, 11:00-12:00
-Room: 170/324
+Room: 123/322
 
 Title: Hardware Design in the 21st Century: with the Object Oriented
 and Functional Language Chisel
@@ -76,7 +90,104 @@ the t-CREST project and in teaching.
 Martin Schoeberl
 \end{frame}
 
-\begin{frame}{yyy}
+\begin{frame}[fragile]{Chisel}
+\begin{itemize}
+\item A hardware \emph{construction} language
+\item If it compiles it is synthesizable hardware 
+\item Single source two targets:
+\begin{itemize}
+\item C based cycle accurate simulator
+\item Verilog for synthesis
+\end{itemize}
+\item Embedded in Scala
+\begin{itemize}
+\item Full power of Scala available
+\item But to start with, no Scala knowledge needed
+\end{itemize}
+\item Developed at UC Berkeley
+\end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{A Register}
+\begin{chisel}
+val cntReg = Reg(init = UInt(0, 25))
+
+cntReg := cntReg + UInt(1)
+\end{chisel}
+\begin{itemize}
+\item Type inferred by initial value (reset value)
+\item No need to specify a clock or reset signal
+\end{itemize}
+\begin{itemize}
+\item Also definition with an input signal connected:
+\end{itemize}
+\begin{chisel}
+val r = Reg(next = nextVal) 
+\end{chisel}
+
+\end{frame}
+
+\begin{frame}[fragile]{Expressions}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item Width inference
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bundles}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Modules}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Connections}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{zzz}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{yyy}
 \begin{itemize}
 \item xxx
 \item xxx
@@ -85,6 +196,25 @@ Martin Schoeberl
 \item xxx
 \end{itemize}
 \end{frame}
+%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Scala}
+\begin{itemize}
+\item Object oriented
+\item Functional
+\item Strongly typed
+\begin{itemize}
+\item With very good type interference
+\end{itemize}
+\item Could be seen as Java++
+\item Compiled to the JVM
+\item Good Java interoperability
+\begin{itemize}
+\item Many libraries available
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Hello World in Chisel}
 \begin{chisel}
@@ -106,6 +236,23 @@ class Hello extends Module {
 \end{chisel}
 \end{frame}
 
-
+\begin{frame}[fragile]{Hello World in Chisel}
+\begin{chisel}
+git clone https://github.com/schoeberl/chisel-examples.git
+\end{chisel}
+\begin{itemize}
+\item or download from \url{https://github.com/schoeberl/chisel-examples}
+\item This contains a minimal Chisel project with the blinking LED
+\item Has ready to use project files for:
+\begin{itemize}
+\item Altera DE0
+\item Altera DE1
+\item Altera DE2-115
+\item BeMicro
+\end{itemize}
+\item Plus a simple ALU for HW test and showing Chisel Tester
+\item Plus some more examples to explore
+\end{itemize}
+\end{frame}
 
 \end{document}
