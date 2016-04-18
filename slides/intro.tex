@@ -128,7 +128,24 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Register}
+\begin{frame}[fragile]{Expressions are Combinational Circuits}
+\begin{chisel}
+(a | b) & ~(c ^ d)
+
+val addVal = a + b
+val orVal = a | b
+val boolVal = a >= b
+\end{chisel}
+\begin{itemize}
+\item The usual operations 
+\item Simple name assignment with val
+\item Width inference
+\item Type inference
+\item Types: Bits, UInt, SInt, Bool
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Registers}
 \begin{chisel}
 val cntReg = Reg(init = UInt(0, 25))
 
@@ -144,23 +161,23 @@ cntReg := cntReg + UInt(1)
 \begin{chisel}
 val r = Reg(next = nextVal) 
 \end{chisel}
-
 \end{frame}
 
-\begin{frame}[fragile]{Expressions}
+\begin{frame}[fragile]{Functional Abstraction}
 \begin{chisel}
-val addVal = a + b
-val orVal = a | b
-val boolVal = a === b
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a+b, a-b)
+
+  val res = addSub(cond, a, b)
+  
+  def rising(d: Bool) = d && !Reg(next = d)
 \end{chisel}
 \begin{itemize}
-\item The usual operations 
-\item Simple assignments
-\item Width inference
-\item Type inferrence
-\item Types: Bits, UInt, SInt, Bool
+\item Functions for repeated pieces of logic
+\item May contain state
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{Bundles}
 \begin{chisel}
@@ -172,8 +189,21 @@ class DecodeExecute extends Bundle {
 }
 \end{chisel}
 \begin{itemize}
-\item Collection of fields 
+\item Collection of values in named fields 
 \item Like struct or record
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors}
+\begin{chisel}
+val myVec = Vec.fill(3){ SInt(width = 10) }
+
+myVec(0) := SInt(-3)
+val y = myVec(2)
+\end{chisel}
+\begin{itemize}
+\item Indexable vector of elements
+\item Bundles and Vecs can be arbitrary nested
 \end{itemize}
 \end{frame}
 
@@ -267,35 +297,46 @@ val c = Mux(cond, a, b)
 
 \begin{frame}[fragile]{Testing}
 \begin{chisel}
-code
+class CounterTester(c: Counter) extends Tester(c) {
+  for (i <- 0 until 5) {
+    println(peek(c.io.out))
+    step(1)
+  }
+}
 \end{chisel}
 \begin{itemize}
-\item Within Chisel with a tester
-\item Or waveform generation
-\item (e.g. the counter)
+\item Within Chisel with a tester (= Scala program)
+\item May include waveform generation
+\item poke and peek to set and read values
+\item printf in simulation on rising edge
+\begin{chisel}
+printf("Counting %x\n", r1)
+\end{chisel}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Component Generation}
 \begin{chisel}
-code
+val cores = new Array[Module](32)
+
+for (j <- 0 until 32)
+  cores(j) = Module(new CPU())
 \end{chisel}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Use Scala array to collect components
+\item Generation with a Scala loop
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Conditional Component Generation}
 \begin{chisel}
-  val icache =
-    if (TYPE == METHOD)
-      Module(new MCache())
-    else if (TYPE == LINE)
-      Module(new ICache())
-    else
-      ChiselError.error("Unsupported Type")
+val icache =
+  if (TYPE == METHOD)
+    Module(new MCache())
+  else if (TYPE == LINE)
+    Module(new ICache())
+  else
+    ChiselError.error("Unsupported Type")
 \end{chisel}
 \begin{itemize}
 \item Use Scala if/else for conditional component types
@@ -308,7 +349,7 @@ code
 \begin{itemize}
 \item Read a file into a table
 \begin{itemize}
-\item E.g., used to read in a ROM content for a processor
+\item E.g., used to read in ROM content for a processor
 \end{itemize}
 \item Generate a truth table algorithmically
 \begin{itemize}
@@ -316,37 +357,37 @@ code
 \end{itemize}
 \end{itemize}
 \begin{chisel}
-    val source = fromFile(fileName)
-    val byteArray = source.map(_.toByte).toArray
-    source.close()
-    val arr = new Array[Bits](byteArray.length)
-    for (i <- 0 until byteArray.length) {
-      arr(i) = Bits(byteArray(i), 8)
-    }
-    Vec[Bits](arr)
+val source = fromFile(fileName)
+val byteArray = source.map(_.toByte).toArray
+source.close()
+val arr = new Array[Bits](byteArray.length)
+for (i <- 0 until byteArray.length) {
+  arr(i) = Bits(byteArray(i), 8)
+}
+val rom = Vec[Bits](arr)
 \end{chisel}
 \end{frame}
 %%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{zzz}
-\begin{chisel}
-code
-\end{chisel}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{yyy}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{zzz}
+%\begin{chisel}
+%code
+%\end{chisel}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{yyy}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
 %%%%%%%%%%%%%%%%%
 
 
@@ -365,7 +406,7 @@ code
 \item Patmos processor rewritten in Chisel
 \begin{itemize}
 \item As part of learning Chisel
-\item LoC 6.4.2013: Chisel: 996 VHDL: 3020
+\item 6.4.2013: Chisel: 996 LoC vs VHDL: 3020 LoC
 \item But VHDL was very verbose, with records maybe 2000 LoC
 \end{itemize}
 \item Memory controller, memory arbiters, IO devices in Chisel
@@ -392,8 +433,8 @@ code
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
 \item \url{https://chisel.eecs.berkeley.edu/}
-\item Getting Started with Chisel
 \item Chisel 2.2 Tutorial
+\item Getting Started with Chisel
 \item \url{http://groups.google.com/group/chisel-users}
 \end{itemize}
 \end{frame}
