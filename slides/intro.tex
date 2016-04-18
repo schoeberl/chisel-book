@@ -24,6 +24,8 @@
   colorlinks = true,
 }
 
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
 
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
@@ -44,16 +46,6 @@
 
 \begin{frame}
 \titlepage
-\end{frame}
-
-\begin{frame}[fragile]{Notes}
-\begin{itemize}
-\item a Mux for any data type
-\item generation of logic in code, e.g. ROM or binary to BCD instead of Java program
-\item Connectors
-\item Tester (e.g. the counter)
-\item xxx
-\end{itemize}
 \end{frame}
 
 
@@ -93,8 +85,11 @@
 \begin{frame}[fragile]{Chisel}
 \begin{itemize}
 \item A hardware \emph{construction} language
-\item If it compiles it is synthesizable hardware 
-\item Single source two targets:
+\begin{itemize}
+\item If it compiles it is synthesisable hardware 
+\item Say goodby to your unintended latches
+\end{itemize}
+\item Single source two targets
 \begin{itemize}
 \item C based cycle accurate simulator
 \item Verilog for synthesis
@@ -108,9 +103,30 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Some Notes on Scala}
+\begin{itemize}
+\item Object oriented
+\item Functional
+\item Strongly typed
+\begin{itemize}
+\item With very good type inference
+\end{itemize}
+\item Could be seen as Java++
+\item Compiled to the JVM
+\item Good Java interoperability
+\begin{itemize}
+\item Many libraries available
+\end{itemize}
+\end{itemize}
+\end{frame}
 
-
-
+\begin{frame}[fragile]{Chisel vs. Scala}
+\begin{itemize}
+\item A Chisel hardware description is a Scala program
+\item Chisel is a Scala library
+\item When the program is executed it generates hardware
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{A Register}
 \begin{chisel}
@@ -239,6 +255,16 @@ class Hello extends Module {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Generic Components}
+\begin{chisel}
+val c = Mux(cond, a, b)
+\end{chisel}
+\begin{itemize}
+\item This is a multiplexer
+\item Input can be any type
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Testing}
 \begin{chisel}
 code
@@ -246,10 +272,60 @@ code
 \begin{itemize}
 \item Within Chisel with a tester
 \item Or waveform generation
+\item (e.g. the counter)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Component Generation}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
 \item xxx
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Conditional Component Generation}
+\begin{chisel}
+  val icache =
+    if (TYPE == METHOD)
+      Module(new MCache())
+    else if (TYPE == LINE)
+      Module(new ICache())
+    else
+      ChiselError.error("Unsupported Type")
+\end{chisel}
+\begin{itemize}
+\item Use Scala if/else for conditional component types
+\item Code example from Patmos
+\item We parse an XML file for the configuration
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Logic Generation}
+\begin{itemize}
+\item Read a file into a table
+\begin{itemize}
+\item E.g., used to read in a ROM content for a processor
+\end{itemize}
+\item Generate a truth table algorithmically
+\begin{itemize}
+\item E.g., could generate binary to BCD translation
+\end{itemize}
+\end{itemize}
+\begin{chisel}
+    val source = fromFile(fileName)
+    val byteArray = source.map(_.toByte).toArray
+    source.close()
+    val arr = new Array[Bits](byteArray.length)
+    for (i <- 0 until byteArray.length) {
+      arr(i) = Bits(byteArray(i), 8)
+    }
+    Vec[Bits](arr)
+\end{chisel}
+\end{frame}
 %%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{zzz}
 \begin{chisel}
@@ -273,22 +349,7 @@ code
 \end{frame}
 %%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{Scala}
-\begin{itemize}
-\item Object oriented
-\item Functional
-\item Strongly typed
-\begin{itemize}
-\item With very good type interference
-\end{itemize}
-\item Could be seen as Java++
-\item Compiled to the JVM
-\item Good Java interoperability
-\begin{itemize}
-\item Many libraries available
-\end{itemize}
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{An IDE for Chisel}
 \begin{itemize}
