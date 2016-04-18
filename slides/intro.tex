@@ -69,26 +69,26 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Talk abstract}
-
-Date: Tu 19/04/2016, 11:00-12:00
-Room: 123/322
-
-Title: Hardware Design in the 21st Century: with the Object Oriented
-and Functional Language Chisel
-
-Chisel is a hardware construction language implemented as a
-domain specific language in Scala. Therefore, the full power of
-a modern programming language is available to describe hardware
-and, more important, hardware generators. Chisel has been developed
-at UC Berkeley and successfully used for several tape outs of RISC-V.
-Here at DTU we used Chisel in the T-CREST project and in teaching
-advanced computer architecture. Besides presenting small code
-examples in Chisel I will report on experiences on using Chisel in
-the t-CREST project and in teaching.
-
-Martin Schoeberl
-\end{frame}
+%\begin{frame}[fragile]{Talk abstract}
+%
+%Date: Tu 19/04/2016, 11:00-12:00
+%Room: 123/322
+%
+%Title: Hardware Design in the 21st Century: with the Object Oriented
+%and Functional Language Chisel
+%
+%Chisel is a hardware construction language implemented as a
+%domain specific language in Scala. Therefore, the full power of
+%a modern programming language is available to describe hardware
+%and, more important, hardware generators. Chisel has been developed
+%at UC Berkeley and successfully used for several tape outs of RISC-V.
+%Here at DTU we used Chisel in the T-CREST project and in teaching
+%advanced computer architecture. Besides presenting small code
+%examples in Chisel I will report on experiences on using Chisel in
+%the t-CREST project and in teaching.
+%
+%Martin Schoeberl
+%\end{frame}
 
 \begin{frame}[fragile]{Chisel}
 \begin{itemize}
@@ -133,44 +133,119 @@ val r = Reg(next = nextVal)
 
 \begin{frame}[fragile]{Expressions}
 \begin{chisel}
-code
+val addVal = a + b
+val orVal = a | b
+val boolVal = a === b
 \end{chisel}
 \begin{itemize}
+\item The usual operations 
+\item Simple assignments
 \item Width inference
-\item xxx
-\item xxx
+\item Type inferrence
+\item Types: Bits, UInt, SInt, Bool
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Bundles}
 \begin{chisel}
-code
+class DecodeExecute extends Bundle {
+  val rs1 = UInt(width = 32)
+  val rs2 = UInt(width = 32)
+  val immVal = UInt(width = 32)
+  val aluOp = new AluOp()
+}
 \end{chisel}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Collection of fields 
+\item Like struct or record
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{IO Ports}
+\begin{chisel}
+class Channel extends Bundle {
+  val data = Bits(INPUT, 8)
+  val ready = Bool(OUTPUT)
+  val valid = Bool(INPUT)
+}
+\end{chisel}
+\begin{itemize}
+\item Ports are Bundles with directions
+\item Direction can also be assigned at instantiation:
+\end{itemize}
+\begin{chisel}
+class ExecuteIO extends Bundle {
+  val dec = new DecodeExecute().asInput
+  val mem = new ExecuteMemory().asOutput
+}
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Modules}
 \begin{chisel}
-code
+class Adder extends Module {
+  val io = new Bundle {
+    val a = UInt(INPUT, 4)
+    val b = UInt(INPUT, 4)
+    val result = UInt(OUTPUT, 4)
+  }
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
 \end{chisel}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Organization of components
+\item IO ports defined as a Bundle named io
+\item Created with:
 \end{itemize}
+\begin{chisel}
+val adder = Module(new Adder())
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Hello World in Chisel}
+\begin{chisel}
+class Hello extends Module {
+  val io = new Bundle {
+    val led = UInt(OUTPUT, 1)
+  }
+  val CNT_MAX = UInt(16000000 / 2 - 1);
+  val r1 = Reg(init = UInt(0, 25))
+  val blk = Reg(init = UInt(0, 1))
+
+  r1 := r1 + UInt(1)
+  when(r1 === CNT_MAX) {
+    r1 := UInt(0)
+    blk := ~blk
+  }
+  io.led := blk
+}
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Connections}
+\begin{itemize}
+\item Simple connections just with assignments, e.g.,
+\begin{chisel}
+  adder.io.a := ina
+  adder.io.b := inb
+\end{chisel}
+\item Automatic bulk connections between components
+\begin{chisel}
+  dec.io <> exe.io
+  mem.io <> exe.io
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing}
 \begin{chisel}
 code
 \end{chisel}
 \begin{itemize}
-\item xxx
-\item xxx
+\item Within Chisel with a tester
+\item Or waveform generation
 \item xxx
 \end{itemize}
 \end{frame}
@@ -215,28 +290,55 @@ code
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Hello World in Chisel}
-\begin{chisel}
-class Hello extends Module {
-  val io = new Bundle {
-    val led = UInt(OUTPUT, 1)
-  }
-  val CNT_MAX = UInt(16000000 / 2 - 1);
-  val r1 = Reg(init = UInt(0, 25))
-  val blk = Reg(init = UInt(0, 1))
-
-  r1 := r1 + UInt(1)
-  when(r1 === CNT_MAX) {
-    r1 := UInt(0)
-    blk := ~blk
-  }
-  io.led := blk
-}
-\end{chisel}
+\begin{frame}[fragile]{An IDE for Chisel}
+\begin{itemize}
+\item Eclipse
+\item Scala plugin
+\item Chisel source included in the project build path
+\item Show it
+\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Hello World in Chisel}
+\begin{frame}[fragile]{Chisel in T-CREST}
+\begin{itemize}
+\item Patmos processor rewritten in Chisel
+\begin{itemize}
+\item As part of learning Chisel
+\item LoC 6.4.2013: Chisel: 996 VHDL: 3020
+\item But VHDL was very verbose, with records maybe 2000 LoC
+\end{itemize}
+\item Memory controller, memory arbiters, IO devices in Chisel
+\item One Phd, two master, and one bachelor project:
+\begin{itemize}
+\item Patmos stack cache
+\item Method cache for Patmos -- Chisel was relative easy
+\item TDM based memory arbiter -- trouble with Chisel
+\item RISC stack cache -- no issues with Chisel
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel in Teaching}
+\begin{itemize}
+\item Using/offering it in Advanced Computer Architecture
+\item 2016 all projects are in Chisel
+\item Students pick it up reasonable fast
+\item For software engineering students easier than VHDL
+\item Issue of \emph{writing a program} instead of describing hardware remains
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Further Information}
+\begin{itemize}
+\item \url{https://chisel.eecs.berkeley.edu/}
+\item Getting Started with Chisel
+\item Chisel 2.2 Tutorial
+\item \url{http://groups.google.com/group/chisel-users}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Hello World in Chisel and Examples}
 \begin{chisel}
 git clone https://github.com/schoeberl/chisel-examples.git
 \end{chisel}
