@@ -175,7 +175,13 @@ to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 10000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
 
+\subsection{Course Abstract}
 
+Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Here at DTU we used Chisel in the T-CREST project and in teaching advanced computer architecture.
+
+In this course I will give an overview of Chisel to describe circuits at the RTL, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators. Besides lecturing we will have lab sessions to describe small circuits and evaluate them in an FPGA.
+
+The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course shall give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala.
 
 %\begin{figure}
 %  \centering
