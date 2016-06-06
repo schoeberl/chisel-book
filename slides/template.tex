@@ -1,0 +1,103 @@
+\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
+\usepackage{epsfig,graphicx}
+\usepackage{palatino}
+\usepackage{fancybox}
+\usepackage{relsize}
+\usepackage[procnames]{listings}
+\usepackage{hyperref}
+
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage[procnames]{listings}
+
+\input{../shared/chisel.tex}
+
+\hypersetup{
+  linkcolor  = black,
+%  citecolor  = blue,
+  urlcolor   = blue,
+  colorlinks = true,
+}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% uncomment following for final submission
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
+%\renewcommand{\author2}[1]{}
+
+
+\title{Template for Chisel Slides}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{DTU Compute}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}[fragile]{Goals for This Template}
+\begin{itemize}
+\item Get faster in adding slides
+\begin{itemize}
+\item with Latex snippets
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Title}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]{Code example}
+\begin{chisel}
+(a | b) & ~(c ^ d)
+
+val addVal = a + b
+val orVal = a | b
+val boolVal = a >= b
+\end{chisel}
+\begin{itemize}
+\item The usual operations 
+\item Simple name assignment with val
+\item Width inference
+\item Type inference
+\item Types: Bits, UInt, SInt, Bool
+\end{itemize}
+\end{frame}
+
+\end{document}
