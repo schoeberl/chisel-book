@@ -24,6 +24,8 @@
   colorlinks = true,
 }
 
+\newcommand{\code}[1]{{\texttt{#1}}}
+
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
 
@@ -85,10 +87,9 @@ cd chisel-tutorial
 \end{chisel}
 \begin{itemize}
 \item Test the installation with a Hello World
-\item xxx
 \end{itemize}
 \begin{chisel}
-cd helo
+cd hello
 make
 \end{chisel}
 \begin{itemize}
@@ -118,7 +119,7 @@ class HelloTests(c: Hello) extends Tester(c) {
 }
 \end{chisel}
 \begin{itemize}
-\item Drive the simulation with step(1), which is a single clock tick
+\item Drive the simulation with \code{step(1)}, which is a single clock tick
 \item Test output against expected value
 \end{itemize}
 \end{frame}
@@ -146,5 +147,31 @@ code
 \end{frame}
 %%%%%%%%%%%%%%%%
 
+\begin{frame}[fragile]{From here on Slides that shall be moved somewhere}
+\end{frame}
+
+\begin{frame}[fragile]{More Chisel Example Code}
+\begin{itemize}
+\item The time-predictable processor Patmos
+\item An SRAM controller for the DE2-115 board
+\item An SSRAM controller
+\item An UART
+\item A memory arbiter
+\item Caches
+\item ...
+\item \url{https://github.com/t-crest/patmos}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{More Chisel Documentation}
+\begin{itemize}
+\item Started a textbook on ``Digital Design with Chisel''
+\item Considered a work-in-progress (V 0.01 ;-)
+\item \url{https://github.com/schoeberl/chisel-book}
+\item Will grow during the semester
+\item Feedback is welcome
+\end{itemize}
+\end{frame}
 
 \end{document}

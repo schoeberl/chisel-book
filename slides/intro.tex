@@ -24,6 +24,8 @@
   colorlinks = true,
 }
 
+\newcommand{\code}[1]{{\texttt{#1}}}
+
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
 
@@ -58,6 +60,7 @@
 \item Reconsider how to describe hardware
 \item Some experience report from usage at DTU
 \item Pointers to more information
+\item A first high level view of the main features of Chisel
 \end{itemize}
 \end{frame}
 
@@ -125,6 +128,7 @@
 \item A Chisel hardware description is a Scala program
 \item Chisel is a Scala library
 \item When the program is executed it generates hardware
+\item Chisel is a so-called \emph{embedded domain-specific language}
 \end{itemize}
 \end{frame}
 
@@ -152,7 +156,7 @@ val cntReg = Reg(init = UInt(0, 25))
 cntReg := cntReg + UInt(1)
 \end{chisel}
 \begin{itemize}
-\item Type inferred by initial value (reset value)
+\item Type inferred by initial value (= reset value)
 \item No need to specify a clock or reset signal
 \end{itemize}
 \begin{itemize}
@@ -175,6 +179,7 @@ val r = Reg(next = nextVal)
 \begin{itemize}
 \item Functions for repeated pieces of logic
 \item May contain state
+\item Functions may return \emph{hardware}
 \end{itemize}
 \end{frame}
 
@@ -397,6 +402,7 @@ val rom = Vec[Bits](arr)
 \item Eclipse
 \item Scala plugin
 \item Chisel source included in the project build path
+\item But you are not compiling with Eclipse\\ and against the Chisel source
 \item Show it
 \end{itemize}
 \end{frame}
@@ -423,7 +429,7 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Chisel in Teaching}
 \begin{itemize}
 \item Using/offering it in Advanced Computer Architecture
-\item 2016 all projects are in Chisel
+\item Spring 2016 all projects have been in Chisel
 \item Students pick it up reasonable fast
 \item For software engineering students easier than VHDL
 \item Issue of \emph{writing a program} instead of describing hardware remains
@@ -465,6 +471,7 @@ git clone https://github.com/schoeberl/chisel-examples.git
 \item Clone or download the repository now
 \end{itemize}
 \begin{chisel}
+git clone https://github.com/schoeberl/chisel-examples.git
 cd chisel-examples/hello-world
 make
 \end{chisel}
@@ -479,8 +486,40 @@ make
 
 \begin{frame}[fragile]{What is a Minimal Chisel Project}
 \begin{itemize}
-\item Get a blinking LED working on the FPGA board
-\item Clone or download the repository now
+\item Scala class (e.g., \code{Hello.scala})
+\item Build info in \code{build.sbt} for \code{sbt}:
+\end{itemize}
+\begin{chisel}
+scalaVersion := "2.11.7"
+
+libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
+\end{chisel}
+\begin{itemize}
+\item Run the process manually (look into the Makefile)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Additional Files in the Hello World}
+\begin{itemize}
+\item A \code{Makefile}
+\item A Verilog top level file \code{verilog/hello\_top.v}
+\begin{itemize}
+\item For reset and possible PLLs
+\item Can also be in VHDL
+\end{itemize}
+\item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
+\begin{itemize}
+\item List of source files, device and pin assignments
+\item plain text files, look into hello.qsf
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Change the Design}
+\begin{itemize}
+\item Setup Eclipse with a Scala project and the Chisel source
+\item Change blinking frequency
+\item Rerun the example
 \end{itemize}
 \end{frame}
 
