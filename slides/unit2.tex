@@ -1,0 +1,150 @@
+\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
+\usepackage{epsfig,graphicx}
+\usepackage{palatino}
+\usepackage{fancybox}
+\usepackage{relsize}
+\usepackage[procnames]{listings}
+\usepackage{hyperref}
+
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage[procnames]{listings}
+
+\input{../shared/chisel.tex}
+
+\hypersetup{
+  linkcolor  = black,
+%  citecolor  = blue,
+  urlcolor   = blue,
+  colorlinks = true,
+}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% uncomment following for final submission
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
+%\renewcommand{\author2}[1]{}
+
+
+\title{Chisel Background and a Little Bit of Scala}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{DTU Compute}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]{Chisel and Scala}
+\begin{itemize}
+\item Chisel is a library written in Scala
+\item Chisel code is Scala code
+\item When it is run is \emph{generates} hardware
+\begin{itemize}
+\item Verilog for synthesize
+\item C++ code for simulation
+\end{itemize}
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel Tutorial from UCB}
+\begin{itemize}
+\item Collection of small exercises
+\item Only in simulation, no hardware required (+/-)
+\item All examples in \emph{one} design
+\item
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel Tutorial}
+\begin{itemize}
+\item Get the tutorial
+\end{itemize}
+\begin{chisel}
+git clone https://github.com/ucb-bar/chisel-tutorial.git
+cd chisel-tutorial
+\end{chisel}
+\begin{itemize}
+\item Test the installation with a Hello World
+\item xxx
+\end{itemize}
+\begin{chisel}
+cd helo
+make
+\end{chisel}
+\begin{itemize}
+\item May take some time
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Very Minimal Hello World}
+\begin{chisel}
+class Hello extends Module {
+  val io = new Bundle { 
+    val out = UInt(OUTPUT, 8)
+  }
+  io.out := UInt(42)
+}
+\end{chisel}
+\begin{itemize}
+\item Produces a single constant
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing the Minimal Hello World}
+\begin{chisel}
+class HelloTests(c: Hello) extends Tester(c) {
+  step(1)
+  expect(c.io.out, 42)
+}
+\end{chisel}
+\begin{itemize}
+\item Drive the simulation with step(1), which is a single clock tick
+\item Test output against expected value
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Title}
+\begin{chisel}
+code
+\end{chisel}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%
+
+
+\end{document}
