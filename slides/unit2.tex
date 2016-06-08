@@ -39,7 +39,7 @@
 %\renewcommand{\author2}[1]{}
 
 
-\title{Chisel Background and a Little Bit of Scala}
+\title{Maybe: Chisel Basic Operations\\Chisel Background and a Little Bit of Scala}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{DTU Compute}
@@ -64,13 +64,206 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Chisel Data Types}
+\begin{itemize}
+\item Data types for values on wires or state elements
+\item Raw collection of bits is type \code{Bits}
+\item Simple types to represent integer numbers
+\begin{itemize}
+\item Unsigned and signed
+\item Subtype of \code{Bits}
+\end{itemize}
+\item Little strange way to specify constants
+\item Automatic bit width inference
+\item Boolean values are of type \code{Bool}, a single bit value
+\end{itemize}
+\begin{chisel}
+UInt(1)
+UInt("habcd")
+UInt("b0101")
+SInt(-5)
+Bool(true)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel Data Types}
+\begin{itemize}
+\item Bit width can be explicitly specified
+\begin{itemize}
+\item \code{SInt} will be sign extended
+\item \code{UInt} will be zero extended
+\end{itemize}
+\end{itemize}
+\begin{chisel}
+UInt(0, 32)
+UInt("habcd", 24)
+SInt(-5, 16)
+Bool(true)
+\end{chisel}
+\begin{itemize}
+\item \emph{Bundles} for a named collection of values
+\item \emph{Vecs} for indexable collection of values
+\item Chisel data types are different from Scala builtin types (e.g., Scala's \code{Int})
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bitwise Logical Operations}
+\begin{itemize}
+\item Bitwise NOT, AND, OR, and XOR
+\item Automatic size extension to larger operand
+\end{itemize}
+\begin{chisel}
+val notVal = ~x
+val maskOut = x & UInt("b00001111")
+val orVal = x | y
+val xorVal = x ^ y
+\end{chisel}
+\begin{itemize}
+\item Bit reduction
+\item Results in a \code{Bool}
+\end{itemize}
+\begin{chisel}
+andR(x)
+orR(x)
+xorR(x)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Arithmetic Operations}
+\begin{itemize}
+\item Addition, subtraction, multiplication, division, modulos
+\item Automatic size extension to larger operand
+\end{itemize}
+\begin{chisel}
++, -, *, /, %
+\end{chisel}
+\begin{itemize}
+\item Left and right shifts
+\item Left shift extend bit width
+\item Right shift reduces bit width
+\end{itemize}
+\begin{chisel}
+<<, >>
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Bitfield Manipulations}
+\begin{itemize}
+\item Extract a single bit
+\end{itemize}
+\begin{chisel}
+val sign = x(31)
+\end{chisel}
+\begin{itemize}
+\item Extract a sub field from end to start position
+\end{itemize}
+\begin{chisel}
+val lowByte = word(7, 0)
+\end{chisel}
+\begin{itemize}
+\item Concatenate bit fields
+\end{itemize}
+\begin{chisel}
+val word = Cat(highByte, lowByte)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Comparison}
+\begin{itemize}
+\item The usual operations
+\begin{itemize}
+\item Unusual equal and unequal operator symbols
+\end{itemize}
+\item Operands are \code{UInt} and \code{SInt}
+\item Can be \code{Bool} for equal and unequal
+\item Result is \code{Bool}
+\end{itemize}
+\begin{chisel}
+===, =/=
+>, >=, <, <=
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Boolean Logical Operations}
+\begin{itemize}
+\item Operands and result are \code{Bool}
+\item Logical NOT, AND, and OR
+\end{itemize}
+\begin{chisel}
+val notX = !x
+val bothTrue = a && b
+val orVal = x || y
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuits}
+\begin{itemize}
+\item Circuit is a graph of nodes
+\item A node is a hardware operator with zero or more inputs
+\item Textual expression to wire up nodes
+\item Named wires with some (unspecified) width
+\end{itemize}
+\begin{chisel}
+(a | b) & ~c
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuits}
+\begin{itemize}
+\item Simple expressions represent a circuit tree
+\item Arbitrary directed acyclic graphs need named subexpressions
+\item Using Scala's \code{val} keyword for variables that don't change
+\item Referenced multiple times
+\end{itemize}
+\begin{chisel}
+val cond = a & b
+val result = (cond & selA) | (!cond & selB)
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+\item Section 6, but that might come later
+\item xxx
+\item xxx
+\end{itemize}
+\begin{chisel}
+code
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\begin{chisel}
+code
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\begin{chisel}
+code
+\end{chisel}
+\end{frame}
 
 \begin{frame}[fragile]{Chisel Tutorial from UCB}
 \begin{itemize}
 \item Collection of small exercises
 \item Only in simulation, no hardware required (+/-)
 \item All examples in \emph{one} design
-\item
+\begin{itemize}
+\item Results in a little bit more complex setup
+\end{itemize}
+\item 
 \item
 \item
 \item
@@ -107,7 +300,7 @@ class Hello extends Module {
 }
 \end{chisel}
 \begin{itemize}
-\item Produces a single constant
+\item Produces hardware for a single constant
 \end{itemize}
 \end{frame}
 
@@ -169,8 +362,8 @@ code
 \item Started a textbook on ``Digital Design with Chisel''
 \item Considered a work-in-progress (V 0.01 ;-)
 \item \url{https://github.com/schoeberl/chisel-book}
-\item Will grow during the semester
 \item Feedback is welcome
+\item Contains all the slides
 \end{itemize}
 \end{frame}
 

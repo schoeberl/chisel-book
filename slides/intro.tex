@@ -247,8 +247,8 @@ class Adder extends Module {
 \end{chisel}
 \begin{itemize}
 \item Organization of components
-\item IO ports defined as a Bundle named io
-\item Created with:
+\item IO ports defined as a Bundle named \code{io}
+\item Created (instantiated) with:
 \end{itemize}
 \begin{chisel}
 val adder = Module(new Adder())
@@ -261,16 +261,17 @@ class Hello extends Module {
   val io = new Bundle {
     val led = UInt(OUTPUT, 1)
   }
-  val CNT_MAX = UInt(16000000 / 2 - 1);
-  val r1 = Reg(init = UInt(0, 25))
-  val blk = Reg(init = UInt(0, 1))
+  val CNT_MAX = UInt(20000000 / 2 - 1);
+  
+  val cntReg = Reg(init = UInt(0, 25))
+  val blkReg = Reg(init = UInt(0, 1))
 
-  r1 := r1 + UInt(1)
-  when(r1 === CNT_MAX) {
-    r1 := UInt(0)
-    blk := ~blk
+  cntReg := cntReg + UInt(1)
+  when(cntReg === CNT_MAX) {
+    cntReg := UInt(0)
+    blkReg := ~blkReg
   }
-  io.led := blk
+  io.led := blkReg
 }
 \end{chisel}
 \end{frame}
@@ -354,12 +355,13 @@ val icache =
 \begin{itemize}
 \item Read a file into a table
 \begin{itemize}
-\item E.g., used to read in ROM content for a processor
+\item E.g., to read in ROM content for a processor
 \end{itemize}
 \item Generate a truth table algorithmically
 \begin{itemize}
-\item E.g., could generate binary to BCD translation
+\item E.g., generate binary to BCD translation
 \end{itemize}
+\item Use the full power of Scala
 \end{itemize}
 \begin{chisel}
 val source = fromFile(fileName)
@@ -484,7 +486,7 @@ make
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{What is a Minimal Chisel Project}
+\begin{frame}[fragile]{What is a Minimal Chisel Project?}
 \begin{itemize}
 \item Scala class (e.g., \code{Hello.scala})
 \item Build info in \code{build.sbt} for \code{sbt}:
@@ -499,7 +501,7 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Additional Files in the Hello World}
+\begin{frame}[fragile]{Additional Files in the Hello World Example}
 \begin{itemize}
 \item A \code{Makefile}
 \item A Verilog top level file \code{verilog/hello\_top.v}
@@ -518,6 +520,9 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
 \begin{frame}[fragile]{Change the Design}
 \begin{itemize}
 \item Setup Eclipse with a Scala project and the Chisel source
+\begin{itemize}
+\item Optional, use the editor you like most
+\end{itemize}
 \item Change blinking frequency
 \item Rerun the example
 \end{itemize}
