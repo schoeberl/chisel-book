@@ -39,29 +39,15 @@
 %\renewcommand{\author2}[1]{}
 
 
-\title{Maybe: Chisel Basic Operations\\Chisel Background and a Little Bit of Scala}
+\title{Chisel Basic Operations}
 \author{Martin Schoeberl}
 \date{\today}
-\institute{DTU Compute}
+\institute{Technical University of Denmark}
 
 \begin{document}
 
 \begin{frame}
 \titlepage
-\end{frame}
-
-\begin{frame}[fragile]{Chisel and Scala}
-\begin{itemize}
-\item Chisel is a library written in Scala
-\item Chisel code is Scala code
-\item When it is run is \emph{generates} hardware
-\begin{itemize}
-\item Verilog for synthesize
-\item C++ code for simulation
-\end{itemize}
-\item xxx
-\item xxx
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Chisel Data Types}
@@ -173,6 +159,7 @@ val word = Cat(highByte, lowByte)
 \item The usual operations
 \begin{itemize}
 \item Unusual equal and unequal operator symbols
+\item To keep the original Sala operators usable
 \end{itemize}
 \item Operands are \code{UInt} and \code{SInt}
 \item Can be \code{Bool} for equal and unequal
@@ -221,14 +208,93 @@ val result = (cond & selA) | (!cond & selB)
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Register}
+\begin{itemize}
+\item State elements
+\item Has it's own Chisel type \code{Reg}
+\item Positive edge triggered D flip-flop
+\item Synchronous reset
+\item Clock and reset are \emph{hidden wires}
+\end{itemize}
+\begin{chisel}
+val q = Reg(next = d)
+\end{chisel}
+\begin{itemize}
+\item \code{d} is the input, \code{q} the output
+\item Register type is inferred by the input (d) type
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Register}
+\begin{itemize}
+\item Reset value as \code{init} parameter on definition
+\end{itemize}
+\begin{chisel}
+val regInit = Reg(init = UInt(0, 8))
+\end{chisel}
+\begin{itemize}
+\item With this forward declaration we later assign the next value
+\end{itemize}
+\begin{chisel}
+regInit := regInit + UInt(1)
+\end{chisel}
+\begin{itemize}
+\item Register can also simply be defined within an expression
+\end{itemize}
+\begin{chisel}
+val risingEdge = d & !Reg(next = d)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Multiplexer}
+\begin{itemize}
+\item So common: a component provided by Chisel
+\item Could be implemented with conditional updates
+\item Automagical type selection on input types
+\end{itemize}
+\begin{chisel}
+val selection = Mux(cond, trueVal, falseVal)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{A Small Circuit}
+\begin{itemize}
+\item Our Chisel knowledge is complete to implement any digital circuit
+\item Maybe not in the most elegant way ;-)
+\item A counter is a simple basic component
+\end{itemize}
+\begin{chisel}
+  val regCnt = Reg(init = UInt(0, 8))
+  
+  regCnt := Mux(regCnt === UInt(100),
+    UInt(0), regCnt + UInt(1))
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The Complete Counter Module}
+\begin{chisel}
+class Count extends Module {
+  val io = new Bundle {
+    val cnt = UInt(OUTPUT, 8)
+  }
+  
+  val regCnt = Reg(init = UInt(0, 8))
+  
+  regCnt := Mux(regCnt === UInt(100),
+    UInt(0), regCnt + UInt(1))
+  
+  io.cnt := regCnt
+}
+\end{chisel}
+\end{frame}
+
 \begin{frame}[fragile]{Next Topics -- Some Order}
 \begin{itemize}
-\item Registers
-\item Some more code examples
-\item Multiplexer
+\item Some more code examples, e.g. counter with a register and a multuplexer
 \item Bundles
 \item Ports
 \item Modules
+\item Vecs
 \item Chisel Background and some Scala (constructor code...)
 \item Testing 1
 \item If/else, case statements
@@ -276,6 +342,30 @@ code
 \begin{chisel}
 code
 \end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Chisel Example Code}
+\begin{itemize}
+\item The time-predictable processor Patmos
+\item An SRAM controller for the DE2-115 board
+\item An SSRAM controller
+\item An UART
+\item A memory arbiter
+\item Caches
+\item ...
+\item \url{https://github.com/t-crest/patmos}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{More Chisel Documentation}
+\begin{itemize}
+\item Started a textbook on ``Digital Design with Chisel''
+\item Considered a work-in-progress (V 0.01 ;-)
+\item \url{https://github.com/schoeberl/chisel-book}
+\item Feedback is welcome
+\item Contains all the slides
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Chisel Tutorial from UCB}
@@ -387,31 +477,6 @@ code
 \end{frame}
 %%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]{From here on Slides that shall be moved somewhere}
-\end{frame}
 
-\begin{frame}[fragile]{More Chisel Example Code}
-\begin{itemize}
-\item The time-predictable processor Patmos
-\item An SRAM controller for the DE2-115 board
-\item An SSRAM controller
-\item An UART
-\item A memory arbiter
-\item Caches
-\item ...
-\item \url{https://github.com/t-crest/patmos}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{More Chisel Documentation}
-\begin{itemize}
-\item Started a textbook on ``Digital Design with Chisel''
-\item Considered a work-in-progress (V 0.01 ;-)
-\item \url{https://github.com/schoeberl/chisel-book}
-\item Feedback is welcome
-\item Contains all the slides
-\end{itemize}
-\end{frame}
 
 \end{document}
