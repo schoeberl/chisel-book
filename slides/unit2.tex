@@ -221,6 +221,29 @@ val result = (cond & selA) | (!cond & selB)
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Next Topics -- Some Order}
+\begin{itemize}
+\item Registers
+\item Some more code examples
+\item Multiplexer
+\item Bundles
+\item Ports
+\item Modules
+\item Chisel Background and some Scala (constructor code...)
+\item Testing 1
+\item If/else, case statements
+\item Functions
+\item Function examples for combinational circuits (e.g. ALU)
+\item Functions with state (rising edge, counter,...)
+\item FSM
+\item Wave form debugging
+\item printf debugging
+\item Memories
+\item Modules and structure
+\item Bulk connections
+\item Scala for circuit creation (``scripting'' hardware generation)
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Functions}
 \begin{itemize}
@@ -263,7 +286,10 @@ code
 \begin{itemize}
 \item Results in a little bit more complex setup
 \end{itemize}
-\item 
+\item Needs a Internet connection
+\begin{itemize}
+\item  Tests against latest Chisel version
+\end{itemize}
 \item
 \item
 \item
@@ -314,6 +340,27 @@ class HelloTests(c: Hello) extends Tester(c) {
 \begin{itemize}
 \item Drive the simulation with \code{step(1)}, which is a single clock tick
 \item Test output against expected value
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tutorial Problems}
+\begin{chisel}
+cd problems
+make Mux2.out
+\end{chisel}
+\begin{itemize}
+\item This example should already work
+\item Read the hardware and test code
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tutorial Problems}
+\begin{chisel}
+make Mux4.out
+\end{chisel}
+\begin{itemize}
+\item Keep sbt running
+\item Fix the Mux4 component so that the tests complete
 \end{itemize}
 \end{frame}
 
