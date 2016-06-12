@@ -230,16 +230,16 @@ val q = Reg(next = d)
 \item Reset value as \code{init} parameter on definition
 \end{itemize}
 \begin{chisel}
-val regInit = Reg(init = UInt(0, 8))
+val initReg = Reg(init = UInt(0, 8))
 \end{chisel}
 \begin{itemize}
 \item With this forward declaration we later assign the next value
 \end{itemize}
 \begin{chisel}
-regInit := regInit + UInt(1)
+initReg := initReg + UInt(1)
 \end{chisel}
 \begin{itemize}
-\item Register can also simply be defined within an expression
+\item A register can also be defined within an expression
 \end{itemize}
 \begin{chisel}
 val risingEdge = d & !Reg(next = d)
@@ -259,15 +259,15 @@ val selection = Mux(cond, trueVal, falseVal)
 
 \begin{frame}[fragile]{A Small Circuit}
 \begin{itemize}
-\item Our Chisel knowledge is complete to implement any digital circuit
+\item Our Chisel knowledge is complete enough\\ to implement any digital circuit
 \item Maybe not in the most elegant way ;-)
 \item A counter is a simple basic component
 \end{itemize}
 \begin{chisel}
-  val regCnt = Reg(init = UInt(0, 8))
-  
-  regCnt := Mux(regCnt === UInt(100),
-    UInt(0), regCnt + UInt(1))
+  val cntReg = Reg(init = UInt(0, 8))
+
+  cntReg := Mux(cntReg === UInt(100),
+    UInt(0), cntReg + UInt(1))
 \end{chisel}
 \end{frame}
 
@@ -277,27 +277,90 @@ class Count extends Module {
   val io = new Bundle {
     val cnt = UInt(OUTPUT, 8)
   }
-  
-  val regCnt = Reg(init = UInt(0, 8))
-  
-  regCnt := Mux(regCnt === UInt(100),
-    UInt(0), regCnt + UInt(1))
-  
-  io.cnt := regCnt
+
+  val cntReg = Reg(init = UInt(0, 8))
+
+  cntReg := Mux(cntReg === UInt(100),
+    UInt(0), cntReg + UInt(1))
+
+  io.cnt := cntReg
 }
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Data Aggregation}
+\begin{itemize}
+\item A \code{Bundle} groups several named fields
+\item Like a C struct
+\item \code{Vec} is a vector of elements with the same type
+\item Can be arbitrary mixed
+\end{itemize}
+\begin{chisel}
+class AluFields extends Bundle {
+  val function = UInt(2)
+  val inputA = UInt(8)
+  val inputB = UInt(8)
+  val result = UInt(8)
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\begin{chisel}
+code
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Ports}
+\begin{itemize}
+\item Ports used to connect modules
+\item Ports are bundles with directions
+\end{itemize}
+\begin{chisel}
+class AluIO extends Bundle {
+  val function = UInt(INPUT, 2)
+  val inputA = UInt(INPUT, 8)
+  val inputB = UInt(INPUT, 8)
+  val result = UInt(OUTPUT, 8)
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Port Directions}
+\begin{itemize}
+\item Can be assigned at instantiation
+\end{itemize}
+\begin{chisel}
+class ExecuteIO extends Bundle {
+  val dec = new DecodeExecute().asInput
+  val mem = new ExecuteMemory().asOutput
+}
+\end{chisel}
+\begin{itemize}
+\item Can be reversed with the \code{flip} operation
+\item Convenient to have one bundle definition working as source
+and destination used between two modules
+\end{itemize}
+\begin{chisel}
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Next Topics -- Some Order}
 \begin{itemize}
-\item Some more code examples, e.g. counter with a register and a multuplexer
+\item See notes on the back of the slide printout
 \item Bundles
 \item Ports
 \item Modules
 \item Vecs
 \item Chisel Background and some Scala (constructor code...)
 \item Testing 1
-\item If/else, case statements
+\item when/otherwise, case statements
+\item Some more code examples, e.g. counter then with when statement
 \item Functions
 \item Function examples for combinational circuits (e.g. ALU)
 \item Functions with state (rising edge, counter,...)
@@ -440,7 +503,7 @@ make Mux2.out
 \end{chisel}
 \begin{itemize}
 \item This example should already work
-\item Read the hardware and test code
+\item Read the hardware description and test code
 \end{itemize}
 \end{frame}
 
