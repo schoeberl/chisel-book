@@ -262,6 +262,7 @@ val selection = Mux(cond, trueVal, falseVal)
 \item Our Chisel knowledge is complete enough\\ to implement any digital circuit
 \item Maybe not in the most elegant way ;-)
 \item A counter is a simple basic component
+\item The following counts form 0 to 100
 \end{itemize}
 \begin{chisel}
   val cntReg = Reg(init = UInt(0, 8))
@@ -369,9 +370,9 @@ class ChannelUsage extends Bundle {
 
 \begin{frame}[fragile]{Modules}
 \begin{itemize}
-\item Modules are used to organize the
+\item Modules are used to organize the circuit
 \item Similar to VHDL components (entity/architecture)
-\item Inherits from \code{Module}
+\item A class that inherits from \code{Module}
 \item Circuit description in the constructor
 \item Interface is a Bundle stored in the field \code{io}
 \end{itemize}
@@ -391,7 +392,7 @@ class Adder extends Module {
 
 \begin{frame}[fragile]{Module Usage}
 \begin{itemize}
-\item Creation with \code{new} and wrapped into a \code{Module}
+\item Create with \code{new} and wrap into a \code{Module}
 \item Interface port via the \code{io} field
 \item Note the assignment operator \code{:=} on \code{io} fields
 \end{itemize}
@@ -403,48 +404,77 @@ val result = adder.io.result
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Next Topics -- Some Order}
+\begin{frame}[fragile]{Conditional Assignments}
 \begin{itemize}
-\item See notes on the back of the slide printout
-\item Chisel Background and some Scala (constructor code...)
-\item Testing 1
-\item when/otherwise, case statements
-\item Some more code examples, e.g. counter then with when statement
-\item Functions
-\item Function examples for combinational circuits (e.g. ALU)
-\item Functions with state (rising edge, counter,...)
-\item FSM
-\item Wave form debugging
-\item printf debugging
-\item Memories
-\item Modules and structure
-\item Bulk connections
-\item Scala for circuit creation (``scripting'' hardware generation)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Functions}
-\begin{itemize}
-\item Section 6, but that might come later
-\item xxx
-\item xxx
+\item Conditional update of a value
+\item Last assignment counts
+\item Is basically a multiplexer
 \end{itemize}
 \begin{chisel}
-code
+val v = UInt(5)
+when (condition) {
+  v := UInt(0)
+}
+
+when (c1) { v := UInt(1) }
+when (c2) { v := UInt(2) }
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Title}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
+\begin{frame}[fragile]{The Counter With a Conditional Update}
 \begin{chisel}
-code
+class Count extends Module {
+  val io = new Bundle {
+    val cnt = UInt(OUTPUT, 8)
+  }
+
+  val cntReg = Reg(init = UInt(0, 8))
+
+  cntReg := cntReg + UInt(1)
+  when (cntReg === UInt(100)) {
+    cntReg := UInt(0)
+  }
+
+  io.cnt := cntReg
+}
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Chained Conditionals}
+\begin{itemize}
+\item Chain of conditionals with \code{.elsewhen}
+\item With an optional \emph{else} path with \code{.otherwise}
+\item Note that Scala has \code{if/else}
+\begin{itemize}
+\item Does NOT result in hardware
+\item Are used to conditionally \emph{generate} hardware
+\item We will look at this later
+\end{itemize}
+\item Note the ``.'' at the operators
+\end{itemize}
+\begin{chisel}
+when (c1) { v := UInt(1) }
+.elsewhen (c2) { v := UInt(2) }
+.otherwise { v := UInt(3) }
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Switch Statement}
+\begin{itemize}
+\item Series of comparisons
+\item Chisel allows combinational logic be updated conditional 
+\item Chisel disallows incomplete specified logic (= latches)
+\item Chisel will report a runtime error
+\end{itemize}
+\begin{chisel}
+switch(fn) {
+  is(UInt(0)) { result := a + b }
+  is(UInt(1)) { result := a - b }
+  is(UInt(2)) { result := a | b }
+  is(UInt(3)) { result := a & b }
+}
+\end{chisel}
+\end{frame}
 
 \begin{frame}[fragile]{More Chisel Example Code}
 \begin{itemize}
@@ -548,33 +578,25 @@ make Mux2.out
 make Mux4.out
 \end{chisel}
 \begin{itemize}
-\item Keep sbt running
+\item The test should fail
 \item Fix the Mux4 component so that the tests complete
 \end{itemize}
 \end{frame}
 
-%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Title}
-\begin{chisel}
-code
-\end{chisel}
+\begin{frame}[fragile]{More Problems}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Explore more problems to solve
+\item Suggestions:
+\begin{itemize}
+\item Accumulator
+\item VecSchiftRegister (maybe)
+\end{itemize}
+\item Change the Blinking LED example so that
+\begin{itemize}
+\item It flashes for 1/5 second every second
+\end{itemize}
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Title}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%
 
 
 
