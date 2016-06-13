@@ -307,12 +307,14 @@ class AluFields extends Bundle {
 
 \begin{frame}[fragile]{Vectors}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Indexable vector of elements
+\item Elements can be Chisel basic elements, or bundles
+\item Type is specified within the curly brackets
 \end{itemize}
 \begin{chisel}
-code
+val myVec = Vec.fill(3) { SInt(width = 10) }
+val y = myVec(2)
+myVec(0) := SInt(-3)
 \end{chisel}
 \end{frame}
 
@@ -341,22 +343,69 @@ class ExecuteIO extends Bundle {
   val mem = new ExecuteMemory().asOutput
 }
 \end{chisel}
+\begin{chisel}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Port Directions}
 \begin{itemize}
 \item Can be reversed with the \code{flip} operation
 \item Convenient to have one bundle definition working as source
 and destination used between two modules
 \end{itemize}
 \begin{chisel}
+class Channel extends Bundle {
+  val data = UInt(INPUT, 32)
+  val ready = Bool(OUTPUT)
+  val valid = Bool(INPUT)
+}
+
+class ChannelUsage extends Bundle {
+  val input = new Channel()
+  val output = new Channel().flip()
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Modules}
+\begin{itemize}
+\item Modules are used to organize the
+\item Similar to VHDL components (entity/architecture)
+\item Inherits from \code{Module}
+\item Circuit description in the constructor
+\item Interface is a Bundle stored in the field \code{io}
+\end{itemize}
+\begin{chisel}
+class Adder extends Module {
+  val io = new Bundle {
+    val a = UInt(INPUT, 4)
+    val b = UInt(INPUT, 4)
+    val result = UInt(OUTPUT, 4)
+  }
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Module Usage}
+\begin{itemize}
+\item Creation with \code{new} and wrapped into a \code{Module}
+\item Interface port via the \code{io} field
+\item Note the assignment operator \code{:=} on \code{io} fields
+\end{itemize}
+\begin{chisel}
+val adder = Module(new Adder())
+adder.io.a := ina
+adder.io.b := inb
+val result = adder.io.result
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Next Topics -- Some Order}
 \begin{itemize}
 \item See notes on the back of the slide printout
-\item Bundles
-\item Ports
-\item Modules
-\item Vecs
 \item Chisel Background and some Scala (constructor code...)
 \item Testing 1
 \item when/otherwise, case statements
@@ -396,16 +445,6 @@ code
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Title}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\begin{chisel}
-code
-\end{chisel}
-\end{frame}
 
 \begin{frame}[fragile]{More Chisel Example Code}
 \begin{itemize}
@@ -443,9 +482,6 @@ code
 \begin{itemize}
 \item  Tests against latest Chisel version
 \end{itemize}
-\item
-\item
-\item
 \end{itemize}
 \end{frame}
 
