@@ -39,7 +39,7 @@
 %\renewcommand{\author2}[1]{}
 
 
-\title{Unit 4}
+\title{Customized Circuit Generation}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark}
@@ -51,15 +51,29 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Goals for This Template}
+\begin{frame}[fragile]{Lab Session}
 \begin{itemize}
-\item Get faster in adding slides
+\item Run and explore the UART example (e.g., with gtkterm)
+\item Combine the UART with the blinking LED
 \begin{itemize}
-\item with Latex snippets
+\item Write a `0' and `1' on blink off and on
 \end{itemize}
+\item Write repeated ``0..9'' as fast as possible 
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Next Topics -- Some Order}
+\begin{itemize}
+\item See notes on the back of the slide printout
+\item FSM
+\item Parameters for Chisel components (Module, Bundle,...)
+\item Parameters -- see BubbleFifo
+\item Memories
+\item Modules and structure
+\item Bulk connections
+\item Scala for circuit creation (``scripting'' hardware generation)
+\end{itemize}
+\end{frame}
 
 %%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Title}
@@ -83,23 +97,5 @@ code
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%
-
-
-\begin{frame}[fragile]{Code example}
-\begin{chisel}
-(a | b) & ~(c ^ d)
-
-val addVal = a + b
-val orVal = a | b
-val boolVal = a >= b
-\end{chisel}
-\begin{itemize}
-\item The usual operations 
-\item Simple name assignment with val
-\item Width inference
-\item Type inference
-\item Types: Bits, UInt, SInt, Bool
-\end{itemize}
-\end{frame}
 
 \end{document}
