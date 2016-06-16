@@ -50,30 +50,203 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Scala List for Enumeration}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(UInt(), 2)
+\end{chisel}
+\begin{itemize}
+\item Can be used in wires and registers
+\item Symbols for a state machine
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Finite State Machine}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(UInt(), 2)
+  val stateReg = Reg(init = empty)
+  val dataReg = Reg(init = Bits(0, size))
+
+  when(stateReg === empty) {
+    when(io.enq.write) {
+      stateReg := full
+      dataReg := io.enq.din
+    }
+  }.elsewhen(stateReg === full) {
+    when(io.deq.read) {
+      stateReg := empty
+    }
+  }
+\end{chisel}
+\begin{itemize}
+\item A simple buffer for a bubble FIFO
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = UInt(INPUT, n)
+  val ready = Bool(OUTPUT)
+  val valid = Bool(INPUT)
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
+\begin{itemize}
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\begin{chisel}
+class ParamAdder(n: Int) extends Module {
+  val io = new Bundle {
+    val a = UInt(INPUT, n)
+    val b = UInt(INPUT, n)
+    val result = UInt(OUTPUT, n)
+  }
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+
+val add8 = Module(new ParamAdder(8))
+\end{chisel}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+\item Can also be a generic type:
+\item \code{class Mod[T <: Bits](param: T) extends...}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
+\begin{chisel}
+val shiftReg = Reg(init = UInt(0, 8))
+
+shiftReg(0) := inVal
+
+for (i <- 1 until 8) {
+  shiftReg(i) := shiftReg(i-1)
+}
+\end{chisel}
+\begin{itemize}
+\item \code{for} is Scala
+\item This loop generates several connections
+\item The connections are parallel hardware
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Circuit Generation}
+\begin{chisel}
+class Base extends Module { val io = new Bundle() }
+class VariantA extends Base { }
+class VariantB extends Base { }
+
+val m = if (useA) Module(new VariantA())
+        else Module(new VariantB())
+\end{chisel}
+\begin{itemize}
+\item \code{if} and \code{else} is Scala
+\item \code{if} is an expression that returns a value
+\begin{itemize}
+\item Like ``\code{cond ? a : b;}'' in C and Java
+\end{itemize}
+\item This is not a hardware multiplexer
+\item Decides which module to generate
+\item Could even read an XML file for the configuration
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational (Truth) Table Generation}
+\begin{chisel}
+val arr = new Array[Bits](length)
+for (i <- 0 until length) {
+  arr(i) = ...
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\begin{itemize}
+\item Generate a table in a Scala array
+\item Use that array as input for a Chisel \code{Vec}
+\item Generates a logic table at hardware construction time
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ideas for Runtime Table Generation}
+\begin{itemize}
+\item Assembler in Scala/Java generates the boot ROM
+\item Table with a \code{sin} function
+\item Binary to BCD conversion
+\item Schedule table for a TDM based network-on-chip
+\item 
+\item More ideas?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory}
+\begin{chisel}
+val mem = Mem(Bits(width = 8), size)
+
+// write
+when(wrEna) {
+  mem(wrAddr) := wrData
+}
+
+// read
+val rdAddrReg = Reg(next = rdAddr)
+rdData := mem(rdAddrReg)
+\end{chisel}
+\begin{itemize}
+\item Write is synchronous
+\item Read can be asynchronous or synchronous
+\item But there are no asynchronous memories in an FPGA
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
 \item Run and explore the UART example (e.g., with gtkterm)
+\begin{itemize}
+\item In folder examples, package \code{uart}
+\item \code{make uart}
+\end{itemize}
 \item Combine the UART with the blinking LED
 \begin{itemize}
-\item Write a `0' and `1' on blink off and on
+\item Write a `0' and `1' out on blink off and on
 \end{itemize}
 \item Write repeated ``0..9'' as fast as possible 
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Next Topics -- Some Order}
+\begin{frame}[fragile]{Links to the Examples}
 \begin{itemize}
-\item See notes on the back of the slide printout
-\item FSM
-\item Parameters for Chisel components (Module, Bundle,...)
-\item Parameters -- see BubbleFifo
-\item Memories
-\item Modules and structure
-\item Bulk connections
-\item Scala for circuit creation (``scripting'' hardware generation)
+\item Example code
+\end{itemize}
+\begin{chisel}
+https://github.com/schoeberl/chisel-examples.git
+\end{chisel}
+\begin{itemize}
+\item Slides
+\end{itemize}
+\begin{chisel}
+https://github.com/schoeberl/chisel-book.git
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Feedback}
+\begin{itemize}
+\item Plans on using Chisel?
+\item What went well?
+\item What was not so good?
+\item How can this Chisel course be improved?
+\item
+\item Would be happy to receive an email: \code{masca@dtu.dk}
 \end{itemize}
 \end{frame}
+
+\end{document}
 
 %%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Title}
@@ -98,4 +271,3 @@ code
 \end{frame}
 %%%%%%%%%%%%%%%%
 
-\end{document}
