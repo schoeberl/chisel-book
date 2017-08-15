@@ -162,7 +162,7 @@ val word = Cat(highByte, lowByte)
 \item To keep the original Sala operators usable
 \end{itemize}
 \item Operands are \code{UInt} and \code{SInt}
-\item Can be \code{Bool} for equal and unequal
+\item Operands can be \code{Bool} for equal and unequal
 \item Result is \code{Bool}
 \end{itemize}
 \begin{chisel}
@@ -292,7 +292,7 @@ class Count extends Module {
 \begin{frame}[fragile]{Data Aggregation}
 \begin{itemize}
 \item A \code{Bundle} groups several named fields
-\item Like a C struct
+\item Like a C struct or VHDL record
 \item \code{Vec} is a vector of elements with the same type
 \item Can be arbitrary mixed
 \end{itemize}
@@ -374,7 +374,7 @@ class ChannelUsage extends Bundle {
 \item Similar to VHDL components (entity/architecture)
 \item A class that inherits from \code{Module}
 \item Circuit description in the constructor
-\item Interface is a Bundle stored in the field \code{io}
+\item Interface (port) is a Bundle stored in the field \code{io}
 \end{itemize}
 \begin{chisel}
 class Adder extends Module {
@@ -392,7 +392,7 @@ class Adder extends Module {
 
 \begin{frame}[fragile]{Module Usage}
 \begin{itemize}
-\item Create with \code{new} and wrap into a \code{Module}
+\item Create with \code{new} and wrap into a \code{Module()}
 \item Interface port via the \code{io} field
 \item Note the assignment operator \code{:=} on \code{io} fields
 \end{itemize}
@@ -508,7 +508,7 @@ switch(fn) {
 \begin{itemize}
 \item Results in a little bit more complex setup
 \end{itemize}
-\item Needs a Internet connection
+\item Needs an Internet connection
 \begin{itemize}
 \item  Tests against latest Chisel version
 \end{itemize}
@@ -522,6 +522,7 @@ switch(fn) {
 \begin{chisel}
 git clone https://github.com/ucb-bar/chisel-tutorial.git
 cd chisel-tutorial
+git checkout chisel2
 \end{chisel}
 \begin{itemize}
 \item Test the installation with a Hello World

@@ -167,7 +167,7 @@ object Example {}
 \begin{itemize}
 \item For \emph{static} fields and methods
 \begin{itemize}
-\item Scala has no static fields or method like Java
+\item Scala has no static fields or methods like Java
 \end{itemize}
 \item Needed for \code{main}
 \item Useful for helper functions
@@ -208,6 +208,12 @@ sbt "run-main simple.Example"
 \end{itemize}
 \begin{chisel}
 sbt "run-main simple.Example"
+\end{chisel}
+\begin{itemize}
+\item Or even just:
+\end{itemize}
+\begin{chisel}
+sbt run
 \end{chisel}
 \end{frame}
 
@@ -333,7 +339,7 @@ expect(dut.io.result, 7)
 %\end{chisel}
 %\end{frame}
 
-\begin{frame}[fragile]{A Tiny ALU -- IO Connection}
+\begin{frame}[fragile]{A Tiny ALU: IO Connection}
 \begin{chisel}
 class Alu extends Module {
   val io = new Bundle {
@@ -350,7 +356,7 @@ class Alu extends Module {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{A Tiny ALU -- The Function}
+\begin{frame}[fragile]{A Tiny ALU: The Function}
 \begin{chisel}
   val result = UInt(width = 4)
   // some default value is needed
@@ -364,7 +370,7 @@ class Alu extends Module {
     is(UInt(3)) { result := a & b }
   }
 
-  // Output on the LEDs (with zero extension)
+  // Output on the LEDs
   io.result := result
 }
 \end{chisel}
@@ -499,18 +505,21 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \item Explore the ALU example
 \begin{itemize}
 \item It contains a tester
-\item It can also be tested with the switches and LEDS on the FPGA
+\item It can also be tested with the switches and LEDs on the FPGA
 \end{itemize}
 \item Explore the bubble FIFO example for wave form viewing
 \item Do an example project from scratch
 \begin{itemize}
 \item But reuse VHDL top and Quartus files (from the ALU)
 \item With a Chisel main
-\item Some simple function with LEDs and switches 
+\item Some simple function with LEDs and switches
+\begin{itemize}
 \item E.g., moving light with direction change
+\item Remember Knight Rider?
+\end{itemize}
 \item Running it in the FPGA
 \end{itemize}
-\item Do the UART exercise, which is mandatory
+% \item Do the UART exercise, which is mandatory
 \end{itemize}
 \end{frame}
 
