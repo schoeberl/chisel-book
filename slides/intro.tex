@@ -369,9 +369,7 @@ val icache =
 \item Use the full power of Scala
 \end{itemize}
 \begin{chisel}
-val source = fromFile(fileName)
-val byteArray = source.map(_.toByte).toArray
-source.close()
+val byteArray = Files.readAllBytes(Paths.get(fileName))
 val arr = new Array[Bits](byteArray.length)
 for (i <- 0 until byteArray.length) {
   arr(i) = Bits(byteArray(i), 8)
