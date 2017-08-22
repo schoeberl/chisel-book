@@ -313,7 +313,7 @@ class AluFields extends Bundle {
 \item Type is specified within the curly brackets
 \end{itemize}
 \begin{chisel}
-val myVec = Vec.fill(3) { SInt(width = 10) }
+val myVec = Vec(3, SInt(width = 10))
 val y = myVec(2)
 myVec(0) := SInt(-3)
 \end{chisel}
