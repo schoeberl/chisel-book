@@ -50,6 +50,64 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Feedback Fixes}
+\begin{itemize}
+\item Changed ``Hello World'' example to use a 32-bit counter
+\begin{itemize}
+\item No point in saving a few bits in an intro example
+\end{itemize}
+\item Better syntax for \code{Vec} creation
+\end{itemize}
+\begin{chisel}
+val myVec = Vec(3, SInt(width = 10))
+val y = myVec(2)
+myVec(0) := SInt(-3)
+\end{chisel}
+\begin{itemize}
+\item Suggestion of a register file as \code{Reg} of a vector
+\end{itemize}
+\begin{chisel}
+val vecReg = Reg(Vec(32, SInt(width = 32)))
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Feedback}
+\begin{itemize}
+\item Mux with more inputs (instead of \code{switch}):
+\end{itemize}
+\begin{chisel}
+Mux(c1, a, Mux(c2, b, Mux(..., default)))
+
+MuxCase(default, Array(c1 -> a, c2 -> b, ...))  
+
+MuxLookup(idx, default, 
+          Array(UInt(0) -> a, UInt(1) -> b, ...))
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Feedback}
+\begin{itemize}
+\item Question on wiring up a component at creation time
+\item Yes, by defining a function:
+\end{itemize}
+\begin{chisel}
+def add(x: UInt, y: UInt): UInt = {
+  val adder = Module(new Adder)
+  adder.io.a := x
+  adder.io.b := y
+  adder.io.result
+}
+  
+val res1 = add(x, y)
+\end{chisel}
+\begin{itemize}
+\item Or better as Factory method (will show it in the second session)
+\end{itemize}
+\begin{chisel}
+val res2 = Adder(x, y)
+\end{chisel}
+\end{frame}
+
 \begin{frame}[fragile]{Chisel and Scala}
 \begin{itemize}
 \item Chisel is a library written in Scala
@@ -510,7 +568,7 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \item Explore the bubble FIFO example for wave form viewing
 \item Do an example project from scratch
 \begin{itemize}
-\item But reuse VHDL top and Quartus files (from the ALU)
+\item But reuse Quartus files (from the ALU or knight example)
 \item With a Chisel main
 \item Some simple function with LEDs and switches
 \begin{itemize}
