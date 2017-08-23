@@ -204,6 +204,29 @@ rdData := mem(rdAddrReg)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Factory Methods}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built in components, such as \code{Mux}
+\end{itemize}
+\begin{chisel}
+val myAdder = Adder(x, y)
+\end{chisel}
+\begin{itemize}
+\item A little bit more work on component side
+\item Define an \code{apply} method on the companion object that returns the component
+\end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
+\end{frame}
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
