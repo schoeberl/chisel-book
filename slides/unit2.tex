@@ -310,12 +310,18 @@ class AluFields extends Bundle {
 \begin{itemize}
 \item Indexable vector of elements
 \item Elements can be Chisel basic elements, or bundles
-\item Type is specified within the curly brackets
+\item Type is specified as second parameter
 \end{itemize}
 \begin{chisel}
 val myVec = Vec(3, SInt(width = 10))
 val y = myVec(2)
 myVec(0) := SInt(-3)
+\end{chisel}
+\begin{itemize}
+\item A register file as \code{Reg} of a vector
+\end{itemize}
+\begin{chisel}
+val vecReg = Reg(Vec(32, SInt(width = 32)))
 \end{chisel}
 \end{frame}
 
