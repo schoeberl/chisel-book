@@ -155,7 +155,7 @@ class Hello extends Module {
   }
   val CNT_MAX = UInt(20000000 / 2 - 1);
   
-  val cntReg = Reg(init = UInt(0, 25))
+  val cntReg = Reg(init = UInt(0, 32))
   val blkReg = Reg(init = UInt(0, 1))
 
   cntReg := cntReg + UInt(1)
@@ -310,6 +310,60 @@ class ReaderIO(size: Int) extends Bundle {
 \end{chisel}
 
 
+\section{Snippets}
+
+\todo{A collection is Chisel snippets collected along some coding}
+
+
+A memory with sequential registered read and write ports:
+\begin{chisel}
+  val mem = Mem(UInt(width = 8), 256, seqRead = true)
+  val rdData = mem(Reg(next = rdAddr))
+  when(wrEna) {
+    mem(wrAddr) := wrData
+  }
+\end{chisel}
+
+Initialize a \code{Vec} from a Scala array:
+\begin{chisel}
+  val program = new Array[Bits](3)
+  program(0) = Bits(0x01, 8)
+  program(1) = Bits(0x23, 8)
+  program(2) = Bits(0x16, 8)
+    
+  val rom = Vec(program)
+\end{chisel}
+
+State machine:
+\begin{chisel}
+  val fetch :: execute :: load :: Nil = Enum(UInt(), 3)
+  val stateReg = Reg(init = fetch)
+
+  switch(stateReg) {
+    is(fetch) {
+      stateReg := execute
+    }
+    is(execute) {
+      when(isLoad) {
+        stateReg := load
+      }.otherwise {
+        stateReg := fetch
+      }
+    }
+    is(load) {
+      stateReg := fetch
+    }
+  }
+\end{chisel}
+
+\textbf{No default assignment possible when declaring a signal! Need an extra one.}
+
+\subsection{SBT and Eclipse}
+
+Use an IDE, such as Eclipse, but generate the project with \code{sbt}
+from the library dependency description. E.g.,:
+
+\todo{add Eclipse stuff here.}
 
 \section{Conclusion}
 \label{sec:conclusion}
