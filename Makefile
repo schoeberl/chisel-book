@@ -9,3 +9,7 @@ all:
 
 clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
+
+chisel:
+	sbt "test:runMain RegisterTester"
+	sbt "test:runMain LogicTester"
