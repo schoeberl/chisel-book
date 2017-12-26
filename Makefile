@@ -1,5 +1,5 @@
 
-DOC=design-with-chisel
+DOC=chisel-book
 
 all:
 	pdflatex $(DOC)
