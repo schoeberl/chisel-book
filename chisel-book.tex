@@ -85,16 +85,17 @@ We will walk through these examples in detail.
 \section{Introduction}
 \label{sec:intro}
 
-This book is not a genral introdcution to digital design and the fundamentals
-of it.
 This book is an introduction to digital system design using a modern hardware
 construction language, Chisel~\cite{chisel:dac2012}.
-For an introdcution of basics, such as how to build a gate out of CMOS transistors
-refere to other digital design books.
-In this book we focus on a slightly higher abstraction to get you up to
+In this book we focus on a slightly higher abstraction level to get you up to
 speed to build more complex, interacting digital systems.
 
-Hardware is now commonly described with a hardware design language (HDL).
+This book is not a general introduction to digital design and the fundamentals
+of it.
+For an introduction of basics, such as how to build a gate out of CMOS transistors
+refer to other digital design books.
+
+Hardware is now commonly described with a hardware description language (HDL).
 The time of drawing hardware components, even with CAD tools, is definitely
 over. Some high level schematics can give an overview of the system, but are
 not intended to describe the system.
@@ -102,9 +103,10 @@ not intended to describe the system.
 The two most common HDLs are Verilog and VHDL. Both languages are old,
 care a lot of legacy, and have a moving line of what constructions of the language
 are synthesizable to hardware.
-
 Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
 blocks that can be synthesized in an ASIC.
+For hardware design in Chisel, Verilog serves as an intermediate language
+for testing and synthesis.
 
 \subsection{Getting Started with the Tools}
 
@@ -127,7 +129,7 @@ called the \emph{Hello World} example. Following code is a first approach:
 Compiling and executing this short program with \code{sbt}
 
 \begin{chisel}
-sbt "run-main Hello"
+sbt "runMain Hello"
 \end{chisel}
 
 leads to the expected output of a Hello World program:
@@ -181,21 +183,23 @@ to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 10000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
 
-%\subsection{Course Abstract}
-%
-%Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Here at DTU we used Chisel in the T-CREST project and in teaching advanced computer architecture.
-%
-%In this course I will give an overview of Chisel to describe circuits at the RTL, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators. Besides lecturing we will have lab sessions to describe small circuits and evaluate them in an FPGA.
-%
-%The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course shall give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala.
+\subsection{Source Access}
 
-%\begin{figure}
-%  \centering
-%  \includegraphics{figures/broken-mux}
-%
-%  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
-%  \label{fig:mux}
-%\end{figure}
+This book is open source and hosted at GitHub: \href{https://github.com/schoeberl/chisel-book}{chisel-book}.
+Small Chisel code snippets are included in the repository of the book.
+Larger examples are collected in the accompanying repository \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+
+\subsection{Exercises}
+
+Each chapter ends with a few hands-on exercises. For the introduction best would be if you have
+an FPGA board available an get the blinking LED running.
+As a first step clone (or fork) the \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+repository and compile the blinking LED with following steps:
+
+\begin{chisel}
+git clone https://github.com/schoeberl/chisel-examples.git
+
+\end{chisel}
 
 \section{Basic Components}
 
@@ -403,3 +407,19 @@ All code examples are available in open source from:
 \bibliography{chisel}
 
 \end{document}
+
+\subsection{Course Abstract}
+
+Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Here at DTU we used Chisel in the T-CREST project and in teaching advanced computer architecture.
+
+In this course I will give an overview of Chisel to describe circuits at the RTL, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators. Besides lecturing we will have lab sessions to describe small circuits and evaluate them in an FPGA.
+
+The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course shall give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala.
+
+%\begin{figure}
+%  \centering
+%  \includegraphics{figures/broken-mux}
+%
+%  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
+%  \label{fig:mux}
+%\end{figure}
