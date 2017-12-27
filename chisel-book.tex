@@ -161,27 +161,28 @@ class Hello extends Module {
   val io = new Bundle {
     val led = UInt(OUTPUT, 1)
   }
-  val CNT_MAX = UInt(20000000 / 2 - 1);
-  
+  val CNT_MAX = UInt(50000000 / 2 - 1);
+
   val cntReg = Reg(init = UInt(0, 32))
   val blkReg = Reg(init = UInt(0, 1))
 
-  cntReg := cntReg + UInt(1)
+  cntReg := cntReg + 1.U
   when(cntReg === CNT_MAX) {
-    cntReg := UInt(0)
+    cntReg := 0.U
     blkReg := ~blkReg
   }
   io.led := blkReg
 }
-
 \end{chisel}
 
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
-usually clocked with a high frequency, e.g., 20 MHz, and we need a counter
+usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
-example we count from 0 up to 10000000-1 and then toggle the blinking signal
-(\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := UInt(0)}).
+example we count from 0 up to 25000000-1 and then toggle the blinking signal
+(\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
+
+\todo{The above code is Chisel 3 in Chisel 2 compatibility mode. Switch to the real Chisel 3 code.}
 
 \subsection{Source Access}
 
@@ -191,15 +192,63 @@ Larger examples are collected in the accompanying repository \href{https://githu
 
 \subsection{Exercises}
 
-Each chapter ends with a few hands-on exercises. For the introduction best would be if you have
-an FPGA board available an get the blinking LED running.
+Each chapter ends with a few hands-on exercises. For the introduction exercise we will use and
+FPGA board to get one LED blinking LED.
 As a first step clone (or fork) the \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}
-repository and compile the blinking LED with following steps:
+repository.
+The Hello World example is in its own folder \code{hello-world} setup as
+a minimal project. You can explore the Chisel code of the blinking LED
+in \code{Hello.scala}.
+Compile the blinking LED with following steps:
 
 \begin{chisel}
 git clone https://github.com/schoeberl/chisel-examples.git
-
+cd chisel-examples/hello-world/
+make
 \end{chisel}
+
+After some initial downloading of Chisel components, this will produce the Verilog file \code{Hello.v}.
+Explore this Verilog file. You will see that it contains two inputs \code{clock} and \code{reset}
+and one output \code{io\_led}. When you compare this Verilog file with the Chisel module
+you will notice that the Chisel module does not contain \code{clock} or \code{reset}.
+Those signals are implicit generated and in most designs is convenient to not need to
+deal with these low-level details. Chisel provides register components and those
+are connected automatically to \code{clock} and \code{reset} (if needed).
+
+
+We also provide an additional Verilog top level in \code{verilog/hello\_top.v},
+which can be used to avoid connecting a reset signal (as FPGA registers usually
+are set to 0 on FPGA configuration).
+
+The next step is to setup an FPGA project file for the synthesize tool, assign the pins,
+and compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
+performing place and route, performing timing analysis, and generating a bitfile.
+However, for the purpose of this introduction example we simply call it ``compile''
+your code.} the Verilog code, and configure the FPGA with the bitfile.
+We cannot provide the details on this steps. Please consult the manual of
+your Intel Quartus or Xilinx Vivado tool.
+However, the examples repository contains some ready to use Quartus
+projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
+If it happens that your board is supported, start Quartus open the project,
+compile it by pressing the \emph{Play} button, and configure the FPGA board
+with the \emph{Programmer} button and one of the LEDs should blink.
+Voila, you managed to get your first design in Chisel running in an FPGA!
+
+Now change the blinking frequency to a slower or a faster value and
+rerun the build process. Blinking frequencies and also blinking patterns
+communicate different ``emotions''. E.g., a slow blinking LED signals that
+everything is ok, a fast blinking LED signals an alarm state.
+Explore which frequencies signal best those two different emotions.
+
+As a more challenging extension to the exercise, generate a blinking pattern:
+the LED shall be on for 200~ms every second. For this pattern you might
+decouple the change of the LED blinking from the counter reset.
+You will need a second constant where you change the state of the
+\code{blkReg} register. What kind of emotion does this pattern produce?
+Is it alarming or more like a sign of live signal?
+
+
+
 
 \section{Basic Components}
 
