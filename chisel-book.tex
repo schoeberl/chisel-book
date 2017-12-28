@@ -158,13 +158,13 @@ Following code shows a blinking LED, described in Chisel:
 
 \begin{chisel}
 class Hello extends Module {
-  val io = new Bundle {
-    val led = UInt(OUTPUT, 1)
-  }
+  val io = IO(new Bundle {
+    val led = Output(UInt(1.W))
+  })
   val CNT_MAX = UInt(50000000 / 2 - 1);
-
-  val cntReg = Reg(init = UInt(0, 32))
-  val blkReg = Reg(init = UInt(0, 1))
+  
+  val cntReg = RegInit(UInt(0, 32.W))
+  val blkReg = RegInit(UInt(0, 1.W))
 
   cntReg := cntReg + 1.U
   when(cntReg === CNT_MAX) {
@@ -182,8 +182,6 @@ to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 
-\todo{The above code is Chisel 3 in Chisel 2 compatibility mode. Switch to the real Chisel 3 code.}
-
 \subsection{Source Access}
 
 This book is open source and hosted at GitHub: \href{https://github.com/schoeberl/chisel-book}{chisel-book}.
@@ -192,11 +190,11 @@ Larger examples are collected in the accompanying repository \href{https://githu
 
 \subsection{Exercises}
 
-Each chapter ends with a few hands-on exercises. For the introduction exercise we will use and
-FPGA board to get one LED blinking LED.
-As a first step clone (or fork) the \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+Each chapter ends with a few hands-on exercises. For the introduction exercise we will use an
+FPGA board to get one LED blinking.
+As a first step clone (or first fork on GitHub) the \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository.
-The Hello World example is in its own folder \code{hello-world} setup as
+The Hello World example is in its own folder \code{hello-world}, setup as
 a minimal project. You can explore the Chisel code of the blinking LED
 in \code{Hello.scala}.
 Compile the blinking LED with following steps:
@@ -232,7 +230,8 @@ projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115
 If it happens that your board is supported, start Quartus open the project,
 compile it by pressing the \emph{Play} button, and configure the FPGA board
 with the \emph{Programmer} button and one of the LEDs should blink.
-Voila, you managed to get your first design in Chisel running in an FPGA!
+
+{\bf Gratulation! You managed to get your first design in Chisel running in an FPGA!}
 
 Now change the blinking frequency to a slower or a faster value and
 rerun the build process. Blinking frequencies and also blinking patterns
@@ -256,15 +255,22 @@ In this section we introduce the basic components for digital design.
 These basic elements can be combined to build larger, more interesting
 circuits.
 
+\todo{Checkout out (all) the different ways to define a register.
+Start some code.
+Then ask the community, which is the preferred one.}
+
+\lstinputlisting[language=chisel]{src/main/scala/DivReg.scala}
+
+
 Here are two examples of basic components.
 
 A module containing combinational logic:
 
-\lstinputlisting[language=chisel]{src/main/scala/Logic.scala}
+%\lstinputlisting[language=chisel]{src/main/scala/Logic.scala}
 
 An 8-bit register:
 
-\lstinputlisting[language=chisel]{src/main/scala/Register.scala}
+%\lstinputlisting[language=chisel]{src/main/scala/Register.scala}
 
 \subsection{Multiplexor}
 
