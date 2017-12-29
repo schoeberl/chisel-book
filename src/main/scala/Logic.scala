@@ -1,12 +1,12 @@
-import Chisel._
+import chisel3._
 
 class Logic extends Module {
-  val io = new Bundle {
-    val a = UInt(INPUT, 1)
-    val b = UInt(INPUT, 1)
-    val c = UInt(INPUT, 1)
-    val out = UInt(OUTPUT, 1)
-  }
+  val io = IO(new Bundle {
+    val a = Input(UInt(1.W))
+    val b = Input(UInt(1.W))
+    val c = Input(UInt(1.W))
+    val out = Output(UInt(1.W))
+  })
 
   io.out := io.a & io.b | io.c
 }

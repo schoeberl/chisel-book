@@ -10,4 +10,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
+scalacOptions := Seq("-deprecation")
+
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.0.1"
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.1.0"

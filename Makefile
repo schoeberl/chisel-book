@@ -12,8 +12,8 @@ clean:
 
 chisel:
 	sbt "runMain DivReg"
-
-# broken as they need to be changed to Chisel 3
-broken:
 	sbt "test:runMain RegisterTester"
 	sbt "test:runMain LogicTester"
+
+eclipse:
+	sbt eclipse

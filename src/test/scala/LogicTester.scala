@@ -1,6 +1,7 @@
-import Chisel._
+import chisel3._
+import chisel3.iotesters._
 
-class LogicTester(c: Logic) extends Tester(c) {
+class LogicTester(c: Logic) extends PeekPokeTester(c) {
 
   // TODO: more should be tested
   poke(c.io.a, 1)
@@ -12,10 +13,7 @@ class LogicTester(c: Logic) extends Tester(c) {
 
 object LogicTester {
   def main(args: Array[String]): Unit = {
-    chiselMainTest(Array("--genHarness", "--test", "--backend", "c",
-      "--compile", "--targetDir", "generated"),
-      () => Module(new Logic())) {
-        c => new LogicTester(c)
-      }
+    chisel3.iotesters.Driver(() => new Logic()) { c =>
+      new LogicTester(c) }
   }
 }
