@@ -161,10 +161,10 @@ class Hello extends Module {
   val io = IO(new Bundle {
     val led = Output(UInt(1.W))
   })
-  val CNT_MAX = UInt(50000000 / 2 - 1);
+  val CNT_MAX = (50000000 / 2 - 1).U;
   
-  val cntReg = RegInit(UInt(0, 32.W))
-  val blkReg = RegInit(UInt(0, 1.W))
+  val cntReg = RegInit(0.asUInt(32.W))
+  val blkReg = RegInit(0.asUInt(1.W))
 
   cntReg := cntReg + 1.U
   when(cntReg === CNT_MAX) {
@@ -258,6 +258,7 @@ circuits.
 \todo{Checkout out (all) the different ways to define a register.
 Start some code.
 Then ask the community, which is the preferred one.}
+\todo{RegInit and RegNext are the preferred ones.}
 
 \lstinputlisting[language=chisel]{src/main/scala/DivReg.scala}
 
