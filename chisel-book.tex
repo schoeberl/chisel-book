@@ -87,13 +87,17 @@ We will walk through these examples in detail.
 
 This book is an introduction to digital system design using a modern hardware
 construction language, Chisel~\cite{chisel:dac2012}.
-In this book we focus on a slightly higher abstraction level to get you up to
-speed to build more complex, interacting digital systems.
+In this book we focus on a higher abstraction level then usual digital design,
+to enable to build more complex, interacting digital systems.
 
-This book is not a general introduction to digital design and the fundamentals
-of it.
-For an introduction of basics, such as how to build a gate out of CMOS transistors
-refer to other digital design books.
+This book and Chisel is targeting two groups of developers:
+(1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
+Java, or TCL/TK to generate hardware to move to a single hardware construction language
+where hardware generation is part of the language and
+(2) software programmers who are becoming interested in hardware design as future chips
+from Intel will include programmable hardware to speed up programs.
+
+\todo{Why Chisel}
 
 Hardware is now commonly described with a hardware description language (HDL).
 The time of drawing hardware components, even with CAD tools, is definitely
@@ -108,14 +112,41 @@ blocks that can be synthesized in an ASIC.
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
+This book is not a general introduction to digital design and the fundamentals of it.
+For an introduction of basics, such as how to build a gate out of CMOS transistors
+refer to other digital design books.
+
 \subsection{Getting Started with the Tools}
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
 
-\todo{Describe sbt installation -- or at least have pointer to it.}
+On Mac OS X, with the packet manager \href{https://brew.sh/}{Homebrew},
+\code{sbt} is installed with:
 
-\todo{Mention Quartus and Xilinx Vivado as FPGA tools.}
+\begin{verbatim}
+brew install sbt
+\end{verbatim}
+
+For Ubuntu, which is based on Debian, software is usually installed from a
+Debian file (.deb). However, as of the time of this writing \code{sbt} is not
+available as a ready to install package. Therefore, the installation process
+is a little bit more involved:
+\begin{verbatim}
+echo "deb https://dl.bintray.com/sbt/debian /" | \
+  sudo tee -a /etc/apt/sources.list.d/sbt.list
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
+  --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
+sudo apt-get update
+sudo apt-get install sbt
+\end{verbatim}
+
+To build hardware for an FPGA you need a synthesize tool. The two major
+FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
+their tools that cover small to medium sized FPGAs. Those medium sized
+FPGAs are large enough to build multicore RISC style processors.
+Intel provides the \href{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
+\href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 
 \subsection{Hello World}
 
@@ -190,7 +221,13 @@ Larger examples are collected in the accompanying repository \href{https://githu
 
 \subsection{Further Reading}
 
-Here a list of further reading for digital design and Chisel;
+Here a list of further reading for digital design:
+\begin{itemize}
+\item \href{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
+is a modern textbook on digital design.
+\end{itemize}
+
+Chisel documentation is available online:
 
 \begin{itemize}
 \item \href{https://chisel.eecs.berkeley.edu/}{Chisel} home page, the official starting point to
@@ -354,7 +391,43 @@ If we want to count N, we start with N-2 and count till -1.
 
 \todo{discuss >= and so on}
 
+\section{Build Process and Testing}
+
+Chisel is written in Scala, so any build process that supports Scala is possible
+with a Chisel project. One popular build tool for Scala is \href{https://www.scala-sbt.org/}{sbt},
+which stands for Scala interactive build tool.
+Besides driving the build and test process, \code{sbt} also downloads the correct
+version of Scala and the Chisel libraries.
+
+The Scala library that represents Chisel and the Chisel testers are automatically
+downloaded during the build process from a Maven repository.
+The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
+with \code{latest.release} to always use the most actual version of Chisel.
+However, this means on each build the version is looked up from the Maven
+repository and an Internet connection is needed for the build to succeed.
+Better use a dedicated version of Chisel and all other Scala libraries in your \code{build.sbt}.
+Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
+For example, it is cool to do hardware design on a plane.
+
 \section{Components}
+
+A larger digital design is structured into a set of components, structured in
+a hierarchical way. Each component has an interface with input and output
+wires. These are similar to input and output pins in an IC.
+Components are connected by by wiring up the inputs and outputs.
+Components are may contain subcomponents to build the hierarchy.
+
+Hardware components are called modules in Chisel. Each module extends
+the class \code{Module} and contains a field \code{io} for the interface.
+The interface is defined by a \code{Bundle} that is wrapped into a call to \code{IO()}.
+The \code{Bundle} contains fields to represent input and output pins of
+module. The direction is given by wrapping a field into either a call to \code{Input()}
+or \code{Output()}. The direction is from the view of the component itself.
+
+In this section we explore some medium sizes digital designs, such as
+a FIFO buffer, which are used as building blocks for larger design.
+As an example we will design a serial interface (also called UART),
+which itself will use the FIFO buffer.
 
 \subsection{FIFO Buffer}
 
