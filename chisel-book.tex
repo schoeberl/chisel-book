@@ -1,8 +1,37 @@
-\documentclass[a4paper]{article}
-%\documentclass[10pt, conference, compsocconf]{IEEEtran}
-%\documentclass[a4paper, conference]{IEEEtran}
+\documentclass[%draft,
+    11pt, % use explicit paper size
+    headinclude, footexclude,
+    % twoside, % this produces strange margins!
+    openright, % for new chapters
+    notitlepage,
+    cleardoubleempty,
+    headsepline,
+    pointlessnumbers,
+    bibtotoc, idxtotoc,
+    ]{scrbook}
 
+% LeeSeshia is 15,73 ? 20,96 cm
+% that was for CreateSpace trim size of JOP book
+% \setlength{\paperwidth}{7.5in} \setlength{\paperheight}{9.25in}
+% \typearea[0.5in]{14}
+% This results in 19,05 ? 23,5 cm
+\setlength{\paperwidth}{15cm} \setlength{\paperheight}{20cm}
+%\typearea{calc} % without BCOR results to a DIV of 8 for 11pt
+\typearea[1cm]{16} % TODO: check if 1 cm is the correct number
 
+% I should switch:
+% From KOMA-Script 3.12 the completely newly implemented package scrlayer-scrpage replaces the old scrpage2.
+% headings
+\usepackage{scrpage2} % for headers
+ \setkomafont{pagehead}{\scshape\small}
+ \setkomafont{pagenumber}{\scshape\small}
+ \automark[section]{chapter}
+ % The following has no influence on the text
+% \ohead[]{\pagemark}
+% \chead[]{}
+% \ihead[]{\headmark}
+% \ofoot[]{} \cfoot[]{} \ifoot[]{}
+ 
 \usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
 \usepackage[colorlinks=true,bookmarks=false]{hyperref}
 \usepackage{booktabs}
@@ -72,21 +101,19 @@
 
 \maketitle \thispagestyle{empty}
 
-\begin{abstract}
-This lecture notes (to become a book) are an introduction into hardware design with the focus
+This lecture notes, which shall become a book, are an introduction into hardware design with the focus
 on using the hardware construction language
 \href{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
 is to present small to medium sized typical hardware components to explore
 hardware design with Chisel.
 We will walk through these examples in detail.
-\end{abstract}
 
 
-\section{Introduction}
+\chapter{Introduction}
 \label{sec:intro}
 
 This book is an introduction to digital system design using a modern hardware
-construction language, Chisel~\cite{chisel:dac2012}.
+construction language, \href{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
 In this book we focus on a higher abstraction level then usual digital design,
 to enable to build more complex, interacting digital systems.
 
@@ -115,8 +142,17 @@ for testing and synthesis.
 This book is not a general introduction to digital design and the fundamentals of it.
 For an introduction of basics, such as how to build a gate out of CMOS transistors
 refer to other digital design books.
+As prerequisites for this book I assume basic knowledge of
+\href{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} and the
+\href{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
+Furthermore, some programming experience in any programming language
+is assumed. No knowledge of Verilog or VHDL is assumed.
+Chisel can be and shall be your first programming language to describe digital hardware.
+As the build process in the examples is based on \code{sbt} and \code{make}
+basic knowledge of the command line interface (CLI, also called terminal or
+Unix shell).
 
-\subsection{Getting Started with the Tools}
+\section{Getting Started with the Tools}
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
@@ -148,7 +184,7 @@ FPGAs are large enough to build multicore RISC style processors.
 Intel provides the \href{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
 \href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 
-\subsection{Hello World}
+\section{Hello World}
 
 Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is a first approach:
@@ -174,11 +210,11 @@ However, is this Chisel? Is this hardware generated to print a string?
 No, this is actually plain Scala code and not a representative Hello World
 program for a hardware design.
 
-\subsection{Chisel Testing Hello World}
+\section{Chisel Testing Hello World}
 
 \todo{Show the testing printout like on the GitHub page of Chisel}
 
-\subsection{Hardware Hello World}
+\section{Hardware Hello World}
 
 What is then the equivalent of a Hello World program for a hardware design?
 The minimal useful and visible design? A blinking LED is the hardware (or even
@@ -213,13 +249,13 @@ to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 
-\subsection{Source Access}
+\section{Source Access}
 
 This book is open source and hosted at GitHub: \href{https://github.com/schoeberl/chisel-book}{chisel-book}.
 Small Chisel code snippets are included in the repository of the book.
 Larger examples are collected in the accompanying repository \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
 
-\subsection{Further Reading}
+\section{Further Reading}
 
 Here a list of further reading for digital design:
 \begin{itemize}
@@ -243,7 +279,7 @@ their own repository that contains a Wiki documentation.
 a Chisel course focusing on hardware generators, as a Jupyter notebook
 \end{itemize}
 
-\subsection{Exercises}
+\section{Exercises}
 
 Each chapter ends with a few hands-on exercises. For the introduction exercise we will use an
 FPGA board to get one LED blinking.
@@ -304,7 +340,7 @@ Is it alarming or more like a sign of live signal?
 
 
 
-\section{Basic Components}
+\chapter{Basic Components}
 
 In this section we introduce the basic components for digital design.
 These basic elements can be combined to build larger, more interesting
@@ -329,7 +365,7 @@ An 8-bit register:
 
 \lstinputlisting[language=chisel]{src/main/scala/Register.scala}
 
-\subsection{Multiplexor}
+\section{Multiplexor}
 
 A multiplexor is a circuit that selects between alternatives. In the most
 basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
@@ -346,7 +382,7 @@ signale \code{b}.
 \end{figure}
 
 
-\subsection{Counting}
+\section{Counting}
 
 Counting is a very basic operation in digital systems. On might count events.
 However, more often counting is used to define a time interval. Counting the
@@ -391,7 +427,7 @@ If we want to count N, we start with N-2 and count till -1.
 
 \todo{discuss >= and so on}
 
-\section{Build Process and Testing}
+\chapter{Build Process and Testing}
 
 Chisel is written in Scala, so any build process that supports Scala is possible
 with a Chisel project. One popular build tool for Scala is \href{https://www.scala-sbt.org/}{sbt},
@@ -409,7 +445,7 @@ Better use a dedicated version of Chisel and all other Scala libraries in your \
 Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
 For example, it is cool to do hardware design on a plane.
 
-\section{Components}
+\chapter{Components}
 
 A larger digital design is structured into a set of components, structured in
 a hierarchical way. Each component has an interface with input and output
@@ -429,7 +465,7 @@ a FIFO buffer, which are used as building blocks for larger design.
 As an example we will design a serial interface (also called UART),
 which itself will use the FIFO buffer.
 
-\subsection{FIFO Buffer}
+\section{FIFO Buffer}
 
 To decouple a write (sender) and a reader (receiver) some form
 of buffering between the writer and the reader is inserted.
@@ -478,7 +514,7 @@ class ReaderIO(size: Int) extends Bundle {
 \end{chisel}
 
 
-\section{Snippets}
+\chapter{Snippets}
 
 \todo{A collection is Chisel snippets collected along some coding}
 
@@ -526,7 +562,7 @@ State machine:
 
 \textbf{No default assignment possible when declaring a signal! Need an extra one.}
 
-\subsection{SBT and Eclipse}
+\section{SBT and Eclipse}
 
 Use an IDE, such as Eclipse, but generate the project with \code{sbt}
 from the library dependency description. E.g.,:
@@ -535,7 +571,7 @@ from the library dependency description. E.g.,:
 
 ``sbt eclipse'' and project import
 
-\section{Conclusion}
+\chapter{Conclusion}
 \label{sec:conclusion}
 
 
@@ -545,7 +581,7 @@ from the library dependency description. E.g.,:
 
 
 
-\subsection*{Source Access}
+\section*{Source Access}
 
 All code examples are available in open source from:
 
@@ -558,7 +594,7 @@ All code examples are available in open source from:
 
 \end{document}
 
-\subsection{Course Abstract}
+\subsection*{Course Abstract}
 
 Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Here at DTU we used Chisel in the T-CREST project and in teaching advanced computer architecture.
 
