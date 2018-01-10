@@ -513,6 +513,45 @@ class ReaderIO(size: Int) extends Bundle {
 }
 \end{chisel}
 
+\chapter{Chisel 2}
+
+This book covers version 3 of Chisel. And Chisel 3 is recommended for new designs.
+However, there is still Chisel 2 code out in the wild, which has not yet been converted
+to Chisel 3. There is documentation available how to convert a Chisel 2 project to
+Chisel 3:
+
+\begin{itemize}
+\item \href{https://github.com/freechipsproject/chisel3/wiki/Chisel3-vs-Chisel2}{Chisel2 vs. Chisel3} and
+\item \href{https://github.com/schoeberl/chisel-examples/blob/master/TowardsChisel3.md}{Towards Chisel 3}
+\end{itemize}
+
+However, you might get involved in a project that still uses Chisel 2,
+e.g., the \url{https://github.com/t-crest/patmos}{Patmos} processor.
+Therefore, we will provide here some information on Chisel 2 coding for those who
+have started with Chisel 3.
+
+First, all documentation on Chisel 2 has been removed from the web sites
+belonging to Chisel. We have rescued those PDF documents and put them
+on GitHub at \url{https://github.com/schoeberl/chisel2-doc}.
+You can use the Chisel 2 tutorial by switching to the Chisel 2 branch:
+
+\begin{chisel}
+git clone https://github.com/ucb-bar/chisel-tutorial.git
+cd chisel-tutorial
+git checkout chisel2
+\end{chisel}
+
+The main visible difference between Chisel 3 and 2 are: the definitions of
+Constants, Bundles, wires, memories, and probably older forms of register
+definitions.
+
+Chisel 2 constructs can be used, to some extend, in a Chisel 3 project by
+using the compatibility layer using as package \code{Chisel} instead of \code{chisel3}.
+However, using this compatibility layer should only be used in a transition phase.
+Therefore, we will not cover it here.
+
+
+
 
 \chapter{Snippets}
 
