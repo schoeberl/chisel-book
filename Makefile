@@ -17,3 +17,10 @@ chisel:
 
 eclipse:
 	sbt eclipse
+
+chisel2_test:
+	cd chisel2; sbt "runMain RegisterTester"
+	cd chisel2; sbt "runMain LogicTester"
+
+chisel2_hw:
+	cd chisel2; sbt "runMain LogicHardware"
