@@ -39,7 +39,7 @@
 %\renewcommand{\author2}[1]{}
 
 
-\title{SomeScala and Customized Circuit Generation}
+\title{A Little Bit of Scala and\\ Customized Circuit Generation}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark}
@@ -217,29 +217,6 @@ sbt run
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Build Configuration}
-\begin{itemize}
-\item Defines needed Scala version
-\item Library dependencies
-\item File name: \code{build.sbt}
-\end{itemize}
-\begin{chisel}
-scalaVersion := "2.11.7"
-
-libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.30"
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{File Organization in Scala/Chisel}
-\begin{itemize}
-\item A Scala file can contain several classes (and objects)
-\item For large classes use one file per class with the class name
-\item Scala has packages, like Java
-\item Use folders with the package names for file organization
-\item sbt looks into current folder and \code{src/main/scala/}
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Chisel in Scala}
 \begin{itemize}
 \item Chisel components are Scala classes
@@ -250,43 +227,6 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.30"
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel Main}
-
-\begin{itemize}
-\item Create one top-level Module
-\item Invoke \code{chiselMain()} from the Scala \code{main}
-\item Pass some parameters and the top module
-\item Following code generates Verilog code
-\end{itemize}
-\begin{chisel}
-object Hello {
-  def main(args: Array[String]): Unit = {
-    chiselMain(Array("--backend", "v"),
-      () => Module(new Hello()))
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Main for Testing}
-\begin{itemize}
-\item Tests can be written in Scala/Chisel
-\item Tester and device under test (DUT) are two processes
-\item Invoke \code{chiselMainTest} with some parameters, the DUT, and a tester
-\end{itemize}
-\begin{chisel}
-object AdderTester {
-  def main(args: Array[String]): Unit = {
-    chiselMainTest(Array("--genHarness", "--test",
-      "--backend", "c",
-      "--compile", "--targetDir", "generated"),
-      () => Module(new Adder())) {
-        c => new AdderTester(c)
-      }
-  }
-}
-\end{chisel}
-\end{frame}
 
 \begin{frame}[fragile]{A Chisel Tester}
 \begin{itemize}
@@ -309,6 +249,7 @@ class AdderTester(dut: Adder) extends Tester(dut) {
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
+\item Can use full power of the general purpose language Scala
 \end{itemize}
 \end{frame}
 
@@ -429,7 +370,7 @@ class Alu extends Module {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Functions}
+\begin{frame}[fragile]{Functional Abstraction}
 \begin{itemize}
 \item Circuits can be encapsulated in functions
 \item Each \emph{function call} generates hardware
@@ -445,7 +386,7 @@ class Alu extends Module {
 
 \begin{frame}[fragile]{More Function Examples}
 \begin{itemize}
-\item Functions can also contain registers
+\item Functions can also contain registers (contain state)
 \end{itemize}
 \begin{chisel}
   def addSub(add: Bool, a: UInt, b: UInt) =
@@ -498,29 +439,6 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
   result
 }
 \end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Lab Session}
-\begin{itemize}
-\item Explore the ALU example
-\begin{itemize}
-\item It contains a tester
-\item It can also be tested with the switches and LEDs on the FPGA
-\end{itemize}
-\item Explore the bubble FIFO example for wave form viewing
-\item Do an example project from scratch
-\begin{itemize}
-\item But reuse Quartus files (from the ALU or knight example)
-\item With a Chisel main
-\item Some simple function with LEDs and switches
-\begin{itemize}
-\item E.g., moving light with direction change
-\item Remember Knight Rider?
-\end{itemize}
-\item Running it in the FPGA
-\end{itemize}
-% \item Do the UART exercise, which is mandatory
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Scala List for Enumeration}
@@ -631,6 +549,23 @@ val m = if (useA) Module(new VariantA())
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Conditional Component Generation}
+\begin{chisel}
+val icache =
+  if (TYPE == METHOD)
+    Module(new MCache())
+  else if (TYPE == LINE)
+    Module(new ICache())
+  else
+    ChiselError.error("Unsupported Type")
+\end{chisel}
+\begin{itemize}
+\item Use Scala if/else for conditional component types
+\item Code example from Patmos
+\item We parse an XML file for the configuration
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Combinational (Truth) Table Generation}
 \begin{chisel}
 val arr = new Array[Bits](length)
@@ -644,6 +579,28 @@ val rom = Vec[Bits](arr)
 \item Use that array as input for a Chisel \code{Vec}
 \item Generates a logic table at hardware construction time
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Logic Generation}
+\begin{itemize}
+\item Read a file into a table
+\begin{itemize}
+\item E.g., to read in ROM content for a processor
+\end{itemize}
+\item Generate a truth table algorithmically
+\begin{itemize}
+\item E.g., generate binary to BCD translation
+\end{itemize}
+\item Use the full power of Scala
+\end{itemize}
+\begin{chisel}
+val byteArray = Files.readAllBytes(Paths.get(fileName))
+val arr = new Array[Bits](byteArray.length)
+for (i <- 0 until byteArray.length) {
+  arr(i) = Bits(byteArray(i), 8)
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Ideas for Runtime Table Generation}
@@ -701,21 +658,6 @@ object Adder {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Session}
-\begin{itemize}
-\item Run and explore the UART example (e.g., with gtkterm)
-\begin{itemize}
-\item In folder examples, package \code{uart}
-\item \code{make uart}
-\end{itemize}
-\item Combine the UART with a blinking LED
-\begin{itemize}
-\item Write a `0' and `1' out on blink off and on
-\end{itemize}
-\item Write repeated ``0..9'' as fast as possible 
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Links to the Examples}
 \begin{itemize}
 \item Example code
@@ -733,10 +675,12 @@ https://github.com/schoeberl/chisel-book.git
 
 \begin{frame}[fragile]{Feedback}
 \begin{itemize}
-\item Plans on using Chisel?
+\item Plans on exploring Chisel?
 \item What went well?
 \item What was not so good?
 \item How can this Chisel course be improved?
+\item
+\item I can also do a more hands on version of this course (with prepared laptops and FPGA boards)
 \item
 \item Would be happy to receive an email: \code{masca@dtu.dk}
 \end{itemize}

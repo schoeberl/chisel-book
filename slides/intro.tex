@@ -50,6 +50,12 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Motivating Example: Lipsi, a Tiny Processor}
+\begin{itemize}
+\item Show in Eclipse
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example: Lipsi}
 \begin{itemize}
 \item Small utility processor Lipsi
@@ -62,9 +68,8 @@
 \item Additionally comparing with a software simulator written in Scala
 \end{itemize}
 \item All in a single programming language and a single program!
-\item All coded and tested in 14 hours
+\item All coded and tested in less than 14 hours
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}[fragile]{Goals for this Intro}
@@ -106,7 +111,7 @@
 \begin{itemize}
 \item A hardware \emph{construction} language
 \begin{itemize}
-\item Construction Hardware In a Scala Embedded Language
+\item Constructing Hardware In a Scala Embedded Language
 \item If it compiles, it is synthesisable hardware 
 \item Say goodby to your unintended latches
 \end{itemize}
@@ -423,6 +428,7 @@ val rom = Vec[Bits](arr)
 \item Eclipse
 \item Scala plugin
 \item Chisel source included in the project build path
+\item Or do: sbt eclipse
 \item But you are not compiling with Eclipse\\ and against the Chisel source
 \item Show it
 \end{itemize}
@@ -527,8 +533,10 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
 \item Clone or download the repository now
 \end{itemize}
 \begin{chisel}
-git clone https://github.com/schoeberl/chisel-examples.git
+git clone \\
+   https://github.com/schoeberl/chisel-examples.git
 cd chisel-examples/hello-world
+git checkout chisel2
 make
 \end{chisel}
 \begin{itemize}

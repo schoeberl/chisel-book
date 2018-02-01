@@ -50,10 +50,16 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Motivating Example: Lipsi, a Tiny Processor}
+\begin{itemize}
+\item Show in Eclipse
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example: Lipsi}
 \begin{itemize}
 \item Small utility processor Lipsi
-\item Hardware described in Chisel/Scala
+\item Hardware described in Chisel
 \item Tester in Chisel/Scala
 \item Assembler in Scala (core case statement about 20 lines)
 \item Testing:
@@ -61,10 +67,9 @@
 \item Some self testing assembler programs
 \item Additionally comparing with a software simulator written in Scala
 \end{itemize}
-\item All in a single programming language and a single program!
+\item All in a single (dual) programming language and a single program!
 \item All coded and tested in 14 hours
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}[fragile]{Goals for this Intro}
@@ -77,7 +82,6 @@
 \item Reconsider how to describe hardware
 \item Some experience report from usage at DTU
 \item Pointers to more information
-\item Have your first Chisel design running in an FPGA!
 \end{itemize}
 \end{frame}
 
@@ -106,7 +110,7 @@
 \begin{itemize}
 \item A hardware \emph{construction} language
 \begin{itemize}
-\item Construction Hardware In a Scala Embedded Language
+\item Constructing Hardware In a Scala Embedded Language
 \item If it compiles, it is synthesisable hardware 
 \item Say goodby to your unintended latches
 \end{itemize}
@@ -185,50 +189,6 @@ val r = Reg(next = nextVal)
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Functional Abstraction}
-\begin{chisel}
-  def addSub(add: Bool, a: UInt, b: UInt) =
-    Mux(add, a+b, a-b)
-
-  val res = addSub(cond, a, b)
-  
-  def rising(d: Bool) = d && !Reg(next = d)
-\end{chisel}
-\begin{itemize}
-\item Functions for repeated pieces of logic
-\item May contain state
-\item Functions may return \emph{hardware}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Bundles}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(width = 32)
-  val rs2 = UInt(width = 32)
-  val immVal = UInt(width = 32)
-  val aluOp = new AluOp()
-}
-\end{chisel}
-\begin{itemize}
-\item Collection of values in named fields 
-\item Like struct or record
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Vectors}
-\begin{chisel}
-val myVec = Vec.fill(3){ SInt(width = 10) }
-
-myVec(0) := SInt(-3)
-val y = myVec(2)
-\end{chisel}
-\begin{itemize}
-\item Indexable vector of elements
-\item Bundles and Vecs can be arbitrarely nested
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{IO Ports}
 \begin{chisel}
@@ -315,243 +275,11 @@ val c = Mux(cond, a, b)
 \end{chisel}
 \begin{itemize}
 \item This is a multiplexer
-\item Input can be any type
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing}
-\begin{chisel}
-class CounterTester(c: Counter) extends Tester(c) {
-  for (i <- 0 until 5) {
-    println(peek(c.io.out))
-    step(1)
-  }
-}
-\end{chisel}
-\begin{itemize}
-\item Within Chisel with a tester (= Scala program)
-\item May include waveform generation
-\item peek and poke to read and set values
-\begin{itemize}
-\item Remember the BASIC days ;-)
-\end{itemize}
-\item printf in simulation on rising edge
-\begin{chisel}
-printf("Counting %x\n", r1)
-\end{chisel}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Component Generation}
-\begin{chisel}
-val cores = new Array[Module](32)
-
-for (j <- 0 until 32)
-  cores(j) = Module(new CPU())
-\end{chisel}
-\begin{itemize}
-\item Use Scala array to collect components
-\item Generation with a Scala loop
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Conditional Component Generation}
-\begin{chisel}
-val icache =
-  if (TYPE == METHOD)
-    Module(new MCache())
-  else if (TYPE == LINE)
-    Module(new ICache())
-  else
-    ChiselError.error("Unsupported Type")
-\end{chisel}
-\begin{itemize}
-\item Use Scala if/else for conditional component types
-\item Code example from Patmos
-\item We parse an XML file for the configuration
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Logic Generation}
-\begin{itemize}
-\item Read a file into a table
-\begin{itemize}
-\item E.g., to read in ROM content for a processor
-\end{itemize}
-\item Generate a truth table algorithmically
-\begin{itemize}
-\item E.g., generate binary to BCD translation
-\end{itemize}
-\item Use the full power of Scala
-\end{itemize}
-\begin{chisel}
-val byteArray = Files.readAllBytes(Paths.get(fileName))
-val arr = new Array[Bits](byteArray.length)
-for (i <- 0 until byteArray.length) {
-  arr(i) = Bits(byteArray(i), 8)
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\end{frame}
-%%%%%%%%%%%%%%%%%
-%\begin{frame}[fragile]{zzz}
-%\begin{chisel}
-%code
-%\end{chisel}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%%%%%%%%%%%%%%%%%
-
-
-
-\begin{frame}[fragile]{An IDE for Chisel}
-\begin{itemize}
-\item Eclipse
-\item Scala plugin
-\item Chisel source included in the project build path
-\item But you are not compiling with Eclipse\\ and against the Chisel source
-\item Show it
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel in T-CREST Project}
-\begin{itemize}
-\item Patmos processor rewritten in Chisel
-\begin{itemize}
-\item As part of learning Chisel
-\item 6.4.2013: Chisel: 996 LoC vs VHDL: 3020 LoC
-\item But VHDL was very verbose, with records maybe 2000 LoC
-\end{itemize}
-\item Memory controller, memory arbiters, IO devices in Chisel
-\item One Phd, two master, and one bachelor project:
-\begin{itemize}
-\item Patmos stack cache
-\item Method cache for Patmos -- Chisel was relative easy
-\item TDM based memory arbiter -- trouble with Chisel
-\item RISC stack cache -- no issues with Chisel
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel in Teaching}
-\begin{itemize}
-\item Using/offering it in Advanced Computer Architecture
-\item Spring 2016 and 2017 all projects have been in Chisel
-\item Several Bachelor and Master projects
-\item Students pick it up reasonable fast
-\item For software engineering students easier than VHDL
-\item Issue of \emph{writing a program} instead of describing hardware remains
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Further Information}
-\begin{itemize}
-\item \url{https://chisel.eecs.berkeley.edu/}
-\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
-\begin{itemize}
-\item Chisel 2.2 Tutorial
-\item Getting Started with Chisel
-\end{itemize}
-\item \url{http://groups.google.com/group/chisel-users}
+\item Inputs a and b can be any type
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{Hello World in Chisel and Examples}
-\begin{chisel}
-git clone https://github.com/schoeberl/chisel-examples.git
-\end{chisel}
-\begin{itemize}
-\item or download from \url{https://github.com/schoeberl/chisel-examples}
-\item This contains a minimal Chisel project with the blinking LED
-\item Has ready to use project files for:
-\begin{itemize}
-\item Altera DE0
-\item Altera DE1
-\item Altera DE2-115
-\item BeMicro
-\end{itemize}
-\item Plus a simple ALU for HW test and showing Chisel Tester
-\item Plus some more examples to explore
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{What is a Minimal Chisel Project?}
-\begin{itemize}
-\item Scala class (e.g., \code{Hello.scala})
-\item Build info in \code{build.sbt} for \code{sbt}:
-\end{itemize}
-\begin{chisel}
-scalaVersion := "2.11.7"
-
-libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
-\end{chisel}
-\begin{itemize}
-\item Run the process manually (look into the Makefile)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Additional Files in the Hello World Example}
-\begin{itemize}
-\item A \code{Makefile}
-\item A Verilog top level file \code{verilog/hello\_top.v}
-\begin{itemize}
-\item For reset and possible PLLs
-\item Can also be in VHDL
-\end{itemize}
-\item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
-\begin{itemize}
-\item List of source files, device and pin assignments
-\item plain text files, look into hello.qsf
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Lab Time}
-\begin{itemize}
-\item Get a blinking LED working on the FPGA board
-\item Clone or download the repository now
-\end{itemize}
-\begin{chisel}
-git clone https://github.com/schoeberl/chisel-examples.git
-cd chisel-examples/hello-world
-make
-\end{chisel}
-\begin{itemize}
-\item Start Quartus
-\item Open the project under chisel-examples/hello-world/quartus/altde2-115
-\item Synthesize with the Play button
-\item Configure the FPGA
-\item Enjoy!
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Change the Design}
-\begin{itemize}
-\item Use \code{gedit}, or the editor you like most
-\item Change blinking frequency
-\item Rerun the example
-\item Optional:
-\begin{itemize}
-\item Setup Eclipse with a Scala project and the Chisel source
-\item Make sure to checkout the chisel2 branch
-\end{itemize}
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Chisel Data Types}
 \begin{itemize}
@@ -998,6 +726,36 @@ switch(fn) {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Chisel in the T-CREST Project}
+\begin{itemize}
+\item T-CREST is a multicore research project (open source)
+\item Patmos processor rewritten in Chisel
+\begin{itemize}
+\item As part of learning Chisel
+\item 6.4.2013: Chisel: 996 LoC vs VHDL: 3020 LoC
+\item But VHDL was very verbose, with records maybe 2000 LoC
+\end{itemize}
+\item Memory controller, memory arbiters, IO devices in Chisel
+\item One Phd, two master, and one bachelor project:
+\begin{itemize}
+\item Patmos stack cache
+\item Method cache for Patmos -- Chisel was relative easy
+\item TDM based memory arbiter -- trouble with Chisel
+\item RISC stack cache -- no issues with Chisel
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel in Teaching}
+\begin{itemize}
+\item Using/offering it in Advanced Computer Architecture
+\item Spring 2016 and 2017 all projects have been in Chisel
+\item Several Bachelor and Master projects
+\item Students pick it up reasonable fast
+\item For software engineering students easier than VHDL
+\item Issue of \emph{writing a program} instead of describing hardware remains
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{More Chisel Documentation}
 \begin{itemize}
@@ -1005,108 +763,20 @@ switch(fn) {
 \item Considered a work-in-progress (V 0.01 ;-)
 \item \url{https://github.com/schoeberl/chisel-book}
 \item Feedback is welcome
-\item Contains all the slides
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Tutorial from UCB}
-\begin{itemize}
-\item Collection of small exercises
-\item Only in simulation, no hardware required (+/-)
-\item All examples in \emph{one} design
-\begin{itemize}
-\item Results in a little bit more complex setup
-\end{itemize}
-\item Needs an Internet connection
-\begin{itemize}
-\item  Tests against latest Chisel version
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Tutorial}
-\begin{itemize}
-\item Get the tutorial
-\end{itemize}
-\begin{chisel}
-git clone https://github.com/ucb-bar/chisel-tutorial.git
-cd chisel-tutorial
-git checkout chisel2
-\end{chisel}
-\begin{itemize}
-\item Test the installation with a Hello World
-\end{itemize}
-\begin{chisel}
-cd hello
-make
-\end{chisel}
-\begin{itemize}
-\item May take some time
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Very Minimal Hello World}
-\begin{chisel}
-class Hello extends Module {
-  val io = new Bundle { 
-    val out = UInt(OUTPUT, 8)
-  }
-  io.out := UInt(42)
-}
-\end{chisel}
-\begin{itemize}
-\item Produces hardware for a single constant
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing the Minimal Hello World}
-\begin{chisel}
-class HelloTests(c: Hello) extends Tester(c) {
-  step(1)
-  expect(c.io.out, 42)
-}
-\end{chisel}
-\begin{itemize}
-\item Drive the simulation with \code{step(1)}, which is a single clock tick
-\item Test output against expected value
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Tutorial Problems}
-\begin{chisel}
-cd problems
-make Mux2.out
-\end{chisel}
-\begin{itemize}
-\item This example should already work
-\item Read the hardware description and test code
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Tutorial Problems}
-\begin{chisel}
-make Mux4.out
-\end{chisel}
-\begin{itemize}
-\item The test should fail
-\item Fix the Mux4 component so that the tests complete
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{More Problems}
-\begin{itemize}
-\item Explore more problems to solve
-\item Suggestions:
-\begin{itemize}
-\item Accumulator
-\item VecSchiftRegister (maybe)
-\end{itemize}
-\item Change the Blinking LED example so that
-\begin{itemize}
-\item It flashes for 1/5 second every second
-\end{itemize}
+\item Contains all the slides (including exercises)
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}[fragile]{Further Information}
+\begin{itemize}
+\item \url{https://chisel.eecs.berkeley.edu/}
+\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
+\begin{itemize}
+\item Chisel 2.2 Tutorial
+\item Getting Started with Chisel
+\end{itemize}
+\item \url{http://groups.google.com/group/chisel-users}
+\end{itemize}
+\end{frame}
 \end{document}
