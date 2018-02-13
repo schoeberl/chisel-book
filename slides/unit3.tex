@@ -502,6 +502,19 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
+\item Do a git pull in the examples to get the latest version
+\item Explore the UART (serial port) example
+\begin{itemize}
+\item There is a make target that builds the UART hardware
+\item It shall write some text out, which you can observe with a terminal (e.g., gtkterm)
+\end{itemize}
+\item Extend the blinking LED example with a UART output (writing 0 and 1)
+\item Write at maximum speed repeated numbers 0--9
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Additional Lab Material}
+\begin{itemize}
 \item Explore the ALU example
 \begin{itemize}
 \item It contains a tester
@@ -519,7 +532,6 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{itemize}
 \item Running it in the FPGA
 \end{itemize}
-% \item Do the UART exercise, which is mandatory
 \end{itemize}
 \end{frame}
 
