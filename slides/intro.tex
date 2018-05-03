@@ -50,25 +50,73 @@
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{Motivating Example: Lipsi, a Tiny Processor}
+\begin{frame}[fragile]{Motivating Example:\\
+Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
-\item Show in Eclipse
+\item Tiny processor
+\item Simple instruction set
+\item Shall be small
+\begin{itemize}
+\item Around 200 logic cells, one FPGA memory block
+\end{itemize}
+\item Hardware described in Chisel
+\item Available at \url{https://github.com/schoeberl/lipsi}
+\item Usage
+\begin{itemize}
+\item Utility processor for small stuff
+\item Could be used for your vending machine
+\item In teaching for introduction to computer architecture
+\end{itemize}
+\item The design took place on Lipsi
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Motivating Example: Lipsi}
+\begin{frame}[fragile]{The Design of Lipsi on Lipsi}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.3]{lipsi}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Lipsi Implementation}
 \begin{itemize}
-\item Small utility processor Lipsi
-\item Hardware described in Chisel/Scala
-\item Tester in Chisel/Scala
-\item Assembler in Scala (core case statement about 20 lines)
+\item Hardware described in Chisel
+\item Tester in Chisel
+\item Assembler in Scala
+\begin{itemize}
+\item Core case statement about 20 lines
+\end{itemize}
+\item Reference design of Lipsi as software simulator in Scala
 \item Testing:
 \begin{itemize}
-\item Some self testing assembler programs
-\item Additionally comparing with a software simulator written in Scala
+\item Self testing assembler programs
+\item Comparing hardware with a software simulator
 \end{itemize}
-\item All in a single programming language and a single program!
-\item All coded and tested in less than 14 hours
+\item All in a single programming language!
+\item All in a single program
+\item How much work is this?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel is Productive}
+\begin{itemize}
+\item All coded and tested in less than 14 hours!
+\end{itemize}
+\begin{itemize}
+\item The hardware in Chisel
+\item Assembler in Scala
+\item Some assembler programs (blinking LED)
+\item Simulation in Scala
+\item Two testers
+\end{itemize}
+\begin{itemize}
+\item BUT, this does not include the design (done on paper)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Motivating Example: Lipsi, a Tiny Processor}
+\begin{itemize}
+\item Show in Eclipse or IntelliJ (if beamer allows)
 \end{itemize}
 \end{frame}
 
@@ -224,7 +272,7 @@ class DecodeExecute extends Bundle {
 
 \begin{frame}[fragile]{Vectors}
 \begin{chisel}
-val myVec = Vec.fill(3){ SInt(width = 10) }
+val myVec = Vec(3, SInt(width = 10))
 
 myVec(0) := SInt(-3)
 val y = myVec(2)
@@ -425,11 +473,11 @@ val rom = Vec[Bits](arr)
 
 \begin{frame}[fragile]{An IDE for Chisel}
 \begin{itemize}
-\item Eclipse
+\item Eclipse or IntelliJ
 \item Scala plugin
 \item Chisel source included in the project build path
 \item Or do: sbt eclipse
-\item But you are not compiling with Eclipse\\ and against the Chisel source
+%\item But you are not compiling with Eclipse\\ and against the Chisel source
 \item Show it
 \end{itemize}
 \end{frame}
@@ -443,12 +491,13 @@ val rom = Vec[Bits](arr)
 \item But VHDL was very verbose, with records maybe 2000 LoC
 \end{itemize}
 \item Memory controller, memory arbiters, IO devices in Chisel
-\item One Phd, two master, and one bachelor project:
+\item Several Phd, master, and bachelor projects:
 \begin{itemize}
 \item Patmos stack cache
 \item Method cache for Patmos -- Chisel was relative easy
 \item TDM based memory arbiter -- trouble with Chisel
 \item RISC stack cache -- no issues with Chisel
+\item and more ongoing 
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -456,7 +505,7 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Chisel in Teaching}
 \begin{itemize}
 \item Using/offering it in Advanced Computer Architecture
-\item Spring 2016 and 2017 all projects have been in Chisel
+\item Spring 2016--2018 all projects have been in Chisel
 \item Several Bachelor and Master projects
 \item Students pick it up reasonable fast
 \item For software engineering students easier than VHDL
@@ -561,4 +610,19 @@ make
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Summery}
+\begin{itemize}
+\item We need a modern language for hardware/systems design
+\item Chisel builds on the power of object-oriented and functional Scala
+\item Chisel is good for hardware generators
+\item You can get started with a hardware design in a special course or 4th semester project
+\end{itemize}
+\end{frame}
+
 \end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
