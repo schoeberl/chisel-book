@@ -50,6 +50,18 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Notes for Chisel 3 Update}
+\begin{itemize}
+\item Data types UInt ... are just types (e.g., UInt(4.W)), constants have different syntax
+\item Wires for multiple assignment of logic, last assignment counts
+\item Add info for IntelliJ/Eclipse
+File - New - Project from Existing Sources..., open build.sbt
+\item Output(UInt(size.W))
+\item RegInit(0.asUInt(size.W))
+\item Have qr code for URLs of slides, examples
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example:\\
 Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
@@ -538,6 +550,7 @@ git clone https://github.com/schoeberl/chisel-examples.git
 \item Altera DE0
 \item Altera DE1
 \item Altera DE2-115
+\item Altera DE10-Nano
 \item BeMicro
 \end{itemize}
 \item Plus a simple ALU for HW test and showing Chisel Tester
@@ -615,7 +628,7 @@ make
 \item We need a modern language for hardware/systems design
 \item Chisel builds on the power of object-oriented and functional Scala
 \item Chisel is good for hardware generators
-\item You can get started with a hardware design in a special course or 4th semester project
+% \item You can get started with a hardware design in a special course or 4th semester project
 \end{itemize}
 \end{frame}
 
