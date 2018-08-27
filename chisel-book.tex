@@ -150,7 +150,7 @@ is assumed. No knowledge of Verilog or VHDL is assumed.
 Chisel can be and shall be your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
-Unix shell).
+Unix shell) will be helpful.
 
 \section{Getting Started with the Tools}
 
@@ -230,8 +230,8 @@ class Hello extends Module {
   })
   val CNT_MAX = (50000000 / 2 - 1).U;
   
-  val cntReg = RegInit(0.asUInt(32.W))
-  val blkReg = RegInit(0.asUInt(1.W))
+  val cntReg = RegInit(0.U(32.W))
+  val blkReg = RegInit(0.U(1.W))
 
   cntReg := cntReg + 1.U
   when(cntReg === CNT_MAX) {
@@ -300,7 +300,7 @@ After some initial downloading of Chisel components, this will produce the Veril
 Explore this Verilog file. You will see that it contains two inputs \code{clock} and \code{reset}
 and one output \code{io\_led}. When you compare this Verilog file with the Chisel module
 you will notice that the Chisel module does not contain \code{clock} or \code{reset}.
-Those signals are implicit generated and in most designs is convenient to not need to
+Those signals are implicit generated and in most designs it is convenient to not need to
 deal with these low-level details. Chisel provides register components and those
 are connected automatically to \code{clock} and \code{reset} (if needed).
 
@@ -318,7 +318,7 @@ We cannot provide the details on this steps. Please consult the manual of
 your Intel Quartus or Xilinx Vivado tool.
 However, the examples repository contains some ready to use Quartus
 projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
-If it happens that your board is supported, start Quartus open the project,
+If it happens that your board is supported, start Quartus, open the project,
 compile it by pressing the \emph{Play} button, and configure the FPGA board
 with the \emph{Programmer} button and one of the LEDs should blink.
 
@@ -328,7 +328,7 @@ Now change the blinking frequency to a slower or a faster value and
 rerun the build process. Blinking frequencies and also blinking patterns
 communicate different ``emotions''. E.g., a slow blinking LED signals that
 everything is ok, a fast blinking LED signals an alarm state.
-Explore which frequencies signal best those two different emotions.
+Explore which frequencies express best those two different emotions.
 
 As a more challenging extension to the exercise, generate a blinking pattern:
 the LED shall be on for 200~ms every second. For this pattern you might

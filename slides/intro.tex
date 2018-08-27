@@ -54,8 +54,7 @@
 \begin{itemize}
 \item Data types UInt ... are just types (e.g., UInt(4.W)), constants have different syntax
 \item Wires for multiple assignment of logic, last assignment counts
-\item Add info for IntelliJ/Eclipse
-File - New - Project from Existing Sources..., open build.sbt
+
 \item Output(UInt(size.W))
 \item RegInit(0.asUInt(size.W))
 \item Have qr code for URLs of slides, examples
@@ -234,9 +233,9 @@ val boolVal = a >= b
 
 \begin{frame}[fragile]{Registers}
 \begin{chisel}
-val cntReg = Reg(init = UInt(0, 25))
+val cntReg = RegInit(0.U(32.W))
 
-cntReg := cntReg + UInt(1)
+cntReg := cntReg + 1.U
 \end{chisel}
 \begin{itemize}
 \item Type inferred by initial value (= reset value)
@@ -246,7 +245,7 @@ cntReg := cntReg + UInt(1)
 \item Also definition with an input signal connected:
 \end{itemize}
 \begin{chisel}
-val r = Reg(next = nextVal) 
+val r = RegNext(nextVal) 
 \end{chisel}
 \end{frame}
 
@@ -257,7 +256,7 @@ val r = Reg(next = nextVal)
 
   val res = addSub(cond, a, b)
   
-  def rising(d: Bool) = d && !Reg(next = d)
+  def rising(d: Bool) = d && !RegNext(d)
 \end{chisel}
 \begin{itemize}
 \item Functions for repeated pieces of logic
@@ -270,9 +269,9 @@ val r = Reg(next = nextVal)
 \begin{frame}[fragile]{Bundles}
 \begin{chisel}
 class DecodeExecute extends Bundle {
-  val rs1 = UInt(width = 32)
-  val rs2 = UInt(width = 32)
-  val immVal = UInt(width = 32)
+  val rs1 = UInt(32.W)
+  val rs2 = UInt(32.W)
+  val immVal = UInt(32.W)
   val aluOp = new AluOp()
 }
 \end{chisel}
@@ -284,9 +283,9 @@ class DecodeExecute extends Bundle {
 
 \begin{frame}[fragile]{Vectors}
 \begin{chisel}
-val myVec = Vec(3, SInt(width = 10))
+val myVec = Vec(3, SInt(10.W))
 
-myVec(0) := SInt(-3)
+myVec(0) := -3.S
 val y = myVec(2)
 \end{chisel}
 \begin{itemize}
@@ -298,9 +297,9 @@ val y = myVec(2)
 \begin{frame}[fragile]{IO Ports}
 \begin{chisel}
 class Channel extends Bundle {
-  val data = Bits(INPUT, 8)
-  val ready = Bool(OUTPUT)
-  val valid = Bool(INPUT)
+  val data = Input(UInt(8.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
 }
 \end{chisel}
 \begin{itemize}
@@ -318,11 +317,11 @@ class ExecuteIO extends Bundle {
 \begin{frame}[fragile]{Modules}
 \begin{chisel}
 class Adder extends Module {
-  val io = new Bundle {
-    val a = UInt(INPUT, 4)
-    val b = UInt(INPUT, 4)
-    val result = UInt(OUTPUT, 4)
-  }
+  val io = IO(new Bundle {
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
 
   val addVal = io.a + io.b
   io.result := addVal
@@ -330,7 +329,7 @@ class Adder extends Module {
 \end{chisel}
 \begin{itemize}
 \item Organization of components
-\item IO ports defined as a Bundle named \code{io}
+\item IO ports defined as a Bundle named \code{io} and wrapped into an \code{IO()}
 \item Created (instantiated) with:
 \end{itemize}
 \begin{chisel}
@@ -341,17 +340,17 @@ val adder = Module(new Adder())
 \begin{frame}[fragile]{Hello World in Chisel}
 \begin{chisel}
 class Hello extends Module {
-  val io = new Bundle {
-    val led = UInt(OUTPUT, 1)
-  }
-  val CNT_MAX = UInt(20000000 / 2 - 1);
+  val io = IO(new Bundle {
+    val led = Output(UInt(1.W))
+  })
+  val CNT_MAX = (50000000 / 2 - 1).U;
   
-  val cntReg = Reg(init = UInt(0, 25))
-  val blkReg = Reg(init = UInt(0, 1))
+  val cntReg = RegInit(0.U(32.W))
+  val blkReg = RegInit(0.U(1.W))
 
-  cntReg := cntReg + UInt(1)
+  cntReg := cntReg + 1.U
   when(cntReg === CNT_MAX) {
-    cntReg := UInt(0)
+    cntReg := 0.U
     blkReg := ~blkReg
   }
   io.led := blkReg
@@ -386,9 +385,9 @@ val c = Mux(cond, a, b)
 
 \begin{frame}[fragile]{Testing}
 \begin{chisel}
-class CounterTester(c: Counter) extends Tester(c) {
+class CounterTester(c: Counter) extends PeekPokeTester(c) {
   for (i <- 0 until 5) {
-    println(peek(c.io.out))
+    println(i.toString + ": " + peek(c.io.out).toString())
     step(1)
   }
 }
@@ -487,14 +486,14 @@ val rom = Vec[Bits](arr)
 \begin{itemize}
 \item Eclipse or IntelliJ
 \item Scala plugin
-\item Chisel source included in the project build path
-\item Or do: sbt eclipse
+\item For an Eclipse project: sbt eclipse
+\item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
 %\item But you are not compiling with Eclipse\\ and against the Chisel source
 \item Show it
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel in T-CREST Project}
+\begin{frame}[fragile]{Chisel in the T-CREST Project}
 \begin{itemize}
 \item Patmos processor rewritten in Chisel
 \begin{itemize}
@@ -566,7 +565,7 @@ git clone https://github.com/schoeberl/chisel-examples.git
 \begin{chisel}
 scalaVersion := "2.11.7"
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{chisel}
 \begin{itemize}
 \item Run the process manually (look into the Makefile)
@@ -598,14 +597,13 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
 git clone \\
    https://github.com/schoeberl/chisel-examples.git
 cd chisel-examples/hello-world
-git checkout chisel2
 make
 \end{chisel}
 \begin{itemize}
 \item Start Quartus
 \item Open the project under chisel-examples/hello-world/quartus/altde2-115
 \item Synthesize with the Play button
-\item Configure the FPGA
+\item Configure the FPGA with the Programmer button
 \item Enjoy!
 \end{itemize}
 \end{frame}
@@ -617,8 +615,8 @@ make
 \item Rerun the example
 \item Optional:
 \begin{itemize}
-\item Setup Eclipse with a Scala project and the Chisel source
-\item Make sure to checkout the chisel2 branch
+\item Change to an asymmetric blinking, e.g., 200 ms on every second 
+\item Setup Eclipse/IntelliJ with a Scala project and the Chisel source
 \end{itemize}
 \end{itemize}
 \end{frame}
