@@ -59,32 +59,31 @@
 \item Unsigned and signed
 \item Subtype of \code{Bits}
 \end{itemize}
-\item Little strange way to specify constants
+\item \emph{Interesting} way to specify constants
 \item Automatic bit width inference
 \item Boolean values are of type \code{Bool}, a single bit value
 \end{itemize}
 \begin{chisel}
-UInt(1)
-UInt("habcd")
-UInt("b0101")
-SInt(-5)
-Bool(true)
+1.U
+"habcd".U
+"b0101".U
+-5.S
+true.B
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Chisel Data Types}
 \begin{itemize}
-\item Bit width can be explicitly specified
+\item Bit width can be explicitly specified with a width type
 \begin{itemize}
 \item \code{SInt} will be sign extended
 \item \code{UInt} will be zero extended
 \end{itemize}
 \end{itemize}
 \begin{chisel}
-UInt(0, 32)
-UInt("habcd", 24)
-SInt(-5, 16)
-Bool(true)
+0.U(32.W)
+"habcd".U(24.W)
+-5.S(16.W)
 \end{chisel}
 \begin{itemize}
 \item \emph{Bundles} for a named collection of values
@@ -100,18 +99,18 @@ Bool(true)
 \end{itemize}
 \begin{chisel}
 val notVal = ~x
-val maskOut = x & UInt("b00001111")
+val maskOut = x & "b00001111".U
 val orVal = x | y
 val xorVal = x ^ y
 \end{chisel}
 \begin{itemize}
 \item Bit reduction
-\item Results in a \code{Bool}
+\item Results in a single bit
 \end{itemize}
 \begin{chisel}
-andR(x)
-orR(x)
-xorR(x)
+x.andR
+x.orR
+x.xorR
 \end{chisel}
 \end{frame}
 
@@ -159,7 +158,7 @@ val word = Cat(highByte, lowByte)
 \item The usual operations
 \begin{itemize}
 \item Unusual equal and unequal operator symbols
-\item To keep the original Sala operators usable
+\item To keep the original Sala operators usable for references
 \end{itemize}
 \item Operands are \code{UInt} and \code{SInt}
 \item Operands can be \code{Bool} for equal and unequal
@@ -217,7 +216,7 @@ val result = (cond & selA) | (!cond & selB)
 \item Clock and reset are \emph{hidden wires}
 \end{itemize}
 \begin{chisel}
-val q = Reg(next = d)
+val q = RegNext(d)
 \end{chisel}
 \begin{itemize}
 \item \code{d} is the input, \code{q} the output
@@ -227,22 +226,22 @@ val q = Reg(next = d)
 
 \begin{frame}[fragile]{Register}
 \begin{itemize}
-\item Reset value as \code{init} parameter on definition
+\item Reset value as parameter on a \code{RegInit} constructor
 \end{itemize}
 \begin{chisel}
-val initReg = Reg(init = UInt(0, 8))
+val initReg = RegInit(0.U(8.W))
 \end{chisel}
 \begin{itemize}
-\item With this forward declaration we later assign the next value
+\item With this forward declaration we later assign the input
 \end{itemize}
 \begin{chisel}
-initReg := initReg + UInt(1)
+initReg := initReg + 1.U
 \end{chisel}
 \begin{itemize}
 \item A register can also be defined within an expression
 \end{itemize}
 \begin{chisel}
-val risingEdge = d & !Reg(next = d)
+val risingEdge = d & !RegNext(d)
 \end{chisel}
 \end{frame}
 
@@ -265,24 +264,24 @@ val selection = Mux(cond, trueVal, falseVal)
 \item The following counts form 0 to 100
 \end{itemize}
 \begin{chisel}
-  val cntReg = Reg(init = UInt(0, 8))
+  val cntReg = RegInit(0.U(8.W))
 
-  cntReg := Mux(cntReg === UInt(100),
-    UInt(0), cntReg + UInt(1))
+  cntReg := Mux(cntReg === 100.U,
+    0.U, cntReg + 1.U)
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{The Complete Counter Module}
 \begin{chisel}
-class Count extends Module {
-  val io = new Bundle {
-    val cnt = UInt(OUTPUT, 8)
-  }
+class Counter extends Module {
+  val io = IO(new Bundle {
+    val cnt = Output(UInt(8.W))
+  })
 
-  val cntReg = Reg(init = UInt(0, 8))
+  val cntReg = RegInit(0.U(8.W))
 
-  cntReg := Mux(cntReg === UInt(100),
-    UInt(0), cntReg + UInt(1))
+  cntReg := Mux(cntReg === 100.U,
+    0.U, cntReg + 1.U)
 
   io.cnt := cntReg
 }
@@ -298,10 +297,10 @@ class Count extends Module {
 \end{itemize}
 \begin{chisel}
 class AluFields extends Bundle {
-  val function = UInt(2)
-  val inputA = UInt(8)
-  val inputB = UInt(8)
-  val result = UInt(8)
+  val function = UInt(2.W)
+  val inputA = UInt(8.W)
+  val inputB = UInt(8.W)
+  val result = UInt(8.W)
 }
 \end{chisel}
 \end{frame}
@@ -313,15 +312,15 @@ class AluFields extends Bundle {
 \item Type is specified as second parameter
 \end{itemize}
 \begin{chisel}
-val myVec = Vec(3, SInt(width = 10))
+val myVec = Vec(3, SInt(10.W))
 val y = myVec(2)
-myVec(0) := SInt(-3)
+myVec(0) := -3.S
 \end{chisel}
 \begin{itemize}
-\item A register file as \code{Reg} of a vector
+\item A register file as a register of a vector
 \end{itemize}
 \begin{chisel}
-val vecReg = Reg(Vec(32, SInt(width = 32)))
+val vecReg = Reg(Vec(32, SInt(32.W)))
 \end{chisel}
 \end{frame}
 
@@ -332,10 +331,10 @@ val vecReg = Reg(Vec(32, SInt(width = 32)))
 \end{itemize}
 \begin{chisel}
 class AluIO extends Bundle {
-  val function = UInt(INPUT, 2)
-  val inputA = UInt(INPUT, 8)
-  val inputB = UInt(INPUT, 8)
-  val result = UInt(OUTPUT, 8)
+  val function = Input(UInt(2.W))
+  val inputA = Input(UInt(4.W))
+  val inputB = Input(UInt(4.W))
+  val result = Output(UInt(4.W))
 }
 \end{chisel}
 \end{frame}
@@ -346,8 +345,8 @@ class AluIO extends Bundle {
 \end{itemize}
 \begin{chisel}
 class ExecuteIO extends Bundle {
-  val dec = new DecodeExecute().asInput
-  val mem = new ExecuteMemory().asOutput
+  val dec = Input(new DecodeExecute())
+  val mem = Output(new ExecuteMemory())
 }
 \end{chisel}
 \begin{chisel}
@@ -356,20 +355,20 @@ class ExecuteIO extends Bundle {
 
 \begin{frame}[fragile]{Port Directions}
 \begin{itemize}
-\item Can be reversed with the \code{flip} operation
+\item Can be reversed with the \code{Flipped}
 \item Convenient to have one bundle definition working as source
 and destination used between two modules
 \end{itemize}
 \begin{chisel}
 class Channel extends Bundle {
-  val data = UInt(INPUT, 32)
-  val ready = Bool(OUTPUT)
-  val valid = Bool(INPUT)
+  val data = Input(UInt(32.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
 }
 
 class ChannelUsage extends Bundle {
   val input = new Channel()
-  val output = new Channel().flip()
+  val output = Flipped(new Channel())
 }
 \end{chisel}
 \end{frame}
@@ -380,15 +379,15 @@ class ChannelUsage extends Bundle {
 \item Similar to VHDL components (entity/architecture)
 \item A class that inherits from \code{Module}
 \item Circuit description in the constructor
-\item Interface (port) is a Bundle stored in the field \code{io}
+\item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
 \end{itemize}
 \begin{chisel}
 class Adder extends Module {
-  val io = new Bundle {
-    val a = UInt(INPUT, 4)
-    val b = UInt(INPUT, 4)
-    val result = UInt(OUTPUT, 4)
-  }
+  val io = IO(new Bundle {
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
 
   val addVal = io.a + io.b
   io.result := addVal
@@ -403,42 +402,44 @@ class Adder extends Module {
 \item Note the assignment operator \code{:=} on \code{io} fields
 \end{itemize}
 \begin{chisel}
-val adder = Module(new Adder())
-adder.io.a := ina
-adder.io.b := inb
-val result = adder.io.result
+  val adder = Module(new Adder())
+  adder.io.a := ina
+  adder.io.b := inb
+  val result = adder.io.result
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Conditional Assignments}
 \begin{itemize}
 \item Conditional update of a value
+\item Needs to be declared as a \code{Wire}
 \item Last assignment counts
 \item Is basically a multiplexer
 \end{itemize}
 \begin{chisel}
-val v = UInt(5)
-when (condition) {
-  v := UInt(0)
-}
+  val v = Wire(UInt())
+  v := 5.U
+  when (condition) {
+    v := 0.U
+  }
 
-when (c1) { v := UInt(1) }
-when (c2) { v := UInt(2) }
+  when (c1) { v := 1.U }
+  when (c2) { v := 2.U }
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{The Counter With a Conditional Update}
 \begin{chisel}
-class Count extends Module {
-  val io = new Bundle {
-    val cnt = UInt(OUTPUT, 8)
-  }
+class Counter2 extends Module {
+  val io = IO(new Bundle {
+    val cnt = Output(UInt(8.W))
+  })
 
-  val cntReg = Reg(init = UInt(0, 8))
+  val cntReg = RegInit(0.U(8.W))
 
-  cntReg := cntReg + UInt(1)
-  when (cntReg === UInt(100)) {
-    cntReg := UInt(0)
+  cntReg := cntReg + 1.U
+  when (cntReg === 100.U) {
+    cntReg := 0.U
   }
 
   io.cnt := cntReg
@@ -459,9 +460,9 @@ class Count extends Module {
 \item Note the ``.'' at the operators
 \end{itemize}
 \begin{chisel}
-when (c1) { v := UInt(1) }
-.elsewhen (c2) { v := UInt(2) }
-.otherwise { v := UInt(3) }
+  when (c1) { v := 1.U }
+  .elsewhen (c2) { v := 2.U }
+  .otherwise { v := 3.U }
 \end{chisel}
 \end{frame}
 
@@ -473,12 +474,12 @@ when (c1) { v := UInt(1) }
 \item Chisel will report a runtime error
 \end{itemize}
 \begin{chisel}
-switch(fn) {
-  is(UInt(0)) { result := a + b }
-  is(UInt(1)) { result := a - b }
-  is(UInt(2)) { result := a | b }
-  is(UInt(3)) { result := a & b }
-}
+  switch(fn) {
+    is(0.U) { result := a + b }
+    is(1.U) { result := a - b }
+    is(2.U) { result := a | b }
+    is(3.U) { result := a & b }
+  }
 \end{chisel}
 \end{frame}
 
@@ -528,14 +529,13 @@ switch(fn) {
 \begin{chisel}
 git clone https://github.com/ucb-bar/chisel-tutorial.git
 cd chisel-tutorial
-git checkout chisel2
 \end{chisel}
 \begin{itemize}
 \item Test the installation with a Hello World
+\item Living in \code{src/main/scala/hello/Hello.scala}
 \end{itemize}
 \begin{chisel}
-cd hello
-make
+sbt run
 \end{chisel}
 \begin{itemize}
 \item May take some time
@@ -545,10 +545,10 @@ make
 \begin{frame}[fragile]{Very Minimal Hello World}
 \begin{chisel}
 class Hello extends Module {
-  val io = new Bundle { 
-    val out = UInt(OUTPUT, 8)
-  }
-  io.out := UInt(42)
+  val io = IO(new Bundle {
+    val out = Output(UInt(8.W))
+  })
+  io.out := 42.U
 }
 \end{chisel}
 \begin{itemize}
@@ -558,7 +558,7 @@ class Hello extends Module {
 
 \begin{frame}[fragile]{Testing the Minimal Hello World}
 \begin{chisel}
-class HelloTests(c: Hello) extends Tester(c) {
+class HelloTests(c: Hello) extends PeekPokeTester(c) {
   step(1)
   expect(c.io.out, 42)
 }
@@ -571,21 +571,24 @@ class HelloTests(c: Hello) extends Tester(c) {
 
 \begin{frame}[fragile]{Tutorial Problems}
 \begin{chisel}
-cd problems
-make Mux2.out
+sbt "test:runMain problems.Launcher Mux2"
 \end{chisel}
 \begin{itemize}
 \item This example should already work
 \item Read the hardware description and test code
+\item Source organized in \code{main} and \code{test} folders
+\item Problems and testers are in package/folder \code{problem}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Tutorial Problems}
 \begin{chisel}
-make Mux4.out
+sbt "test:runMain problems.Launcher Mux4"
 \end{chisel}
 \begin{itemize}
-\item The test should fail
+\item This version does not compile
+\item Fix with a default assign to the output \code{io.out}
+\item The test should fail now
 \item Fix the Mux4 component so that the tests complete
 \end{itemize}
 \end{frame}

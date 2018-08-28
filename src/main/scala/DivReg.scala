@@ -40,6 +40,6 @@ class DivReg extends Module {
  */
 object DivReg {
   def main(args: Array[String]): Unit = {
-    chisel3.Driver.execute(Array[String](), () => new DivReg())
+    chisel3.Driver.execute(Array("--target-dir", "generated"), () => new DivReg())
   }
 }

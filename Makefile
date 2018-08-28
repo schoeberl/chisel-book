@@ -11,6 +11,8 @@ clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
 
 chisel:
+	sbt "runMain Snippets"
+	sbt "runMain Counter"
 	sbt "runMain DivReg"
 	sbt "test:runMain RegisterTester"
 	sbt "test:runMain LogicTester"
