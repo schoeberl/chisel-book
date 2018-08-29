@@ -52,7 +52,7 @@
 
 \begin{frame}[fragile]{Scala List for Enumeration}
 \begin{chisel}
-  val empty :: full :: Nil = Enum(UInt(), 2)
+  val empty :: full :: Nil = Enum(2)
 \end{chisel}
 \begin{itemize}
 \item Can be used in wires and registers
@@ -62,9 +62,9 @@
 
 \begin{frame}[fragile]{Finite State Machine}
 \begin{chisel}
-  val empty :: full :: Nil = Enum(UInt(), 2)
-  val stateReg = Reg(init = empty)
-  val dataReg = Reg(init = Bits(0, size))
+  val empty :: full :: Nil = Enum(2)
+  val stateReg = RegInit(empty)
+  val dataReg = RegInit(0.U(size.W))
 
   when(stateReg === empty) {
     when(io.enq.write) {
@@ -85,9 +85,9 @@
 \begin{frame}[fragile]{Parameterization}
 \begin{chisel}
 class ParamChannel(n: Int) extends Bundle {
-  val data = UInt(INPUT, n)
-  val ready = Bool(OUTPUT)
-  val valid = Bool(INPUT)
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
 }
 
 val ch32 = new ParamChannel(32)
@@ -101,11 +101,11 @@ val ch32 = new ParamChannel(32)
 \begin{frame}[fragile]{A Module with a Parameter}
 \begin{chisel}
 class ParamAdder(n: Int) extends Module {
-  val io = new Bundle {
-    val a = UInt(INPUT, n)
-    val b = UInt(INPUT, n)
-    val result = UInt(OUTPUT, n)
-  }
+  val io = IO(new Bundle {
+    val a = Input(UInt(n.W))
+    val b = Input(UInt(n.W))
+    val result = Output(UInt(n.W))
+  })
 
   val addVal = io.a + io.b
   io.result := addVal
@@ -122,7 +122,7 @@ val add8 = Module(new ParamAdder(8))
 
 \begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
 \begin{chisel}
-val shiftReg = Reg(init = UInt(0, 8))
+val shiftReg = RegInit(0.U(8.W))
 
 shiftReg(0) := inVal
 
@@ -228,23 +228,6 @@ object Adder {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Session}
-\begin{itemize}
-\item Run and explore the UART (serial port) example
-\begin{itemize}
-\item There is a make target that builds the UART hardware
-\item \code{make uart}
-\item It shall write some text out
-\item You can observe with a terminal (e.g., gtkterm)
-\end{itemize}
-\item Combine the UART with a blinking LED
-\begin{itemize}
-\item Write a `0' and `1' out on blink off and on
-\end{itemize}
-\item Write at maximum speed repeated numbers 0--9
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Links to the Examples}
 \begin{itemize}
 \item Example code
@@ -268,6 +251,24 @@ https://github.com/schoeberl/chisel-book.git
 \item How can this Chisel course be improved?
 \item
 \item Would be happy to receive an email: \code{masca@dtu.dk}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab Session}
+\begin{itemize}
+\item Run and explore the UART (serial port) example
+\begin{itemize}
+\item There is a make target that builds the UART hardware
+\item \code{make uart}
+\item It shall write some text out
+\item You can observe it with a terminal (e.g., gtkterm)
+\end{itemize}
+\item Combine the UART with a blinking LED
+\begin{itemize}
+\item Write a `0' and `1' out on blink off and on
+\item Best add the LEDs to \code{UartMain} and \code{uart\_top.vhdl}
+\end{itemize}
+\item Write repeated numbers 0--9 at maximum speed 
 \end{itemize}
 \end{frame}
 

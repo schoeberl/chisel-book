@@ -32,6 +32,13 @@ class ChannelUsage extends Bundle {
   val output = Flipped(new Channel())
 }
 
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+
 class Adder extends Module {
   val io = IO(new Bundle {
     val a = Input(UInt(4.W))
@@ -58,6 +65,18 @@ class UseAdder extends Module {
 
   io.result := result
 }
+
+class ParamAdder(n: Int) extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(n.W))
+    val b = Input(UInt(n.W))
+    val result = Output(UInt(n.W))
+  })
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+
 
 class Conditional extends Module {
   val io = IO(new Bundle {
@@ -95,6 +114,10 @@ class Snippets extends Module {
     0.U, cntReg + 1.U)
 
   io.result := cntReg
+
+  val ch32 = new ParamChannel(32)
+
+  val add8 = Module(new ParamAdder(8))
 }
 
 object Snippets extends App {
