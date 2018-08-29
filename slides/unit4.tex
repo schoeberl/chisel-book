@@ -230,16 +230,18 @@ object Adder {
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
-\item Run and explore the UART example (e.g., with gtkterm)
+\item Run and explore the UART (serial port) example
 \begin{itemize}
-\item In folder examples, package \code{uart}
+\item There is a make target that builds the UART hardware
 \item \code{make uart}
+\item It shall write some text out
+\item You can observe with a terminal (e.g., gtkterm)
 \end{itemize}
 \item Combine the UART with a blinking LED
 \begin{itemize}
 \item Write a `0' and `1' out on blink off and on
 \end{itemize}
-\item Write repeated ``0..9'' as fast as possible 
+\item Write at maximum speed repeated numbers 0--9
 \end{itemize}
 \end{frame}
 
