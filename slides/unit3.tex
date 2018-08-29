@@ -54,7 +54,7 @@
 \begin{itemize}
 \item Chisel is a library written in Scala
 \begin{itemize}
-\item Import the library with \code{import Chisel.\_}
+\item Import the library with \code{import chisel3.\_}
 \end{itemize}
 \item Chisel code is Scala code
 \item When it is run is \emph{generates} hardware
@@ -78,7 +78,8 @@
 \begin{itemize}
 \item Can almost be written like Java
 \item With a more lightweight syntax
-\item Show Scala for Java Refugees
+\item Scala for Java Refugees is a nice tutorial
+\item \url{http://www.codecommit.com/blog/scala/roundup-scala-for-java-refugees}
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -208,7 +209,7 @@ object Example {
 \item Compile and run it with sbt (or within Eclipse/IntelliJ):
 \end{itemize}
 \begin{chisel}
-sbt "runMain simple.Example"
+sbt "runMain Example"
 \end{chisel}
 \end{frame}
 
@@ -291,17 +292,13 @@ object Hello extends App {
 \begin{itemize}
 \item Tests can be written in Scala/Chisel
 \item Tester and device under test (DUT) are two processes
-\item Invoke \code{chiselMainTest} with some parameters, the DUT, and a tester
+\item Invoke \code{execute} with some parameters, the DUT, and a tester
 \end{itemize}
 \begin{chisel}
-object AdderTester {
-  def main(args: Array[String]): Unit = {
-    chiselMainTest(Array("--genHarness", "--test",
-      "--backend", "c",
-      "--compile", "--targetDir", "generated"),
-      () => Module(new Adder())) {
-        c => new AdderTester(c)
-      }
+object CounterTester extends App {
+
+  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
+    c => new CounterTester(c)
   }
 }
 \end{chisel}
@@ -309,12 +306,12 @@ object AdderTester {
 
 \begin{frame}[fragile]{A Chisel Tester}
 \begin{itemize}
-\item Extends class \code{Tester}
+\item Extends class \code{PeekPokeTester}
 \item Has the DUT as parameter
 \item Testing code can use all features of Scala
 \end{itemize}
 \begin{chisel}
-class AdderTester(dut: Adder) extends Tester(dut) {
+class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 
   // Here comes the Chisel/Scala code
   // for the testing
@@ -361,12 +358,12 @@ expect(dut.io.result, 7)
 \begin{frame}[fragile]{A Tiny ALU: IO Connection}
 \begin{chisel}
 class Alu extends Module {
-  val io = new Bundle {
-    val fn = UInt(INPUT, 2)
-    val a = UInt(INPUT, 4)
-    val b = UInt(INPUT, 4)
-    val result = UInt(OUTPUT, 4)
-  }
+  val io = IO(new Bundle {
+    val fn = Input(UInt(2.W))
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
 
   // Use shorter variable names
   val fn = io.fn
@@ -377,16 +374,16 @@ class Alu extends Module {
 
 \begin{frame}[fragile]{A Tiny ALU: The Function}
 \begin{chisel}
-  val result = UInt(width = 4)
+  val result = Wire(UInt(4.W))
   // some default value is needed
-  result := UInt(0)
+  result := 0.U
 
   // The ALU selection
   switch(fn) {
-    is(UInt(0)) { result := a + b }
-    is(UInt(1)) { result := a - b }
-    is(UInt(2)) { result := a | b }
-    is(UInt(3)) { result := a & b }
+    is(0.U) { result := a + b }
+    is(1.U) { result := a - b }
+    is(2.U) { result := a | b }
+    is(3.U) { result := a & b }
   }
 
   // Output on the LEDs
@@ -435,7 +432,7 @@ class Alu extends Module {
 
 \begin{frame}[fragile]{Generating Wave Forms}
 \begin{itemize}
-\item Additional parameter \code{--vcd}
+\item Additional parameter \code{--fint-write-vcd}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
@@ -472,7 +469,7 @@ class Alu extends Module {
 
   val res = addSub(cond, a, b)
 
-  def rising(d: Bool) = d && !Reg(next = d)
+  def rising(d: Bool) = d && !RegNext(d)
 
   val edge = rising(cond)
 \end{chisel}
@@ -486,16 +483,16 @@ class Alu extends Module {
 \begin{chisel}
 def counter(n: UInt) = {
   
-  val cntReg = Reg(init = UInt(0, 8))
+  val cntReg = RegInit(0.U(8.W))
   
-  cntReg := cntReg + UInt(1)
+  cntReg := cntReg + 1.U
   when(cntReg === n) {
-    cntReg := UInt(0)
+    cntReg := 0.U
   }
   cntReg
 }
 
-val counter100 = counter(UInt(100))
+val counter100 = counter(100.U)
 \end{chisel}
 \end{frame}
 
@@ -521,18 +518,6 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
-\item Explore the UART (serial port) example
-\begin{itemize}
-\item There is a make target that builds the UART hardware
-\item It shall write some text out, which you can observe with a terminal (e.g., gtkterm)
-\end{itemize}
-\item Extend the blinking LED example with a UART output (writing 0 and 1)
-\item Write at maximum speed repeated numbers 0--9
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Additional Lab Material}
-\begin{itemize}
 \item Explore the ALU example
 \begin{itemize}
 \item It contains a tester
@@ -550,6 +535,18 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{itemize}
 \item Running it in the FPGA
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Additional Lab Material}
+\begin{itemize}
+\item Explore the UART (serial port) example
+\begin{itemize}
+\item There is a make target that builds the UART hardware
+\item It shall write some text out, which you can observe with a terminal (e.g., gtkterm)
+\end{itemize}
+\item Extend the blinking LED example with a UART output (writing 0 and 1)
+\item Write at maximum speed repeated numbers 0--9
 \end{itemize}
 \end{frame}
 
