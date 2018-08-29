@@ -12,5 +12,5 @@ resolvers ++= Seq(
 
 scalacOptions := Seq("-deprecation")
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.0.1"
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.1.0"
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"

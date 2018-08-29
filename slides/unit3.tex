@@ -85,7 +85,7 @@
 
 \begin{frame}[fragile]{Scala Hello World}
 \begin{chisel}
-object HelloWorld extends Application {
+object HelloWorld extends App {
   println("Hello, World!")
 }
 \end{chisel}
@@ -205,10 +205,10 @@ object Example {
 }
 \end{chisel}
 \begin{itemize}
-\item Compile and run it with sbt (or within Eclipse):
+\item Compile and run it with sbt (or within Eclipse/IntelliJ):
 \end{itemize}
 \begin{chisel}
-sbt "run-main simple.Example"
+sbt "runMain simple.Example"
 \end{chisel}
 \end{frame}
 
@@ -222,7 +222,7 @@ sbt "run-main simple.Example"
 \item Compile and run with:
 \end{itemize}
 \begin{chisel}
-sbt "run-main simple.Example"
+sbt "runMain simple.Example"
 \end{chisel}
 \begin{itemize}
 \item Or even just:
@@ -241,7 +241,13 @@ sbt run
 \begin{chisel}
 scalaVersion := "2.11.7"
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.30"
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases")
+)
+
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 \end{chisel}
 \end{frame}
 
@@ -251,7 +257,8 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.30"
 \item For large classes use one file per class with the class name
 \item Scala has packages, like Java
 \item Use folders with the package names for file organization
-\item sbt looks into current folder and \code{src/main/scala/}
+\item \code{sbt} looks into current folder and \code{src/main/scala/}
+\item Tests shall be in \code{src/test/scala/}
 \end{itemize}
 \end{frame}
 
@@ -269,16 +276,13 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.30"
 
 \begin{itemize}
 \item Create one top-level Module
-\item Invoke \code{chiselMain()} from the Scala \code{main}
+\item Invoke the Chisel driver from the Scala \code{main} (or App)
 \item Pass some parameters and the top module
 \item Following code generates Verilog code
 \end{itemize}
 \begin{chisel}
-object Hello {
-  def main(args: Array[String]): Unit = {
-    chiselMain(Array("--backend", "v"),
-      () => Module(new Hello()))
-  }
+object Hello extends App {
+  chisel3.Driver.execute(Array[String](), () => new Hello())
 }
 \end{chisel}
 \end{frame}
@@ -517,7 +521,6 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 
 \begin{frame}[fragile]{Lab Session}
 \begin{itemize}
-\item Do a git pull in the examples to get the latest version
 \item Explore the UART (serial port) example
 \begin{itemize}
 \item There is a make target that builds the UART hardware

@@ -67,7 +67,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Could be used for your vending machine
 \item In teaching for introduction to computer architecture
 \end{itemize}
-\item The design took place on Lipsi
+\item The design took place on the island Lipsi
 \end{itemize}
 \end{frame}
 
@@ -174,6 +174,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item If it compiles, it is synthesisable hardware 
 \item Say goodby to your unintended latches
 \end{itemize}
+\item Chisel is not a high-level synthesis language
 \item Single source two targets
 \begin{itemize}
 \item C based cycle accurate simulator
@@ -308,8 +309,8 @@ class Channel extends Bundle {
 \end{itemize}
 \begin{chisel}
 class ExecuteIO extends Bundle {
-  val dec = new DecodeExecute().asInput
-  val mem = new ExecuteMemory().asOutput
+  val dec = Input(new DecodeExecute())
+  val mem = Output(new ExecuteMemory())
 }
 \end{chisel}
 \end{frame}
@@ -527,11 +528,13 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
 \item \url{https://chisel.eecs.berkeley.edu/}
-\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
-\begin{itemize}
-\item Chisel 2.2 Tutorial
-\item Getting Started with Chisel
-\end{itemize}
+\item \url{https://github.com/ucb-bar/chisel-tutorial}
+\item \url{https://github.com/ucb-bar/generator-bootcamp}
+%\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
+%\begin{itemize}
+%\item Chisel 2.2 Tutorial
+%\item Getting Started with Chisel
+%\end{itemize}
 \item \url{http://groups.google.com/group/chisel-users}
 \end{itemize}
 \end{frame}
@@ -600,8 +603,9 @@ cd chisel-examples/hello-world
 make
 \end{chisel}
 \begin{itemize}
+\item Do a \code{git pull} if you have cloned it before
 \item Start Quartus
-\item Open the project under chisel-examples/hello-world/quartus/altde2-115
+\item Open the project at \code{chisel-examples/hello-world/quartus/altde2-115}
 \item Synthesize with the Play button
 \item Configure the FPGA with the Programmer button
 \item Enjoy!
@@ -616,7 +620,7 @@ make
 \item Optional:
 \begin{itemize}
 \item Change to an asymmetric blinking, e.g., 200 ms on every second 
-\item Setup Eclipse/IntelliJ with a Scala project and the Chisel source
+\item Setup Eclipse/IntelliJ with a Scala project 
 \end{itemize}
 \end{itemize}
 \end{frame}
