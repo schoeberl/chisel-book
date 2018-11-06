@@ -127,7 +127,8 @@ The two most common hardware description languages are Verilog and VHDL.
 Both languages are old, care a lot of legacy, and have a moving line of what
 constructions of the language are synthesizable to hardware.
 Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
-blocks that can be synthesized in an \myref{todo}{ASIC}.
+blocks that can be synthesized in an
+\myref{https://en.wikipedia.org/wiki/Application-specific_integrated_circuit}{ASIC}.
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
@@ -136,7 +137,7 @@ For an introduction of basics, such as how to build a gate out of CMOS transisto
 refer to other digital design books.
 However, the intention of this book is to teach digital design at an abstraction level that is
 current practice to describe ASICs or designs targeting
-\myref{todo}{FPGA}s.\footnote{As the author is more familiar with FPGAs
+\myref{https://en.wikipedia.org/wiki/Field-programmable_gate_array}{FPGA}s.\footnote{As the author is more familiar with FPGAs
 than ASICs as target technology, some design optimizations shown in this book are
 targeting FPGA technology.}
 As prerequisites for this book we assume basic knowledge of
@@ -153,10 +154,11 @@ Chisel itself is not a big language, as it shall be for hardware design.
 Therefore, this book is not a big book as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacy.
 The power if Chisel comes from the embedding of Chisel within
-\myref{TODO}{Scala}, which is itself a big language. However, Scala is not the topic
+\myref{https://www.scala-lang.org/}{Scala}, which is itself a big language.
+However, Scala is not the topic
 of this book. We provide a short section on Scala for hardware designers,
 but a general introduction to Scala is better served by the textbook by
-Odersky et al.\cite{TODO}.
+Odersky et al.\cite{Scala}.
 
 All code examples shown in this book are extracted from complete programs
 that have been compiled and tested. Therefore, the code shall not contain
@@ -277,6 +279,7 @@ a short users guide to Chisel and links to further information.
 their own repository that contains a Wiki documentation.
 \item The \myref{https://github.com/ucb-bar/generator-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a Jupyter notebook
+\item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
 \end{itemize}
 
 \section{Exercises}
@@ -342,34 +345,18 @@ Is it alarming or more like a sign of live signal?
 
 \chapter{Basic Components}
 
-In this section we introduce the basic components for digital design.
+In this section we introduce the basic components for digital design,
+combinational circuits and flip-flops.
 These basic elements can be combined to build larger, more interesting
 circuits.
 
-Test of generated code:
-
-
-
-\todo{Checkout out (all) the different ways to define a register.
-Start some code.
-Then ask the community, which is the preferred one.}
-\todo{RegInit and RegNext are the preferred ones.}
-
-\lstinputlisting[language=chisel]{src/main/scala/DivReg.scala}
-
-\todo{Talk about 4.U and 8.W is a constant with a type, similar to 4L in C, Java, and Scala.}
-
-Here are two examples of basic components.
+\section{Combinational Circuits}
 
 A module containing combinational logic:
 
 \input{code/logic.txt}
 
-An 8-bit register, initialized with 0 at reset:
-
-\input{code/register.txt}
-
-\section{Multiplexor}
+\subsection{Multiplexor}
 
 A multiplexor is a circuit that selects between alternatives. In the most
 basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
@@ -385,8 +372,13 @@ signale \code{b}.
   \label{fig:mux}
 \end{figure}
 
+\section{Flip-Flops for State}
 
-\section{Counting}
+An 8-bit register, initialized with 0 at reset:
+
+\input{code/register.txt}
+
+\subsection{Counting}
 
 Counting is a very basic operation in digital systems. On might count events.
 However, more often counting is used to define a time interval. Counting the
@@ -420,7 +412,7 @@ With comparison using LUTs there is no difference comparing against a '0' or
 
 However, there is still one more trick a clever hardware designer can pull off.
 Counting up or down needed a comparison agains all counting bis, so far.
-What about counting down \emph{one to many}? In that case the counter
+What about counting down \emph{one too many}? In that case the counter
 becomes negative. Detecting a negative value is simply comparing the
 most significant bit against 'a'.
 
@@ -428,8 +420,24 @@ If we want to count N, we start with N-2 and count till -1.
 
 \todo{Show optimized down counting code.}
 
-
 \todo{discuss >= and so on}
+
+
+\section{Stuff to Sort Out}
+
+\todo{Checkout out (all) the different ways to define a register.
+Start some code.
+Then ask the community, which is the preferred one.}
+\todo{RegInit and RegNext are the preferred ones.}
+
+\lstinputlisting[language=chisel]{src/main/scala/DivReg.scala}
+
+\todo{Talk about 4.U and 8.W is a constant with a type, similar to 4L in C, Java, and Scala.}
+
+Here are two examples of basic components.
+
+
+
 
 \chapter{Build Process and Testing}
 
