@@ -55,7 +55,7 @@
 
 \hypersetup{
   linkcolor  = black,
-%  citecolor  = blue,
+  citecolor  = blue,
   urlcolor   = blue,
   colorlinks = true,
 }
@@ -78,12 +78,11 @@
 
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
-\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+\newcommand{\myref}[2]{\href{#1}{#2}}
 
 % uncomment following for final submission
 %\renewcommand{\todo}[1]{}
 %\renewcommand{\martin}[1]{}
-%\renewcommand{\author2}[1]{}
 
 \begin{document}
 
@@ -91,20 +90,11 @@
 
 \author{Martin Schoeberl}
 
-% Most conferences have their own commands for author headings.
-
-%\author{\IEEEauthorblockN{Edgar Lakis, Martin Schoeberl}\\
-%\IEEEauthorblockA{Department of Applied Mathematics and Computer Science\\
-%Technical University of Denmark\\
-%Email: \texttt{edgar.lakis@gmail.com}, \texttt{masca@imm.dtu.dk}}
-%}
-
-
 \maketitle \thispagestyle{empty}
 
-This lecture notes, which shall become a book, are an introduction into hardware design with the focus
+These lecture notes, which shall become a book, are an introduction into digital design with the focus
 on using the hardware construction language
-\href{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
+\myref{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
 is to present small to medium sized typical hardware components to explore
 hardware design with Chisel.
 We will walk through these examples in detail.
@@ -114,7 +104,7 @@ We will walk through these examples in detail.
 \label{sec:intro}
 
 This book is an introduction to digital system design using a modern hardware
-construction language, \href{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
+construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
 In this book we focus on a higher abstraction level then usual digital design,
 to enable to build more complex, interacting digital systems.
 
@@ -122,43 +112,58 @@ This book and Chisel is targeting two groups of developers:
 (1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
 Java, or TCL/TK to generate hardware to move to a single hardware construction language
 where hardware generation is part of the language and
-(2) software programmers who are becoming interested in hardware design as future chips
-from Intel will include programmable hardware to speed up programs.
+(2) software programmers who are becoming interested in hardware design,
+e.g., as future chips from Intel will include programmable hardware to speed up programs.
 
 \todo{Why Chisel}
 
-Hardware is now commonly described with a hardware description language (HDL).
+Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is definitely
 over. Some high level schematics can give an overview of the system, but are
 not intended to describe the system.
 
-The two most common HDLs are Verilog and VHDL. Both languages are old,
-care a lot of legacy, and have a moving line of what constructions of the language
-are synthesizable to hardware.
+The two most common hardware description languages are Verilog and VHDL.
+Both languages are old, care a lot of legacy, and have a moving line of what
+constructions of the language are synthesizable to hardware.
 Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
-blocks that can be synthesized in an ASIC.
+blocks that can be synthesized in an \myref{todo}{ASIC}.
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
-This book is not a general introduction to digital design and the fundamentals of it.
+This book is not a general introduction to hardware design and the fundamentals of it.
 For an introduction of basics, such as how to build a gate out of CMOS transistors
 refer to other digital design books.
-As prerequisites for this book I assume basic knowledge of
-\href{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} and the
-\href{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
+However, it is intended to teach digital design at an abstraction level that is
+current practice to describe ASICs or designs targeting
+\myref{todo}{FPGA}s.\footnote{As the author is more familiar with FPGAs
+than ASICs as target technology, some design optimizations shown in this book are targeting FPGA
+technology.}
+As prerequisites for this book we assume basic knowledge of
+\myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} and the
+\myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
 Furthermore, some programming experience in any programming language
-is assumed. No knowledge of Verilog or VHDL is assumed.
-Chisel can be and shall be your first programming language to describe digital hardware.
+is assumed. No knowledge of Verilog or VHDL is needed.
+Chisel can be, and shall be, your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
+
+All code examples shown in the book are extracted from complete programs
+that have been compiled and tested. Therefore, the code shall not contain
+any syntax errors. The code examples are available from the
+\myref{https://github.com/schoeberl/chisel-book}{GitHub repository}
+of this book.
+
+This book is optimized to be read electronically on a laptop or on a tablet (e.g., iPad).
+We include links to further reading in the running text, mostly to
+\myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
 \section{Getting Started with the Tools}
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
 
-On Mac OS X, with the packet manager \href{https://brew.sh/}{Homebrew},
+On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} is installed with:
 
 \begin{verbatim}
@@ -178,12 +183,14 @@ sudo apt-get update
 sudo apt-get install sbt
 \end{verbatim}
 
+\todo{Windows version}
+
 To build hardware for an FPGA you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
 their tools that cover small to medium sized FPGAs. Those medium sized
 FPGAs are large enough to build multicore RISC style processors.
-Intel provides the \href{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
-\href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
+Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
+\myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 
 \section{Hello World}
 
@@ -211,11 +218,7 @@ However, is this Chisel? Is this hardware generated to print a string?
 No, this is actually plain Scala code and not a representative Hello World
 program for a hardware design.
 
-\section{Chisel Testing Hello World}
-
-\todo{Show the testing printout like on the GitHub page of Chisel}
-
-\section{Hardware Hello World}
+\section{Chisel Hello World}
 
 What is then the equivalent of a Hello World program for a hardware design?
 The minimal useful and visible design? A blinking LED is the hardware (or even
@@ -232,42 +235,43 @@ usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
+That hardware then blinks the LED at 1~Hz.
 
 \section{Source Access}
 
-This book is open source and hosted at GitHub: \href{https://github.com/schoeberl/chisel-book}{chisel-book}.
+This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
 Small Chisel code snippets are included in the repository of the book.
-Larger examples are collected in the accompanying repository \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+Larger examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
 
 \section{Further Reading}
 
 Here a list of further reading for digital design:
 \begin{itemize}
-\item \href{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
+\item \myref{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
 is a modern textbook on digital design.
 \end{itemize}
 
-Chisel documentation is available online:
+The official Chisel documentation and further documents are available online:
 
 \begin{itemize}
-\item \href{https://chisel.eecs.berkeley.edu/}{Chisel} home page, the official starting point to
+\item \myref{https://chisel.eecs.berkeley.edu/}{Chisel} home page, the official starting point to
 download and learn Chisel.
-\item The \href{https://github.com/ucb-bar/chisel-tutorial}{Chisel Tutorial} provides a ready setup
+\item The \myref{https://github.com/ucb-bar/chisel-tutorial}{Chisel Tutorial} provides a ready setup
 project containing small exercises with testers and solutions.
 
-\item The \href{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
+\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
 a short users guide to Chisel and links to further information.
-\item The \href{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
+\item The \myref{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
 their own repository that contains a Wiki documentation.
-\item The \href{https://github.com/ucb-bar/generator-bootcamp}{Generator Bootcamp} is
+\item The \myref{https://github.com/ucb-bar/generator-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a Jupyter notebook
 \end{itemize}
 
 \section{Exercises}
 
-Each chapter ends with a few hands-on exercises. For the introduction exercise we will use an
+Each chapter ends with hands-on exercises. For the introduction exercise we will use an
 FPGA board to get one LED blinking.
-As a first step clone (or first fork on GitHub) the \href{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+As a first step clone (or first fork on GitHub) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository.
 The Hello World example is in its own folder \code{hello-world}, setup as
 a minimal project. You can explore the Chisel code of the blinking LED
@@ -297,8 +301,8 @@ The next step is to setup an FPGA project file for the synthesize tool, assign t
 and compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
 performing place and route, performing timing analysis, and generating a bitfile.
 However, for the purpose of this introduction example we simply call it ``compile''
-your code.} the Verilog code, and configure the FPGA with the bitfile.
-We cannot provide the details on this steps. Please consult the manual of
+your code.} the Verilog code, and configure the FPGA with the resulting bitfile.
+We cannot provide the details for these steps. Please consult the manual of
 your Intel Quartus or Xilinx Vivado tool.
 However, the examples repository contains some ready to use Quartus
 projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
@@ -314,7 +318,7 @@ communicate different ``emotions''. E.g., a slow blinking LED signals that
 everything is ok, a fast blinking LED signals an alarm state.
 Explore which frequencies express best those two different emotions.
 
-As a more challenging extension to the exercise, generate a blinking pattern:
+As a more challenging extension to the exercise, generate following blinking pattern:
 the LED shall be on for 200~ms every second. For this pattern you might
 decouple the change of the LED blinking from the counter reset.
 You will need a second constant where you change the state of the
@@ -418,7 +422,7 @@ If we want to count N, we start with N-2 and count till -1.
 \chapter{Build Process and Testing}
 
 Chisel is written in Scala, so any build process that supports Scala is possible
-with a Chisel project. One popular build tool for Scala is \href{https://www.scala-sbt.org/}{sbt},
+with a Chisel project. One popular build tool for Scala is \myref{https://www.scala-sbt.org/}{sbt},
 which stands for Scala interactive build tool.
 Besides driving the build and test process, \code{sbt} also downloads the correct
 version of Scala and the Chisel libraries.
@@ -509,12 +513,12 @@ to Chisel 3. There is documentation available how to convert a Chisel 2 project 
 Chisel 3:
 
 \begin{itemize}
-\item \href{https://github.com/freechipsproject/chisel3/wiki/Chisel3-vs-Chisel2}{Chisel2 vs. Chisel3} and
-\item \href{https://github.com/schoeberl/chisel-examples/blob/master/TowardsChisel3.md}{Towards Chisel 3}
+\item \myref{https://github.com/freechipsproject/chisel3/wiki/Chisel3-vs-Chisel2}{Chisel2 vs. Chisel3} and
+\item \myref{https://github.com/schoeberl/chisel-examples/blob/master/TowardsChisel3.md}{Towards Chisel 3}
 \end{itemize}
 
 However, you might get involved in a project that still uses Chisel 2,
-e.g., the \url{https://github.com/t-crest/patmos}{Patmos} processor.
+e.g., the \myref{https://github.com/t-crest/patmos}{Patmos}~\cite{patmos:rts2018} processor.
 Therefore, we will provide here some information on Chisel 2 coding for those who
 have started with Chisel 3.
 
@@ -560,7 +564,7 @@ but usage of \code{RegInit} and \code{RegNext} is recommended for new Chisel 3 d
 Note also here the constant definition of an 8-bit wide 0 as \code{UInt(0, 8)}.
 
 Chisel based testing and Verilog code is generated by calling \code{chiselMainTest}
-and \code{chiselMain}. Both ``main'' functions take String array for further parameters.
+and \code{chiselMain}. Both ``main'' functions take a \code{String} array for further parameters.
 
 \lstinputlisting[language=chisel]{chisel2/src/main/scala/LogicTester.scala}
 
