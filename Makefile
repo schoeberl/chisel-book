@@ -5,7 +5,7 @@ all: gencode book
 
 gencode:
 	-mkdir code
-	scala gencode.scala
+	scala scripts/gencode.scala
 
 book:
 	pdflatex $(DOC)
