@@ -18,7 +18,7 @@
 %\setlength{\paperwidth}{15cm} \setlength{\paperheight}{20cm}
 \setlength{\paperwidth}{15.73cm} \setlength{\paperheight}{20.96cm}
 %\typearea{calc} % without BCOR results to a DIV of 8 for 11pt
-\typearea[0.6cm]{20} % TODO: check if 1 cm is the correct number
+\typearea[1cm]{18} % TODO: check if 1 cm is the correct number
 
 % I should switch:
 % From KOMA-Script 3.12 the completely newly implemented package scrlayer-scrpage replaces the old scrpage2.
@@ -99,14 +99,15 @@ is to present small to medium sized typical hardware components to explore
 hardware design with Chisel.
 We will walk through these examples in detail.
 
+\tableofcontents
 
 \chapter{Introduction}
 \label{sec:intro}
 
 This book is an introduction to digital system design using a modern hardware
 construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
-In this book we focus on a higher abstraction level then usual digital design,
-to enable to build more complex, interacting digital systems.
+In this book we focus on a higher abstraction levels then usual in digital design,
+to enable to build more complex, interacting digital systems in shorter time.
 
 This book and Chisel is targeting two groups of developers:
 (1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
@@ -131,13 +132,13 @@ For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
 This book is not a general introduction to hardware design and the fundamentals of it.
-For an introduction of basics, such as how to build a gate out of CMOS transistors
+For an introduction of basics, such as how to build a gate out of CMOS transistors,
 refer to other digital design books.
-However, it is intended to teach digital design at an abstraction level that is
+However, the intention of this book is to teach digital design at an abstraction level that is
 current practice to describe ASICs or designs targeting
 \myref{todo}{FPGA}s.\footnote{As the author is more familiar with FPGAs
-than ASICs as target technology, some design optimizations shown in this book are targeting FPGA
-technology.}
+than ASICs as target technology, some design optimizations shown in this book are
+targeting FPGA technology.}
 As prerequisites for this book we assume basic knowledge of
 \myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} and the
 \myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
@@ -148,17 +149,28 @@ As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
-All code examples shown in the book are extracted from complete programs
+Chisel itself is not a big language, as it shall be for hardware design.
+Therefore, this book is not a big book as well.
+Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacy.
+The power if Chisel comes from the embedding of Chisel within
+\myref{TODO}{Scala}, which is itself a big language. However, Scala is not the topic
+of this book. We provide a short section on Scala for hardware designers,
+but a general introduction to Scala is better served by the textbook by
+Odersky et al.\cite{TODO}.
+
+All code examples shown in this book are extracted from complete programs
 that have been compiled and tested. Therefore, the code shall not contain
 any syntax errors. The code examples are available from the
 \myref{https://github.com/schoeberl/chisel-book}{GitHub repository}
 of this book.
+Besides showing Chisel code, we have also tried to show useful designs and
+principles of good hardware description style.
 
-This book is optimized to be read electronically on a laptop or on a tablet (e.g., iPad).
+This book is optimized for reading on a laptop or on a tablet (e.g., iPad).
 We include links to further reading in the running text, mostly to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
-\section{Getting Started with the Tools}
+\section{Installing Chisel and FPGA Tools}
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
