@@ -1,7 +1,13 @@
 
 DOC=chisel-book
 
-all:
+all: gencode book
+
+gencode:
+	-mkdir code
+	scala gencode.scala
+
+book:
 	pdflatex $(DOC)
 	bibtex $(DOC)
 	pdflatex $(DOC)
@@ -9,6 +15,7 @@ all:
 
 clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
+	rm -rf code
 
 chisel:
 	sbt "runMain Snippets"
