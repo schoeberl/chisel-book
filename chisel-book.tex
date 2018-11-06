@@ -224,24 +224,7 @@ solve bigger problems!
 
 Following code shows a blinking LED, described in Chisel:
 
-\begin{chisel}
-class Hello extends Module {
-  val io = IO(new Bundle {
-    val led = Output(UInt(1.W))
-  })
-  val CNT_MAX = (50000000 / 2 - 1).U;
-  
-  val cntReg = RegInit(0.U(32.W))
-  val blkReg = RegInit(0.U(1.W))
-
-  cntReg := cntReg + 1.U
-  when(cntReg === CNT_MAX) {
-    cntReg := 0.U
-    blkReg := ~blkReg
-  }
-  io.led := blkReg
-}
-\end{chisel}
+\input{code/hello.txt}
 
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
@@ -349,7 +332,7 @@ circuits.
 
 Test of generated code:
 
-\input{code/counter.txt}
+
 
 \todo{Checkout out (all) the different ways to define a register.
 Start some code.
@@ -364,11 +347,11 @@ Here are two examples of basic components.
 
 A module containing combinational logic:
 
-\lstinputlisting[language=chisel]{src/main/scala/Logic.scala}
+\input{code/logic.txt}
 
-An 8-bit register:
+An 8-bit register, initialized with 0 at reset:
 
-\lstinputlisting[language=chisel]{src/main/scala/Register.scala}
+\input{code/register.txt}
 
 \section{Multiplexor}
 
@@ -400,7 +383,7 @@ till 9 and wraps around to 0 when reaching 9.
 
 If we want to count N, we start with 0 and count till N-1.
 
-\todo{counter code}
+\input{code/counter.txt}
 
 
 

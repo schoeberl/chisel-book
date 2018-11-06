@@ -6,7 +6,9 @@ class Register extends Module {
     val out = Output(UInt(8.W))
   })
 
+  //- start register
   val reg = RegInit(0.U(8.W))
+  //- end
   reg := io.in
 
   io.out := reg

@@ -7,6 +7,7 @@ class Logic extends Module {
     val c = Input(UInt(1.W))
     val out = Output(UInt(1.W))
   })
-
+  //- start logic
   io.out := io.a & io.b | io.c
+  //- end
 }
