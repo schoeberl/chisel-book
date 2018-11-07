@@ -218,7 +218,7 @@ called the \emph{Hello World} example. Following code is a first approach:
 Compiling and executing this short program with \code{sbt}
 
 \begin{chisel}
-sbt "runMain Hello"
+$ sbt "runMain Hello"
 \end{chisel}
 
 leads to the expected output of a Hello World program:
@@ -239,10 +239,14 @@ The minimal useful and visible design? A blinking LED is the hardware (or even
 embedded software) version of Hello World. If a LED blinks, we are ready to
 solve bigger problems!
 
-Following code shows a blinking LED, described in Chisel:
 
+\begin{figure}
 \input{code/hello.txt}
+\caption{A hardware Hello World in Chisel}
+\label{fig:chisel:hello}
+\end{figure}
 
+Figure~\ref{fig:chisel:hello} shows a blinking LED, described in Chisel.
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
 usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
@@ -251,11 +255,37 @@ example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 That hardware then blinks the LED at 1~Hz.
 
+\section{IDE for Chisel}
+
+This book makes no assumptions about your programming environment or editor to use.
+Learning of the basics should be easy with just using \code{sbt} at the command line
+and an editor of your choice. In the tradition of other books, all commands that you
+shall type in a shell/terminal/CLI are preceded by a \code{\$} character, which you
+shall not type in. As example here the Unix \code{ls} command, which lists files of
+the current folder:
+
+\begin{verbatim}
+$ ls
+\end{verbatim}
+
+That said, an integrated development environment (IDE) with a compiler running in
+the background can speedup coding. As Chisel is basically a Scala library, all IDEs
+that support Scala are also good IDEs for Chisel.
+It is possible in Eclipse and IntelliJ to generate a project from the sbt project configuration
+in \code{build.sbt}.
+You can create an Eclipse project via
+\begin{verbatim}
+$ sbt eclipse
+\end{verbatim}
+and import that project in Eclipse.
+In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
+
 \section{Source Access}
 
 This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
 Small Chisel code snippets are included in the repository of the book.
-Larger examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+Larger examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way
+to incorporate your improvement.
 
 \section{Further Reading}
 
@@ -294,9 +324,9 @@ in \code{Hello.scala}.
 Compile the blinking LED with following steps:
 
 \begin{chisel}
-git clone https://github.com/schoeberl/chisel-examples.git
-cd chisel-examples/hello-world/
-make
+$ git clone https://github.com/schoeberl/chisel-examples.git
+$ cd chisel-examples/hello-world/
+$ make
 \end{chisel}
 
 After some initial downloading of Chisel components, this will produce the Verilog file \code{Hello.v}.
@@ -548,9 +578,9 @@ on GitHub at \url{https://github.com/schoeberl/chisel2-doc}.
 You can use the Chisel 2 tutorial by switching to the Chisel 2 branch:
 
 \begin{chisel}
-git clone https://github.com/ucb-bar/chisel-tutorial.git
-cd chisel-tutorial
-git checkout chisel2
+$ git clone https://github.com/ucb-bar/chisel-tutorial.git
+$ cd chisel-tutorial
+$ git checkout chisel2
 \end{chisel}
 
 The main visible difference between Chisel 3 and 2 are: the definitions of
@@ -602,16 +632,9 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 
 
 
-\section{SBT and Eclipse}
 
-Use an IDE, such as Eclipse, but generate the project with \code{sbt}
-from the library dependency description. E.g.,:
 
-\todo{add Eclipse stuff here.}
-
-``sbt eclipse'' and project import
-
-\chapter{Conclusion}
+\chapter{Summary}
 \label{sec:conclusion}
 
 \subsection*{Acknowledgment}
