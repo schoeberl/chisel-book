@@ -1,0 +1,100 @@
+\documentclass{article}
+
+\usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
+\usepackage[colorlinks=true,bookmarks=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\begin{document}
+
+\title{Hardware Design in the 21st Century with the Object Oriented and Functional Language Chisel}
+
+\author{Martin Schoeberl\\
+\texttt{masca@dtu.dk}}
+
+
+\maketitle \thispagestyle{empty}
+
+
+This is a proposal for a tutorial for ARC 2019 on \href{https://chisel.eecs.berkeley.edu/}{Chisel}.
+The tutorial is intended for a full day, but can be shortened to a half day.
+It will include hands-on lab with FPGA boards.
+
+\subsection*{Tutorial Abstract}
+
+To develop future more complex digital circuits in less time we need a better hardware description
+language than VHDL or Verilog. Chisel is a hardware construction language intended to
+speedup the development of digital hardware and hardware generators.
+
+Chisel is a hardware construction language implemented as a domain specific language in Scala.
+Therefore, the full power of a modern programming language is available to describe hardware and,
+more important, hardware generators.
+Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V
+by UC Berkeley students and a chip for a tensor processing unit by Google.
+Here at the Technical University of Denmark we use Chisel in the T-CREST project and
+in teaching advanced computer architecture.
+
+In this tutorial I will give an overview of Chisel to describe circuits at the RTL level, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators.
+
+The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course will give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala. The intended audience is hardware designers with some background in VHDL or Verilog, but Chisel is also a good first hardware language for software programmers entering into hardware design
+(e.g., porting software algorithms to FPGAs for speedup).
+
+%\paragraph{Necessary background:}
+%Knowledge of a hardware description language like VHDL of Verilog is beneficial, but Chisel is also
+%approachable by software engineers with knowledge of an object-oriented language such as Java or C\#.
+
+Besides lecturing we will have lab sessions to describe small circuits, test them in the Chisel simulation,
+and run them in an FPGA.
+
+
+\subsection*{Further Information}
+
+\paragraph{List of organizers and speakers:}
+Assoc.~Prof.~Martin Schoeberl, Technical University of Denmark.
+
+Martin Schoeberl received his PhD from the Vienna University of Technology in 2005. From 2005 to 2010 he has been Assistant Professor at the Institute of Computer Engineering. He is now Associate Professor at the Technical University of Denmark. His research interest is on hard real-time systems, time-predictable computer architecture, and real-time Java.  Martin Schoeberl has been involved in a number of national and international research projects: JEOPARD, CJ4ES, T-CREST, RTEMP, the TACLe COST action, and PREDICT.  He has been the technical lead of the EC funded project T-CREST.  He has more than 100 publications in peer reviewed journals, conferences, and books.
+
+Martin has been four times at UC Berkeley on 3--4 months research stays, where he has picked up Chisel
+and was in close contact with the developers of Chisel.
+
+%\paragraph{Topics:} Hardware description in a modern hardware construction language, object oriented and
+%functional description of hardware, circuit generators.
+
+\paragraph{Length and Format:} The tutorial at ARC 2019 is preferable one day. But if there are scheduling
+constraints it can be cut down to a half day.
+The tutorial will be a mix of lectures and hands-on labs. Participants shall have a laptop and I will provide
+instructions for software installation beforehand. Furthermore, at the tutorial I will provide USB sticks
+with a virtual machine where all software is installed and a few FPGA boards for a hands-on real
+hardware experience.
+
+\paragraph{Former tutorials:} I have given this tutorial (or a variation of it) several times:
+in a two day format at University of Augsburg (about 10 attendees), several years
+in a course in advanced computer architecture at DTU (about 10 attendees), at DTU with industrial attendees
+(two half days), at the Danish engineering society (very short form, afternoon),
+and at FPL 2018 in Dublin as a one day tutorial (22 attendees).
+
+ \paragraph{References:}
+
+\begin{itemize}
+\item Jonathan Bachrach, jackbackrack@gmail.com, Initial designer of Chisel (UC Berkeley)
+\item Thomas Preusser, thomas.preusser@xilinx.com, Tutorial Chair FPL 2018
+\item Charles Lo, University Of Toronto, locharl1@ece.utoronto.ca, participant of FPL 2018 Chisel tutorial
+\end{itemize}
+
+
+%\paragraph{Tutorial plan:}
+%
+%
+%Chisel overview
+%
+%Chisel basic operations
+%
+%
+%
+%A little bit of Scala and Chisel background 
+%
+%Customized circuit generation
+
+
+\end{document}
