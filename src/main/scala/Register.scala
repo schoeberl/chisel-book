@@ -9,7 +9,19 @@ class Register extends Module {
   //- start register
   val reg = RegInit(0.U(8.W))
   //- end
-  reg := io.in
 
+  val d = io.in
+  //- start reg_con
+  reg := d
+  val q = reg
+  //- end
+
+  //- start reg_next
+  val regNxt = RegNext(d)
+  //- end
+
+  //- start reg_both
+  val regBoth = RegNext(d, 0.U)
+  //- end
   io.out := reg
 }

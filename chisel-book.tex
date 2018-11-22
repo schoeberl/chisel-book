@@ -43,6 +43,7 @@
 %\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
 
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
+\newcommand{\codefoot}[1]{{\footnotesize{\texttt{#1}}}}
 
 % fatter TT font
 \renewcommand*\ttdefault{txtt}
@@ -158,7 +159,7 @@ The power if Chisel comes from the embedding of Chisel within
 However, Scala is not the topic
 of this book. We provide a short section on Scala for hardware designers,
 but a general introduction to Scala is better served by the textbook by
-Odersky et al.\cite{Scala}.
+Odersky et al.~\cite{Scala}.
 
 All code examples shown in this book are extracted from complete programs
 that have been compiled and tested. Therefore, the code shall not contain
@@ -168,7 +169,7 @@ of this book.
 Besides showing Chisel code, we have also tried to show useful designs and
 principles of good hardware description style.
 
-This book is optimized for reading on a laptop or on a tablet (e.g., iPad).
+This book is optimized for reading on a laptop or on a tablet (e.g., an iPad).
 We include links to further reading in the running text, mostly to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
@@ -184,7 +185,7 @@ On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 brew install sbt
 \end{verbatim}
 
-For Ubuntu, which is based on Debian, software is usually installed from a
+\noindent For Ubuntu, which is based on Debian, software is usually installed from a
 Debian file (.deb). However, as of the time of this writing \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
 is a little bit more involved:
@@ -197,7 +198,12 @@ sudo apt-get update
 sudo apt-get install sbt
 \end{verbatim}
 
-\todo{Windows version}
+
+
+Chisel and Scala can also be installed and used under Windows.
+For instructions see:
+\myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
+\todo{Test Windows version}
 
 To build hardware for an FPGA you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
@@ -215,20 +221,20 @@ called the \emph{Hello World} example. Following code is a first approach:
 \lstinputlisting[language=chisel]{src/main/scala/Hello.scala}
 
 
-Compiling and executing this short program with \code{sbt}
+\noindent Compiling and executing this short program with \code{sbt}
 
 \begin{chisel}
 $ sbt "runMain Hello"
 \end{chisel}
 
-leads to the expected output of a Hello World program:
+\noindent leads to the expected output of a Hello World program:
 
 \begin{chisel}
 [info] Running Hello 
 Hello World!
 \end{chisel}
 
-However, is this Chisel? Is this hardware generated to print a string?
+\noindent However, is this Chisel? Is this hardware generated to print a string?
 No, this is actually plain Scala code and not a representative Hello World
 program for a hardware design.
 
@@ -377,19 +383,96 @@ Is it alarming or more like a sign of live signal?
 
 In this section we introduce the basic components for digital design,
 combinational circuits and flip-flops.
-These basic elements can be combined to build larger, more interesting
-circuits.
+These basic elements can be combined to build larger, more interesting circuits.
+
+\section{Signal Types and Constants}
+
+Chisel provides three data types to describe signals, combinational logic, and registers:
+\code{Bits}, \code{UInt}, and \code{SInt}. \code{UInt} and \code{SInt} extend \code{Bits}
+and all three types represent a vector of bits. \code{UInt} gives this vector of
+bits the meaning of an unsigned integer and \code{SInt} of a signed
+integer.\footnote{The type \codefoot{Bits} in the current version of Chisel is missing operations and
+therefore not very useful for user code.}
+Chisel uses \myref{https://en.wikipedia.org/wiki/Two\%27s\_complement}{two's complement}
+as signed integer representation.
+Here is the definition different types, an 8-bit \code{Bits}, 8-bit unsigned integer, and an 10-bit
+signed integer:
+
+\input{code/types.txt}
+
+\noindent The width of a vector of bits is defined by a Chisel width type (\code{Width}).
+The following expression casts the Scala integer \code{n} to a Chisel width,
+which is used for the definition of the \code{Bits} vector:
+
+\input{code/n_w.txt}
+
+\noindent Constants can be defined by using a Scala integer and converting it to a Chisel type:
+
+\input{code/constants.txt}
+
+\noindent Constants can also be defined with a width, by using the Chisel width type:
+
+\input{code/const_width.txt}
+
+\noindent Chisel benefits from Scala's type inference and in many places type information can be left out.
+The same is true for bit width. In many cases Chisel will automatically infer the correct width.
+Therefore, a Chisel description of hardware is more concise and better readable than VHDL or
+Verilog.
+
+For constants defined in other bases than decimal, the constant is defined in a string with
+a preceding \code{h} for hexadecimal (base 16), \code{o} for octal (base 8), and \code{b}
+for binary (base 2). The following example shows the definition of constant 255 in different
+bases. In this example we omit the bit width and Chisel infers the minimum width to fit
+the constants in, in this case 8 bits.
+
+\input{code/const_base.txt}
+
+\noindent The above code also shows how to use an underscore to group digits in the
+string that represents a constant. The underscore is simply ignored.
+
+To represent logic values, Chisel defines the type \code{Bool}.
+\code{Bool} can represent a \emph{true} or \emph{false} value.
+the following code shows the definition of type \code{Bool} and the definition of
+\code{Bool} constants, by converting the Scala Boolean constants \code{true}
+and \code{false} to Chisel \code{Bool} constants.
+
+\input{code/bool.txt}
+
 
 \section{Combinational Circuits}
 
-A module containing combinational logic:
+Chisel uses \myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} operators,
+as they are defined in C, Java, Scala, and probably several other programming languages,
+to described combinational circuits.
+Following line of code defines a circuit that combines signals \code{a} and \code{b} with \emph{and}
+gates and combines the result with signal \code{c} with \emph{or} gates.
 
 \input{code/logic.txt}
 
-\subsection{Multiplexor}
+\noindent In this example we do not define the type nor the width of signal \code{logic}.
+Both are inferred from the type and width of the expression.
+The standard logic operations in Chisel are:
 
-A multiplexor is a circuit that selects between alternatives. In the most
-basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
+\input{code/bool_ops.txt}
+
+\noindent The arithmetic operations use the standard operators:
+
+\input{code/arith_ops.txt}
+
+\noindent The resulting width of the operation is the maximum width of the operators for
+addition and subtraction, the sum of the two widths for the multiplication, and usually
+the width of the numerator for divide and modulo operations.\footnote{The exact
+details are available in the \myref{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}{FIRRTL specification}.}
+
+
+
+The full list of operators can be found at
+\myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}.
+
+\subsection{Multiplexer}
+
+A \myref{https://en.wikipedia.org/wiki/Multiplexer}{multiplexer} is a circuit that selects between alternatives.
+In the most basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
 such a 2:1 multiplexer, or mux for short. Depending on the value of the
 select signal (\code{sel}) signal \code{y} will represent signal \code{a} or
 signale \code{b}.
@@ -397,16 +480,62 @@ signale \code{b}.
 \begin{figure}
   \centering
   \includegraphics{figures/mux}
-
   \caption{A basic 2:1 multiplexor.}
   \label{fig:mux}
 \end{figure}
 
-\section{Flip-Flops for State}
+A multiplexer can be simply built from logic.
+However, as multiplexing  is such a common operation, Chisel provides a multiplexer,
 
-An 8-bit register, initialized with 0 at reset:
+\input{code/mux.txt}
+
+\noindent where \code{a} is selected when the \code{sel} is \code{true.B}, otherwise \code{b}
+is selected. The type of \code{sel} is a Chisel \code{Bool}; the inputs \code{a} and \code{b}
+can be any Chisel base type or aggregate (bundles or vectors) as long as they are the same
+type.
+
+With logical and arithmetical operations and a multiplexer basically every combinational
+circuit can be described. However, Chisel provides further components and control abstractions
+for a more elegant description of a combinational circuit, which are described late.
+
+The second basic component needed to describe a digital circuit is a state element,
+also called register, which is described next.
+
+
+
+\section{Register for State}
+
+Chisel provides a register, which is a collection of
+\myref{https://en.wikipedia.org/wiki/Flip-flop\_(electronics)\#D\_flip-flop}{D flip-flops}.
+The register is implicitly connected to a global clock and is updated on the rising edge.
+When an initialization value is provided at the declaration of the register,
+it uses a synchronous reset connected to a global reset signal.
+A register can be any Chisel type that can be represented as a collection of bits.
+Following code defines an 8-bit register, initialized with 0 at reset:
 
 \input{code/register.txt}
+
+\noindent An input is connected to the register with the \code{:=} update operator and
+the output of the register can be used just with the name in an expression:
+
+\input{code/reg_con.txt}
+
+\noindent A register can also be connected to its input at the definition:
+
+\input{code/reg_next.txt}
+
+\noindent A register can also be connected to its input and a constant as
+initial value at the definition:
+
+\input{code/reg_both.txt}
+
+\noindent To distinguish from signals representing combinational logic and registers,
+a common practice is to prefix register names with \code{reg}.
+Another common practice, coming from Java and Scala, is to use
+\myref{https://en.wikipedia.org/wiki/Camel_case}{camelCase} for
+identifier consisting of several words. The convention is to start
+functions and variables with a lower case and classes (types) with
+an upper case.
 
 \subsection{Counting}
 
@@ -492,7 +621,7 @@ For example, it is cool to do hardware design on a plane.
 A larger digital design is structured into a set of components, structured in
 a hierarchical way. Each component has an interface with input and output
 wires. These are similar to input and output pins in an IC.
-Components are connected by by wiring up the inputs and outputs.
+Components are connected by wiring up the inputs and outputs.
 Components are may contain subcomponents to build the hierarchy.
 
 Hardware components are called modules in Chisel. Each module extends
@@ -645,13 +774,21 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 
 \section*{Source Access}
 
-All code examples are available in open source from:
+This book is available in open source.
+The repository also contains slides for a Chisel course and
+all Chisel examples are included.
+
+\url{https://github.com/schoeberl/chisel-book}
+
+
+
+A collection of medium sized examples, which most are referenced
+in the book, is also available in open source. This collection
+contains also projects for various popular FPGA boards.
 
 \url{https://github.com/schoeberl/chisel-examples}
 
-This book and slides are available in open source from:
 
-\url{https://github.com/schoeberl/chisel-book}
 
 \bibliographystyle{plain}
 % Please do not add any references to msbib.bib.
@@ -659,6 +796,9 @@ This book and slides are available in open source from:
 \bibliography{chisel}
 
 \chapter*{Snippets and Collect Stuff to Describe}
+
+This chip was done in Chisel: \url{https://aiyprojects.withgoogle.com/edge-tpu}
+See also \url{https://cloud.google.com/edge-tpu/}
 
 Concatenation and subfield access. Cat is in util. 
 
