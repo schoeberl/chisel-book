@@ -218,20 +218,20 @@ Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is a first approach:
 
 
-\lstinputlisting[language=chisel]{src/main/scala/Hello.scala}
+\lstinputlisting[language=chisel]{src/main/scala/HelloScala.scala}
 
 
 \noindent Compiling and executing this short program with \code{sbt}
 
 \begin{chisel}
-$ sbt "runMain Hello"
+$ sbt "runMain HelloScala"
 \end{chisel}
 
 \noindent leads to the expected output of a Hello World program:
 
 \begin{chisel}
-[info] Running Hello 
-Hello World!
+[info] Running HelloScala
+Hello Chisel World!
 \end{chisel}
 
 \noindent However, is this Chisel? Is this hardware generated to print a string?
@@ -581,7 +581,36 @@ If we want to count N, we start with N-2 and count till -1.
 
 \todo{discuss >= and so on}
 
+\section{Exercises}
 
+In the introduction you implemented a blinking LED on an FPGA board
+(from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}), which is a reasonable
+hardware \emph{Hello World} example. It used only internal state, a single LED output, and no input.
+Copy that project into a new folder and extend it by adding some inputs to the \code{Bundle}
+with \code{val sw = Input(UInt(2.W))}.
+For those switches you also need to assign the PIN names for the FPGA board.
+You can find examples of pin assignments in the Quartus project files of the ALU project
+(e.g., for the \myref{https://github.com/schoeberl/chisel-examples/blob/master/quartus/altde2-115/alu.qsf}{DE2-115
+FPGA board}).
+
+When you have defined those inputs and the pin assignment, start with a simple test:
+drop all blinking logic from the design and connect one switch to the LED output;
+compile and configure the FPGA device. Can you switch the LED on an off with the switch?
+Is yes, you have now inputs available to play with. If not, you need to debug your FPGA configuration.
+This can also be done with the GUI version of the tool.
+
+Now use two switches and implement one of the basic combinational functions,
+e.g., AND two switches and show the result on the LED. Change the function.
+The next step involves three input switches to implement a multiplexer: one acts as
+select signal, and the other two are the two inputs for the 2:1 multiplexer.
+
+Now you have been able to implement simple combinational functions and test them
+in real hardware in an FPGA. As a next step we will et a first look how the build
+process works to generate a FPGA configuration. Furthermore, we will also
+explore a simple testing framework from Chisel, which allows you to test circuits
+with configuring an FPGA and toggle switches.
+    
+    
 \section{Stuff to Sort Out}
 
 \todo{Checkout out (all) the different ways to define a register.
@@ -616,6 +645,73 @@ Better use a dedicated version of Chisel and all other Scala libraries in your \
 Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
 For example, it is cool to do hardware design on a plane.
 
+\section{Exercises}
+
+For this exercise we will revisit the blinking LED from
+\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+and explore the ALU example.
+
+First, let us find out what a minimal Chisel project is. Explore the files in the
+\myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world}{Hello World}
+example.
+The \code{Hello.scala} is the single hardware source file.
+It contains the hardware description of the blinking LED (\code{class Hello})
+and an \code{App} that generates the Verilog code.
+
+Each file starts with the import of Chisel and related packages:
+
+\input{code/import.txt}
+
+\noindent Then follows the hardware description, as shown in Figure~\ref{fig:chisel:hello}.
+To generate the Verilog description we need an application. A Scala object that \code{extends APP}
+is an application that implicitly generates a main function where the application starts.
+The only action of this application is to create a new \code{HelloWorld} object and pass it
+to the Chisel driver \code{execute} function. The first argument is an array of Strings,
+where build options can be set (e.g., the output folder). The following code will
+generate the Verilog file \code{HelloWorld.v}.
+
+\input{code/generate.txt}
+
+Run the generation of the example manually with:
+
+
+
+
+\begin{frame}[fragile]{What is a Minimal Chisel Project?}
+\begin{itemize}
+\item Scala class (e.g., \code{Hello.scala})
+\item Build info in \code{build.sbt} for \code{sbt}:
+\end{itemize}
+\begin{chisel}
+scalaVersion := "2.11.7"
+
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
+\end{chisel}
+\begin{itemize}
+\item Run the process manually (look into the Makefile)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Additional Files in the Hello World Example}
+\begin{itemize}
+\item A \code{Makefile}
+\item A Verilog top level file \code{verilog/hello\_top.v}
+\begin{itemize}
+\item For reset and possible PLLs
+\item Can also be in VHDL
+\end{itemize}
+\item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
+\begin{itemize}
+\item List of source files, device and pin assignments
+\item plain text files, look into hello.qsf
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+For this exercise we will use the ALU example from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+
+
 \chapter{Components}
 
 A larger digital design is structured into a set of components, structured in
@@ -630,6 +726,12 @@ The interface is defined by a \code{Bundle} that is wrapped into a call to \code
 The \code{Bundle} contains fields to represent input and output pins of
 module. The direction is given by wrapping a field into either a call to \code{Input()}
 or \code{Output()}. The direction is from the view of the component itself.
+
+\todo{Come back to one of the earlier examples for components, e.g., the ALU?}
+
+\chapter{Example Comps?}
+
+
 
 In this section we explore some medium sizes digital designs, such as
 a FIFO buffer, which are used as building blocks for larger design.
