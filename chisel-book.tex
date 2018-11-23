@@ -635,6 +635,8 @@ which stands for Scala interactive build tool.
 Besides driving the build and test process, \code{sbt} also downloads the correct
 version of Scala and the Chisel libraries.
 
+\section{Building your Project with sbt}
+
 The Scala library that represents Chisel and the Chisel testers are automatically
 downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
@@ -645,11 +647,17 @@ Better use a dedicated version of Chisel and all other Scala libraries in your \
 Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
 For example, it is cool to do hardware design on a plane.
 
+\section{Testing with Chisel}
+
+
+
 \section{Exercises}
 
 For this exercise we will revisit the blinking LED from
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 and explore the ALU example.
+
+\subsection{A Minimal Project}
 
 First, let us find out what a minimal Chisel project is. Explore the files in the
 \myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world}{Hello World}
@@ -672,41 +680,76 @@ generate the Verilog file \code{HelloWorld.v}.
 
 \input{code/generate.txt}
 
-Run the generation of the example manually with:
+\noindent Run the generation of the example manually with
 
+\begin{chisel}
+$ sbt "runMain Hello"
+\end{chisel}
 
+and explore the generated \code{Hello.v} with an editor. The generated Verilog code may not be
+very readable, but we can find out some details. The file starts with a module \code{Hello},
+which is the same name as our Chisel module. We can identify our LED port as
+\code{output io\_led}. Pin names are the Chisel names with a prepended \code{io\_}.
+Besides our LED pin, the module also contains \code{clock} and \code{reset} input signals.
+Those two signals are added automatically by Chisel.
+Furthermore, we can identify our two register \code{cntReg} and \code{blkReg} definitions.
+We may also find the reset and update of those registers at the end of the module definition.
+Note, that Chisel generates a synchronous reset.
 
+For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library
+we nee a \code{build.sbt}:
 
-\begin{frame}[fragile]{What is a Minimal Chisel Project?}
-\begin{itemize}
-\item Scala class (e.g., \code{Hello.scala})
-\item Build info in \code{build.sbt} for \code{sbt}:
-\end{itemize}
 \begin{chisel}
 scalaVersion := "2.11.7"
 
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases")
+)
+
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{chisel}
-\begin{itemize}
-\item Run the process manually (look into the Makefile)
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{Additional Files in the Hello World Example}
-\begin{itemize}
-\item A \code{Makefile}
-\item A Verilog top level file \code{verilog/hello\_top.v}
-\begin{itemize}
-\item For reset and possible PLLs
-\item Can also be in VHDL
-\end{itemize}
-\item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
-\begin{itemize}
-\item List of source files, device and pin assignments
-\item plain text files, look into hello.qsf
-\end{itemize}
-\end{itemize}
-\end{frame}
+\noindent Note that in this example we have a concrete Chisel version number to avoid checking on
+each run for a new version (which will fail if we are not connected to the Internet).
+Change the \code{build.sbt} configuration to use the latest Chisel version by changing the
+library dependency to
+
+\begin{chisel}
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "latest.release"
+\end{chisel}
+
+\noindent and rerun the build with \code{sbt}. Is there a newer version of Chisel
+available and will it be automatically downloaded?
+
+For convenience the project contains also a \code{Makefile}.
+It just contains the \code{sbt} command, so we do not need to remember it and
+can simply generate the Verilog code with:
+
+\begin{chisel}
+make
+\end{chisel}
+
+The project also contains a
+\myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/verilog/hello_top.v}{Verilog top level},
+which wires the reset signal to 0.
+This works for our example in an FPGA, as registers usually power up 0.
+Besides a \code{README} file, the example project also contains project
+files for different FPGA board. E.g., in
+\myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world/quartus/altde2-115}{quartus/altde2-115} 
+you can find the two project files to define a Quartus project for the DE2-115 board.
+The main definitions (source files, device, pin assignments) can be found in a plain text file
+\myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/quartus/altde2-115/hello.qsf}{hello.qsf}.
+Explore the file and find out which pins are connected to which signals.
+If you need to adapt the project to a different board, there is where the changes are applied.
+If you have Quartus installed, open that project, compile with the green \emph{Play} button,
+and then configure the FPGA.
+
+Note that the \emph{Hello World} is the very minimal Chisel project.
+More realistic projects have their source files organized and contain testers.
+The next exercise will explore such a project.
+
+\subsection{A More Complete Project}
 
 
 For this exercise we will use the ALU example from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
