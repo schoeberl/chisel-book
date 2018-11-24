@@ -20,7 +20,6 @@ clean:
 chisel:
 	sbt "runMain Snippets"
 	sbt "runMain Counter"
-	sbt "runMain DivReg"
 	sbt "test:runMain RegisterTester"
 	sbt "test:runMain LogicTester"
 

@@ -678,14 +678,47 @@ sub-packages.
 The folder \code{target} contains the class files and other generated files.
 I recommend to also use a folder for generated Verilog files, which is usually
 call \code{generated}.
-may also be placed 
 
-\todo{show package code: how to place, how to import with and without \_}
+
+To use the facility of namespaces in Chisel, you need to declare that a class/module
+is defined in a package, in this example in \code{mypacket}:
+
+\input{code/packet.txt}
+
+\noindent Note that in this example we see the import of the \code{chisel3} packet
+to use Chisel classes.
+
+To use the module \code{Abc} in a different context (packet name space),
+the components of packet \code{mypacket} need to be imported. The underscore
+(\_) acts as wildcard, meaning that all classes of \code{mypacket} are imported.
+
+\input{code/usepacket.txt}
+
+\noindent It is also possible to not import all types from \code{mypacket},
+but use the fully qualified name \code{mypack.Abc} to refer to the module
+\code{Abc} in packet \code{mypack}.
+
+\input{code/usepacket2.txt}
+
+\noindent It is also possible to import just a single class and create an instance of it:
+
+\input{code/usepacket3.txt}
+
+
 
     
 \section{Testing with Chisel}
 
+Tests of hardware designs are usually calls \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
+The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
+and compares them with expected values.
 
+Chisel provides test benches in the form of a \code{PeekPokeTester}.
+One strength of Chisel is that it can use the full power of Scala to write those
+test benches. One can, for example, code the expected functionality of the hardware
+in a software simulator and compare the simulation of the hardware with the
+software simulation. This method is very efficient when testing an implementation
+of a processor~\cite{lipsi:arcs2018}. 
 
 \section{Exercises}
 
