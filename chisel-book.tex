@@ -41,6 +41,7 @@
 \usepackage{multirow}
 \usepackage{cite}
 %\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
+\usepackage{dirtree}
 
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 \newcommand{\codefoot}[1]{{\footnotesize{\texttt{#1}}}}
@@ -80,6 +81,9 @@
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
 \newcommand{\myref}[2]{\href{#1}{#2}}
+
+% uncomment for the printed version
+%\renewcommand{\myref}[2]{{#2}{\footnote{\url{#1}}}}
 
 % uncomment following for final submission
 %\renewcommand{\todo}[1]{}
@@ -295,7 +299,7 @@ to incorporate your improvement.
 
 \section{Further Reading}
 
-Here a list of further reading for digital design:
+Here a list of further reading for digital design and Chisel:
 \begin{itemize}
 \item \myref{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
 is a modern textbook on digital design.
@@ -322,8 +326,8 @@ a Chisel course focusing on hardware generators, as a Jupyter notebook
 
 Each chapter ends with hands-on exercises. For the introduction exercise we will use an
 FPGA board to get one LED blinking.
-As a first step clone (or first fork on GitHub) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
-repository.
+As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+repository from GitHub.
 The Hello World example is in its own folder \code{hello-world}, setup as
 a minimal project. You can explore the Chisel code of the blinking LED
 in \code{Hello.scala}.
@@ -379,7 +383,7 @@ Is it alarming or more like a sign of live signal?
 
 
 
-\chapter{Basic Components}
+\chapter{Basic Circuits}
 
 In this section we introduce the basic components for digital design,
 combinational circuits and flip-flops.
@@ -414,7 +418,10 @@ which is used for the definition of the \code{Bits} vector:
 
 \input{code/const_width.txt}
 
-\noindent Chisel benefits from Scala's type inference and in many places type information can be left out.
+\noindent When you find the notion of 8.U and 4.W a little bit funny, consider it as variant of an integer
+constant with a type. This is similar to 8L, representing a long integer constant in C, Java, and Scala.
+
+Chisel benefits from Scala's type inference and in many places type information can be left out.
 The same is true for bit width. In many cases Chisel will automatically infer the correct width.
 Therefore, a Chisel description of hardware is more concise and better readable than VHDL or
 Verilog.
@@ -609,25 +616,12 @@ in real hardware in an FPGA. As a next step we will et a first look how the buil
 process works to generate a FPGA configuration. Furthermore, we will also
 explore a simple testing framework from Chisel, which allows you to test circuits
 with configuring an FPGA and toggle switches.
-    
-    
-\section{Stuff to Sort Out}
-
-\todo{Checkout out (all) the different ways to define a register.
-Start some code.
-Then ask the community, which is the preferred one.}
-\todo{RegInit and RegNext are the preferred ones.}
-
-\lstinputlisting[language=chisel]{src/main/scala/DivReg.scala}
-
-\todo{Talk about 4.U and 8.W is a constant with a type, similar to 4L in C, Java, and Scala.}
-
-Here are two examples of basic components.
-
-
-
 
 \chapter{Build Process and Testing}
+
+To get started with more interesting Chisel code we first need to learn how to compile
+Chisel programs, how to generate Verilog code for execution in an FPGA, and how
+to write tests for debugging and to verify that our circuits are correct.
 
 Chisel is written in Scala, so any build process that supports Scala is possible
 with a Chisel project. One popular build tool for Scala is \myref{https://www.scala-sbt.org/}{sbt},
@@ -647,6 +641,48 @@ Better use a dedicated version of Chisel and all other Scala libraries in your \
 Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
 For example, it is cool to do hardware design on a plane.
 
+\subsection{Source Organization}
+
+\code{sbt} inherits the source convention from the \myref{https://maven.apache.org/}{Maven}
+build automation tool. Maven also organizes repositories of open-source Java libraries.\footnote{That is
+also the place where you downloaded the Chisel library on your first build:
+\url{https://mvnrepository.com/artifact/edu.berkeley.cs/chisel3}.}
+
+\begin{figure}
+\dirtree{%
+.1 project.
+.2 src.
+.3 main.
+.4 scala.
+.5 package.
+.6 sub-package.
+.3 test.
+.4 scala.
+.5 package.
+.2 target.
+.2 generated.
+}
+\caption{caption}
+\label{fig:folders}
+\end{figure}
+
+Figure~\ref{fig:folders} shows the organization of the source tree of a typical Chisel project.
+The root of the project is the project home, which contains \code{build.sbt}.
+Optional also a \code{Makefile} for the build process, a README, and a LICENSE file.
+Folder \code{src} contains all source code. From there it is split between \code{main},
+containing the hardware sources and \code{test} containing testers.
+Chisel inherits from Scala, which inherits from Java the organization of source
+in \myref{https://en.wikipedia.org/wiki/Java_package}{packages}.
+Packages organize you Chisel code into namespaces. Packages can also contain
+sub-packages.
+The folder \code{target} contains the class files and other generated files.
+I recommend to also use a folder for generated Verilog files, which is usually
+call \code{generated}.
+may also be placed 
+
+\todo{show package code: how to place, how to import with and without \_}
+
+    
 \section{Testing with Chisel}
 
 
@@ -771,6 +807,98 @@ module. The direction is given by wrapping a field into either a call to \code{I
 or \code{Output()}. The direction is from the view of the component itself.
 
 \todo{Come back to one of the earlier examples for components, e.g., the ALU?}
+
+
+\chapter{Headings}
+
+\todo{Collect the headings here, but only elevate them to chapter level when some
+writing is going on.}
+
+\section{Introduction}
+
+ * Why Chisel, what is cool about it
+ * What this book is (and what not)
+ * Overview of the following Chapters
+
+\section{Basic Circuits}
+
+ * Combinational expressions (basic gates with logic tables)
+ * Combinational base circuits (chapter 8 in Culler)
+ * Multiplexer (just the simple one for a start)
+ * Registers
+
+1. base functions: +, - , and or, register (with reset, with enable)
+
+
+\section{Build Process and Testing}
+
+ * A full example (blinking LED again)
+ * Packages
+ * Source organization (Scala)
+ * Object to generate Verilog
+ * Testing
+ * sbt
+
+\section{Components/Modules}
+
+\section{Building Blocks}
+
+ * building blocks (adder, mux, ALU, counter, memory)
+
+\section{Bundles and Vecs (better title needed)}
+
+\section{Medium Complex Circuits (better title needed)}
+
+3. small designs (better name): UART, FIFO, PWM, VGA, sigma delta
+
+\section{State Machines and Data Path}
+
+\section{Memory}
+
+ * Vec based ROM with address register
+ * Vec based read/write
+ * All other variations
+ * Escape code in VHDL and Verilog for unsupported memories
+
+\section{Tips and Tricks (better title needed)}
+
+Stuff that saves a little hardware, but might not worse the less readable code
+
+ * Counter to -1
+ * Shared adder and subtractor
+ * Mux with one hot encoding of select
+ 5. little tricks: count down, add/sub
+
+
+\section{Scala for Hardware Developers}
+
+ * Simple Scala (for, if else)
+ * functions for hardware generation
+ * Classes and constructor
+
+\section{Hardware Generation}
+
+ * More advanced stuff
+ * Table generation (sinus, assembler)
+ 
+ \section{Leros}
+ 
+  * as a more complex design
+  4. full design(s): processor
+
+\section{Chisel 2}
+
+ * Some notes for reading Chisel 2 code
+ * Update Lipsi to Chisel 3 to work on the 2 to 3 documentation
+ 
+ \section{Chisel Projects}
+ 
+  * Projects written in Chisel, as paper reference, some words and a URL.
+
+\section{Appendix}
+
+ * Basic digital circuits, e.g., transistor based inverter, half and full adder
+ * With lot of links to Wikipedia
 
 \chapter{Example Comps?}
 
