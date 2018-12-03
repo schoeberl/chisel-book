@@ -662,7 +662,7 @@ also the place where you downloaded the Chisel library on your first build:
 .2 target.
 .2 generated.
 }
-\caption{caption}
+\caption{Source tree of a Chisel project (using \code{sbt})}
 \label{fig:folders}
 \end{figure}
 
@@ -705,11 +705,14 @@ but use the fully qualified name \code{mypack.Abc} to refer to the module
 \input{code/usepacket3.txt}
 
 
+\subsection{Running sbt}
 
+\todo{Describe minimum sbt commands (run main, Chisel main code, use target folder generated
+as an example for options.}
     
 \section{Testing with Chisel}
 
-Tests of hardware designs are usually calls \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
+Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
 
@@ -718,7 +721,37 @@ One strength of Chisel is that it can use the full power of Scala to write those
 test benches. One can, for example, code the expected functionality of the hardware
 in a software simulator and compare the simulation of the hardware with the
 software simulation. This method is very efficient when testing an implementation
-of a processor~\cite{lipsi:arcs2018}. 
+of a processor~\cite{lipsi:arcs2018}.
+
+Testing a circuit contains (at least) three components: (1) the device under test (often
+simply called DTU), (2) the testing logic, also called test bench, and (3) the tester objects
+that contains the \code{main} function to start the testing.
+
+The following code shows our simple design under test. It contains to input
+ports and one output port, all with a 2-bit width. The circuit does a bit-wise and
+returns it on the output:
+
+\input{code/test_dut.txt}
+
+\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
+the DTU as parameter for the constructor:
+
+\input{code/test_bench_simple.txt}
+
+\noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
+read back output values with \code{peek()}. The simulation is advanced with one
+step (= one clock cycle) with \code{step()}.
+
+\todo{First do just print, then also have a complete testing example}
+
+The tester main:
+
+\input{code/test_main_simple.txt}
+
+more interesting:
+
+\input{code/test_bench.txt}
+
 
 \section{Exercises}
 
