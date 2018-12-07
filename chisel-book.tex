@@ -111,8 +111,8 @@ We will walk through these examples in detail.
 
 This book is an introduction to digital system design using a modern hardware
 construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
-In this book we focus on a higher abstraction levels then usual in digital design,
-to enable to build more complex, interacting digital systems in shorter time.
+In this book, we focus on a higher abstraction level than usual in digital design,
+to enable to build more complex, interacting digital systems in a shorter time.
 
 This book and Chisel is targeting two groups of developers:
 (1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
@@ -125,14 +125,14 @@ e.g., as future chips from Intel will include programmable hardware to speed up 
 
 Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is definitely
-over. Some high level schematics can give an overview of the system, but are
+over. Some high-level schematics can give an overview of the system but are
 not intended to describe the system.
 
 The two most common hardware description languages are Verilog and VHDL.
-Both languages are old, care a lot of legacy, and have a moving line of what
+Both languages are old, contain a lot of legacies, and have a moving line of what
 constructions of the language are synthesizable to hardware.
-Do not get me wrong: VHDL and Verilog are perfectly able to describe hardware
-blocks that can be synthesized in an
+Do not get me wrong: VHDL and Verilog are perfectly able to describe a hardware
+block that can be synthesized in an
 \myref{https://en.wikipedia.org/wiki/Application-specific_integrated_circuit}{ASIC}.
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
@@ -150,14 +150,14 @@ As prerequisites for this book we assume basic knowledge of
 \myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
-Chisel can be, and shall be, your first programming language to describe digital hardware.
+Chisel can be and shall be, your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
 Chisel itself is not a big language, as it shall be for hardware design.
 Therefore, this book is not a big book as well.
-Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacy.
+Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacies.
 The power if Chisel comes from the embedding of Chisel within
 \myref{https://www.scala-lang.org/}{Scala}, which is itself a big language.
 However, Scala is not the topic
@@ -265,7 +265,7 @@ example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 That hardware then blinks the LED at 1~Hz.
 
-\section{IDE for Chisel}
+\section{An IDE for Chisel}
 
 This book makes no assumptions about your programming environment or editor to use.
 Learning of the basics should be easy with just using \code{sbt} at the command line
@@ -281,8 +281,9 @@ $ ls
 That said, an integrated development environment (IDE) with a compiler running in
 the background can speedup coding. As Chisel is basically a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
-It is possible in Eclipse and IntelliJ to generate a project from the sbt project configuration
-in \code{build.sbt}.
+It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
+\myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
+to generate a project from the sbt project configuration in \code{build.sbt}.
 You can create an Eclipse project via
 \begin{verbatim}
 $ sbt eclipse
@@ -343,7 +344,7 @@ After some initial downloading of Chisel components, this will produce the Veril
 Explore this Verilog file. You will see that it contains two inputs \code{clock} and \code{reset}
 and one output \code{io\_led}. When you compare this Verilog file with the Chisel module
 you will notice that the Chisel module does not contain \code{clock} or \code{reset}.
-Those signals are implicit generated and in most designs it is convenient to not need to
+Those signals are implicitly generated and in most designs it is convenient to not need to
 deal with these low-level details. Chisel provides register components and those
 are connected automatically to \code{clock} and \code{reset} (if needed).
 
@@ -357,11 +358,11 @@ and compile\footnote{The real process is more elaborated with following steps: s
 performing place and route, performing timing analysis, and generating a bitfile.
 However, for the purpose of this introduction example we simply call it ``compile''
 your code.} the Verilog code, and configure the FPGA with the resulting bitfile.
-We cannot provide the details for these steps. Please consult the manual of
+We cannot provide the details of these steps. Please consult the manual of
 your Intel Quartus or Xilinx Vivado tool.
 However, the examples repository contains some ready to use Quartus
 projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
-If it happens that your board is supported, start Quartus, open the project,
+If it happens that the repository contains support for your board, start Quartus, open the project,
 compile it by pressing the \emph{Play} button, and configure the FPGA board
 with the \emph{Programmer} button and one of the LEDs should blink.
 
@@ -374,7 +375,7 @@ everything is ok, a fast blinking LED signals an alarm state.
 Explore which frequencies express best those two different emotions.
 
 As a more challenging extension to the exercise, generate following blinking pattern:
-the LED shall be on for 200~ms every second. For this pattern you might
+the LED shall be on for 200~ms every second. For this pattern, you might
 decouple the change of the LED blinking from the counter reset.
 You will need a second constant where you change the state of the
 \code{blkReg} register. What kind of emotion does this pattern produce?
@@ -387,7 +388,7 @@ Is it alarming or more like a sign of live signal?
 
 In this section we introduce the basic components for digital design,
 combinational circuits and flip-flops.
-These basic elements can be combined to build larger, more interesting circuits.
+These essential elements can be combined to build larger, more interesting circuits.
 
 \section{Signal Types and Constants}
 
@@ -418,11 +419,11 @@ which is used for the definition of the \code{Bits} vector:
 
 \input{code/const_width.txt}
 
-\noindent When you find the notion of 8.U and 4.W a little bit funny, consider it as variant of an integer
-constant with a type. This is similar to 8L, representing a long integer constant in C, Java, and Scala.
+\noindent When you find the notion of 8.U and 4.W a little bit funny, consider it as a variant of an integer
+constant with a type. This notation is similar to 8L, representing a long integer constant in C, Java, and Scala.
 
 Chisel benefits from Scala's type inference and in many places type information can be left out.
-The same is true for bit width. In many cases Chisel will automatically infer the correct width.
+The same is also valid for bit widths. In many cases, Chisel will automatically infer the correct width.
 Therefore, a Chisel description of hardware is more concise and better readable than VHDL or
 Verilog.
 
@@ -501,7 +502,7 @@ is selected. The type of \code{sel} is a Chisel \code{Bool}; the inputs \code{a}
 can be any Chisel base type or aggregate (bundles or vectors) as long as they are the same
 type.
 
-With logical and arithmetical operations and a multiplexer basically every combinational
+With logical and arithmetical operations and a multiplexer, every combinational
 circuit can be described. However, Chisel provides further components and control abstractions
 for a more elegant description of a combinational circuit, which are described late.
 
@@ -561,8 +562,8 @@ If we want to count N, we start with 0 and count till N-1.
 
 
 
-This is straight forward. However, one might ask if this is the most efficient
-implementation of counting. The comparison agains an end value, 10 in our
+This is straightforward. However, one might ask if this is the most efficient
+implementation of counting. The comparison against an end value, 10 in our
 example, involves some combinational circuit in an ASIC. More efficient in an
 ASIC (and as well in loops of programs) is counting down and exit when 0
 is reached.
@@ -573,12 +574,12 @@ If we want to count N, we start with N-1 and count till 0.
 
 With a comparison against 0 we need only a NOR gat to detect the 0 condition.
 This optimization is valid for an ASIC, but not for an FPGA based on LUTs.
-With comparison using LUTs there is no difference comparing against a '0' or
-'1' bit. In that case use the better readable counting logic towards the end value.
+With comparison using LUTs, there is no difference comparing against a '0' or
+'1' bit. In that case, use a better readable counting logic towards the end value.
 
 However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison agains all counting bis, so far.
-What about counting down \emph{one too many}? In that case the counter
+Counting up or down needed a comparison against all counting bis, so far.
+What about counting down \emph{one too many}? In that case, the counter
 becomes negative. Detecting a negative value is simply comparing the
 most significant bit against 'a'.
 
@@ -595,7 +596,7 @@ In the introduction you implemented a blinking LED on an FPGA board
 hardware \emph{Hello World} example. It used only internal state, a single LED output, and no input.
 Copy that project into a new folder and extend it by adding some inputs to the \code{Bundle}
 with \code{val sw = Input(UInt(2.W))}.
-For those switches you also need to assign the PIN names for the FPGA board.
+For those switches, you also need to assign the PIN names for the FPGA board.
 You can find examples of pin assignments in the Quartus project files of the ALU project
 (e.g., for the \myref{https://github.com/schoeberl/chisel-examples/blob/master/quartus/altde2-115/alu.qsf}{DE2-115
 FPGA board}).
@@ -603,17 +604,17 @@ FPGA board}).
 When you have defined those inputs and the pin assignment, start with a simple test:
 drop all blinking logic from the design and connect one switch to the LED output;
 compile and configure the FPGA device. Can you switch the LED on an off with the switch?
-Is yes, you have now inputs available to play with. If not, you need to debug your FPGA configuration.
+If yes, you have now inputs available. If not, you need to debug your FPGA configuration.
 This can also be done with the GUI version of the tool.
 
 Now use two switches and implement one of the basic combinational functions,
 e.g., AND two switches and show the result on the LED. Change the function.
 The next step involves three input switches to implement a multiplexer: one acts as
-select signal, and the other two are the two inputs for the 2:1 multiplexer.
+select signal and the other two are the two inputs for the 2:1 multiplexer.
 
 Now you have been able to implement simple combinational functions and test them
-in real hardware in an FPGA. As a next step we will take a first look on how the build
-process works to generate a FPGA configuration. Furthermore, we will also
+in real hardware in an FPGA. As a next step, we will take a first look at how the build
+process works to generate an FPGA configuration. Furthermore, we will also
 explore a simple testing framework from Chisel, which allows you to test circuits
 without configuring an FPGA and toggle switches.
 
@@ -636,9 +637,9 @@ downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
 with \code{latest.release} to always use the most actual version of Chisel.
 However, this means on each build the version is looked up from the Maven
-repository and an Internet connection is needed for the build to succeed.
+repository. This lookup needs an Internet connection for the build to succeed.
 Better use a dedicated version of Chisel and all other Scala libraries in your \code{build.sbt}.
-Maybe sometimes it is also good to be able to write hardware code and test it without Internet connection.
+Maybe sometimes it is also good to be able to write hardware code and test it without an Internet connection.
 For example, it is cool to do hardware design on a plane.
 
 \subsection{Source Organization}
@@ -673,7 +674,7 @@ Folder \code{src} contains all source code. From there it is split between \code
 containing the hardware sources and \code{test} containing testers.
 Chisel inherits from Scala, which inherits from Java the organization of source
 in \myref{https://en.wikipedia.org/wiki/Java_package}{packages}.
-Packages organize you Chisel code into namespaces. Packages can also contain
+Packages organize your Chisel code into namespaces. Packages can also contain
 sub-packages.
 The folder \code{target} contains the class files and other generated files.
 I recommend to also use a folder for generated Verilog files, which is usually
@@ -717,10 +718,10 @@ This command will compile all your Chisel code from the source tree and searches
 for classes that contain an \code{object} that contains a \code{main} method, or simpler
 that extends \code{App}. If there is more than one such object, all objects are listed and
 can be selected.
-You can also directly provide the object that shall be executed as parameter to \code{sbt}:
+You can also directly specify the object that shall be executed as parameter to \code{sbt}:
 
 \begin{verbatim}
-$ sbt run mypacket.MyObject
+$ sbt "runMain mypacket.MyObject"
 \end{verbatim}
 
 Per default \code{sbt} searches only the \code{main} part of the source tree and not
@@ -821,7 +822,7 @@ taking 0.022101 seconds
 
 In this section we described the basic testing facility with Chisel for simple tests.
 However, in Chisel the full power of Scala is available to write testers.
-We will show this possibilities later.
+We will show these possibilities later.
 
 \section{Exercises}
 
