@@ -1,5 +1,7 @@
+//- start test_import
 import chisel3._
 import chisel3.iotesters._
+//- end
 
 //- start test_dut
 class DeviceUnderTest extends Module {
@@ -14,35 +16,38 @@ class DeviceUnderTest extends Module {
 //- end
 
 //- start test_bench_simple
-class TesterSimple(c: DeviceUnderTest) extends PeekPokeTester(c) {
+class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
-  poke(c.io.a, 0.U)
-  poke(c.io.b, 1.U)
+  poke(dut.io.a, 0.U)
+  poke(dut.io.b, 1.U)
   step(1)
-  println(peek(c.io.out).toString)
-  poke(c.io.a, 3.U)
-  poke(c.io.b, 2.U)
+  println("Result is: " + peek(dut.io.out).toString)
+  poke(dut.io.a, 3.U)
+  poke(dut.io.b, 2.U)
   step(1)
-  println(peek(c.io.out).toString)
+  println("Result is: " + peek(dut.io.out).toString)
 }
 //- end
 
 //- start test_main_simple
 object TesterSimple extends App {
   chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
-    new Tester(c)
+    new TesterSimple(c)
   }
 }
 //- end
 
 //- start test_bench
-class Tester(c: DeviceUnderTest) extends PeekPokeTester(c) {
+class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
-  poke(c.io.a, 0.U)
-  poke(c.io.b, 1.U)
+  poke(dut.io.a, 3.U)
+  poke(dut.io.b, 1.U)
   step(1)
-  println(peek(c.io.out).toString)
-  expect(c.io.out, 13)
+  expect(dut.io.out, 1)
+  poke(dut.io.a, 2.U)
+  poke(dut.io.b, 0.U)
+  step(1)
+  expect(dut.io.out, 0)
 }
 //- end
 

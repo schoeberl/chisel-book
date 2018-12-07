@@ -612,10 +612,10 @@ The next step involves three input switches to implement a multiplexer: one acts
 select signal, and the other two are the two inputs for the 2:1 multiplexer.
 
 Now you have been able to implement simple combinational functions and test them
-in real hardware in an FPGA. As a next step we will et a first look how the build
+in real hardware in an FPGA. As a next step we will take a first look on how the build
 process works to generate a FPGA configuration. Furthermore, we will also
 explore a simple testing framework from Chisel, which allows you to test circuits
-with configuring an FPGA and toggle switches.
+without configuring an FPGA and toggle switches.
 
 \chapter{Build Process and Testing}
 
@@ -707,8 +707,34 @@ but use the fully qualified name \code{mypack.Abc} to refer to the module
 
 \subsection{Running sbt}
 
-\todo{Describe minimum sbt commands (run main, Chisel main code, use target folder generated
-as an example for options.}
+A Chisel project can be compiled and executed with a simple \code{sbt} command:
+
+\begin{verbatim}
+$ sbt run
+\end{verbatim}
+
+This command will compile all your Chisel code from the source tree and searches
+for classes that contain an \code{object} that contains a \code{main} method, or simpler
+that extends \code{App}. If there is more than one such object, all objects are listed and
+can be selected.
+You can also directly provide the object that shall be executed as parameter to \code{sbt}:
+
+\begin{verbatim}
+$ sbt run mypacket.MyObject
+\end{verbatim}
+
+Per default \code{sbt} searches only the \code{main} part of the source tree and not
+the \code{test} part.\footnote{This is a convention form Java/Scala that the test folder contains
+unit tests and not objects with a \codefoot{main}.} However, Chisel testers, as described here,
+contain a \code{main}, but shall be placed in the \code{test} part of the source tree.
+To execute a \code{main} in the tester tree use following \code{sbt} command:
+
+\begin{verbatim}
+$ sbt "test:runMain mypacket.MyTester"
+\end{verbatim}
+
+Now that we know the basic structure of a Chisel project and how to compile and run it
+with \code{sbt}, we can continue with a simple testing framework.
     
 \section{Testing with Chisel}
 
@@ -723,35 +749,79 @@ in a software simulator and compare the simulation of the hardware with the
 software simulation. This method is very efficient when testing an implementation
 of a processor~\cite{lipsi:arcs2018}.
 
-Testing a circuit contains (at least) three components: (1) the device under test (often
-simply called DTU), (2) the testing logic, also called test bench, and (3) the tester objects
+To use the \code{PeekPokeTester} following packages need to be imported:
+
+\input{code/test_import.txt}
+
+\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
+simply called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
 that contains the \code{main} function to start the testing.
 
 The following code shows our simple design under test. It contains to input
-ports and one output port, all with a 2-bit width. The circuit does a bit-wise and
-returns it on the output:
+ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
+to it returns on the output:
 
 \input{code/test_dut.txt}
 
 \noindent The test bench for this DUT extends \code{PeekPokeTester} and has
-the DTU as parameter for the constructor:
+the DUT as parameter for the constructor:
 
 \input{code/test_bench_simple.txt}
 
 \noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
 read back output values with \code{peek()}. The simulation is advanced with one
-step (= one clock cycle) with \code{step()}.
+step (= one clock cycle) with \code{step(1)}.
+We can print the values of the outputs with \code{println()}.
 
-\todo{First do just print, then also have a complete testing example}
-
-The tester main:
+The test is created and run with following tester main:
 
 \input{code/test_main_simple.txt}
 
-more interesting:
+\noindent When you run the test, you will see the results printed to the terminal
+(besides other information):
+
+\begin{verbatim}
+[info] [0.004] SEED 1544207645120
+[info] [0.008] Result is: 0
+[info] [0.009] Result is: 2
+test DeviceUnderTest Success: 0 tests passed in 7 cycles
+taking 0.021820 seconds
+[info] [0.010] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
+Besides manually inspecting printouts, which is a fine starting point, we can also
+express our expectations in the test bench itself with \code{expect()},
+having the output port and the expected value as parameters.
+The following example shows testing with \code{expect()}:
 
 \input{code/test_bench.txt}
 
+\noindent Executing this test does not print out any values from the hardware,
+but that all tests passed as all expect values are correct.
+
+\begin{verbatim}
+[info] [0.001] SEED 1544208437832
+test DeviceUnderTest Success: 2 tests passed in 7 cycles
+taking 0.018000 seconds
+[info] [0.009] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent A failed test, when either the DUT or the test bench contain an error,
+produces an error message describing the difference between the expected and actual
+value. In the following we changed the test bench to expect a 4, which is an error:
+
+\begin{verbatim}
+[info] [0.002] SEED 1544208642263
+[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
+test DeviceUnderTest Success: 1 tests passed in 7 cycles
+taking 0.022101 seconds
+[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
+\end{verbatim}
+
+In this section we described the basic testing facility with Chisel for simple tests.
+However, in Chisel the full power of Scala is available to write testers.
+We will show this possibilities later.
 
 \section{Exercises}
 
@@ -855,6 +925,9 @@ The next exercise will explore such a project.
 
 
 For this exercise we will use the ALU example from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+
+\todo{This example uses already quite some Scala and the switch statement.
+We should probably postpone this for later.}
 
 
 \chapter{Components}
