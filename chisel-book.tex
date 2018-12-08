@@ -457,6 +457,8 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
 
 \input{code/logic.txt}
 
+\todo{I should have a drawing of this. Actually more drawings all over.}
+
 \noindent In this example we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
 The standard logic operations in Chisel are:
@@ -504,7 +506,7 @@ type.
 
 With logical and arithmetical operations and a multiplexer, every combinational
 circuit can be described. However, Chisel provides further components and control abstractions
-for a more elegant description of a combinational circuit, which are described late.
+for a more elegant description of a combinational circuit, which are described lateer.
 
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
@@ -562,41 +564,19 @@ If we want to count N, we start with 0 and count till N-1.
 
 
 
-This is straightforward. However, one might ask if this is the most efficient
-implementation of counting. The comparison against an end value, 10 in our
-example, involves some combinational circuit in an ASIC. More efficient in an
-ASIC (and as well in loops of programs) is counting down and exit when 0
-is reached.
 
-If we want to count N, we start with N-1 and count till 0.
-
-\todo{down counting code}
-
-With a comparison against 0 we need only a NOR gat to detect the 0 condition.
-This optimization is valid for an ASIC, but not for an FPGA based on LUTs.
-With comparison using LUTs, there is no difference comparing against a '0' or
-'1' bit. In that case, use a better readable counting logic towards the end value.
-
-However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison against all counting bis, so far.
-What about counting down \emph{one too many}? In that case, the counter
-becomes negative. Detecting a negative value is simply comparing the
-most significant bit against 'a'.
-
-If we want to count N, we start with N-2 and count till -1.
-
-\todo{Show optimized down counting code.}
-
-\todo{discuss >= and so on}
 
 \section{Exercises}
 
 In the introduction you implemented a blinking LED on an FPGA board
 (from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}), which is a reasonable
 hardware \emph{Hello World} example. It used only internal state, a single LED output, and no input.
-Copy that project into a new folder and extend it by adding some inputs to the \code{Bundle}
+Copy that project into a new folder and extend it by adding some inputs to the \code{io} \code{Bundle}
 with \code{val sw = Input(UInt(2.W))}.
-For those switches, you also need to assign the PIN names for the FPGA board.
+
+\input{code/basic_exercise.txt}
+
+\noindent For those switches, you also need to assign the PIN names for the FPGA board.
 You can find examples of pin assignments in the Quartus project files of the ALU project
 (e.g., for the \myref{https://github.com/schoeberl/chisel-examples/blob/master/quartus/altde2-115/alu.qsf}{DE2-115
 FPGA board}).
@@ -922,6 +902,25 @@ Note that the \emph{Hello World} is the very minimal Chisel project.
 More realistic projects have their source files organized and contain testers.
 The next exercise will explore such a project.
 
+\subsection{A Testing Exercise}
+
+In the last chapter's exercise you have extended the blinking LED example with some input
+to build an AND gate and a multiplexer and run this hardware in an FPGA.
+We will now use this example and test the functionality with a Chisel tester
+to automate testing and also to be independent from an FPGA.
+Use your designs from the prior chapter and add a Chisel tester to test the functionality.
+Try to enumerate all possible inputs and test the output with an \code{except()}.
+
+Testing within Chisel can really speedup the debugging of your design.
+However, it is always a good idea to synthesize your design for an FPGA and run tests
+with the FPGA. There you can perform a reality check on the size of your design (usually
+in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
+As a reference point, a decent pipelined RISC processor may consume about 300
+4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
+Xilinx Spartan).
+
+\todo{Do we need more details here?}
+
 \subsection{A More Complete Project}
 
 
@@ -1096,6 +1095,35 @@ class ReaderIO(size: Int) extends Bundle {
   val empty = Bool(OUTPUT)
 }
 \end{chisel}
+
+\subsection*{Start on Better Counters}
+
+This is straightforward. However, one might ask if this is the most efficient
+implementation of counting. The comparison against an end value, 10 in our
+example, involves some combinational circuit in an ASIC. More efficient in an
+ASIC (and as well in loops of programs) is counting down and exit when 0
+is reached.
+
+If we want to count N, we start with N-1 and count till 0.
+
+\todo{down counting code}
+
+With a comparison against 0 we need only a NOR gat to detect the 0 condition.
+This optimization is valid for an ASIC, but not for an FPGA based on LUTs.
+With comparison using LUTs, there is no difference comparing against a '0' or
+'1' bit. In that case, use a better readable counting logic towards the end value.
+
+However, there is still one more trick a clever hardware designer can pull off.
+Counting up or down needed a comparison against all counting bis, so far.
+What about counting down \emph{one too many}? In that case, the counter
+becomes negative. Detecting a negative value is simply comparing the
+most significant bit against 'a'.
+
+If we want to count N, we start with N-2 and count till -1.
+
+\todo{Show optimized down counting code.}
+
+\todo{discuss >= and so on}
 
 \chapter{Chisel 2}
 

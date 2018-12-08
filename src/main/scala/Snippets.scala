@@ -2,6 +2,16 @@
 
 import chisel3._
 
+class BasciExercise extends Module {
+  //- start basic_exercise
+  val io = IO(new Bundle {
+    val sw = Input(UInt(2.W))
+    val led = Output(UInt(1.W))
+  })
+  //- end
+  io.led := io.sw(0) & io.sw(1)
+}
+
 class AluIO extends Bundle {
   val function = Input(UInt(2.W))
   val inputA = Input(UInt(4.W))
