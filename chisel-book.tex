@@ -457,9 +457,19 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
 
 \input{code/logic.txt}
 
-\todo{I should have a drawing of this. Actually more drawings all over.}
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.7]{figures/logic}
+  \caption{Logic for the expression \code{a \& b | c}.}
+  \label{fig:logic}
+\end{figure}
 
-\noindent In this example we do not define the type nor the width of signal \code{logic}.
+
+Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
+Note that this circuit may have several signals that are combined with the
+AND and OR circuits.
+
+In this example we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
 The standard logic operations in Chisel are:
 
@@ -992,6 +1002,8 @@ writing is going on.}
 
 \section{State Machines and Data Path}
 
+ * Is this still relevant? Or is this simple old stuff not in real use anymore?
+
 \section{Memory}
 
  * Vec based ROM with address register
@@ -1014,6 +1026,10 @@ Stuff that saves a little hardware, but might not worse the less readable code
  * Simple Scala (for, if else)
  * functions for hardware generation
  * Classes and constructor
+ 
+ \section{More Complex Testing}
+ 
+  * As we know now sone Scala it is time to use the power of Scala for better testing
 
 \section{Hardware Generation}
 
