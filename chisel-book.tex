@@ -165,6 +165,10 @@ of this book. We provide a short section on Scala for hardware designers,
 but a general introduction to Scala is better served by the textbook by
 Odersky et al.~\cite{Scala}.
 
+This book is a tutorial in digital design and the Chisel language, it is not
+a Chisel language reference nor is it a book on complete chip design.
+
+
 All code examples shown in this book are extracted from complete programs
 that have been compiled and tested. Therefore, the code shall not contain
 any syntax errors. The code examples are available from the
@@ -460,14 +464,15 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
 \begin{figure}
   \centering
   \includegraphics[scale=0.7]{figures/logic}
-  \caption{Logic for the expression \code{a \& b | c}.}
+  \caption{Logic for the expression \code{a \& b | c}.
+  The wires can be single bit or multiple bits. The Chisel expression (and the schematics) is the same.}
   \label{fig:logic}
 \end{figure}
 
 
 Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
-Note that this circuit may have several signals that are combined with the
-AND and OR circuits.
+Note that this circuit may be for a vector of bits and not only single wires
+that are combined with the AND and OR circuits.
 
 In this example we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
@@ -499,7 +504,7 @@ signale \code{b}.
 
 \begin{figure}
   \centering
-  \includegraphics{figures/mux}
+  \includegraphics[scale=0.7]{figures/mux}
   \caption{A basic 2:1 multiplexor.}
   \label{fig:mux}
 \end{figure}
@@ -958,102 +963,7 @@ or \code{Output()}. The direction is from the view of the component itself.
 \todo{Come back to one of the earlier examples for components, e.g., the ALU?}
 
 
-\chapter{Headings}
 
-\todo{Collect the headings here, but only elevate them to chapter level when some
-writing is going on.}
-
-\section{Introduction}
-
- * Why Chisel, what is cool about it
- * What this book is (and what not)
- * Overview of the following Chapters
-
-\section{Basic Circuits}
-
- * Combinational expressions (basic gates with logic tables)
- * Combinational base circuits (chapter 8 in Culler)
- * Multiplexer (just the simple one for a start)
- * Registers
-
-1. base functions: +, - , and or, register (with reset, with enable)
-
-
-\section{Build Process and Testing}
-
- * A full example (blinking LED again)
- * Packages
- * Source organization (Scala)
- * Object to generate Verilog
- * Testing
- * sbt
-
-\section{Components/Modules}
-
-\section{Building Blocks}
-
- * building blocks (adder, mux, ALU, counter, memory)
-
-\section{Bundles and Vecs (better title needed)}
-
-\section{Medium Complex Circuits (better title needed)}
-
-3. small designs (better name): UART, FIFO, PWM, VGA, sigma delta
-
-\section{State Machines and Data Path}
-
- * Is this still relevant? Or is this simple old stuff not in real use anymore?
-
-\section{Memory}
-
- * Vec based ROM with address register
- * Vec based read/write
- * All other variations
- * Escape code in VHDL and Verilog for unsupported memories
-
-\section{Tips and Tricks (better title needed)}
-
-Stuff that saves a little hardware, but might not worse the less readable code
-
- * Counter to -1
- * Shared adder and subtractor
- * Mux with one hot encoding of select
- 5. little tricks: count down, add/sub
-
-
-\section{Scala for Hardware Developers}
-
- * Simple Scala (for, if else)
- * functions for hardware generation
- * Classes and constructor
- 
- \section{More Complex Testing}
- 
-  * As we know now sone Scala it is time to use the power of Scala for better testing
-
-\section{Hardware Generation}
-
- * More advanced stuff
- * Table generation (sinus, assembler)
- 
- \section{Leros}
- 
-  * as a more complex design
-  4. full design(s): processor
-
-\section{Chisel 2}
-
- * Some notes for reading Chisel 2 code
- * Update Lipsi to Chisel 3 to work on the 2 to 3 documentation
- 
- \section{Chisel Projects}
- 
-  * Projects written in Chisel, as paper reference, some words and a URL.
-
-\section{Appendix}
-
- * Basic digital circuits, e.g., transistor based inverter, half and full adder
- * With lot of links to Wikipedia
 
 \chapter{Example Comps?}
 
@@ -1140,6 +1050,90 @@ If we want to count N, we start with N-2 and count till -1.
 \todo{Show optimized down counting code.}
 
 \todo{discuss >= and so on}
+
+\chapter{A Processor Design}
+
+As one of the last chapters in this book we will present a medium size project:
+the design, simulation, and testing of a microprocessor.
+In order to keep this project manageable, we will deign a simple accumulator
+machine.
+The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:arcs2019}
+and is available in open source at \url{https://github.com/leros-dev/leros}.
+
+Leros is designed to be simple, but still a good target for a C compiler.
+The description of the instructions fits on one page:
+
+\begin{verbatim}
++--------+----------+
+|00000---| nop      |
+|000010-0| add      |
+|000010-1| addi     |
+|000011-0| sub      |
+|000011-1| subi     |
+|00010---| shr      |
+|00011---| -        |
+|00100000| load     |
+|00100000| load i   |
+|00100010| and      |
+|00100011| andi     |
+|00100100| or       |
+|00100101| ori      |
+|00100110| xor      |
+|00100111| xori     |
+|00101001| loadhi   |
+|00101010| loadh2i  |
+|00101011| loadh3i  |
+|00110---| store    |
+|001110-?| out      |
+|000001-?| in       |
+|01000---| jal      |
+|01001---| -        |
+|01010---| ldaddr   |
+|01100--0| loadind  |
+|01100--1| loadindbu|
+|01110--0| storeind |
+|01110--1| storeindb|
+|1000nnnn| br       |
+|1001nnnn| brz      |
+|1010nnnn| brnz     |
+|1011nnnn| brp      |
+|1100nnnn| brn      |
+|11111111| scall    |
++--------+----------+
+\end{verbatim}
+
+\todo{Make this a nice table, explaining the instructions}
+
+\section{Start with an ALU}
+
+A central component of a processor is the
+\myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic logic unit}, or ALU for short.
+Therefore, we start with coding of the ALU und a test bench.
+First, we define an \code{Enum} to represent the different operations of the ALU:
+
+\input{code/leros_types.txt}
+
+\noindent An ALU has usually two operand inputs (call them \code{a} and \code{b}), an operation \code{op}
+(or opcode) input to select the function and an output \code{y}.
+Figure~\ref{fig:leros-alu} shows the ALU.
+
+\todo{draw a nice ALU, see Wikipedia}
+
+We first define shorter names for the three inputs. The logic for \code{res} is computed
+with a \code{switch} statement. Therefore, it gets a default assignment of 0.
+The switch statement enumerates all operations and assigns the expression accordingly.
+All operations map directly to a Chisel expression.
+At the end we assign the result \code{res} to the ALU output \code{y}
+
+\begin{figure}
+\input{code/leros_alu.txt}
+\caption{The Leros ALU.}
+\label{fig:leros-alu}
+\end{figure}
+
+
+
+
 
 \chapter{Chisel 2}
 
@@ -1245,7 +1239,102 @@ contains also projects for various popular FPGA boards.
 
 \url{https://github.com/schoeberl/chisel-examples}
 
+\chapter{Headings}
 
+\todo{Collect the headings here, but only elevate them to chapter level when some
+writing is going on.}
+
+\section{Introduction}
+
+ * Why Chisel, what is cool about it
+ * What this book is (and what not)
+ * Overview of the following Chapters
+
+\section{Basic Circuits}
+
+ * Combinational expressions (basic gates with logic tables)
+ * Combinational base circuits (chapter 8 in Culler)
+ * Multiplexer (just the simple one for a start)
+ * Registers
+
+1. base functions: +, - , and or, register (with reset, with enable)
+
+
+\section{Build Process and Testing}
+
+ * A full example (blinking LED again)
+ * Packages
+ * Source organization (Scala)
+ * Object to generate Verilog
+ * Testing
+ * sbt
+
+\section{Components/Modules}
+
+\section{Building Blocks}
+
+ * building blocks (adder, mux, ALU, counter, memory)
+
+\section{Bundles and Vecs (better title needed)}
+
+\section{Medium Complex Circuits (better title needed)}
+
+3. small designs (better name): UART, FIFO, PWM, VGA, sigma delta
+
+\section{State Machines and Data Path}
+
+ * Is this still relevant? Or is this simple old stuff not in real use anymore?
+
+\section{Memory}
+
+ * Vec based ROM with address register
+ * Vec based read/write
+ * All other variations
+ * Escape code in VHDL and Verilog for unsupported memories
+
+\section{Tips and Tricks (better title needed)}
+
+Stuff that saves a little hardware, but might not worse the less readable code
+
+ * Counter to -1
+ * Shared adder and subtractor
+ * Mux with one hot encoding of select
+ 5. little tricks: count down, add/sub
+
+
+\section{Scala for Hardware Developers}
+
+ * Simple Scala (for, if else)
+ * functions for hardware generation
+ * Classes and constructor
+ 
+ \section{More Complex Testing}
+ 
+  * As we know now sone Scala it is time to use the power of Scala for better testing
+
+\section{Hardware Generation}
+
+ * More advanced stuff
+ * Table generation (sinus, assembler)
+ 
+ \section{Leros}
+ 
+  * as a more complex design
+  4. full design(s): processor
+
+\section{Chisel 2}
+
+ * Some notes for reading Chisel 2 code
+ * Update Lipsi to Chisel 3 to work on the 2 to 3 documentation
+ 
+ \section{Chisel Projects}
+ 
+  * Projects written in Chisel, as paper reference, some words and a URL.
+
+\section{Appendix}
+
+ * Basic digital circuits, e.g., transistor based inverter, half and full adder
+ * With lot of links to Wikipedia
 
 \bibliographystyle{plain}
 % Please do not add any references to msbib.bib.
