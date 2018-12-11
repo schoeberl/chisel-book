@@ -1131,8 +1131,44 @@ At the end we assign the result \code{res} to the ALU output \code{y}
 \label{fig:leros-alu}
 \end{figure}
 
+For the testing we write the ALU function in plain Scala, as shown in Figure~\ref{fig:leros-alu-scala}.
 
+\begin{figure}
+\input{code/leros_alu_ref.txt}
+\caption{The Leros ALU function written in Scala.}
+\label{fig:leros-alu-scala}
+\end{figure}
 
+\noindent While this duplication of hardware written in Chisel by a Scala implementation does not
+detect errors in the specification, it is at least some sanity check.
+We use some corner case values as test vector:
+
+\input{code/leros_alu_testvec.txt}
+
+\noindent And testing all functions with those values on both inputs:
+
+\input{code/leros_alu_test.txt}
+
+\noindent Full exhaustive testing for 32-bit arguments is not possible, which was the reason we
+selected some corner cases as input values. Beside testing agains corner cases it is also useful
+to test against random inputs:
+
+\input{code/leros_alu_rand.txt}
+
+\noindent The tests can be run within the Leros project with
+
+\begin{verbatim}
+$ leros martin$ sbt "test:runMain leros.AluTester"
+\end{verbatim}
+
+and shall produce a success message similar to:
+
+\begin{verbatim}
+[info] [0.001] SEED 1544507337402
+test Alu Success: 70567 tests passed in 70572 cycles taking
+3.845715 seconds
+[info] [3.825] RAN 70567 CYCLES PASSED
+\end{verbatim}
 
 
 \chapter{Chisel 2}
