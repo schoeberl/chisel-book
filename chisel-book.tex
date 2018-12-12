@@ -1061,48 +1061,51 @@ The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:
 and is available in open source at \url{https://github.com/leros-dev/leros}.
 
 Leros is designed to be simple, but still a good target for a C compiler.
-The description of the instructions fits on one page:
+The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
+In that table A represents the accumulator, PC is the program counter,
+i is an immediate value (0 to 255), Rn a register
+n (0 to 255), o a branch offset relative to PC, and AR an address register for memory access.
 
-\begin{verbatim}
-+--------+----------+
-|00000---| nop      |
-|000010-0| add      |
-|000010-1| addi     |
-|000011-0| sub      |
-|000011-1| subi     |
-|00010---| shr      |
-|00011---| -        |
-|00100000| load     |
-|00100000| load i   |
-|00100010| and      |
-|00100011| andi     |
-|00100100| or       |
-|00100101| ori      |
-|00100110| xor      |
-|00100111| xori     |
-|00101001| loadhi   |
-|00101010| loadh2i  |
-|00101011| loadh3i  |
-|00110---| store    |
-|001110-?| out      |
-|000001-?| in       |
-|01000---| jal      |
-|01001---| -        |
-|01010---| ldaddr   |
-|01100--0| loadind  |
-|01100--1| loadindbu|
-|01110--0| storeind |
-|01110--1| storeindb|
-|1000nnnn| br       |
-|1001nnnn| brz      |
-|1010nnnn| brnz     |
-|1011nnnn| brp      |
-|1100nnnn| brn      |
-|11111111| scall    |
-+--------+----------+
-\end{verbatim}
-
-\todo{Make this a nice table, explaining the instructions}
+\begin{table}
+\centering
+\begin{tabular}{lll}
+\toprule
+Opcode & Function & Description\\
+\midrule
+add & A = A + Rn & Add register Rn to A \\
+addi & A = A + i & Add immediate value i to A \\
+sub & A = A - Rn & Subtract register Rn from A \\
+subi & A = A - i & Subtract immediate value i from A \\
+shr & A = A $>>>$ 1 & Shift A logically right \\
+load & A = Rn & Load register Rn into A \\
+loadi & A = i & Load immediate value i into A \\
+and & A = A and Rn & And register Rn with A \\
+andi & A = A and i & And immediate value i with A \\
+or & A = A or Rn & Or register Rn with A \\
+ori & A = A or i & Or immediate value i with A \\
+xor & A = A xor Rn & Xor register Rn with A \\
+xori & A = A xor i & Xor immediate value i with A \\
+loadhi & A$_{15-8}$ = i & Load immediate into second byte \\
+loadh2i & A$_{23-16}$ = i  & Load immediate into third byte \\
+loadh3i & A$_{31-24}$ = i & Load immediate into forth byte \\
+store & Rn = A & Store A into register Rn \\
+jal & PC = A, A = PC + 2 & Jump and link \\
+ldaddr & AR = A & Load address register AR with A \\
+loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
+loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
+storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
+storeindb & mem[AR+i]$_{7-0}$ = A & Store a byte into memory \\
+br & PC = PC + o & Branch \\
+brz & if A == 0 PC = PC + o & Branch if A is zero \\
+brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
+brp & if A $>=$ 0 PC = PC + o & Branch if A is positive \\
+brn & if A $<$ 0 PC = PC + o & Branch if A is negative \\
+scall & scall A & System call (simulation hook) \\
+\bottomrule
+\end{tabular}
+\caption{Leros instruction set.}
+\label{tab:leros:isa}
+\end{table}
 
 \section{Start with an ALU}
 
@@ -1150,7 +1153,7 @@ We use some corner case values as test vector:
 \input{code/leros_alu_test.txt}
 
 \noindent Full exhaustive testing for 32-bit arguments is not possible, which was the reason we
-selected some corner cases as input values. Beside testing agains corner cases it is also useful
+selected some corner cases as input values. Beside testing against corner cases it is also useful
 to test against random inputs:
 
 \input{code/leros_alu_rand.txt}
@@ -1158,7 +1161,7 @@ to test against random inputs:
 \noindent The tests can be run within the Leros project with
 
 \begin{verbatim}
-$ leros martin$ sbt "test:runMain leros.AluTester"
+$ sbt "test:runMain leros.AluTester"
 \end{verbatim}
 
 and shall produce a success message similar to:
