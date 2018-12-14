@@ -1056,9 +1056,9 @@ If we want to count N, we start with N-2 and count till -1.
 
 \chapter{A Processor Design}
 
-As one of the last chapters in this book we will present a medium size project:
+As one of the last chapters in this book we present a medium size project:
 the design, simulation, and testing of a microprocessor.
-In order to keep this project manageable, we will deign a simple accumulator
+In order to keep this project manageable, we will design a simple accumulator
 machine.
 The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:arcs2019}
 and is available in open source at \url{https://github.com/leros-dev/leros}.
@@ -1212,6 +1212,56 @@ which we will use to initialize the instruction memory.
 
 \input{code/leros_asm_hard.txt}
 
+\noindent However, this is a very inefficient approach to test a processor.
+Writing an assembler with an expressive language like Scala is not a big project.
+Therefore, we write a simple assembler for Leros, which is possible within about
+100 lines of code. We define a function \code{getProgram} that calls the assembler.
+For branch destinations we need a symbol table, which we collect in a \code{Map}.
+A classic assembler runs in two passes: (1) collect the values for the symbol table
+and (2) assemble the program with the symbols collected in the first pass.
+Therefore, we call assemble twice with a parameter to indicate which pass it is.
+
+\input{code/leros_asm_call.txt}
+
+The \code{assemble} function starts with reading in the source
+file\footnote{This function does not actually read the source file, but for this
+discussion we can consider it as the reading function.}
+and defining two helper functions to parse the two possible operands: (1) an
+integer constant (allowing decimal or hexadecimal notation) and (2) to read
+a register number.
+
+\input{code/leros_asm_start.txt}
+
+Figure~\ref{fig:leros-asm-match} shows the core of the assembler for Leros.
+The core of the assembly function is covered by a Scala \code{match}
+expression. \todo{Some more words on the code.}
+
+
+
+\begin{figure}[t]
+\input{code/leros_asm_match.txt}
+\caption{The main part of the Leros assembler.}
+\label{fig:leros-asm-match}
+\end{figure}
+
+\section{Exercise}
+
+This last chapter exercise assignment is in a very free form. You are at the end
+of your learning tour through Chisel and ready to tackle design problems that
+you find interesting.
+
+One option is to read the chapter again and read along all the source code in the
+\myref{https://github.com/leros-dev/leros}{Leros repository}, run the test cases,
+fiddle with the code by breaking it and see that tests fail.
+
+Another option is to simply write your own implementation of Leros.
+The implementation in the repository is just one possible organization of a pipeline.
+You could write a Chisel simulation version of Leros with just a single pipeline stage,
+or go creasy and superpipeline Leros for the highest possible clocking frequency.
+
+A third option is to design you own processor from scratch. Maybe the demonstration
+how to build the Leros processor and the needed tools has convinced you that processor
+design and implementation is no magic art, but engineering that can be very joyful.
 
 \chapter{Chisel 2}
 

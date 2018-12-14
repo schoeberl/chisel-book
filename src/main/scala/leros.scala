@@ -288,21 +288,9 @@ object Assembler {
   def getProgramFix() = prog
   //- end
 
+  //- start leros_asm_call
   def getProgram(prog: String) = {
     assemble(prog)
-
-    /*
-        if (true)
-          getProgramFix()
-        else {
-          // FERTL does not like large vectors
-          val code = new Array[Int](200)
-          for (i <- 0 until code.length) {
-            code(i) = ((i << 8) + i+1) & 0xffff
-          }
-          code
-        }
-      */
   }
 
   // collect destination addresses in first pass
@@ -312,7 +300,9 @@ object Assembler {
     assemble(prog, false)
     assemble(prog, true)
   }
+  //- end
 
+  //- start leros_asm_start
   def assemble(prog: String, pass2: Boolean): Array[Int] = {
 
     val source = Source.fromFile(prog)
@@ -331,18 +321,12 @@ object Assembler {
       assert(s.startsWith("r"), "Register numbers shall start with \'r\'")
       s.substring(1).toInt
     }
+    //- end
 
-    //    def regIndirect(s: String): Int = {
-    //      assert(s.startsWith("(r"))
-    //      assert(s.endsWith(")"))
-    //      s.substring(2, s.length - 1).toInt
-    //    }
-
+    //- start leros_asm_match
     for (line <- source.getLines()) {
       if (!pass2) println(line)
       val tokens = line.trim.split(" ")
-      // println(s"length: ${tokens.length}")
-      // tokens.foreach(println)
       val Pattern = "(.*:)".r
       val instr = tokens(0) match {
         case "//" => // comment
@@ -358,6 +342,12 @@ object Assembler {
         case "andi" => (ANDI << 8) + toInt(tokens(1))
         case "ori" => (ORI << 8) + toInt(tokens(1))
         case "xori" => (XORI << 8) + toInt(tokens(1))
+        case "shr" => (SHR << 8)
+        // ...
+        case "" => // println("Empty line")
+        case t: String => throw new Exception("Assembler error: unknown instruction: " + t)
+        case _ => throw new Exception("Assembler error")
+        //- end
         case "loadi" => (LDI << 8) + toInt(tokens(1))
         case "loadhi" => (LDHI << 8) + toInt(tokens(1))
         case "loadh2i" => (LDH2I << 8) + toInt(tokens(1))
@@ -376,9 +366,6 @@ object Assembler {
         case "in" => (IN << 8) + toInt(tokens(1))
         case "out" => (OUT << 8) + toInt(tokens(1))
         case "scall" => (SCALL << 8) + toInt(tokens(1))
-        case "" => // println("Empty line")
-        case t: String => throw new Exception("Assembler error: unknown instruction: " + t)
-        case _ => throw new Exception("Assembler error")
       }
 
       instr match {
