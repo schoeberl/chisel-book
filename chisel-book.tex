@@ -155,11 +155,14 @@ As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
+\todo{Think about: Chisel is not a large (big?) language, but this is good for hardware description. The basic constructs can be learned/ fit on a page.... The power of the Chisel ecosystem comes from being embedded in Scala when programming hardware generators.
+Check also Rust book for structure, but better the Scala book.}
+
 Chisel itself is not a big language, as it shall be for hardware design.
 Therefore, this book is not a big book as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacies.
-The power if Chisel comes from the embedding of Chisel within
-\myref{https://www.scala-lang.org/}{Scala}, which is itself a big language.
+The power of Chisel comes from the embedding of Chisel within
+\myref{https://www.scala-lang.org/}{Scala}, which is itself an expressive language.
 However, Scala is not the topic
 of this book. We provide a short section on Scala for hardware designers,
 but a general introduction to Scala is better served by the textbook by
@@ -1089,7 +1092,7 @@ loadhi & A$_{15-8}$ = i & Load immediate into second byte \\
 loadh2i & A$_{23-16}$ = i  & Load immediate into third byte \\
 loadh3i & A$_{31-24}$ = i & Load immediate into forth byte \\
 store & Rn = A & Store A into register Rn \\
-jal & PC = A, A = PC + 2 & Jump and link \\
+jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
 loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
@@ -1172,6 +1175,42 @@ test Alu Success: 70567 tests passed in 70572 cycles taking
 3.845715 seconds
 [info] [3.825] RAN 70567 CYCLES PASSED
 \end{verbatim}
+
+\section{Decoding Instructions}
+
+From the ALU we work backwards and implement the instruction decoder.
+However, first we define the instruction encoding in its own Scala class and in
+a \emph{shared} package. We want to share the encoding constants between
+the hardware implementation of Leros, an assembler for Leros, and an instruction
+set simulator of Leros.
+
+\input{code/leros_constants.txt}
+
+\todo{Update code when Leros is more complete, as stuff is missing.}
+
+\noindent For the decode component we define a \code{Bundle} for the output,
+which is later fed partially into the ALU.
+
+\input{code/leros_decode_bundle.txt}
+
+\noindent Decode takes as input an 8-bit opcode and delivers the decoded signals
+as output. Those driving signals are assigned a default value with \code{WireInit}.
+
+\input{code/leros_decode_init.txt}
+
+\noindent The decoding itself is just a large switch statement on part of the
+instruction that represents the opcode (in Leros for most instructions the upper
+8 bits.)
+
+\input{code/leros_decode.txt}
+
+\section{Assembling Instructions}
+
+To write programs for Leros we need an assembler. However, for the very first
+test we can hard code a few instructions, and put them into a Scala array,
+which we will use to initialize the instruction memory.
+
+\input{code/leros_asm_hard.txt}
 
 
 \chapter{Chisel 2}
