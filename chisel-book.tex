@@ -893,7 +893,7 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "latest.release"
 \noindent and rerun the build with \code{sbt}. Is there a newer version of Chisel
 available and will it be automatically downloaded?
 
-For convenience the project contains also a \code{Makefile}.
+For convenience, the project also contains a \code{Makefile}.
 It just contains the \code{sbt} command, so we do not need to remember it and
 can simply generate the Verilog code with:
 
@@ -927,7 +927,7 @@ to build an AND gate and a multiplexer and run this hardware in an FPGA.
 We will now use this example and test the functionality with a Chisel tester
 to automate testing and also to be independent from an FPGA.
 Use your designs from the prior chapter and add a Chisel tester to test the functionality.
-Try to enumerate all possible inputs and test the output with an \code{except()}.
+Try to enumerate all possible inputs and test the output with \code{except()}.
 
 Testing within Chisel can really speedup the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
@@ -1470,6 +1470,39 @@ Stuff that saves a little hardware, but might not worse the less readable code
 \bibliography{chisel}
 
 \chapter*{Snippets and Collect Stuff to Describe}
+
+\section{Minor Pitfalls}
+
+How to define a 32 bit unsigned constant of 0xffffffff?
+
+Comparing a 32-bit UInt against a large literal results in error message.
+
+val x = UInt(32.W)
+when (x === 0xFFFFFFFF.U) {
+...
+}
+
+
+0xffffffff.U does not work, as Int is a signed integer and the value is -1.
+
+solutions are BigInt or Strings:
+
+From email: However! You can do this with either a String or a BigInt. I think both of the following work:
+
+val x = UInt(32.W)
+when (x === "hffffffff".U || x === BigInt("ffffffff", 16)) {
+  \\...
+}
+
+from Richard: 
+You can also use a long, 0xffffffffL.U, though this will break at 64 bits.
+For the String-to-UInt conversion, x also works as a hex radix specifier, eg "xffffffff".U
+
+\todo{Make an example and explain.}
+
+
+
+\section*{Is this below Chisel 2?}
 
 This chip was done in Chisel: \url{https://aiyprojects.withgoogle.com/edge-tpu}
 See also \url{https://cloud.google.com/edge-tpu/}
