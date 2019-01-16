@@ -193,7 +193,7 @@ On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} is installed with:
 
 \begin{verbatim}
-brew install sbt
+$ brew install sbt
 \end{verbatim}
 
 \noindent For Ubuntu, which is based on Debian, software is usually installed from a
@@ -1262,6 +1262,118 @@ or go creasy and superpipeline Leros for the highest possible clocking frequency
 A third option is to design you own processor from scratch. Maybe the demonstration
 how to build the Leros processor and the needed tools has convinced you that processor
 design and implementation is no magic art, but engineering that can be very joyful.
+
+\chapter{Contributing to Chisel}
+
+Chisel is an open-source project under constant development and improvement.
+Therefore, you can also contribute to the project. Here describe how to
+setup your environment for Chisel library development and how to contribute
+to Chisel.
+
+\section{Setup the Development Environment}
+
+Chisel consists of several different repositories, all hosted at
+the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
+
+Fork the repository, which you like to contribute, into your local GitHub account.
+This can be easily done by pressing the \code{Fork} button in the GitHub web interface.
+Then from that fork, clone your fork of the repository. In our example we will change
+\code{chisel3} and the clone command for my local fork is:
+
+\begin{verbatim}
+$ git clone git@github.com:schoeberl/chisel3.git
+\end{verbatim}
+
+To compile Chisel 3 and publish as a local library execute:
+\begin{verbatim}
+$ cd chisel3
+$ sbt compile
+$ sbt publishLocal
+\end{verbatim}
+
+Watch out during the publish local command for the version string of the published
+library, which contains the string \code{SNAPSHOT}.
+If you use the tester and the published version is not compatible with the Chisel
+SNAPSHOT, fork and clone the \myref{https://github.com/freechipsproject/chisel-testers}{chisel-tester}
+repo as well and publish it local.
+
+To test your changes in Chisel, you probably also want to setup a Chisel project,
+e.g., by forking/cloning an \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project},
+renaming it, and removing the \code{.git} folder from it.
+
+Change the \code{build.sbt} to reference the locally published version of Chisel.
+Furthermore, at the time of this writing, the head of Chisel source uses Scala 2.12, but Scala
+2.12 has troubles with
+\myref{https://github.com/freechipsproject/chisel-template/issues/35}{anonymous bundles}.
+Therefore, you need to add following Scala option: \code{"-Xsource:2.11"}.
+The \code{build.sbt} should look similar to:
+
+\begin{verbatim}
+scalaVersion := "2.12.6"
+
+scalacOptions := Seq("-Xsource:2.11")
+
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases")
+)
+
+libraryDependencies +=
+  "edu.berkeley.cs" %% "chisel3" % "3.2-SNAPSHOT"
+libraryDependencies +=
+  "edu.berkeley.cs" %% "chisel-iotesters" % "1.3-SNAPSHOT"
+\end{verbatim}
+
+Compile your Chisel test application and watch if it picks up the local published
+version of the Chisel library.
+
+\section{Testing}
+
+\todo{I need more details here from the Chisel developers on what and how
+to test.}
+
+When you change the Chisel library you should run the Chisel tests.
+In an \code{sbt} based project, this is usually run with:
+
+\begin{verbatim}
+$ cd test
+\end{verbatim}
+
+Furthermore, if you add functionality to Chisel you should also provide tests for the
+new features.
+
+\section{Contribute with a Pull Request}
+
+In the Chisel project no developer commits directly to the main repository.
+A contribution is organized via a
+\myref{https://help.github.com/articles/creating-a-pull-request-from-a-fork/}{pull request}
+from a branch in a forked version of library.
+For further information see the documentation at GitHub on
+\myref{https://help.github.com/categories/collaborating-with-issues-and-pull-requests/}{collaboration with
+pull requests}.
+
+\section{Exercise}
+
+Invent a new operator for the \code{UInt} type, implement it in the Chisel library,
+and write some usage/test code to explore the operator. It does not need to be
+a very useful operator, just anything, e.g., a ? operator that delivers the lefthand side
+if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
+How many lines of code did you need to add?\footnote{A quick a dirty implementation
+needs just two lines of Scala code.}
+
+As simple as this was, please be not tempted to fork the Chisel project and
+add you little extensions. Changes and extension shall be coordinated with the
+main developers.
+This was just a simple exercise to get you started.
+
+If you are getting bold, you could pick one of the
+\myref{https://github.com/freechipsproject/chisel3/issues}{open issues} and try to solve it.
+Then contribute with a pull request to Chisel.
+However, probably first watch the style of development in Chisel by watching the GitHub
+repositories.
+See how changes and pull requests are handled in the Chisel open-source project.
+
+
 
 \chapter{Chisel 2}
 
