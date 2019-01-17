@@ -1266,7 +1266,7 @@ design and implementation is no magic art, but engineering that can be very joyf
 \chapter{Contributing to Chisel}
 
 Chisel is an open-source project under constant development and improvement.
-Therefore, you can also contribute to the project. Here describe how to
+Therefore, you can also contribute to the project. Here we describe how to
 setup your environment for Chisel library development and how to contribute
 to Chisel.
 
@@ -1275,7 +1275,7 @@ to Chisel.
 Chisel consists of several different repositories, all hosted at
 the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
 
-Fork the repository, which you like to contribute, into your local GitHub account.
+Fork the repository, which you like to contribute, into your personal GitHub account.
 This can be easily done by pressing the \code{Fork} button in the GitHub web interface.
 Then from that fork, clone your fork of the repository. In our example we will change
 \code{chisel3} and the clone command for my local fork is:
@@ -1324,8 +1324,14 @@ libraryDependencies +=
   "edu.berkeley.cs" %% "chisel-iotesters" % "1.3-SNAPSHOT"
 \end{verbatim}
 
-Compile your Chisel test application and watch if it picks up the local published
-version of the Chisel library.
+Compile your Chisel test application and take a close look if it picks up the local published
+version of the Chisel library (there is also a SNAPSHOT version published, so if, e.g.,
+the Scala version is different between your Chisel library and your application code,
+it will pickup the SNAPSHOT version from the server instead of your local published
+library.)
+
+See also \myref{https://github.com/freechipsproject/chisel3\#for-chisel-developers}{some notes
+at the Chisel repo}.
 
 \section{Testing}
 
@@ -1336,7 +1342,7 @@ When you change the Chisel library you should run the Chisel tests.
 In an \code{sbt} based project, this is usually run with:
 
 \begin{verbatim}
-$ cd test
+$ sbt test
 \end{verbatim}
 
 Furthermore, if you add functionality to Chisel you should also provide tests for the
@@ -1351,6 +1357,9 @@ from a branch in a forked version of library.
 For further information see the documentation at GitHub on
 \myref{https://help.github.com/categories/collaborating-with-issues-and-pull-requests/}{collaboration with
 pull requests}.
+The Chisel group started to document
+\myref{https://github.com/freechipsproject/chisel-lang-governance/blob/master/reviewer_guidelines.md}{contribution
+guide lines}.
 
 \section{Exercise}
 
