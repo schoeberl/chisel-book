@@ -379,7 +379,7 @@ object Assembler {
     val finalProg = program.reverse.toArray
     if (!pass2) {
       println(s"The program:")
-      finalProg.foreach(printf("0x%02x ", _))
+      // finalProg.foreach(printf("0x%02x ", _))
       println()
     }
     finalProg

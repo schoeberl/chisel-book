@@ -5,6 +5,7 @@ all: gencode book
 
 gencode:
 	-mkdir code
+	sbt compile
 	scala scripts/gencode.scala
 
 book:

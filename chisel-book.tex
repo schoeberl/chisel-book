@@ -950,18 +950,108 @@ We should probably postpone this for later.}
 
 \chapter{Components}
 
-A larger digital design is structured into a set of components, structured in
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.7]{figures/components}
+  \caption{A design built of a a hierarchy of components.}
+  \label{fig:components}
+\end{figure}
+
+
+A larger digital design is structured into a set of components, often in
 a hierarchical way. Each component has an interface with input and output
-wires. These are similar to input and output pins in an IC.
+wires, usually called ports. These are similar to input and output pins in an IC.
 Components are connected by wiring up the inputs and outputs.
-Components are may contain subcomponents to build the hierarchy.
+Components may contain subcomponents to build the hierarchy.
+
+Figure~\ref{fig:components} shows an example design. Component C has
+two input ports and two output ports. The component itself is assembled out
+of two subcomponents: B and C, wich are connected to the inputs and
+outputs of C. One output of A is connected to an input of B.
+Component D is at the same hierarchy level as component C and connected
+to it.
+
+The outermost component, which is connected to physical pins
+in a chip, is called the top-level component.
+
+In this chapter we will explain how components are described in Chisel and
+provide several examples of standard components.
+Those standard components serve two purposes: (1) they provide examples
+of Chisel code and (2) they provide a library of components ready to be reused
+in your design.
+
+\section{Components in Chisel are Modules}
 
 Hardware components are called modules in Chisel. Each module extends
 the class \code{Module} and contains a field \code{io} for the interface.
 The interface is defined by a \code{Bundle} that is wrapped into a call to \code{IO()}.
-The \code{Bundle} contains fields to represent input and output pins of
-module. The direction is given by wrapping a field into either a call to \code{Input()}
+The \code{Bundle} contains fields to represent input and output ports of
+the module. The direction is given by wrapping a field into either a call to \code{Input()}
 or \code{Output()}. The direction is from the view of the component itself.
+
+The following code shows the definition of the two example components A and B from
+Figure~\ref{fig:components}:
+
+\input{code/components_ab.txt}
+
+\noindent Component A has two inputs, named \code{a} and \code{b}, and two
+outputs, named \code{x} and \code{y}. For the ports of component B
+we chose the names \code{in1}, \code{in2}, and \code{out}.
+All ports use an unsigned integer (\code{UInt}) with a bit width of 8.
+As this example code is about connecting components and building a
+hierarchy, we do not show any implementation within the components.
+The implementation of the component is written at the place where
+the comments states ``function of X''.
+As we have no function associated with those example components,
+we used generic port names. For a real design use descriptive
+port names, such as \code{data}, \code{valid}, or \code{ready}.
+
+Component C has three input and two output ports. It is built out of
+components A and B. We show how A and B are connected to the ports
+of C and als the connection between an output port of A and an
+input port of B:
+
+\input{code/components_c.txt}
+
+Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
+into a call to \code{Module()}. The reference to that module is stored in a local variable,
+in this example \code{val compA = Module(new CompA())}.
+
+With this reference we can access the IO ports by dereferencing the \code{io} field of the module
+and the individual fields of the IO \code{Bundle}.
+
+The simplest component in our design has just an input port, named \code{in}, and
+an output port, named \code{out}.
+
+\input{code/components_d.txt}
+
+The final missing peace of our example design is the top-level component, which itself
+is assembled out of components C and D:
+
+\input{code/components_top.txt}
+
+Good component design is similar to a good design of functions or methods in
+software design. One of the main questions is how much functionality we put into
+a component and how large a component should be. The two extremes are very
+small components, such an adder, and very large components.
+
+Beginners in hardware design often start with very tiny components.
+The problem is that design books use very small components to show the principles.
+But the sizes of the examples (in those books, and also in this book) is small
+to fit into a page and to not distract by too many details.
+
+The interface to a component is a little bit verbose (with types, names, directions,
+IO construction). As a rule of thumb I would propose that the core of the component
+the function should be at least as long as the interface to the component.
+
+For very small components, such as a counter, Chisel provides a more lightweight
+way to describe them as functions that return hardware.
+
+
+\section{An Arithmetic Logic Unit}
+
+
+
 
 \todo{Come back to one of the earlier examples for components, e.g., the ALU?}
 

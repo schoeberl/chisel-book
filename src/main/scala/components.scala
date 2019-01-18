@@ -1,0 +1,85 @@
+import chisel3._
+
+//- start components_ab
+class CompA extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(8.W))
+    val b = Input(UInt(8.W))
+    val x = Output(UInt(8.W))
+    val y = Output(UInt(8.W))
+  })
+
+  // function of A
+}
+
+class CompB extends Module {
+  val io = IO(new Bundle {
+    val in1 = Input(UInt(8.W))
+    val in2 = Input(UInt(8.W))
+    val out = Output(UInt(8.W))
+  })
+
+  // function of B
+}
+//- end
+
+//- start components_c
+class CompC extends Module {
+  val io = IO(new Bundle {
+    val in_a = Input(UInt(8.W))
+    val in_b = Input(UInt(8.W))
+    val in_c = Input(UInt(8.W))
+    val out_x = Output(UInt(8.W))
+    val out_y = Output(UInt(8.W))
+  })
+
+  // create components A and B
+  val compA = Module(new CompA())
+  val compB = Module(new CompB())
+
+  // connect A
+  compA.io.a := io.in_a
+  compA.io.b := io.in_b
+  io.out_x := compA.io.x
+  // connect B
+  compB.io.in1 := compA.io.y
+  compB.io.in2 := io.in_c
+  io.out_y := compB.io.out
+}
+//- end
+
+//- start components_d
+class CompD extends Module {
+  val io = IO(new Bundle {
+    val in = Input(UInt(8.W))
+    val out = Output(UInt(8.W))
+  })
+
+  // function of D
+}
+//- end
+
+//- start components_top
+class TopLevel extends Module {
+  val io = IO(new Bundle {
+    val in_a = Input(UInt(8.W))
+    val in_b = Input(UInt(8.W))
+    val in_c = Input(UInt(8.W))
+    val out_m = Output(UInt(8.W))
+    val out_n = Output(UInt(8.W))
+  })
+
+  // create C and D
+  val c = Module(new CompC())
+  val d = Module(new CompD())
+
+  // connect C
+  c.io.in_a := io.in_a
+  c.io.in_b := io.in_b
+  c.io.in_c := io.in_c
+  io.out_m := c.io.out_x
+  // connect D
+  d.io.in := c.io.out_y
+  io.out_n := d.io.out
+}
+//- end
