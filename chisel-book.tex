@@ -1050,12 +1050,37 @@ way to describe them as functions that return hardware.
 
 \section{An Arithmetic Logic Unit}
 
+One of the central components for circuits that compute, e.g., a microprocessor, is an
+\myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic-logic unit},
+ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.7]{figures/alu}
+  \caption{An arithmetic logic unit, or ALU for short.}
+  \label{fig:alu}
+\end{figure}
 
+The ALU has two data inputs, labeled \code{A} and \code{B} in the figure, one function input \code{fn},
+and an output, labeled {Y}. The ALU operates on \code{A} and \code{B} and provides the result
+at the output. The input \code{fn} selects the operation on \code{A} and \code{B}.
+The operations are usually some arithmetic, sich as addition and subtraction, and some logical
+functions such as and, or, xor. That's why it is called ALU.
 
-\todo{Come back to one of the earlier examples for components, e.g., the ALU?}
+The operation is selected by the function input \code{fn}. The ALU is usually a combinational
+circuit without any state elements. An ALU might also have additional outputs to signal properties
+of the result, such as zero or sign.
 
+The following code shows an ALU with 16-bit inputs and outputs that supports: addition, subtraction, or, and and
+operation, selected by a 2-bit \code{fn} signal.
 
+\input{code/components_alu.txt}
+
+\noindent In this example we use a new Chisel construct, the \code{switch/is} construct to describe
+the table that selects the output of our ALU.
+To use this utility function we need to import another Chisel package:
+
+\input{code/components_util.txt}
 
 
 \chapter{Example Comps?}

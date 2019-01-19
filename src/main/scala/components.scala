@@ -1,5 +1,9 @@
 import chisel3._
 
+//- start components_util
+import chisel3.util._
+//- end
+
 //- start components_ab
 class CompA extends Module {
   val io = IO(new Bundle {
@@ -81,5 +85,27 @@ class TopLevel extends Module {
   // connect D
   d.io.in := c.io.out_y
   io.out_n := d.io.out
+}
+//- end
+
+//- start components_alu
+class Alu extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(16.W))
+    val b = Input(UInt(16.W))
+    val fn = Input(UInt(2.W))
+    val y = Output(UInt(16.W))
+  })
+
+  // some default value is needed
+  io.y := 0.U
+
+  // The ALU selection
+  switch(io.fn) {
+    is(0.U) { io.y := io.a + io.b }
+    is(1.U) { io.y := io.a - io.b }
+    is(2.U) { io.y := io.a | io.b }
+    is(3.U) { io.y := io.a & io.b }
+  }
 }
 //- end
