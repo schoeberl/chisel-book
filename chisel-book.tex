@@ -1082,6 +1082,50 @@ To use this utility function we need to import another Chisel package:
 
 \input{code/components_util.txt}
 
+\chapter{Combinational Building Blocks}
+
+In this chapter we explore various combinational circuits, basic building block that we can
+use to construct more complex systems.
+In principle all combinational circuits can be described with boolean equations.
+However, more often a description in form of a table is more efficient.
+We can delegate to the synthesize tool to extract and minimize the boolean equations.
+
+
+\section{Encoding and Decoding}
+
+Two basic circuits, best described in a table form are encoding and decoding.
+Encoding means to translate a binary number in the range of $0 .. 2^{m-1}$ to a select of
+one in a binary vector of $2^m$ positions.
+
+\todo{draw and encoder and maybe a table.}
+
+The following code introduces the \code{switch} statement of Chisel to describe an encoder:
+
+\input{code/encdec_enc.txt}
+
+\noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
+and assigns the decoded value to the \code{result} signal.
+Note that even if we enumerate all possible input values, Chisel still needs us to assign a
+default value, as we do by assigning 0 to \code{result}.
+This assignment will be active and optimized away by the backend tool.
+It is intended to avoid situations with incomplete assignments for combinational circuits
+(in Chisel a \code{Wire}) that will result in unintended latches in hardware description
+languages such as VHDL and Verilog.
+
+In the example we use unsigned integers for the signals. A maybe clearer representation
+of an encode circuit uses binary notation:
+
+\input{code/encdec_encbin.txt}
+
+\noindent Note that the \code{switch} statement is not part of the core Chisel language. Therefore,
+we need to include the elements of the package \code{chisel.util}.
+
+\input{code/encdec_util.txt}
+
+
+\section{Exercise}
+
+7-seg display
 
 \chapter{Example Comps?}
 
