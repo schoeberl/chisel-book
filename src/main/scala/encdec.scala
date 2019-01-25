@@ -7,16 +7,17 @@ import chisel3.util._
 
 class EncDec extends Module {
   val io = IO(new Bundle {
-    val a = Input(UInt(8.W))
-    val b = Input(UInt(8.W))
-    val x = Output(UInt(8.W))
+    val decin = Input(UInt(2.W))
+    val decout = Output(UInt(4.W))
+    val encin = Input(UInt(4.W))
+    val encout = Output(UInt(2.W))
   })
 
-  val sel = io.a(1, 0)
+  val sel = io.decin
 
   val result = Wire(UInt(4.W))
 
-  //- start encdec_enc
+  //- start encdec_dec
   result := 0.U
 
   switch(sel) {
@@ -27,34 +28,54 @@ class EncDec extends Module {
   }
   //- end
 
-  //- start encdec_encbin
-  // TODO
-  switch(sel) {
-    is (0.U) { result := 1.U}
-    is (1.U) { result := 2.U}
-    is (2.U) { result := 4.U}
-    is (3.U) { result := 8.U}
+  //- start encdec_decbin
+  switch (sel) {
+    is ("b00".U) { result := "b0001".U}
+    is ("b01".U) { result := "b0010".U}
+    is ("b10".U) { result := "b0100".U}
+    is ("b11".U) { result := "b1000".U}
   }
   //- end
 
-  io.x := result
+  //- start encdec_shift
+  result := 1.U << sel
+  //- end
+
+  io.decout := result
+
+  val a = io.encin
+  val b = Wire(UInt(2.W))
+  //- start encdec_enc
+  b := "b00".U
+  switch (a) {
+    is ("b0001".U) { b := "b00".U}
+    is ("b0010".U) { b := "b01".U}
+    is ("b0100".U) { b := "b10".U}
+    is ("b1000".U) { b := "b11".U}
+  }
+  //- end
+
+  io.encout := b
+
 }
 
-class TestEncDec(dut: EncDec) extends PeekPokeTester(dut) {
+class EncDecTester(dut: EncDec) extends PeekPokeTester(dut) {
 
-  poke(dut.io.a, 3.U)
-  poke(dut.io.b, 1.U)
-  step(1)
-  expect(dut.io.x, 1)
-  poke(dut.io.a, 2.U)
-  poke(dut.io.b, 0.U)
-  step(1)
-  expect(dut.io.x, 0)
+  for (i <- 0 to 3) {
+    poke(dut.io.decin, i)
+    step(1)
+    expect(dut.io.decout, 1 << i)
+  }
+  for (i <- 0 to 3) {
+    poke(dut.io.encin, 1 << i)
+    step(1)
+    expect(dut.io.encout, i)
+  }
 }
 
-object TestEncDec extends App {
+object EncDecTester extends App {
   chisel3.iotesters.Driver(() => new EncDec()) { c =>
-    new TestEncDec(c)
+    new EncDecTester(c)
   }
 }
 

@@ -76,6 +76,8 @@
   \end{quotation}
 }
 
+\newcommand{\scale}{0.7}
+
 \input{shared/chisel.tex}
 
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
@@ -466,7 +468,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.7]{figures/logic}
+  \includegraphics[scale=\scale]{figures/logic}
   \caption{Logic for the expression \code{a \& b | c}.
   The wires can be single bit or multiple bits. The Chisel expression (and the schematics) is the same.}
   \label{fig:logic}
@@ -507,7 +509,7 @@ signale \code{b}.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.7]{figures/mux}
+  \includegraphics[scale=\scale]{figures/mux}
   \caption{A basic 2:1 multiplexor.}
   \label{fig:mux}
 \end{figure}
@@ -952,7 +954,7 @@ We should probably postpone this for later.}
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.7]{figures/components}
+  \includegraphics[scale=\scale]{figures/components}
   \caption{A design built of a a hierarchy of components.}
   \label{fig:components}
 \end{figure}
@@ -1056,7 +1058,7 @@ ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.7]{figures/alu}
+  \includegraphics[scale=\scale]{figures/alu}
   \caption{An arithmetic logic unit, or ALU for short.}
   \label{fig:alu}
 \end{figure}
@@ -1086,50 +1088,137 @@ To use this utility function we need to import another Chisel package:
 
 In this chapter we explore various combinational circuits, basic building block that we can
 use to construct more complex systems.
-In principle all combinational circuits can be described with boolean equations.
+In principle all combinational circuits can be described with Boolean equations.
 However, more often a description in form of a table is more efficient.
-We can delegate to the synthesize tool to extract and minimize the boolean equations.
+We let the synthesize tool extract and minimize the Boolean equations.
+Two basic circuits, best described in a table form, are a decoder and an encoder.
 
+\section{Decoder}
 
-\section{Encoding and Decoding}
+A \myref{https://en.wikipedia.org/wiki/Binary_decoder}{decoder}
+converts a binary number of $n$ bits to an $m$-bit signal, where $m \leq 2^n$.
+The output is one-hot encoded (where exactly one bit is one).
 
-Two basic circuits, best described in a table form are encoding and decoding.
-Encoding means to translate a binary number in the range of $0 .. 2^{m-1}$ to a select of
-one in a binary vector of $2^m$ positions.
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/decoder}
+  \caption{A 2-bit to 4-bit decoder.}
+  \label{fig:decoder}
+\end{figure}
 
-\todo{draw and encoder and maybe a table.}
+Figure~\ref{fig:decoder} shows a 2-bit to 4-bit decoder. The function of the decoder
+can be described in a truth table, such as Table~\ref{tab:decoder}.
 
-The following code introduces the \code{switch} statement of Chisel to describe an encoder:
+\begin{table}
+ \centering
+ \label{tab:decoder}
+  \begin{tabular}{rr}
+    \toprule
+    a & b \\
+    \midrule
+    00 & 0001 \\
+    01 & 0010 \\
+    10 & 0100 \\
+    11 & 1000 \\
+    \bottomrule 
+  \end{tabular} 
+  \caption{Truth table for a 2 to 4 decoder.}
+\end{table}
 
-\input{code/encdec_enc.txt}
+The representation of logic as a truth table can be directly described in Chisel with a
+\code{switch} based table.
+The \code{switch} statement is not part of the core Chisel language.
+Therefore, we need to include the elements of the package \code{chisel.util}.
+
+\input{code/encdec_util.txt}
+
+\noindent The following code introduces the \code{switch} statement of Chisel to describe a decoder:
+
+\input{code/encdec_dec.txt}
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
 and assigns the decoded value to the \code{result} signal.
 Note that even if we enumerate all possible input values, Chisel still needs us to assign a
 default value, as we do by assigning 0 to \code{result}.
-This assignment will be active and optimized away by the backend tool.
+This assignment will never be active and therefore optimized away by the backend tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
-languages such as VHDL and Verilog.
+languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
 
-In the example we use unsigned integers for the signals. A maybe clearer representation
+In the example before we used unsigned integers for the signals. A maybe clearer representation
 of an encode circuit uses binary notation:
 
-\input{code/encdec_encbin.txt}
+\input{code/encdec_decbin.txt}
 
-\noindent Note that the \code{switch} statement is not part of the core Chisel language. Therefore,
-we need to include the elements of the package \code{chisel.util}.
+A table gives a very readable representation of the decoder function, but is also
+a little bit verbose.
+When examine the table, we see an regular structure: a 1 is shifted left by the number
+represented by \code{sel}. Therefore, we can express a decoder with the Chisel shift
+operation \code{<<}.
 
-\input{code/encdec_util.txt}
+\input{code/encdec_shift.txt}
 
+Decoders are used as a building block for a multiplexer by using the output as an enable
+with an AND gate for the multiplexer data input. However, in Chisel we do not need to construct
+a multiplexer, as a \code{Mux} is available in the core library.
+Decoders can also be used for address decoding and then the outputs are used as
+select signals for e.g., different IO devices connected to a microprocessor. 
+
+
+\section{Encoder}
+
+An \myref{https://en.wikipedia.org/wiki/Encoder_(digital)}{encoder}
+converts a one-hot encoded input signal into a binary encoded output signal.
+The encoder does the inverse operation of a decoder.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/encoder}
+  \caption{A 4-bit to 2-bit encoder.}
+  \label{fig:encoder}
+\end{figure}
+
+
+\begin{table}
+ \centering
+ \label{tab:encoder}
+  \begin{tabular}{rr}
+    \toprule
+    a & b \\
+    \midrule
+    0001 & 00 \\
+    0010 & 01 \\
+    0100 & 10 \\
+    1000 & 11 \\
+    ???? & ?? \\
+    \bottomrule 
+  \end{tabular} 
+  \caption{Truth table for a 4 to 2 encoder.}
+\end{table}
+
+Figure~\ref{fig:encoder} shows a 4-bit one-hot input to a 2-bit binary output encoder and
+Table~\ref{tab:encoder} the truth table of the encode function. However, an encoder will
+only work as expected when the input signal is one-hot coded. For all other input values the output
+is undefined. As we cannot describe a function with undefined outputs we will use a default
+assignment that catches all undefine input patterns.
+
+The following Chisel code assigns a default value of 00 and then uses the switch statement
+for the legal input values.
+
+\input{code/encdec_enc.txt}
 
 \section{Exercise}
 
-7-seg display
+Describe a combinational circuit to convert a 4-bit binary input to the encoding of a
+\myref{https://en.wikipedia.org/wiki/Seven-segment_display}{7-segment display}.
+You can either just define the codes for the decimal digits, which where the initial
+usage of 7-segment displays or asl define encodings for the remaining bit pattern
+to be able to display all 16 values of a single digit in
+\myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
+When you have an FPGA board with a 7-segment display, connect 4 switches or
+buttons to the input of your circuit and the output to the 7-segment display.
 
-\chapter{Example Comps?}
-
-
+\chapter{Example Components}
 
 In this section we explore some medium sizes digital designs, such as
 a FIFO buffer, which are used as building blocks for larger design.
@@ -1149,8 +1238,7 @@ Data is put into the FIFO by the writer on \code{din} with an active
 
 \begin{figure}
   \centering
-  \includegraphics{figures/fifo}
-
+  \includegraphics[scale=\scale]{figures/fifo}
   \caption{A writer, a FIFO buffer, and a reader.}
   \label{fig:fifo}
 \end{figure}
@@ -1189,7 +1277,7 @@ class ReaderIO(size: Int) extends Bundle {
 This is straightforward. However, one might ask if this is the most efficient
 implementation of counting. The comparison against an end value, 10 in our
 example, involves some combinational circuit in an ASIC. More efficient in an
-ASIC (and as well in loops of programs) is counting down and exit when 0
+ASIC (and as well as in loops of software programs) is counting down and exit when 0
 is reached.
 
 If we want to count N, we start with N-1 and count till 0.
