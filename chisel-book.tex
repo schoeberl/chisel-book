@@ -840,12 +840,12 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 $ sbt test
 \end{verbatim}
 
-\noindent A minimal test (a testing hello world) to just test the Scala Integer
+\noindent A minimal test (a testing hello world) to just test a Scala Integer
 addition:
 
 \input{code/scalatest_hello_world.txt}
 
-\noindent Although Chisel testing is more heavyweight than Scala unit testing,
+\noindent Although Chisel testing is more heavyweight than unit testing of Scala programs,
 we can wrap a Chisel test into a ScalaTest class. For the \code{Tester} shown
 before this is:
 
@@ -1130,11 +1130,68 @@ Two basic circuits, best described in a table form, are a decoder and an encoder
 
 \section{Combinational Circuits}
 
-Before describing some standard combinational building blocks we will explore
+Before describing some standard combinational building blocks, we will explore
 how combinational circuits can be expressed in Chisel.
-The simplest form is a boolean expression, which can be assigned a name:
+The simplest form is a Boolean expression, which can be assigned a name:
 
-\todo{add examples}
+\input{code/comb_bool.txt}
+
+\noindent The Boolean expression is given a name (\code{e}) by assigning it
+to a Scala value. The expression can be reused in other expressions:
+
+\input{code/comb_use.txt}
+
+Such an expression is considered fixed. A reassignment to \code{e}
+with \code{=} would result in a Scala compiler error: \code{reassignment to val}.
+A try with the Chisel operator \code{:=}, as shown below,
+
+\input{code/comb_error.txt}
+
+\noindent results in a runtime exception: \code{Cannot reassign to read-only}.
+
+Chisel also supports describing combinational circuits with conditional updates.
+Such a circuit is declared as a \code{Wire} and uses conditional operations,
+such as \code{when} to describe the logic of the circuit.
+The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns a default
+value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassigns
+\code{3} to \code{w} if \code{cond} is \code{true.B}.
+
+\input{code/comb_wire.txt}
+
+\noindent The logic of the circuit is a multiplexer, where the two inputs are the constants
+\code{0} and \code{3} and the condition \code{cond} the select signal.
+Keep in mind that we describe hardware circuits and not a software program with conditional
+execution.
+
+The Chisel condition construct \code{when} has also a form of \emph{else}, it is called
+\code{otherwise}. With assigning a value under any condition we can omit the default
+value assignment:
+
+\input{code/comb_otherwise.txt}
+
+Chisel also supports a chain of conditionals (a if elseif else chain) with \code{.elsewhen}:
+
+\input{code/comb_elsewhen.txt}
+
+Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
+Those \code{.elsewhen} branches can be arbitrary long.
+However, if the chain of conditions depends on a single signal, it is better
+to use the \code{switch} statement, which is introduced in the following
+subsection with a decoder circuit.
+
+For more complex combinational circuits it might be practical to assign
+a default value to a \code{Wire}. This can be combined with the wire
+declaration with \code{WireDefault}.\footnote{In the current version of Chisel
+it is called WireInit, but will change with the release of Chisel 3.2}
+
+
+\input{code/comb_wiredefault.txt}
+
+One might question why using \code{when}, \code{.elsewhen}, and \code{otherwise}
+when Scala has \code{if}, \code{else if}, and \code{else}? Those statement are for
+conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
+Those Scala conditionals have their use in Chisel when we write circuit generators,
+which take parameters to conditionally generate \emph{different} hardware instances.
 
 \section{Decoder}
 
@@ -1254,8 +1311,8 @@ for the legal input values.
 
 Describe a combinational circuit to convert a 4-bit binary input to the encoding of a
 \myref{https://en.wikipedia.org/wiki/Seven-segment_display}{7-segment display}.
-You can either just define the codes for the decimal digits, which where the initial
-usage of 7-segment displays or asl define encodings for the remaining bit pattern
+You can either just define the codes for the decimal digits, which was the initial
+usage of a 7-segment display, or additionally define encodings for the remaining bit pattern
 to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
 When you have an FPGA board with a 7-segment display, connect 4 switches or
