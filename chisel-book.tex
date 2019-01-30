@@ -1032,9 +1032,9 @@ is assembled out of components C and D:
 
 \input{code/components_top.txt}
 
-Good component design is similar to a good design of functions or methods in
-software design. One of the main questions is how much functionality we put into
-a component and how large a component should be. The two extremes are very
+Good component design is similar to good design of functions or methods in
+software design. One of the main questions is how much functionality shall we put into
+a component and how large should a component be. The two extremes are very
 small components, such an adder, and very large components.
 
 Beginners in hardware design often start with very tiny components.
@@ -1043,8 +1043,8 @@ But the sizes of the examples (in those books, and also in this book) is small
 to fit into a page and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
-IO construction). As a rule of thumb I would propose that the core of the component
-the function should be at least as long as the interface to the component.
+IO construction). As a rule of thumb I would propose that the core of the component,
+the function, should be at least as long as the interface of the component.
 
 For very small components, such as a counter, Chisel provides a more lightweight
 way to describe them as functions that return hardware.
@@ -1054,7 +1054,7 @@ way to describe them as functions that return hardware.
 
 One of the central components for circuits that compute, e.g., a microprocessor, is an
 \myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic-logic unit},
-ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
+or ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 
 \begin{figure}
   \centering
@@ -1066,12 +1066,12 @@ ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 The ALU has two data inputs, labeled \code{A} and \code{B} in the figure, one function input \code{fn},
 and an output, labeled {Y}. The ALU operates on \code{A} and \code{B} and provides the result
 at the output. The input \code{fn} selects the operation on \code{A} and \code{B}.
-The operations are usually some arithmetic, sich as addition and subtraction, and some logical
+The operations are usually some arithmetic, such as addition and subtraction, and some logical
 functions such as and, or, xor. That's why it is called ALU.
 
 The operation is selected by the function input \code{fn}. The ALU is usually a combinational
 circuit without any state elements. An ALU might also have additional outputs to signal properties
-of the result, such as zero or sign.
+of the result, such as zero or the sign.
 
 The following code shows an ALU with 16-bit inputs and outputs that supports: addition, subtraction, or, and and
 operation, selected by a 2-bit \code{fn} signal.
@@ -1092,6 +1092,14 @@ In principle all combinational circuits can be described with Boolean equations.
 However, more often a description in form of a table is more efficient.
 We let the synthesize tool extract and minimize the Boolean equations.
 Two basic circuits, best described in a table form, are a decoder and an encoder.
+
+\section{Combinational Circuits}
+
+Before describing some standard combinational building blocks we will explore
+how combinational circuits can be expressed in Chisel.
+The simplest form is a boolean expression, which can be assigned a name:
+
+\todo{add examples}
 
 \section{Decoder}
 
@@ -1770,6 +1778,7 @@ writing is going on.}
 \section{Building Blocks}
 
  * building blocks (adder, mux, ALU, counter, memory)
+ * maybe split into combinational and sequential
 
 \section{Bundles and Vecs (better title needed)}
 
