@@ -24,6 +24,9 @@ chisel:
 	sbt "test:runMain RegisterTester"
 	sbt "test:runMain LogicTester"
 
+test:
+	sbt test
+
 eclipse:
 	sbt eclipse
 

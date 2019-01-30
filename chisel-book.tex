@@ -470,7 +470,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
   \centering
   \includegraphics[scale=\scale]{figures/logic}
   \caption{Logic for the expression \code{a \& b | c}.
-  The wires can be single bit or multiple bits. The Chisel expression (and the schematics) is the same.}
+  The wires can be single bit or multiple bits. The Chisel expression, and the schematics, are the same.}
   \label{fig:logic}
 \end{figure}
 
@@ -823,6 +823,41 @@ taking 0.022101 seconds
 In this section we described the basic testing facility with Chisel for simple tests.
 However, in Chisel the full power of Scala is available to write testers.
 We will show these possibilities later.
+
+\subsection{ScalaTest}
+
+\myref{http://www.scalatest.org/}{ScalaTest} is a testing tool for Scala (and Java),
+which we can use to run Chisel testers.
+To use it, include the library in your \code{build.sbt} with following line:
+
+\begin{verbatim}
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+\end{verbatim}
+
+\noindent Tests are usually found in \code{src/test/scala} and can be run with:
+
+\begin{verbatim}
+$ sbt test
+\end{verbatim}
+
+\noindent A minimal test (a testing hello world) to just test the Scala Integer
+addition:
+
+\input{code/scalatest_hello_world.txt}
+
+\noindent Although Chisel testing is more heavyweight than Scala unit testing,
+we can wrap a Chisel test into a ScalaTest class. For the \code{Tester} shown
+before this is:
+
+\input{code/scalatest_simple.txt}
+
+The main benefit of this exercise is to be able to run all tests with a simple
+\code{sbt test} (instead of a running \code{main}). You can run just a single
+test with \code{sbt}, as follows:
+
+\begin{verbatim}
+$ sbt "testOnly SimpleSpec"
+\end{verbatim}
 
 \section{Exercises}
 
