@@ -1119,6 +1119,42 @@ To use this utility function we need to import another Chisel package:
 
 \input{code/components_util.txt}
 
+\section{Lightweight Components with Functions}
+
+Modules are the general way to structure your hardware description.
+However, there is some boiler plate when declaring a module and when instantiating and
+connecting it.
+A lightweight way to structure your hardware is to use functions.
+Scala functions can take Chisel (and Scala) parameters and return generated hardware.
+As a simple example we generate an adder:
+
+\input{code/components_fn_def.txt}
+
+\noindent We can then create two adders by simply calling the function \code{adder}.
+
+\input{code/components_fn_use.txt}
+
+\noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
+during elaboration, but create two adders (hardware instances). The adder example is artificial
+to be a simple example. Chisel has already an adder generation function, like \code{+(that: UInt)}.
+
+Functions as lightweight hardware generators can also contain state (including a register).
+Following example returns a one clock cycle delay element (a register).
+
+\input{code/components_fn_delay.txt}
+
+\noindent By calling the function with the function itself as parameter, this generated a two
+clock cycle delay.
+
+\input{code/components_fn_2delay.txt}
+
+\noindent Again, this is a too short example to be useful, as \code{RegNext()}
+already is that function creating the register for the delay.
+
+Functions can be declared as part of a \code{Module}. However, functions that shall be
+used in different modules are better placed into a Scala object that just collects utility
+functions.
+
 \chapter{Combinational Building Blocks}
 
 In this chapter we explore various combinational circuits, basic building block that we can
@@ -1317,6 +1353,22 @@ to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
 When you have an FPGA board with a 7-segment display, connect 4 switches or
 buttons to the input of your circuit and the output to the 7-segment display.
+
+\chapter{Sequential Building Blocks}
+
+Sequential circuits a circuits where the output depends on the input \emph{and}
+a previous value. As we are interested in synchronous design (clocked designs),
+we mean synchronous sequential circuits when we talk about sequential
+circuits.\footnote{Sequential circuits can also build with asynchronous logic and
+feedback, but this is a specific niche topic and cannot be expressed in Chisel.}
+
+%\section{Register}
+%
+%The basic element to build sequential circuits are registers. A register is a collection
+%of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
+% A D flip-flop takes the v
+
+\todo{draw a flip-flop}
 
 \chapter{Example Components}
 

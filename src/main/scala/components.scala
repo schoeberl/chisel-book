@@ -109,3 +109,51 @@ class Alu extends Module {
   }
 }
 //- end
+
+class CompFn extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val out = Output(UInt(4.W))
+    val c = Input(UInt(4.W))
+    val d = Input(UInt(4.W))
+    val out2 = Output(UInt(4.W))
+    val del = Input(UInt(4.W))
+    val out3 = Output(UInt(4.W))
+  })
+
+  val a = io.a
+  val b = io.b
+  val c = io.c
+  val d = io.d
+  //- start components_fn_def
+  def adder (x: UInt, y: UInt) = {
+    x + y
+  }
+  //- end
+
+  //- start components_fn_use
+  val x = adder(a, b)
+  // another adder
+  val y = adder(c, d)
+  //- end
+
+  io.out := x
+  io.out2 := y - 1.U
+
+  val delIn = io.del
+
+  //- start components_fn_delay
+  def delay(x: UInt) = {
+    RegNext(x)
+  }
+  //- end
+
+  //- start components_fn_2delay
+  val delOut = delay(delay(delIn))
+  //- end
+
+  io.out3 := delOut
+
+
+}
