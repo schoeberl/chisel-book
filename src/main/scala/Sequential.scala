@@ -21,7 +21,7 @@ class Sequential extends Module {
 
   val delayIn = io.d2
   //- start sequ_reg2
-  val regDelay = Reg(UInt())
+  val regDelay = Reg(UInt(4.W))
 
   regDelay := delayIn
   //- end
@@ -29,7 +29,7 @@ class Sequential extends Module {
 
   val inVal = io.d3
   //- start sequ_reg_init
-  val regVal = RegInit(0.U)
+  val regVal = RegInit(0.U(4.W))
 
   regVal := inVal
   //- end
@@ -37,7 +37,7 @@ class Sequential extends Module {
 
   val enable = io.ena
   //- start sequ_reg_ena
-  val regEnable = Reg(UInt())
+  val regEnable = Reg(UInt(4.W))
 
   when (enable) {
     regEnable := inVal
@@ -46,7 +46,7 @@ class Sequential extends Module {
   io.q4 := regEnable
 
   //- start sequ_reg_init_ena
-  val regResetEnable = RegInit(0.U)
+  val regResetEnable = RegInit(0.U(4.W))
 
   when (enable) {
     regResetEnable := inVal
@@ -58,10 +58,48 @@ class Sequential extends Module {
 
 class SequCounter extends Module {
   val io = IO(new Bundle {
-    val q = Output(UInt(4.W))
+    val out = Output(UInt(4.W))
+    val event = Input(Bool())
+    val eventCnt = Output(UInt(4.W))
+    val tick = Output(Bool())
+    val lowCnt = Output(UInt(4.W))
+
   })
 
-  //- start sequ_counter
+  //- start sequ_free_counter
+  val regCnt = RegInit(0.U(4.W))
+
+  regCnt := regCnt + 1.U
+  //- end
+  io.out := regCnt
+
+  val event = io.event
+  //- start sequ_event_counter
+  val regEvents = RegInit(0.U(4.W))
+  when(event) {
+    regEvents := regEvents + 1.U
+  }
+  //- end
+  io.eventCnt := regEvents
+
+  val N = 5
+  //- start sequ_tick_gen
+  val regTickCounter = RegInit(0.U(4.W))
+  val tick = regTickCounter === (N-1).U
+
+  regTickCounter := regTickCounter + 1.U
+  when (tick) {
+    regTickCounter := 0.U
+  }
   //- end
 
+  //- start sequ_tick_counter
+  val regLowFrequCnt = RegInit(0.U(4.W))
+  when (tick) {
+    regLowFrequCnt := regLowFrequCnt + 1.U
+  }
+  //- end
+
+  io.tick := tick
+  io.lowCnt := regLowFrequCnt
 }

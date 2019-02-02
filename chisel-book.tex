@@ -1453,6 +1453,12 @@ captures the initial value of \code{0}. Input \code{inVal} is ignored. In the ne
 edge (labeled C). From then on \code{reset} stays \code{0}, as it should be, and the
 register output follows the input signal with one clock cycle delay.
 
+Waveforms are a good tool to specify the behavior of a circuit graphically.
+Especially in more complex circuits where many operations happen an parallel
+and data moves pipelined through the circuit, timing diagrams are very practical.
+Chisel testers can also produce waveforms during testing that can be displayed
+with a waveform viewer and used for debugging.
+
 A common design pattern is a register with an enable signal. Only when the enable signal
 it \code{true} (high), the register captures the input, otherwise it keeps its old value.
 This enable behavior can be implemented, similar to the synchronous reset with
@@ -1494,11 +1500,67 @@ with a conditional update:
 Now that we have explored all basic uses of a register, we will put those registers to
 good use and build more interesting sequential circuits.
 
-\section{Counter}
+\section{Counters}
 
-One of the most basic sequential circuit is a counter. In its simplest form a counter is a register
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/counter}
+  \caption{An adder and a register results in counter.}
+  \label{fig:counter}
+\end{figure}
+
+One of the most basic sequential circuit is a counter. In its simplest form, a counter is a register
 where the output is connected to an adder and the adder's output it connected to the input
-of the register.
+of the register. Figure~\ref{fig:counter} shows such a free-running counter.
+
+A free-running counter with a 4-bit register will run from 0 to 15 and then wrap around
+to 0 again. A counter shall also be reset to a known value.
+
+\input{code/sequ_free_counter.txt}
+
+\noindent When we want to count events, we simply use a condition to  increment the counter.
+
+\input{code/sequ_event_counter.txt}
+
+\subsection{Generating Timing with Counters}
+
+Besides counting events, counters are often used to generate timing.
+A synchronous circuit runs with a clock with a fixed frequency.
+The circuit proceeds in those clock ticks. There is no notion of time in a digital
+circuit other than counting clock ticks. If we know the clock frequency we
+can generate circuits that generate timed events, such as blinking a LED
+at some frequency as we have shown in the Chisel ``Hello World'' example.
+
+A common practice is to generate single cycle \emph{ticks} with a frequency $f_{tick}$
+that we need in our circuit. That tick occurs every $n$ clock cycles,
+where $n = f_{clock}/f_{tick}$ and is exactly one original clock cycle long.
+This tick is \emph{not} used as a derived clock, but as an enable signal for
+registers in the circuit that shall logically operate at frequency $f_{tick}$.
+
+In the following circuit we describe a counter that counts from \code{0}
+to the maximum value of \code{N - 1}. When the maximum value is reached,
+\code{tick} is \code{true} for a single cycle and the counter is reset to \code{0}.
+When we count from \code{0} to \code{N - 1}, we generate one logical tick
+every \code{N} clock cycles.
+
+\input{code/sequ_tick_gen.txt}
+
+\noindent This logical timing of one tick every $n$ clock cycles can then be used
+to advance other parts of our circuit with this slower, logical clock.
+In the following code we use just another counter that increments by \code{1}
+every $n$ clock cycles.
+
+\input{code/sequ_tick_counter.txt}
+
+Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
+generating the baud rate for a serial bus, generating signals for 7-segment
+display multiplexing, and subsampling input values for debouncing of buttons
+and switches. 
+
+Although width inference should size the registers values, it is better explicitly
+have the width specified wither with the type at register definition or with the
+initialization value. This can avoid surprises when a reset value of \code{0.U}
+results in a counter with a width of a single bit.
 
 \section{Stuff}
 
