@@ -1,12 +1,15 @@
 
 DOC=chisel-book
 
-all: gencode book
+all: gencode fig book
 
 gencode:
 	-mkdir code
 	sbt compile
 	scala scripts/gencode.scala
+
+fig:
+	cd figures; pdflatex *.tex
 
 book:
 	pdflatex $(DOC)

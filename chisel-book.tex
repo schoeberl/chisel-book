@@ -415,7 +415,7 @@ signed integer:
 \input{code/types.txt}
 
 \noindent The width of a vector of bits is defined by a Chisel width type (\code{Width}).
-The following expression casts the Scala integer \code{n} to a Chisel width,
+The following expression casts the Scala integer \code{n} to a Chisel \code{width},
 which is used for the definition of the \code{Bits} vector:
 
 \input{code/n_w.txt}
@@ -526,7 +526,8 @@ type.
 
 With logical and arithmetical operations and a multiplexer, every combinational
 circuit can be described. However, Chisel provides further components and control abstractions
-for a more elegant description of a combinational circuit, which are described lateer.
+for a more elegant description of a combinational circuit, which are described in
+a later chapter.
 
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
@@ -1359,16 +1360,150 @@ buttons to the input of your circuit and the output to the 7-segment display.
 Sequential circuits a circuits where the output depends on the input \emph{and}
 a previous value. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
-circuits.\footnote{Sequential circuits can also build with asynchronous logic and
+circuits.\footnote{We can also build sequential circuits with asynchronous logic and
 feedback, but this is a specific niche topic and cannot be expressed in Chisel.}
+To build sequential circuits we need elements that can store state: the so
+called registers.
 
-%\section{Register}
-%
-%The basic element to build sequential circuits are registers. A register is a collection
-%of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
-% A D flip-flop takes the v
+\section{Registers}
 
-\todo{draw a flip-flop}
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/register}
+  \caption{A D flip-flop based register.}
+  \label{fig:register}
+\end{figure}
+
+The basic element to build sequential circuits are registers. A register is a collection
+of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
+A D flip-flop captures the value of its input at the rising edge of the clock and stores
+it at its output. Or in other words: the register updates its output with the value of the input on the
+rising edge of the clock.
+
+Figure~\ref{fig:register} shows the schematic symbol of a register. I contains an input
+\code{D} and an output \code{Q}. Each register also contains in input for a clock signal.
+As this global clock signal is connected to all registers in a synchronous circuit, it is usually
+not drawn in a schematic. The little triangle on the bottom of the box symbolizes the
+clock input and tells us that this is a register.
+
+In Chisel a registers with input \code{d} and output \code{q} is defined with:
+
+\input{code/sequ_reg.txt}
+
+\noindent Note that we do not need to connect a clock to the register, this is
+implicitly done by Chisel. A register's input and output can be arbitrary complex types
+made out of a combination of vectors and bundles.
+
+A register can also be defined and used in two steps:
+
+\input{code/sequ_reg2.txt}
+
+First we define the register and give it a name, second we connect the signal
+\code{delayIn} to the input of the register. Note also the name of the register
+starting with \code{reg}. To easily distinguish elements between combinational
+circuits and sequential circuits it is common practice to prepend the marker
+\code{reg} to the name. Also note that names in Scala (and therefore
+also in Chisel) are usually in
+\myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
+Variable names start with lowercase and classes start with upper case.
+
+A register can also be initialized on reset. The reset signal is, like the clock signal,
+implicit in Chisel. We supply the reset value, e.g., zero, as a parameter to the register
+constructor \code{RegInit}. The input for the register is connected with a Chisel
+assignment statement.
+
+\input{code/sequ_reg_init.txt}
+
+The default implementation of reset in Chisel is a synchronous
+reset.\footnote{Support for asynchronous reset is currently under development}
+For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
+needs to be added to the input that selects between the initialization value under
+reset and the data values.
+
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/register-reset}
+  \caption{A D flip-flop based register with a synchronous reset.}
+  \label{fig:register-reset}
+\end{figure}
+
+Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
+where the reset drives the multiplexer. However, as synchronous reset is used quite often
+modern FPGAs flip-flops contain a synchronous reset (and set) input to not wast LUT
+resources for the multiplexer.
+
+Sequential circuits change their value over time. Therefore, their behavior can be described
+by a diagram showing the signals over time. Such a diagram is called waveform or timing diagram.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/reg_wave}
+  \caption{A waveform diagram for a register with a reset.}
+  \label{fig:register-wave}
+\end{figure}
+
+Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
+and some input data applied to it.
+Time advances from left to right. On top of the figure we see the clock that drives our circuit.
+In the first clock cycle, before a reset, the register is undefined. In the second clock cycle reset
+is asserted high and on the rising edge of this clock cycle (labeled B) the register
+captures the initial value of \code{0}. Input \code{inVal} is ignored. In the next clock cycle
+\code{reset} is \code{0} and the value of \code{inVal} is captured on the next rising
+edge (labeled C). From then on \code{reset} stays \code{0}, as it should be, and the
+register output follows the input signal with one clock cycle delay.
+
+A common design pattern is a register with an enable signal. Only when the enable signal
+it \code{true} (high), the register captures the input, otherwise it keeps its old value.
+This enable behavior can be implemented, similar to the synchronous reset with
+a multiplexer at the input of the register, where one input is the feedback of the
+output of the register.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/register-enable}
+  \caption{A D flip-flop based register with an enable signal.}
+  \label{fig:register-enable}
+\end{figure}
+
+Figure~\ref{fig:register-enable} shows the schematics of a register with an enable.
+As this is also a very common design pattern, modern FPGA flip-flops contain a
+dedicated enable input, and no additional resources are needed.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/reg_en_wave}
+  \caption{A waveform diagram for a register with an enable signal.}
+  \label{fig:register-en-wave}
+\end{figure}
+
+Figure~\ref{fig:register-en-wave} shows an example waveform for a register
+with enable. Most of the time enable it high (\code{true}) and the register
+follows the input with one clock cycle delay. Only in the forth clock cycle
+\code{enable} is low and the register keeps its value (5) at rising edge D.
+
+Oh, and yes, a register with an enable can be described in a few lines of Chisel code
+with a conditional update:
+
+\input{code/sequ_reg_ena.txt}
+
+\noindent And a register with enable can also be reset.
+
+\input{code/sequ_reg_init_ena.txt}
+
+Now that we have explored all basic uses of a register, we will put those registers to
+good use and build more interesting sequential circuits.
+
+\section{Counter}
+
+One of the most basic sequential circuit is a counter. In its simplest form a counter is a register
+where the output is connected to an adder and the adder's output it connected to the input
+of the register.
+
+\section{Stuff}
+
+\todo{Notes on what to describe: edge detector, also using a function (e.g., one has more inputs
+to detect pressed buttons)}
 
 \chapter{Example Components}
 
