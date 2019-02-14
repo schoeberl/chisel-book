@@ -1,0 +1,4 @@
+\begin{chisel}
+  0.U  // defines a UInt constant of 0
+  -3.S // defines a SInt constant of -3
+\end{chisel}

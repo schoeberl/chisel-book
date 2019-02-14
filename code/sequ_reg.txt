@@ -1,0 +1,3 @@
+\begin{chisel}
+  val q = RegNext(d)
+\end{chisel}

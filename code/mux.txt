@@ -1,0 +1,3 @@
+\begin{chisel}
+  val result = Mux(sel, a, b)
+\end{chisel}

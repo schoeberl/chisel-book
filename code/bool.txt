@@ -1,0 +1,5 @@
+\begin{chisel}
+  Bool()
+  true.B
+  false.B
+\end{chisel}

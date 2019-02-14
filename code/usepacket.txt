@@ -1,0 +1,10 @@
+\begin{chisel}
+import mypack._
+
+class AbcUser extends Module {
+  val io = IO(new Bundle{})
+
+  val abc = new Abc()
+
+}
+\end{chisel}

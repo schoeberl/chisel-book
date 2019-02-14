@@ -1,0 +1,24 @@
+\begin{chisel}
+class TopLevel extends Module {
+  val io = IO(new Bundle {
+    val in_a = Input(UInt(8.W))
+    val in_b = Input(UInt(8.W))
+    val in_c = Input(UInt(8.W))
+    val out_m = Output(UInt(8.W))
+    val out_n = Output(UInt(8.W))
+  })
+
+  // create C and D
+  val c = Module(new CompC())
+  val d = Module(new CompD())
+
+  // connect C
+  c.io.in_a := io.in_a
+  c.io.in_b := io.in_b
+  c.io.in_c := io.in_c
+  io.out_m := c.io.out_x
+  // connect D
+  d.io.in := c.io.out_y
+  io.out_n := d.io.out
+}
+\end{chisel}

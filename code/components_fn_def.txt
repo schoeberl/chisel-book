@@ -1,0 +1,5 @@
+\begin{chisel}
+  def adder (x: UInt, y: UInt) = {
+    x + y
+  }
+\end{chisel}

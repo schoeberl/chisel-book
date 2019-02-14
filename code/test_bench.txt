@@ -1,0 +1,13 @@
+\begin{chisel}
+class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
+
+  poke(dut.io.a, 3.U)
+  poke(dut.io.b, 1.U)
+  step(1)
+  expect(dut.io.out, 1)
+  poke(dut.io.a, 2.U)
+  poke(dut.io.b, 0.U)
+  step(1)
+  expect(dut.io.out, 0)
+}
+\end{chisel}

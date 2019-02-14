@@ -1,0 +1,72 @@
+\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Installing Chisel and FPGA Tools}{6}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Hello World}{7}{section.1.2}% 
+\contentsline {section}{\numberline {1.3}Chisel Hello World}{7}{section.1.3}% 
+\contentsline {section}{\numberline {1.4}An IDE for Chisel}{7}{section.1.4}% 
+\contentsline {section}{\numberline {1.5}Source Access}{8}{section.1.5}% 
+\contentsline {section}{\numberline {1.6}Further Reading}{8}{section.1.6}% 
+\contentsline {section}{\numberline {1.7}Exercises}{9}{section.1.7}% 
+\contentsline {chapter}{\numberline {2}Basic Circuits}{11}{chapter.2}% 
+\contentsline {section}{\numberline {2.1}Signal Types and Constants}{11}{section.2.1}% 
+\contentsline {section}{\numberline {2.2}Combinational Circuits}{12}{section.2.2}% 
+\contentsline {subsection}{\numberline {2.2.1}Multiplexer}{13}{subsection.2.2.1}% 
+\contentsline {section}{\numberline {2.3}Register for State}{14}{section.2.3}% 
+\contentsline {subsection}{\numberline {2.3.1}Counting}{15}{subsection.2.3.1}% 
+\contentsline {section}{\numberline {2.4}练习}{15}{section.2.4}% 
+\contentsline {chapter}{\numberline {3}Build Process and Testing}{17}{chapter.3}% 
+\contentsline {section}{\numberline {3.1}Building your Project with sbt}{17}{section.3.1}% 
+\contentsline {subsection}{\numberline {3.1.1}Source Organization}{17}{subsection.3.1.1}% 
+\contentsline {subsection}{\numberline {3.1.2}Running sbt}{19}{subsection.3.1.2}% 
+\contentsline {section}{\numberline {3.2}Testing with Chisel}{20}{section.3.2}% 
+\contentsline {subsection}{\numberline {3.2.1}ScalaTest}{22}{subsection.3.2.1}% 
+\contentsline {section}{\numberline {3.3}Exercises}{22}{section.3.3}% 
+\contentsline {subsection}{\numberline {3.3.1}A Minimal Project}{22}{subsection.3.3.1}% 
+\contentsline {subsection}{\numberline {3.3.2}A Testing Exercise}{24}{subsection.3.3.2}% 
+\contentsline {subsection}{\numberline {3.3.3}A More Complete Project}{24}{subsection.3.3.3}% 
+\contentsline {chapter}{\numberline {4}Components}{25}{chapter.4}% 
+\contentsline {section}{\numberline {4.1}Components in Chisel are Modules}{25}{section.4.1}% 
+\contentsline {section}{\numberline {4.2}An Arithmetic Logic Unit}{28}{section.4.2}% 
+\contentsline {section}{\numberline {4.3}Lightweight Components with Functions}{29}{section.4.3}% 
+\contentsline {chapter}{\numberline {5}Combinational Building Blocks}{31}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Combinational Circuits}{31}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Decoder}{33}{section.5.2}% 
+\contentsline {section}{\numberline {5.3}Encoder}{34}{section.5.3}% 
+\contentsline {section}{\numberline {5.4}Exercise}{35}{section.5.4}% 
+\contentsline {chapter}{\numberline {6}Sequential Building Blocks}{37}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Registers}{37}{section.6.1}% 
+\contentsline {section}{\numberline {6.2}Counters}{40}{section.6.2}% 
+\contentsline {subsection}{\numberline {6.2.1}Generating Timing with Counters}{41}{subsection.6.2.1}% 
+\contentsline {section}{\numberline {6.3}Stuff}{41}{section.6.3}% 
+\contentsline {chapter}{\numberline {7}Example Components}{43}{chapter.7}% 
+\contentsline {section}{\numberline {7.1}FIFO Buffer}{43}{section.7.1}% 
+\contentsline {chapter}{\numberline {8}A Processor Design}{45}{chapter.8}% 
+\contentsline {section}{\numberline {8.1}Start with an ALU}{45}{section.8.1}% 
+\contentsline {section}{\numberline {8.2}Decoding Instructions}{48}{section.8.2}% 
+\contentsline {section}{\numberline {8.3}Assembling Instructions}{50}{section.8.3}% 
+\contentsline {section}{\numberline {8.4}Exercise}{51}{section.8.4}% 
+\contentsline {chapter}{\numberline {9}Contributing to Chisel}{53}{chapter.9}% 
+\contentsline {section}{\numberline {9.1}Setup the Development Environment}{53}{section.9.1}% 
+\contentsline {section}{\numberline {9.2}Testing}{54}{section.9.2}% 
+\contentsline {section}{\numberline {9.3}Contribute with a Pull Request}{54}{section.9.3}% 
+\contentsline {section}{\numberline {9.4}Exercise}{54}{section.9.4}% 
+\contentsline {chapter}{\numberline {10}Chisel 2}{55}{chapter.10}% 
+\contentsline {chapter}{\numberline {11}Summary}{59}{chapter.11}% 
+\contentsline {chapter}{\numberline {12}Headings}{61}{chapter.12}% 
+\contentsline {section}{\numberline {12.1}Introduction}{61}{section.12.1}% 
+\contentsline {section}{\numberline {12.2}Basic Circuits}{61}{section.12.2}% 
+\contentsline {section}{\numberline {12.3}Build Process and Testing}{61}{section.12.3}% 
+\contentsline {section}{\numberline {12.4}Components/Modules}{61}{section.12.4}% 
+\contentsline {section}{\numberline {12.5}Building Blocks}{61}{section.12.5}% 
+\contentsline {section}{\numberline {12.6}Bundles and Vecs (better title needed)}{61}{section.12.6}% 
+\contentsline {section}{\numberline {12.7}Medium Complex Circuits (better title needed)}{61}{section.12.7}% 
+\contentsline {section}{\numberline {12.8}State Machines and Data Path}{61}{section.12.8}% 
+\contentsline {section}{\numberline {12.9}Memory}{61}{section.12.9}% 
+\contentsline {section}{\numberline {12.10}Tips and Tricks (better title needed)}{62}{section.12.10}% 
+\contentsline {section}{\numberline {12.11}Scala for Hardware Developers}{62}{section.12.11}% 
+\contentsline {section}{\numberline {12.12}More Complex Testing}{62}{section.12.12}% 
+\contentsline {section}{\numberline {12.13}Hardware Generation}{62}{section.12.13}% 
+\contentsline {section}{\numberline {12.14}Leros}{62}{section.12.14}% 
+\contentsline {section}{\numberline {12.15}Chisel 2}{62}{section.12.15}% 
+\contentsline {section}{\numberline {12.16}Chisel Projects}{62}{section.12.16}% 
+\contentsline {section}{\numberline {12.17}Appendix}{62}{section.12.17}% 
+\contentsline {section}{\numberline {12.18}Minor Pitfalls}{63}{section.12.18}% 

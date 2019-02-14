@@ -1,0 +1,5 @@
+\begin{chisel}
+  val regVal = RegInit(0.U(4.W))
+
+  regVal := inVal
+\end{chisel}

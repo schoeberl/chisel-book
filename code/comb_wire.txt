@@ -1,0 +1,8 @@
+\begin{chisel}
+  val w = Wire(UInt())
+
+  w := 0.U
+  when (cond) {
+    w := 3.U
+  }
+\end{chisel}

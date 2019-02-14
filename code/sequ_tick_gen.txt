@@ -1,0 +1,9 @@
+\begin{chisel}
+  val regTickCounter = RegInit(0.U(4.W))
+  val tick = regTickCounter === (N-1).U
+
+  regTickCounter := regTickCounter + 1.U
+  when (tick) {
+    regTickCounter := 0.U
+  }
+\end{chisel}

@@ -1,0 +1,3 @@
+\begin{chisel}
+  val reg = RegInit(0.U(8.W))
+\end{chisel}

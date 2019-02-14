@@ -1,0 +1,26 @@
+\begin{chisel}
+  switch(io.din) {
+    is(ADD.U) {
+      f := add
+      ena := true.B
+    }
+    is(ADDI.U) {
+      f := add
+      imm := true.B
+      ena := true.B
+    }
+    is(SUB.U) {
+      f := sub
+      ena := true.B
+    }
+    is(SUBI.U) {
+      f := sub
+      imm := true.B
+      ena := true.B
+    }
+    is(SHR.U) {
+      f := shr
+      ena := true.B
+    }
+    // ...
+\end{chisel}

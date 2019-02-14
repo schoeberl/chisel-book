@@ -1,0 +1,3 @@
+\begin{chisel}
+  val f = ~e
+\end{chisel}

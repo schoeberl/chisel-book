@@ -1,0 +1,3 @@
+\begin{chisel}
+  val logic = a & b | c
+\end{chisel}

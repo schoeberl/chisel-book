@@ -1,0 +1,6 @@
+\begin{chisel}
+  val regEvents = RegInit(0.U(4.W))
+  when(event) {
+    regEvents := regEvents + 1.U
+  }
+\end{chisel}

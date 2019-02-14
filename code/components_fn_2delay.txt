@@ -1,0 +1,3 @@
+\begin{chisel}
+  val delOut = delay(delay(delIn))
+\end{chisel}

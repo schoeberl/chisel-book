@@ -1,0 +1,5 @@
+\begin{chisel}
+  val regDelay = Reg(UInt(4.W))
+
+  regDelay := delayIn
+\end{chisel}

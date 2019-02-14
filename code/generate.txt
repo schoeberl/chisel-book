@@ -1,0 +1,5 @@
+\begin{chisel}
+object Hello extends App {
+  chisel3.Driver.execute(Array[String](), () => new Hello())
+}
+\end{chisel}

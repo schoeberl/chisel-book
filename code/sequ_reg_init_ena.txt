@@ -1,0 +1,7 @@
+\begin{chisel}
+  val regResetEnable = RegInit(0.U(4.W))
+
+  when (enable) {
+    regResetEnable := inVal
+  }
+\end{chisel}

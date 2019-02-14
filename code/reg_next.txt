@@ -1,0 +1,3 @@
+\begin{chisel}
+  val regNxt = RegNext(d)
+\end{chisel}

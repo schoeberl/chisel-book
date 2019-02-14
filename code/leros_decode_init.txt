@@ -1,0 +1,13 @@
+\begin{chisel}
+class Decode() extends Module {
+  val io = IO(new Bundle {
+    val din = Input(UInt(8.W))
+    val dout = Output(new DecodeOut)
+  })
+
+  val f = WireInit(nop)
+  val imm = WireInit(false.B)
+  val ena = WireInit(false.B)
+
+  io.dout.exit := false.B
+\end{chisel}

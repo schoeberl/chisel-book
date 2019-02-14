@@ -1,0 +1,3 @@
+\begin{chisel}
+  8.U(4.W) // An 4-bit constant of 8
+\end{chisel}
