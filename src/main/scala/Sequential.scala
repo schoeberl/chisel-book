@@ -11,6 +11,8 @@ class Sequential extends Module {
     val ena = Input(Bool())
     val q4 = Output(UInt(4.W))
     val q5 = Output(UInt(4.W))
+    val riseIn = Input(UInt(1.W))
+    val riseOut = Output(UInt(1.W))
   })
 
   val d = io.d
@@ -53,6 +55,12 @@ class Sequential extends Module {
   }
   //- end
   io.q5 := regResetEnable
+
+  val din = io.riseIn
+  //- start sequ_reg_expr
+  val risingEdge = din & !RegNext(din)
+  //- end
+  io.riseOut := risingEdge
 }
 
 

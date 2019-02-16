@@ -9,6 +9,7 @@ class SequentialTester(c: Sequential) extends PeekPokeTester(c) {
   poke(c.io.ena, 1)
   expect(c.io.q3, 0x0)
   expect(c.io.q5, 0x0)
+  poke(c.io.riseIn, 0)
   step(1)
   poke(c.io.d, 0x1)
   poke(c.io.d2, 0x2)
@@ -19,6 +20,8 @@ class SequentialTester(c: Sequential) extends PeekPokeTester(c) {
   expect(c.io.q3, 0xf)
   expect(c.io.q4, 0xf)
   expect(c.io.q5, 0xf)
+  poke(c.io.riseIn, 1)
+  expect(c.io.riseOut, 1)
   step(1)
   expect(c.io.q, 0x1)
   expect(c.io.q2, 0x2)
@@ -26,9 +29,12 @@ class SequentialTester(c: Sequential) extends PeekPokeTester(c) {
   expect(c.io.q4, 0xf)
   expect(c.io.q5, 0xf)
   poke(c.io.ena, 1)
+  expect(c.io.riseOut, 0)
   step(1)
   expect(c.io.q4, 0x3)
   expect(c.io.q5, 0x3)
+  expect(c.io.riseOut, 0)
+
 }
 
 class SequCounterTester(c: SequCounter) extends PeekPokeTester(c) {

@@ -1497,6 +1497,11 @@ with a conditional update:
 
 \input{code/sequ_reg_init_ena.txt}
 
+A register can also be part of an expression. Following circuit detects the rising edge
+of a signal by comparing its current value with the one in the last clock cycle.
+
+\input{code/sequ_reg_expr.txt}
+
 Now that we have explored all basic uses of a register, we will put those registers to
 good use and build more interesting sequential circuits.
 
@@ -1521,6 +1526,11 @@ to 0 again. A counter shall also be reset to a known value.
 \noindent When we want to count events, we simply use a condition to  increment the counter.
 
 \input{code/sequ_event_counter.txt}
+
+\subsection{Counting Up}
+
+To count up to a value and then restart with \code{0} we need to compare
+the counter value with a maximum constant.
 
 \subsection{Generating Timing with Counters}
 
@@ -1566,6 +1576,16 @@ results in a counter with a width of a single bit.
 
 \todo{Notes on what to describe: edge detector, also using a function (e.g., one has more inputs
 to detect pressed buttons)}
+
+\section{Exercise}
+
+Use the 7-segment encoder from the last exercise and add a 4-bit counter as input
+to switch count from \code{0} to \code{F}. When you directly connect this
+counter to the clock of the FPGA board, you will see all 16 digits basically
+overlapped. Therefore, you need to slow down the counting. Create a second
+counter that can generate a single-cycle \emph{tick} signal every millisecond.
+Use the signal as enable signal for the 4-bit counter.
+
 
 \chapter{Example Components}
 

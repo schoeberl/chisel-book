@@ -240,9 +240,7 @@ initReg := initReg + 1.U
 \begin{itemize}
 \item A register can also be defined within an expression
 \end{itemize}
-\begin{chisel}
-val risingEdge = d & !RegNext(d)
-\end{chisel}
+\input{../code/sequ_reg_expr.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Multiplexer}
