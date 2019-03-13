@@ -20,6 +20,7 @@ book:
 clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
 	rm -rf code
+	rm -rf test_run_dir
 
 chisel:
 	sbt "runMain Snippets"
@@ -29,6 +30,13 @@ chisel:
 
 test:
 	sbt test
+
+# test only one
+flasher:
+	sbt "testOnly FlasherSpec"
+
+detex:
+	detex chisel-book.tex > chisel-book.txt
 
 eclipse:
 	sbt eclipse

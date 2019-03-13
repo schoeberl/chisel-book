@@ -383,12 +383,12 @@ communicate different ``emotions''. E.g., a slow blinking LED signals that
 everything is ok, a fast blinking LED signals an alarm state.
 Explore which frequencies express best those two different emotions.
 
-As a more challenging extension to the exercise, generate following blinking pattern:
+As a more challenging extension to the exercise, generate the following blinking pattern:
 the LED shall be on for 200~ms every second. For this pattern, you might
 decouple the change of the LED blinking from the counter reset.
 You will need a second constant where you change the state of the
 \code{blkReg} register. What kind of emotion does this pattern produce?
-Is it alarming or more like a sign of live signal?
+Is it alarming or more like a sign-of-live signal?
 
 
 
@@ -1585,6 +1585,135 @@ counter to the clock of the FPGA board, you will see all 16 digits basically
 overlapped. Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every millisecond.
 Use the signal as enable signal for the 4-bit counter.
+
+\chapter{Communicating State Machines}
+
+A problem is often too complex to describe it with a single FSM.
+In that case, the problem can be divided into two or more smaller and simpler FSMs.
+Those FSMs then communicate with signals. One FSMs output is
+another FSMs input and the FSM watches the output of the other FSM.
+When we split a large FSM into simpler ones, this is called factoring FSMs.
+However, often communicating FSMs are directly designed from the specification,
+as often a single FSM would be infeasible large.
+
+\section{A Light Flasher Example}
+
+To discuss communicating FSMs, we use an example
+from~\cite[Chapter~17]{dally:vhdl:2016}, the light flasher.
+The light flasher has one input \code{start} and an output
+\code{light}. The specification of the light flasher is as follows:
+\begin{itemize}
+\item when \code{start} is high for one clock cycle, the flashing
+sequence starts;
+\item the sequence is to flash three times;
+\item where \code{light} goes \emph{on} for six clock cycles and \code{light} goes \emph{off} for four clock cycles between flashes;
+\item after the sequence, the FSM switches \code{light} \emph{off} and waits
+for the next start.
+\end{itemize}
+
+The FSM for a direct implementation\footnote{The state diagram is shown
+in~\cite[p.~376]{dally:vhdl:2016}.} has 27 states:
+one initial state that is waiting for the input, $3 \times 6$ states for the three
+\emph{on} states and $2 \times 4$ states for the \emph{off} states.
+We do not show the code for this simple minded implementation of the light
+flasher.
+
+The problem can be solved more elegantly by factoring this large FSM into
+two smaller FSMs: the master FSM implements the flashing logic and the timer FSM
+implements the waiting. Figure~\ref{fig:flasher} shows the composition of
+the two FSMs.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/flasher}
+  \caption{The light flasher split into a Master FSM and a Timer FSM.}
+  \label{fig:flasher}
+\end{figure}
+
+The timer FSM counts down for 6 or 4 clock cycles to produce the desired timing.
+The timer specification is as follows:
+
+\begin{itemize}
+\item when \code{timerLoad} is asserted, the timer loads a value into the down counter,
+independent of the state;
+\item \code{timerSelect} selects between 5 or 3 for the load;
+\item \code{timerDone} is asserted when the counter completed the countdown
+and remains asserted;
+\item otherwise the timer counts down.
+\end{itemize}
+
+\noindent Following code shows the timer FSM of the light flasher:
+
+
+\input{code/flasher_timer.txt}
+
+\noindent Following code shows the master FSM:
+
+\input{code/flasher_fsm.txt}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/flasher2}
+  \caption{The light flasher split into a Master FSM, a Timer FSM, and a Counter FSM.}
+  \label{fig:flasher2}
+\end{figure}
+
+This solution with a master FSM and a timer has still redundancy in the code
+of the master FSM. States \code{flash1}, \code{flash2}, and \code{flash3}
+are performing the same function, states \code{space1} and \code{space2} as well.
+We can factor out the number of remaining flashes into a second counter.
+Then the master FSM is reduced to three states: \code{off}, \code{flash},
+and \code{space}.
+
+Figure~\ref{fig:flasher2} shows the design with a master FSM and two FSMs
+that count: one FSM to count clock cycles for the interval length of \emph{on}
+and \emph{off}; the second FSM to count the remaining flashes.
+
+Following code shows the down counter FSM:
+
+\input{code/flasher2_counter.txt}
+
+\noindent Note, that the counter is loaded with 2 for 3 flashes, as it counts the
+\emph{remaining} flashes and is decremented in state \code{space} when the timer
+is done. The master FSM for the double refactored flasher:
+
+\input{code/flasher2_fsm.txt}
+
+Besides having a master FSM that is reduced to just three states, our current solution
+is also better configurable. No FSM needs to be changed if we want to change
+the length of the \emph{on} or \emph{off} intervals or the number of flashes.
+
+In this section, we have explored communicating circuits, especially FSM, that
+only exchange control signals. However, circuits can also exchange data.
+For the coordinated exchange of data we use handshake signals.
+The next section describes the ready-valid interface for flow control of
+unidirectional data exchange.
+
+\section{Ready-Valid Interface}
+
+Communication of subsystems can be generalized to the movement
+of data and handshaking for flow-control.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/readyvalid}
+  \caption{The ready-valid flow control.}
+  \label{fig:readyvalid}
+\end{figure}
+
+The ready-valid interface~\cite[p.~480]{dally:vhdl:2016} is a simple flow
+control interface consisting of \code{data} and a \code{valid} signal at the
+sender side and a \code{ready} signal at the receiver side (see
+Figure~\ref{fig:readyvalid}). The sender asserts \code{valid} when data is available
+and the receiver asserts \code{ready} when it is ready to receive one word
+of data. The transmission of the data happens when both signals, \code{valid}
+and \code{ready}, are asserted. If either of the two signals is not asserted,
+no transfer takes place.
+
+To make this interface composable neither \code{ready} not \code{valid} is
+allowed to depend combinational on the other signal.
+
+\todo{Read and cite AXI}
 
 
 \chapter{Example Components}
