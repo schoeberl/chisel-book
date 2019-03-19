@@ -906,7 +906,7 @@ We may also find the reset and update of those registers at the end of the modul
 Note, that Chisel generates a synchronous reset.
 
 For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library
-we nee a \code{build.sbt}:
+we need a \code{build.sbt}:
 
 \begin{chisel}
 scalaVersion := "2.11.7"
@@ -971,7 +971,7 @@ Testing within Chisel can really speedup the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
 with the FPGA. There you can perform a reality check on the size of your design (usually
 in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
-As a reference point, a decent pipelined RISC processor may consume about 300
+As a reference point, a decent pipelined RISC processor may consume about 3000
 4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
 Xilinx Spartan).
 
@@ -1583,8 +1583,8 @@ Use the 7-segment encoder from the last exercise and add a 4-bit counter as inpu
 to switch count from \code{0} to \code{F}. When you directly connect this
 counter to the clock of the FPGA board, you will see all 16 digits basically
 overlapped. Therefore, you need to slow down the counting. Create a second
-counter that can generate a single-cycle \emph{tick} signal every millisecond.
-Use the signal as enable signal for the 4-bit counter.
+counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
+Use that signal as enable signal for the 4-bit counter.
 
 \chapter{Communicating State Machines}
 
@@ -1688,6 +1688,56 @@ only exchange control signals. However, circuits can also exchange data.
 For the coordinated exchange of data we use handshake signals.
 The next section describes the ready-valid interface for flow control of
 unidirectional data exchange.
+
+\section{State Machine with Datapath}
+
+One common example of communicating state machines is a state machine
+combined with a datapath. This combination is often called A finite state machine
+with datapath (FSMD). The state machine controls the datapath and the datapath
+performs the computation. The FSM input is input from the environment and input
+from the datapath. The data from the environment is fed into the datapath and the
+data output comes from the datapath. Figure~\ref{fig:popcnt-fsmd} shows an example
+of the combination of the FSM with the datapath.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/popcnt-fsmd}
+  \caption{A state machine with a datapath.}
+  \label{fig:popcnt-fsmd}
+\end{figure}
+
+\subsection{Popcount Example}
+
+The FSMD shown in Figure~\ref{fig:popcnt-fsmd} serves as an example that computes the
+popcount, also called the \myref{https://en.wikipedia.org/wiki/Hamming_weight}{Hamming weight}.
+The Hamming weight is the number of symbols different from the zero symbol.
+For a binary string this is the number of `1's.
+
+The popcount unit contains the data input \code{din} and the result output \code{popCount},
+both connected to the datapath. For the input and for the output we use a ready-valid handshake.
+When data is available, valid is asserted. When a receiver can accept data it asserts ready.
+When both signals are asserted the transfer takes place. The handshake signals are connected
+to the FSM. The FSM is connected with the datapath with control signals towards the datapath
+and with status signals from the datapath.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/popcnt-states}
+  \caption{State digram for the popcount FSM.}
+  \label{fig:popcnt-states}
+\end{figure}
+
+As a next step we can design the FSM, starting with a state diagram, shown in
+Figure~\ref{fig:popcnt-states}. We start in state \code{Idle}, where the FSM simply waits
+for input. When data arrives, signaled with a valid signal we advance to state \code{Load}
+to load a shift register. The FSM proceeds to the next state \code{Count}, there the number
+of `1's is counted sequentially. We will use a shift register, and adder, an accumulator
+register, and a down counter to perform the computation. When the down counter reaches
+zero we are finished and move to state \code{Done}. There the FSM signals with a valid
+signal that the popcount value is ready to be consumed. On a ready signal from the
+receiver the FSM moves back to the \code{Idle} state, ready to compute the next popcount.
+
+
 
 \section{Ready-Valid Interface}
 
