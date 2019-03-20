@@ -64,16 +64,6 @@
 			<string>coded</string>
 			<string>BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2JqZWN0AIWEASqEhAFxlwCG</string>
 		</array>
-		<key>NSPrinter</key>
-		<array>
-			<string>coded</string>
-			<string>BAtzdHJlYW10eXBlZIHoA4QBQISEhAlOU1ByaW50ZXIAhIQITlNPYmplY3QAhZKEhIQITlNTdHJpbmcBlIQBKw9jdXBzLmltbS5kdHUuZGuGhg==</string>
-		</array>
-		<key>NSPrinterName</key>
-		<array>
-			<string>string</string>
-			<string>cups.imm.dtu.dk</string>
-		</array>
 		<key>NSRightMargin</key>
 		<array>
 			<string>float</string>
@@ -485,7 +475,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{350.68041907716542, 105.5}, {62.58837890625, 23}}</string>
+					<string>{{343.34081946779042, 105.5}, {77.267578125, 23}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -546,7 +536,7 @@
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs22 \cf0 pcntReady}</string>
+\f0\fs22 \cf0 popCntReady}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -604,7 +594,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{346.06601572036743, 204.5}, {57.7060546875, 23}}</string>
+					<string>{{352.18369150161743, 204.5}, {45.470703125, 23}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -665,7 +655,7 @@
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs22 \cf0 popCount}</string>
+\f0\fs22 \cf0 popCnt}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -871,7 +861,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{351.20947350095958, 78.5}, {54.4404296875, 23}}</string>
+					<string>{{343.86987389158458, 78.5}, {69.11962890625, 23}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -932,7 +922,7 @@
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs22 \cf0 pcntValid}</string>
+\f0\fs22 \cf0 popCntValid}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>

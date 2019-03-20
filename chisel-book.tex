@@ -1737,12 +1737,51 @@ zero we are finished and move to state \code{Done}. There the FSM signals with a
 signal that the popcount value is ready to be consumed. On a ready signal from the
 receiver the FSM moves back to the \code{Idle} state, ready to compute the next popcount.
 
+The top level component instantiates the FSM and the datapath components and connects
+them with bulk connections.
 
+\input{code/popcnt_main.txt}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/popcnt-data}
+  \caption{Datapath for the popcount circuit.}
+  \label{fig:popcnt-data}
+\end{figure}
+
+Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
+The data is loaded into the \code{shf} register. On the load also the \code{cnt}
+register is reset to 0. To count the number of `1's, the \code{shf} register is shifted
+right and the least significant bit is added to \code{cnt} each clock cycle.
+A counter, not shown in the figure, counts down until all bits have been shifted
+through the least significant bit. When the counter reaches zero, the popcount
+has finished. The FSM switches to state \code{Done} and signals the result
+by asserting \code{popCntReady}. When the result is read, signaled by asserting
+\code{popCntValid} the FSW switches back to \code{Idle}.
+
+On a \code{load} signal, the \code{regData} register is loaded with the input,
+the \code{regPopCount} register reset to 0, and the counter register \code{regCount}
+set to the number of shifts to be performed.
+
+Otherwise, the \code{regData} register is shifted to the right, the least significant bit
+of the \code{regData} register added to the \code{regPopCount} register, and the counter
+decremented until it is 0. When the counter is 0, the output contains the popcount.
+
+\input{code/popcnt_data.txt}
+
+The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it
+switches to the \code{count} state and waits till the datapath has finished counting.
+When the popcount is valid the FSM switches to state \code{done} and waits till the
+popcount is read (signaled by \code{popCntReady}).
+
+\input{code/popcnt_fsm.txt}
 
 \section{Ready-Valid Interface}
 
 Communication of subsystems can be generalized to the movement
-of data and handshaking for flow-control.
+of data and handshaking for flow-control. In the popcount example
+we have seen a handshaking interface for the input and the output data
+using valid and ready signals.
 
 \begin{figure}
   \centering
@@ -1754,7 +1793,7 @@ of data and handshaking for flow-control.
 The ready-valid interface~\cite[p.~480]{dally:vhdl:2016} is a simple flow
 control interface consisting of \code{data} and a \code{valid} signal at the
 sender side and a \code{ready} signal at the receiver side (see
-Figure~\ref{fig:readyvalid}). The sender asserts \code{valid} when data is available
+Figure~\ref{fig:readyvalid}). The sender asserts \code{valid} when \code{data} is available
 and the receiver asserts \code{ready} when it is ready to receive one word
 of data. The transmission of the data happens when both signals, \code{valid}
 and \code{ready}, are asserted. If either of the two signals is not asserted,
