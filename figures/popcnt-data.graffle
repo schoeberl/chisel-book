@@ -381,7 +381,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-03-20 15:11:46 +0000</string>
+	<string>2019-03-21 13:09:56 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -1515,13 +1515,13 @@
 								<key>element</key>
 								<string>MOVETO</string>
 								<key>point</key>
-								<string>{188.5, 171}</string>
+								<string>{261, 171}</string>
 							</dict>
 							<dict>
 								<key>element</key>
 								<string>LINETO</string>
 								<key>point</key>
-								<string>{189, 99}</string>
+								<string>{261, 99}</string>
 							</dict>
 							<dict>
 								<key>element</key>
@@ -1545,8 +1545,8 @@
 					</dict>
 					<key>Points</key>
 					<array>
-						<string>{188.5, 171}</string>
-						<string>{189, 99}</string>
+						<string>{261, 171}</string>
+						<string>{261, 99}</string>
 						<string>{54, 99}</string>
 						<string>{54, 144}</string>
 						<string>{72, 144}</string>
@@ -2212,7 +2212,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{32.25, 11.5}, {341.5, 333.5}}</string>
+		<string>{{32.5, 11.5}, {341.5, 333.5}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>
