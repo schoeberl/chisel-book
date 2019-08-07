@@ -122,6 +122,7 @@ Java, or TCL/TK to generate hardware to move to a single hardware construction l
 where hardware generation is part of the language and
 (2) software programmers who are becoming interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
+Chisel is perfectly fine to be used as first hardware description language.
 
 \todo{Why Chisel}
 
@@ -340,7 +341,7 @@ As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-e
 repository from GitHub.
 The Hello World example is in its own folder \code{hello-world}, setup as
 a minimal project. You can explore the Chisel code of the blinking LED
-in \code{Hello.scala}.
+in \code{src/main/scala/Hello.scala}.
 Compile the blinking LED with following steps:
 
 \begin{chisel}
@@ -357,11 +358,6 @@ Those signals are implicitly generated and in most designs it is convenient to n
 deal with these low-level details. Chisel provides register components and those
 are connected automatically to \code{clock} and \code{reset} (if needed).
 
-
-We also provide an additional Verilog top level in \code{verilog/hello\_top.v},
-which can be used to avoid connecting a reset signal (as FPGA registers usually
-are set to 0 on FPGA configuration).
-
 The next step is to setup an FPGA project file for the synthesize tool, assign the pins,
 and compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
 performing place and route, performing timing analysis, and generating a bitfile.
@@ -376,6 +372,9 @@ compile it by pressing the \emph{Play} button, and configure the FPGA board
 with the \emph{Programmer} button and one of the LEDs should blink.
 
 {\bf Gratulation! You managed to get your first design in Chisel running in an FPGA!}
+
+If the LED is not blinking, check the statues of reset. On the DE2-115 configuration
+the reset input is connected to SW0.
 
 Now change the blinking frequency to a slower or a faster value and
 rerun the build process. Blinking frequencies and also blinking patterns
