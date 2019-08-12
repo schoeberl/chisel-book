@@ -42,6 +42,7 @@
 \usepackage{cite}
 %\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
 \usepackage{dirtree}
+\usepackage{pdfpages}
 
 \newcommand{\code}[1]{{\small{\texttt{#1}}}}
 \newcommand{\codefoot}[1]{{\footnotesize{\texttt{#1}}}}
@@ -93,21 +94,25 @@
 
 \begin{document}
 
-\title{Digital Design with Chisel}
 
-\author{Martin Schoeberl}
+\includepdf{chisel-cover.pdf}
 
-\maketitle \thispagestyle{empty}
 
-These lecture notes, which shall become a book, are an introduction into digital design with the focus
-on using the hardware construction language
-\myref{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
-is to present small to medium sized typical hardware components to explore
-hardware design with Chisel.
-We will walk through these examples in detail.
+%\title{Digital Design with Chisel}
+%
+%\author{Martin Schoeberl}
+%
+%\maketitle \thispagestyle{empty}
+%
+%These book is an introduction into digital design with the focus
+%on using the hardware construction language
+%\myref{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
+%is to present small to medium sized typical hardware components to explore
+%hardware design with Chisel.
+%We will walk through these examples in detail.
 
 \tableofcontents
-
+  
 \chapter{Introduction}
 \label{sec:intro}
 
@@ -190,7 +195,8 @@ We include links to further reading in the running text, mostly to
 \section{Installing Chisel and FPGA Tools}
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
-with \code{sbt}, the Scala build tool.
+with \code{sbt}, the Scala build tool. Scala itself depends on an installation
+of the \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}.
 
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} is installed with:
@@ -217,7 +223,7 @@ sudo apt-get install sbt
 Chisel and Scala can also be installed and used under Windows.
 For instructions see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
-\todo{Test Windows version}
+
 
 To build hardware for an FPGA you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
@@ -301,19 +307,26 @@ $ sbt eclipse
 and import that project in Eclipse.
 In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
 
-\section{Source Access}
+\section{Source Access and eBook Features}
 
 This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
 Small Chisel code snippets are included in the repository of the book.
 Larger examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way
 to incorporate your improvement.
 
+This book is freely available as a PDF eBook.\footnote{A print version will soon be available
+from Amazon.com.} The eBook version features links to further resources
+and \myref{https://www.wikipedia.org/}{Wikipedia} entries.
+Wikipedia entries are used for background information (e.g., binary number system)
+that does not directly fit into this book.
+The format of the eBook is optimized for reading on a tablet, such as an iPad.
+
 \section{Further Reading}
 
 Here a list of further reading for digital design and Chisel:
 \begin{itemize}
 \item \myref{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
-is a modern textbook on digital design.
+is a modern textbook on digital design. It is available in two versions: using Verilog or VHDL as hardware description language.
 \end{itemize}
 
 The official Chisel documentation and further documents are available online:
@@ -336,7 +349,7 @@ a Chisel course focusing on hardware generators, as a Jupyter notebook
 \section{Exercises}
 
 Each chapter ends with hands-on exercises. For the introduction exercise we will use an
-FPGA board to get one LED blinking.
+FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED} blinking.
 As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository from GitHub.
 The Hello World example is in its own folder \code{hello-world}, setup as
@@ -504,7 +517,7 @@ A \myref{https://en.wikipedia.org/wiki/Multiplexer}{multiplexer} is a circuit th
 In the most basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
 such a 2:1 multiplexer, or mux for short. Depending on the value of the
 select signal (\code{sel}) signal \code{y} will represent signal \code{a} or
-signale \code{b}.
+signal \code{b}.
 
 \begin{figure}
   \centering
@@ -879,12 +892,12 @@ Each file starts with the import of Chisel and related packages:
 \input{code/import.txt}
 
 \noindent Then follows the hardware description, as shown in Figure~\ref{fig:chisel:hello}.
-To generate the Verilog description we need an application. A Scala object that \code{extends APP}
+To generate the Verilog description we need an application. A Scala object that \code{extends App}
 is an application that implicitly generates a main function where the application starts.
 The only action of this application is to create a new \code{HelloWorld} object and pass it
 to the Chisel driver \code{execute} function. The first argument is an array of Strings,
 where build options can be set (e.g., the output folder). The following code will
-generate the Verilog file \code{HelloWorld.v}.
+generate the Verilog file \code{Hello.v}.
 
 \input{code/generate.txt}
 
@@ -938,10 +951,10 @@ can simply generate the Verilog code with:
 make
 \end{chisel}
 
-The project also contains a
-\myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/verilog/hello_top.v}{Verilog top level},
-which wires the reset signal to 0.
-This works for our example in an FPGA, as registers usually power up 0.
+%The project also contains a
+%\myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/verilog/hello_top.v}{Verilog top level},
+%which wires the reset signal to 0.
+%This works for our example in an FPGA, as registers usually power up 0.
 Besides a \code{README} file, the example project also contains project
 files for different FPGA board. E.g., in
 \myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world/quartus/altde2-115}{quartus/altde2-115} 
@@ -997,12 +1010,12 @@ We should probably postpone this for later.}
 
 A larger digital design is structured into a set of components, often in
 a hierarchical way. Each component has an interface with input and output
-wires, usually called ports. These are similar to input and output pins in an IC.
+wires, usually called ports. These are similar to input and output pins in an integrated circuit (IC).
 Components are connected by wiring up the inputs and outputs.
 Components may contain subcomponents to build the hierarchy.
 
 Figure~\ref{fig:components} shows an example design. Component C has
-two input ports and two output ports. The component itself is assembled out
+three input ports and two output ports. The component itself is assembled out
 of two subcomponents: B and C, wich are connected to the inputs and
 outputs of C. One output of A is connected to an input of B.
 Component D is at the same hierarchy level as component C and connected
@@ -1509,7 +1522,7 @@ good use and build more interesting sequential circuits.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/counter}
-  \caption{An adder and a register results in counter.}
+  \caption{An adder and a register result in counter.}
   \label{fig:counter}
 \end{figure}
 
