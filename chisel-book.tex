@@ -1625,6 +1625,7 @@ An implementation of an FSM consists of three parts: (1) a register that holds t
 (2) combinational logic that computes the next state dependent on the current
 state and the input, and (3) combinational logic that computes the output of the FSM.
 
+\section{Basic Finite-State Machine}
 
 \begin{figure}
   \centering
@@ -1700,6 +1701,38 @@ red & 0 & 1 & green & 1 \\
 \label{tab:state:table}
 \end{table}
 
+Finally, after all the design of our warning level FSM we shall code it in Chisel:
+
+\input{code/simple_fsm.txt}
+
+The complete Chisel code for this simple FSM fits into one page.
+Let us step through the individual parts.
+The FSM has two input and a single output signal, captured in a Chisel \code{Bundle}:
+\input{code/simple_fsm_io.txt}
+
+\noindent Quite some work has been spent in optimal state encoding. Two common options
+are binary or one-hot encoding. However, we leave those low-level decisions to
+the synthesize tool and aim for readable code. Therefore, we use an enumeration
+type with symbolic names for the states:
+
+\input{code/simple_fsm_states.txt}
+
+\noindent The register holding the state is defined with the \emph{green} state as the reset value:
+
+\input{code/simple_fsm_register.txt}
+
+\noindent The meat of the FSM is in the next state logic. We use a Chisel switch on the
+state register to cover all states. Within each \code{is} branch we code the next state
+logic, which depends on out inputs, by assigning a new value for our state register:
+
+\input{code/simple_fsm_next.txt}
+
+\noindent Lats, but not least we code our \emph{ringing bell} output to be true when
+the state is \emph{red}.
+
+\input{code/simple_fsm_output.txt}
+
+\section{Faster Output with a Mealy FSM}
 
 \begin{figure}
   \centering
@@ -1713,9 +1746,13 @@ the input of the FSM and the output, this is called a
 \myref{https://en.wikipedia.org/wiki/Mealy_machine}{Mealy machine}.
 Figure~\ref{fig:mealy} shows a Mealy type FSM. The register contains the current \code{state}.
 
+\todo{Do the edge detection as Mealy machine, show Chisel, HW and than States}
+
 \section{Moore versus Mealy FSM}
 
 \section{Exercise}
+
+\todo{Maybe edge detection as Moor machine plus evaluation of the effects.}
 
 \chapter{Communicating State Machines}
 
