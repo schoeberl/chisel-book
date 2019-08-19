@@ -104,12 +104,26 @@
 
 \maketitle \thispagestyle{empty}
 
+% This text goes on the backside of the book
 These book is an introduction into digital design with the focus
-on using the hardware construction language
-\myref{https://chisel.eecs.berkeley.edu/}{Chisel}. The approach of this book
+on using the hardware construction language Chisel.
+Chisel brings advances in software engineering, such as object orientated
+and functional languages, into digital design.
+
+This book addresses hardware designers and software engineers.
+Hardware designers, with a knowledge in Verilog or VHDL, can upgrade
+their productivity with a modern language for their next ASIC design.
+Software engineers, with knowledge of object oriented and functional
+programming, can use their knowledge to program hardware, for example
+FPGA accelerators executing in the cloud.
+
+
+The approach of this book
 is to present small to medium sized typical hardware components to explore
 hardware design with Chisel.
 We will walk through these examples in detail.
+
+
 
 \tableofcontents
   
@@ -730,7 +744,7 @@ $ sbt run
 This command will compile all your Chisel code from the source tree and searches
 for classes that contain an \code{object} that contains a \code{main} method, or simpler
 that extends \code{App}. If there is more than one such object, all objects are listed and
-can be selected.
+one can be selected.
 You can also directly specify the object that shall be executed as parameter to \code{sbt}:
 
 \begin{verbatim}
@@ -1392,7 +1406,7 @@ A D flip-flop captures the value of its input at the rising edge of the clock an
 it at its output. Or in other words: the register updates its output with the value of the input on the
 rising edge of the clock.
 
-Figure~\ref{fig:register} shows the schematic symbol of a register. I contains an input
+Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
 \code{D} and an output \code{Q}. Each register also contains in input for a clock signal.
 As this global clock signal is connected to all registers in a synchronous circuit, it is usually
 not drawn in a schematic. The little triangle on the bottom of the box symbolizes the
@@ -1704,7 +1718,7 @@ unidirectional data exchange.
 \section{State Machine with Datapath}
 
 One common example of communicating state machines is a state machine
-combined with a datapath. This combination is often called A finite state machine
+combined with a datapath. This combination is often called a finite state machine
 with datapath (FSMD). The state machine controls the datapath and the datapath
 performs the computation. The FSM input is input from the environment and input
 from the datapath. The data from the environment is fed into the datapath and the
@@ -1817,7 +1831,7 @@ allowed to depend combinational on the other signal.
 \todo{Read and cite AXI}
 
 
-\chapter{Example Components}
+\chapter{Example Designs}
 
 In this section we explore some medium sizes digital designs, such as
 a FIFO buffer, which are used as building blocks for larger design.
@@ -2199,7 +2213,7 @@ new features.
 In the Chisel project no developer commits directly to the main repository.
 A contribution is organized via a
 \myref{https://help.github.com/articles/creating-a-pull-request-from-a-fork/}{pull request}
-from a branch in a forked version of library.
+from a branch in a forked version of the library.
 For further information see the documentation at GitHub on
 \myref{https://help.github.com/categories/collaborating-with-issues-and-pull-requests/}{collaboration with
 pull requests}.
@@ -2211,13 +2225,13 @@ guide lines}.
 
 Invent a new operator for the \code{UInt} type, implement it in the Chisel library,
 and write some usage/test code to explore the operator. It does not need to be
-a very useful operator, just anything, e.g., a ? operator that delivers the lefthand side
+a very useful operator, just anything will do, e.g., a ? operator that delivers the lefthand side
 if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
 How many lines of code did you need to add?\footnote{A quick a dirty implementation
 needs just two lines of Scala code.}
 
 As simple as this was, please be not tempted to fork the Chisel project and
-add you little extensions. Changes and extension shall be coordinated with the
+add your little extensions. Changes and extension shall be coordinated with the
 main developers.
 This was just a simple exercise to get you started.
 
