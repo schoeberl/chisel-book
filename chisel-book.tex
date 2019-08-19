@@ -1,5 +1,5 @@
 \documentclass[%draft,
-    10pt, % use explicit paper size
+    10pt,
     headinclude, footexclude,
     % twoside, % this produces strange margins!
     openright, % for new chapters
@@ -20,19 +20,12 @@
 %\typearea{calc} % without BCOR results to a DIV of 8 for 11pt
 \typearea[1cm]{18} % TODO: check if 1 cm is the correct number
 
-% I should switch:
-% From KOMA-Script 3.12 the completely newly implemented package scrlayer-scrpage replaces the old scrpage2.
-% headings
-\usepackage{scrpage2} % for headers
- \setkomafont{pagehead}{\scshape\small}
- \setkomafont{pagenumber}{\scshape\small}
- \automark[section]{chapter}
- % The following has no influence on the text
-% \ohead[]{\pagemark}
-% \chead[]{}
-% \ihead[]{\headmark}
-% \ofoot[]{} \cfoot[]{} \ifoot[]{}
- 
+\usepackage{scrlayer-scrpage}
+\setkomafont{pagehead}{\scshape\small}
+\setkomafont{pagenumber}{\scshape\small}
+\cfoot{\hyperlink{contents}{Contents}}
+
+
 \usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
 \usepackage[colorlinks=true,bookmarks=false]{hyperref}
 \usepackage{booktabs}
@@ -57,10 +50,11 @@
 
 
 \hypersetup{
-  linkcolor  = black,
+  linkcolor  = blue,
   citecolor  = blue,
   urlcolor   = blue,
   colorlinks = true,
+  bookmarks=true,
 }
 
 % not really used
@@ -111,11 +105,11 @@ Chisel brings advances in software engineering, such as object orientated
 and functional languages, into digital design.
 
 This book addresses hardware designers and software engineers.
-Hardware designers, with a knowledge in Verilog or VHDL, can upgrade
-their productivity with a modern language for their next ASIC design.
+Hardware designers, with a knowledge of Verilog or VHDL, can upgrade
+their productivity with a modern language for their next ASIC or FPGA design.
 Software engineers, with knowledge of object oriented and functional
-programming, can use their knowledge to program hardware, for example
-FPGA accelerators executing in the cloud.
+programming, can leverage their knowledge to program hardware,
+for example FPGA accelerators executing in the cloud.
 
 
 The approach of this book
@@ -124,8 +118,11 @@ hardware design with Chisel.
 We will walk through these examples in detail.
 
 
-
+\phantomsection
+\hypertarget{contents}{}
 \tableofcontents
+
+
   
 \chapter{Introduction}
 \label{sec:intro}
@@ -1617,12 +1614,30 @@ Use that signal as enable signal for the 4-bit counter.
 
 \chapter{Finite-State Machines}
 
-A Finite-state machines (FSM) is a basic building block in digital design.
+A finite-state machines (FSM) is a basic building block in digital design.
 An FSM consists of three parts: (1) a register that holds the current state,
 (2) combinational logic that computes the next state dependent on the current
 state and the input, and (3) combinational logic that computes the output of the FSM.
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/fsm}
+  \caption{A finite state machine}
+  \label{fig:fsm}
+\end{figure}
 
+Figure~\ref{fig:fsm} shows an FSM. The register contains the current \code{state}.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/mealy}
+  \caption{A Mealy type finite state machine}
+  \label{fig:mealy}
+\end{figure}
+
+Figure~\ref{fig:mealy} shows a Mealy type FSM. The register contains the current \code{state}.
+
+\section{Moore versus Mealy FSM}
 
 \chapter{Communicating State Machines}
 
