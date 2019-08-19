@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-08-19 09:41:02 +0000</string>
+	<string>2019-08-19 12:37:09 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -370,7 +370,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{144, 189.5}, {27, 29}}</string>
+					<string>{{144, 192.38167938931292}, {27, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -386,8 +386,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>74</integer>
@@ -419,14 +419,14 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 Q}</string>
+\f0\fs24 \cf0 Q}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{108, 189.5}, {27, 29}}</string>
+					<string>{{108, 192.38167938931292}, {27, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -442,8 +442,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>73</integer>
@@ -475,7 +475,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 D}</string>
+\f0\fs24 \cf0 D}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -674,6 +674,8 @@
 			<dict>
 				<key>ShowsGrid</key>
 				<string>YES</string>
+				<key>SnapsToGrid</key>
+				<string>YES</string>
 			</dict>
 			<key>HPages</key>
 			<integer>1</integer>
@@ -735,7 +737,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{-3.8167938931297773, 132.44274809160302}, {260.6870229007634, 254.58015267175577}}</string>
+		<string>{{-3.8167938931298102, 132.44274809160311}, {260.68702290076334, 254.58015267175568}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>

@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-08-19 09:50:40 +0000</string>
+	<string>2019-08-19 12:32:29 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -248,8 +248,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -314,8 +312,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -386,8 +382,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -517,8 +511,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -580,8 +572,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -650,8 +640,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -693,8 +681,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -763,8 +749,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -831,18 +815,6 @@
 					<string>{{72, 135}, {36, 36}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
-					<key>FontInfo</key>
-					<dict>
-						<key>Color</key>
-						<dict>
-							<key>space</key>
-							<string>gg22</string>
-							<key>w</key>
-							<string>0</string>
-						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
-					</dict>
 					<key>ID</key>
 					<integer>112</integer>
 					<key>Style</key>
@@ -877,8 +849,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -1105,8 +1075,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -1332,8 +1300,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -1447,8 +1413,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>11</real>
 					</dict>
@@ -1481,18 +1445,6 @@
 					<string>{{288, 153}, {45, 90}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
-					<key>FontInfo</key>
-					<dict>
-						<key>Color</key>
-						<dict>
-							<key>space</key>
-							<string>gg22</string>
-							<key>w</key>
-							<string>0</string>
-						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
-					</dict>
 					<key>ID</key>
 					<integer>87</integer>
 					<key>Shape</key>
@@ -1716,54 +1668,6 @@
 						</dict>
 					</dict>
 				</dict>
-				<dict>
-					<key>Class</key>
-					<string>LineGraphic</string>
-					<key>ID</key>
-					<integer>58</integer>
-					<key>LogicalPath</key>
-					<dict>
-						<key>elements</key>
-						<array>
-							<dict>
-								<key>element</key>
-								<string>MOVETO</string>
-								<key>point</key>
-								<string>{333, 207}</string>
-							</dict>
-						</array>
-					</dict>
-					<key>Points</key>
-					<array>
-						<string>{333, 207}</string>
-						<string>{333, 207}</string>
-					</array>
-					<key>Style</key>
-					<dict>
-						<key>fill</key>
-						<dict>
-							<key>Draws</key>
-							<string>NO</string>
-						</dict>
-						<key>shadow</key>
-						<dict>
-							<key>Draws</key>
-							<string>NO</string>
-						</dict>
-						<key>stroke</key>
-						<dict>
-							<key>HeadArrow</key>
-							<string>FilledArrow</string>
-							<key>Legacy</key>
-							<true/>
-						</dict>
-					</dict>
-					<key>Tail</key>
-					<dict>
-						<key>ID</key>
-						<integer>87</integer>
-					</dict>
-				</dict>
 			</array>
 			<key>GridInfo</key>
 			<dict>
@@ -1832,7 +1736,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{-46.5, -22.5}, {341.5, 333.5}}</string>
+		<string>{{89.75, 13.25}, {341.5, 333.5}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>
