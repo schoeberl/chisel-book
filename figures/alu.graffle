@@ -5,7 +5,7 @@
 	<key>ApplicationVersion</key>
 	<array>
 		<string>com.omnigroup.OmniGraffle7</string>
-		<string>192.21.0.323236</string>
+		<string>196.10.0.336887</string>
 	</array>
 	<key>ColorProfiles</key>
 	<array>
@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-01-18 20:53:05 +0000</string>
+	<string>2019-08-19 09:43:34 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -208,6 +208,11 @@
 						<string>NO</string>
 					</dict>
 				</dict>
+				<key>Text</key>
+				<dict>
+					<key>TextAlongPathGlyphAnchor</key>
+					<string>center</string>
+				</dict>
 			</dict>
 			<key>BaseZoom</key>
 			<integer>0</integer>
@@ -227,13 +232,25 @@
 			<array>
 				<dict>
 					<key>Bounds</key>
-					<string>{{168, 20.418750286102295}, {24, 30}}</string>
+					<string>{{168.328125, 20.918750286102295}, {23.34375, 29}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
 					<string>YES</string>
 					<key>Flow</key>
 					<string>Resize</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>space</key>
+							<string>gg22</string>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+					</dict>
 					<key>ID</key>
 					<integer>48</integer>
 					<key>Line</key>
@@ -261,13 +278,15 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
-{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
 \f0\fs32 \cf0 fn}</string>
+						<key>TextAlongPathGlyphAnchor</key>
+						<string>center</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
@@ -325,13 +344,25 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{208.72148437499999, 93}, {21, 30}}</string>
+					<string>{{208.88554599881172, 93.5}, {20.671875, 29}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
 					<string>YES</string>
 					<key>Flow</key>
 					<string>Resize</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>space</key>
+							<string>gg22</string>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+					</dict>
 					<key>ID</key>
 					<integer>47</integer>
 					<key>Line</key>
@@ -339,7 +370,7 @@
 						<key>ID</key>
 						<integer>31</integer>
 						<key>Position</key>
-						<real>0.33684895833333334</real>
+						<real>0.33684894442558289</real>
 						<key>RotationType</key>
 						<integer>0</integer>
 					</dict>
@@ -358,44 +389,41 @@
 					</dict>
 					<key>Text</key>
 					<dict>
-						<key>RTFD</key>
-						<data>
-						BAtzdHJlYW10eXBlZIHoA4QBQISE
-						hBJOU0F0dHJpYnV0ZWRTdHJpbmcA
-						hIQITlNPYmplY3QAhZKEhIQITlNT
-						dHJpbmcBlIQBKwFZhoQCaUkBAZKE
-						hIQMTlNEaWN0aW9uYXJ5AJSEAWkD
-						koSWlgdOU0NvbG9yhpKEhIQHTlND
-						b2xvcgCUhAFjA4QCZmYAAYaShJaW
-						EE5TUGFyYWdyYXBoU3R5bGWGkoSE
-						hBBOU1BhcmFncmFwaFN0eWxlAJSE
-						BENDQFMCAIUAhpKElpYGTlNGb250
-						hpKEhIQGTlNGb250HpSZJIQFWzM2
-						Y10GAAAAHAAAAP/+SABlAGwAdgBl
-						AHQAaQBjAGEATgBlAHUAZQCEAWYQ
-						mwCbAZsAmwCGhoY=
-						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
-{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs32 \cf2 Y}</string>
+\f0\fs32 \cf0 Y}</string>
+						<key>TextAlongPathGlyphAnchor</key>
+						<string>center</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{106.42539062500001, 120}, {21, 30}}</string>
+					<string>{{106.58945283293724, 120.5}, {20.671875, 29}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
 					<string>YES</string>
 					<key>Flow</key>
 					<string>Resize</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>space</key>
+							<string>gg22</string>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+					</dict>
 					<key>ID</key>
 					<integer>46</integer>
 					<key>Line</key>
@@ -403,7 +431,7 @@
 						<key>ID</key>
 						<integer>39</integer>
 						<key>Position</key>
-						<real>0.42738715277777778</real>
+						<real>0.42738714814186096</real>
 						<key>RotationType</key>
 						<integer>0</integer>
 					</dict>
@@ -422,44 +450,41 @@
 					</dict>
 					<key>Text</key>
 					<dict>
-						<key>RTFD</key>
-						<data>
-						BAtzdHJlYW10eXBlZIHoA4QBQISE
-						hBJOU0F0dHJpYnV0ZWRTdHJpbmcA
-						hIQITlNPYmplY3QAhZKEhIQITlNT
-						dHJpbmcBlIQBKwFChoQCaUkBAZKE
-						hIQMTlNEaWN0aW9uYXJ5AJSEAWkD
-						koSWlgdOU0NvbG9yhpKEhIQHTlND
-						b2xvcgCUhAFjA4QCZmYAAYaShJaW
-						EE5TUGFyYWdyYXBoU3R5bGWGkoSE
-						hBBOU1BhcmFncmFwaFN0eWxlAJSE
-						BENDQFMCAIUAhpKElpYGTlNGb250
-						hpKEhIQGTlNGb250HpSZJIQFWzM2
-						Y10GAAAAHAAAAP/+SABlAGwAdgBl
-						AHQAaQBjAGEATgBlAHUAZQCEAWYQ
-						mwCbAZsAmwCGhoY=
-						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
-{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs32 \cf2 B}</string>
+\f0\fs32 \cf0 B}</string>
+						<key>TextAlongPathGlyphAnchor</key>
+						<string>center</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{102.61640625, 66}, {21, 30}}</string>
+					<string>{{102.78046900033951, 66.5}, {20.671875, 29}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
 					<string>YES</string>
 					<key>Flow</key>
 					<string>Resize</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>space</key>
+							<string>gg22</string>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+					</dict>
 					<key>ID</key>
 					<integer>45</integer>
 					<key>Line</key>
@@ -467,7 +492,7 @@
 						<key>ID</key>
 						<integer>38</integer>
 						<key>Position</key>
-						<real>0.36692708333333335</real>
+						<real>0.36692708730697632</real>
 						<key>RotationType</key>
 						<integer>0</integer>
 					</dict>
@@ -486,31 +511,16 @@
 					</dict>
 					<key>Text</key>
 					<dict>
-						<key>RTFD</key>
-						<data>
-						BAtzdHJlYW10eXBlZIHoA4QBQISE
-						hBJOU0F0dHJpYnV0ZWRTdHJpbmcA
-						hIQITlNPYmplY3QAhZKEhIQITlNT
-						dHJpbmcBlIQBKwFBhoQCaUkBAZKE
-						hIQMTlNEaWN0aW9uYXJ5AJSEAWkD
-						koSWlgdOU0NvbG9yhpKEhIQHTlND
-						b2xvcgCUhAFjA4QCZmYAAYaShJaW
-						EE5TUGFyYWdyYXBoU3R5bGWGkoSE
-						hBBOU1BhcmFncmFwaFN0eWxlAJSE
-						BENDQFMCAIUAhpKElpYGTlNGb250
-						hpKEhIQGTlNGb250HpSZJIQFWzM2
-						Y10GAAAAHAAAAP/+SABlAGwAdgBl
-						AHQAaQBjAGEATgBlAHUAZQCEAWYQ
-						mwCbAZsAmwCGhoY=
-						</data>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
-{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs32 \cf2 A}</string>
+\f0\fs32 \cf0 A}</string>
+						<key>TextAlongPathGlyphAnchor</key>
+						<string>center</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
@@ -520,6 +530,18 @@
 					<string>{{153, 63}, {45, 90}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Color</key>
+						<dict>
+							<key>space</key>
+							<string>gg22</string>
+							<key>w</key>
+							<string>0</string>
+						</dict>
+						<key>Font</key>
+						<string>Helvetica</string>
+					</dict>
 					<key>ID</key>
 					<integer>44</integer>
 					<key>Shape</key>
@@ -562,13 +584,15 @@
 					<key>Text</key>
 					<dict>
 						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf200
+						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
 \f0\fs24 \cf0  ALU}</string>
+						<key>TextAlongPathGlyphAnchor</key>
+						<string>center</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
@@ -747,23 +771,6 @@
 					<true/>
 				</dict>
 			</array>
-			<key>LayoutInfo</key>
-			<dict>
-				<key>Animate</key>
-				<string>NO</string>
-				<key>circoMinDist</key>
-				<real>18</real>
-				<key>circoSeparation</key>
-				<real>0.0</real>
-				<key>layoutEngine</key>
-				<string>dot</string>
-				<key>neatoLineLength</key>
-				<real>0.20000000298023224</real>
-				<key>neatoSeparation</key>
-				<real>0.0</real>
-				<key>twopiSeparation</key>
-				<real>0.0</real>
-			</dict>
 			<key>Orientation</key>
 			<integer>2</integer>
 			<key>PrintOnePage</key>
@@ -805,7 +812,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{11.5, -92}, {341.5, 333.5}}</string>
+		<string>{{3.5, -92}, {341.5, 333.5}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>

@@ -495,7 +495,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/logic}
-  \caption{Logic for the expression \code{a \& b | c}.
+  \caption{Logic for the expression \code{(a \& b) | c}.
   The wires can be single bit or multiple bits. The Chisel expression, and the schematics, are the same.}
   \label{fig:logic}
 \end{figure}
@@ -1407,10 +1407,13 @@ it at its output. Or in other words: the register updates its output with the va
 rising edge of the clock.
 
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
-\code{D} and an output \code{Q}. Each register also contains in input for a clock signal.
+\code{D} and an output \code{Q}. Each register also contains an input for a clock signal.
 As this global clock signal is connected to all registers in a synchronous circuit, it is usually
-not drawn in a schematic. The little triangle on the bottom of the box symbolizes the
-clock input and tells us that this is a register.
+not drawn in the schematic. The little triangle on the bottom of the box symbolizes the
+clock input and tells us that this is a register. We will omit the clock signal in the following
+drawings.
+The omission of the global clock signal is also reflected by Chisel where no explicit
+connection of a signal to the register's clock input is needed.
 
 In Chisel a registers with input \code{d} and output \code{q} is defined with:
 
@@ -1514,12 +1517,12 @@ with enable. Most of the time enable it high (\code{true}) and the register
 follows the input with one clock cycle delay. Only in the forth clock cycle
 \code{enable} is low and the register keeps its value (5) at rising edge D.
 
-Oh, and yes, a register with an enable can be described in a few lines of Chisel code
+A register with an enable can be described in a few lines of Chisel code
 with a conditional update:
 
 \input{code/sequ_reg_ena.txt}
 
-\noindent And a register with enable can also be reset.
+\noindent A register with enable can also be reset:
 
 \input{code/sequ_reg_init_ena.txt}
 
@@ -1611,6 +1614,15 @@ counter to the clock of the FPGA board, you will see all 16 digits basically
 overlapped. Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
+
+\chapter{Finite-State Machines}
+
+A Finite-state machines (FSM) is a basic building block in digital design.
+An FSM consists of three parts: (1) a register that holds the current state,
+(2) combinational logic that computes the next state dependent on the current
+state and the input, and (3) combinational logic that computes the output of the FSM.
+
+
 
 \chapter{Communicating State Machines}
 
