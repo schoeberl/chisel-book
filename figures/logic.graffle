@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-08-19 09:48:07 +0000</string>
+	<string>2019-08-20 14:36:43 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -232,7 +232,7 @@
 			<array>
 				<dict>
 					<key>Bounds</key>
-					<string>{{338.609375, 144.5}, {42.90625, 29}}</string>
+					<string>{{333.72265625, 147}, {34.6796875, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -248,8 +248,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>55</integer>
@@ -281,7 +281,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 logic}</string>
+\f0\fs24 \cf0 logic}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -302,8 +302,6 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
 						<key>Size</key>
 						<real>12</real>
 					</dict>
@@ -372,7 +370,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{233.5, 153.5}, {18, 29}}</string>
+					<string>{{234.5, 156}, {16, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -388,8 +386,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>53</integer>
@@ -421,7 +419,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 c}</string>
+\f0\fs24 \cf0 c}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -430,7 +428,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{143.05078125, 108.5}, {18.8984375, 29}}</string>
+					<string>{{144.1630859375, 111}, {16.673828125, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -446,8 +444,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>51</integer>
@@ -479,7 +477,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 a}</string>
+\f0\fs24 \cf0 a}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -488,7 +486,7 @@
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{143.61328125, 126.5}, {18.8984375, 29}}</string>
+					<string>{{144.7255859375, 129}, {16.673828125, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -504,8 +502,8 @@
 							<key>w</key>
 							<string>0</string>
 						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
+						<key>Size</key>
+						<real>12</real>
 					</dict>
 					<key>ID</key>
 					<integer>50</integer>
@@ -537,7 +535,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs32 \cf0 b}</string>
+\f0\fs24 \cf0 b}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -738,18 +736,6 @@
 							<string>{{270, 144}, {45, 36}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
-							<key>FontInfo</key>
-							<dict>
-								<key>Color</key>
-								<dict>
-									<key>space</key>
-									<string>gg22</string>
-									<key>w</key>
-									<string>0</string>
-								</dict>
-								<key>Font</key>
-								<string>Helvetica</string>
-							</dict>
 							<key>ID</key>
 							<integer>49</integer>
 							<key>Magnets</key>
@@ -993,18 +979,6 @@
 							<string>{{180, 117}, {45, 36}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
-							<key>FontInfo</key>
-							<dict>
-								<key>Color</key>
-								<dict>
-									<key>space</key>
-									<string>gg22</string>
-									<key>w</key>
-									<string>0</string>
-								</dict>
-								<key>Font</key>
-								<string>Helvetica</string>
-							</dict>
 							<key>ID</key>
 							<integer>44</integer>
 							<key>Magnets</key>
@@ -1129,7 +1103,7 @@
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{48.5, 1.75}, {341.5, 333.5}}</string>
+		<string>{{40.5, 0}, {341.5, 333.5}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>

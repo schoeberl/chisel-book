@@ -328,8 +328,9 @@ In IntelliJ you can create a new project from existing sources and then select f
 \section{Source Access and eBook Features}
 
 This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
-Small Chisel code snippets are included in the repository of the book.
-Larger examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way
+All Chisel code examples, shown in this book, are included in the repository.
+The code compiles with a recent version of Chisel and many examples also include a test bench.
+Larger Chisel examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way
 to incorporate your improvement.
 
 This book is freely available as a PDF eBook.\footnote{A print version will soon be available
@@ -1626,13 +1627,16 @@ An FSM can be described as a set of \emph{states} and conditional (guarded)
 \emph{state transitions} between states. 
 An FSM has an initial state, which is set on reset.
 FSMs are also called synchronous sequential circuits.
-In principle every digital circuit that contains a register or other memory elements
-to store state can be described as a single FSM. However, this might
-not be practical, e.g., try to describe your laptop as a single FSM.
 
 An implementation of an FSM consists of three parts: (1) a register that holds the current state,
 (2) combinational logic that computes the next state dependent on the current
 state and the input, and (3) combinational logic that computes the output of the FSM.
+
+In principle every digital circuit that contains a register or other memory elements
+to store state can be described as a single FSM. However, this might
+not be practical, e.g., try to describe your laptop as a single FSM.
+In the next chapter we will describe how to build larger systems
+out of smaller FSMs by combining them to communicating FSMs.
 
 \section{Basic Finite-State Machine}
 
@@ -1859,10 +1863,61 @@ FSMs shall be used for more complex circuits with three and more states.
 To show the difference between a Moore and Mealy FSM we redo the edge
 detection with a Moor FSM. 
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/state-diag-rising-moore}
+  \caption{The state diagram of the rising edge detector as Moor FSM.}
+  \label{fig:diag:rising:moore}
+\end{figure}
+
+Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
+edge detection with a Moor FSM. Fist thing to notice is that the Moor FSM
+needs three states, compared to two states in the Mealy version.
+The state \code{puls} is needed to produce the single cycle puls.
+The FSM stays in state \code{puls} just one clock cycle and then
+proceeds either back to the start state \code{zero} or to the \code{one}
+state, waiting for the input to become 0 again.
+We show the input condition on the state transition arrows and the
+FSM output within the state representing circles.
+
+\longlist{code/rising_moore_fsm.txt}{Rising edge detection with a Moore FSM.}{lst:fsm:rising:moore}
+
+Listing~\ref{lst:fsm:rising:moore} shows the Moor version of the rising edge detection
+circuit. Is uses double the number of D flip-flops than the Mealy or direct
+coded version. The resulting next state logic, is therefore also larger
+than the Mealy or direct coded version.
+
+From the above example, one is tempted to find Mealy FSMs the \emph{better}
+FSMs as they need less state (and therefore logic) and react faster than a Moor FSM.
+However, the combinational path within a Mealy machine an cause trouble in
+larger designs. First, with a chain of communicating FSM (see next chapter) this
+combinational path can become long. Second, if the communicating FSMs build
+a circle the result is a combinational loop, which is an error in synchronous design.
+Due to a cut in the combinational path with the state register in a Moore FSM,
+all the above issues do not exist for communicating Moore FSMs.
+
+In summary, Moore FSMs combine better for communication state machine, they
+are \emph{more robust}. Use Mealy FSMs only when the reaction within the same
+cycle is of utmost importance. Small circuits such as the rising edge detection,
+which are practically Mealy machines, are fine as well.
 
 \section{Exercise}
 
-\todo{Maybe edge detection as Moor machine plus evaluation of the effects.}
+% This is a boring example, maybe I can find something more interesting
+In this chapter you have seen many examples of very small FSMs.
+Now it is time to write some \emph{real} FSM code.
+Pick a little bit more complex example and implement the FMS and
+write a test bench for it.
+
+A classic example is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
+A traffic light controller has to ensure that on a switch from red to green
+there is a phase in between where both roads in the intersection
+have a no-go light (red and orange).
+To make this example a little bit more interesting, have a priority road.
+The other road has two car detectors (on both entries into the intersection).
+Switch to green for this road only when a care is detected and then switch
+back to green for the priority road.
+
 
 \chapter{Communicating State Machines}
 

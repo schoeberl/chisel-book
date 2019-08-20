@@ -14,7 +14,7 @@ class Combinational extends Module {
   val c = io.c
 
   //- start comb_bool
-  val e = a & b | c
+  val e = (a & b) | c
   //- end
 
   //- start comb_use

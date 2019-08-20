@@ -44,6 +44,24 @@ class RisingFsmTester(dut: RisingFsm) extends PeekPokeTester(dut) {
   expect(dut.io.risingEdge, 0)
 }
 
+class RisingMoreFsmTester(dut: RisingMooreFsm) extends PeekPokeTester(dut) {
+  poke(dut.io.din, 0)
+  expect(dut.io.risingEdge, 0)
+  step(1)
+  expect(dut.io.risingEdge, 0)
+  step(1)
+  poke(dut.io.din, 1)
+  expect(dut.io.risingEdge, 0) // this would be mealy outpu
+  step(1)
+  expect(dut.io.risingEdge, 1) // this should be 1 in Moore
+  step(1)
+  expect(dut.io.risingEdge, 0)
+  poke(dut.io.din, 0)
+  expect(dut.io.risingEdge, 0)
+  step(1)
+  expect(dut.io.risingEdge, 0)
+}
+
 class FsmSpec extends FlatSpec with Matchers {
   "Fsm" should "pass" in {
     chisel3.iotesters.Driver.execute(Array(), () => new SimpleFsm()) { dut =>
@@ -54,6 +72,12 @@ class FsmSpec extends FlatSpec with Matchers {
   "RisingFsm" should "pass" in {
     chisel3.iotesters.Driver.execute(Array(), () => new RisingFsm()) { dut =>
       new RisingFsmTester(dut)
+    } should be (true)
+  }
+
+  "RisingMooreFsm" should "pass" in {
+    chisel3.iotesters.Driver.execute(Array(), () => new RisingMooreFsm()) { dut =>
+      new RisingMoreFsmTester(dut)
     } should be (true)
   }
 }

@@ -46,7 +46,7 @@ class Logic extends Module {
   val b = io.b
   val c = io.c
   //- start logic
-  val logic = a & b | c
+  val logic = (a & b) | c
   //- end
 
   io.out := logic
