@@ -129,7 +129,7 @@ We will walk through these examples in detail.
 \let\cleardoublepage\clearpage
 \listoffigures
 \listoftables
-%\lstlistoflistings
+\lstlistoflistings
 \endgroup
 
 \mainmatter
@@ -149,7 +149,8 @@ Java, or TCL/TK to generate hardware to move to a single hardware construction l
 where hardware generation is part of the language and
 (2) software programmers who are becoming interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
-Chisel is perfectly fine to be used as first hardware description language.
+It is perfectly fine to use Chisel as first hardware description language.
+
 
 \todo{Why Chisel}
 
@@ -160,7 +161,7 @@ not intended to describe the system.
 
 The two most common hardware description languages are Verilog and VHDL.
 Both languages are old, contain a lot of legacies, and have a moving line of what
-constructions of the language are synthesizable to hardware.
+constructs of the language are synthesizable to hardware.
 Do not get me wrong: VHDL and Verilog are perfectly able to describe a hardware
 block that can be synthesized in an
 \myref{https://en.wikipedia.org/wiki/Application-specific_integrated_circuit}{ASIC}.
@@ -260,7 +261,7 @@ Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is a first approach:
 
 
-\lstinputlisting[language=chisel]{src/main/scala/HelloScala.scala}
+\shortlist{src/main/scala/HelloScala.scala}
 
 
 \noindent Compiling and executing this short program with \code{sbt}
@@ -287,14 +288,9 @@ The minimal useful and visible design? A blinking LED is the hardware (or even
 embedded software) version of Hello World. If a LED blinks, we are ready to
 solve bigger problems!
 
+\longlist{code/hello.txt}{A hardware Hello World in Chisel}{lst:chisel:hello}
 
-\begin{figure}
-\input{code/hello.txt}
-\caption{A hardware Hello World in Chisel}
-\label{fig:chisel:hello}
-\end{figure}
-
-Figure~\ref{fig:chisel:hello} shows a blinking LED, described in Chisel.
+Listing~\ref{lst:chisel:hello} shows a blinking LED, described in Chisel.
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
 usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
@@ -446,21 +442,21 @@ as signed integer representation.
 Here is the definition different types, an 8-bit \code{Bits}, 8-bit unsigned integer, and an 10-bit
 signed integer:
 
-\input{code/types.txt}
+\shortlist{code/types.txt}
 
 \noindent The width of a vector of bits is defined by a Chisel width type (\code{Width}).
 The following expression casts the Scala integer \code{n} to a Chisel \code{width},
 which is used for the definition of the \code{Bits} vector:
 
-\input{code/n_w.txt}
+\shortlist{code/n_w.txt}
 
 \noindent Constants can be defined by using a Scala integer and converting it to a Chisel type:
 
-\input{code/constants.txt}
+\shortlist{code/constants.txt}
 
 \noindent Constants can also be defined with a width, by using the Chisel width type:
 
-\input{code/const_width.txt}
+\shortlist{code/const_width.txt}
 
 \noindent When you find the notion of 8.U and 4.W a little bit funny, consider it as a variant of an integer
 constant with a type. This notation is similar to 8L, representing a long integer constant in C, Java, and Scala.
@@ -476,7 +472,7 @@ for binary (base 2). The following example shows the definition of constant 255 
 bases. In this example we omit the bit width and Chisel infers the minimum width to fit
 the constants in, in this case 8 bits.
 
-\input{code/const_base.txt}
+\shortlist{code/const_base.txt}
 
 \noindent The above code also shows how to use an underscore to group digits in the
 string that represents a constant. The underscore is simply ignored.
@@ -487,7 +483,7 @@ the following code shows the definition of type \code{Bool} and the definition o
 \code{Bool} constants, by converting the Scala Boolean constants \code{true}
 and \code{false} to Chisel \code{Bool} constants.
 
-\input{code/bool.txt}
+\shortlist{code/bool.txt}
 
 
 \section{Combinational Circuits}
@@ -498,7 +494,7 @@ to described combinational circuits.
 Following line of code defines a circuit that combines signals \code{a} and \code{b} with \emph{and}
 gates and combines the result with signal \code{c} with \emph{or} gates.
 
-\input{code/logic.txt}
+\shortlist{code/logic.txt}
 
 \begin{figure}
   \centering
@@ -517,11 +513,11 @@ In this example we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
 The standard logic operations in Chisel are:
 
-\input{code/bool_ops.txt}
+\shortlist{code/bool_ops.txt}
 
 \noindent The arithmetic operations use the standard operators:
 
-\input{code/arith_ops.txt}
+\shortlist{code/arith_ops.txt}
 
 \noindent The resulting width of the operation is the maximum width of the operators for
 addition and subtraction, the sum of the two widths for the multiplication, and usually
@@ -551,7 +547,7 @@ signal \code{b}.
 A multiplexer can be simply built from logic.
 However, as multiplexing  is such a common operation, Chisel provides a multiplexer,
 
-\input{code/mux.txt}
+\shortlist{code/mux.txt}
 
 \noindent where \code{a} is selected when the \code{sel} is \code{true.B}, otherwise \code{b}
 is selected. The type of \code{sel} is a Chisel \code{Bool}; the inputs \code{a} and \code{b}
@@ -578,21 +574,21 @@ it uses a synchronous reset connected to a global reset signal.
 A register can be any Chisel type that can be represented as a collection of bits.
 Following code defines an 8-bit register, initialized with 0 at reset:
 
-\input{code/register.txt}
+\shortlist{code/register.txt}
 
 \noindent An input is connected to the register with the \code{:=} update operator and
 the output of the register can be used just with the name in an expression:
 
-\input{code/reg_con.txt}
+\shortlist{code/reg_con.txt}
 
 \noindent A register can also be connected to its input at the definition:
 
-\input{code/reg_next.txt}
+\shortlist{code/reg_next.txt}
 
 \noindent A register can also be connected to its input and a constant as
 initial value at the definition:
 
-\input{code/reg_both.txt}
+\shortlist{code/reg_both.txt}
 
 \noindent To distinguish from signals representing combinational logic and registers,
 a common practice is to prefix register names with \code{reg}.
@@ -615,7 +611,7 @@ till 9 and wraps around to 0 when reaching 9.
 
 If we want to count N, we start with 0 and count till N-1.
 
-\input{code/counter.txt}
+\shortlist{code/counter.txt}
 
 
 
@@ -629,7 +625,7 @@ hardware \emph{Hello World} example. It used only internal state, a single LED o
 Copy that project into a new folder and extend it by adding some inputs to the \code{io} \code{Bundle}
 with \code{val sw = Input(UInt(2.W))}.
 
-\input{code/basic_exercise.txt}
+\shortlist{code/basic_exercise.txt}
 
 \noindent For those switches, you also need to assign the PIN names for the FPGA board.
 You can find examples of pin assignments in the Quartus project files of the ALU project
@@ -719,7 +715,7 @@ call \code{generated}.
 To use the facility of namespaces in Chisel, you need to declare that a class/module
 is defined in a package, in this example in \code{mypacket}:
 
-\input{code/packet.txt}
+\shortlist{code/packet.txt}
 
 \noindent Note that in this example we see the import of the \code{chisel3} packet
 to use Chisel classes.
@@ -728,17 +724,17 @@ To use the module \code{Abc} in a different context (packet name space),
 the components of packet \code{mypacket} need to be imported. The underscore
 (\_) acts as wildcard, meaning that all classes of \code{mypacket} are imported.
 
-\input{code/usepacket.txt}
+\shortlist{code/usepacket.txt}
 
 \noindent It is also possible to not import all types from \code{mypacket},
 but use the fully qualified name \code{mypack.Abc} to refer to the module
 \code{Abc} in packet \code{mypack}.
 
-\input{code/usepacket2.txt}
+\shortlist{code/usepacket2.txt}
 
 \noindent It is also possible to import just a single class and create an instance of it:
 
-\input{code/usepacket3.txt}
+\shortlist{code/usepacket3.txt}
 
 
 \subsection{Running sbt}
@@ -787,7 +783,7 @@ of a processor~\cite{lipsi:arcs2018}.
 
 To use the \code{PeekPokeTester} following packages need to be imported:
 
-\input{code/test_import.txt}
+\shortlist{code/test_import.txt}
 
 \noindent Testing a circuit contains (at least) three components: (1) the device under test (often
 simply called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
@@ -797,12 +793,12 @@ The following code shows our simple design under test. It contains to input
 ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
 to it returns on the output:
 
-\input{code/test_dut.txt}
+\shortlist{code/test_dut.txt}
 
 \noindent The test bench for this DUT extends \code{PeekPokeTester} and has
 the DUT as parameter for the constructor:
 
-\input{code/test_bench_simple.txt}
+\shortlist{code/test_bench_simple.txt}
 
 \noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
 read back output values with \code{peek()}. The simulation is advanced with one
@@ -811,7 +807,7 @@ We can print the values of the outputs with \code{println()}.
 
 The test is created and run with following tester main:
 
-\input{code/test_main_simple.txt}
+\shortlist{code/test_main_simple.txt}
 
 \noindent When you run the test, you will see the results printed to the terminal
 (besides other information):
@@ -831,7 +827,7 @@ express our expectations in the test bench itself with \code{expect()},
 having the output port and the expected value as parameters.
 The following example shows testing with \code{expect()}:
 
-\input{code/test_bench.txt}
+\shortlist{code/test_bench.txt}
 
 \noindent Executing this test does not print out any values from the hardware,
 but that all tests passed as all expect values are correct.
@@ -878,13 +874,13 @@ $ sbt test
 \noindent A minimal test (a testing hello world) to just test a Scala Integer
 addition:
 
-\input{code/scalatest_hello_world.txt}
+\shortlist{code/scalatest_hello_world.txt}
 
 \noindent Although Chisel testing is more heavyweight than unit testing of Scala programs,
 we can wrap a Chisel test into a ScalaTest class. For the \code{Tester} shown
 before this is:
 
-\input{code/scalatest_simple.txt}
+\shortlist{code/scalatest_simple.txt}
 
 The main benefit of this exercise is to be able to run all tests with a simple
 \code{sbt test} (instead of a running \code{main}). You can run just a single
@@ -911,9 +907,9 @@ and an \code{App} that generates the Verilog code.
 
 Each file starts with the import of Chisel and related packages:
 
-\input{code/import.txt}
+\shortlist{code/import.txt}
 
-\noindent Then follows the hardware description, as shown in Figure~\ref{fig:chisel:hello}.
+\noindent Then follows the hardware description, as shown in Listing~\ref{lst:chisel:hello}.
 To generate the Verilog description we need an application. A Scala object that \code{extends App}
 is an application that implicitly generates a main function where the application starts.
 The only action of this application is to create a new \code{HelloWorld} object and pass it
@@ -921,7 +917,7 @@ to the Chisel driver \code{execute} function. The first argument is an array of 
 where build options can be set (e.g., the output folder). The following code will
 generate the Verilog file \code{Hello.v}.
 
-\input{code/generate.txt}
+\shortlist{code/generate.txt}
 
 \noindent Run the generation of the example manually with
 
@@ -1025,7 +1021,7 @@ We should probably postpone this for later.}
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/components}
-  \caption{A design built of a a hierarchy of components.}
+  \caption{A design consisting of a hierarchy of components.}
   \label{fig:components}
 \end{figure}
 
@@ -1064,7 +1060,7 @@ or \code{Output()}. The direction is from the view of the component itself.
 The following code shows the definition of the two example components A and B from
 Figure~\ref{fig:components}:
 
-\input{code/components_ab.txt}
+\shortlist{code/components_ab.txt}
 
 \noindent Component A has two inputs, named \code{a} and \code{b}, and two
 outputs, named \code{x} and \code{y}. For the ports of component B
@@ -1083,7 +1079,7 @@ components A and B. We show how A and B are connected to the ports
 of C and als the connection between an output port of A and an
 input port of B:
 
-\input{code/components_c.txt}
+\shortlist{code/components_c.txt}
 
 Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
 into a call to \code{Module()}. The reference to that module is stored in a local variable,
@@ -1095,12 +1091,12 @@ and the individual fields of the IO \code{Bundle}.
 The simplest component in our design has just an input port, named \code{in}, and
 an output port, named \code{out}.
 
-\input{code/components_d.txt}
+\shortlist{code/components_d.txt}
 
 The final missing peace of our example design is the top-level component, which itself
 is assembled out of components C and D:
 
-\input{code/components_top.txt}
+\shortlist{code/components_top.txt}
 
 Good component design is similar to good design of functions or methods in
 software design. One of the main questions is how much functionality shall we put into
@@ -1146,13 +1142,13 @@ of the result, such as zero or the sign.
 The following code shows an ALU with 16-bit inputs and outputs that supports: addition, subtraction, or, and and
 operation, selected by a 2-bit \code{fn} signal.
 
-\input{code/components_alu.txt}
+\shortlist{code/components_alu.txt}
 
 \noindent In this example we use a new Chisel construct, the \code{switch/is} construct to describe
 the table that selects the output of our ALU.
 To use this utility function we need to import another Chisel package:
 
-\input{code/components_util.txt}
+\shortlist{code/components_util.txt}
 
 \section{Lightweight Components with Functions}
 
@@ -1163,11 +1159,11 @@ A lightweight way to structure your hardware is to use functions.
 Scala functions can take Chisel (and Scala) parameters and return generated hardware.
 As a simple example we generate an adder:
 
-\input{code/components_fn_def.txt}
+\shortlist{code/components_fn_def.txt}
 
 \noindent We can then create two adders by simply calling the function \code{adder}.
 
-\input{code/components_fn_use.txt}
+\shortlist{code/components_fn_use.txt}
 
 \noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
 during elaboration, but create two adders (hardware instances). The adder example is artificial
@@ -1176,12 +1172,12 @@ to be a simple example. Chisel has already an adder generation function, like \c
 Functions as lightweight hardware generators can also contain state (including a register).
 Following example returns a one clock cycle delay element (a register).
 
-\input{code/components_fn_delay.txt}
+\shortlist{code/components_fn_delay.txt}
 
 \noindent By calling the function with the function itself as parameter, this generated a two
 clock cycle delay.
 
-\input{code/components_fn_2delay.txt}
+\shortlist{code/components_fn_2delay.txt}
 
 \noindent Again, this is a too short example to be useful, as \code{RegNext()}
 already is that function creating the register for the delay.
@@ -1205,18 +1201,18 @@ Before describing some standard combinational building blocks, we will explore
 how combinational circuits can be expressed in Chisel.
 The simplest form is a Boolean expression, which can be assigned a name:
 
-\input{code/comb_bool.txt}
+\shortlist{code/comb_bool.txt}
 
 \noindent The Boolean expression is given a name (\code{e}) by assigning it
 to a Scala value. The expression can be reused in other expressions:
 
-\input{code/comb_use.txt}
+\shortlist{code/comb_use.txt}
 
 Such an expression is considered fixed. A reassignment to \code{e}
 with \code{=} would result in a Scala compiler error: \code{reassignment to val}.
 A try with the Chisel operator \code{:=}, as shown below,
 
-\input{code/comb_error.txt}
+\shortlist{code/comb_error.txt}
 
 \noindent results in a runtime exception: \code{Cannot reassign to read-only}.
 
@@ -1227,7 +1223,7 @@ The following code declares a \code{Wire} \code{w} of type \code{UInt} and assig
 value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassigns
 \code{3} to \code{w} if \code{cond} is \code{true.B}.
 
-\input{code/comb_wire.txt}
+\shortlist{code/comb_wire.txt}
 
 \noindent The logic of the circuit is a multiplexer, where the two inputs are the constants
 \code{0} and \code{3} and the condition \code{cond} the select signal.
@@ -1238,11 +1234,11 @@ The Chisel condition construct \code{when} has also a form of \emph{else}, it is
 \code{otherwise}. With assigning a value under any condition we can omit the default
 value assignment:
 
-\input{code/comb_otherwise.txt}
+\shortlist{code/comb_otherwise.txt}
 
 Chisel also supports a chain of conditionals (a if elseif else chain) with \code{.elsewhen}:
 
-\input{code/comb_elsewhen.txt}
+\shortlist{code/comb_elsewhen.txt}
 
 Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
 Those \code{.elsewhen} branches can be arbitrary long.
@@ -1256,7 +1252,7 @@ declaration with \code{WireDefault}.\footnote{In the current version of Chisel
 it is called WireInit, but will change with the release of Chisel 3.2}
 
 
-\input{code/comb_wiredefault.txt}
+\shortlist{code/comb_wiredefault.txt}
 
 One might question why using \code{when}, \code{.elsewhen}, and \code{otherwise}
 when Scala has \code{if}, \code{else if}, and \code{else}? Those statement are for
@@ -1301,11 +1297,11 @@ The representation of logic as a truth table can be directly described in Chisel
 The \code{switch} statement is not part of the core Chisel language.
 Therefore, we need to include the elements of the package \code{chisel.util}.
 
-\input{code/encdec_util.txt}
+\shortlist{code/encdec_util.txt}
 
 \noindent The following code introduces the \code{switch} statement of Chisel to describe a decoder:
 
-\input{code/encdec_dec.txt}
+\shortlist{code/encdec_dec.txt}
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
 and assigns the decoded value to the \code{result} signal.
@@ -1319,7 +1315,7 @@ languages such as VHDL and Verilog. Chisel does not allow incomplete assignments
 In the example before we used unsigned integers for the signals. A maybe clearer representation
 of an encode circuit uses binary notation:
 
-\input{code/encdec_decbin.txt}
+\shortlist{code/encdec_decbin.txt}
 
 A table gives a very readable representation of the decoder function, but is also
 a little bit verbose.
@@ -1327,7 +1323,7 @@ When examine the table, we see an regular structure: a 1 is shifted left by the 
 represented by \code{sel}. Therefore, we can express a decoder with the Chisel shift
 operation \code{<<}.
 
-\input{code/encdec_shift.txt}
+\shortlist{code/encdec_shift.txt}
 
 Decoders are used as a building block for a multiplexer by using the output as an enable
 with an AND gate for the multiplexer data input. However, in Chisel we do not need to construct
@@ -1376,7 +1372,7 @@ assignment that catches all undefine input patterns.
 The following Chisel code assigns a default value of 00 and then uses the switch statement
 for the legal input values.
 
-\input{code/encdec_enc.txt}
+\shortlist{code/encdec_enc.txt}
 
 \section{Exercise}
 
@@ -1425,7 +1421,7 @@ connection of a signal to the register's clock input is needed.
 
 In Chisel a registers with input \code{d} and output \code{q} is defined with:
 
-\input{code/sequ_reg.txt}
+\shortlist{code/sequ_reg.txt}
 
 \noindent Note that we do not need to connect a clock to the register, this is
 implicitly done by Chisel. A register's input and output can be arbitrary complex types
@@ -1433,7 +1429,7 @@ made out of a combination of vectors and bundles.
 
 A register can also be defined and used in two steps:
 
-\input{code/sequ_reg2.txt}
+\shortlist{code/sequ_reg2.txt}
 
 First we define the register and give it a name, second we connect the signal
 \code{delayIn} to the input of the register. Note also the name of the register
@@ -1449,7 +1445,7 @@ implicit in Chisel. We supply the reset value, e.g., zero, as a parameter to the
 constructor \code{RegInit}. The input for the register is connected with a Chisel
 assignment statement.
 
-\input{code/sequ_reg_init.txt}
+\shortlist{code/sequ_reg_init.txt}
 
 The default implementation of reset in Chisel is a synchronous
 reset.\footnote{Support for asynchronous reset is currently under development}
@@ -1528,16 +1524,16 @@ follows the input with one clock cycle delay. Only in the forth clock cycle
 A register with an enable can be described in a few lines of Chisel code
 with a conditional update:
 
-\input{code/sequ_reg_ena.txt}
+\shortlist{code/sequ_reg_ena.txt}
 
 \noindent A register with enable can also be reset:
 
-\input{code/sequ_reg_init_ena.txt}
+\shortlist{code/sequ_reg_init_ena.txt}
 
 A register can also be part of an expression. Following circuit detects the rising edge
 of a signal by comparing its current value with the one in the last clock cycle.
 
-\input{code/sequ_reg_expr.txt}
+\shortlist{code/sequ_reg_expr.txt}
 
 Now that we have explored all basic uses of a register, we will put those registers to
 good use and build more interesting sequential circuits.
@@ -1558,11 +1554,11 @@ of the register. Figure~\ref{fig:counter} shows such a free-running counter.
 A free-running counter with a 4-bit register will run from 0 to 15 and then wrap around
 to 0 again. A counter shall also be reset to a known value.
 
-\input{code/sequ_free_counter.txt}
+\shortlist{code/sequ_free_counter.txt}
 
 \noindent When we want to count events, we simply use a condition to  increment the counter.
 
-\input{code/sequ_event_counter.txt}
+\shortlist{code/sequ_event_counter.txt}
 
 \subsection{Counting Up}
 
@@ -1590,14 +1586,14 @@ to the maximum value of \code{N - 1}. When the maximum value is reached,
 When we count from \code{0} to \code{N - 1}, we generate one logical tick
 every \code{N} clock cycles.
 
-\input{code/sequ_tick_gen.txt}
+\shortlist{code/sequ_tick_gen.txt}
 
 \noindent This logical timing of one tick every $n$ clock cycles can then be used
 to advance other parts of our circuit with this slower, logical clock.
 In the following code we use just another counter that increments by \code{1}
 every $n$ clock cycles.
 
-\input{code/sequ_tick_counter.txt}
+\shortlist{code/sequ_tick_counter.txt}
 
 Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
 generating the baud rate for a serial bus, generating signals for 7-segment
@@ -1712,35 +1708,35 @@ red & 0 & 1 & green & 1 \\
 Finally, after all the design of our warning level FSM we shall code it in Chisel:
 
 %\begin{lstlisting}[float,caption={A blinking LED\label{fig:blinkasm}}]
-\input{code/simple_fsm.txt}
+\shortlist{code/simple_fsm.txt}
 %\end{lstlisting}
 
 The complete Chisel code for this simple FSM fits into one page.
 Let us step through the individual parts.
 The FSM has two input and a single output signal, captured in a Chisel \code{Bundle}:
-\input{code/simple_fsm_io.txt}
+\shortlist{code/simple_fsm_io.txt}
 
 \noindent Quite some work has been spent in optimal state encoding. Two common options
 are binary or one-hot encoding. However, we leave those low-level decisions to
 the synthesize tool and aim for readable code. Therefore, we use an enumeration
 type with symbolic names for the states:
 
-\input{code/simple_fsm_states.txt}
+\shortlist{code/simple_fsm_states.txt}
 
 \noindent The register holding the state is defined with the \emph{green} state as the reset value:
 
-\input{code/simple_fsm_register.txt}
+\shortlist{code/simple_fsm_register.txt}
 
 \noindent The meat of the FSM is in the next state logic. We use a Chisel switch on the
 state register to cover all states. Within each \code{is} branch we code the next state
 logic, which depends on out inputs, by assigning a new value for our state register:
 
-\input{code/simple_fsm_next.txt}
+\shortlist{code/simple_fsm_next.txt}
 
 \noindent Lats, but not least we code our \emph{ringing bell} output to be true when
 the state is \emph{red}.
 
-\input{code/simple_fsm_output.txt}
+\shortlist{code/simple_fsm_output.txt}
 
 \section{Faster Output with a Mealy FSM}
 
@@ -1823,11 +1819,11 @@ and remains asserted;
 \noindent Following code shows the timer FSM of the light flasher:
 
 
-\input{code/flasher_timer.txt}
+\shortlist{code/flasher_timer.txt}
 
 \noindent Following code shows the master FSM:
 
-\input{code/flasher_fsm.txt}
+\shortlist{code/flasher_fsm.txt}
 
 \begin{figure}
   \centering
@@ -1849,13 +1845,13 @@ and \emph{off}; the second FSM to count the remaining flashes.
 
 Following code shows the down counter FSM:
 
-\input{code/flasher2_counter.txt}
+\shortlist{code/flasher2_counter.txt}
 
 \noindent Note, that the counter is loaded with 2 for 3 flashes, as it counts the
 \emph{remaining} flashes and is decremented in state \code{space} when the timer
 is done. The master FSM for the double refactored flasher:
 
-\input{code/flasher2_fsm.txt}
+\shortlist{code/flasher2_fsm.txt}
 
 Besides having a master FSM that is reduced to just three states, our current solution
 is also better configurable. No FSM needs to be changed if we want to change
@@ -1918,7 +1914,7 @@ receiver the FSM moves back to the \code{Idle} state, ready to compute the next 
 The top level component instantiates the FSM and the datapath components and connects
 them with bulk connections.
 
-\input{code/popcnt_main.txt}
+\shortlist{code/popcnt_main.txt}
 
 \begin{figure}
   \centering
@@ -1945,14 +1941,14 @@ Otherwise, the \code{regData} register is shifted to the right, the least signif
 of the \code{regData} register added to the \code{regPopCount} register, and the counter
 decremented until it is 0. When the counter is 0, the output contains the popcount.
 
-\input{code/popcnt_data.txt}
+\shortlist{code/popcnt_data.txt}
 
 The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it
 switches to the \code{count} state and waits till the datapath has finished counting.
 When the popcount is valid the FSM switches to state \code{done} and waits till the
 popcount is read (signaled by \code{popCntReady}).
 
-\input{code/popcnt_fsm.txt}
+\shortlist{code/popcnt_fsm.txt}
 
 \section{Ready-Valid Interface}
 
@@ -2066,7 +2062,7 @@ If we want to count N, we start with N-2 and count till -1.
 
 \todo{discuss >= and so on}
 
-\chapter{A Processor Design}
+\chapter{Designing a Processor}
 
 As one of the last chapters in this book we present a medium size project:
 the design, simulation, and testing of a microprocessor.
@@ -2129,11 +2125,11 @@ A central component of a processor is the
 Therefore, we start with coding of the ALU und a test bench.
 First, we define an \code{Enum} to represent the different operations of the ALU:
 
-\input{code/leros_types.txt}
+\shortlist{code/leros_types.txt}
 
 \noindent An ALU has usually two operand inputs (call them \code{a} and \code{b}), an operation \code{op}
 (or opcode) input to select the function and an output \code{y}.
-Figure~\ref{fig:leros-alu} shows the ALU.
+Listing~\ref{lst:leros-alu} shows the ALU.
 
 \todo{draw a nice ALU, see Wikipedia}
 
@@ -2143,35 +2139,27 @@ The switch statement enumerates all operations and assigns the expression accord
 All operations map directly to a Chisel expression.
 At the end we assign the result \code{res} to the ALU output \code{y}
 
-\begin{figure}
-\input{code/leros_alu.txt}
-\caption{The Leros ALU.}
-\label{fig:leros-alu}
-\end{figure}
+\longlist{code/leros_alu.txt}{The Leros ALU.}{lst:leros-alu}
 
-For the testing we write the ALU function in plain Scala, as shown in Figure~\ref{fig:leros-alu-scala}.
+For the testing we write the ALU function in plain Scala, as shown in Listing~\ref{lst:leros-alu-scala}.
 
-\begin{figure}
-\input{code/leros_alu_ref.txt}
-\caption{The Leros ALU function written in Scala.}
-\label{fig:leros-alu-scala}
-\end{figure}
+\longlist{code/leros_alu_ref.txt}{The Leros ALU function written in Scala.}{lst:leros-alu-scala}
 
 \noindent While this duplication of hardware written in Chisel by a Scala implementation does not
 detect errors in the specification, it is at least some sanity check.
 We use some corner case values as test vector:
 
-\input{code/leros_alu_testvec.txt}
+\shortlist{code/leros_alu_testvec.txt}
 
 \noindent And testing all functions with those values on both inputs:
 
-\input{code/leros_alu_test.txt}
+\shortlist{code/leros_alu_test.txt}
 
 \noindent Full exhaustive testing for 32-bit arguments is not possible, which was the reason we
 selected some corner cases as input values. Beside testing against corner cases it is also useful
 to test against random inputs:
 
-\input{code/leros_alu_rand.txt}
+\shortlist{code/leros_alu_rand.txt}
 
 \noindent The tests can be run within the Leros project with
 
@@ -2196,25 +2184,25 @@ a \emph{shared} package. We want to share the encoding constants between
 the hardware implementation of Leros, an assembler for Leros, and an instruction
 set simulator of Leros.
 
-\input{code/leros_constants.txt}
+\shortlist{code/leros_constants.txt}
 
 \todo{Update code when Leros is more complete, as stuff is missing.}
 
 \noindent For the decode component we define a \code{Bundle} for the output,
 which is later fed partially into the ALU.
 
-\input{code/leros_decode_bundle.txt}
+\shortlist{code/leros_decode_bundle.txt}
 
 \noindent Decode takes as input an 8-bit opcode and delivers the decoded signals
 as output. Those driving signals are assigned a default value with \code{WireInit}.
 
-\input{code/leros_decode_init.txt}
+\shortlist{code/leros_decode_init.txt}
 
 \noindent The decoding itself is just a large switch statement on part of the
 instruction that represents the opcode (in Leros for most instructions the upper
 8 bits.)
 
-\input{code/leros_decode.txt}
+\shortlist{code/leros_decode.txt}
 
 \section{Assembling Instructions}
 
@@ -2222,7 +2210,7 @@ To write programs for Leros we need an assembler. However, for the very first
 test we can hard code a few instructions, and put them into a Scala array,
 which we will use to initialize the instruction memory.
 
-\input{code/leros_asm_hard.txt}
+\shortlist{code/leros_asm_hard.txt}
 
 \noindent However, this is a very inefficient approach to test a processor.
 Writing an assembler with an expressive language like Scala is not a big project.
@@ -2233,7 +2221,7 @@ A classic assembler runs in two passes: (1) collect the values for the symbol ta
 and (2) assemble the program with the symbols collected in the first pass.
 Therefore, we call assemble twice with a parameter to indicate which pass it is.
 
-\input{code/leros_asm_call.txt}
+\shortlist{code/leros_asm_call.txt}
 
 The \code{assemble} function starts with reading in the source
 file\footnote{This function does not actually read the source file, but for this
@@ -2242,19 +2230,15 @@ and defining two helper functions to parse the two possible operands: (1) an
 integer constant (allowing decimal or hexadecimal notation) and (2) to read
 a register number.
 
-\input{code/leros_asm_start.txt}
+\shortlist{code/leros_asm_start.txt}
 
-Figure~\ref{fig:leros-asm-match} shows the core of the assembler for Leros.
+Listing~\ref{lst:leros-asm-match} shows the core of the assembler for Leros.
 The core of the assembly function is covered by a Scala \code{match}
 expression. \todo{Some more words on the code.}
 
 
 
-\begin{figure}[t]
-\input{code/leros_asm_match.txt}
-\caption{The main part of the Leros assembler.}
-\label{fig:leros-asm-match}
-\end{figure}
+\longlist{code/leros_asm_match.txt}{The main part of the Leros assembler.}{lst:leros-asm-match}
 
 \section{Exercise}
 
@@ -2436,7 +2420,7 @@ Therefore, we will not cover it here.
 Here are two examples of basic components, the same that have been presented
 for Chisel 3. A module containing combinational logic:
 
-\lstinputlisting[language=chisel]{chisel2/src/main/scala/Logic.scala}
+\shortlist{chisel2/src/main/scala/Logic.scala}
 
 Note that the \code{Bundle} for the the IO definition is \emph{not} wrapped into
 an \code{IO()} class.  Furthermore, the direction of the different IO ports is defined
@@ -2446,7 +2430,7 @@ as part of \code{UInt}. The width is given as the second parameter.
 \begin{minipage}{\linewidth}
 The 8-bit register example in Chisel 2:
 
-\lstinputlisting[language=chisel]{chisel2/src/main/scala/Register.scala}
+\shortlist{chisel2/src/main/scala/Register.scala}
 \end{minipage}
 
 Here you see a typical register definition with a reset value passed in as
@@ -2457,9 +2441,9 @@ Note also here the constant definition of an 8-bit wide 0 as \code{UInt(0, 8)}.
 Chisel based testing and Verilog code is generated by calling \code{chiselMainTest}
 and \code{chiselMain}. Both ``main'' functions take a \code{String} array for further parameters.
 
-\lstinputlisting[language=chisel]{chisel2/src/main/scala/LogicTester.scala}
+\shortlist{chisel2/src/main/scala/LogicTester.scala}
 
-\lstinputlisting[language=chisel]{chisel2/src/main/scala/LogicHardware.scala}
+\shortlist{chisel2/src/main/scala/LogicHardware.scala}
 
 A memory with sequential registered read and write ports is defined in Chisel 2 as:
 
@@ -2545,7 +2529,7 @@ writing is going on.}
 
 \section{State Machines and Data Path}
 
- * Is this still relevant? Or is this simple old stuff not in real use anymore?
+ * Covered in stuff for Dally book lecture spring 2019
 
 \section{Memory}
 
@@ -2599,8 +2583,6 @@ Stuff that saves a little hardware, but might not worse the less readable code
  * With lot of links to Wikipedia
 
 \bibliographystyle{plain}
-% Please do not add any references to msbib.bib.
-% They get lost when I 'generate' is again (see Makefile)
 \bibliography{chisel}
 
 \end{document}
@@ -2612,11 +2594,3 @@ Chisel is a hardware construction language implemented as a domain specific lang
 In this course I will give an overview of Chisel to describe circuits at the RTL, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators. Besides lecturing we will have lab sessions to describe small circuits and evaluate them in an FPGA.
 
 The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course shall give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala.
-
-%\begin{figure}
-%  \centering
-%  \includegraphics{figures/broken-mux}
-%
-%  \caption{An inkscape figure. With arrows shooting over the destination coordinates!}
-%  \label{fig:mux}
-%\end{figure}

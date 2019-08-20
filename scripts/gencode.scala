@@ -26,9 +26,9 @@ def extract(f: String) {
     if (tokens.length >= 2 && tokens(0).equals("//-")) {
       if (tokens(1).equals("start")) {
         code = new PrintWriter(new File("code/"+tokens(2)+".txt"))
-        code.println("\\begin{chisel}")
+//        code.println("\\begin{chisel}")
       } else if (tokens(1).equals("end")) {
-        code.println("\\end{chisel}")
+//        code.println("\\end{chisel}")
         code.close()
         code = null
       }
