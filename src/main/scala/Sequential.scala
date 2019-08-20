@@ -57,7 +57,7 @@ class Sequential extends Module {
   io.q5 := regResetEnable
 
   val din = io.riseIn
-  //- start sequ_reg_expr
+  //- start sequ_reg_rising
   val risingEdge = din & !RegNext(din)
   //- end
   io.riseOut := risingEdge
