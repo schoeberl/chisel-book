@@ -1712,13 +1712,19 @@ red & 0 & 1 & green & 1 \\
 
 Finally, after all the design of our warning level FSM we shall code it in Chisel.
 Listing~\ref{lst:fsm:alarm} shows the Chisel code for the alarm FSM.
+Note, that we use the Chisel type \code{Bool} for the inputs and the
+output of the FSM.
+To use \code{Enum} and the \code{switch} control instruction we need to
+import \code{chisel3.util.\_}.
 
 \longlist{code/simple_fsm.txt}{The Chisel code for the alarm FSM.}{lst:fsm:alarm}
 
 The complete Chisel code for this simple FSM fits into one page.
 Let us step through the individual parts.
 The FSM has two input and a single output signal, captured in a Chisel \code{Bundle}:
+%
 \shortlist{code/simple_fsm_io.txt}
+
 
 \noindent Quite some work has been spent in optimal state encoding. Two common options
 are binary or one-hot encoding. However, we leave those low-level decisions to
@@ -1732,7 +1738,7 @@ Therefore, we use an enumeration type with symbolic names for the states:
 
 \noindent The individual state values are described as a list where the individual
 elements are concatenated with the \code{::} operator; \code{Nil} represents
-the end of the list. This list of states is a \code{Enum} type \emph{assigned}.
+the end of the list. An \code{Enum} instance is \emph{assigned} to the list of states.
 The register holding the state is defined with the \emph{green} state as the reset value:
 
 \shortlist{code/simple_fsm_register.txt}
@@ -1764,7 +1770,7 @@ output \emph{earliest} in the next clock cycle.
 If we want to observe an immediate change, we need a combinational
 path from the input to the output.
 Let us consider a minimal example, an edge detection circuit.
-We have seen this Chisel one liner before:
+We have seen this Chisel one-liner before:
 
 \shortlist{code/sequ_reg_rising.txt}
 
@@ -1776,12 +1782,18 @@ We have seen this Chisel one liner before:
 \end{figure}
 
 Figure~\ref{fig:rising} shows the schematic of the rising edge detector.
-The output becomes 1 for one clock cycle then the current input is 1
+The output becomes 1 for one clock cycle when the current input is 1
 and the input in the last clock cycle was 0.
 The state register is just a single D flip-flop where the next state
 is just the input. We can also consider this as a delay element of one
 clock cycle. The output logic \emph{compares} the current
 input with the current state.
+
+
+
+When the output depends also on the input, i.e., there is a combinational path between
+the input of the FSM and the output, this is called a
+\myref{https://en.wikipedia.org/wiki/Mealy_machine}{Mealy machine}.
 
 \begin{figure}
   \centering
@@ -1790,9 +1802,6 @@ input with the current state.
   \label{fig:mealy}
 \end{figure}
 
-When the output depends also on the input, i.e., there is a combinational path between
-the input of the FSM and the output, this is called a
-\myref{https://en.wikipedia.org/wiki/Mealy_machine}{Mealy machine}.
 Figure~\ref{fig:mealy} shows the schematic of a Mealy type FSM.
 Similar to the Moor FSM, the register contains the current \code{state} and
 the next state logic computes the the next state value (\code{next\_state})
@@ -1811,25 +1820,44 @@ The output logic computes the output (\code{out}) from the current state
 
 Figure~\ref{fig:diag:mealy} shows the state diagram of the Mealy FSM for the
 edge detector. As the state register consists just of a single D flip-flop,
-only two states are possible, which we name \code{A} and \code{B} in this
+only two states are possible, which we name \code{zero} and \code{one} in this
 example.
 As the output of a Mealy FSM does not only depend on the state, but also
 on the input we cannot describe the output as part of the state circle.
 Instead, the transitions between the states are labeled with the input
 value (condition) \emph{and} the output (after the slash).
-Note also the we draw self transitions, e.g., that in state \code{A} when
-the input it \code{0} the FSM stays in state \code{A} and the output is {0}.
+Note also the we draw self transitions, e.g., in state \code{zero} when
+the input is \code{0} the FSM stays in state \code{zero} and the output is {0}.
 The rising edge FSM generates the \code{1} output only on the transition
-from state \code{A} to state \code{B}. In state \code{B}, which represents
-that the input is now \code{1}, the output is \code{0}. We only want a single
-puls for each rising edge.
+from state \code{zero} to state \code{one}. In state \code{one}, which represents
+that the input is now \code{1}, the output is \code{0}. We only want a single (cycle)
+puls for each rising edge of the input.
 
-\todo{Do the edge detection as Mealy machine, show Chisel, HW and than States,
-and than a Chisel FSM code, plus discussion of what size FSM shall be.}
+\longlist{code/rising_fsm.txt}{Rising edge detection with a Mealy FSM.}{lst:fsm:rising}
+
+Listing~\ref{lst:fsm:rising} shows the Chisel code for the rising edge detection
+with a Mealy machine.
+As in the previous example, we use the Chisel type \code{Bool} for the
+single bit input and output.
+The output logic is now part of the next state logic; on the transition from
+\code{zero} to \code{one}, the output is set to \code{true.B}. Otherwise,
+the default assignment to the output (\code{false.B}) counts.
+
+One can ask, if a full blown FSM is the best solution for the edge detection circuit.
+Especially, as we have seen a Chisel one-liner for the same functionality.
+The hardware consumptions will be similar. Both solutions need a single D flip-flop
+for the state. The combinational logic for the FSM is probably a bit more complex, as
+the state change depends on the current state and on the input value.
+Anyway, for this function the one-liner is easier to write and easier to read,
+which is more important. Therefore, the one-liner is the preferred solution.
+
+We have used this example to show one of the smallest possible Mealy FSMs.
+FSMs shall be used for more complex circuits with three and more states.
 
 \section{Moore versus Mealy FSM}
 
-\todo{Redo the edge detector. Maybe have a timing diagram.}
+To show the difference between a Moore and Mealy FSM we redo the edge
+detection with a Moor FSM. 
 
 
 \section{Exercise}

@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-08-20 11:52:20 +0000</string>
+	<string>2019-08-20 13:40:59 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -965,7 +965,7 @@ reset}</string>
 {\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs24 \cf0 B}</string>
+\f0\fs24 \cf0 one}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -1024,7 +1024,7 @@ reset}</string>
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs24 \cf0 A}</string>
+\f0\fs24 \cf0 zero}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
