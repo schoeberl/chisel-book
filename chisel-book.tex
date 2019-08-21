@@ -135,7 +135,7 @@ We will walk through these examples in detail.
 \chapter*{Acknowledgements}
 
 I would like to thank everyone who has worked on Chisel for creating such
-a cool hardware construction language, which is so joyful to use and
+a cool hardware construction language. Chisel is so joyful to use and
 therefore worth writing a book about.
 I am thankful to the whole Chisel community, which is so welcoming and friendly
 and never tired to answer questions on Chisel.
@@ -143,7 +143,7 @@ and never tired to answer questions on Chisel.
 I would also like to thank my students in the last years of an advanced computer
 architecture course where most of them picked up Chisel for the final project.
 Thank you for moving out of the comfort zone and taking up the journey of
-learning and using a bleeding edge hardware language. I know, some of
+learning and using a bleeding edge hardware description language. I know, some of
 the error messages of early Chisel (version 2) have not been very helpful ;-)
 Many of your questions have helped to shape this book.
 
@@ -1073,16 +1073,6 @@ in LUTs and flip-flops) and your performance of your design in maximum clocking 
 As a reference point, a decent pipelined RISC processor may consume about 3000
 4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
 Xilinx Spartan).
-
-\todo{Do we need more details here?}
-
-\subsection{A More Complete Project}
-
-
-For this exercise we will use the ALU example from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
-
-\todo{This example uses already quite some Scala and the switch statement.
-We should probably postpone this for later.}
 
 
 \chapter{Components}
@@ -2293,8 +2283,24 @@ out into a parent class. We will explore how to use inheritance with an example.
 In Section~\ref{sec:counter} we have explored various different forms of counters,
 which may be used for a low frequency tick generation. Let us assume we want to
 explore those different versions, e.g., to compare their resource consumption.
+We start with an abstract class to define the ticking interface:
 
+\shortlist{code/ticker.txt}
 
+\noindent As a first implementation of that abstract class we provide the \code{when} based
+counter:
+
+\shortlist{code/when_ticker.txt}
+
+We can test all different versions of our \emph{ticker} logic with a single test bench.
+We \emph{just} need to define the test bench to accept subtypes of \code{Ticker}.
+The tester waits to see the first occurrence of a tick (the start might be different for
+different implementations) and then check that \code{tick} repeats every $n$ clock cycles.
+
+\shortlist{code/ticker_tester.txt}
+
+\noindent Note the type parameter \code{T <: Ticker} on the test bench to accept a
+\code{Ticker} or any class that inherits from \code{Ticker}.
 
 
 \section{Generate Combinational Logic}

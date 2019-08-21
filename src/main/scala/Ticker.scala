@@ -1,5 +1,6 @@
 import chisel3._
 
+//- start ticker
 abstract class Ticker(n: Int) extends Module {
   val io = IO(new Bundle{
     val tick = Output(Bool())
@@ -7,7 +8,9 @@ abstract class Ticker(n: Int) extends Module {
 
 //  val cntReg = Reg(UInt(8.W))
 }
+//- end
 
+//- start when_ticker
 class WhenTicker(n: Int) extends Ticker(n) {
 
   val N = (n-1).U
@@ -22,3 +25,4 @@ class WhenTicker(n: Int) extends Ticker(n) {
 
   io.tick := cntReg === N
 }
+//- end
