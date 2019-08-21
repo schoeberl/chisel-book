@@ -529,6 +529,58 @@ details are available in the \myref{https://github.com/freechipsproject/firrtl/b
 
 The full list of operators can be found at
 \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}.
+The Chisel operator precedence is determined by the evaluation order of the circuit,
+which follows the \myref{https://docs.scala-lang.org/tour/operators.html}{Scala operator precedence}.
+If in doubt, it is always good praxis to use parentheses.
+
+%### List of operators
+%Chisel defines a set of hardware operators:
+%
+%| Operation        | Explanation |
+%| ---------        | ---------           |
+%| **Bitwise operators**                       | **Valid on:** SInt, UInt, Bool    |
+%| `val invertedX = ~x`                        | Bitwise NOT |
+%| `val hiBits = x & "h_ffff_0000".U`          | Bitwise AND                     |     
+%| `val flagsOut = flagsIn \| overflow`         | Bitwise OR                      |   
+%| `val flagsOut = flagsIn ^ toggle`           | Bitwise XOR                     |  
+%| **Bitwise reductions.**                     | **Valid on:** SInt and UInt. Returns Bool. |
+%| `val allSet = x.andR`                       | AND reduction                     |   
+%| `val anySet = x.orR`                        | OR reduction                      |  
+%| `val parity = x.xorR`                       | XOR reduction                     |   
+%| **Equality comparison.**                    | **Valid on:** SInt, UInt, and Bool. Returns Bool. |
+%| `val equ = x === y`                         | Equality                          |
+%| `val neq = x =/= y`                         | Inequality                        |
+%| **Shifts**                                  | **Valid on:** SInt and UInt       |
+%| `val twoToTheX = 1.S << x`                  | Logical shift left                |
+%| `val hiBits = x >> 16.U`                    | Right shift (logical on UInt and arithmetic on SInt). |  
+%| **Bitfield manipulation**                   | **Valid on:** SInt, UInt, and Bool. |
+%| `val xLSB = x(0)`                           | Extract single bit, LSB has index 0.     |  
+%| `val xTopNibble = x(15, 12)`                | Extract bit field from end to start bit position.     |            
+%| `val usDebt = Fill(3, "hA".U)`              | Replicate a bit string multiple times.     |               
+%| `val float = Cat(sign, exponent, mantissa)` | Concatenates bit fields, with first argument on left.     |
+%| **Logical Operations**                      | **Valid on:** Bool                                                                             
+%| `val sleep = !busy`                         | Logical NOT                       |       
+%| `val hit = tagMatch && valid`               | Logical AND                       |                 
+%| `val stall = src1busy \|\| src2busy`        | Logical OR                        |                     
+%| `val out = Mux(sel, inTrue, inFalse)`       | Two-input mux where sel is a Bool |                                               
+%| **Arithmetic operations**                   | **Valid on Nums:** SInt and UInt.  |
+%| `val sum = a + b` *or* `val sum = a +% b`   | Addition (without width expansion) |
+%| `val sum = a +& b`                          | Addition (with width expansion)    |         
+%| `val diff = a - b` *or* `val diff = a -% b` | Subtraction (without width expansion) |
+%| `val diff = a -& b`                         | Subtraction (with width expansion) |            
+%| `val prod = a * b`                          | Multiplication                     |            
+%| `val div = a / b`                           | Division                           |           
+%| `val mod = a % b`                           | Modulus                            |           
+%| **Arithmetic comparisons**                  | **Valid on Nums:** SInt and UInt. Returns Bool. |
+%| `val gt = a > b`                            | Greater than                       |      
+%| `val gte = a >= b`                          | Greater than or equal              |                 
+%| `val lt = a < b`                            | Less than                          |   
+%| `val lte = a <= b`                          | Less than or equal                 |              
+%
+%>Our choice of operator names was constrained by the Scala language.
+%We have to use triple equals```===``` for equality and ```=/=```
+%for inequality to allow the
+%native Scala equals operator to remain usable.
 
 \subsection{Multiplexer}
 
@@ -932,7 +984,7 @@ which is the same name as our Chisel module. We can identify our LED port as
 \code{output io\_led}. Pin names are the Chisel names with a prepended \code{io\_}.
 Besides our LED pin, the module also contains \code{clock} and \code{reset} input signals.
 Those two signals are added automatically by Chisel.
-Furthermore, we can identify our two register \code{cntReg} and \code{blkReg} definitions.
+Furthermore, we can identify the definition of our two registers \code{cntReg} and \code{blkReg}.
 We may also find the reset and update of those registers at the end of the module definition.
 Note, that Chisel generates a synchronous reset.
 
@@ -951,7 +1003,8 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{chisel}
 
 \noindent Note that in this example we have a concrete Chisel version number to avoid checking on
-each run for a new version (which will fail if we are not connected to the Internet).
+each run for a new version (which will fail if we are not connected to the Internet,
+e.g., when doing hardware design during a flight).
 Change the \code{build.sbt} configuration to use the latest Chisel version by changing the
 library dependency to
 
@@ -986,7 +1039,7 @@ If you have Quartus installed, open that project, compile with the green \emph{P
 and then configure the FPGA.
 
 Note that the \emph{Hello World} is the very minimal Chisel project.
-More realistic projects have their source files organized and contain testers.
+More realistic projects have their source files organized in packages and contain testers.
 The next exercise will explore such a project.
 
 \subsection{A Testing Exercise}
@@ -1651,8 +1704,8 @@ Figure~\ref{fig:fsm} shows the schematics of an FSM. The register contains the c
 The next state logic computes the the next state value (\code{next\_state})
 from the current \code{state} and the input (\code{in}).
 On the next clock tick, \code{state} becomes \code{next\_state}.
-The output logic computes the output (\code{out}). As the output depends only on the current
-state, this state machine is called a
+The output logic computes the output (\code{out}). As the output depends on the current
+state only, this state machine is called a
 \myref{https://en.wikipedia.org/wiki/Moore_machine}{Moore machine}.
 
 
@@ -1768,7 +1821,7 @@ In Chisel a register is a base type and can be freely used within a combinationa
 
 \section{Faster Output with a Mealy FSM}
 
-On a Moor FSM the output depends only on the current state.
+On a Moore FSM the output depends only on the current state.
 That means that a change of an input can be seen as a change of the
 output \emph{earliest} in the next clock cycle.
 If we want to observe an immediate change, we need a combinational
@@ -1807,7 +1860,7 @@ the input of the FSM and the output, this is called a
 \end{figure}
 
 Figure~\ref{fig:mealy} shows the schematic of a Mealy type FSM.
-Similar to the Moor FSM, the register contains the current \code{state} and
+Similar to the Moore FSM, the register contains the current \code{state} and
 the next state logic computes the the next state value (\code{next\_state})
 from the current \code{state} and the input (\code{in}).
 On the next clock tick, \code{state} becomes \code{next\_state}.
@@ -1861,17 +1914,17 @@ FSMs shall be used for more complex circuits with three and more states.
 \section{Moore versus Mealy FSM}
 
 To show the difference between a Moore and Mealy FSM we redo the edge
-detection with a Moor FSM. 
+detection with a Moore FSM. 
 
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/state-diag-rising-moore}
-  \caption{The state diagram of the rising edge detector as Moor FSM.}
+  \caption{The state diagram of the rising edge detector as Moore FSM.}
   \label{fig:diag:rising:moore}
 \end{figure}
 
 Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
-edge detection with a Moor FSM. Fist thing to notice is that the Moor FSM
+edge detection with a Moore FSM. Fist thing to notice is that the Moore FSM
 needs three states, compared to two states in the Mealy version.
 The state \code{puls} is needed to produce the single cycle puls.
 The FSM stays in state \code{puls} just one clock cycle and then
@@ -1882,13 +1935,26 @@ FSM output within the state representing circles.
 
 \longlist{code/rising_moore_fsm.txt}{Rising edge detection with a Moore FSM.}{lst:fsm:rising:moore}
 
-Listing~\ref{lst:fsm:rising:moore} shows the Moor version of the rising edge detection
+Listing~\ref{lst:fsm:rising:moore} shows the Moore version of the rising edge detection
 circuit. Is uses double the number of D flip-flops than the Mealy or direct
 coded version. The resulting next state logic, is therefore also larger
 than the Mealy or direct coded version.
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/rising}
+  \caption{Mealy and a  Moore FSM waveform for rising edge detection.}
+  \label{fig:rising}
+\end{figure}
+
+Figure~\ref{fig:rising} shows the waveform of a Mealy and a  Moore version
+of the rising edge detection FSM. We can see that the Mealy output closely
+follows the input rising edge, while the Moore output rises after the clock tick.
+We can also see that the Moore output is one clock cycle wide, where the Mealy
+output is usually less than a clock cycle.
+
 From the above example, one is tempted to find Mealy FSMs the \emph{better}
-FSMs as they need less state (and therefore logic) and react faster than a Moor FSM.
+FSMs as they need less state (and therefore logic) and react faster than a Moore FSM.
 However, the combinational path within a Mealy machine an cause trouble in
 larger designs. First, with a chain of communicating FSM (see next chapter) this
 combinational path can become long. Second, if the communicating FSMs build
@@ -1909,15 +1975,14 @@ Now it is time to write some \emph{real} FSM code.
 Pick a little bit more complex example and implement the FMS and
 write a test bench for it.
 
-A classic example is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
+A classic example for a FSM is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
 A traffic light controller has to ensure that on a switch from red to green
 there is a phase in between where both roads in the intersection
 have a no-go light (red and orange).
-To make this example a little bit more interesting, have a priority road.
-The other road has two car detectors (on both entries into the intersection).
-Switch to green for this road only when a care is detected and then switch
+To make this example a little bit more interesting, consider a priority road.
+The minor road has two car detectors (on both entries into the intersection).
+Switch to green for the minor road only when a care is detected and then switch
 back to green for the priority road.
-
 
 \chapter{Communicating State Machines}
 

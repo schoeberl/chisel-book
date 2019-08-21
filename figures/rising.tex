@@ -1,0 +1,29 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=2.5ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+{clock}     & [L] 14{C} \\
+{din} & 2.5L  4H          0L        2.5L          2H          2L          1L \\
+{risingEdge Mealy}   & .1L 2.5L 1.5H  5L   1H   2L 1.9L \\
+{risingEdde Moore}   & .1L 4L  2H  4L   2H   1.9L  \\
+\extracode
+\vertlines[semitransparent,semithick,blue]{2,4,6,8,10,12}
+\endextracode
+\end{tikztimingtable}
+
+\end{document}
