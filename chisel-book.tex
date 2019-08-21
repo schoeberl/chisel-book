@@ -1458,7 +1458,7 @@ buttons to the input of your circuit and the output to the 7-segment display.
 
 \chapter{Sequential Building Blocks}
 
-Sequential circuits a circuits where the output depends on the input \emph{and}
+Sequential circuits are circuits where the output depends on the input \emph{and}
 a previous value. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
@@ -1610,6 +1610,7 @@ Now that we have explored all basic uses of a register, we will put those regist
 good use and build more interesting sequential circuits.
 
 \section{Counters}
+\label{sec:counter}
 
 \begin{figure}
   \centering
@@ -1648,7 +1649,7 @@ with the maximum value and reset the counter to that value when reaching 0.
 
 \shortlist{code/down_counter.txt}
 
-\noindent As we are in the mood of writing and using more counters, we can
+\noindent As we are writing and using more counters, we can
 define a function with a parameter to generate a counter for us.
 
 \shortlist{code/function_counter.txt}
@@ -1711,7 +1712,7 @@ specify the width with the type at register definition or with the
 initialization value. This can avoid surprises when a reset value of \code{0.U}
 results in a counter with a width of a single bit.
 
-\section{The Nerd Counter}
+\subsection{The Nerd Counter}
 
 Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
 For example, we want to design a really optimized version of our counter/tick generation.
@@ -1721,10 +1722,11 @@ up we need to compare against a number, which is a some bit string. The comparat
 can be built out of a bunch of inverters for the zeros in the bit string and a large AND gate.
 When counting down to zero, the comparator is a large NOR gate, which might be
 a little bit cheaper than the comparator against a constant in an ASIC.
-In an FPGA where logic is built out of lookup tables, the resource consumption
-is the same for the up and down counter.
+In an FPGA where logic is built out of lookup tables, there is no difference between comparing
+against a 0 or 1 bit, the resource consumption is the same for the up and down counter.
 
-We want to generate a tick every N clock cycles.
+However, there is still one more trick a clever hardware designer can pull off.
+Counting up or down needed a comparison against all counting bis, so far.
 What if we count from N-2 down to -1? A negative number has the most significant bit
 set to 1, a positive number has this bit set to 0. We need to check this bit only to detect
 that our counter reached -1. Here it is, the counter created by a nerd:
@@ -2270,6 +2272,33 @@ allowed to depend combinational on the other signal.
 
 \todo{Read and cite AXI}
 
+\chapter{Hardware Generation}
+
+The strength of Chisel is that it allows to write so called hardware generators.
+With older hardware description languages, such as VHDL and Verilog,
+we use another language, e.g., Java or Python, to generate hardware.
+The author has often written small Java programs to generate VHDL tables.
+In Chisel, the full power of Scala (and Java libraries) is available at hardware
+construction. Therefore, we can write our hardware generators in the same
+language and execute them as part of the Chisel circuit generation.
+
+\section{Configure with Parameters}
+
+\section{Use Inheritance}
+
+Chisel is an object-oriented language. A hardware component, the Chisel \code{Module}
+is a Scala class. Therefore, we can use inheritance to factor a common behavior
+out into a parent class. We will explore how to use inheritance with an example.
+
+In Section~\ref{sec:counter} we have explored various different forms of counters,
+which may be used for a low frequency tick generation. Let us assume we want to
+explore those different versions, e.g., to compare their resource consumption.
+
+
+
+
+\section{Generate Combinational Logic}
+
 
 \chapter{Example Designs}
 
@@ -2325,34 +2354,8 @@ class ReaderIO(size: Int) extends Bundle {
 }
 \end{chisel}
 
-\subsection*{Start on Better Counters}
 
-This is straightforward. However, one might ask if this is the most efficient
-implementation of counting. The comparison against an end value, 10 in our
-example, involves some combinational circuit in an ASIC. More efficient in an
-ASIC (and as well as in loops of software programs) is counting down and exit when 0
-is reached.
 
-If we want to count N, we start with N-1 and count till 0.
-
-\todo{down counting code}
-
-With a comparison against 0 we need only a NOR gat to detect the 0 condition.
-This optimization is valid for an ASIC, but not for an FPGA based on LUTs.
-With comparison using LUTs, there is no difference comparing against a '0' or
-'1' bit. In that case, use a better readable counting logic towards the end value.
-
-However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison against all counting bis, so far.
-What about counting down \emph{one too many}? In that case, the counter
-becomes negative. Detecting a negative value is simply comparing the
-most significant bit against 'a'.
-
-If we want to count N, we start with N-2 and count till -1.
-
-\todo{Show optimized down counting code.}
-
-\todo{discuss >= and so on}
 
 \chapter{Designing a Processor}
 
@@ -2837,7 +2840,7 @@ Stuff that saves a little hardware, but might not worse the less readable code
  * Counter to -1
  * Shared adder and subtractor
  * Mux with one hot encoding of select
- 5. little tricks: count down, add/sub
+ * little tricks: count down, add/sub
 
 
 \section{Scala for Hardware Developers}
