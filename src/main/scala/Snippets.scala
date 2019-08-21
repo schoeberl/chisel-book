@@ -2,7 +2,7 @@
 
 import chisel3._
 
-class BasciExercise extends Module {
+class BasicExercise extends Module {
   //- start basic_exercise
   val io = IO(new Bundle {
     val sw = Input(UInt(2.W))

@@ -144,9 +144,7 @@ class CompFn extends Module {
   val delIn = io.del
 
   //- start components_fn_delay
-  def delay(x: UInt) = {
-    RegNext(x)
-  }
+  def delay(x: UInt) = RegNext(x)
   //- end
 
   //- start components_fn_2delay

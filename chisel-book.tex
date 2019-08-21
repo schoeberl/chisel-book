@@ -132,16 +132,31 @@ We will walk through these examples in detail.
 \lstlistoflistings
 \endgroup
 
+\chapter*{Acknowledgements}
+
+I would like to thank everyone who has worked on Chisel for creating such
+a cool hardware construction language, which is so joyful to use and
+therefore worth writing a book about.
+I am thankful to the whole Chisel community, which is so welcoming and friendly
+and never tired to answer questions on Chisel.
+
+I would also like to thank my students in the last years of an advanced computer
+architecture course where most of them picked up Chisel for the final project.
+Thank you for moving out of the comfort zone and taking up the journey of
+learning and using a bleeding edge hardware language. I know, some of
+the error messages of early Chisel (version 2) have not been very helpful ;-)
+Many of your questions have helped to shape this book.
+
+
 \mainmatter
 
-  
 \chapter{Introduction}
 \label{sec:intro}
 
 This book is an introduction to digital system design using a modern hardware
 construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
 In this book, we focus on a higher abstraction level than usual in digital design,
-to enable to build more complex, interacting digital systems in a shorter time.
+to enable you to build more complex, interacting digital systems in a shorter time.
 
 This book and Chisel is targeting two groups of developers:
 (1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
@@ -151,8 +166,10 @@ where hardware generation is part of the language and
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
 It is perfectly fine to use Chisel as first hardware description language.
 
-
-\todo{Why Chisel}
+Chisel brings advances in software engineering, such as object orientated
+and functional languages, into digital design.
+Chisel does not only allow to express hardware at the register-transfer level,
+but allows you to write hardware generators.
 
 Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is definitely
@@ -181,13 +198,10 @@ As prerequisites for this book we assume basic knowledge of
 \myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
-Chisel can be and shall be, your first programming language to describe digital hardware.
+Chisel can be, and shall be, your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
-
-\todo{Think about: Chisel is not a large (big?) language, but this is good for hardware description. The basic constructs can be learned/ fit on a page.... The power of the Chisel ecosystem comes from being embedded in Scala when programming hardware generators.
-Check also Rust book for structure, but better the Scala book.}
 
 Chisel itself is not a big language, as it shall be for hardware design.
 The basic constructs fit on
@@ -334,8 +348,8 @@ In IntelliJ you can create a new project from existing sources and then select f
 This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
 All Chisel code examples, shown in this book, are included in the repository.
 The code compiles with a recent version of Chisel and many examples also include a test bench.
-Larger Chisel examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way
-to incorporate your improvement.
+Larger Chisel examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
+You can also provide feedback or comments for improvements by filing an issue on GitHub.
 
 This book is freely available as a PDF eBook.\footnote{A print version will soon be available
 from Amazon.com.} The eBook version features links to further resources
@@ -666,13 +680,10 @@ and in digital design, counting starts at 0. Therefore, if we want to count till
 10 we count from 0 to 9. The following code shows such a counter that counts
 till 9 and wraps around to 0 when reaching 9.
 
-If we want to count N, we start with 0 and count till N-1.
+If we want to count N, we start with 0 and count till N-1. The following
+counter counts from 0 to 100, inclusive.
 
 \shortlist{code/counter.txt}
-
-
-
-
 
 \section{Exercises}
 
@@ -1224,11 +1235,13 @@ As a simple example we generate an adder:
 \shortlist{code/components_fn_use.txt}
 
 \noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
-during elaboration, but create two adders (hardware instances). The adder example is artificial
-to be a simple example. Chisel has already an adder generation function, like \code{+(that: UInt)}.
+during elaboration, but create two adders (hardware instances). The adder is an artificial example
+to keep it simple. Chisel has already an adder generation function, like \code{+(that: UInt)}.
 
 Functions as lightweight hardware generators can also contain state (including a register).
 Following example returns a one clock cycle delay element (a register).
+If a function has just a single statement, we can write it in one line and omit the curly
+braces ({}).
 
 \shortlist{code/components_fn_delay.txt}
 
@@ -1589,7 +1602,7 @@ with a conditional update:
 \shortlist{code/sequ_reg_init_ena.txt}
 
 A register can also be part of an expression. Following circuit detects the rising edge
-of a signal by comparing its current value with the one in the last clock cycle.
+of a signal by comparing its current value with the one from the last clock cycle.
 
 \shortlist{code/sequ_reg_rising.txt}
 
@@ -1605,7 +1618,7 @@ good use and build more interesting sequential circuits.
   \label{fig:counter}
 \end{figure}
 
-One of the most basic sequential circuit is a counter. In its simplest form, a counter is a register
+One of the most basic sequential circuits is a counter. In its simplest form, a counter is a register
 where the output is connected to an adder and the adder's output it connected to the input
 of the register. Figure~\ref{fig:counter} shows such a free-running counter.
 
@@ -1618,10 +1631,35 @@ to 0 again. A counter shall also be reset to a known value.
 
 \shortlist{code/sequ_event_counter.txt}
 
-\subsection{Counting Up}
+\subsection{Counting Up and Down}
 
 To count up to a value and then restart with \code{0} we need to compare
-the counter value with a maximum constant.
+the counter value with a maximum constant, e.g., with a \code{when}
+conditional statement.
+
+\shortlist{code/when_counter.txt}
+
+\noindent We can also use a multiplexer for our counter:
+
+\shortlist{code/mux_counter.txt}
+
+\noindent If we are in the mood of counting down, we start (reset the counter register)
+with the maximum value and reset the counter to that value when reaching 0.
+
+\shortlist{code/down_counter.txt}
+
+\noindent As we are in the mood of writing and using more counters, we can
+define a function with a parameter to generate a counter for us.
+
+\shortlist{code/function_counter.txt}
+
+\noindent The last statement of the function \code{genCounter} is the return
+value of the function, in our case the counting register \code{cntReg}.
+
+Note, that in all the examples our counter had values between \code{0} and
+\code{N}, including \code{N}. If we want to count 10 clock cycles we need
+to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
+\myref{https://en.wikipedia.org/wiki/Off-by-one_error}{off-by-one error}.
 
 \subsection{Generating Timing with Counters}
 
@@ -1637,6 +1675,16 @@ that we need in our circuit. That tick occurs every $n$ clock cycles,
 where $n = f_{clock}/f_{tick}$ and is exactly one original clock cycle long.
 This tick is \emph{not} used as a derived clock, but as an enable signal for
 registers in the circuit that shall logically operate at frequency $f_{tick}$.
+Figure~\ref{fig:tick-wave} shows an example of a tick generated every
+3 clock cycles.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/tick_wave}
+  \caption{A waveform diagram for the generation of a slow frequency tick.}
+  \label{fig:tick-wave}
+\end{figure}
+
 
 In the following circuit we describe a counter that counts from \code{0}
 to the maximum value of \code{N - 1}. When the maximum value is reached,
@@ -1663,17 +1711,33 @@ specify the width with the type at register definition or with the
 initialization value. This can avoid surprises when a reset value of \code{0.U}
 results in a counter with a width of a single bit.
 
-\section{Stuff}
+\section{The Nerd Counter}
 
-\todo{Notes on what to describe: edge detector, also using a function (e.g., one has more inputs
-to detect pressed buttons)}
+Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
+For example, we want to design a really optimized version of our counter/tick generation.
+A standard counter needs following resources: one register, one adder (or subtractor),
+and a comparator. We cannot do much about the register or the adder. If we count
+up we need to compare against a number, which is a some bit string. The comparator
+can be built out of a bunch of inverters for the zeros in the bit string and a large AND gate.
+When counting down to zero, the comparator is a large NOR gate, which might be
+a little bit cheaper than the comparator against a constant in an ASIC.
+In an FPGA where logic is built out of lookup tables, the resource consumption
+is the same for the up and down counter.
+
+We want to generate a tick every N clock cycles.
+What if we count from N-2 down to -1? A negative number has the most significant bit
+set to 1, a positive number has this bit set to 0. We need to check this bit only to detect
+that our counter reached -1. Here it is, the counter created by a nerd:
+
+\shortlist{code/nerd_counter.txt}
 
 \section{Exercise}
 
 Use the 7-segment encoder from the last exercise and add a 4-bit counter as input
-to switch count from \code{0} to \code{F}. When you directly connect this
-counter to the clock of the FPGA board, you will see all 16 digits basically
-overlapped. Therefore, you need to slow down the counting. Create a second
+to switch the display from \code{0} to \code{F}. When you directly connect this
+counter to the clock of the FPGA board, you will see all 16 numbers basically
+overlapped (all 7 segments will light up).
+Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
 
