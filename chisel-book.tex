@@ -142,7 +142,7 @@ and never tired to answer questions on Chisel.
 
 I would also like to thank my students in the last years of an advanced computer
 architecture course where most of them picked up Chisel for the final project.
-Thank you for moving out of the comfort zone and taking up the journey of
+Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding edge hardware description language. I know, some of
 the error messages of early Chisel (version 2) have not been very helpful ;-)
 Many of your questions have helped to shape this book.
@@ -155,7 +155,7 @@ Many of your questions have helped to shape this book.
 
 This book is an introduction to digital system design using a modern hardware
 construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{chisel:dac2012}.
-In this book, we focus on a higher abstraction level than usual in digital design,
+In this book, we focus on a higher abstraction level than usual in digital design books,
 to enable you to build more complex, interacting digital systems in a shorter time.
 
 This book and Chisel is targeting two groups of developers:
@@ -180,7 +180,7 @@ The two most common hardware description languages are Verilog and VHDL.
 Both languages are old, contain a lot of legacies, and have a moving line of what
 constructs of the language are synthesizable to hardware.
 Do not get me wrong: VHDL and Verilog are perfectly able to describe a hardware
-block that can be synthesized in an
+block that can be synthesized into an
 \myref{https://en.wikipedia.org/wiki/Application-specific_integrated_circuit}{ASIC}.
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
@@ -2105,9 +2105,9 @@ and remains asserted;
 
 \shortlist{code/flasher_timer.txt}
 
-\noindent Following code shows the master FSM:
+\noindent Listing~\ref{lst:flasher:master} shows the master FSM.
 
-\shortlist{code/flasher_fsm.txt}
+\longlist{code/flasher_fsm.txt}{Master FSM of the light flasher.}{lst:flasher:master}
 
 \begin{figure}
   \centering
@@ -2133,9 +2133,9 @@ Following code shows the down counter FSM:
 
 \noindent Note, that the counter is loaded with 2 for 3 flashes, as it counts the
 \emph{remaining} flashes and is decremented in state \code{space} when the timer
-is done. The master FSM for the double refactored flasher:
+is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double refactored flasher.
 
-\shortlist{code/flasher2_fsm.txt}
+\longlist{code/flasher2_fsm.txt}{Master FSM of the double refactored light flasher.}{lst:flasher2:master}
 
 Besides having a master FSM that is reduced to just three states, our current solution
 is also better configurable. No FSM needs to be changed if we want to change
@@ -2152,7 +2152,7 @@ unidirectional data exchange.
 One common example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite state machine
 with datapath (FSMD). The state machine controls the datapath and the datapath
-performs the computation. The FSM input is input from the environment and input
+performs the computation. The FSM input is the input from the environment and the input
 from the datapath. The data from the environment is fed into the datapath and the
 data output comes from the datapath. Figure~\ref{fig:popcnt-fsmd} shows an example
 of the combination of the FSM with the datapath.
@@ -2195,10 +2195,10 @@ zero we are finished and move to state \code{Done}. There the FSM signals with a
 signal that the popcount value is ready to be consumed. On a ready signal from the
 receiver the FSM moves back to the \code{Idle} state, ready to compute the next popcount.
 
-The top level component instantiates the FSM and the datapath components and connects
+The top level component, shown in Listing~\ref{lst:pop:top} instantiates the FSM and the datapath components and connects
 them with bulk connections.
 
-\shortlist{code/popcnt_main.txt}
+\longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
 
 \begin{figure}
   \centering
@@ -2224,15 +2224,18 @@ set to the number of shifts to be performed.
 Otherwise, the \code{regData} register is shifted to the right, the least significant bit
 of the \code{regData} register added to the \code{regPopCount} register, and the counter
 decremented until it is 0. When the counter is 0, the output contains the popcount.
+Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
+circuit.
 
-\shortlist{code/popcnt_data.txt}
+\longlist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
 
 The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it
 switches to the \code{count} state and waits till the datapath has finished counting.
 When the popcount is valid the FSM switches to state \code{done} and waits till the
 popcount is read (signaled by \code{popCntReady}).
+Listing~\ref{lst:pop:fsm} showes the code of the FSM.
 
-\shortlist{code/popcnt_fsm.txt}
+\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 \section{Ready-Valid Interface}
 
@@ -2363,7 +2366,7 @@ class ReaderIO(size: Int) extends Bundle {
 
 
 
-\chapter{Designing a Processor}
+\chapter{Desig of a Processor}
 
 As one of the last chapters in this book we present a medium size project:
 the design, simulation, and testing of a microprocessor.
