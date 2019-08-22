@@ -545,60 +545,57 @@ details are available in the \myref{https://github.com/freechipsproject/firrtl/b
 
 
 
-The full list of operators can be found at
-\myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}.
+Table~\ref{tab:operators} shows the full list of operators
+(see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
 The Chisel operator precedence is determined by the evaluation order of the circuit,
 which follows the \myref{https://docs.scala-lang.org/tour/operators.html}{Scala operator precedence}.
-If in doubt, it is always good praxis to use parentheses.
+If in doubt, it is always good praxis to use parentheses.\footnote{The operator precedence in
+Chisel is a side effect of the hardware elaboration when the tree of hardware nodes
+is created by executing the Scala operators. The Scala operator precedence is similar but
+not identical to Java/C. Verilog has the same operator precedence as C, but VHDL
+has a different one. Verilog has precedence ordering for logic operations, but in VHDL
+those operators have the same precedence and are evaluated from left to right.}
 
-%### List of operators
-%Chisel defines a set of hardware operators:
-%
-%| Operation        | Explanation |
-%| ---------        | ---------           |
-%| **Bitwise operators**                       | **Valid on:** SInt, UInt, Bool    |
-%| `val invertedX = ~x`                        | Bitwise NOT |
-%| `val hiBits = x & "h_ffff_0000".U`          | Bitwise AND                     |     
-%| `val flagsOut = flagsIn \| overflow`         | Bitwise OR                      |   
-%| `val flagsOut = flagsIn ^ toggle`           | Bitwise XOR                     |  
-%| **Bitwise reductions.**                     | **Valid on:** SInt and UInt. Returns Bool. |
-%| `val allSet = x.andR`                       | AND reduction                     |   
-%| `val anySet = x.orR`                        | OR reduction                      |  
-%| `val parity = x.xorR`                       | XOR reduction                     |   
-%| **Equality comparison.**                    | **Valid on:** SInt, UInt, and Bool. Returns Bool. |
-%| `val equ = x === y`                         | Equality                          |
-%| `val neq = x =/= y`                         | Inequality                        |
-%| **Shifts**                                  | **Valid on:** SInt and UInt       |
-%| `val twoToTheX = 1.S << x`                  | Logical shift left                |
-%| `val hiBits = x >> 16.U`                    | Right shift (logical on UInt and arithmetic on SInt). |  
-%| **Bitfield manipulation**                   | **Valid on:** SInt, UInt, and Bool. |
-%| `val xLSB = x(0)`                           | Extract single bit, LSB has index 0.     |  
-%| `val xTopNibble = x(15, 12)`                | Extract bit field from end to start bit position.     |            
-%| `val usDebt = Fill(3, "hA".U)`              | Replicate a bit string multiple times.     |               
-%| `val float = Cat(sign, exponent, mantissa)` | Concatenates bit fields, with first argument on left.     |
-%| **Logical Operations**                      | **Valid on:** Bool                                                                             
-%| `val sleep = !busy`                         | Logical NOT                       |       
-%| `val hit = tagMatch && valid`               | Logical AND                       |                 
-%| `val stall = src1busy \|\| src2busy`        | Logical OR                        |                     
-%| `val out = Mux(sel, inTrue, inFalse)`       | Two-input mux where sel is a Bool |                                               
-%| **Arithmetic operations**                   | **Valid on Nums:** SInt and UInt.  |
-%| `val sum = a + b` *or* `val sum = a +% b`   | Addition (without width expansion) |
-%| `val sum = a +& b`                          | Addition (with width expansion)    |         
-%| `val diff = a - b` *or* `val diff = a -% b` | Subtraction (without width expansion) |
-%| `val diff = a -& b`                         | Subtraction (with width expansion) |            
-%| `val prod = a * b`                          | Multiplication                     |            
-%| `val div = a / b`                           | Division                           |           
-%| `val mod = a % b`                           | Modulus                            |           
-%| **Arithmetic comparisons**                  | **Valid on Nums:** SInt and UInt. Returns Bool. |
-%| `val gt = a > b`                            | Greater than                       |      
-%| `val gte = a >= b`                          | Greater than or equal              |                 
-%| `val lt = a < b`                            | Less than                          |   
-%| `val lte = a <= b`                          | Less than or equal                 |              
-%
-%>Our choice of operator names was constrained by the Scala language.
-%We have to use triple equals```===``` for equality and ```=/=```
-%for inequality to allow the
-%native Scala equals operator to remain usable.
+Table~\ref{tab:functions} shows various functions defined on and for Chisel data types.
+
+\begin{table}
+ \centering
+ \label{tab:operators}
+  \begin{tabular}{lll}
+    \toprule
+    Operator & Description & Data types \\
+    \midrule
+    \code{* / \%} & multiplication, division, modulus & UInt, SInt \\
+    \code{+ -} & addition, subtraction & UInt, SInt \\
+    \code{=== =/=} & equal, not equal & UInt, SInt, returns Bool \\
+    \code{> >= < <=} & comparison & UInt, SInt, returns Bool \\
+    \code{<< >>} & shift left, shift right (sign extend on SInt) & UInt, SInt \\
+    \code{\~} & NOT & UInt, SInt, Bool \\
+    \code{\& | \^} & AND, OR, XOR & UInt, SInt, Bool \\
+    \code{!} & logical NOT & Bool \\
+    \code{\&\& ||} & logical AND, OR & Bool \\
+    \bottomrule 
+  \end{tabular} 
+  \caption{Chisel defined hardware operators.}
+\end{table}
+
+\begin{table}
+ \centering
+ \label{tab:functions}
+  \begin{tabular}{lll}
+    \toprule
+    Function & Description & Data types \\
+    \midrule
+    \code{v.andR v.orR v.xorR} & AND, OR, XOR reduction & UInt, SInt, returns Bool \\
+    \code{v(n)} & single bit extraction & UInt, SInt \\
+    \code{v(end, start)} & bit field extraction & UInt, SInt \\
+    \code{Fill(n, v)} & bit string replication, n times & UInt, SInt \\
+    \code{Cat(a, b, ...)} & bit field concatenation & UInt, SInt \\
+    \bottomrule 
+  \end{tabular} 
+  \caption{Chisel defined hardware functions, invoked on \code{v}.}
+\end{table}                                            
+    
 
 \subsection{Multiplexer}
 
@@ -2361,7 +2358,8 @@ We can use the full power of Scala to generate our logic (tables).
 E.g., generate a table of fix point constants to represent a trigonometric function,
 compute constants for digital filters, or writing a small assembler in Scala
 to generate code for a microprocessor written in Chisel. All those functions
-in the same code base, maybe executed during hardware generation.
+are in the same code base (same language) and can be executed during
+hardware generation.
 
 A classic example is the conversion of a binary number
 into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
