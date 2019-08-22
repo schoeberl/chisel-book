@@ -2333,6 +2333,26 @@ sbt "testOnly TickerSpec"
 
 \section{Generate Combinational Logic}
 
+In Chisel we can easily generate logic by creating a logic table with
+a Chisel \code{Vec} from a Scala \code{Array}.
+We might have data in a file, that we can read in at hardware generation
+time for the logic table.
+Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
+class form the Scala standard library to read the file ``data.txt'', which
+contains integer constants in textual representation.
+
+\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
+
+We can use the full power of Scala to generate our logic (tables).
+E.g., generate a table of fix point constants to represent a trigonometric function,
+compute constants for digital filters, or writing a small assembler in Scala
+to generate code for a microprocessor written in Chisel. All those functions
+in the same code base, maybe executed during hardware generation.
+
+A classic example I have used in teaching is the conversion of a binary number
+into binary...
+
+
 
 \chapter{Example Designs}
 
