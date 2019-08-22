@@ -2283,27 +2283,52 @@ Chisel is an object-oriented language. A hardware component, the Chisel \code{Mo
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
 out into a parent class. We will explore how to use inheritance with an example.
 
-In Section~\ref{sec:counter} we have explored various different forms of counters,
+In Section~\ref{sec:counter} we have explored different forms of counters,
 which may be used for a low frequency tick generation. Let us assume we want to
 explore those different versions, e.g., to compare their resource consumption.
 We start with an abstract class to define the ticking interface:
 
 \shortlist{code/ticker.txt}
 
-\noindent As a first implementation of that abstract class we provide the \code{when} based
-counter:
+\noindent Listing~\ref{lst:ticker:up} shows a first implementation of that abstract class
+with a counter, counting up, for the tick generation.
 
-\shortlist{code/when_ticker.txt}
+\longlist{code/up_ticker.txt}{Tick generation with a counter.}{lst:ticker:up}
 
 We can test all different versions of our \emph{ticker} logic with a single test bench.
 We \emph{just} need to define the test bench to accept subtypes of \code{Ticker}.
-The tester waits to see the first occurrence of a tick (the start might be different for
-different implementations) and then check that \code{tick} repeats every $n$ clock cycles.
+Listing~\ref{lst:ticker:test} shows the Chisel code for the tester.
+The \code{TickerTester} has several parameters: (1) the type parameter
+\code{[T <: Ticker]} to accept a \code{Ticker} or any class that inherits from \code{Ticker},
+(2) the design under test, being of type \code{T} or a subtype thereof,
+and (3) the number of clock cycles we expect for each tick.
+The tester waits for the first occurrence of a tick (the start might be different for
+different implementations) and then checks that \code{tick} repeats every $n$ clock cycles.
 
-\shortlist{code/ticker_tester.txt}
+\longlist{code/ticker_tester.txt}{A tester for different versions of the ticker.}{lst:ticker:test}
 
-\noindent Note the type parameter \code{T <: Ticker} on the test bench to accept a
-\code{Ticker} or any class that inherits from \code{Ticker}.
+With a first, easy implementation of the ticker we can actually test the tester
+itself, probably with some \code{println} debugging. When we are confident that
+the simple ticker and the tester are correct, we can proceed and explore
+two more versions of the ticker. Listing~\ref{lst:ticker:down} shows the tick
+generation with a counter counting down to 0.
+Listing~\ref{lst:ticker:nerd} shows the nerd version of counting down to -1 to use
+less hardware by avoiding the comparator.
+
+\longlist{code/down_ticker.txt}{Tick generation with a down counter.}{lst:ticker:down}
+
+\longlist{code/nerd_ticker.txt}{Tick generation by counting down to -1.}{lst:ticker:nerd}
+
+We can test all three versions of the ticker by using ScalaTest specifications,
+creating instances of the different versions of the ticker and passing them
+to the generic test bench. Listing~\ref{lst:ticker:spec} shows the specification.
+We run the ticker tests only with:
+\begin{chisel}
+sbt "testOnly TickerSpec"
+\end{chisel}
+
+\longlist{code/ticker_spec.txt}{ScalaTest specifications for the ticker tests.}{lst:ticker:spec}
+
 
 
 \section{Generate Combinational Logic}
@@ -2311,8 +2336,8 @@ different implementations) and then check that \code{tick} repeats every $n$ clo
 
 \chapter{Example Designs}
 
-In this section we explore some medium sizes digital designs, such as
-a FIFO buffer, which are used as building blocks for larger design.
+In this section we explore some medium size digital designs, such as
+a FIFO buffer, which are used as building blocks for a larger design.
 As an example we will design a serial interface (also called UART),
 which itself will use the FIFO buffer.
 
@@ -2635,9 +2660,6 @@ at the Chisel repo}.
 
 \section{Testing}
 
-\todo{I need more details here from the Chisel developers on what and how
-to test.}
-
 When you change the Chisel library you should run the Chisel tests.
 In an \code{sbt} based project, this is usually run with:
 
@@ -2766,9 +2788,6 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 \chapter{Summary}
 \label{sec:conclusion}
 
-\subsection*{Acknowledgment}
-
-\todo{Sometimes we received some help. Sometimes external funding.}
 
 
 
@@ -2776,16 +2795,13 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 
 This book is available in open source.
 The repository also contains slides for a Chisel course and
-all Chisel examples are included.
-
-\url{https://github.com/schoeberl/chisel-book}
+all Chisel examples: \url{https://github.com/schoeberl/chisel-book}
 
 
 
 A collection of medium sized examples, which most are referenced
 in the book, is also available in open source. This collection
-contains also projects for various popular FPGA boards.
-
+contains also projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
 
 \chapter{Headings}
