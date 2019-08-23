@@ -60,34 +60,6 @@ class Adder extends Module {
   io.result := addVal
 }
 
-class UseAdder extends Module {
-  val io = IO(new Bundle {
-    val result = Output(UInt(4.W))
-  })
-
-  val ina = 10.U
-  val inb = 3.U
-
-  val adder = Module(new Adder())
-  adder.io.a := ina
-  adder.io.b := inb
-  val result = adder.io.result
-
-  io.result := result
-}
-
-class ParamAdder(n: Int) extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(n.W))
-    val b = Input(UInt(n.W))
-    val result = Output(UInt(n.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-
-
 class Conditional extends Module {
   val io = IO(new Bundle {
     val condition = Input(Bool())

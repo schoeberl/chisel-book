@@ -18,7 +18,7 @@ book:
 	pdflatex $(DOC)
 
 clean:
-	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
+	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.lol # *.pdf
 	rm -rf code
 	rm -rf test_run_dir
 
