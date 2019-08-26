@@ -31,6 +31,7 @@ class ExecuteIO extends Bundle {
   val mem = Output(new ExecuteMemory())
 }
 
+/*
 class Channel extends Bundle {
   val data = Input(UInt(32.W))
   val ready = Output(Bool())
@@ -41,6 +42,7 @@ class ChannelUsage extends Bundle {
   val input = new Channel()
   val output = Flipped(new Channel())
 }
+ */
 
 class ParamChannel(n: Int) extends Bundle {
   val data = Input(UInt(n.W))

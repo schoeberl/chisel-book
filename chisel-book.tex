@@ -132,6 +132,14 @@ hardware design with Chisel.
 \lstlistoflistings
 \endgroup
 
+%\chapter*{Foreword}
+%
+%Here comes the text.
+%
+%\bigskip
+%
+%Jonathan Bachrach, designer of Chisel
+
 \chapter*{Acknowledgements}
 
 I would like to thank everyone who has worked on Chisel for creating such
@@ -508,7 +516,7 @@ and \code{false} to Chisel \code{Bool} constants.
 \section{Combinational Circuits}
 
 Chisel uses \myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} operators,
-as they are defined in C, Java, Scala, and probably several other programming languages,
+as they are defined in C, Java, Scala, and several other programming languages,
 to described combinational circuits.
 Following line of code defines a circuit that combines signals \code{a} and \code{b} with \emph{and}
 gates and combines the result with signal \code{c} with \emph{or} gates.
@@ -543,7 +551,10 @@ addition and subtraction, the sum of the two widths for the multiplication, and 
 the width of the numerator for divide and modulo operations.\footnote{The exact
 details are available in the \myref{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}{FIRRTL specification}.}
 
+A signal can also first be defined as a \code{Wire} of some type. Later we can assign a
+value to the wire with the \code{:=} update operator.
 
+\shortlist{code/wire.txt}
 
 Table~\ref{tab:operators} shows the full list of operators
 (see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
@@ -677,10 +688,75 @@ and in digital design, counting starts at 0. Therefore, if we want to count till
 10 we count from 0 to 9. The following code shows such a counter that counts
 till 9 and wraps around to 0 when reaching 9.
 
-If we want to count N, we start with 0 and count till N-1. The following
-counter counts from 0 to 100, inclusive.
-
 \shortlist{code/counter.txt}
+
+\section{Bundle and Vec}
+
+Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
+signals of different types and (2) a \code{Vec} to represent a collection of signals.
+\code{Bundle}s and \code{Vec}s can be arbitrary nested.
+
+
+A Chisel bundle groups several signals. The entire bundle can be referenced
+as a whole, or individual fields can be accessed by their name.
+We can define our own bundle (collection of signals) by defining a class that
+extends \code{Bundle} and list the fields as \code{val}s within the constructor block.
+
+\shortlist{code/bundle.txt}
+
+\noindent To use a bundle we create it with \code{new} and wrap it into a \code{Wire}.
+The fields are accessed with the dot notation:
+
+\shortlist{code/bundle_use.txt}
+
+Dot notation is common in object oriented languages, where \code{x.y} means
+\code{x} is a reference to an object and \code{y} is a field of that object.
+As Chisel is object oriented, we use dot notation to access fields in a bundle.
+A bundle is similar to a \code{struct} in C, a \code{record} in VHDL, or a
+\code{struct} in SystemVerilog.
+A bundle can also be referenced as a whole:
+
+\shortlist{code/bundle_ref.txt}
+
+A Chisel \code{Vec} represents a collection of signals of the same type (a vector).
+Each element can be accessed by an index. A Chisel \code{Vec} is similar
+to array data structures in other programing languages.\footnote{The name \code{Array}
+is already used in Scala.}
+A \code{Vec} is cerated by calling the constructor with two parameters: the
+number of elements and the type of the elements. A combinational \code{Vec}
+needs to be wrapped into a \code{Wire}
+
+\shortlist{code/vec.txt}
+
+\noindent Individual elements are accessed with \code{(index)}.
+
+\shortlist{code/vec_access.txt}
+
+A vector wrapped into a \code{Wire} is basically a multiplexer.
+We can also wrap a vector into a register to define an array of registers.
+Following example defines a register file for a processor; 32 registers
+each 32-bits wide, as for a classic 32-bit 
+\myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{RISC}
+processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}.
+
+\shortlist{code/reg_file.txt}
+
+\noindent An element of that register file is accessed with an index and used like a normal register.
+
+\shortlist{code/reg_file_access.txt}
+
+We can freely mix bundles and vectors. When creating a vector with a bundle
+type, we need to pass a prototype for the vector fields. When using our
+Channel, which we defined above, we can create a vector of channels with:
+
+\shortlist{code/vec_bundle.txt}
+
+\noindent A bundle may as well contain a vector:
+
+\shortlist{code/bundle_vec.txt}
+
+With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
+structures, which are powerful abstractions.
 
 \section{Exercises}
 

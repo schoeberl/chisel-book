@@ -8,7 +8,7 @@ class Count100 extends Module {
   //- start counter
   val cntReg = RegInit(0.U(8.W))
 
-  cntReg := Mux(cntReg === 100.U, 0.U, cntReg + 1.U)
+  cntReg := Mux(cntReg === 9.U, 0.U, cntReg + 1.U)
   //- end
 
   io.cnt := cntReg

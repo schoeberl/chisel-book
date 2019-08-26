@@ -72,6 +72,12 @@ class Logic extends Module {
   val mod = a % b // modulo operation
   //- end
 
+  //- start wire
+  val w = Wire(UInt())
+
+  w := a & b
+  //- end
+
   val sel = b === c
   //- start mux
   val result = Mux(sel, a, b)
