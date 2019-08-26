@@ -2293,7 +2293,7 @@ passed into the constructor that can be used in the IO bundle.
 
 \shortlist{code/use_param_adder.txt}
 
-\subsection{Types Parameters}
+\subsection{Functions with Types Parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
 hardware generators. A very flexible configuration is the usage of types.
@@ -2345,6 +2345,59 @@ value we can use \code{fPath.cloneType} to get the Chisel type.
 Following function shows the alternative way to code the multiplexer.
 
 \shortlist{code/param_func_alt.txt}
+
+\subsection{Modules with Type Parameters}
+
+We can also parameterize modules with Chisel types.
+Let us assume we want to design a network-on-chip to move data between
+different processing cores. However, we do not want to hardcode the
+data format in the router interface, we want \emph{parametrize} it.
+Similar to the type parameter for a function, we add a type parameter \code{T}
+to the Module constructor. Furthermore, we need to have one constructor
+parameter of that type. Additionally, in this example we also make the number
+of router ports configurable.
+
+\shortlist{code/param_mod.txt}
+
+\noindent To use our router, we first need to define the data type we want to route, e.g.,
+as a Chisel \code{Bundle}:
+
+\shortlist{code/param_mod_type.txt}
+
+\noindent We create a router by passing an instance of the user defined Bundle and
+the number of ports to the constructor of the router:
+
+\shortlist{code/param_mod_use.txt}
+
+\subsection{Parametrize Bundles}
+
+In the router example we used two different vectors of fields for the input
+of the router: one for the address and one for the data, which was parameterized.
+A more elegant solution would be to have a \code{Bundle} that itself
+is parametrized. Something like:
+
+\shortlist{code/param_bundle_issue.txt}
+
+The \code{Bundle} has a parameter of type \code{T}, which is a subtype
+of Chisel's \code{Data} type.
+Within the bundle we define a field \code{data} by invoking \code{cloneType}
+on the parameter.
+However, when we use a constructor parameter, this parameter becomes a
+public field of the class. When Chisel needs to clone the type of the \code{Bundle},
+e.g., when it is used in a \code{Vec}, this public field is in the way.
+A solution (work around) to this issue is to make the parameter a private field:
+
+\shortlist{code/param_bundle.txt}
+
+\noindent With that new \code{Bundle} we can define our router ports
+
+\shortlist{code/param_mod2.txt}
+
+\noindent and instantiate that router with a \code{Port} that takes
+a \code{Payload} as parameter:
+
+\shortlist{code/param_mod_use2.txt}
+
 
 \section{Generate Combinational Logic}
 
