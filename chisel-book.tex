@@ -1849,11 +1849,22 @@ Which possibility is available in an FPGA depends on the FPGA type and
 sometimes can be specified.
 Chisel documents that the read data is undefined.
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/memory-forwarding}
+  \caption{A synchronous memory with forwarding for a defined read-during-write behavior.}
+  \label{fig:memory:forwarding}
+\end{figure}
+
 If we want to read out the newly written value, we can build a forwarding
 circuit that detects that the addresses are equal and \emph{forwards} the
-write data.
-Listing~\ref{lst:memory:forward} shows a synchronous memory including
-the forwarding circuit. We need to store the write data into a register
+write data. Figure~\ref{fig:memory:forwarding} shows the memory with
+the forwarding circuit. Read and write addresses are compared and gated with
+write enable to select between the forwarding path of the write data or the
+memory read data. The write data is delayed by one clock cycle with a register.
+
+Listing~\ref{lst:memory:forward} shows the Chisel code for a synchronous memory
+including the forwarding circuit. We need to store the write data into a register
 (\code{wrDataReg}) to be available in the next clock cycle the synchronous
 memory has also a one clock cycle latency.
 We compare the two input addresses (\code{wrAddr} and \code{rdAddr})
@@ -2727,9 +2738,10 @@ and is available in open source at \url{https://github.com/leros-dev/leros}.
 
 Leros is designed to be simple, but still a good target for a C compiler.
 The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
-In that table A represents the accumulator, PC is the program counter,
-i is an immediate value (0 to 255), Rn a register
-n (0 to 255), o a branch offset relative to PC, and AR an address register for memory access.
+In that table \code{A} represents the accumulator, \code{PC} is the program counter,
+\code{i} is an immediate value (0 to 255), \code{Rn} a register
+\code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
+and \code{AR} an address register for memory access.
 
 \begin{table}
 \centering
@@ -2896,7 +2908,7 @@ expression. \todo{Some more words on the code.}
 
 \section{Exercise}
 
-This last chapter exercise assignment is in a very free form. You are at the end
+This exercise assignment in one of the last Chapters is in a very free form. You are at the end
 of your learning tour through Chisel and ready to tackle design problems that
 you find interesting.
 
@@ -3113,9 +3125,6 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 \chapter{Summary}
 \label{sec:conclusion}
 
-
-
-
 \section*{Source Access}
 
 This book is available in open source.
@@ -3128,6 +3137,65 @@ A collection of medium sized examples, which most are referenced
 in the book, is also available in open source. This collection
 contains also projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
+
+\appendix
+
+\chapter{Chisel Projects}
+
+Chisel is not (yet) used in many projects. Therefore, open-source Chisel code
+to learn the language and the coding style from is rare. Here we list several projects
+we are aware of that use Chisel and are in open source.
+
+\begin{description}
+
+\item[\myref{https://github.com/chipsalliance/rocket-chip}{Rocket}] is an implementation of \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}~\cite{risc-v}, which was
+the first main Chisel project~\cite{rocket:techrep}. Rocket was originally developed at UC
+Berkeley. Rocket is available in open source,
+but also forms the basis for the chip portfolio of \myref{https://www.sifive.com/}{SiFive}.
+The code base at SiFive serves as a major test bench for Chisel and new Chisel features
+need to pass the tests at SiFive.
+% TODO: get an ok from Jack
+
+\item[\myref{https://github.com/ucb-bar/riscv-sodor}{Sodor}] is a collection of RISC-V
+implementations intended for educational use. It contains 1, 2, 3, and 5 stages pipeline
+implementations. All processors use a simple scratchpad memory shared by instruction
+fetch, data access, and program loading via a debug port. Sodor is mainly intended to
+be used in simulation.
+
+\item[\myref{https://github.com/t-crest/patmos}{Patmos}] is an implementation of a
+processor optimized fro real-time systems~\cite{patmos:rts2018}. The Patmos repository
+includes several multicore communication architectures, such as a time-predictable memory
+arbiter~\cite{t-crest:memnoc}, a network-on-chip~\cite{s4nocni:arcs2019}
+a shared scratchpad memory with ownership~\cite{t-crest:ownspm}.
+At the time of this writing, Patmos is still described in Chisel 2.
+
+\item[\myref{https://github.com/pretis/flexpret}{FlexPRET}] is a implementation of a
+precision timed architecture~\cite{Zimmer:EECS-2015-181}. FlexPRET implements
+the RISC-V instruction set and has been updated to Chisel 3.1.
+
+\item[\myref{https://github.com/schoeberl/lipsi}{Lipsi}] is a tiny processor intended
+for utility functions on a system-on-chip~\cite{lipsi:arcs2018}. As the code base of
+Lipsi is very small, it can serve as an easy starting point for processor design in Chisel.
+Lipsi also showcases the productivity of Chisel/Scala. It took me 14 hours to: describe the
+hardware in Chisel and run it on an FPGA, write an assembler in Scala, write a
+Lipsi instruction set simulator in Scala for co-simulation, and write a few test cases
+in Lipsi assembler.
+
+\item[\myref{http://www.opensocfabric.org/}{OpenSoC Fabric}] is an open-source NoC
+generator written in Chisel~~\cite{OpenSoC:ispass2016}. It is intended to provide a
+system-on-chip for large-scale design exploration. The NoC itself is a state-of-the-art design with wormhole routing, credits for flow control, and virtual channels.
+OpenSoC Fabric is still using Chisel~2.
+
+\item[\myref{https://github.com/bu-icsg/xfiles-dana}{RoCC}] is a neural network accelerator
+that integrates with the RISC-V Rocket processor~\cite{RoCC:2015}.
+RoCC supports inference and learning.
+
+\item[ ] 
+\end{description}
+
+If you know an open-source project that uses Chisel, please drop me a note
+so I can include it in a future edition of the book.
+
 
 \chapter{Headings}
 
