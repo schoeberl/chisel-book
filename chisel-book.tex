@@ -642,8 +642,6 @@ a later chapter.
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
 
-
-
 \section{Register for State}
 
 Chisel provides a register, which is a collection of
@@ -694,7 +692,8 @@ till 9 and wraps around to 0 when reaching 9.
 \section{Bundle and Vec}
 
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
-signals of different types and (2) a \code{Vec} to represent a collection of signals.
+signals of different types and (2) a \code{Vec} to represent an indexable collection of signals
+of the same type.
 \code{Bundle}s and \code{Vec}s can be arbitrarily nested.
 
 
@@ -721,7 +720,7 @@ A bundle can also be referenced as a whole:
 
 A Chisel \code{Vec} represents a collection of signals of the same type (a vector).
 Each element can be accessed by an index. A Chisel \code{Vec} is similar
-to array data structures in other programing languages.\footnote{The name \code{Array}
+to array data structures in other programing languages.\footnote{The name \codefoot{Array}
 is already used in Scala.}
 A \code{Vec} is created by calling the constructor with two parameters: the
 number of elements and the type of the elements. A combinational \code{Vec}
@@ -747,14 +746,20 @@ processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-
 \shortlist{code/reg_file_access.txt}
 
 We can freely mix bundles and vectors. When creating a vector with a bundle
-type, we need to pass a prototype for the vector fields. When using our
-Channel, which we defined above, we can create a vector of channels with:
+type, we need to pass a prototype for the vector fields. Using our
+\code{Channel}, which we defined above, we can create a vector of channels with:
 
 \shortlist{code/vec_bundle.txt}
 
 \noindent A bundle may as well contain a vector:
 
 \shortlist{code/bundle_vec.txt}
+
+When we want a register of a bundle type that needs a reset value,
+we first create a \code{Wire} of that bundle, set the individual fields
+as needed, and then passing this bundle to a \code{RegInit}:
+
+\shortlist{code/bundle_reg_init.txt}
 
 With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
 structures, which are powerful abstractions.
@@ -1796,6 +1801,76 @@ set to 1, a positive number has this bit set to 0. We need to check this bit onl
 that our counter reached -1. Here it is, the counter created by a nerd:
 
 \shortlist{code/nerd_counter.txt}
+
+\section{Memory}
+
+A memory can be built out of a collection of registers, in Chisel a \code{Reg} of a \code{Vec}.
+However, this is expensive in hardware and larger memory structures are built
+as \myref{https://en.wikipedia.org/wiki/Static_random-access_memory}{SRAM}.
+For an ASIC memories are constructed with the help of a memory compiler.
+FPGAs contain on-chip memory blocks, also called block RAMs.
+Those on-chip memory blocks can be combined for larger memories.
+Memories in an FPGA usually have one read and one write port, or
+two ports where the direction can be switched.
+
+FPGAs (and also ASICs) usually support synchronous memories.
+Synchronous memories have registers on their inputs (address, write data,
+and write enable). That means the read data is available one clock
+cycle after setting the address.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/memory}
+  \caption{A synchronous memory.}
+  \label{fig:memory}
+\end{figure}
+
+Figure~\ref{fig:memory} shows the schematics of such a synchronous memory.
+The memory is dual ported with one read port and one write port.
+The read port has a single input, the read address (\code{rdAddr}) and
+one output, the read data (\code{rdData}).
+The write port has three inputs: the address (\code{wrAddr}), the data
+to be written (\code{wrData}), and a write enable (\code{wrEna}).
+Note that for all inputs there is a register within the memory showing the
+synchronous behavior.
+
+To support on-chip memory, Chisel provides the memory constructor \code{SyncReadMem}.
+Listing~\ref{lst:memory} shows a component \code{Memory} that implements
+1~KB of memory with byte wide input and output data and a write enable.
+
+\longlist{code/memory.txt}{1 KB of synchronous memory.}{lst:memory}
+
+An interesting question is which data value is returned when in the same clock
+cycle a new value is written the the same address that is read out.
+This is also called read-during-write behavior.
+There are three possibilities: the newly written value, the old value, or undefined
+(which might be a mix some bits of the old and some of the newly written data).
+Which possibility is available in an FPGA depends on the FPGA type and
+sometimes can be specified.
+Chisel documents that the read data is undefined.
+
+If we want to read out the newly written value, we can build a forwarding
+circuit that detects that the addresses are equal and \emph{forwards} the
+write data.
+Listing~\ref{lst:memory:forward} shows a synchronous memory including
+the forwarding circuit. We need to store the write data into a register
+(\code{wrDataReg}) to be available in the next clock cycle the synchronous
+memory has also a one clock cycle latency.
+We compare the two input addresses (\code{wrAddr} and \code{rdAddr})
+and check if \code{wrEna} is true for the forwarding condition.
+That condition is also delayed by one clock cycle.
+A multiplexer selects between the forwarding (write) data or the read
+data from the memory.
+
+\longlist{code/memory_forwarding.txt}{A memory with a forwarding circuit.}{lst:memory:forward}
+
+
+
+Chisel also provides \code{Mem}, which represents a memory with synchronous
+write and asynchronous read. As this memory type is usually not directly available
+in a FPGA, the synthesize tool will build it out of flip-flops.
+Therefore, we recommend to use the \code{SyncReadMem}.
+
 
 \section{Exercise}
 

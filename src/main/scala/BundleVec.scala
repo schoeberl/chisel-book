@@ -16,6 +16,7 @@ class BundleVec extends Module {
     val dIn = Input(UInt(32.W))
     val dOut = Output(UInt(32.W))
     val bvOut = Output(UInt(8.W))
+    val chreg = Output(new Channel())
   })
 
   //- start bundle_use
@@ -47,14 +48,14 @@ class BundleVec extends Module {
   io.chan := ch
 
   //- start reg_file
-  val regFile = Reg(Vec(32, UInt(32.W)))
+  val registerFile = Reg(Vec(32, UInt(32.W)))
   //- end
 
   val dIn = io.dIn
 
   //- start reg_file_access
-  regFile(idx) := dIn
-  val dOut = regFile(idx)
+  registerFile(idx) := dIn
+  val dOut = registerFile(idx)
   //- end
 
   io.dOut := dOut
@@ -82,5 +83,19 @@ class BundleVec extends Module {
   }
 
   io.bvOut := bv.field
+
+  //- start bundle_reg_init
+  val initVal = Wire(new Channel())
+
+  initVal.data := 0.U
+  initVal.valid := false.B
+
+  val channelReg = RegInit(initVal)
+  //- end
+
+  channelReg.data := 1.U
+  channelReg.valid := true.B
+
+  io.chreg := channelReg
 
 }

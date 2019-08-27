@@ -16,10 +16,13 @@ class BundleVecTester(b: BundleVec) extends PeekPokeTester(b) {
 
   expect(b.io.bvOut, 13)
 
-
+  expect(b.io.chreg.valid, 0)
+  expect(b.io.chreg.data, 0)
   poke(b.io.idx, 2)
   poke(b.io.dIn, 5)
   step(1)
+  expect(b.io.chreg.valid, 1)
+  expect(b.io.chreg.data, 1)
   poke(b.io.idx, 2)
   poke(b.io.dIn, 7)
   expect(b.io.dOut, 5)
