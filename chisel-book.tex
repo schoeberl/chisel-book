@@ -102,7 +102,7 @@
 \maketitle \thispagestyle{empty}
 
 % This text goes on the backside of the book
-These book is an introduction into digital design with the focus
+This book is an introduction into digital design with the focus
 on using the hardware construction language Chisel.
 Chisel brings advances in software engineering, such as object orientated
 and functional languages, into digital design.
@@ -117,7 +117,7 @@ for example FPGA accelerators executing in the cloud.
 
 The approach of this book
 is to present small to medium sized typical hardware components to explore
-hardware design with Chisel.
+digital design with Chisel.
 
 
 
@@ -166,9 +166,9 @@ construction language, \myref{https://chisel.eecs.berkeley.edu/}{Chisel}~\cite{c
 In this book, we focus on a higher abstraction level than usual in digital design books,
 to enable you to build more complex, interacting digital systems in a shorter time.
 
-This book and Chisel is targeting two groups of developers:
+This book and Chisel are targeting two groups of developers:
 (1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
-Java, or TCL/TK to generate hardware to move to a single hardware construction language
+Java, or Tcl to generate hardware to move to a single hardware construction language
 where hardware generation is part of the language and
 (2) software programmers who are becoming interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
@@ -194,8 +194,8 @@ For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
 This book is not a general introduction to hardware design and the fundamentals of it.
-For an introduction of basics, such as how to build a gate out of CMOS transistors,
-refer to other digital design books.
+For an introduction of the basics in digital design, such as how to build a gate out of
+CMOS transistors, refer to other digital design books.
 However, the intention of this book is to teach digital design at an abstraction level that is
 current practice to describe ASICs or designs targeting
 \myref{https://en.wikipedia.org/wiki/Field-programmable_gate_array}{FPGA}s.\footnote{As the author is more familiar with FPGAs
@@ -206,7 +206,7 @@ As prerequisites for this book we assume basic knowledge of
 \myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
-Chisel can be, and shall be, your first programming language to describe digital hardware.
+Chisel can be your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command line interface (CLI, also called terminal or
 Unix shell) will be helpful.
@@ -218,7 +218,7 @@ and can be learned within a few days.
 Therefore, this book is not a big book as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacies.
 The power of Chisel comes from the embedding of Chisel within
-\myref{https://www.scala-lang.org/}{Scala}, which is itself an expressive language.
+\myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
 Chisel inherits the feature from Scala being ``a language that grows on you''~\cite{Scala}.
 However, Scala is not the topic of this book.
 We provide a short section on Scala for hardware designers,
@@ -331,15 +331,15 @@ This book makes no assumptions about your programming environment or editor to u
 Learning of the basics should be easy with just using \code{sbt} at the command line
 and an editor of your choice. In the tradition of other books, all commands that you
 shall type in a shell/terminal/CLI are preceded by a \code{\$} character, which you
-shall not type in. As example here the Unix \code{ls} command, which lists files of
+shall not type in. As an example, here is the Unix \code{ls} command, which lists files in
 the current folder:
 
 \begin{verbatim}
 $ ls
 \end{verbatim}
 
-That said, an integrated development environment (IDE) with a compiler running in
-the background can speedup coding. As Chisel is basically a Scala library, all IDEs
+That said, an integrated development environment (IDE), with a compiler running in
+the background, can speedup coding. As Chisel is basically a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
 It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
 \myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
@@ -348,7 +348,7 @@ You can create an Eclipse project via
 \begin{verbatim}
 $ sbt eclipse
 \end{verbatim}
-and import that project in Eclipse.
+and import that project into Eclipse.\footnote{This function needs the Eclipse plugin for sbt.}
 In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
 
 \section{Source Access and eBook Features}
@@ -357,7 +357,8 @@ This book is open source and hosted at GitHub: \myref{https://github.com/schoebe
 All Chisel code examples, shown in this book, are included in the repository.
 The code compiles with a recent version of Chisel and many examples also include a test bench.
 Larger Chisel examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
-You can also provide feedback or comments for improvements by filing an issue on GitHub.
+You can also provide feedback or comments for improvements by filing an issue on GitHub
+or sending a plain, old school email.
 
 This book is freely available as a PDF eBook.\footnote{A print version will soon be available
 from Amazon.com.} The eBook version features links to further resources
@@ -466,7 +467,7 @@ integer.\footnote{The type \codefoot{Bits} in the current version of Chisel is m
 therefore not very useful for user code.}
 Chisel uses \myref{https://en.wikipedia.org/wiki/Two\%27s\_complement}{two's complement}
 as signed integer representation.
-Here is the definition different types, an 8-bit \code{Bits}, 8-bit unsigned integer, and an 10-bit
+Here is the definition for different types, an 8-bit \code{Bits}, an 8-bit unsigned integer, and a 10-bit
 signed integer:
 
 \shortlist{code/types.txt}
@@ -485,7 +486,7 @@ which is used for the definition of the \code{Bits} vector:
 
 \shortlist{code/const_width.txt}
 
-\noindent When you find the notion of 8.U and 4.W a little bit funny, consider it as a variant of an integer
+\noindent If you find the notion of 8.U and 4.W a little bit funny, consider it as a variant of an integer
 constant with a type. This notation is similar to 8L, representing a long integer constant in C, Java, and Scala.
 
 Chisel benefits from Scala's type inference and in many places type information can be left out.
@@ -669,8 +670,9 @@ initial value at the definition:
 
 \shortlist{code/reg_both.txt}
 
-\noindent To distinguish from signals representing combinational logic and registers,
-a common practice is to prefix register names with \code{reg}.
+\noindent To distinguish between signals representing combinational logic and registers,
+a common practice is to prefix register names with \code{reg}
+(or postfix them with \code{Reg}).
 Another common practice, coming from Java and Scala, is to use
 \myref{https://en.wikipedia.org/wiki/Camel_case}{camelCase} for
 identifier consisting of several words. The convention is to start
@@ -694,7 +696,7 @@ till 9 and wraps around to 0 when reaching 9.
 
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
 signals of different types and (2) a \code{Vec} to represent a collection of signals.
-\code{Bundle}s and \code{Vec}s can be arbitrary nested.
+\code{Bundle}s and \code{Vec}s can be arbitrarily nested.
 
 
 A Chisel bundle groups several signals. The entire bundle can be referenced
@@ -722,7 +724,7 @@ A Chisel \code{Vec} represents a collection of signals of the same type (a vecto
 Each element can be accessed by an index. A Chisel \code{Vec} is similar
 to array data structures in other programing languages.\footnote{The name \code{Array}
 is already used in Scala.}
-A \code{Vec} is cerated by calling the constructor with two parameters: the
+A \code{Vec} is created by calling the constructor with two parameters: the
 number of elements and the type of the elements. A combinational \code{Vec}
 needs to be wrapped into a \code{Wire}
 
@@ -841,7 +843,7 @@ also the place where you downloaded the Chisel library on your first build:
 
 Figure~\ref{fig:folders} shows the organization of the source tree of a typical Chisel project.
 The root of the project is the project home, which contains \code{build.sbt}.
-Optional also a \code{Makefile} for the build process, a README, and a LICENSE file.
+It may also include a \code{Makefile} for the build process, a README, and a LICENSE file.
 Folder \code{src} contains all source code. From there it is split between \code{main},
 containing the hardware sources and \code{test} containing testers.
 Chisel inherits from Scala, which inherits from Java the organization of source
@@ -1601,7 +1603,7 @@ modern FPGAs flip-flops contain a synchronous reset (and set) input to not wast 
 resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
-by a diagram showing the signals over time. Such a diagram is called waveform or timing diagram.
+by a diagram showing the signals over time. Such a diagram is called a waveform or timing diagram.
 
 \begin{figure}
   \centering
@@ -1781,7 +1783,7 @@ Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, s
 For example, we want to design a really optimized version of our counter/tick generation.
 A standard counter needs following resources: one register, one adder (or subtractor),
 and a comparator. We cannot do much about the register or the adder. If we count
-up we need to compare against a number, which is a some bit string. The comparator
+up we need to compare against a number, which is a bit string. The comparator
 can be built out of a bunch of inverters for the zeros in the bit string and a large AND gate.
 When counting down to zero, the comparator is a large NOR gate, which might be
 a little bit cheaper than the comparator against a constant in an ASIC.
@@ -1789,7 +1791,7 @@ In an FPGA where logic is built out of lookup tables, there is no difference bet
 against a 0 or 1 bit, the resource consumption is the same for the up and down counter.
 
 However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison against all counting bis, so far.
+Counting up or down needed a comparison against all counting bits, so far.
 What if we count from N-2 down to -1? A negative number has the most significant bit
 set to 1, a positive number has this bit set to 0. We need to check this bit only to detect
 that our counter reached -1. Here it is, the counter created by a nerd:
@@ -2640,7 +2642,7 @@ class ReaderIO(size: Int) extends Bundle {
 
 
 
-\chapter{Desig of a Processor}
+\chapter{Design of a Processor}
 
 As one of the last chapters in this book we present a medium size project:
 the design, simulation, and testing of a microprocessor.
