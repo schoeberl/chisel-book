@@ -13,31 +13,31 @@ class SimpleFsm extends Module {
   val green :: orange :: red :: Nil = Enum(3)
 
   // The state register
-  val regState = RegInit(green)
+  val stateReg = RegInit(green)
 
   // Next state logic
-  switch (regState) {
+  switch (stateReg) {
     is (green) {
       when(io.badEvent) {
-        regState := orange
+        stateReg := orange
       }
     }
     is (orange) {
       when(io.badEvent) {
-        regState := red
+        stateReg := red
       } .elsewhen(io.clear) {
-        regState := green
+        stateReg := green
       }
     }
     is (red) {
       when (io.clear) {
-        regState := green
+        stateReg := green
       }
     }
   }
 
   // Output logic
-  io.ringBell := regState === red
+  io.ringBell := stateReg === red
 }
 //- end
 
@@ -55,32 +55,32 @@ class SimpleFsmCopy extends Module {
   //- end
 
   //- start simple_fsm_register
-  val regState = RegInit(green)
+  val stateReg = RegInit(green)
   //- end
 
   //- start simple_fsm_next
-  switch (regState) {
+  switch (stateReg) {
     is (green) {
       when(io.badEvent) {
-        regState := orange
+        stateReg := orange
       }
     }
     is (orange) {
       when(io.badEvent) {
-        regState := red
+        stateReg := red
       } .elsewhen(io.clear) {
-        regState := green
+        stateReg := green
       }
     }
     is (red) {
       when (io.clear) {
-        regState := green
+        stateReg := green
       }
     }
   }
   //- end
 
   //- start simple_fsm_output
-  io.ringBell := regState === red
+  io.ringBell := stateReg === red
   //- end
 }

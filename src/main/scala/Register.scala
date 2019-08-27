@@ -17,11 +17,11 @@ class Register extends Module {
   //- end
 
   //- start reg_next
-  val regNxt = RegNext(d)
+  val nextReg = RegNext(d)
   //- end
 
   //- start reg_both
-  val regBoth = RegNext(d, 0.U)
+  val bothReg = RegNext(d, 0.U)
   //- end
   io.out := reg
 }

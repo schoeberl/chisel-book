@@ -12,22 +12,22 @@ class RisingFsm extends Module {
   val zero :: one :: Nil = Enum(2)
 
   // The state register
-  val regState = RegInit(zero)
+  val stateReg = RegInit(zero)
 
   // default value for output
   io.risingEdge := false.B
 
   // Next state and output logic
-  switch (regState) {
+  switch (stateReg) {
     is(zero) {
       when(io.din) {
-        regState := one
+        stateReg := one
         io.risingEdge := true.B
       }
     }
     is(one) {
       when(!io.din) {
-        regState := zero
+        stateReg := zero
       }
     }
   }

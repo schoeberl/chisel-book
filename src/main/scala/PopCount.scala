@@ -52,28 +52,28 @@ class PopCountDataPath extends Module {
     val done = Output(Bool())
   })
 
-  val regData = RegInit(0.U(8.W))
-  val regPopCnt = RegInit(0.U(8.W))
-  val regCounter= RegInit(0.U(4.W))
+  val dataReg = RegInit(0.U(8.W))
+  val popCntReg = RegInit(0.U(8.W))
+  val counterReg= RegInit(0.U(4.W))
 
-  regData := 0.U ## regData(7, 1)
-  regPopCnt := regPopCnt + regData(0)
+  dataReg := 0.U ## dataReg(7, 1)
+  popCntReg := popCntReg + dataReg(0)
 
-  val done = regCounter === 0.U
+  val done = counterReg === 0.U
   when (!done) {
-    regCounter := regCounter - 1.U
+    counterReg := counterReg - 1.U
   }
 
   when(io.load) {
-    regData := io.din
-    regPopCnt := 0.U
-    regCounter := 8.U
+    dataReg := io.din
+    popCntReg := 0.U
+    counterReg := 8.U
   }
 
   // debug output
-  printf("%x %d\n", regData, regPopCnt)
+  printf("%x %d\n", dataReg, popCntReg)
 
-  io.popCnt := regPopCnt
+  io.popCnt := popCntReg
   io.done := done
 }
 //- end

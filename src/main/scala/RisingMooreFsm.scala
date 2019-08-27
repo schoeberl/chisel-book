@@ -12,31 +12,31 @@ class RisingMooreFsm extends Module {
   val zero :: puls :: one :: Nil = Enum(3)
 
   // The state register
-  val regState = RegInit(zero)
+  val stateReg = RegInit(zero)
 
   // Next state logic
-  switch (regState) {
+  switch (stateReg) {
     is(zero) {
       when(io.din) {
-        regState := puls
+        stateReg := puls
       }
     }
     is(puls) {
       when(io.din) {
-        regState := one
+        stateReg := one
       } .otherwise {
-        regState := zero
+        stateReg := zero
       }
     }
     is(one) {
       when(!io.din) {
-        regState := zero
+        stateReg := zero
       }
     }
   }
 
   // Output logic
-  io.risingEdge := regState === puls
+  io.risingEdge := stateReg === puls
 }
 //- end
 
