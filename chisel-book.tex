@@ -104,7 +104,7 @@
 % This text goes on the backside of the book
 This book is an introduction into digital design with the focus
 on using the hardware construction language Chisel.
-Chisel brings advances in software engineering, such as object orientated
+Chisel brings advances from software engineering, such as object orientated
 and functional languages, into digital design.
 
 This book addresses hardware designers and software engineers.
@@ -392,9 +392,9 @@ a Chisel course focusing on hardware generators, as a Jupyter notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
 \end{itemize}
 
-\section{Exercises}
+\section{Exercise}
 
-Each chapter ends with hands-on exercises. For the introduction exercise we will use an
+Each chapter ends with a hands-on exercise. For the introduction exercise we will use an
 FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED} blinking.
 As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository from GitHub.
@@ -689,7 +689,7 @@ till 9 and wraps around to 0 when reaching 9.
 
 \shortlist{code/counter.txt}
 
-\section{Bundle and Vec}
+\section{Structure with Bundle and Vec}
 
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
 signals of different types and (2) a \code{Vec} to represent an indexable collection of signals
@@ -764,7 +764,7 @@ as needed, and then passing this bundle to a \code{RegInit}:
 With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
 structures, which are powerful abstractions.
 
-\section{Exercises}
+\section{Exercise}
 
 In the introduction you implemented a blinking LED on an FPGA board
 (from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}), which is a reasonable
@@ -774,7 +774,7 @@ with \code{val sw = Input(UInt(2.W))}.
 
 \shortlist{code/basic_exercise.txt}
 
-\noindent For those switches, you also need to assign the PIN names for the FPGA board.
+\noindent For those switches, you also need to assign the pin names for the FPGA board.
 You can find examples of pin assignments in the Quartus project files of the ALU project
 (e.g., for the \myref{https://github.com/schoeberl/chisel-examples/blob/master/quartus/altde2-115/alu.qsf}{DE2-115
 FPGA board}).
@@ -1807,14 +1807,14 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 A memory can be built out of a collection of registers, in Chisel a \code{Reg} of a \code{Vec}.
 However, this is expensive in hardware and larger memory structures are built
 as \myref{https://en.wikipedia.org/wiki/Static_random-access_memory}{SRAM}.
-For an ASIC memories are constructed with the help of a memory compiler.
+For an ASIC, memories are constructed with the help of a memory compiler.
 FPGAs contain on-chip memory blocks, also called block RAMs.
 Those on-chip memory blocks can be combined for larger memories.
 Memories in an FPGA usually have one read and one write port, or
 two ports where the direction can be switched.
 
 FPGAs (and also ASICs) usually support synchronous memories.
-Synchronous memories have registers on their inputs (address, write data,
+Synchronous memories have registers on their inputs (read and write address, write data,
 and write enable). That means the read data is available one clock
 cycle after setting the address.
 
@@ -1840,11 +1840,11 @@ Listing~\ref{lst:memory} shows a component \code{Memory} that implements
 
 \longlist{code/memory.txt}{1 KB of synchronous memory.}{lst:memory}
 
-An interesting question is which data value is returned when in the same clock
+An interesting question is which value is returned from a read when in the same clock
 cycle a new value is written the the same address that is read out.
 This is also called read-during-write behavior.
 There are three possibilities: the newly written value, the old value, or undefined
-(which might be a mix some bits of the old and some of the newly written data).
+(which might be a mix of some bits from the old value and some of the newly written data).
 Which possibility is available in an FPGA depends on the FPGA type and
 sometimes can be specified.
 Chisel documents that the read data is undefined.
@@ -2672,9 +2672,9 @@ sbt "testOnly TickerSpec"
 
 \chapter{Example Designs}
 
-In this section we explore some medium size digital designs, such as
+In this section we explore some small size digital designs, such as
 a FIFO buffer, which are used as building blocks for a larger design.
-As an example we will design a serial interface (also called UART),
+As another example we will design a serial interface (also called UART),
 which itself will use the FIFO buffer.
 
 \section{FIFO Buffer}
@@ -2706,26 +2706,237 @@ memory and read and write pointers or simply a chain of registers with a
 tiny state machine. For small buffers (up to tens of elements) a FIFO organized
 with individual registers connected into a chain of buffers is a simple and efficient
 implementation.
+The code of the bubble FIFO is available in the
+\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+repository.\footnote{For completeness, the Chisel book repository contains
+a copy of the FIFO code as well.}
 
-We start by defining the IO signals for the writer and the reader. The size of
-the data is configurable with \code{size}.
+We start by defining the IO signals for the writer and the reader side.
+The size of the data is configurable with \code{size}.
+The write data are \code{din} and a write is signaled by \code{write}.
+The signal \code{full} performs the
+\myref{https://en.wikipedia.org/wiki/Flow_control_(data)}{flow control}
+at the writer side.
 
-\begin{chisel}
-class WriterIO(size: Int) extends Bundle {
-  val din = UInt(INPUT, size)
-  val write = Bool(INPUT)
-  val full = Bool(OUTPUT)
-}
+\shortlist{code/fifo_writer_io.txt}
 
-class ReaderIO(size: Int) extends Bundle {
-  val dout = UInt(OUTPUT, size)
-  val read = Bool(INPUT)
-  val empty = Bool(OUTPUT)
-}
-\end{chisel}
+The reader side provides data with \code{dout} and the read is initiated
+with \code{read}. The \code{empty} signal is responsible for the flow control
+at the reader side.
+
+\shortlist{code/fifo_reader_io.txt}
+
+Listing~\ref{lst:fifo:stage} shows a single buffer. The buffer has a enqueueing port
+\code{enq} of type \code{WriterIO} and a dequeueing port \code{deq} of type
+\code{ReaderIO}. The state elements of the buffer is one register that holds the
+data (\code{dataReg} and one state register for the simple FSM (\code{stateReg}).
+The FSM has only two states: either the buffer is \code{empty} or \code{full}.
+If the buffer is \code{empty}, a write will register the input data and change
+to the \code{full} state.
+If the buffer is \code{full}, a read will consume the data and change to the
+\code{empty} state.
+The IO ports \code{full} and \code{empty} represent the buffer state for
+the writer and the reader.
+
+\longlist{code/fifo_register.txt}{A single stage of the bubble FIFO.}{lst:fifo:stage}
+
+Listing~\ref{lst:fifo} shows the complete FIFO. The complete FIFO has
+the same IO interface as the individual FIFO buffers.
+\code{BubbleFifo} has as parameters the \code{size} of the data
+word and \code{depth} for the number of buffer stages.
+We can build an \code{depth} stages bubble FIFO out of \code{depth}
+\code{FifoRegister}s. We crate the stages by filling them into a Scala \code{Array}.
+The Scala array has no hardware meaning, it \emph{just} provides us with
+a container to have references to the created buffers.
+In a Scala \code{for} loop we connect the individual buffers.
+The first buffers enqueueing side is connected to the enqueueing IO of
+the complete FIFO and the last buffer's dequeueing side to the
+dequeueing side of the complete FIFO.
+
+\longlist{code/fifo.txt}{A FIFO is composed of an array of FIFO bubble stages.}{lst:fifo}
 
 
+\section{A Serial Port}
 
+A serial port (also called
+\myref{https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter}{UART}
+or \myref{https://en.wikipedia.org/wiki/RS-232}{RS-232}) is one of the easiest options
+to communicate between your laptop and an FPGA board.
+As the name implies, data is transmitted serial. An 8-bit byte is transmitted as follows:
+one 0 start bit, the 8-bit data, least significant bit first, and then one or two stop
+bits (1). When no data is transmitted, the output is 1.
+
+We will design our UART in a modular way with minimal functionality
+per module. We present a transmitter (TX), a receiver (RX),
+a buffer, and then usage of those base components.
+
+First we need an interface, a port definition.
+For the UART design we use a ready/valid handshake interface,
+with the direction as seen from the transmitter.
+\shortlist{code/uart_channel.txt}
+The convention of a ready/valid interface is that the data is transferred
+when both \code{ready} and \code{valid} are asserted.
+
+\longlist{code/uart_tx.txt}{A transmitter for a serial interface.}{lst:uart:tx}
+
+Listing~\ref{lst:uart:tx} shows a bare-bone serial transmitter (\code{Tx}).
+The IO ports are the \code{txd} port, where the serial data is sent and
+a \code{Channel} where the transmitter can receive the characters to serialize
+and send.
+To generate the correct timing, we compute a constant for by computing
+the time in clock cycles for one serial bit.
+
+We use three registers:
+(1) register to shift the data (serialize them) (\code{shiftReg}),
+(2) a counter to generate the correct baud rate (\code{cntReg}), and
+(3) a counter for the number of bits that still need to shifted out.
+No additional state register of FSM is needed, all state is encoded in
+those three registers.
+
+Counter \code{cntReg} is continuously running (counting down to 0
+and reset to the start value when 0). All action is only done when
+\code{cntReg} is 0. As we build a minimal transmitter, we have only
+the shift register to store the data. Therefore, the channel is only ready
+when \code{cntReg} is 0 and no bits are left to shift out.
+
+The IO port \code{txd} is directly connected to the least significant bit
+of the shift register.
+
+When there are more bits to shift out (\code{bitsReg =/= 0.U}),
+we shift the bits to the right and fill with 1 from the top (the idle level
+of a transmitter).
+If no more bits need to shifted out, we check if the channel contains
+data (signaled with the \code{valid} port). If so, the bit string to
+be shifted out is constructed with one start bit (0), the 8-bit data, and
+two stop bits (1). The bit count is set to 11.
+
+This very minimal transmitter has no additional buffer and can
+accept a new character only when the shift register is empty
+and at the clock cycle when \code{cntReg} is 0. This means also
+that the ready flag is also de-asserted when there would be
+space in the shift register. However, we do not want to add this
+``complexity'' to the transmitter, but delegate it to a buffer.
+
+\longlist{code/uart_buffer.txt}{capt.}{lst:uart:buffer}
+Listing~\ref{lst:uart:buffer} shows a single byte buffer, similar to
+the FIFO register for the bubble FIFO. The input port is a \code{Channel}
+interface and the output is the \code{Channel} interface with
+flipped directions. The buffer contains the minimal state machine
+to indicate \code{empty} or \code{full}. The buffer driven handshake
+signals (\code{in.ready} and \code{out.valid} depend on the state
+register.
+
+When the state is \code{empty} and data on the input is \code{valid}
+we register the data and switch to state \code{full}.
+When the state is \code{full} and the downstream receiver is
+\code{ready}, the downstream data transfer happens and we switch
+back to state \code{empty}.
+
+\longlist{code/uart_buffered_tx.txt}{A transmitter with an additional buffer.}{lst:uart:buffered:tx}
+With that buffer we can extend our bare-bone transmitter.
+Listing~\ref{lst:uart:buffered:tx} shows the combination of the transmitter \code{Tx}
+with a single buffer in front. This buffer now relaxes the issue that \code{Tx}
+was \code{ready} only for single clock cycles. We delegated the solution of
+this issue to the buffer module.
+An extension of the single word buffer to a real FIFO can easily be done
+and needs no change in the transmitter or the single byte buffer.
+
+\longlist{code/uart_rx.txt}{capt.}{lst:uart:rx}
+
+\longlist{code/uart_sender.txt}{capt.}{lst:uart:sender}
+\longlist{code/uart_echo.txt}{capt.}{lst:uart:echo}
+
+
+\section{Exercises}
+
+This exercise section is a little bit longer as it contains two exercises:
+(1) exploring the bubble FIFO and implement a different FIFO design;
+and (2) exploring the UART and extending it.
+Source code for both exercises is included in the
+\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples} repository.
+
+\subsection{Explore FIFO Variations}
+
+The FIFO source also includes a tester that provokes different read and write behavior and generates a waveform in the 
+\myref{https://en.wikipedia.org/wiki/Value_change_dump}{value change dump (VCD)} format.
+The VCD file can be viewed with a waveform viewer, such as
+\myref{http://gtkwave.sourceforge.net/}{GTKWave}.
+Explore the
+\myref{https://github.com/schoeberl/chisel-examples/blob/master/src/test/scala/simple/FifoTester.scala}{FifoTester} in the repository.
+The repository contains a \code{Makefile} to run the examples, for the FIFO example
+just type:
+\begin{verbatim}
+$ make fifo
+\end{verbatim}
+This will compile the FIFO, run the test, and then starts GTKWave for waveform
+viewing. Explore the tester and the generated waveform.
+
+In the first cycles the tester just writes a single word. We can observe in
+the waveform how that word bubbles through the FIFO, therefore the
+name \emph{bubble FIFO}. This bubbling also means that the
+latency of a data word through the FIFO is equal to the depth of the FIFO.
+
+The next test fills the FIFO until completely full. A single read follows.
+Notice how the empty word bubbles from the reader side of the FIFO
+to the writer side. When a bubble FIFO is completely full, it takes
+a latency of the buffer depth for a read to have an effect at the writer side. 
+
+The end of the test contains a loop that tries to write and read at the maximum speed.
+We can see the bubble FIFO running at maximum bandwidth, which is two
+clock cycles per word. A buffer stage has always to toggle between empty
+and full for one word transfer.
+
+A bubble FIFO is simple and for small buffers a low resource solution.
+The main drawbacks of a $n$ stage bubble FIFO are: (1) maximum throughput is
+one word every two clock cycles, (2) a data word has to travel $n$ clock cycles
+from the writer end to the reader end, and (3) a full FIFO needs $n$ clock cycles
+for the restart.
+
+This drawbacks can be solved by a FIFO implementation with a
+\myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
+The circular buffer can be implemented with a memory and
+read and write pointers.
+Implement a FIFO as circular buffer with 4 elements, using the same
+interface, and explore the different behavior with the tester.
+For an initial implementation of the circular buffer use, as a shortcut,
+a vector of registers (\code{Reg(Vec(4, UInt(size.W)))}).
+
+\subsection{The UART}
+
+For the UART example you need an FPGA board with a serial port and
+a serial port for your laptop (usually with an USB connection).
+Connect the serial cable between the FPGA board and the serial port on
+your laptop. Start a terminal program, e.g., Hyperterm on Windows
+or \code{gtkterm} on Linux:
+\begin{verbatim}
+$ gtkterm &
+\end{verbatim}
+Configure your port to use the correct device, with a USB UART this
+is often something like \code{/dev/ttyUSB0}. Set the baud rate to 115200
+and no parity or flow control (handshake).
+With following command you can create the Verilog code for the UART:
+\begin{verbatim}
+$ make uart
+\end{verbatim}
+Then use your synthesize tool to synthesize the design.
+The repository contains a Quartus project for the DE2-115 FPGA board.
+With Quartus use the play button to synthesize the design and then configure
+the FPGA.
+After configuration you should see a greeting message in the terminal.
+
+Extend the blinking LED example with a UART and write 0 and 1 to the serial
+line when the LED is off and on. Use the \code{BufferedTx}, as in the \code{Sender}
+example.
+
+With the slow output of characters (two per second) you can just write the data
+to the UART transmit register and can ignore the read/valid handshake.
+Extend the example by writing repeated numbers 0-9 as fast as the baud rate allows.
+In this case you have to extend your state machine to poll the UART status
+to check if the transmit buffer is free.
+
+The example code contains only a single buffer for the \code{Tx}. Feel free to
+add the FIFO that you have implemented to have more buffering in the transmitter
+and receiver. 
 
 \chapter{Design of a Processor}
 
