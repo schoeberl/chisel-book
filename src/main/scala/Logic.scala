@@ -1,4 +1,5 @@
 import chisel3._
+import chisel3.util._
 
 class Logic extends Module {
   val io = IO(new Bundle {
@@ -76,6 +77,22 @@ class Logic extends Module {
   val w = Wire(UInt())
 
   w := a & b
+  //- end
+
+  val x = 123.U
+  //- start single_bit
+  val sign = x(31)
+  //- end
+
+  val largeWord = 1.U
+  //- start sub_field
+  val lowByte = largeWord(7, 0)
+  //- end
+
+  val highByte = 0xff.U
+
+  //- start concat
+  val word = Cat(highByte, lowByte)
   //- end
 
   val sel = b === c

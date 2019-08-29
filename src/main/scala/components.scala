@@ -152,6 +152,54 @@ class CompFn extends Module {
   //- end
 
   io.out3 := delOut
+}
 
+//- start bundle_fetch
+class Fetch extends Module {
+  val io = IO(new Bundle {
+    val instr = Output(UInt(32.W))
+    val pc = Output(UInt(32.W))
+  })
+  // ... Implementation od fetch
+}
+//- end
 
+//- start bundle_decode
+class Decode extends Module {
+  val io = IO(new Bundle {
+    val instr = Input(UInt(32.W))
+    val pc = Input(UInt(32.W))
+    val aluOp = Output(UInt(5.W))
+    val regA = Output(UInt(32.W))
+    val regB = Output(UInt(32.W))
+  })
+  // ... Implementation of decode
+}
+//- end
+
+//- start bundle_execute
+class Execute extends Module {
+  val io = IO(new Bundle {
+    val aluOp = Input(UInt(5.W))
+    val regA = Input(UInt(32.W))
+    val regB = Input(UInt(32.W))
+    val result = Output(UInt(32.W))
+  })
+  // ... Implementation of execute
+}
+//- end
+
+class Processor extends Module {
+  val io = IO(new Bundle {
+    val result = Output(UInt(32.W))
+  })
+//- start bundle_connect
+  val fetch = Module(new Fetch())
+  val decode = Module(new Decode())
+  val execute = Module(new Execute)
+
+  fetch.io <> decode.io
+  decode.io <> execute.io
+  io <> execute.io
+  //- end
 }

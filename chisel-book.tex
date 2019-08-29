@@ -649,10 +649,19 @@ addition and subtraction, the sum of the two widths for the multiplication, and 
 the width of the numerator for divide and modulo operations.\footnote{The exact
 details are available in the \myref{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}{FIRRTL specification}.}
 
-A signal can also first be defined as a \code{Wire} of some type. Later we can assign a
+A signal can also first be defined as a \code{Wire} of some type. Afterwards can we assign a
 value to the wire with the \code{:=} update operator.
 
 \shortlist{code/wire.txt}
+
+A single bit can be extracted as follows:
+\shortlist{code/single_bit.txt}
+
+\noindent A subfield can be extracted from end to start position:
+\shortlist{code/sub_field.txt}
+
+\noindent Bit fields are concatenated with \code{Cat}.
+\shortlist{code/concat.txt}
 
 Table~\ref{tab:operators} shows the full list of operators
 (see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
@@ -1384,6 +1393,28 @@ the table that selects the output of our ALU.
 To use this utility function we need to import another Chisel package:
 
 \shortlist{code/components_util.txt}
+
+\section{Bulk Connections}
+
+For connecting components with complex IO ports Chisel provides the
+bulk connection operator \code{<>}. This operator connects parts of bundles
+in both directions. Chisel uses the names of the leave fields for the connection.
+If a name is missing, it is not connected.
+
+As an example let us assume we build a pipelined processor. The fetch
+stage has a following interface:
+\shortlist{code/bundle_fetch.txt}
+
+\noindent The next stage is the decode stage.
+\shortlist{code/bundle_decode.txt}
+
+\noindent The final stage of our simple processor is the execute stage.
+\shortlist{code/bundle_execute.txt}
+
+To connect all three stages together we need just two \code{<>} operators.
+We can also connect the port of a submodule with the parent module.
+\shortlist{code/bundle_connect.txt}
+
 
 \section{Lightweight Components with Functions}
 
