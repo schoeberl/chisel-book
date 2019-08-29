@@ -239,7 +239,7 @@ The approach of this book is to present small to medium-sized typical hardware c
 
 \section*{Acknowledgements}
 
-I would like to thank everyone who has worked on Chisel for creating such
+I want to thank everyone who has worked on Chisel for creating such
 a cool hardware construction language. Chisel is so joyful to use and
 therefore worth writing a book about.
 I am thankful to the whole Chisel community, which is so welcoming and friendly
@@ -248,7 +248,7 @@ and never tired to answer questions on Chisel.
 I would also like to thank my students in the last years of an advanced computer
 architecture course where most of them picked up Chisel for the final project.
 Thank you for moving out of your comfort zone and taking up the journey of
-learning and using a bleeding edge hardware description language. I know, some of
+learning and using a bleeding-edge hardware description language. I know, some of
 the error messages of early Chisel (version 2) have not been very helpful ;-)
 Many of your questions have helped to shape this book.
 
@@ -264,12 +264,13 @@ In this book, we focus on a higher abstraction level than usual in digital desig
 to enable you to build more complex, interacting digital systems in a shorter time.
 
 This book and Chisel are targeting two groups of developers:
-(1) hardware designers fluid in VHDL or Verilog using other languages such as Python,
-Java, or Tcl to generate hardware to move to a single hardware construction language
+(1) hardware designers and (2) software programmers.
+Hardware designers who are fluid in VHDL or Verilog and using other languages such as Python,
+Java, or Tcl to generate hardware can move to a single hardware construction language
 where hardware generation is part of the language and
-(2) software programmers who are becoming interested in hardware design,
+Software programmers may become interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
-It is perfectly fine to use Chisel as first hardware description language.
+It is perfectly fine to use Chisel as your first hardware description language.
 
 Chisel brings advances in software engineering, such as object orientated
 and functional languages, into digital design.
@@ -277,7 +278,7 @@ Chisel does not only allow to express hardware at the register-transfer level,
 but allows you to write hardware generators.
 
 Hardware is now commonly described with a hardware description language.
-The time of drawing hardware components, even with CAD tools, is definitely
+The time of drawing hardware components, even with CAD tools, is
 over. Some high-level schematics can give an overview of the system but are
 not intended to describe the system.
 
@@ -293,26 +294,26 @@ for testing and synthesis.
 This book is not a general introduction to hardware design and the fundamentals of it.
 For an introduction of the basics in digital design, such as how to build a gate out of
 CMOS transistors, refer to other digital design books.
-However, the intention of this book is to teach digital design at an abstraction level that is
+However, this book intends to teach digital design at an abstraction level that is
 current practice to describe ASICs or designs targeting
 \myref{https://en.wikipedia.org/wiki/Field-programmable_gate_array}{FPGA}s.\footnote{As the author is more familiar with FPGAs
 than ASICs as target technology, some design optimizations shown in this book are
 targeting FPGA technology.}
-As prerequisites for this book we assume basic knowledge of
+As prerequisites for this book, we assume basic knowledge of
 \myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} and the
 \myref{https://en.wikipedia.org/wiki/Binary_number}{binary number system}.
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
 Chisel can be your first programming language to describe digital hardware.
 As the build process in the examples is based on \code{sbt} and \code{make}
-basic knowledge of the command line interface (CLI, also called terminal or
+basic knowledge of the command-line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
 Chisel itself is not a big language, as it shall be for hardware design.
 The basic constructs fit on
 \myref{https://chisel.eecs.berkeley.edu/doc/chisel-cheatsheet3.pdf}{one page}
 and can be learned within a few days.
-Therefore, this book is not a big book as well.
+Therefore, this book is not a big book, as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacies.
 The power of Chisel comes from the embedding of Chisel within
 \myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
@@ -322,7 +323,7 @@ We provide a short section on Scala for hardware designers,
 but a general introduction to Scala is better served by the textbook by
 Odersky et al.~\cite{Scala}.
 
-This book is a tutorial in digital design and the Chisel language, it is not
+This book is a tutorial in digital design and the Chisel language; it is not
 a Chisel language reference nor is it a book on complete chip design.
 
 
@@ -334,14 +335,14 @@ of this book.
 Besides showing Chisel code, we have also tried to show useful designs and
 principles of good hardware description style.
 
-This book is optimized for reading on a laptop or on a tablet (e.g., an iPad).
+This book is optimized for reading on a laptop or tablet (e.g., an iPad).
 We include links to further reading in the running text, mostly to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
 \section{Installing Chisel and FPGA Tools}
 
-Chisel is a Scala library and the easiest way to install Chisel and Scala is
-with \code{sbt}, the Scala build tool. Scala itself depends on an installation
+Chisel is a Scala library, and the easiest way to install Chisel and Scala is
+with \code{sbt}, the Scala build tool. Scala itself depends on the installation
 of the \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}.
 
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
@@ -351,7 +352,7 @@ On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 $ brew install sbt
 \end{verbatim}
 
-\noindent For Ubuntu, which is based on Debian, software is usually installed from a
+\noindent For Ubuntu, which is based on Debian, programs are usually installed from a
 Debian file (.deb). However, as of the time of this writing \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
 is a little bit more involved:
@@ -371,9 +372,9 @@ For instructions see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
 
 
-To build hardware for an FPGA you need a synthesize tool. The two major
+To build hardware for an FPGA, you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
-their tools that cover small to medium sized FPGAs. Those medium sized
+their tools that cover small to medium-sized FPGAs. Those medium-sized
 FPGAs are large enough to build multicore RISC style processors.
 Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
@@ -381,7 +382,7 @@ Intel provides the \myref{https://www.altera.com/products/design-software/fpga-d
 \section{Hello World}
 
 Each book on a programming language shall start with a minimal example,
-called the \emph{Hello World} example. Following code is a first approach:
+called the \emph{Hello World} example. Following code is the first approach:
 
 
 \shortlist{src/main/scala/HelloScala.scala}
@@ -435,8 +436,8 @@ the current folder:
 $ ls
 \end{verbatim}
 
-That said, an integrated development environment (IDE), with a compiler running in
-the background, can speedup coding. As Chisel is basically a Scala library, all IDEs
+That said, an integrated development environment (IDE), where a compiler is running in
+the background, can speedup coding. As Chisel is a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
 It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
 \myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
@@ -452,24 +453,24 @@ In IntelliJ you can create a new project from existing sources and then select f
 
 This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
 All Chisel code examples, shown in this book, are included in the repository.
-The code compiles with a recent version of Chisel and many examples also include a test bench.
-Larger Chisel examples are collected in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
+The code compiles with a recent version of Chisel, and many examples also include a test bench.
+We collect larger Chisel examples in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
 You can also provide feedback or comments for improvements by filing an issue on GitHub
 or sending a plain, old school email.
 
 This book is freely available as a PDF eBook.\footnote{A print version will soon be available
 from Amazon.com.} The eBook version features links to further resources
 and \myref{https://www.wikipedia.org/}{Wikipedia} entries.
-Wikipedia entries are used for background information (e.g., binary number system)
+We use Wikipedia entries for background information (e.g., binary number system)
 that does not directly fit into this book.
-The format of the eBook is optimized for reading on a tablet, such as an iPad.
+We optimized the format of the eBook for reading on a tablet, such as an iPad.
 
 \section{Further Reading}
 
 Here a list of further reading for digital design and Chisel:
 \begin{itemize}
 \item \myref{http://www.cambridge.org/es/academic/subjects/engineering/circuits-and-systems/digital-design-systems-approach}{Digital Design: A Systems Approach}, by William J. Dally and R. Curtis Harting,
-is a modern textbook on digital design. It is available in two versions: using Verilog or VHDL as hardware description language.
+is a modern textbook on digital design. It is available in two versions: using Verilog or VHDL as a hardware description language.
 \end{itemize}
 
 The official Chisel documentation and further documents are available online:
@@ -483,7 +484,7 @@ project containing small exercises with testers and solutions.
 \item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
 a short users guide to Chisel and links to further information.
 \item The \myref{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
-their own repository that contains a Wiki documentation.
+their repository that contains a Wiki documentation.
 \item The \myref{https://github.com/ucb-bar/generator-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a Jupyter notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
@@ -491,14 +492,14 @@ a Chisel course focusing on hardware generators, as a Jupyter notebook
 
 \section{Exercise}
 
-Each chapter ends with a hands-on exercise. For the introduction exercise we will use an
+Each chapter ends with a hands-on exercise. For the introduction exercise, we will use an
 FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED} blinking.
 As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository from GitHub.
-The Hello World example is in its own folder \code{hello-world}, setup as
+The Hello World example is in the folder \code{hello-world}, set up as
 a minimal project. You can explore the Chisel code of the blinking LED
 in \code{src/main/scala/Hello.scala}.
-Compile the blinking LED with following steps:
+Compile the blinking LED with the following steps:
 
 \begin{chisel}
 $ git clone https://github.com/schoeberl/chisel-examples.git
@@ -1025,7 +1026,7 @@ $ sbt run
 \end{verbatim}
 
 This command will compile all your Chisel code from the source tree and searches
-for classes that contain an \code{object} that contains a \code{main} method, or simpler
+for classes that contain an \code{object} that includes a \code{main} method, or simpler
 that extends \code{App}. If there is more than one such object, all objects are listed and
 one can be selected.
 You can also directly specify the object that shall be executed as parameter to \code{sbt}:
@@ -1060,31 +1061,31 @@ in a software simulator and compare the simulation of the hardware with the
 software simulation. This method is very efficient when testing an implementation
 of a processor~\cite{lipsi:arcs2018}.
 
-To use the \code{PeekPokeTester} following packages need to be imported:
+To use the \code{PeekPokeTester}, following packages need to be imported:
 
 \shortlist{code/test_import.txt}
 
 \noindent Testing a circuit contains (at least) three components: (1) the device under test (often
-simply called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
+called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
 that contains the \code{main} function to start the testing.
 
-The following code shows our simple design under test. It contains to input
+The following code shows our simple design under test. It contains two input
 ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
 to it returns on the output:
 
 \shortlist{code/test_dut.txt}
 
 \noindent The test bench for this DUT extends \code{PeekPokeTester} and has
-the DUT as parameter for the constructor:
+the DUT as a parameter for the constructor:
 
 \shortlist{code/test_bench_simple.txt}
 
 \noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
-read back output values with \code{peek()}. The simulation is advanced with one
+read back output values with \code{peek()}. The tester advances the simulation by one
 step (= one clock cycle) with \code{step(1)}.
 We can print the values of the outputs with \code{println()}.
 
-The test is created and run with following tester main:
+The test is created and run with the following tester main:
 
 \shortlist{code/test_main_simple.txt}
 
@@ -1101,7 +1102,7 @@ taking 0.021820 seconds
 \end{verbatim}
 
 \noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
-Besides manually inspecting printouts, which is a fine starting point, we can also
+Besides manually inspecting printouts, which is an excellent starting point, we can also
 express our expectations in the test bench itself with \code{expect()},
 having the output port and the expected value as parameters.
 The following example shows testing with \code{expect()}:
@@ -1118,9 +1119,9 @@ taking 0.018000 seconds
 [info] [0.009] RAN 2 CYCLES PASSED
 \end{verbatim}
 
-\noindent A failed test, when either the DUT or the test bench contain an error,
+\noindent A failed test, when either the DUT or the test bench contains an error,
 produces an error message describing the difference between the expected and actual
-value. In the following we changed the test bench to expect a 4, which is an error:
+value. In the following, we changed the test bench to expect a 4, which is an error:
 
 \begin{verbatim}
 [info] [0.002] SEED 1544208642263
@@ -1130,15 +1131,15 @@ taking 0.022101 seconds
 [info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
 \end{verbatim}
 
-In this section we described the basic testing facility with Chisel for simple tests.
-However, in Chisel the full power of Scala is available to write testers.
+In this section, we described the basic testing facility with Chisel for simple tests.
+However, in Chisel, the full power of Scala is available to write testers.
 We will show these possibilities later.
 
 \subsection{Using ScalaTest}
 
 \myref{http://www.scalatest.org/}{ScalaTest} is a testing tool for Scala (and Java),
 which we can use to run Chisel testers.
-To use it, include the library in your \code{build.sbt} with following line:
+To use it, include the library in your \code{build.sbt} with the following line:
 
 \begin{verbatim}
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
@@ -1150,7 +1151,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 $ sbt test
 \end{verbatim}
 
-\noindent A minimal test (a testing hello world) to just test a Scala Integer
+\noindent A minimal test (a testing hello world) to test a Scala Integer
 addition:
 
 \shortlist{code/scalatest_hello_world.txt}
@@ -1171,7 +1172,7 @@ $ sbt "testOnly SimpleSpec"
 
 \section{Exercises}
 
-For this exercise we will revisit the blinking LED from
+For this exercise, we will revisit the blinking LED from
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 and explore the ALU example.
 
@@ -1189,8 +1190,8 @@ Each file starts with the import of Chisel and related packages:
 \shortlist{code/import.txt}
 
 \noindent Then follows the hardware description, as shown in Listing~\ref{lst:chisel:hello}.
-To generate the Verilog description we need an application. A Scala object that \code{extends App}
-is an application that implicitly generates a main function where the application starts.
+To generate the Verilog description, we need an application. A Scala object that \code{extends App}
+is an application that implicitly generates the main function where the application starts.
 The only action of this application is to create a new \code{HelloWorld} object and pass it
 to the Chisel driver \code{execute} function. The first argument is an array of Strings,
 where build options can be set (e.g., the output folder). The following code will
@@ -1277,7 +1278,7 @@ to automate testing and also to be independent from an FPGA.
 Use your designs from the prior chapter and add a Chisel tester to test the functionality.
 Try to enumerate all possible inputs and test the output with \code{except()}.
 
-Testing within Chisel can really speedup the debugging of your design.
+Testing within Chisel can really speed up the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
 with the FPGA. There you can perform a reality check on the size of your design (usually
 in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
@@ -3064,35 +3065,35 @@ the waveform how that word bubbles through the FIFO, therefore the
 name \emph{bubble FIFO}. This bubbling also means that the
 latency of a data word through the FIFO is equal to the depth of the FIFO.
 
-The next test fills the FIFO until completely full. A single read follows.
+The next test fills the FIFO until it is full. A single read follows.
 Notice how the empty word bubbles from the reader side of the FIFO
-to the writer side. When a bubble FIFO is completely full, it takes
-a latency of the buffer depth for a read to have an effect at the writer side. 
+to the writer side. When a bubble FIFO is full, it takes
+a latency of the buffer depth for a read to affect the writer side. 
 
-The end of the test contains a loop that tries to write and read at the maximum speed.
+The end of the test contains a loop that tries to write and read at maximum speed.
 We can see the bubble FIFO running at maximum bandwidth, which is two
 clock cycles per word. A buffer stage has always to toggle between empty
-and full for one word transfer.
+and full for a single word transfer.
 
-A bubble FIFO is simple and for small buffers a low resource solution.
+A bubble FIFO is simple, and for small buffers a low resource solution.
 The main drawbacks of a $n$ stage bubble FIFO are: (1) maximum throughput is
 one word every two clock cycles, (2) a data word has to travel $n$ clock cycles
 from the writer end to the reader end, and (3) a full FIFO needs $n$ clock cycles
 for the restart.
 
-This drawbacks can be solved by a FIFO implementation with a
+These drawbacks can be solved by a FIFO implementation with a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 The circular buffer can be implemented with a memory and
 read and write pointers.
-Implement a FIFO as circular buffer with 4 elements, using the same
+Implement a FIFO as a circular buffer with four elements, using the same
 interface, and explore the different behavior with the tester.
 For an initial implementation of the circular buffer use, as a shortcut,
 a vector of registers (\code{Reg(Vec(4, UInt(size.W)))}).
 
 \subsection{The UART}
 
-For the UART example you need an FPGA board with a serial port and
-a serial port for your laptop (usually with an USB connection).
+For the UART example, you need an FPGA board with a serial port and
+a serial port for your laptop (usually with a USB connection).
 Connect the serial cable between the FPGA board and the serial port on
 your laptop. Start a terminal program, e.g., Hyperterm on Windows
 or \code{gtkterm} on Linux:
@@ -3102,7 +3103,7 @@ $ gtkterm &
 Configure your port to use the correct device, with a USB UART this
 is often something like \code{/dev/ttyUSB0}. Set the baud rate to 115200
 and no parity or flow control (handshake).
-With following command you can create the Verilog code for the UART:
+With the following command you can create the Verilog code for the UART:
 \begin{verbatim}
 $ make uart
 \end{verbatim}
@@ -3110,16 +3111,16 @@ Then use your synthesize tool to synthesize the design.
 The repository contains a Quartus project for the DE2-115 FPGA board.
 With Quartus use the play button to synthesize the design and then configure
 the FPGA.
-After configuration you should see a greeting message in the terminal.
+After configuration, you should see a greeting message in the terminal.
 
 Extend the blinking LED example with a UART and write 0 and 1 to the serial
 line when the LED is off and on. Use the \code{BufferedTx}, as in the \code{Sender}
 example.
 
-With the slow output of characters (two per second) you can just write the data
+With the slow output of characters (two per second), you can write the data
 to the UART transmit register and can ignore the read/valid handshake.
 Extend the example by writing repeated numbers 0-9 as fast as the baud rate allows.
-In this case you have to extend your state machine to poll the UART status
+In this case, you have to extend your state machine to poll the UART status
 to check if the transmit buffer is free.
 
 The example code contains only a single buffer for the \code{Tx}. Feel free to
@@ -3128,9 +3129,9 @@ and receiver.
 
 \chapter{Design of a Processor}
 
-As one of the last chapters in this book we present a medium size project:
+As one of the last chapters in this book, we present a medium size project:
 the design, simulation, and testing of a microprocessor.
-In order to keep this project manageable, we will design a simple accumulator
+To keep this project manageable, we will design a simple accumulator
 machine.
 The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:arcs2019}
 and is available in open source at \url{https://github.com/leros-dev/leros}.
@@ -3187,31 +3188,31 @@ scall & scall A & System call (simulation hook) \\
 
 A central component of a processor is the
 \myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic logic unit}, or ALU for short.
-Therefore, we start with coding of the ALU und a test bench.
+Therefore, we start with the coding of the ALU and a test bench.
 First, we define an \code{Enum} to represent the different operations of the ALU:
 
 \shortlist{code/leros_types.txt}
 
-\noindent An ALU has usually two operand inputs (call them \code{a} and \code{b}), an operation \code{op}
+\noindent An ALU usually has two operand inputs (call them \code{a} and \code{b}), an operation \code{op}
 (or opcode) input to select the function and an output \code{y}.
 Listing~\ref{lst:leros-alu} shows the ALU.
 
 \todo{draw a nice ALU, see Wikipedia}
 
-We first define shorter names for the three inputs. The logic for \code{res} is computed
-with a \code{switch} statement. Therefore, it gets a default assignment of 0.
+We first define shorter names for the three inputs. The \code{switch} statement defines the
+logic for the computation of \code{res}. Therefore, it gets a default assignment of 0.
 The switch statement enumerates all operations and assigns the expression accordingly.
 All operations map directly to a Chisel expression.
-At the end we assign the result \code{res} to the ALU output \code{y}
+At the end, we assign the result \code{res} to the ALU output \code{y}
 
 \longlist{code/leros_alu.txt}{The Leros ALU.}{lst:leros-alu}
 
-For the testing we write the ALU function in plain Scala, as shown in Listing~\ref{lst:leros-alu-scala}.
+For the testing, we write the ALU function in plain Scala, as shown in Listing~\ref{lst:leros-alu-scala}.
 
 \longlist{code/leros_alu_ref.txt}{The Leros ALU function written in Scala.}{lst:leros-alu-scala}
 
 \noindent While this duplication of hardware written in Chisel by a Scala implementation does not
-detect errors in the specification, it is at least some sanity check.
+detect errors in the specification; it is at least some sanity check.
 We use some corner case values as test vector:
 
 \shortlist{code/leros_alu_testvec.txt}
@@ -3220,13 +3221,13 @@ We use some corner case values as test vector:
 
 \shortlist{code/leros_alu_test.txt}
 
-\noindent Full exhaustive testing for 32-bit arguments is not possible, which was the reason we
-selected some corner cases as input values. Beside testing against corner cases it is also useful
+\noindent Full, exhaustive testing for 32-bit arguments is not possible, which was the reason we
+selected some corner cases as input values. Beside testing against corner cases, it is also useful
 to test against random inputs:
 
 \shortlist{code/leros_alu_rand.txt}
 
-\noindent The tests can be run within the Leros project with
+\noindent You can run the tests within the Leros project with
 
 \begin{verbatim}
 $ sbt "test:runMain leros.AluTester"
@@ -3243,8 +3244,8 @@ test Alu Success: 70567 tests passed in 70572 cycles taking
 
 \section{Decoding Instructions}
 
-From the ALU we work backwards and implement the instruction decoder.
-However, first we define the instruction encoding in its own Scala class and in
+From the ALU, we work backward and implement the instruction decoder.
+However, first, we define the instruction encoding in its own Scala class and
 a \emph{shared} package. We want to share the encoding constants between
 the hardware implementation of Leros, an assembler for Leros, and an instruction
 set simulator of Leros.
@@ -3253,7 +3254,7 @@ set simulator of Leros.
 
 \todo{Update code when Leros is more complete, as stuff is missing.}
 
-\noindent For the decode component we define a \code{Bundle} for the output,
+\noindent For the decode component, we define a \code{Bundle} for the output,
 which is later fed partially into the ALU.
 
 \shortlist{code/leros_decode_bundle.txt}
@@ -3263,7 +3264,7 @@ as output. Those driving signals are assigned a default value with \code{WireIni
 
 \shortlist{code/leros_decode_init.txt}
 
-\noindent The decoding itself is just a large switch statement on part of the
+\noindent The decoding itself is just a large switch statement on the part of the
 instruction that represents the opcode (in Leros for most instructions the upper
 8 bits.)
 
@@ -3281,10 +3282,10 @@ which we will use to initialize the instruction memory.
 Writing an assembler with an expressive language like Scala is not a big project.
 Therefore, we write a simple assembler for Leros, which is possible within about
 100 lines of code. We define a function \code{getProgram} that calls the assembler.
-For branch destinations we need a symbol table, which we collect in a \code{Map}.
+For branch destinations, we need a symbol table, which we collect in a \code{Map}.
 A classic assembler runs in two passes: (1) collect the values for the symbol table
 and (2) assemble the program with the symbols collected in the first pass.
-Therefore, we call assemble twice with a parameter to indicate which pass it is.
+Therefore, we call \code{assemble} twice with a parameter to indicate which pass it is.
 
 \shortlist{code/leros_asm_call.txt}
 
@@ -3298,8 +3299,8 @@ a register number.
 \shortlist{code/leros_asm_start.txt}
 
 Listing~\ref{lst:leros-asm-match} shows the core of the assembler for Leros.
-The core of the assembly function is covered by a Scala \code{match}
-expression. \todo{Some more words on the code.}
+A Scala \code{match} expression covers the core of the assembly function.
+\todo{Some more words on the code.}
 
 
 
@@ -3311,18 +3312,18 @@ This exercise assignment in one of the last Chapters is in a very free form. You
 of your learning tour through Chisel and ready to tackle design problems that
 you find interesting.
 
-One option is to read the chapter again and read along all the source code in the
+One option is to reread the chapter and read along with all the source code in the
 \myref{https://github.com/leros-dev/leros}{Leros repository}, run the test cases,
 fiddle with the code by breaking it and see that tests fail.
 
-Another option is to simply write your own implementation of Leros.
+Another option is to write your own implementation of Leros.
 The implementation in the repository is just one possible organization of a pipeline.
 You could write a Chisel simulation version of Leros with just a single pipeline stage,
 or go creasy and superpipeline Leros for the highest possible clocking frequency.
 
-A third option is to design you own processor from scratch. Maybe the demonstration
+A third option is to design your own processor from scratch. Maybe the demonstration
 how to build the Leros processor and the needed tools has convinced you that processor
-design and implementation is no magic art, but engineering that can be very joyful.
+design and implementation is no magic art, but the engineering that can be very joyful.
 
 \chapter{Contributing to Chisel}
 
@@ -3333,12 +3334,12 @@ to Chisel.
 
 \section{Setup the Development Environment}
 
-Chisel consists of several different repositories, all hosted at
+Chisel consists of several different repositories; all hosted at
 the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
 
 Fork the repository, which you like to contribute, into your personal GitHub account.
-This can be easily done by pressing the \code{Fork} button in the GitHub web interface.
-Then from that fork, clone your fork of the repository. In our example we will change
+You can fork the repository by pressing the \code{Fork} button in the GitHub web interface.
+Then from that fork, clone your fork of the repository. In our example, we will change
 \code{chisel3} and the clone command for my local fork is:
 
 \begin{verbatim}
@@ -3356,9 +3357,9 @@ Watch out during the publish local command for the version string of the publish
 library, which contains the string \code{SNAPSHOT}.
 If you use the tester and the published version is not compatible with the Chisel
 SNAPSHOT, fork and clone the \myref{https://github.com/freechipsproject/chisel-testers}{chisel-tester}
-repo as well and publish it local.
+repo as well and publish it locally.
 
-To test your changes in Chisel, you probably also want to setup a Chisel project,
+To test your changes in Chisel, you probably also want to set up a Chisel project,
 e.g., by forking/cloning an \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project},
 renaming it, and removing the \code{.git} folder from it.
 
@@ -3366,7 +3367,7 @@ Change the \code{build.sbt} to reference the locally published version of Chisel
 Furthermore, at the time of this writing, the head of Chisel source uses Scala 2.12, but Scala
 2.12 has troubles with
 \myref{https://github.com/freechipsproject/chisel-template/issues/35}{anonymous bundles}.
-Therefore, you need to add following Scala option: \code{"-Xsource:2.11"}.
+Therefore, you need to add the following Scala option: \code{"-Xsource:2.11"}.
 The \code{build.sbt} should look similar to:
 
 \begin{verbatim}
@@ -3388,7 +3389,7 @@ libraryDependencies +=
 Compile your Chisel test application and take a close look if it picks up the local published
 version of the Chisel library (there is also a SNAPSHOT version published, so if, e.g.,
 the Scala version is different between your Chisel library and your application code,
-it will pickup the SNAPSHOT version from the server instead of your local published
+it will pick up the SNAPSHOT version from the server instead of your local published
 library.)
 
 See also \myref{https://github.com/freechipsproject/chisel3\#for-chisel-developers}{some notes
@@ -3396,7 +3397,7 @@ at the Chisel repo}.
 
 \section{Testing}
 
-When you change the Chisel library you should run the Chisel tests.
+When you change the Chisel library, you should run the Chisel tests.
 In an \code{sbt} based project, this is usually run with:
 
 \begin{verbatim}
@@ -3408,7 +3409,7 @@ new features.
 
 \section{Contribute with a Pull Request}
 
-In the Chisel project no developer commits directly to the main repository.
+In the Chisel project, no developer commits directly to the main repository.
 A contribution is organized via a
 \myref{https://help.github.com/articles/creating-a-pull-request-from-a-fork/}{pull request}
 from a branch in a forked version of the library.
@@ -3417,13 +3418,13 @@ For further information see the documentation at GitHub on
 pull requests}.
 The Chisel group started to document
 \myref{https://github.com/freechipsproject/chisel-lang-governance/blob/master/reviewer_guidelines.md}{contribution
-guide lines}.
+guidelines}.
 
 \section{Exercise}
 
 Invent a new operator for the \code{UInt} type, implement it in the Chisel library,
 and write some usage/test code to explore the operator. It does not need to be
-a very useful operator, just anything will do, e.g., a ? operator that delivers the lefthand side
+a useful operator; just anything will do, e.g., a ? operator that delivers the lefthand side
 if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
 How many lines of code did you need to add?\footnote{A quick and dirty implementation
 needs just two lines of Scala code.}
@@ -3446,7 +3447,7 @@ See how changes and pull requests are handled in the Chisel open-source project.
 
 This book covers version 3 of Chisel. And Chisel 3 is recommended for new designs.
 However, there is still Chisel 2 code out in the wild, which has not yet been converted
-to Chisel 3. There is documentation available how to convert a Chisel 2 project to
+to Chisel 3. There is documentation available on how to convert a Chisel 2 project to
 Chisel 3:
 
 \begin{itemize}
