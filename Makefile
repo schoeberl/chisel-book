@@ -35,6 +35,9 @@ test:
 flasher:
 	sbt "testOnly FlasherSpec"
 
+rtf:
+	latex2rtf chisel-book.tex
+
 detex:
 	detex chisel-book.tex > chisel-book.txt
 

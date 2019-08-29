@@ -225,7 +225,7 @@ Typeset by Martin Schoeberl}
 \chapter{Preface}
 
 % This text goes on the backside of the book, and in Amazon description
-This book is an introduction into digital design with the focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
+This book is an introduction to digital design with the focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
 
 This book addresses hardware designers and software engineers. Hardware designers, with knowledge of Verilog or VHDL, can upgrade their productivity with a modern language for their next ASIC or FPGA design. Software engineers, with knowledge of object-oriented and functional programming, can leverage their knowledge to program hardware, for example, FPGA accelerators executing in the cloud.
 
@@ -272,9 +272,9 @@ Software programmers may become interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
 It is perfectly fine to use Chisel as your first hardware description language.
 
-Chisel brings advances in software engineering, such as object orientated
+Chisel brings advances in software engineering, such as object-orientated
 and functional languages, into digital design.
-Chisel does not only allow to express hardware at the register-transfer level,
+Chisel does not only allow to express hardware at the register-transfer level
 but allows you to write hardware generators.
 
 Hardware is now commonly described with a hardware description language.
@@ -283,7 +283,7 @@ over. Some high-level schematics can give an overview of the system but are
 not intended to describe the system.
 
 The two most common hardware description languages are Verilog and VHDL.
-Both languages are old, contain a lot of legacies, and have a moving line of what
+Both languages are old, contain many legacies, and have a moving line of what
 constructs of the language are synthesizable to hardware.
 Do not get me wrong: VHDL and Verilog are perfectly able to describe a hardware
 block that can be synthesized into an
@@ -314,17 +314,18 @@ The basic constructs fit on
 \myref{https://chisel.eecs.berkeley.edu/doc/chisel-cheatsheet3.pdf}{one page}
 and can be learned within a few days.
 Therefore, this book is not a big book, as well.
-Chisel is for sure smaller than VHDL and Verilog, which carry a lot of legacies.
+Chisel is for sure smaller than VHDL and Verilog, which carry many legacies.
 The power of Chisel comes from the embedding of Chisel within
 \myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
 Chisel inherits the feature from Scala being ``a language that grows on you''~\cite{Scala}.
 However, Scala is not the topic of this book.
-We provide a short section on Scala for hardware designers,
-but a general introduction to Scala is better served by the textbook by
-Odersky et al.~\cite{Scala}.
+% We provide a short section on Scala for hardware designers, but
+%A general introduction to Scala is better served by
+The textbook by Odersky et al.~\cite{Scala} provides a general introduction
+to Scala.
 
 This book is a tutorial in digital design and the Chisel language; it is not
-a Chisel language reference nor is it a book on complete chip design.
+a Chisel language reference, nor is it a book on complete chip design.
 
 
 All code examples shown in this book are extracted from complete programs
@@ -402,7 +403,7 @@ Hello Chisel World!
 \end{chisel}
 
 \noindent However, is this Chisel? Is this hardware generated to print a string?
-No, this is actually plain Scala code and not a representative Hello World
+No, this is plain Scala code and not a representative Hello World
 program for a hardware design.
 
 \section{Chisel Hello World}
@@ -419,7 +420,7 @@ It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
 usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
-example we count from 0 up to 25000000-1 and then toggle the blinking signal
+example, we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 That hardware then blinks the LED at 1~Hz.
 
@@ -437,7 +438,7 @@ $ ls
 \end{verbatim}
 
 That said, an integrated development environment (IDE), where a compiler is running in
-the background, can speedup coding. As Chisel is a Scala library, all IDEs
+the background, can speed up coding. As Chisel is a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
 It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
 \myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
@@ -509,13 +510,13 @@ $ make
 
 After some initial downloading of Chisel components, this will produce the Verilog file \code{Hello.v}.
 Explore this Verilog file. You will see that it contains two inputs \code{clock} and \code{reset}
-and one output \code{io\_led}. When you compare this Verilog file with the Chisel module
+and one output \code{io\_led}. When you compare this Verilog file with the Chisel module,
 you will notice that the Chisel module does not contain \code{clock} or \code{reset}.
-Those signals are implicitly generated and in most designs it is convenient to not need to
-deal with these low-level details. Chisel provides register components and those
+Those signals are implicitly generated, and in most designs, it is convenient not to need to
+deal with these low-level details. Chisel provides register components, and those
 are connected automatically to \code{clock} and \code{reset} (if needed).
 
-The next step is to setup an FPGA project file for the synthesize tool, assign the pins,
+The next step is to set up an FPGA project file for the synthesize tool, assign the pins,
 and compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
 performing place and route, performing timing analysis, and generating a bitfile.
 However, for the purpose of this introduction example we simply call it ``compile''
@@ -524,13 +525,13 @@ We cannot provide the details of these steps. Please consult the manual of
 your Intel Quartus or Xilinx Vivado tool.
 However, the examples repository contains some ready to use Quartus
 projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
-If it happens that the repository contains support for your board, start Quartus, open the project,
+If the repository contains support for your board, start Quartus, open the project,
 compile it by pressing the \emph{Play} button, and configure the FPGA board
 with the \emph{Programmer} button and one of the LEDs should blink.
 
 {\bf Gratulation! You managed to get your first design in Chisel running in an FPGA!}
 
-If the LED is not blinking, check the statues of reset. On the DE2-115 configuration
+If the LED is not blinking, check the status of reset. On the DE2-115 configuration,
 the reset input is connected to SW0.
 
 Now change the blinking frequency to a slower or a faster value and
@@ -551,14 +552,14 @@ Is it alarming or more like a sign-of-live signal?
 
 \chapter{Basic Circuits}
 
-In this section we introduce the basic components for digital design,
+In this section, we introduce the basic components for digital design:
 combinational circuits and flip-flops.
 These essential elements can be combined to build larger, more interesting circuits.
 
 \section{Signal Types and Constants}
 
 Chisel provides three data types to describe signals, combinational logic, and registers:
-\code{Bits}, \code{UInt}, and \code{SInt}. \code{UInt} and \code{SInt} extend \code{Bits}
+\code{Bits}, \code{UInt}, and \code{SInt}. \code{UInt} and \code{SInt} extend \code{Bits},
 and all three types represent a vector of bits. \code{UInt} gives this vector of
 bits the meaning of an unsigned integer and \code{SInt} of a signed
 integer.\footnote{The type \codefoot{Bits} in the current version of Chisel is missing operations and
@@ -600,12 +601,12 @@ the constants in, in this case 8 bits.
 
 \shortlist{code/const_base.txt}
 
-\noindent The above code also shows how to use an underscore to group digits in the
-string that represents a constant. The underscore is simply ignored.
+\noindent The above code shows how to use an underscore to group digits in the
+string that represents a constant. The underscore is ignored.
 
 To represent logic values, Chisel defines the type \code{Bool}.
 \code{Bool} can represent a \emph{true} or \emph{false} value.
-the following code shows the definition of type \code{Bool} and the definition of
+The following code shows the definition of type \code{Bool} and the definition of
 \code{Bool} constants, by converting the Scala Boolean constants \code{true}
 and \code{false} to Chisel \code{Bool} constants.
 
@@ -626,7 +627,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates.
   \centering
   \includegraphics[scale=\scale]{figures/logic}
   \caption{Logic for the expression \code{(a \& b) | c}.
-  The wires can be single bit or multiple bits. The Chisel expression, and the schematics, are the same.}
+  The wires can be a single bit or multiple bits. The Chisel expression, and the schematics are the same.}
   \label{fig:logic}
 \end{figure}
 
@@ -635,7 +636,7 @@ Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
 Note that this circuit may be for a vector of bits and not only single wires
 that are combined with the AND and OR circuits.
 
-In this example we do not define the type nor the width of signal \code{logic}.
+In this example, we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
 The standard logic operations in Chisel are:
 
@@ -650,7 +651,7 @@ addition and subtraction, the sum of the two widths for the multiplication, and 
 the width of the numerator for divide and modulo operations.\footnote{The exact
 details are available in the \myref{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}{FIRRTL specification}.}
 
-A signal can also first be defined as a \code{Wire} of some type. Afterwards can we assign a
+A signal can also first be defined as a \code{Wire} of some type. Afterward, we can assign a
 value to the wire with the \code{:=} update operator.
 
 \shortlist{code/wire.txt}
@@ -668,7 +669,7 @@ Table~\ref{tab:operators} shows the full list of operators
 (see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
 The Chisel operator precedence is determined by the evaluation order of the circuit,
 which follows the \myref{https://docs.scala-lang.org/tour/operators.html}{Scala operator precedence}.
-If in doubt, it is always good praxis to use parentheses.\footnote{The operator precedence in
+If in doubt, it is always a good praxis to use parentheses.\footnote{The operator precedence in
 Chisel is a side effect of the hardware elaboration when the tree of hardware nodes
 is created by executing the Scala operators. The Scala operator precedence is similar but
 not identical to Java/C. Verilog has the same operator precedence as C, but VHDL
@@ -706,9 +707,9 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     Function & Description & Data types \\
     \midrule
     \code{v.andR v.orR v.xorR} & AND, OR, XOR reduction & UInt, SInt, returns Bool \\
-    \code{v(n)} & single bit extraction & UInt, SInt \\
-    \code{v(end, start)} & bit field extraction & UInt, SInt \\
-    \code{Fill(n, v)} & bit string replication, n times & UInt, SInt \\
+    \code{v(n)} & extraction of a single bit & UInt, SInt \\
+    \code{v(end, start)} & bitfield extraction & UInt, SInt \\
+    \code{Fill(n, v)} & bitstring replication, n times & UInt, SInt \\
     \code{Cat(a, b, ...)} & bit field concatenation & UInt, SInt \\
     \bottomrule 
   \end{tabular} 
@@ -719,7 +720,7 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
 \subsection{Multiplexer}
 
 A \myref{https://en.wikipedia.org/wiki/Multiplexer}{multiplexer} is a circuit that selects between alternatives.
-In the most basic form it selects between two alternatives. Figure~\ref{fig:mux} shows
+In the most basic form, it selects between two alternatives. Figure~\ref{fig:mux} shows
 such a 2:1 multiplexer, or mux for short. Depending on the value of the
 select signal (\code{sel}) signal \code{y} will represent signal \code{a} or
 signal \code{b}.
@@ -731,8 +732,8 @@ signal \code{b}.
   \label{fig:mux}
 \end{figure}
 
-A multiplexer can be simply built from logic.
-However, as multiplexing  is such a common operation, Chisel provides a multiplexer,
+A multiplexer can be built from logic.
+However, as multiplexing  is such a standard operation, Chisel provides a multiplexer,
 
 \shortlist{code/mux.txt}
 
@@ -785,13 +786,13 @@ an upper case.
 
 \subsection{Counting}
 
-Counting is a very basic operation in digital systems. On might count events.
+Counting is a fundamental operation in digital systems. On might count events.
 However, more often counting is used to define a time interval. Counting the
 clock cycles and triggering an action when the time interval has expired.
 
 A simple approach is counting up to a value. However, in computer science,
-and in digital design, counting starts at 0. Therefore, if we want to count till
-10 we count from 0 to 9. The following code shows such a counter that counts
+and digital design, counting starts at 0. Therefore, if we want to count till
+10, we count from 0 to 9. The following code shows such a counter that counts
 till 9 and wraps around to 0 when reaching 9.
 
 \shortlist{code/counter.txt}
@@ -806,19 +807,19 @@ of the same type.
 
 A Chisel bundle groups several signals. The entire bundle can be referenced
 as a whole, or individual fields can be accessed by their name.
-We can define our own bundle (collection of signals) by defining a class that
+We can define a bundle (collection of signals) by defining a class that
 extends \code{Bundle} and list the fields as \code{val}s within the constructor block.
 
 \shortlist{code/bundle.txt}
 
-\noindent To use a bundle we create it with \code{new} and wrap it into a \code{Wire}.
+\noindent To use a bundle, we create it with \code{new} and wrap it into a \code{Wire}.
 The fields are accessed with the dot notation:
 
 \shortlist{code/bundle_use.txt}
 
-Dot notation is common in object oriented languages, where \code{x.y} means
+Dot notation is common in object-oriented languages, where \code{x.y} means
 \code{x} is a reference to an object and \code{y} is a field of that object.
-As Chisel is object oriented, we use dot notation to access fields in a bundle.
+As Chisel is object-oriented, we use dot notation to access fields in a bundle.
 A bundle is similar to a \code{struct} in C, a \code{record} in VHDL, or a
 \code{struct} in SystemVerilog.
 A bundle can also be referenced as a whole:
@@ -839,7 +840,7 @@ needs to be wrapped into a \code{Wire}
 
 \shortlist{code/vec_access.txt}
 
-A vector wrapped into a \code{Wire} is basically a multiplexer.
+A vector wrapped into a \code{Wire} is a multiplexer.
 We can also wrap a vector into a register to define an array of registers.
 Following example defines a register file for a processor; 32 registers
 each 32-bits wide, as for a classic 32-bit 
@@ -848,7 +849,7 @@ processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-
 
 \shortlist{code/reg_file.txt}
 
-\noindent An element of that register file is accessed with an index and used like a normal register.
+\noindent An element of that register file is accessed with an index and used as a normal register.
 
 \shortlist{code/reg_file_access.txt}
 
@@ -879,14 +880,14 @@ language) does define hardware components. While in a software program one
 line of code after the other is executed, in hardware all lines of code
 \emph{execute in parallel}.
 
-It is important to keep in mind that Chisel code does generate hardware.
+It is essential to keep in mind that Chisel code does generate hardware.
 Try to imagine, or draw on a sheet of paper, the individual blocks that
 are generated by your Chisel circuit description.
-Each creation of a component adds hardware, each assignment statement
+Each creation of a component adds hardware; each assignment statement
 generates gates and/or flip-flops.
 
-More technically, when Chisel is executed it runs as a Scala program and
-by executing the Chisel statements \emph{collects} the hardware components
+More technically, when Chisel executes your code it runs as a Scala program, and
+by executing the Chisel statements, it \emph{collects} the hardware components
 and connects those nodes. This network of hardware nodes is the hardware,
 which can spill out Verilog code for ASIC or FPGA synthesis or can be
 tested with a Chisel tester.
@@ -916,12 +917,12 @@ When you have defined those inputs and the pin assignment, start with a simple t
 drop all blinking logic from the design and connect one switch to the LED output;
 compile and configure the FPGA device. Can you switch the LED on an off with the switch?
 If yes, you have now inputs available. If not, you need to debug your FPGA configuration.
-This can also be done with the GUI version of the tool.
+The pin assignment can also be done with the GUI version of the tool.
 
 Now use two switches and implement one of the basic combinational functions,
 e.g., AND two switches and show the result on the LED. Change the function.
 The next step involves three input switches to implement a multiplexer: one acts as
-select signal and the other two are the two inputs for the 2:1 multiplexer.
+a select signal, and the other two are the two inputs for the 2:1 multiplexer.
 
 Now you have been able to implement simple combinational functions and test them
 in real hardware in an FPGA. As a next step, we will take a first look at how the build
@@ -937,7 +938,7 @@ to write tests for debugging and to verify that our circuits are correct.
 
 Chisel is written in Scala, so any build process that supports Scala is possible
 with a Chisel project. One popular build tool for Scala is \myref{https://www.scala-sbt.org/}{sbt},
-which stands for Scala interactive build tool.
+which stands for the Scala interactive build tool.
 Besides driving the build and test process, \code{sbt} also downloads the correct
 version of Scala and the Chisel libraries.
 
@@ -1029,7 +1030,7 @@ This command will compile all your Chisel code from the source tree and searches
 for classes that contain an \code{object} that includes a \code{main} method, or simpler
 that extends \code{App}. If there is more than one such object, all objects are listed and
 one can be selected.
-You can also directly specify the object that shall be executed as parameter to \code{sbt}:
+You can also directly specify the object that shall be executed as a parameter to \code{sbt}:
 
 \begin{verbatim}
 $ sbt "runMain mypacket.MyObject"
@@ -1211,6 +1212,7 @@ which is the same name as our Chisel module. We can identify our LED port as
 \code{output io\_led}. Pin names are the Chisel names with a prepended \code{io\_}.
 Besides our LED pin, the module also contains \code{clock} and \code{reset} input signals.
 Those two signals are added automatically by Chisel.
+
 Furthermore, we can identify the definition of our two registers \code{cntReg} and \code{blkReg}.
 We may also find the reset and update of those registers at the end of the module definition.
 Note, that Chisel generates a synchronous reset.
@@ -1244,7 +1246,7 @@ available and will it be automatically downloaded?
 
 For convenience, the project also contains a \code{Makefile}.
 It just contains the \code{sbt} command, so we do not need to remember it and
-can simply generate the Verilog code with:
+can generate the Verilog code with:
 
 \begin{chisel}
 make
@@ -1265,20 +1267,20 @@ If you need to adapt the project to a different board, there is where the change
 If you have Quartus installed, open that project, compile with the green \emph{Play} button,
 and then configure the FPGA.
 
-Note that the \emph{Hello World} is the very minimal Chisel project.
+Note that the \emph{Hello World} is a minimal Chisel project.
 More realistic projects have their source files organized in packages and contain testers.
 The next exercise will explore such a project.
 
 \subsection{A Testing Exercise}
 
-In the last chapter's exercise you have extended the blinking LED example with some input
+In the last chapter's exercise, you have extended the blinking LED example with some input
 to build an AND gate and a multiplexer and run this hardware in an FPGA.
 We will now use this example and test the functionality with a Chisel tester
-to automate testing and also to be independent from an FPGA.
-Use your designs from the prior chapter and add a Chisel tester to test the functionality.
+to automate testing and also to be independent of an FPGA.
+Use your designs from the previous chapter and add a Chisel tester to test the functionality.
 Try to enumerate all possible inputs and test the output with \code{except()}.
 
-Testing within Chisel can really speed up the debugging of your design.
+Testing within Chisel can speed up the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
 with the FPGA. There you can perform a reality check on the size of your design (usually
 in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
@@ -1299,21 +1301,21 @@ Xilinx Spartan).
 
 A larger digital design is structured into a set of components, often in
 a hierarchical way. Each component has an interface with input and output
-wires, usually called ports. These are similar to input and output pins in an integrated circuit (IC).
+wires, usually called ports. These are similar to input and output pins on an integrated circuit (IC).
 Components are connected by wiring up the inputs and outputs.
 Components may contain subcomponents to build the hierarchy.
 
 Figure~\ref{fig:components} shows an example design. Component C has
 three input ports and two output ports. The component itself is assembled out
-of two subcomponents: B and C, wich are connected to the inputs and
+of two subcomponents: B and C, which are connected to the inputs and
 outputs of C. One output of A is connected to an input of B.
 Component D is at the same hierarchy level as component C and connected
 to it.
 
 The outermost component, which is connected to physical pins
-in a chip, is called the top-level component.
+on a chip, is called the top-level component.
 
-In this chapter we will explain how components are described in Chisel and
+In this chapter, we will explain how components are described in Chisel and
 provide several examples of standard components.
 Those standard components serve two purposes: (1) they provide examples
 of Chisel code and (2) they provide a library of components ready to be reused
@@ -1347,7 +1349,7 @@ port names, such as \code{data}, \code{valid}, or \code{ready}.
 
 Component C has three input and two output ports. It is built out of
 components A and B. We show how A and B are connected to the ports
-of C and als the connection between an output port of A and an
+of C and also the connection between an output port of A and an
 input port of B:
 
 \shortlist{code/components_c.txt}
@@ -1356,34 +1358,34 @@ Components are created with \code{new}, e.g., \code{new CompA()}, and need to be
 into a call to \code{Module()}. The reference to that module is stored in a local variable,
 in this example \code{val compA = Module(new CompA())}.
 
-With this reference we can access the IO ports by dereferencing the \code{io} field of the module
+With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
 and the individual fields of the IO \code{Bundle}.
 
 The simplest component in our design has just an input port, named \code{in}, and
-an output port, named \code{out}.
+an output port named \code{out}.
 
 \shortlist{code/components_d.txt}
 
-The final missing peace of our example design is the top-level component, which itself
+The final missing piece of our example design is the top-level component, which itself
 is assembled out of components C and D:
 
 \shortlist{code/components_top.txt}
 
-Good component design is similar to good design of functions or methods in
+Good component design is similar to the good design of functions or methods in
 software design. One of the main questions is how much functionality shall we put into
-a component and how large should a component be. The two extremes are very
-small components, such an adder, and very large components.
+a component and how large should a component be. The two extremes are tiny
+components, such an adder, and huge components.
 
-Beginners in hardware design often start with very tiny components.
-The problem is that design books use very small components to show the principles.
+Beginners in hardware design often start with tiny components.
+The problem is that design books use tiny components to show the principles.
 But the sizes of the examples (in those books, and also in this book) is small
 to fit into a page and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
-IO construction). As a rule of thumb I would propose that the core of the component,
+IO construction). As a rule of thumb, I would propose that the core of the component,
 the function, should be at least as long as the interface of the component.
 
-For very small components, such as a counter, Chisel provides a more lightweight
+For tiny components, such as a counter, Chisel provides a more lightweight
 way to describe them as functions that return hardware.
 
 
@@ -1406,7 +1408,7 @@ at the output. The input \code{fn} selects the operation on \code{A} and \code{B
 The operations are usually some arithmetic, such as addition and subtraction, and some logical
 functions such as and, or, xor. That's why it is called ALU.
 
-The operation is selected by the function input \code{fn}. The ALU is usually a combinational
+The function input \code{fn} selects the operation. The ALU is usually a combinational
 circuit without any state elements. An ALU might also have additional outputs to signal properties
 of the result, such as zero or the sign.
 
@@ -1415,20 +1417,20 @@ operation, selected by a 2-bit \code{fn} signal.
 
 \shortlist{code/components_alu.txt}
 
-\noindent In this example we use a new Chisel construct, the \code{switch/is} construct to describe
+\noindent In this example, we use a new Chisel construct, the \code{switch/is} construct to describe
 the table that selects the output of our ALU.
-To use this utility function we need to import another Chisel package:
+To use this utility function, we need to import another Chisel package:
 
 \shortlist{code/components_util.txt}
 
 \section{Bulk Connections}
 
-For connecting components with complex IO ports Chisel provides the
+For connecting components with multiple IO ports, Chisel provides the
 bulk connection operator \code{<>}. This operator connects parts of bundles
 in both directions. Chisel uses the names of the leave fields for the connection.
 If a name is missing, it is not connected.
 
-As an example let us assume we build a pipelined processor. The fetch
+As an example, let us assume we build a pipelined processor. The fetch
 stage has a following interface:
 \shortlist{code/bundle_fetch.txt}
 
@@ -1438,7 +1440,7 @@ stage has a following interface:
 \noindent The final stage of our simple processor is the execute stage.
 \shortlist{code/bundle_execute.txt}
 
-To connect all three stages together we need just two \code{<>} operators.
+To connect all three stages we need just two \code{<>} operators.
 We can also connect the port of a submodule with the parent module.
 \shortlist{code/bundle_connect.txt}
 
@@ -1446,11 +1448,11 @@ We can also connect the port of a submodule with the parent module.
 \section{Lightweight Components with Functions}
 
 Modules are the general way to structure your hardware description.
-However, there is some boiler plate when declaring a module and when instantiating and
+However, there is some boilerplate when declaring a module and when instantiating and
 connecting it.
 A lightweight way to structure your hardware is to use functions.
 Scala functions can take Chisel (and Scala) parameters and return generated hardware.
-As a simple example we generate an adder:
+As a simple example, we generate an adder:
 
 \shortlist{code/components_fn_def.txt}
 
@@ -1478,15 +1480,15 @@ clock cycle delay.
 already is that function creating the register for the delay.
 
 Functions can be declared as part of a \code{Module}. However, functions that shall be
-used in different modules are better placed into a Scala object that just collects utility
+used in different modules are better placed into a Scala object that collects utility
 functions.
 
 \chapter{Combinational Building Blocks}
 
-In this chapter we explore various combinational circuits, basic building block that we can
+In this chapter, we explore various combinational circuits, basic building blocks that we can
 use to construct more complex systems.
-In principle all combinational circuits can be described with Boolean equations.
-However, more often a description in form of a table is more efficient.
+In principle, all combinational circuits can be described with Boolean equations.
+However, more often, a description in the form of a table is more efficient.
 We let the synthesize tool extract and minimize the Boolean equations.
 Two basic circuits, best described in a table form, are a decoder and an encoder.
 
@@ -1525,7 +1527,7 @@ value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassign
 Keep in mind that we describe hardware circuits and not a software program with conditional
 execution.
 
-The Chisel condition construct \code{when} has also a form of \emph{else}, it is called
+The Chisel condition construct \code{when} also has a form of \emph{else}, it is called
 \code{otherwise}. With assigning a value under any condition we can omit the default
 value assignment:
 
@@ -1550,7 +1552,7 @@ it is called WireInit, but will change to \code{WireDefault} with the release of
 \shortlist{code/comb_wiredefault.txt}
 
 One might question why using \code{when}, \code{.elsewhen}, and \code{otherwise}
-when Scala has \code{if}, \code{else if}, and \code{else}? Those statement are for
+when Scala has \code{if}, \code{else if}, and \code{else}? Those statements are for
 conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
 Those Scala conditionals have their use in Chisel when we write circuit generators,
 which take parameters to conditionally generate \emph{different} hardware instances.
@@ -1588,7 +1590,7 @@ can be described in a truth table, such as Table~\ref{tab:decoder}.
 \end{table}
 
 The representation of logic as a truth table can be directly described in Chisel with a
-\code{switch} based table.
+\code{switch} statement.
 The \code{switch} statement is not part of the core Chisel language.
 Therefore, we need to include the elements of the package \code{chisel.util}.
 
@@ -1607,24 +1609,24 @@ It is intended to avoid situations with incomplete assignments for combinational
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
 languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
 
-In the example before we used unsigned integers for the signals. A maybe clearer representation
+In the example before we used unsigned integers for the signals. Maybe a clearer representation
 of an encode circuit uses binary notation:
 
 \shortlist{code/encdec_decbin.txt}
 
-A table gives a very readable representation of the decoder function, but is also
+A table gives a very readable representation of the decoder function but is also
 a little bit verbose.
-When examine the table, we see an regular structure: a 1 is shifted left by the number
+When examining the table, we see a regular structure: a 1 is shifted left by the number
 represented by \code{sel}. Therefore, we can express a decoder with the Chisel shift
 operation \code{<<}.
 
 \shortlist{code/encdec_shift.txt}
 
 Decoders are used as a building block for a multiplexer by using the output as an enable
-with an AND gate for the multiplexer data input. However, in Chisel we do not need to construct
+with an AND gate for the multiplexer data input. However, in Chisel, we do not need to construct
 a multiplexer, as a \code{Mux} is available in the core library.
-Decoders can also be used for address decoding and then the outputs are used as
-select signals for e.g., different IO devices connected to a microprocessor. 
+Decoders can also be used for address decoding, and then the outputs are used as
+select signals e.g., different IO devices connected to a microprocessor. 
 
 
 \section{Encoder}
@@ -1659,10 +1661,10 @@ The encoder does the inverse operation of a decoder.
 \end{table}
 
 Figure~\ref{fig:encoder} shows a 4-bit one-hot input to a 2-bit binary output encoder and
-Table~\ref{tab:encoder} the truth table of the encode function. However, an encoder will
-only work as expected when the input signal is one-hot coded. For all other input values the output
-is undefined. As we cannot describe a function with undefined outputs we will use a default
-assignment that catches all undefine input patterns.
+Table~\ref{tab:encoder} shows the truth table of the encode function. However, an encoder will
+only work as expected when the input signal is one-hot coded. For all other input values, the output
+is undefined. As we cannot describe a function with undefined outputs, we will use a default
+assignment that catches all undefined input patterns.
 
 The following Chisel code assigns a default value of 00 and then uses the switch statement
 for the legal input values.
@@ -1673,8 +1675,8 @@ for the legal input values.
 
 Describe a combinational circuit to convert a 4-bit binary input to the encoding of a
 \myref{https://en.wikipedia.org/wiki/Seven-segment_display}{7-segment display}.
-You can either just define the codes for the decimal digits, which was the initial
-usage of a 7-segment display, or additionally define encodings for the remaining bit pattern
+You can either define the codes for the decimal digits, which was the initial
+usage of a 7-segment display, or additionally, define encodings for the remaining bit pattern
 to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
 When you have an FPGA board with a 7-segment display, connect 4 switches or
@@ -1687,8 +1689,8 @@ a previous value. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
 feedback, but this is a specific niche topic and cannot be expressed in Chisel.}
-To build sequential circuits we need elements that can store state: the so
-called registers.
+To build sequential circuits, we need elements that can store state:
+the so-called registers.
 
 \section{Registers}
 
@@ -1699,7 +1701,7 @@ called registers.
   \label{fig:register}
 \end{figure}
 
-The basic element to build sequential circuits are registers. A register is a collection
+The fundamental elements to build sequential circuits are registers. A register is a collection
 of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
 A D flip-flop captures the value of its input at the rising edge of the clock and stores
 it at its output. Or in other words: the register updates its output with the value of the input on the
@@ -1714,28 +1716,28 @@ drawings.
 The omission of the global clock signal is also reflected by Chisel where no explicit
 connection of a signal to the register's clock input is needed.
 
-In Chisel a registers with input \code{d} and output \code{q} is defined with:
+In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \shortlist{code/sequ_reg.txt}
 
-\noindent Note that we do not need to connect a clock to the register, this is
-implicitly done by Chisel. A register's input and output can be arbitrary complex types
+\noindent Note that we do not need to connect a clock to the register, Chisel implicitly does this.
+A register's input and output can be arbitrary complex types
 made out of a combination of vectors and bundles.
 
 A register can also be defined and used in two steps:
 
 \shortlist{code/sequ_reg2.txt}
 
-First we define the register and give it a name, second we connect the signal
-\code{delayIn} to the input of the register. Note also the name of the register
-starting with \code{reg}. To easily distinguish elements between combinational
-circuits and sequential circuits it is common practice to prepend the marker
-\code{reg} to the name. Also note that names in Scala (and therefore
+First, we define the register and give it a name, second, we connect the signal
+\code{delayIn} to the input of the register. Note also that the name of the register
+contains the string \code{Reg}. To easily distinguish between combinational
+circuits and sequential circuits, it is common practice to have the marker
+\code{Reg} as part of to the name. Also, note that names in Scala (and therefore
 also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
 Variable names start with lowercase and classes start with upper case.
 
-A register can also be initialized on reset. The \code{reset} signal is, like the \code{clock} signal,
+A register can also be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
 implicit in Chisel. We supply the reset value, e.g., zero, as a parameter to the register
 constructor \code{RegInit}. The input for the register is connected with a Chisel
 assignment statement.
@@ -1773,23 +1775,23 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
-Time advances from left to right. On top of the figure we see the clock that drives our circuit.
+Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
 In the first clock cycle, before a reset, the register is undefined. In the second clock cycle reset
 is asserted high and on the rising edge of this clock cycle (labeled B) the register
 captures the initial value of \code{0}. Input \code{inVal} is ignored. In the next clock cycle
-\code{reset} is \code{0} and the value of \code{inVal} is captured on the next rising
+\code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
 edge (labeled C). From then on \code{reset} stays \code{0}, as it should be, and the
 register output follows the input signal with one clock cycle delay.
 
-Waveforms are a good tool to specify the behavior of a circuit graphically.
-Especially in more complex circuits where many operations happen an parallel
-and data moves pipelined through the circuit, timing diagrams are very practical.
+Waveforms are an excellent tool to specify the behavior of a circuit graphically.
+Especially in more complex circuits where many operations happen in parallel
+and data move pipelined through the circuit, timing diagrams are convenient.
 Chisel testers can also produce waveforms during testing that can be displayed
 with a waveform viewer and used for debugging.
 
-A common design pattern is a register with an enable signal. Only when the enable signal
-it \code{true} (high), the register captures the input, otherwise it keeps its old value.
-This enable behavior can be implemented, similar to the synchronous reset with
+A typical design pattern is a register with an enable signal. Only when the enable signal
+is \code{true} (high), the register captures the input; otherwise, it keeps its old value.
+The enable can be implemented, similar to the synchronous reset with
 a multiplexer at the input of the register, where one input is the feedback of the
 output of the register.
 
@@ -1800,7 +1802,7 @@ output of the register.
   \label{fig:register-enable}
 \end{figure}
 
-Figure~\ref{fig:register-enable} shows the schematics of a register with an enable.
+Figure~\ref{fig:register-enable} shows the schematics of a register with enable.
 As this is also a very common design pattern, modern FPGA flip-flops contain a
 dedicated enable input, and no additional resources are needed.
 
@@ -1812,9 +1814,9 @@ dedicated enable input, and no additional resources are needed.
 \end{figure}
 
 Figure~\ref{fig:register-en-wave} shows an example waveform for a register
-with enable. Most of the time enable it high (\code{true}) and the register
-follows the input with one clock cycle delay. Only in the forth clock cycle
-\code{enable} is low and the register keeps its value (5) at rising edge D.
+with enable. Most of the time, enable it high (\code{true}) and the register
+follows the input with one clock cycle delay. Only in the fourth clock cycle
+\code{enable} is low, and the register keeps its value (5) at rising edge D.
 
 A register with an enable can be described in a few lines of Chisel code
 with a conditional update:
@@ -1844,7 +1846,7 @@ good use and build more interesting sequential circuits.
 \end{figure}
 
 One of the most basic sequential circuits is a counter. In its simplest form, a counter is a register
-where the output is connected to an adder and the adder's output it connected to the input
+where the output is connected to an adder and the adder's output is connected to the input
 of the register. Figure~\ref{fig:counter} shows such a free-running counter.
 
 A free-running counter with a 4-bit register will run from 0 to 15 and then wrap around
@@ -1852,13 +1854,13 @@ to 0 again. A counter shall also be reset to a known value.
 
 \shortlist{code/sequ_free_counter.txt}
 
-\noindent When we want to count events, we simply use a condition to  increment the counter.
+\noindent When we want to count events, we use a condition to  increment the counter.
 
 \shortlist{code/sequ_event_counter.txt}
 
 \subsection{Counting Up and Down}
 
-To count up to a value and then restart with \code{0} we need to compare
+To count up to a value and then restart with \code{0}, we need to compare
 the counter value with a maximum constant, e.g., with a \code{when}
 conditional statement.
 
@@ -1891,13 +1893,13 @@ to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 Besides counting events, counters are often used to generate timing.
 A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
-circuit other than counting clock ticks. If we know the clock frequency we
+circuit other than counting clock ticks. If we know the clock frequency, we
 can generate circuits that generate timed events, such as blinking a LED
 at some frequency as we have shown in the Chisel ``Hello World'' example.
 
-A common practice is to generate single cycle \emph{ticks} with a frequency $f_{tick}$
+A common practice is to generate single-cycle \emph{ticks} with a frequency $f_{tick}$
 that we need in our circuit. That tick occurs every $n$ clock cycles,
-where $n = f_{clock}/f_{tick}$ and is exactly one original clock cycle long.
+where $n = f_{clock}/f_{tick}$ and the tick is precisely one clock cycle long.
 This tick is \emph{not} used as a derived clock, but as an enable signal for
 registers in the circuit that shall logically operate at frequency $f_{tick}$.
 Figure~\ref{fig:tick-wave} shows an example of a tick generated every
@@ -1911,9 +1913,9 @@ Figure~\ref{fig:tick-wave} shows an example of a tick generated every
 \end{figure}
 
 
-In the following circuit we describe a counter that counts from \code{0}
+In the following circuit, we describe a counter that counts from \code{0}
 to the maximum value of \code{N - 1}. When the maximum value is reached,
-\code{tick} is \code{true} for a single cycle and the counter is reset to \code{0}.
+the \code{tick} is \code{true} for a single cycle, and the counter is reset to \code{0}.
 When we count from \code{0} to \code{N - 1}, we generate one logical tick
 every \code{N} clock cycles.
 
@@ -1921,7 +1923,7 @@ every \code{N} clock cycles.
 
 \noindent This logical timing of one tick every $n$ clock cycles can then be used
 to advance other parts of our circuit with this slower, logical clock.
-In the following code we use just another counter that increments by \code{1}
+In the following code, we use just another counter that increments by \code{1}
 every $n$ clock cycles.
 
 \shortlist{code/sequ_tick_counter.txt}
@@ -2496,7 +2498,7 @@ and with status signals from the datapath.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/popcnt-states}
-  \caption{State digram for the popcount FSM.}
+  \caption{State diagram for the popcount FSM.}
   \label{fig:popcnt-states}
 \end{figure}
 
@@ -3164,7 +3166,7 @@ xor & A = A xor Rn & Xor register Rn with A \\
 xori & A = A xor i & Xor immediate value i with A \\
 loadhi & A$_{15-8}$ = i & Load immediate into second byte \\
 loadh2i & A$_{23-16}$ = i  & Load immediate into third byte \\
-loadh3i & A$_{31-24}$ = i & Load immediate into forth byte \\
+loadh3i & A$_{31-24}$ = i & Load immediate into fourth byte \\
 store & Rn = A & Store A into register Rn \\
 jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
