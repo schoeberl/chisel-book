@@ -86,8 +86,8 @@
 %\renewcommand{\myref}[2]{{#2}{\footnote{\url{#1}}}}
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 \begin{document}
 
@@ -1389,7 +1389,7 @@ subsection with a decoder circuit.
 For more complex combinational circuits it might be practical to assign
 a default value to a \code{Wire}. This can be combined with the wire
 declaration with \code{WireDefault}.\footnote{In the current version of Chisel
-it is called WireInit, but will change with the release of Chisel 3.2}
+it is called WireInit, but will change to \code{WireDefault} with the release of Chisel 3.2}
 
 
 \shortlist{code/comb_wiredefault.txt}
@@ -2765,6 +2765,14 @@ to communicate between your laptop and an FPGA board.
 As the name implies, data is transmitted serial. An 8-bit byte is transmitted as follows:
 one 0 start bit, the 8-bit data, least significant bit first, and then one or two stop
 bits (1). When no data is transmitted, the output is 1.
+Figure~\ref{fig:uart:wave} shows the timing diagram of one byte transmitted.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/uart_wave}
+  \caption{One byte transmitted by a UART.}
+  \label{fig:uart:wave}
+\end{figure}
 
 We will design our UART in a modular way with minimal functionality
 per module. We present a transmitter (TX), a receiver (RX),
@@ -2777,7 +2785,7 @@ with the direction as seen from the transmitter.
 The convention of a ready/valid interface is that the data is transferred
 when both \code{ready} and \code{valid} are asserted.
 
-\longlist{code/uart_tx.txt}{A transmitter for a serial interface.}{lst:uart:tx}
+\longlist{code/uart_tx.txt}{A transmitter for a serial port.}{lst:uart:tx}
 
 Listing~\ref{lst:uart:tx} shows a bare-bone serial transmitter (\code{Tx}).
 The IO ports are the \code{txd} port, where the serial data is sent and
@@ -2817,7 +2825,7 @@ that the ready flag is also de-asserted when there would be
 space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter, but delegate it to a buffer.
 
-\longlist{code/uart_buffer.txt}{capt.}{lst:uart:buffer}
+\longlist{code/uart_buffer.txt}{A single byte buffer with a ready/valid interface.}{lst:uart:buffer}
 Listing~\ref{lst:uart:buffer} shows a single byte buffer, similar to
 the FIFO register for the bubble FIFO. The input port is a \code{Channel}
 interface and the output is the \code{Channel} interface with
@@ -2841,11 +2849,37 @@ this issue to the buffer module.
 An extension of the single word buffer to a real FIFO can easily be done
 and needs no change in the transmitter or the single byte buffer.
 
-\longlist{code/uart_rx.txt}{capt.}{lst:uart:rx}
+\longlist{code/uart_rx.txt}{A receiver for a serial port.}{lst:uart:rx}
+Listing~\ref{lst:uart:rx} shows the code for the receiver (\code{Rx}).
+A receiver is a little bit tricky, as it needs to reconstruct the timing of
+the serial data. The receiver waits for the falling edge of the start bit.
+From that event it waits 1.5 bit times to position itself into the middle
+of bit 0. Then it shifts in the bits every bit time. You can observe these
+two waiting times as \code{START\_CNT} and \code{BIT\_CNT}.
+For both times the same counter (\code{cntReg}) is used.
+After 8 bits are shifted in, \code{valReg} signals an available byte
 
-\longlist{code/uart_sender.txt}{capt.}{lst:uart:sender}
-\longlist{code/uart_echo.txt}{capt.}{lst:uart:echo}
+\longlist{code/uart_sender.txt}{Sending ``Hello World!" via the serial port.}{lst:uart:sender}
+Listing~\ref{lst:uart:sender} shows the usage of the serial port transmitter
+by sending a friendly message out. We define the message in a Scala
+string (\code{msg}) and converting it to a Chisel \code{Vec} of \code{UInt}.
+A Scala string is a sequence that supports the \code{map} method.
+The \code{map} method takes as argument a function literal, applies this function to
+each element, and builds a sequence of the functions return values.
+If the function literal shall have only one argument, as it is in this case, the
+argument can be represented by \code{\_}. Our function literal calls
+the Chisel method \code{.U} to convert the Scala \code{Char} to a Chisel
+\code{UInt}. The sequence is then passed to \code{VecInint} to construct
+a Chisel \code{Vec}. We index into the vector \code{text} with the counter
+\code{cntReg} to provide the individual characters to the buffered transmitter.
+With each \code{ready} signal we increase the counter until the full string
+is sent out. The sender keeps \code{valid} asserted until the last character
+has been sent out.
 
+\longlist{code/uart_echo.txt}{Echoing data on the serial port.}{lst:uart:echo}
+Listing~\ref{lst:uart:echo} shows the usage of the receiver and the transmitter
+by connecting them together. This generates an \code{Echo} circuit where each
+received character is sent back (echoed).
 
 \section{Exercises}
 
@@ -2935,7 +2969,7 @@ In this case you have to extend your state machine to poll the UART status
 to check if the transmit buffer is free.
 
 The example code contains only a single buffer for the \code{Tx}. Feel free to
-add the FIFO that you have implemented to have more buffering in the transmitter
+add the FIFO that you have implemented to add buffering to the transmitter
 and receiver. 
 
 \chapter{Design of a Processor}
@@ -3237,7 +3271,7 @@ Invent a new operator for the \code{UInt} type, implement it in the Chisel libra
 and write some usage/test code to explore the operator. It does not need to be
 a very useful operator, just anything will do, e.g., a ? operator that delivers the lefthand side
 if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
-How many lines of code did you need to add?\footnote{A quick a dirty implementation
+How many lines of code did you need to add?\footnote{A quick and dirty implementation
 needs just two lines of Scala code.}
 
 As simple as this was, please be not tempted to fork the Chisel project and
