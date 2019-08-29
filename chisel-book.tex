@@ -11,11 +11,6 @@
     ]{scrbook}
 
 % LeeSeshia is 15,73 ? 20,96 cm
-% that was for CreateSpace trim size of JOP book
-% \setlength{\paperwidth}{7.5in} \setlength{\paperheight}{9.25in}
-% \typearea[0.5in]{14}
-% This results in 19,05 ? 23,5 cm
-%\setlength{\paperwidth}{15cm} \setlength{\paperheight}{20cm}
 \setlength{\paperwidth}{15.73cm} \setlength{\paperheight}{20.96cm}
 %\typearea{calc} % without BCOR results to a DIV of 8 for 11pt
 \typearea[1cm]{18} % TODO: check if 1 cm is the correct number
@@ -23,7 +18,17 @@
 \usepackage{scrlayer-scrpage}
 \setkomafont{pagehead}{\scshape\small}
 \setkomafont{pagenumber}{\scshape\small}
+
+
+\newif\ifbook
+\booktrue % comment out for the eBook version
+
+\ifbook
+\else
 \cfoot{\hyperlink{contents}{Contents}}
+\fi
+
+
 
 
 \usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
@@ -52,6 +57,15 @@
 \usepackage[procnames]{listings}
 
 
+\ifbook
+\hypersetup{
+  linkcolor  = black,
+  citecolor  = black,
+  urlcolor   = black,
+  colorlinks = black,
+  bookmarks=false,
+}
+\else
 \hypersetup{
   linkcolor  = blue,
   citecolor  = blue,
@@ -59,6 +73,7 @@
   colorlinks = true,
   bookmarks=true,
 }
+\fi
 
 % not really used
 \newenvironment{comment}
@@ -82,8 +97,9 @@
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
 \newcommand{\myref}[2]{\href{#1}{#2}}
 
-% uncomment for the printed version
-%\renewcommand{\myref}[2]{{#2}{\footnote{\url{#1}}}}
+\ifbook
+\renewcommand{\myref}[2]{{#2}{\footnote{\url{#1}}}}
+\fi
 
 % uncomment following for final submission
 \renewcommand{\todo}[1]{}
@@ -92,38 +108,101 @@
 \begin{document}
 
 
+\ifbook
+\else
 \includepdf{chisel-cover.pdf}
+\newpage
+\pagestyle{empty}
+~
+\newpage
+\fi
 
 
-\title{Digital Design with Chisel}
 
-\author{Martin Schoeberl}
-
-\maketitle \thispagestyle{empty}
-
-% This text goes on the backside of the book
-This book is an introduction into digital design with the focus
-on using the hardware construction language Chisel.
-Chisel brings advances from software engineering, such as object orientated
-and functional languages, into digital design.
-
-This book addresses hardware designers and software engineers.
-Hardware designers, with a knowledge of Verilog or VHDL, can upgrade
-their productivity with a modern language for their next ASIC or FPGA design.
-Software engineers, with knowledge of object oriented and functional
-programming, can leverage their knowledge to program hardware,
-for example FPGA accelerators executing in the cloud.
+\begin{flushleft}
+\pagestyle{empty}
+\ \\
+\vspace{1cm}
+{\usekomafont{title}\mdseries\huge Digital Design with Chisel}
+\cleardoublepage
+\end{flushleft}
+\newpage
 
 
-The approach of this book
-is to present small to medium sized typical hardware components to explore
-digital design with Chisel.
+\begin{flushleft}
+\pagestyle{empty}
+\ \\
+\vspace{1cm}
+{\usekomafont{title}\Huge Digital Design with Chisel\\
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+%{\large\itshape Beta Edition}\\
+\bigskip
+{\usekomafont{title}\huge Martin Schoeberl}
+\medskip\\
+%{\large\itshape martin@jopdesign.com}
+
+}
+
+%\vspace{10cm} \emph{Version: \today}
+\newpage
+\end{flushleft}
+
+\thispagestyle{empty}
+\begin{flushleft}
+{\small
+
+%\lowertitleback{
+Copyright \copyright{} 2016--2019 Martin Schoeberl
+  \medskip\\
+  \begin{tabular}{lp{.8\textwidth}}
+    \raisebox{-12pt}{\includegraphics[height=18pt]{figures/cc_by_sa}} &
+     This work is licensed under a Creative Commons Attribution-ShareAlike
+     4.0 International License.
+     \url{http://creativecommons.org/licenses/by-sa/4.0/}\\
+  \end{tabular}
+%}
+
+\medskip
+
+Email: \url{martin@jopdesign.com}\\
+Visit the source at \url{https://github.com/schoeberl/chisel-book}
+\medskip
+
+Published 2019 by Kindle Direct Publishing,\\
+\url{https://kdp.amazon.com/}
+\medskip
+\medskip
 
 
+\textbf{Library of Congress Cataloging-in-Publication Data}
+\medskip
+
+Schoeberl, Martin
+\begin{quote}
+Digital Design with Chisel\\
+Martin Schoeberl\\
+Includes bibliographical references and index.\\
+ISBN xxx-yyy
+\end{quote}
+
+\bigskip
+
+
+Manufactured in the United States of America.
+
+Typeset by Martin Schoeberl}
+\end{flushleft}
+
+\frontmatter
 
 \phantomsection
 \hypertarget{contents}{}
 \tableofcontents
+
 
 \begingroup
 \let\cleardoublepage\clearpage
@@ -140,7 +219,16 @@ digital design with Chisel.
 %
 %Jonathan Bachrach, designer of Chisel
 
-\chapter*{Acknowledgements}
+\chapter{Preface}
+
+% This text goes on the backside of the book, and in Amazon description
+This book is an introduction into digital design with the focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
+
+This book addresses hardware designers and software engineers. Hardware designers, with knowledge of Verilog or VHDL, can upgrade their productivity with a modern language for their next ASIC or FPGA design. Software engineers, with knowledge of object-oriented and functional programming, can leverage their knowledge to program hardware, for example, FPGA accelerators executing in the cloud.
+
+The approach of this book is to present small to medium-sized typical hardware components to explore digital design with Chisel.
+
+\section*{Acknowledgements}
 
 I would like to thank everyone who has worked on Chisel for creating such
 a cool hardware construction language. Chisel is so joyful to use and
@@ -3370,13 +3458,28 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 \chapter{Summary}
 \label{sec:conclusion}
 
+This book presented an introduction into digital design using the
+hardware construction language Chisel.
+We have seen several simple to medium sized digital circuits
+described in Chisel.
+Chisel is embedded in Scala and therefore inherits the powerful
+abstraction of Scala.
+As this book is intended as an introduction, we have restricted
+our examples to simple uses of Scala.
+A next logical step is to learn a few basics of Scala and apply them
+to your Chisel project.
+
+I would be happy to receive feedback on the book, as I will further
+improve it and will publish new editions. You can contact me at
+\url{mailto:masca@dtu.dk}, or with a issue request on the GitHub
+repository. I am also happily accepting pull requests
+on the book repository for any fixes and improvements.
+
 \section*{Source Access}
 
 This book is available in open source.
 The repository also contains slides for a Chisel course and
 all Chisel examples: \url{https://github.com/schoeberl/chisel-book}
-
-
 
 A collection of medium sized examples, which most are referenced
 in the book, is also available in open source. This collection
@@ -3435,12 +3538,15 @@ OpenSoC Fabric is still using Chisel~2.
 that integrates with the RISC-V Rocket processor~\cite{RoCC:2015}.
 RoCC supports inference and learning.
 
-\item[ ] 
 \end{description}
 
 If you know an open-source project that uses Chisel, please drop me a note
 so I can include it in a future edition of the book.
 
+\bibliographystyle{plain}
+\bibliography{chisel}
+
+\end{document}
 
 \chapter{Headings}
 
@@ -3540,8 +3646,7 @@ Stuff that saves a little hardware, but might not worse the less readable code
  * Basic digital circuits, e.g., transistor based inverter, half and full adder
  * With lot of links to Wikipedia
 
-\bibliographystyle{plain}
-\bibliography{chisel}
+
 
 \end{document}
 
