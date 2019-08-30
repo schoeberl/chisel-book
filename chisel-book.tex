@@ -248,8 +248,7 @@ and never tired to answer questions on Chisel.
 I would also like to thank my students in the last years of an advanced computer
 architecture course where most of them picked up Chisel for the final project.
 Thank you for moving out of your comfort zone and taking up the journey of
-learning and using a bleeding-edge hardware description language. I know, some of
-the error messages of early Chisel (version 2) have not been very helpful ;-)
+learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
 
@@ -281,7 +280,6 @@ Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is
 over. Some high-level schematics can give an overview of the system but are
 not intended to describe the system.
-
 The two most common hardware description languages are Verilog and VHDL.
 Both languages are old, contain many legacies, and have a moving line of what
 constructs of the language are synthesizable to hardware.
@@ -309,8 +307,7 @@ As the build process in the examples is based on \code{sbt} and \code{make}
 basic knowledge of the command-line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
-Chisel itself is not a big language, as it shall be for hardware design.
-The basic constructs fit on
+Chisel itself is not a big language. The basic constructs fit on
 \myref{https://chisel.eecs.berkeley.edu/doc/chisel-cheatsheet3.pdf}{one page}
 and can be learned within a few days.
 Therefore, this book is not a big book, as well.
@@ -323,7 +320,6 @@ However, Scala is not the topic of this book.
 %A general introduction to Scala is better served by
 The textbook by Odersky et al.~\cite{Scala} provides a general introduction
 to Scala.
-
 This book is a tutorial in digital design and the Chisel language; it is not
 a Chisel language reference, nor is it a book on complete chip design.
 
@@ -366,12 +362,9 @@ sudo apt-get update
 sudo apt-get install sbt
 \end{verbatim}
 
-
-
 Chisel and Scala can also be installed and used under Windows.
-For instructions see:
+\code{sbt} can be installed with a Windows installer, see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
-
 
 To build hardware for an FPGA, you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
@@ -550,7 +543,7 @@ Is it alarming or more like a sign-of-live signal?
 
 
 
-\chapter{Basic Circuits}
+\chapter{Basic Components}
 
 In this section, we introduce the basic components for digital design:
 combinational circuits and flip-flops.
@@ -617,7 +610,8 @@ and \code{false} to Chisel \code{Bool} constants.
 
 Chisel uses \myref{https://en.wikipedia.org/wiki/Boolean_algebra}{Boolean algebra} operators,
 as they are defined in C, Java, Scala, and several other programming languages,
-to described combinational circuits.
+to described combinational circuits: \code{\&} is the AND operator and \code{|} is
+the OR operator.
 Following line of code defines a circuit that combines signals \code{a} and \code{b} with \emph{and}
 gates and combines the result with signal \code{c} with \emph{or} gates.
 
@@ -728,7 +722,7 @@ signal \code{b}.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/mux}
-  \caption{A basic 2:1 multiplexor.}
+  \caption{A basic 2:1 multiplexer.}
   \label{fig:mux}
 \end{figure}
 
@@ -750,7 +744,7 @@ a later chapter.
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
 
-\section{Register for State}
+\section{Registers}
 
 Chisel provides a register, which is a collection of
 \myref{https://en.wikipedia.org/wiki/Flip-flop\_(electronics)\#D\_flip-flop}{D flip-flops}.
@@ -1134,7 +1128,7 @@ taking 0.022101 seconds
 
 In this section, we described the basic testing facility with Chisel for simple tests.
 However, in Chisel, the full power of Scala is available to write testers.
-We will show these possibilities later.
+\todo{Have a link to the not yet written section for: We will show these possibilities later.}
 
 \subsection{Using ScalaTest}
 
@@ -1217,7 +1211,7 @@ Furthermore, we can identify the definition of our two registers \code{cntReg} a
 We may also find the reset and update of those registers at the end of the module definition.
 Note, that Chisel generates a synchronous reset.
 
-For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library
+For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library,
 we need a \code{build.sbt}:
 
 \begin{chisel}
@@ -1231,7 +1225,7 @@ resolvers ++= Seq(
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{chisel}
 
-\noindent Note that in this example we have a concrete Chisel version number to avoid checking on
+\noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
 each run for a new version (which will fail if we are not connected to the Internet,
 e.g., when doing hardware design during a flight).
 Change the \code{build.sbt} configuration to use the latest Chisel version by changing the
@@ -1284,7 +1278,7 @@ Testing within Chisel can speed up the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
 with the FPGA. There you can perform a reality check on the size of your design (usually
 in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
-As a reference point, a decent pipelined RISC processor may consume about 3000
+As a reference point, a textbook style pipelined RISC processor may consume about 3000
 4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
 Xilinx Spartan).
 
@@ -1304,6 +1298,8 @@ a hierarchical way. Each component has an interface with input and output
 wires, usually called ports. These are similar to input and output pins on an integrated circuit (IC).
 Components are connected by wiring up the inputs and outputs.
 Components may contain subcomponents to build the hierarchy.
+The outermost component, which is connected to physical pins
+on a chip, is called the top-level component.
 
 Figure~\ref{fig:components} shows an example design. Component C has
 three input ports and two output ports. The component itself is assembled out
@@ -1311,9 +1307,6 @@ of two subcomponents: B and C, which are connected to the inputs and
 outputs of C. One output of A is connected to an input of B.
 Component D is at the same hierarchy level as component C and connected
 to it.
-
-The outermost component, which is connected to physical pins
-on a chip, is called the top-level component.
 
 In this chapter, we will explain how components are described in Chisel and
 provide several examples of standard components.
@@ -1374,10 +1367,10 @@ is assembled out of components C and D:
 Good component design is similar to the good design of functions or methods in
 software design. One of the main questions is how much functionality shall we put into
 a component and how large should a component be. The two extremes are tiny
-components, such an adder, and huge components.
+components, such an adder, and huge components, such as a full microprocessor,
 
 Beginners in hardware design often start with tiny components.
-The problem is that design books use tiny components to show the principles.
+The problem is that digital design books use tiny components to show the principles.
 But the sizes of the examples (in those books, and also in this book) is small
 to fit into a page and to not distract by too many details.
 
@@ -1448,7 +1441,7 @@ We can also connect the port of a submodule with the parent module.
 \section{Lightweight Components with Functions}
 
 Modules are the general way to structure your hardware description.
-However, there is some boilerplate when declaring a module and when instantiating and
+However, there is some boilerplate code when declaring a module and when instantiating and
 connecting it.
 A lightweight way to structure your hardware is to use functions.
 Scala functions can take Chisel (and Scala) parameters and return generated hardware.
@@ -1613,6 +1606,8 @@ of an encode circuit uses the binary notation:
 
 \shortlist{code/encdec_decbin.txt}
 
+\todo{from Luca: for very small examples. What if the one-hot input is 256 wires? Can Chisel capture that? Or I need 256 lines? I would suggest to put an additional example. Maybe there is something like the for loop in VHDL.}
+
 A table gives a very readable representation of the decoder function but is also
 a little bit verbose.
 When examining the table, we see a regular structure: a 1 is shifted left by the number
@@ -1762,7 +1757,10 @@ modern FPGAs flip-flops contain a synchronous reset (and set) input to not wast 
 resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
-by a diagram showing the signals over time. Such a diagram is called a waveform or timing diagram.
+by a diagram showing the signals over time. Such a diagram is called a waveform or
+\myref{https://en.wikipedia.org/wiki/Digital_timing_diagram}{timing diagram}.
+
+\todo{from Luca: Do readers know about timing diagrams?}
 
 \begin{figure}
   \centering
@@ -2048,6 +2046,8 @@ Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
 
+\todo{Luca: More exercises would be nice. Maybe in the future?}
+
 \chapter{Finite-State Machines}
 
 A finite-state machine (FSM) is a basic building block in digital design.
@@ -2287,7 +2287,7 @@ FSMs shall be used for more complex circuits with three and more states.
 
 \section{Moore versus Mealy FSM}
 
-To show the difference between a Moore and Mealy FSM we redo the edge
+To show the difference between a Moore and Mealy FSM, we redo the edge
 detection with a Moore FSM. 
 
 \begin{figure}
@@ -2357,6 +2357,9 @@ To make this example a little bit more interesting, consider a priority road.
 The minor road has two car detectors (on both entries into the intersection).
 Switch to green for the minor road only when a car is detected and then switch
 back to green for the priority road.
+
+\todo{Luca: Greatest common divisor with Euclide algorithm can be also a nice exercise.
+Martin: but this is shown at the Chisel homepage without an FSM.}
 
 \chapter{Communicating State Machines}
 
@@ -2551,6 +2554,9 @@ Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 \longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 \section{Ready-Valid Interface}
+
+\todo{Luca: This comes very sudden after all this FSM reading.
+Maybe give some more context and a timing diagram.}
 
 Communication of subsystems can be generalized to the movement
 of data and handshaking for flow control. In the popcount example,
@@ -2756,12 +2762,10 @@ format using 4 bits fo each decimal digit. For example, decimal \code{13} is in 
 BCD allows displaying numbers in decimal, a more user-friendly number
 representation than hexadecimal.
 
-
-When I was teaching digital electronics with VHDL, I provided a Java program
-to the students that computes the table to convert binary to BCD.
+We can write a Java program that computes the table to convert binary to BCD.
 That Java program prints out VHDL code that can be included in a project.
-The Java file was about 100 lines of code; most of the code was generating
-VHDL strings. The key part of the conversion was just two lines.
+The Java program is about 100 lines of code; most of the code generating
+VHDL strings. The key part of the conversion is just two lines.
 
 With Chisel, we can compute this table directly as part of the hardware generation.
 Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
@@ -2857,8 +2861,8 @@ serve as handshake signals
 Several different implementations of a FIFO are possible: E.g., using on-chip
 memory and read and write pointers or simply a chain of registers with a
 tiny state machine. For small buffers (up to tens of elements) a FIFO organized
-with individual registers connected into a chain of buffers is a simple and efficient
-implementation.
+with individual registers connected into a chain of buffers is a simple
+implementation with a low resource usage.
 The code of the bubble FIFO is available in the
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository.\footnote{For completeness, the Chisel book repository contains
@@ -3130,10 +3134,11 @@ and receiver.
 
 As one of the last chapters in this book, we present a medium size project:
 the design, simulation, and testing of a microprocessor.
-To keep this project manageable, we design a simple accumulator
-machine.
+To keep this project manageable, we design a simple accumulator machine.
 The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:arcs2019}
 and is available in open source at \url{https://github.com/leros-dev/leros}.
+We would like to mention that this is an advanced example and some computer
+architecture knowledge is needed to follow the presented code examples.
 
 Leros is designed to be simple, but still a good target for a C compiler.
 The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
