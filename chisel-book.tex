@@ -197,7 +197,7 @@ ISBN 9781689336031
 
 Manufactured in the United States of America.
 
-Typeset by Martin Schoeberl}
+Typeset by Martin Schoeberl.}
 \end{flushleft}
 
 \frontmatter
@@ -1169,7 +1169,7 @@ $ sbt "testOnly SimpleSpec"
 
 For this exercise, we will revisit the blinking LED from
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
-and explore the ALU example.
+and explore Chisel testing. \todo{Also use the ALU example.}
 
 \subsection{A Minimal Project}
 
@@ -1945,7 +1945,7 @@ can be built out of inverters for the zeros in the bit string and a large AND ga
 When counting down to zero, the comparator is a large NOR gate, which might be
 a little bit cheaper than the comparator against a constant in an ASIC.
 In an FPGA ,where logic is built out of lookup tables, there is no difference between comparing
-against a 0 or 1 bit. The resource consumption is the same for the up and down counter.
+against a 0 or 1 bit. The resource requirement is the same for the up and down counter.
 
 However, there is still one more trick a clever hardware designer can pull off.
 Counting up or down needed a comparison against all counting bits, so far.
@@ -2084,7 +2084,7 @@ state only, this state machine is called a
 \myref{https://en.wikipedia.org/wiki/Moore_machine}{Moore machine}.
 
 A \myref{https://en.wikipedia.org/wiki/State_diagram}{state diagram}
-describes the behavior of such an FMS visually.
+describes the behavior of such an FSM visually.
 In a state diagram, individual states are depicted as circles labeled
 with the state names.
 State transitions are shown with arrows between states.
@@ -2285,7 +2285,7 @@ which is more important. Therefore, the one-liner is the preferred solution.
 We have used this example to show one of the smallest possible Mealy FSMs.
 FSMs shall be used for more complex circuits with three and more states.
 
-\section{Moore versus Mealy FSM}
+\section{Moore versus Mealy}
 
 To show the difference between a Moore and Mealy FSM, we redo the edge
 detection with a Moore FSM. 
@@ -2346,7 +2346,7 @@ which are practically Mealy machines, are fine as well.
 % This is a boring example, maybe I can find something more interesting
 In this chapter, you have seen many examples of very small FSMs.
 Now it is time to write some \emph{real} FSM code.
-Pick a little bit more complex example and implement the FMS and
+Pick a little bit more complex example and implement the FSM and
 write a test bench for it.
 
 A classic example for a FSM is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
@@ -2514,7 +2514,8 @@ receiver, the FSM moves back to the \code{Idle} state, ready to compute the next
 The top level component, shown in Listing~\ref{lst:pop:top} instantiates the FSM and the datapath components and connects
 them with bulk connections.
 
-\longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
+\longlist{code/popcnt_main.txt}{The top level of the popcount circuit.
+\todo{Bulk connection should be used here (and tested).}}{lst:pop:top}
 
 \begin{figure}
   \centering
@@ -2742,7 +2743,8 @@ which supports the mapping function \code{map}.
 a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
 each \code{Int} value from the Scala array as a \code{\_} and performs the conversion
 from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-bits.
-The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}.
+The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
+of Chisel types.
 
 
 \longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
@@ -2780,7 +2782,7 @@ out into a parent class. We explore how to use inheritance with an example.
 
 In Section~\ref{sec:counter} we have explored different forms of counters,
 which may be used for a low-frequency tick generation. Let us assume we want to
-explore those different versions, e.g., to compare their resource consumption.
+explore those different versions, e.g., to compare their resource requirement.
 We start with an abstract class to define the ticking interface:
 
 \shortlist{code/ticker.txt}
@@ -2862,7 +2864,7 @@ Several different implementations of a FIFO are possible: E.g., using on-chip
 memory and read and write pointers or simply a chain of registers with a
 tiny state machine. For small buffers (up to tens of elements) a FIFO organized
 with individual registers connected into a chain of buffers is a simple
-implementation with a low resource usage.
+implementation with a low resource requirement.
 The code of the bubble FIFO is available in the
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository.\footnote{For completeness, the Chisel book repository contains
@@ -2920,7 +2922,7 @@ A serial port (also called
 or \myref{https://en.wikipedia.org/wiki/RS-232}{RS-232}) is one of the easiest options
 to communicate between your laptop and an FPGA board.
 As the name implies, data is transmitted serially. An 8-bit byte is transmitted as follows:
-one 0 start bit, the 8-bit data, least significant bit first, and then one or two stop
+one start bit (0), the 8-bit data, least significant bit first, and then one or two stop
 bits (1). When no data is transmitted, the output is 1.
 Figure~\ref{fig:uart:wave} shows the timing diagram of one byte transmitted.
 
@@ -3078,7 +3080,7 @@ We can see the bubble FIFO running at maximum bandwidth, which is two
 clock cycles per word. A buffer stage has always to toggle between empty
 and full for a single word transfer.
 
-A bubble FIFO is simple and for small buffers a low resource solution.
+A bubble FIFO is simple and for small buffers has a low resource requirement.
 The main drawbacks of an $n$ stage bubble FIFO are: (1) maximum throughput is
 one word every two clock cycles, (2) a data word has to travel $n$ clock cycles
 from the writer end to the reader end, and (3) a full FIFO needs $n$ clock cycles

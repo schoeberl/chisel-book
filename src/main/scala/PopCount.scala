@@ -93,7 +93,6 @@ class PopCount extends Module {
   val fsm = Module(new PopCountFSM)
   val data = Module(new PopCountDataPath)
 
-  // TODO: bulk connections should do the work.
   fsm.io.dinValid := io.dinValid
   io.dinReady := fsm.io.dinReady
   io.popCntValid := fsm.io.popCntValid
@@ -105,3 +104,4 @@ class PopCount extends Module {
   fsm.io.done := data.io.done
 }
 //- end
+// TODO: bulk connections should do the work.
