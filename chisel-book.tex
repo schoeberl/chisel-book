@@ -24,11 +24,11 @@
 
 
 \newif\ifbook
-\booktrue % comment out for the eBook version
+%\booktrue % comment out for the eBook version
 
 \ifbook
 \else
-\cfoot{\hyperlink{contents}{Contents}}
+\cfoot{\hyperlink{contents}{{\textnormal{Contents}}}}
 \fi
 
 
@@ -41,7 +41,6 @@
 \usepackage{xcolor}
 \usepackage{multirow}
 \usepackage{cite}
-%\usepackage{flushend} % even out the last page, but use only at the end when there is a bibliography
 \usepackage{dirtree}
 \usepackage{pdfpages}
 % For alignment on tables
@@ -115,7 +114,7 @@
 \else
 \includepdf{chisel-cover.pdf}
 \newpage
-\pagestyle{empty}
+\thispagestyle{empty}
 ~
 \newpage
 \fi
