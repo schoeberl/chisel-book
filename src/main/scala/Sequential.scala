@@ -11,6 +11,8 @@ class Sequential extends Module {
     val ena = Input(Bool())
     val q4 = Output(UInt(4.W))
     val q5 = Output(UInt(4.W))
+    val riseIn = Input(UInt(1.W))
+    val riseOut = Output(UInt(1.W))
   })
 
   val d = io.d
@@ -21,38 +23,44 @@ class Sequential extends Module {
 
   val delayIn = io.d2
   //- start sequ_reg2
-  val regDelay = Reg(UInt(4.W))
+  val delayReg = Reg(UInt(4.W))
 
-  regDelay := delayIn
+  delayReg := delayIn
   //- end
-  io.q2 := regDelay
+  io.q2 := delayReg
 
   val inVal = io.d3
   //- start sequ_reg_init
-  val regVal = RegInit(0.U(4.W))
+  val valReg = RegInit(0.U(4.W))
 
-  regVal := inVal
+  valReg := inVal
   //- end
-  io.q3 := regVal
+  io.q3 := valReg
 
   val enable = io.ena
   //- start sequ_reg_ena
-  val regEnable = Reg(UInt(4.W))
+  val enableReg = Reg(UInt(4.W))
 
   when (enable) {
-    regEnable := inVal
+    enableReg := inVal
   }
   //- end
-  io.q4 := regEnable
+  io.q4 := enableReg
 
   //- start sequ_reg_init_ena
-  val regResetEnable = RegInit(0.U(4.W))
+  val resetEnableReg = RegInit(0.U(4.W))
 
   when (enable) {
-    regResetEnable := inVal
+    resetEnableReg := inVal
   }
   //- end
-  io.q5 := regResetEnable
+  io.q5 := resetEnableReg
+
+  val din = io.riseIn
+  //- start sequ_reg_rising
+  val risingEdge = din & !RegNext(din)
+  //- end
+  io.riseOut := risingEdge
 }
 
 
@@ -67,39 +75,39 @@ class SequCounter extends Module {
   })
 
   //- start sequ_free_counter
-  val regCnt = RegInit(0.U(4.W))
+  val cntReg = RegInit(0.U(4.W))
 
-  regCnt := regCnt + 1.U
+  cntReg := cntReg + 1.U
   //- end
-  io.out := regCnt
+  io.out := cntReg
 
   val event = io.event
   //- start sequ_event_counter
-  val regEvents = RegInit(0.U(4.W))
+  val cntEventsReg = RegInit(0.U(4.W))
   when(event) {
-    regEvents := regEvents + 1.U
+    cntEventsReg := cntEventsReg + 1.U
   }
   //- end
-  io.eventCnt := regEvents
+  io.eventCnt := cntEventsReg
 
   val N = 5
   //- start sequ_tick_gen
-  val regTickCounter = RegInit(0.U(4.W))
-  val tick = regTickCounter === (N-1).U
+  val tickCounterReg = RegInit(0.U(4.W))
+  val tick = tickCounterReg === (N-1).U
 
-  regTickCounter := regTickCounter + 1.U
+  tickCounterReg := tickCounterReg + 1.U
   when (tick) {
-    regTickCounter := 0.U
+    tickCounterReg := 0.U
   }
   //- end
 
   //- start sequ_tick_counter
-  val regLowFrequCnt = RegInit(0.U(4.W))
+  val lowFrequCntReg = RegInit(0.U(4.W))
   when (tick) {
-    regLowFrequCnt := regLowFrequCnt + 1.U
+    lowFrequCntReg := lowFrequCntReg + 1.U
   }
   //- end
 
   io.tick := tick
-  io.lowCnt := regLowFrequCnt
+  io.lowCnt := lowFrequCntReg
 }

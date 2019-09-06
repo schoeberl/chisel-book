@@ -38,6 +38,7 @@ object TesterSimple extends App {
 //- end
 
 //- start test_bench
+//- 开始测试平台
 class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   poke(dut.io.a, 3.U)
@@ -50,12 +51,15 @@ class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
   expect(dut.io.out, 0)
 }
 //- end
+//- 结束
 
 //- start test_main
+//- 开始测试函数
 object Tester extends App {
   chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
     new Tester(c)
   }
 }
 //- end
+//- 结束
 

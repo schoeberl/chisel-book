@@ -2,6 +2,7 @@
 import chisel3._
 
 //- start usepacket2
+//- 开始使用第二个包裹
 class AbcUser2 extends Module {
   val io = IO(new Bundle{})
 
@@ -9,8 +10,10 @@ class AbcUser2 extends Module {
 
 }
 //- end
+//- 结束
 
 //- start usepacket3
+//- 开始使用第三个包裹
 import mypack.Abc
 
 class AbcUser3 extends Module {
@@ -20,8 +23,10 @@ class AbcUser3 extends Module {
 
 }
 //- end
+//- 结束
 
 //- start usepacket
+//- 开始使用包裹
 import mypack._
 
 class AbcUser extends Module {
@@ -31,3 +36,4 @@ class AbcUser extends Module {
 
 }
 //- end
+//- 结束

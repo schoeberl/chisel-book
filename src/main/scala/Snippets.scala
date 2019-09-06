@@ -2,7 +2,7 @@
 
 import chisel3._
 
-class BasciExercise extends Module {
+class BasicExercise extends Module {
   //- start basic_exercise
   val io = IO(new Bundle {
     val sw = Input(UInt(2.W))
@@ -31,6 +31,7 @@ class ExecuteIO extends Bundle {
   val mem = Output(new ExecuteMemory())
 }
 
+/*
 class Channel extends Bundle {
   val data = Input(UInt(32.W))
   val ready = Output(Bool())
@@ -41,6 +42,7 @@ class ChannelUsage extends Bundle {
   val input = new Channel()
   val output = Flipped(new Channel())
 }
+ */
 
 class ParamChannel(n: Int) extends Bundle {
   val data = Input(UInt(n.W))
@@ -59,34 +61,6 @@ class Adder extends Module {
   val addVal = io.a + io.b
   io.result := addVal
 }
-
-class UseAdder extends Module {
-  val io = IO(new Bundle {
-    val result = Output(UInt(4.W))
-  })
-
-  val ina = 10.U
-  val inb = 3.U
-
-  val adder = Module(new Adder())
-  adder.io.a := ina
-  adder.io.b := inb
-  val result = adder.io.result
-
-  io.result := result
-}
-
-class ParamAdder(n: Int) extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(n.W))
-    val b = Input(UInt(n.W))
-    val result = Output(UInt(n.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-
 
 class Conditional extends Module {
   val io = IO(new Bundle {

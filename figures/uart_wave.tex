@@ -1,0 +1,23 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=3ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+  & .1H 2H 2L  2D{b0}  2D{b1}   2D{b2} 2D{b3} 2D{b4} 2D{b5}  2D{b6} 2D{b7} 3H 1.9H  \\
+\end{tikztimingtable}
+
+\end{document}
