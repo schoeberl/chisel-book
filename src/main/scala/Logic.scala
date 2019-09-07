@@ -48,22 +48,33 @@ class Logic extends Module {
 
   //- start const_base
   //- 开始
-  "hff".U        // hexadecimal representation of 255
-  "o377".U       // octal representation of 255
-  "b1111_1111".U // binary representation of 255
+  // hexadecimal representation of 255
+  // 255的十二进制
+  "hff".U  
+  // octal representation of 255
+  // 255的八进制    
+  "o377".U 
+  // binary representation of 255
+  // 255的二进制      
+  "b1111_1111".U 
+  // 结束
   //- end
 
   //- start bool
+  //- 开始逻辑
   Bool()
   true.B
   false.B
+  //- 结束
   //- end
 
   val a = io.a
   val b = io.b
   val c = io.c
   //- start logic
+  //- 开始逻辑
   val logic = (a & b) | c
+  //- 结束
   //- end
 
   io.out := logic
@@ -74,45 +85,80 @@ class Logic extends Module {
   val bop = bt & bf
 
   //- start bool_ops
-  val and = a & b // bitwise and
-  val or = a | b  // bitwise or
-  val xor = a ^ b // bitwise xor
-  val not = ~a    // bitwise negation
+  //- 开始逻辑操作
+  // bitwise and
+  // 按位与
+  val and = a & b 
+  // bitwise or
+  // 按位或
+  val or = a | b  
+  // bitwise xor
+  // 按位异或
+  val xor = a ^ b 
+  // bitwise negation
+  // 按位非
+  val not = ~a    
   //- end
+  //- 结束
 
   //- start arith_ops
-  val add = a + b // addition
-  val sub = a - b // subtraction
-  val neg = -a    // negate
-  val mul = a * b // multiplication
-  val div = a / b // division
-  val mod = a % b // modulo operation
+  //- 开始算术操作
+  // addition
+  // 相加
+  val add = a + b 
+  // subtraction
+  // 相减
+  val sub = a - b 
+  // negate
+  // 相反数
+  val neg = -a  
+  // multiplication
+  // 相乘  
+  val mul = a * b 
+  // division
+  // 相除
+  val div = a / b 
+  // modulo operation
+  // 取余数
+  val mod = a % b 
   //- end
+  //- 结束
+  
 
   //- start wire
+  //- 开始线
   val w = Wire(UInt())
 
   w := a & b
   //- end
+  //- 结束
 
   val x = 123.U
   //- start single_bit
+  //- 开始单位元
   val sign = x(31)
   //- end
+  //- 结束
 
   val largeWord = 1.U
   //- start sub_field
+  //- 开始部分域
   val lowByte = largeWord(7, 0)
   //- end
+  //- 结束
 
   val highByte = 0xff.U
 
   //- start concat
+  //- 开始串联
   val word = Cat(highByte, lowByte)
   //- end
+  //- 结束
 
   val sel = b === c
   //- start mux
+  //- 开始复用器
   val result = Mux(sel, a, b)
   //- end
+  //- 结束
 }

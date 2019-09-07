@@ -19,6 +19,7 @@ class Sequential extends Module {
   //- start sequ_reg
   val q = RegNext(d)
   //- end
+  //- 结束
   io.q := q
 
   val delayIn = io.d2
@@ -27,6 +28,7 @@ class Sequential extends Module {
 
   delayReg := delayIn
   //- end
+  //- 结束
   io.q2 := delayReg
 
   val inVal = io.d3
@@ -35,6 +37,7 @@ class Sequential extends Module {
 
   valReg := inVal
   //- end
+  //- 结束
   io.q3 := valReg
 
   val enable = io.ena
@@ -45,6 +48,7 @@ class Sequential extends Module {
     enableReg := inVal
   }
   //- end
+  //- 结束
   io.q4 := enableReg
 
   //- start sequ_reg_init_ena
@@ -54,12 +58,14 @@ class Sequential extends Module {
     resetEnableReg := inVal
   }
   //- end
+  //- 结束
   io.q5 := resetEnableReg
 
   val din = io.riseIn
   //- start sequ_reg_rising
   val risingEdge = din & !RegNext(din)
   //- end
+  //- 结束
   io.riseOut := risingEdge
 }
 
@@ -79,6 +85,7 @@ class SequCounter extends Module {
 
   cntReg := cntReg + 1.U
   //- end
+  //- 结束
   io.out := cntReg
 
   val event = io.event
@@ -88,6 +95,7 @@ class SequCounter extends Module {
     cntEventsReg := cntEventsReg + 1.U
   }
   //- end
+  //- 结束
   io.eventCnt := cntEventsReg
 
   val N = 5
@@ -100,6 +108,7 @@ class SequCounter extends Module {
     tickCounterReg := 0.U
   }
   //- end
+  //- 结束
 
   //- start sequ_tick_counter
   val lowFrequCntReg = RegInit(0.U(4.W))
@@ -107,6 +116,7 @@ class SequCounter extends Module {
     lowFrequCntReg := lowFrequCntReg + 1.U
   }
   //- end
+  //- 结束
 
   io.tick := tick
   io.lowCnt := lowFrequCntReg

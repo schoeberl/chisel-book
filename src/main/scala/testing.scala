@@ -2,6 +2,7 @@
 import chisel3._
 import chisel3.iotesters._
 //- end
+//- 结束
 
 //- start test_dut
 class DeviceUnderTest extends Module {
@@ -14,6 +15,7 @@ class DeviceUnderTest extends Module {
   io.out := io.a & io.b
 }
 //- end
+//- 结束
 
 //- start test_bench_simple
 class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
@@ -28,6 +30,7 @@ class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
   println("Result is: " + peek(dut.io.out).toString)
 }
 //- end
+//- 结束
 
 //- start test_main_simple
 object TesterSimple extends App {
@@ -36,6 +39,7 @@ object TesterSimple extends App {
   }
 }
 //- end
+//- 结束
 
 //- start test_bench
 //- 开始测试平台

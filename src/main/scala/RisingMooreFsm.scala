@@ -39,4 +39,5 @@ class RisingMooreFsm extends Module {
   io.risingEdge := stateReg === puls
 }
 //- end
+//- 结束
 

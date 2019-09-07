@@ -4,11 +4,13 @@
  * License: Simplified BSD License
  *
  * A UART is a serial port, also called an RS232 interface.
+ * UART是一个串联的端口，也被称为RS232界面
  *
  */
 
 package uart
 // a copy from chisel-examples, improvements shall be done there
+// 从chisel例子的一个拷贝，在这里有一些改进
 //
 
 import chisel3._
@@ -16,6 +18,7 @@ import chisel3.util._
 
 /**
   * This is a minimal data channel with a ready/valid handshake.
+  * 这是
   */
 //- start uart_channel
 class Channel extends Bundle {
@@ -24,6 +27,7 @@ class Channel extends Bundle {
   val valid = Input(Bool())
 }
 //- end
+//- 结束
 
 /**
   * Transmit part of the UART.
@@ -68,6 +72,7 @@ class Tx(frequency: Int, baudRate: Int) extends Module {
   }
 }
 //- end
+//- 结束
 
 /**
   * Receive part of the UART.
@@ -119,6 +124,7 @@ class Rx(frequency: Int, baudRate: Int) extends Module {
   io.channel.valid := valReg
 }
 //- end
+//- 结束
 
 /**
   * A single byte buffer with a ready/valid interface
@@ -150,6 +156,7 @@ class Buffer extends Module {
   io.out.data := dataReg
 }
 //- end
+//- 结束
 
 /**
   * A transmitter with a single buffer.
@@ -168,6 +175,7 @@ class BufferedTx(frequency: Int, baudRate: Int) extends Module {
   io.txd <> tx.io.txd
 }
 //- end
+//- 结束
 
 /**
   * Send a string.
@@ -196,6 +204,7 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
   }
 }
 //- end
+//- 结束
 
 //- start uart_echo
 class Echo(frequency: Int, baudRate: Int) extends Module {
@@ -211,6 +220,7 @@ class Echo(frequency: Int, baudRate: Int) extends Module {
   tx.io.channel <> rx.io.channel
 }
 //- end
+//- 结束
 
 class UartMain(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {

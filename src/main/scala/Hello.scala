@@ -9,14 +9,18 @@
  */
 
 //- start import
+//- 开始引用
 import chisel3._
 //- end
+//- 结束
 
 /**
  * The blinking LED component.
+ * 闪烁的二极管部分
  */
 
 //- start hello
+//- 开始hello
 class Hello extends Module {
   val io = IO(new Bundle {
     val led = Output(UInt(1.W))
@@ -34,12 +38,16 @@ class Hello extends Module {
   io.led := blkReg
 }
 //- end
+//- 结束
 
 /**
  * An object extending App to generate the Verilog code.
+ * 一个拓展性的App生成Verilog代码
  */
 //- start generate
+//- 开始生成
 object Hello extends App {
   chisel3.Driver.execute(Array[String](), () => new Hello())
 }
 //- end
+//- 结束

@@ -21,18 +21,24 @@ class Flasher extends FlasherBase {
   val off :: flash1 :: space1 :: flash2 :: space2 :: flash3 :: Nil = Enum(6)
   val stateReg = RegInit(off)
 
+  // FSM output
   // 有限状态机的输出
-  val light = WireInit(false.B) // FSM output
+  val light = WireInit(false.B) 
 
   // Timer connection
   // 连接计时器
-  val timerLoad = WireInit(false.B) // start timer with a load
-  val timerSelect = WireInit(true.B) // select 6 or 4 cycles
+  // start timer with a load
+  // 开始计时器通过读取
+  val timerLoad = WireInit(false.B) 
+  // select 6 or 4 cycles
+  // 选择4或是6周期
+  val timerSelect = WireInit(true.B) 
   val timerDone = Wire(Bool())
 
   timerLoad := timerDone
 
   // Master FSM
+  // 主FSM
   switch(stateReg) {
     is(off) {
       timerLoad := true.B
@@ -62,12 +68,15 @@ class Flasher extends FlasherBase {
     }
   }
   //- end
+  //- 结束
 
   //- start flasher_timer
+  //- 开始闪烁器的计时器
   val timerReg = RegInit(0.U)
   timerDone := timerReg === 0.U
 
   // Timer FSM (down counter)
+  // 计时器的FSM(向下计时)
   when(!timerDone) {
     timerReg := timerReg - 1.U
   }
@@ -79,6 +88,7 @@ class Flasher extends FlasherBase {
     }
   }
   //- end
+  //- 结束
 
   io.light := light
 }
@@ -88,16 +98,26 @@ class Flasher2 extends FlasherBase {
   val start = io.start.toBool
 
   //- start flasher2_fsm
+  //- 开始闪烁器2的FSM
   val off :: flash :: space :: Nil = Enum(3)
   val stateReg = RegInit(off)
 
-  val light = WireInit(false.B) // FSM output
+  // FSM output
+  // FSM输出
+  val light = WireInit(false.B) 
 
   // Timer connection
-  val timerLoad = WireInit(false.B) // start timer with a load
-  val timerSelect = WireInit(true.B) // select 6 or 4 cycles
+  // 计时器连接
+
+  // start timer with a load
+  // 通过读取开始计时器
+  val timerLoad = WireInit(false.B) 
+  // select 6 or 4 cycles
+  // 选择6或4周期
+  val timerSelect = WireInit(true.B) 
   val timerDone = Wire(Bool())
   // Counter connection
+  // 连接计数器
   val cntLoad = WireInit(false.B)
   val cntDecr = WireInit(false.B)
   val cntDone = Wire(Bool())
@@ -123,20 +143,26 @@ class Flasher2 extends FlasherBase {
     }
   }
   //- end
+  //- 结束
 
   //- start flasher2_counter
+  //- 开始闪烁器2的计数器
   val cntReg = RegInit(0.U)
   cntDone := cntReg === 0.U
 
   // Down counter FSM
+  // 向下计数FSM
   when(cntLoad) { cntReg := 2.U }
   when(cntDecr) { cntReg := cntReg - 1.U }
   //- end
+  //- 结束
 
   val timerReg = RegInit(0.U)
   timerDone := timerReg === 0.U
 
   // Timer FSM (down counter)
+  // 计时器FSM(向下计数)
+
   when(!timerDone) {
     timerReg := timerReg - 1.U
   }

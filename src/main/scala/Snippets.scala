@@ -9,6 +9,7 @@ class BasicExercise extends Module {
     val led = Output(UInt(1.W))
   })
   //- end
+  //- 结束
   io.led := io.sw(0) & io.sw(1)
 }
 

@@ -4,6 +4,7 @@ import org.scalatest._
 class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
 
   // some defaults for all signals
+  // 所有信号的一些默认值
   poke(dut.io.enq.din, 0xab)
   poke(dut.io.enq.write, 0)
   poke(dut.io.deq.read, 0)
@@ -12,6 +13,7 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
   var empty = peek(dut.io.deq.empty)
 
   // write into the buffer
+  // 写入到缓存
   poke(dut.io.enq.din, 0x12)
   poke(dut.io.enq.write, 1)
   step(1)
@@ -22,10 +24,14 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
   step(1)
   full = peek(dut.io.enq.full)
 
-  step(3) // see the bubbling of the first element
+  // see the bubbling of the first element
+  // 查看第一个元素的冒泡
+  step(3) 
 
   // Fill the whole buffer with a check for full condition
   // Only every second cycle a write can happen.
+  // 填充整个缓存查看整体情况
+  // 只能发生在每周期写入一个的情况
   for (i <- 0 until 7) {
     full = peek(dut.io.enq.full)
     poke(dut.io.enq.din, 0x80 + i)
@@ -39,6 +45,8 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
 
   // Now we know it is full, so do a single read and watch
   // how this empty slot bubble up to the FIFO input.
+  // 现在我们知道它是满了，所以做一个简单的写入和观察
+  // 看一下
   poke(dut.io.deq.read, 1)
   step(1)
   poke(dut.io.deq.read, 0)

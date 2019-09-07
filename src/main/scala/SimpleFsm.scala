@@ -40,6 +40,7 @@ class SimpleFsm extends Module {
   io.ringBell := stateReg === red
 }
 //- end
+//- 结束
 
 class SimpleFsmCopy extends Module {
   //- start simple_fsm_io
@@ -49,14 +50,17 @@ class SimpleFsmCopy extends Module {
     val ringBell = Output(Bool())
   })
   //- end
+  //- 结束
 
   //- start simple_fsm_states
   val green :: orange :: red :: Nil = Enum(3)
   //- end
+  //- 结束
 
   //- start simple_fsm_register
   val stateReg = RegInit(green)
   //- end
+  //- 结束
 
   //- start simple_fsm_next
   switch (stateReg) {
@@ -79,8 +83,10 @@ class SimpleFsmCopy extends Module {
     }
   }
   //- end
+  //- 结束
 
   //- start simple_fsm_output
   io.ringBell := stateReg === red
   //- end
+  //- 结束
 }
