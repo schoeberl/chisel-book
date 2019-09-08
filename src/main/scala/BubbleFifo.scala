@@ -16,8 +16,10 @@ import chisel3.util._
 
 /*
  * On signal naming:
+ * 在信号的命名上：
  * 
  * Alter's FIFO component:
+ * Altera的FIFO组成：
  * 
  * data - data in, q - data out, wrreq and rdreq
  * state: full and empty

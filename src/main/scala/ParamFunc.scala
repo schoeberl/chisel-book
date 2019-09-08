@@ -1,11 +1,13 @@
 import chisel3._
 
 //- start param_func_type
+//- 开始参数函数类型
 class ComplexIO extends Bundle {
   val d = UInt(10.W)
   val b = Bool()
 }
 //- end
+//- 结束
 
 class ParamFunc extends Module {
   val io =IO(new Bundle {

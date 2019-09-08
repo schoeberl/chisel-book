@@ -54,6 +54,8 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
 
   // New read out the whole buffer.
   // Also watch that maximum read out is every second clock cycle
+  // 现在读出缓存
+  // 并且观察
   for (i <- 0 until 7) {
     empty = peek(dut.io.deq.empty)
     if (empty == 0) {
@@ -65,6 +67,7 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
   }
 
   // Now write and read at maximum speed for some time
+  // 现在以最快速度写入和读取
   for (i <- 1 until 16) {
     full = peek(dut.io.enq.full)
     poke(dut.io.enq.din, i)

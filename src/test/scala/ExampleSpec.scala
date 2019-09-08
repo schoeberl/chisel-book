@@ -1,4 +1,5 @@
 //- start scalatest_hello_world
+//- 开始 scala测试的hello world
 import org.scalatest._
 
 class ExampleSpec extends FlatSpec with Matchers {
@@ -10,3 +11,4 @@ class ExampleSpec extends FlatSpec with Matchers {
   }
 }
 //- end
+//- 结束

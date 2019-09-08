@@ -128,8 +128,10 @@ class Rx(frequency: Int, baudRate: Int) extends Module {
 
 /**
   * A single byte buffer with a ready/valid interface
+  * 一个简单的字节缓存和一个ready/valid界面
   */
 //- start uart_buffer
+//- 开始uart缓存
 class Buffer extends Module {
   val io = IO(new Bundle {
     val in = new Channel()
@@ -162,6 +164,7 @@ class Buffer extends Module {
   * A transmitter with a single buffer.
   */
 //- start uart_buffered_tx
+//- 开始uart缓存发送
 class BufferedTx(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))
@@ -179,8 +182,10 @@ class BufferedTx(frequency: Int, baudRate: Int) extends Module {
 
 /**
   * Send a string.
+  * 发送数组
   */
 //- start uart_sender
+//- 开始uart发送器
 class Sender(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))
@@ -207,6 +212,7 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
 //- 结束
 
 //- start uart_echo
+//- 开始uart返回
 class Echo(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))

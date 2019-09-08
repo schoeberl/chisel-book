@@ -1,9 +1,11 @@
 // Just code snippets for syntax check by the compiler
+// 只是一些小的代码用来编译器的语法检查
 
 import chisel3._
 
 class BasicExercise extends Module {
   //- start basic_exercise
+  //- 开始基本练习
   val io = IO(new Bundle {
     val sw = Input(UInt(2.W))
     val led = Output(UInt(1.W))

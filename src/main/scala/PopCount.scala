@@ -2,6 +2,7 @@ import chisel3._
 import chisel3.util._
 
 //- start popcnt_fsm
+//- 开始弹出计数器FSM
 class PopCountFSM extends Module {
   val io = IO(new Bundle {
     val dinValid = Input(Bool())
@@ -42,8 +43,10 @@ class PopCountFSM extends Module {
   }
 }
 //- end
+//- 结束
 
 //- start popcnt_data
+//- 开始弹出计数器的数据
 class PopCountDataPath extends Module {
   val io = IO(new Bundle {
     val din = Input(UInt(8.W))
@@ -71,14 +74,17 @@ class PopCountDataPath extends Module {
   }
 
   // debug output
+  // debug输出
   printf("%x %d\n", dataReg, popCntReg)
 
   io.popCnt := popCntReg
   io.done := done
 }
 //- end
+//- 结束
 
 //- start popcnt_main
+//- 开始弹出计数器的主函数
 class PopCount extends Module {
   val io = IO(new Bundle {
     val dinValid = Input(Bool())
@@ -104,4 +110,5 @@ class PopCount extends Module {
   fsm.io.done := data.io.done
 }
 //- end
+//- 结束
 // TODO: bulk connections should do the work.

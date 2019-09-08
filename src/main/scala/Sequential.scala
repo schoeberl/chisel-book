@@ -17,6 +17,7 @@ class Sequential extends Module {
 
   val d = io.d
   //- start sequ_reg
+  //- 开始顺序寄存器
   val q = RegNext(d)
   //- end
   //- 结束
@@ -24,6 +25,7 @@ class Sequential extends Module {
 
   val delayIn = io.d2
   //- start sequ_reg2
+  //- 开始顺序寄存器2
   val delayReg = Reg(UInt(4.W))
 
   delayReg := delayIn
@@ -33,6 +35,7 @@ class Sequential extends Module {
 
   val inVal = io.d3
   //- start sequ_reg_init
+  //- 开始顺序寄存器初始化
   val valReg = RegInit(0.U(4.W))
 
   valReg := inVal

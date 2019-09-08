@@ -1,10 +1,12 @@
 //- start test_import
+//- 开始引入测试
 import chisel3._
 import chisel3.iotesters._
 //- end
 //- 结束
 
 //- start test_dut
+//- 开始测试被测试的单元
 class DeviceUnderTest extends Module {
   val io = IO(new Bundle {
     val a = Input(UInt(2.W))
@@ -18,6 +20,7 @@ class DeviceUnderTest extends Module {
 //- 结束
 
 //- start test_bench_simple
+//- 开始简单的测试平台
 class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   poke(dut.io.a, 0.U)
@@ -33,6 +36,7 @@ class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 //- 结束
 
 //- start test_main_simple
+//- 开始
 object TesterSimple extends App {
   chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
     new TesterSimple(c)

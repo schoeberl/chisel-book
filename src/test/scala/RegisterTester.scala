@@ -11,6 +11,7 @@ class RegisterTester(c: Register) extends PeekPokeTester(c) {
 
 /**
  * Create a counter and a tester.
+ * 创建计时器和测试
  */
 object RegisterTester {
     def main(args: Array[String]): Unit = {
