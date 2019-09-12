@@ -65,7 +65,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Usage
 \begin{itemize}
 \item Utility processor for small stuff
-\item Could be used for your vending machine
+% \item Could be used for your vending machine
 \item In teaching for introduction to computer architecture
 \end{itemize}
 \item The design took place on the island Lipsi
@@ -178,7 +178,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Chisel is not a high-level synthesis language
 \item Single source two targets
 \begin{itemize}
-\item C based cycle accurate simulator
+\item Cycle accurate simulation (testing)
 \item Verilog for synthesis
 \end{itemize}
 \item Embedded in Scala
@@ -517,11 +517,16 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Chisel Book is Coming Out Soon}
+\begin{frame}[fragile]{A Chisel Book}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.1]{../chisel-cover}
+    \includegraphics[scale=0.4]{../cover-small}
 \end{figure}
+
+\begin{itemize}
+\item Available in open access (PDF)
+\item In paper form from Amazon
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Further Information}
@@ -535,6 +540,7 @@ val rom = Vec[Bits](arr)
 %\item Getting Started with Chisel
 %\end{itemize}
 \item \url{http://groups.google.com/group/chisel-users}
+\item \url{https://github.com/schoeberl/chisel-book}
 \end{itemize}
 \end{frame}
 
@@ -577,16 +583,25 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \begin{frame}[fragile]{Additional Files in the Hello World Example}
 \begin{itemize}
 \item A \code{Makefile}
-\item A Verilog top level file \code{verilog/hello\_top.v}
-\begin{itemize}
-\item For reset and possible PLLs
-\item Can also be in VHDL
-\end{itemize}
+\item Optional Verilog or VHDL top level file %\code{verilog/hello\_top.v}
+%\begin{itemize}
+%\item For reset and possible PLLs
+%\item Can also be in VHDL
+%\end{itemize}
 \item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
 \begin{itemize}
 \item List of source files, device and pin assignments
 \item plain text files, look into hello.qsf
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item We need a modern language for hardware/systems design
+\item Chisel builds on the power of object-oriented and functional Scala
+\item Chisel is good for hardware generators
+% \item You can get started with a hardware design in a special course or 4th semester project
 \end{itemize}
 \end{frame}
 
@@ -614,24 +629,17 @@ make
 \begin{frame}[fragile]{Change the Design}
 \begin{itemize}
 \item Use \code{gedit}, or the editor you like most
+\item Source is in \code{.../src/main/scala/Hello.scala}
 \item Change blinking frequency
 \item Rerun the example
 \item Optional:
 \begin{itemize}
 \item Change to an asymmetric blinking, e.g., 200 ms on every second 
-\item Setup Eclipse/IntelliJ with a Scala project 
+\item Setup IntelliJ with a Scala project 
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item We need a modern language for hardware/systems design
-\item Chisel builds on the power of object-oriented and functional Scala
-\item Chisel is good for hardware generators
-% \item You can get started with a hardware design in a special course or 4th semester project
-\end{itemize}
-\end{frame}
 
 \end{document}
 
