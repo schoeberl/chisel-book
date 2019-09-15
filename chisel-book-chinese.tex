@@ -231,9 +231,11 @@ We include links to further reading in the running text, mostly to
 
 Chisel is a Scala library and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool.
+Chisel是一个Scala库，安装Chisel和Scala最简单的方法时通过sbt(Scala Build Tool)，一个用于Scala工程构建的工具。
 
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} is installed with:
+在Mac OS X中，通过包管理软件Homerew，sbt可以通过此命令安装
 
 \begin{verbatim}
 $ brew install sbt
@@ -243,6 +245,7 @@ $ brew install sbt
 Debian file (.deb). However, as of the time of this writing \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
 is a little bit more involved:
+对于基于Debian的Ubuntu系统，软件通常通过.deb文件进行安装。然而，当编写本文时，sbt还不能通过这种方法安装。因此，安装过程牵扯了一点点其他方式。
 \begin{verbatim}
 echo "deb https://dl.bintray.com/sbt/debian /" | \
   sudo tee -a /etc/apt/sources.list.d/sbt.list
@@ -258,6 +261,8 @@ Chisel and Scala can also be installed and used under Windows.
 For instructions see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
 \todo{Test Windows version}
+Chisel和Scala也支持Windows操作系统。
+方法可以参考该网站。
 
 To build hardware for an FPGA you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
@@ -265,23 +270,27 @@ their tools that cover small to medium sized FPGAs. Those medium sized
 FPGAs are large enough to build multicore RISC style processors.
 Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
+为了构建FPGA硬件，你需要综合工具。两大主要的FPGA工具供应商，Intel和Xilinx都提供了他们免费的工具，涵盖了小容量到中等容量大小的FPGA。其中，中等规模的FPGA已经足够容纳多核RISC架构处理器。
 
 \section{Hello World}
 
 Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is a first approach:
+每一本编程语言书都会从叫做“Hello world”的最小例子开始。以下代码是第一种方法。
 
 
 \lstinputlisting[language=chisel]{src/main/scala/HelloScala.scala}
 
 
 \noindent Compiling and executing this short program with \code{sbt}
+编译、执行这个简短的程序通过sbt：
 
 \begin{chisel}
 $ sbt "runMain HelloScala"
 \end{chisel}
 
 \noindent leads to the expected output of a Hello World program:
+随后，Hollow World程序输出了预期的内容
 
 \begin{chisel}
 [info] Running HelloScala
@@ -291,6 +300,7 @@ Hello Chisel World!
 \noindent However, is this Chisel? Is this hardware generated to print a string?
 No, this is actually plain Scala code and not a representative Hello World
 program for a hardware design.
+然而，这就是Chisel吗？这个硬件被生成用于出书字符串？并不是这样，这里实际上是解释了Scala代码，并不代表着硬件设计的Hollo World程序。
 
 \section{Chisel Hello World}
 
@@ -298,6 +308,8 @@ What is then the equivalent of a Hello World program for a hardware design?
 The minimal useful and visible design? A blinking LED is the hardware (or even
 embedded software) version of Hello World. If a LED blinks, we are ready to
 solve bigger problems!
+那么Hollo World程序等价的硬件设计是什么？是最小的可用并且可视的设计？一个闪烁的LED是硬件（或者嵌入式软件）版本的Hollo World。 
+如果一个LED闪烁，我们就可以解决更大的问题。
 
 
 \begin{figure}
@@ -314,6 +326,9 @@ to derive timing in the Hz range to achieve a visible blinking. In the above
 example we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
 That hardware then blinks the LED at 1~Hz.
+Figure~\ref{fig:chisel:hello}展现的是一个通过Chisel描述的闪烁LED。你是否理解这个代码案例的细节是不重要的。我们将会介绍这些内容在以下的章节中。
+仅仅需要注意这个电路通常有着高频率的时钟，例如50MHz，我们需要一个计数器来分频得到Hz级别的频率来实现可视化的闪烁。在这个例子中我们从0计数到25000000-1然后触发闪烁信号(\code{blkReg := \textasciitilde blkReg}) 
+然后复位计数器 (\code{cntReg := 0.U})。这个硬件以1~Hz频率闪烁LED。
 
 \section{An IDE for Chisel}
 
