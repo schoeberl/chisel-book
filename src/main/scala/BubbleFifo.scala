@@ -28,7 +28,7 @@ import chisel3.util._
  * 
  */
 
-//- start fifo_writer_io
+//- start bubble_fifo_writer_io
 class WriterIO(size: Int) extends Bundle {
   val write = Input(Bool())
   val full = Output(Bool())
@@ -36,7 +36,7 @@ class WriterIO(size: Int) extends Bundle {
 }
 //- end
 
-//- start fifo_reader_io
+//- start bubble_fifo_reader_io
 class ReaderIO(size: Int) extends Bundle {
   val read = Input(Bool())
   val empty = Output(Bool())
@@ -47,7 +47,7 @@ class ReaderIO(size: Int) extends Bundle {
 /**
  * A single register (=stage) to build the FIFO.
  */
-//- start fifo_register
+//- start bubble_fifo_register
 class FifoRegister(size: Int) extends Module {
   val io = IO(new Bundle {
     val enq = new WriterIO(size)
@@ -81,7 +81,7 @@ class FifoRegister(size: Int) extends Module {
 /**
  * This is a bubble FIFO.
  */
-//- start fifo
+//- start bubble_fifo
 class BubbleFifo(size: Int, depth: Int) extends Module {
   val io = IO(new Bundle {
     val enq = new WriterIO(size)

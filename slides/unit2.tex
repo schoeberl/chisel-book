@@ -577,7 +577,7 @@ sbt "test:runMain problems.Launcher Mux2"
 \item This example should already work
 \item Read the hardware description and test code
 \item Source organized in \code{main} and \code{test} folders
-\item Problems and testers are in package/folder \code{problem}
+\item Problems and testers are in package/folder \code{problems}
 \end{itemize}
 \end{frame}
 
@@ -586,9 +586,7 @@ sbt "test:runMain problems.Launcher Mux2"
 sbt "test:runMain problems.Launcher Mux4"
 \end{chisel}
 \begin{itemize}
-\item This version does not compile
-\item Fix with a default assign to the output \code{io.out}
-\item The test should fail now
+\item The test should fail
 \item Fix the Mux4 component so that the tests complete
 \end{itemize}
 \end{frame}

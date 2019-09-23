@@ -1949,7 +1949,7 @@ up, we need to compare against a number, which is a bit string. The comparator
 can be built out of inverters for the zeros in the bit string and a large AND gate.
 When counting down to zero, the comparator is a large NOR gate, which might be
 a little bit cheaper than the comparator against a constant in an ASIC.
-In an FPGA ,where logic is built out of lookup tables, there is no difference between comparing
+In an FPGA, where logic is built out of lookup tables, there is no difference between comparing
 against a 0 or 1 bit. The resource requirement is the same for the up and down counter.
 
 However, there is still one more trick a clever hardware designer can pull off.
@@ -2780,6 +2780,7 @@ Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversio
 \longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
 
 \section{Use Inheritance}
+\label{sec:inheritance}
 
 Chisel is an object-oriented language. A hardware component, the Chisel \code{Module}
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
@@ -2842,6 +2843,7 @@ As another example, we design a serial interface (also called UART),
 which itself may use the FIFO buffer.
 
 \section{FIFO Buffer}
+\label{sec:fifo}
 
 We can decouple a write (sender) and a reader (receiver) by a buffer
 between the writer and reader.
@@ -2882,13 +2884,13 @@ The signal \code{full} performs the
 \myref{https://en.wikipedia.org/wiki/Flow_control_(data)}{flow control}
 at the writer side.
 
-\shortlist{code/fifo_writer_io.txt}
+\shortlist{code/bubble_fifo_writer_io.txt}
 
 The reader side provides data with \code{dout} and the read is initiated
 with \code{read}. The \code{empty} signal is responsible for the flow control
 at the reader side.
 
-\shortlist{code/fifo_reader_io.txt}
+\shortlist{code/bubble_fifo_reader_io.txt}
 
 Listing~\ref{lst:fifo:stage} shows a single buffer. The buffer has a enqueueing port
 \code{enq} of type \code{WriterIO} and a dequeueing port \code{deq} of type
@@ -2902,7 +2904,7 @@ If the buffer is \code{full}, a read will consume the data and change to the
 The IO ports \code{full} and \code{empty} represent the buffer state for
 the writer and the reader.
 
-\longlist{code/fifo_register.txt}{A single stage of the bubble FIFO.}{lst:fifo:stage}
+\longlist{code/bubble_fifo_register.txt}{A single stage of the bubble FIFO.}{lst:fifo:stage}
 
 Listing~\ref{lst:fifo} shows the complete FIFO. The complete FIFO has
 the same IO interface as the individual FIFO buffers.
@@ -2917,8 +2919,20 @@ The first buffers enqueueing side is connected to the enqueueing IO of
 the complete FIFO and the last buffer's dequeueing side to the
 dequeueing side of the complete FIFO.
 
-\longlist{code/fifo.txt}{A FIFO is composed of an array of FIFO bubble stages.}{lst:fifo}
+\longlist{code/bubble_fifo.txt}{A FIFO is composed of an array of FIFO bubble stages.}{lst:fifo}
 
+The presented idea of connecting individual buffers to implement a FIFO
+queue is called a bubble FIFO, as the data bubbles through the queue.
+This is simple, and a good solution when the data rate is considerable slower
+than the clock rate, e.g., as a decouple buffer for a serial port, which is presented
+in the next section.
+
+However, when the data rate approaches the clock frequency, the bubble FIFO
+has two limitations: (1) As each buffer's state has to toggle between \emph{empty} and
+\emph{full}, which means the maximum throughput of the FIFO is 2 clock cycles
+per word. (2) The data needs to bubble through the complete FIFO, therefore,
+the latency from the input to the output is at least the number of buffers.
+I will present other possible implementations of FIFOs in Section~\ref{sec:more:fifo}.
 
 \section{A Serial Port}
 
@@ -3045,6 +3059,35 @@ has been sent out.
 Listing~\ref{lst:uart:echo} shows the usage of the receiver and the transmitter
 by connecting them together. This connection generates an \code{Echo} circuit where each
 received character is sent back (echoed).
+
+\section{FIFO Design Variations}
+\label{sec:more:fifo}.
+
+In this section we will implement different variations of a FIFO queue.
+To make these implementations interchangeable we will use inheritance,
+as introduced in Section~\ref{sec:inheritance}. We define an \code{abstract}
+FIFO class:
+
+\shortlist{code/fifo_abstract.txt}
+
+\noindent Note that we use a Chisel type as parameter to be able to buffer
+any Chisel data type.
+In Section~\ref{sec:fifo} we defined our own types for the interface with common
+names for signals, such as \code{write}, \code{full}, \code{din}, \code{read},
+\code{empty}, and \code{dout}. The input and the output of such a buffer consists
+of data and two signals for handshaking (e.g., we \code{write} into the FIFO when
+it is not \code{full}.
+However, we can generalize this handshaking to the so called ready-valid interface.
+E.g, we can enqueue an element (write into the FIFO) when the FIFO is \code{ready}.
+We signal this at the writer side with \code{valid}.
+As this ready-valid interface is so common, Chisel provides a definition
+of this interface in \code{DecoupledIO} as follows:\footnote{This is a simplification,
+as \codefoot{DecoupledIO} actually extends an abstract class.}
+
+\shortlist{code/fifo_decoupled.txt}
+
+\noindent The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
+Therefore, enqueue port of the FIFO needs to flip the signal directions.
 
 \section{Exercises}
 
