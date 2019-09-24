@@ -1,17 +1,14 @@
 import chisel3._
 
 //- start ticker
-//- 开始定时器
 abstract class Ticker(n: Int) extends Module {
   val io = IO(new Bundle{
     val tick = Output(Bool())
   })
 }
 //- end
-//- 结束
 
 //- start up_ticker
-//- 开始向上定时
 class UpTicker(n: Int) extends Ticker(n) {
 
   val N = (n-1).U
@@ -26,10 +23,8 @@ class UpTicker(n: Int) extends Ticker(n) {
   io.tick := cntReg === N
 }
 //- end
-//- 结束
 
 //- start down_ticker
-//- 开始向下定时
 class DownTicker(n: Int) extends Ticker(n) {
 
   val N = (n-1).U
@@ -44,10 +39,8 @@ class DownTicker(n: Int) extends Ticker(n) {
   io.tick := cntReg === N
 }
 //- end
-//- 结束
 
 //- start nerd_ticker
-//- 开始傻瓜定时
 class NerdTicker(n: Int) extends Ticker(n) {
 
   val N = n
@@ -63,4 +56,3 @@ class NerdTicker(n: Int) extends Ticker(n) {
   }
 }
 //- end
-//- 结束

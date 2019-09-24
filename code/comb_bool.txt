@@ -1,3 +1,0 @@
-\begin{chisel}
-  val e = a & b | c
-\end{chisel}

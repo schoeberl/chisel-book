@@ -1,7 +1,0 @@
-\begin{chisel}
-class DecodeOut extends Bundle {
-  val ena = Bool()
-  val func = UInt()
-  val exit = Bool()
-}
-\end{chisel}

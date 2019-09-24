@@ -1,6 +1,0 @@
-\begin{chisel}
-  val regLowFrequCnt = RegInit(0.U(4.W))
-  when (tick) {
-    regLowFrequCnt := regLowFrequCnt + 1.U
-  }
-\end{chisel}

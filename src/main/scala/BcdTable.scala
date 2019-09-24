@@ -1,5 +1,4 @@
 //- start bcd_table
-//- 开始 bcd表格
 import chisel3._
 
 class BcdTable extends Module {
@@ -11,7 +10,6 @@ class BcdTable extends Module {
   val array = new Array[Int](256)
 
   // Convert binary to BCD
-  // 转换二进制到BCD码
   for (i <- 0 to 99) {
     array(i) = ((i/10)<<4) + i%10
   }
@@ -20,4 +18,3 @@ class BcdTable extends Module {
   io.data := table(io.address)
 }
 //- end
-//- 结束

@@ -1,8 +1,0 @@
-\begin{chisel}
-  switch (sel) {
-    is ("b00".U) { result := "b0001".U}
-    is ("b01".U) { result := "b0010".U}
-    is ("b10".U) { result := "b0100".U}
-    is ("b11".U) { result := "b1000".U}
-  }
-\end{chisel}

@@ -1,4 +1,0 @@
-\begin{chisel}
-  n.W
-  Bits(n.W)
-\end{chisel}

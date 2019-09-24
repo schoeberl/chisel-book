@@ -6,12 +6,10 @@ class Count100 extends Module {
   })
 
   //- start counter
-  //- 开始计数器
   val cntReg = RegInit(0.U(8.W))
 
   cntReg := Mux(cntReg === 9.U, 0.U, cntReg + 1.U)
   //- end
-  //- 结束
 
   io.cnt := cntReg
 }
@@ -28,7 +26,6 @@ class WhenCounter(n: Int) extends Counter(n) {
   val N = (n-1).U
 
   //- start when_counter
-  //- 开始条件计数
   val cntReg = RegInit(0.U(8.W))
 
   cntReg := cntReg + 1.U
@@ -36,7 +33,6 @@ class WhenCounter(n: Int) extends Counter(n) {
     cntReg := 0.U
   }
   //- end
-  //- 结束
 
   io.tick := cntReg === N
   io.cnt := cntReg
@@ -47,12 +43,10 @@ class MuxCounter(n: Int) extends Counter(n) {
   val N = (n-1).U
 
   //- start mux_counter
-  //- 开始复用器计数
   val cntReg = RegInit(0.U(8.W))
 
   cntReg := Mux(cntReg === N, 0.U, cntReg + 1.U)
   //- end
-  //- 结束
 
   io.tick := cntReg === N
   io.cnt := cntReg
@@ -63,7 +57,6 @@ class DownCounter(n: Int) extends Counter(n) {
   val N = (n-1).U
 
   //- start down_counter
-  //- 开始向下计数
   val cntReg = RegInit(N)
 
   cntReg := cntReg - 1.U
@@ -71,7 +64,6 @@ class DownCounter(n: Int) extends Counter(n) {
     cntReg := N
   }
   //- end
-  //- 结束
 
   io.tick := cntReg === N
   io.cnt := cntReg
@@ -80,9 +72,7 @@ class DownCounter(n: Int) extends Counter(n) {
 class FunctionCounter(n: Int) extends Counter(n) {
 
   //- start function_counter
-  //- 开始函数计数
   // This function returns a counter
-  // 这个函数返回计数器
   def genCounter(n: Int) = {
     val cntReg = RegInit(0.U(8.W))
     cntReg := Mux(cntReg === n.U, 0.U, cntReg + 1.U)
@@ -90,14 +80,11 @@ class FunctionCounter(n: Int) extends Counter(n) {
   }
 
   // now we can easily create many counters
-  // 现在我们可以简单创造很多计数器
   val count10 = genCounter(10)
   val count99 = genCounter(99)
   //- end
-  //- 结束
 
   // and one more for testing
-  // 和一个用来测试
   val testCounter = genCounter(n-1)
   io.tick := testCounter === (n-1).U
   io.cnt := testCounter
@@ -108,7 +95,6 @@ class NerdCounter(n: Int) extends Counter(n) {
   val N = n
 
   //- start nerd_counter
-  //- 开始傻瓜计数
   val MAX = (N - 2).S(8.W)
   val cntReg = RegInit(MAX)
   io.tick := false.B
@@ -119,7 +105,6 @@ class NerdCounter(n: Int) extends Counter(n) {
     io.tick := true.B
   }
   //- end
-  //- 结束
 
   io.cnt := cntReg.asUInt()
 }

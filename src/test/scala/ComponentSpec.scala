@@ -11,7 +11,6 @@ class ComponentFnTester(c: CompFn) extends PeekPokeTester(c) {
   expect(c.io.out2, 11-1)
 
   // two tap delay
-  // 两次延迟
   poke(c.io.del, 5)
   step(5)
   expect(c.io.out3, 5)

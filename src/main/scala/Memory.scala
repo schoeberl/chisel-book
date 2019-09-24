@@ -1,7 +1,6 @@
 import chisel3._
 
 //- start memory
-//- 开始存储器
 class Memory() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
@@ -20,10 +19,8 @@ class Memory() extends Module {
   }
 }
 //- end
-//- 结束
 
 //- start memory_forwarding
-//- 开始存储器前递
 class ForwardingMemory() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
@@ -47,4 +44,3 @@ class ForwardingMemory() extends Module {
   io.rdData := Mux(doForwardReg, wrDataReg, memData)
 }
 //- end
-//- 结束

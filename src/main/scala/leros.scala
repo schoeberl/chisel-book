@@ -7,15 +7,12 @@ import Types._
 import leros.shared.Constants._
 
 //- start leros_types
-//- 开始莱罗丝类型(莱罗丝是位于丹麦的一个美丽岛屿)
 object Types {
   val nop :: add :: sub :: and :: or :: xor :: ld :: shr :: Nil = Enum(8)
 }
 //- end
-//- 结束
 
 //- start leros_alu
-//- 开始莱罗丝运算单元
 class Alu(size: Int) extends Module {
   val io = IO(new Bundle {
     val op = Input(UInt(3.W))
@@ -47,10 +44,8 @@ class Alu(size: Int) extends Module {
     }
     is (shr) {
       // the following does NOT result in an unsigned shift
-      // 下面不会导致非整型的移位
       // res := (a.asUInt >> 1).asSInt
       // work around
-      // 在解决
       res := (a >> 1) & 0x7fffffff.S
     }
     is(ld) {
@@ -61,7 +56,6 @@ class Alu(size: Int) extends Module {
   io.y := res
 }
 //- end
-//- 结束
 
 class AluTester(dut: Alu) extends PeekPokeTester(dut) {
 
@@ -69,7 +63,6 @@ class AluTester(dut: Alu) extends PeekPokeTester(dut) {
   // Workaround would be defining constants
 
   //- start leros_alu_ref
-  //- 开始莱罗丝运算单元参考
   def alu(a: Int, b: Int, op: Int): Int = {
 
     op match {
@@ -80,25 +73,17 @@ class AluTester(dut: Alu) extends PeekPokeTester(dut) {
       case 5 => a ^ b
       case 6 => b
       case 7 => a >>> 1
-      // This shall not happen
-      // 这个应该发生不了
-      case _ => -123 
+      case _ => -123 // This shall not happen
     }
   }
   //- end
-  //- 结束
 
   //- start leros_alu_testvec
-  //- 开始莱罗丝运算单元测试向量
-
   // Some interesting corner cases
-  // 一些有趣的边角情况
   val interesting = Array(1, 2, 4, 123, 0, -1, -2, 0x80000000, 0x7fffffff)
   //- end
-  //- 结束
 
   //- start leros_alu_test
-  //- 开始莱罗丝运算单元测试
   def test(values: Seq[Int]) = {
     for (fun <- add to shr) {
       for (a <- values) {
@@ -113,21 +98,15 @@ class AluTester(dut: Alu) extends PeekPokeTester(dut) {
     }
   }
   //- end
-  //- 结束
 
   //- start leros_alu_testrun
-  //- 开始运行莱罗丝运算单元测试
   test(interesting)
   //- end
-  //- 结束
-
 
   //- start leros_alu_rand
-  //- 开始莱罗丝运算单元随机测试
   val randArgs = Seq.fill(100)(scala.util.Random.nextInt)
   test(randArgs)
   //- end
-  //- 结束
 
 }
 
@@ -138,7 +117,6 @@ object AluTester extends App {
 }
 
 //- start leros_constants
-//- 开始莱罗丝常量
 package leros.shared {
 
 object Constants {
@@ -162,10 +140,7 @@ object Constants {
   val ST = 0x30
   // ...
   //- end
-  //- 结束
-  // is IN/OUT immediate only?
-  // IN/OUT只是中间数吗？
-  val OUT = 0x39 
+  val OUT = 0x39 // is IN/OUT immediate only?
   val IN = 0x05
   val JAL = 0x40
   val LDADDR = 0x50
@@ -178,28 +153,20 @@ object Constants {
   val BRNZ = 0xa0
   val BRP = 0xb0
   val BRN = 0xc0
-  // 0 is simulator exit
-  // 0 是模拟器结束
-  val SCALL = 0xff 
+  val SCALL = 0xff // 0 is simulator exit
 }
 
-// end package
-// 结束包裹
-} 
+} // end package
 
 //- start leros_decode_bundle
-//- 开始莱罗斯译码器捆束
 class DecodeOut extends Bundle {
   val ena = Bool()
   val func = UInt()
   val exit = Bool()
 }
 //- end
-//- 结束
 
 //- start leros_decode_init
-//- 开始莱罗斯译码初始化
-// 
 class Decode() extends Module {
   val io = IO(new Bundle {
     val din = Input(UInt(8.W))
@@ -212,10 +179,8 @@ class Decode() extends Module {
 
   io.dout.exit := false.B
   //- end
-  //- 结束
 
   //- start leros_decode
-  //- 开始莱罗斯译码
   switch(io.din) {
     is(ADD.U) {
       f := add
@@ -241,7 +206,6 @@ class Decode() extends Module {
     }
     // ...
     //- end
-    //- 结束
     is(LD.U) {
       f := ld
       ena := true.B
@@ -284,7 +248,6 @@ class Decode() extends Module {
       ena := true.B
     }
     // Following only useful for 32-bit Leros
-    // 以下只可以用于32位的莱罗斯
     is(LDH2I.U) {
       f := sub
       imm := true.B
@@ -312,7 +275,6 @@ import scala.io.Source
 object Assembler {
 
   //- start leros_asm_hard
-  //- 开始莱罗斯硬件组装
   val prog = Array[Int](
     0x0903, // addi 0x3
     0x09ff, // -1
@@ -325,17 +287,13 @@ object Assembler {
 
   def getProgramFix() = prog
   //- end
-  //- 结束
 
   //- start leros_asm_call
-  //- 开始召唤莱罗斯组装
   def getProgram(prog: String) = {
     assemble(prog)
   }
 
   // collect destination addresses in first pass
-  // 
-  // 在第一轮收集目的地地址
   val symbols = collection.mutable.Map[String, Int]()
 
   def assemble(prog: String): Array[Int] = {
@@ -343,10 +301,8 @@ object Assembler {
     assemble(prog, true)
   }
   //- end
-  //- 结束
 
   //- start leros_asm_start
-  //- 开始莱罗斯组装
   def assemble(prog: String, pass2: Boolean): Array[Int] = {
 
     val source = Source.fromFile(prog)
@@ -366,18 +322,14 @@ object Assembler {
       s.substring(1).toInt
     }
     //- end
-    //- 结束
 
     //- start leros_asm_match
-    //- 开始莱罗斯组装匹配
     for (line <- source.getLines()) {
       if (!pass2) println(line)
       val tokens = line.trim.split(" ")
       val Pattern = "(.*:)".r
       val instr = tokens(0) match {
-        // comment
-        // 注解
-        case "//" => 
+        case "//" => // comment
         case Pattern(l) => if (!pass2) symbols += (l.substring(0, l.length - 1) -> pc)
         case "add" => (ADD << 8) + regNumber(tokens(1))
         case "sub" => (SUB << 8) + regNumber(tokens(1))
@@ -392,13 +344,10 @@ object Assembler {
         case "xori" => (XORI << 8) + toInt(tokens(1))
         case "shr" => (SHR << 8)
         // ...
-        // println("Empty line")
-        // 打印空线
-        case "" => 
+        case "" => // println("Empty line")
         case t: String => throw new Exception("Assembler error: unknown instruction: " + t)
         case _ => throw new Exception("Assembler error")
         //- end
-        //- 结束
         case "loadi" => (LDI << 8) + toInt(tokens(1))
         case "loadhi" => (LDHI << 8) + toInt(tokens(1))
         case "loadh2i" => (LDH2I << 8) + toInt(tokens(1))
@@ -424,9 +373,7 @@ object Assembler {
           program = a :: program
           pc += 1
         }
-        // println("Something else")
-        // 打印其它
-        case _ => 
+        case _ => // println("Something else")
       }
     }
     val finalProg = program.reverse.toArray

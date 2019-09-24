@@ -1,6 +1,0 @@
-\begin{chisel}
-  val and = a & b // bitwise and
-  val or = a | b  // bitwise or
-  val xor = a ^ b // bitwise xor
-  val not = ~a    // bitwise negation
-\end{chisel}

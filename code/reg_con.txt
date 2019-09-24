@@ -1,4 +1,0 @@
-\begin{chisel}
-  reg := d
-  val q = reg
-\end{chisel}

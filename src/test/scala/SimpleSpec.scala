@@ -1,7 +1,6 @@
 import org.scalatest._
 
 //- start scalatest_simple
-//- 开始简单scala测试
 class SimpleSpec extends FlatSpec with Matchers {
 
   "Tester" should "pass" in {
@@ -11,4 +10,3 @@ class SimpleSpec extends FlatSpec with Matchers {
   }
 }
 //- end
-//- 结束

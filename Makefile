@@ -18,8 +18,9 @@ book:
 	pdflatex $(DOC)
 
 clean:
-	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.pdf *.lol
+	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.lol # *.pdf
 	rm -rf code
+	rm -rf test_run_dir
 
 chisel:
 	sbt "runMain Snippets"
@@ -29,6 +30,16 @@ chisel:
 
 test:
 	sbt test
+
+# test only one
+flasher:
+	sbt "testOnly FlasherSpec"
+
+rtf:
+	latex2rtf chisel-book.tex
+
+detex:
+	detex chisel-book.tex > chisel-book.txt
 
 eclipse:
 	sbt eclipse

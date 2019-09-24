@@ -1,3 +1,0 @@
-\begin{chisel}
-  val regBoth = RegNext(d, 0.U)
-\end{chisel}

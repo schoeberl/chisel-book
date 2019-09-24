@@ -23,6 +23,25 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 % Default settings for code listings
+\ifbook
+\lstset{%frame=lines,
+  language=chisel,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=fixed, % basewidth=\mybasewidth,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\footnotesize,
+  % identifierstyle=\color{red},
+  breaklines=true,
+  breakatwhitespace=true,
+  procnamekeys={def, val, var, class, trait, object, extends},
+  % procnamestyle=\ttfamily,
+  tabsize=2,
+  float
+}
+\else
 \lstset{%frame=lines,
   language=chisel,
   aboveskip=3mm,
@@ -43,7 +62,12 @@
   tabsize=2,
   float
 }
+\fi
 
 \lstnewenvironment{chisel}[1][]
 {\lstset{language=chisel,#1}}
 {}
+
+\newcommand{\shortlist}[1]{{\lstinputlisting[nolol]{#1}}}
+
+\newcommand{\longlist}[3]{{\lstinputlisting[float, caption={#2}, label={#3}, frame=tb, captionpos=b]{#1}}}

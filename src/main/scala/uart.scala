@@ -4,21 +4,17 @@
  * License: Simplified BSD License
  *
  * A UART is a serial port, also called an RS232 interface.
- * UART是一个串联的端口，也被称为RS232界面
  *
  */
 
 package uart
 // a copy from chisel-examples, improvements shall be done there
-// 从chisel例子的一个拷贝，在这里有一些改进
-//
 
 import chisel3._
 import chisel3.util._
 
 /**
   * This is a minimal data channel with a ready/valid handshake.
-  * 这是
   */
 //- start uart_channel
 class Channel extends Bundle {
@@ -27,7 +23,6 @@ class Channel extends Bundle {
   val valid = Input(Bool())
 }
 //- end
-//- 结束
 
 /**
   * Transmit part of the UART.
@@ -72,7 +67,6 @@ class Tx(frequency: Int, baudRate: Int) extends Module {
   }
 }
 //- end
-//- 结束
 
 /**
   * Receive part of the UART.
@@ -124,14 +118,11 @@ class Rx(frequency: Int, baudRate: Int) extends Module {
   io.channel.valid := valReg
 }
 //- end
-//- 结束
 
 /**
   * A single byte buffer with a ready/valid interface
-  * 一个简单的字节缓存和一个ready/valid界面
   */
 //- start uart_buffer
-//- 开始uart缓存
 class Buffer extends Module {
   val io = IO(new Bundle {
     val in = new Channel()
@@ -158,13 +149,11 @@ class Buffer extends Module {
   io.out.data := dataReg
 }
 //- end
-//- 结束
 
 /**
   * A transmitter with a single buffer.
   */
 //- start uart_buffered_tx
-//- 开始uart缓存发送
 class BufferedTx(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))
@@ -178,14 +167,11 @@ class BufferedTx(frequency: Int, baudRate: Int) extends Module {
   io.txd <> tx.io.txd
 }
 //- end
-//- 结束
 
 /**
   * Send a string.
-  * 发送数组
   */
 //- start uart_sender
-//- 开始uart发送器
 class Sender(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))
@@ -209,10 +195,8 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
   }
 }
 //- end
-//- 结束
 
 //- start uart_echo
-//- 开始uart返回
 class Echo(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
     val txd = Output(Bits(1.W))
@@ -226,7 +210,6 @@ class Echo(frequency: Int, baudRate: Int) extends Module {
   tx.io.channel <> rx.io.channel
 }
 //- end
-//- 结束
 
 class UartMain(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {

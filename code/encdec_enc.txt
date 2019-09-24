@@ -1,9 +1,0 @@
-\begin{chisel}
-  b := "b00".U
-  switch (a) {
-    is ("b0001".U) { b := "b00".U}
-    is ("b0010".U) { b := "b01".U}
-    is ("b0100".U) { b := "b10".U}
-    is ("b1000".U) { b := "b11".U}
-  }
-\end{chisel}

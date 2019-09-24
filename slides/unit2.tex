@@ -15,6 +15,8 @@
 
 \usepackage[procnames]{listings}
 
+\newif\ifbook
+
 \input{../shared/chisel.tex}
 
 \hypersetup{
@@ -240,9 +242,7 @@ initReg := initReg + 1.U
 \begin{itemize}
 \item A register can also be defined within an expression
 \end{itemize}
-\begin{chisel}
-val risingEdge = d & !RegNext(d)
-\end{chisel}
+\shortlist{../code/sequ_reg_rising.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Multiplexer}
@@ -499,8 +499,8 @@ class Counter2 extends Module {
 
 \begin{frame}[fragile]{More Chisel Documentation}
 \begin{itemize}
-\item Started a textbook on ``Digital Design with Chisel''
-\item Considered a work-in-progress (V 0.01 ;-)
+\item Textbook ``Digital Design with Chisel''
+\item V 1.0 is out
 \item \url{https://github.com/schoeberl/chisel-book}
 \item Feedback is welcome
 \item Contains all the slides
@@ -577,7 +577,7 @@ sbt "test:runMain problems.Launcher Mux2"
 \item This example should already work
 \item Read the hardware description and test code
 \item Source organized in \code{main} and \code{test} folders
-\item Problems and testers are in package/folder \code{problem}
+\item Problems and testers are in package/folder \code{problems}
 \end{itemize}
 \end{frame}
 
@@ -586,9 +586,7 @@ sbt "test:runMain problems.Launcher Mux2"
 sbt "test:runMain problems.Launcher Mux4"
 \end{chisel}
 \begin{itemize}
-\item This version does not compile
-\item Fix with a default assign to the output \code{io.out}
-\item The test should fail now
+\item The test should fail
 \item Fix the Mux4 component so that the tests complete
 \end{itemize}
 \end{frame}

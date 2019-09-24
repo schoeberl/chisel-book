@@ -15,6 +15,7 @@
 
 \usepackage[procnames]{listings}
 
+\newif\ifbook
 \input{../shared/chisel.tex}
 
 \hypersetup{
@@ -60,7 +61,7 @@
 \item When it is run is \emph{generates} hardware
 \begin{itemize}
 \item Verilog for synthesize
-\item C++ code for simulation
+\item Scala netlist for simulation (testing)
 \end{itemize}
 \item Chisel is an embedded domain specific language
 \item Two languages in one can be a little bit confusing

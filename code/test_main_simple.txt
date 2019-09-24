@@ -1,7 +1,0 @@
-\begin{chisel}
-object TesterSimple extends App {
-  chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
-    new TesterSimple(c)
-  }
-}
-\end{chisel}

@@ -1,5 +1,0 @@
-\begin{chisel}
-  val cntReg = RegInit(0.U(8.W))
-
-  cntReg := Mux(cntReg === 100.U, 0.U, cntReg + 1.U)
-\end{chisel}

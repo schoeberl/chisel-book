@@ -1,5 +1,0 @@
-\begin{chisel}
-object Types {
-  val nop :: add :: sub :: and :: or :: xor :: ld :: shr :: Nil = Enum(8)
-}
-\end{chisel}

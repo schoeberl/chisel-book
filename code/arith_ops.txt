@@ -1,8 +1,0 @@
-\begin{chisel}
-  val add = a + b // addition
-  val sub = a - b // subtraction
-  val neg = -a    // negate
-  val mul = a * b // multiplication
-  val div = a / b // division
-  val mod = a % b // modulo operation
-\end{chisel}

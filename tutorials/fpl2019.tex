@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
+\usepackage[colorlinks=true,bookmarks=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\begin{document}
+
+\title{Hardware Design in the 21st Century with the Object Oriented and Functional Language Chisel}
+
+\author{Martin Schoeberl\\
+\texttt{masca@dtu.dk}}
+
+
+\maketitle \thispagestyle{empty}
+
+This is a proposal for a tutorial for FPL 2018 on \href{https://chisel.eecs.berkeley.edu/}{Chisel}.
+The tutorial shall be a full day, as it includes hands-on lab with FPGA boards.
+
+\subsection*{Tutorial Abstract}
+
+To develop future more complex digital circuits in less time we need a better hardware description
+language than VHDL or Verilog. Chisel\footnote{\url{https://chisel.eecs.berkeley.edu/}} is a hardware construction language intended to
+speedup the development of digital hardware and hardware generators.
+
+Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Here at the Technical University of Denmark we use Chisel in the T-CREST project and in teaching advanced computer architecture.
+
+In this tutorial I will give an overview of Chisel to describe circuits at the RTL level, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators.
+
+The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course will give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala. The intended audience is hardware designers with some background in VHDL or Verilog, but Chisel is also a good entry language for software programmers entering into hardware design
+(e.g., porting software algorithms to FPGAs for speeup).
+
+Besides lecturing we will have lab sessions to describe small circuits, test them in the Chisel simulation,
+and run them in an FPGA.
+
+\subsection*{Further Information}
+
+\paragraph{List of organizers and speakers:}
+Assoc.~Prof.~Martin Schoeberl, Technical University of Denmark.
+
+Martin Schoeberl received his PhD from the Vienna University of Technology in 2005. From 2005 to 2010 he has been Assistant Professor at the Institute of Computer Engineering. He is now Associate Professor at the Technical University of Denmark. His research interest is on hard real-time systems, time-predictable computer architecture, and real-time Java.  Martin Schoeberl has been involved in a number of national and international research projects: JEOPARD, CJ4ES, T-CREST, RTEMP, the TACLe COST action, and PREDICT.  He has been the technical lead of the EC funded project T-CREST.  He has more then 100 publications in peer reviewed journals, conferences, and books.
+
+\paragraph{Topics:} Hardware description in a modern hardware construction language, object oriented and
+functional description of hardware, circuit generators.
+
+\paragraph{Length and Format:} One day.
+The tutorial will be a mix of lectures and hands-on labs. Participants shall have a laptop and I will provide
+instructions for software installation beforehand. Furthermore, at the tutorial I will provide USB sticks
+with virtual machine where all software is installed.
+
+\paragraph{Former tutorials:} I have given this tutorial (or a variation of it) several times:
+in a two day format at University of Augsburg (about 10 attendees), several years
+in a course in advanced computer architecture at DTU (about 10 attendees), at DTU with industrial attendees
+(two half days), at the Danish engineering society (short form, afternoon),
+and at FPL 2018 as one day tutorial (22 attendees).
+
+\end{document}
+
+\subsection*{FPL Call for Tutorial Proposal}
+
+Tutorial proposal submission requirements - A PDF file including the following information:
+
+· Title of tutorial.
+· Abstract (max 500 words) describing motivation, intended audience, and main contents.
+· List of organizers and speakers including their short biographies and affiliation.
+· List of topics to be covered.
+· Length and format of the tutorial (lecture, hands-on), and any special requirement for the tutorial room.
+· If the tutorial has been previously offered, provide information on the conference, date, and number of attendees.
+
+Please, send your proposals by email to the FPL 2018 Tutorial Chair.
+Please, write “[FPL 2018] Tutorial Proposal” on the e-mail subject line.
+
+Tutorial Chair: Thomas Preusser - thomas.preusser@xilinx.com
+
+
+\end{document}

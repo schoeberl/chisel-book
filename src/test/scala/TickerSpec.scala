@@ -26,10 +26,8 @@ class TickerTester[T <: Ticker](dut: T, n: Int) extends PeekPokeTester(dut: T) {
   }
 }
 //- end
-//- 结束
 
 //- start ticker_spec
-//- 开始计时器的要求
 class TickerSpec extends FlatSpec with Matchers {
 
   "UpTicker 5" should "pass" in {
@@ -51,5 +49,4 @@ class TickerSpec extends FlatSpec with Matchers {
   }
 }
 //- end
-//- 结束
 

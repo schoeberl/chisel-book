@@ -1,3 +1,0 @@
-\begin{chisel}
-  result := 1.U << sel
-\end{chisel}

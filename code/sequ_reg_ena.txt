@@ -1,7 +1,0 @@
-\begin{chisel}
-  val regEnable = Reg(UInt(4.W))
-
-  when (enable) {
-    regEnable := inVal
-  }
-\end{chisel}

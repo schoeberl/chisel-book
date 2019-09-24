@@ -1,9 +1,0 @@
-\begin{chisel}
-  // TODO: change to WireDefault when 3.2 is out
-  val w = WireInit(0.U)
-
-  when (cond) {
-    w := 3.U
-  }
-  // ... and some more complex conditional assignments
-\end{chisel}

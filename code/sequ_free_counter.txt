@@ -1,5 +1,0 @@
-\begin{chisel}
-  val regCnt = RegInit(0.U(4.W))
-
-  regCnt := regCnt + 1.U
-\end{chisel}

@@ -1,3 +1,0 @@
-\begin{chisel}
-  test(interesting)
-\end{chisel}

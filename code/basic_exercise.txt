@@ -1,6 +1,0 @@
-\begin{chisel}
-  val io = IO(new Bundle {
-    val sw = Input(UInt(2.W))
-    val led = Output(UInt(1.W))
-  })
-\end{chisel}

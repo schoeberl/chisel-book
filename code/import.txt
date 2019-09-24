@@ -1,3 +1,0 @@
-\begin{chisel}
-import chisel3._
-\end{chisel}

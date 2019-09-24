@@ -1,4 +1,0 @@
-\begin{chisel}
-  val randArgs = Seq.fill(100)(scala.util.Random.nextInt)
-  test(randArgs)
-\end{chisel}

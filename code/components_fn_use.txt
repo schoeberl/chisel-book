@@ -1,5 +1,0 @@
-\begin{chisel}
-  val x = adder(a, b)
-  // another adder
-  val y = adder(c, d)
-\end{chisel}

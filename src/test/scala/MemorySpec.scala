@@ -4,7 +4,6 @@ import org.scalatest._
 class MemoryTester(m: Memory) extends PeekPokeTester(m) {
 
   // fill the memory
-  // 填充储存器
   for (i <- 0 to 10) {
     poke(m.io.wrAddr, i)
     poke(m.io.wrData, i*10)
@@ -22,7 +21,6 @@ class MemoryTester(m: Memory) extends PeekPokeTester(m) {
   expect(m.io.rdData, 50)
 
   // same address read and write
-  // 一样的地址读取和写入
   poke(m.io.wrAddr, 20)
   poke(m.io.wrData, 123)
   poke(m.io.wrEna, 1)
@@ -34,7 +32,6 @@ class MemoryTester(m: Memory) extends PeekPokeTester(m) {
 class ForwardingMemoryTester(m: ForwardingMemory) extends PeekPokeTester(m) {
 
   // fill the memory
-  // 填充存储器
   for (i <- 0 to 10) {
     poke(m.io.wrAddr, i)
     poke(m.io.wrData, i*10)
@@ -52,7 +49,6 @@ class ForwardingMemoryTester(m: ForwardingMemory) extends PeekPokeTester(m) {
   expect(m.io.rdData, 50)
 
   // same address read and write
-  // 一样的地址读取和写入
   poke(m.io.wrAddr, 20)
   poke(m.io.wrData, 123)
   poke(m.io.wrEna, 1)

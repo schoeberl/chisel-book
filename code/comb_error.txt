@@ -1,3 +1,0 @@
-\begin{chisel}
-  e := c & b
-\end{chisel}

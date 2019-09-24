@@ -1,9 +1,0 @@
-\begin{chisel}
-  val w = Wire(UInt())
-
-  when (cond) {
-    w := 1.U
-  } otherwise {
-    w := 2.U
-  }
-\end{chisel}

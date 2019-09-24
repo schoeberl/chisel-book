@@ -1,5 +1,0 @@
-\begin{chisel}
-  def delay(x: UInt) = {
-    RegNext(x)
-  }
-\end{chisel}

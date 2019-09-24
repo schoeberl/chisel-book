@@ -2,10 +2,8 @@ import chisel3._
 import chisel3.iotesters.PeekPokeTester
 
 //- start encdec_util
-//- 开始编码解码工具
 import chisel3.util._
 //- end
-//- 结束
 
 class EncDec extends Module {
   val io = IO(new Bundle {
@@ -20,8 +18,6 @@ class EncDec extends Module {
   val result = Wire(UInt(4.W))
 
   //- start encdec_dec
-  //- 开始编码解码的解码
-
   result := 0.U
 
   switch(sel) {
@@ -31,10 +27,8 @@ class EncDec extends Module {
     is (3.U) { result := 8.U}
   }
   //- end
-  //- 结束
 
   //- start encdec_decbin
-  //- 开始编码解码的二进制版本解码
   switch (sel) {
     is ("b00".U) { result := "b0001".U}
     is ("b01".U) { result := "b0010".U}
@@ -42,21 +36,16 @@ class EncDec extends Module {
     is ("b11".U) { result := "b1000".U}
   }
   //- end
-  //- 结束
 
   //- start encdec_shift
-  //- 开始编码解码的移位解码
   result := 1.U << sel
   //- end
-  //- 结束
 
   io.decout := result
 
   val a = io.encin
   val b = Wire(UInt(2.W))
   //- start encdec_enc
-  //- 开始编码解码的编码
-
   b := "b00".U
   switch (a) {
     is ("b0001".U) { b := "b00".U}
@@ -65,7 +54,6 @@ class EncDec extends Module {
     is ("b1000".U) { b := "b11".U}
   }
   //- end
-  //- 结束
 
   io.encout := b
 

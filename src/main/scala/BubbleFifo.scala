@@ -16,10 +16,8 @@ import chisel3.util._
 
 /*
  * On signal naming:
- * 在信号的命名上：
  * 
  * Alter's FIFO component:
- * Altera的FIFO组成：
  * 
  * data - data in, q - data out, wrreq and rdreq
  * state: full and empty
@@ -30,32 +28,26 @@ import chisel3.util._
  * 
  */
 
-//- start fifo_writer_io
-//- 开始 FIFO写入端口
+//- start bubble_fifo_writer_io
 class WriterIO(size: Int) extends Bundle {
   val write = Input(Bool())
   val full = Output(Bool())
   val din = Input(UInt(size.W))
 }
 //- end
-//- 结束
 
-//- start fifo_reader_io
-//- 开始 fifo读出端口
+//- start bubble_fifo_reader_io
 class ReaderIO(size: Int) extends Bundle {
   val read = Input(Bool())
   val empty = Output(Bool())
   val dout = Output(UInt(size.W))
 }
 //- end
-//- 结束
 
 /**
  * A single register (=stage) to build the FIFO.
- * 单寄存器来搭建FIFO
  */
-//- start fifo_register
-//- 开始 fifo寄存器
+//- start bubble_fifo_register
 class FifoRegister(size: Int) extends Module {
   val io = IO(new Bundle {
     val enq = new WriterIO(size)
@@ -74,13 +66,10 @@ class FifoRegister(size: Int) extends Module {
   }.elsewhen(stateReg === full) {
     when(io.deq.read) {
       stateReg := empty
-      // just to better see empty slots in the waveform 
-      // 只是为了更方便查看波形图的空槽
-      dataReg := 0.U 
+      dataReg := 0.U // just to better see empty slots in the waveform
     }
   }.otherwise {
     // There should not be an otherwise state
-    // 不应该有其它状态
   }
 
   io.enq.full := (stateReg === full)
@@ -88,14 +77,11 @@ class FifoRegister(size: Int) extends Module {
   io.deq.dout := dataReg
 }
 //- end
-//- 结束
 
 /**
  * This is a bubble FIFO.
- * 这是一个冒泡FIFO
  */
-//- start fifo
-//- 开始FIFO
+//- start bubble_fifo
 class BubbleFifo(size: Int, depth: Int) extends Module {
   val io = IO(new Bundle {
     val enq = new WriterIO(size)
@@ -112,4 +98,3 @@ class BubbleFifo(size: Int, depth: Int) extends Module {
   io.deq <> buffers(depth - 1).io.deq
 }
 //- end
-//- 结束
