@@ -3066,17 +3066,18 @@ received character is sent back (echoed).
 In this section we will implement different variations of a FIFO queue.
 To make these implementations interchangeable we will use inheritance,
 as introduced in Section~\ref{sec:inheritance}. We define an \code{abstract}
-FIFO class:
+FIFO class with a Chisel type as parameter to be able to buffer
+any Chisel data type.
+
 
 \shortlist{code/fifo_abstract.txt}
 
-\noindent Note that we use a Chisel type as parameter to be able to buffer
-any Chisel data type.
 In Section~\ref{sec:fifo} we defined our own types for the interface with common
 names for signals, such as \code{write}, \code{full}, \code{din}, \code{read},
 \code{empty}, and \code{dout}. The input and the output of such a buffer consists
 of data and two signals for handshaking (e.g., we \code{write} into the FIFO when
 it is not \code{full}.
+
 However, we can generalize this handshaking to the so called ready-valid interface.
 E.g, we can enqueue an element (write into the FIFO) when the FIFO is \code{ready}.
 We signal this at the writer side with \code{valid}.
@@ -3086,8 +3087,68 @@ as \codefoot{DecoupledIO} actually extends an abstract class.}
 
 \shortlist{code/fifo_decoupled.txt}
 
-\noindent The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
+\noindent With the \code{DecoupledIO} interface we define the interface for our FIFOs:
+a \code{FifoIO} with an \code{enq} enqueue and a \code{deq} dequeue port consisting
+of read-valid interfaces.
+ The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
 Therefore, enqueue port of the FIFO needs to flip the signal directions.
+
+\shortlist{code/fifo_io.txt}
+
+With the abstract base class and an interface we can specialize for different
+FIFO implementations optimized for different parameters (speed, area, power,
+or just simplicity).
+We can redefine our bubble FIFO from Section~\ref{sec:fifo} using standard
+ready-valid interfaces and being parametrizable with a Chisel data type.
+
+\longlist{code/fifo_bubble.txt}{A bubble FIFO with a ready-valid interface.}{lst:fifo:bubble}
+
+Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with ready-valid
+interface. Note what we put the \code{Buffer} component inside from \code{BubbleFifo}
+as private class. This helper class is only needed for this component and therefore
+we hide it and avoid polluting the name space. The buffer class has also been
+simplified. Instead of an FSM e use only a single bit, \code{fullReg}, to note
+the state of the buffer: full or empty.
+
+The bubble FIFO is simply, easy to understand, and uses minimal resources.
+However, as each buffer stage has to toggle between empty and full, the maximum
+bandwidth of this FIFO is two clock cycles per word.
+
+One could start to consider both interface sides in the buffer to be able to accept
+a new word when the producer \code{valid} and the consumer is \code{ready}.
+However, this introduces a combinational path from the consumer handshake
+to the producer handshake, which violates the semantics of the ready-valid protocol.
+
+One solution is stay \code{ready} even when the buffer register if full.
+To be able to accept a data word from the producer, when the consumer is not
+\code{ready} we need a second buffer, we call it the shadow register.
+When the the buffer is full, new data is stored in the shadow register and \code{ready}
+is de-asserted. When the consumer becomes \code{ready} again, data is transferred
+from the data register to the consumer and from the shadow register into
+the data register.
+
+\longlist{code/fifo_double_buffer.txt}{A FIFO with double buffer elements.}{lst:fifo:double:buffer}
+
+
+Listing~\ref{lst:fifo:double:buffer} shows the double buffer. The outer part of
+the FIFO, the connection of the buffer elements is the same as in the bubble FIFO
+and is therefore not shown.
+The only change is in the doubler buffer element. It contains two registers,
+\code{dataReg} and \code{shadowReg}. The consumer is served always from
+\code{shadowReg}. The double buffer has three states: \code{empty}, \code{one},
+and \code{two}, which signal the fill level of the double buffer.
+The buffer is \code{ready} to accept new data when is it in state \code{empty}
+or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
+
+If we run the FIFO at full speed and the consumer is always \code{ready}
+the steady state of the double buffers are \code{one}. Only when the consumer
+de-asserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
+However, compared to a single bubble FIFO, a restart of the queue happens
+immediately, as the stages switch from state \code{two} to \code{one}.
+
+Note the double buffer FIFO needs double the number of registers then the
+bubble FIFO, but can also store double the number of element when needed.
+The fall through latency is the same.
 
 \section{Exercises}
 
@@ -3097,7 +3158,7 @@ and (2) exploring the UART and extending it.
 Source code for both exercises is included in the
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples} repository.
 
-\subsection{Explore FIFO Variations}
+\subsection{Explore the Bubble FIFO}
 
 The FIFO source also includes a tester that provokes different read and write behavior and generates a waveform in the 
 \myref{https://en.wikipedia.org/wiki/Value_change_dump}{value change dump (VCD)} format.
