@@ -3065,7 +3065,11 @@ received character is sent back (echoed).
 
 In this section we will implement different variations of a FIFO queue.
 To make these implementations interchangeable we will use inheritance,
-as introduced in Section~\ref{sec:inheritance}. We define an \code{abstract}
+as introduced in Section~\ref{sec:inheritance}.
+
+\subsection{Parameterizing FIFOs}
+
+We define an \code{abstract}
 FIFO class with a Chisel type as parameter to be able to buffer
 any Chisel data type.
 
@@ -3098,6 +3102,9 @@ Therefore, enqueue port of the FIFO needs to flip the signal directions.
 With the abstract base class and an interface we can specialize for different
 FIFO implementations optimized for different parameters (speed, area, power,
 or just simplicity).
+
+\subsection{Redesigning the Bubble FIFO}
+
 We can redefine our bubble FIFO from Section~\ref{sec:fifo} using standard
 ready-valid interfaces and being parametrizable with a Chisel data type.
 
@@ -3114,10 +3121,12 @@ The bubble FIFO is simply, easy to understand, and uses minimal resources.
 However, as each buffer stage has to toggle between empty and full, the maximum
 bandwidth of this FIFO is two clock cycles per word.
 
-One could start to consider both interface sides in the buffer to be able to accept
+One could consider to look at both interface sides in the buffer to be able to accept
 a new word when the producer \code{valid} and the consumer is \code{ready}.
 However, this introduces a combinational path from the consumer handshake
 to the producer handshake, which violates the semantics of the ready-valid protocol.
+
+\subsection{Double Buffer FIFO}
 
 One solution is stay \code{ready} even when the buffer register if full.
 To be able to accept a data word from the producer, when the consumer is not
@@ -3127,13 +3136,12 @@ is de-asserted. When the consumer becomes \code{ready} again, data is transferre
 from the data register to the consumer and from the shadow register into
 the data register.
 
-\longlist{code/fifo_double_buffer.txt}{A FIFO with double buffer elements.}{lst:fifo:double:buffer}
+\verylonglist{code/fifo_double_buffer.txt}{A FIFO with double buffer elements.}{lst:fifo:double:buffer}
 
 
-Listing~\ref{lst:fifo:double:buffer} shows the double buffer. The outer part of
-the FIFO, the connection of the buffer elements is the same as in the bubble FIFO
-and is therefore not shown.
-The only change is in the doubler buffer element. It contains two registers,
+Listing~\ref{lst:fifo:double:buffer} shows the double buffer. As each buffer element
+can store two entries we need only half of the buffer elements (\code{depth/2}).
+The \code{DoubleBuffer} contains two registers,
 \code{dataReg} and \code{shadowReg}. The consumer is served always from
 \code{shadowReg}. The double buffer has three states: \code{empty}, \code{one},
 and \code{two}, which signal the fill level of the double buffer.
@@ -3143,12 +3151,85 @@ or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
 If we run the FIFO at full speed and the consumer is always \code{ready}
 the steady state of the double buffers are \code{one}. Only when the consumer
 de-asserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
-However, compared to a single bubble FIFO, a restart of the queue happens
-immediately, as the stages switch from state \code{two} to \code{one}.
+However, compared to a single bubble FIFO, a restart of the queue takes
+only half the number fo clock cycles for the same buffer capacity.
+Similar the fall through latency is half of the bubble FIFO.
 
-Note the double buffer FIFO needs double the number of registers then the
-bubble FIFO, but can also store double the number of element when needed.
-The fall through latency is the same.
+\subsection{FIFO with Memory}
+
+When you come with a software engineering background you may have been
+wondering that we built hardware queues out of many small individual small buffer
+elements, all executing in parallel and handshaking with upstream and downstream
+elements. For small buffers this is probably the most efficient implementation.
+
+A queue in software is usually used by a sequential code in a single thread.
+Or as a queue to decouple a producer and consumer thread.
+In this setting a fixed size FIFO queue is usually implemented as a
+\myref{https://en.wikipedia.org/wiki/Circular_buffer}[circular buffer].
+Two pointers point into read and write positions in a memory set aside
+for the queue. When the pointers reach the end of the memory, the
+are set back to the begin of that memory. The difference between the two
+pointers is the number of elements in the queue. When the two pointers
+point to the same address, the queue is either empty or full.
+To distinguish between empty and full we need another flag.
+
+We can implement such a memory based FIFO queue in hardware as
+well. For small queues, we can use a register file (i.e., a \code{Reg(Vec())}).
+Listing~\ref{lst:fifo:reg:mem} shows a FIFO queue implemented with  memory
+and read and write pointers.
+
+\verylonglist{code/fifo_reg_mem.txt}{A FIFO with a register based memory.}{lst:fifo:reg:mem}
+
+
+As there are two pointers that behave the same, being incremented on an
+action and wrap around at the end of the buffer, we define a function \code{counter}
+that implements those wrapping counters. With \code{log2Ceil(depth).W} we
+compute the bit length of the counter. The next value is either an increment by
+1 or a wrap around to 0.
+The counter is incremented only when the input \code{incr} is \code{true.B}.
+
+Furthermore, as we need also the
+possible next value (increment or 0 on wrap around), we return this value from
+the \code{counter} function as well. In Scala we can return a so called \emph{tuple},
+which is simply a container to hold more than one value. The syntax to create
+such a duple is simply wrapping the comma separated values in parentheses:
+
+\begin{chisel}
+  val t = (v1, v2)
+\end{chisel}
+
+\noindent We can deconstruct such a tuple by using the parenthesis notation
+on the left hand side of the assignment:
+
+\begin{chisel}
+val (x1, x2) = t
+\end{chisel}
+
+For the memory we us a register of a vector (\code{Reg(Vec(depth, gen))} of
+Chisel data type \code{gen}. We define two signal to increment the read and
+write pointer and create the read and write pointers with the function \code{counter}.
+When both pointer are equal, the buffer is either empty or full.
+We define two flags to for the notion of empty and full.
+
+When the producer asserts \code{valid} and the FIFO is not full we:
+(1) write into the buffer, (2) ensure \code{emptyReg} is de-asserted,
+(3) mark the buffer full if the write pointer will catch up with the read pointer
+in the next clock cycle (compare the current read pointer with the next
+write pointer), and (4) signal the write counter to increment.
+
+When the consumer is \code{ready} and the FIFO is not empty we:
+(1) ensure that the \code{fullReg} is de-asserted, (2) mark the buffer
+empty if the read pointer will catch up with the write pointer in
+the next clock cycle, and (3) signal the read counter to increment.
+
+The output of the FIFO is the memory element at the read pointer address.
+The ready and valid flags are simply derived from the full and empty
+flags.
+
+
+
+
+\subsection{Discussion}
 
 \section{Exercises}
 

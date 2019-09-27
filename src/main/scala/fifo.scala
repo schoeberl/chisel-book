@@ -103,20 +103,63 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
           dataReg := shadowReg
           stateReg := one
         }
+
       }
     }
+
     io.enq.ready := (stateReg === empty || stateReg === one)
     io.deq.valid := (stateReg === one || stateReg === two)
     io.deq.bits := dataReg
   }
-  //- end
 
-  private val buffers = Array.fill(depth) { Module(new DoubleBuffer(gen)) }
-  for (i <- 0 until depth - 1) {
+  private val buffers = Array.fill(depth/2) { Module(new DoubleBuffer(gen)) }
+
+  for (i <- 0 until depth/2 - 1) {
     buffers(i + 1).io.enq <> buffers(i).io.deq
   }
-
   io.enq <> buffers(0).io.enq
-  io.deq <> buffers(depth - 1).io.deq
+  io.deq <> buffers(depth/2 - 1).io.deq
 }
+//- end
 
+//- start fifo_reg_mem
+class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+
+  def counter(depth: Int, incr: Bool): (UInt, UInt) = {
+    val cntReg = RegInit(0.U(log2Ceil(depth).W))
+    val nextVal = Mux(cntReg === (depth-1).U, 0.U, cntReg + 1.U)
+    when (incr) {
+      cntReg := nextVal
+    }
+    (cntReg, nextVal)
+  }
+
+  // the register based memory
+  val memReg = Reg(Vec(depth, gen))
+
+  val incrRead = WireInit(false.B)
+  val incrWrite = WireInit(false.B)
+  val (readPtr, nextRead) = counter(depth, incrRead)
+  val (writePtr, nextWrite) = counter(depth, incrWrite)
+
+  val emptyReg = RegInit(true.B)
+  val fullReg = RegInit(false.B)
+
+  when (io.enq.valid && !fullReg) {
+    memReg(writePtr) := io.enq.bits
+    emptyReg := false.B
+    fullReg := nextWrite === readPtr
+    incrWrite := true.B
+  }
+
+  when (io.deq.ready && !emptyReg) {
+    fullReg := false.B
+    emptyReg := nextRead === writePtr
+    incrRead := true.B
+  }
+
+  io.deq.bits := memReg(readPtr)
+  io.enq.ready := !fullReg
+  io.deq.valid := !emptyReg
+}
+//- end
