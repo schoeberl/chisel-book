@@ -5,7 +5,7 @@
 	<key>ApplicationVersion</key>
 	<array>
 		<string>com.omnigroup.OmniGraffle7</string>
-		<string>196.10.0.336887</string>
+		<string>196.12.0.337285</string>
 	</array>
 	<key>ColorProfiles</key>
 	<array>
@@ -117,7 +117,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2019-08-19 10:54:34 +0000</string>
+	<string>2019-10-03 11:52:09 +0000</string>
 	<key>Modifier</key>
 	<string>Martin Schoeberl</string>
 	<key>MovementHandleVisible</key>
@@ -424,20 +424,6 @@
 							<key>Draws</key>
 							<string>NO</string>
 						</dict>
-						<key>stroke</key>
-						<dict>
-							<key>Color</key>
-							<dict>
-								<key>b</key>
-								<real>0.0</real>
-								<key>g</key>
-								<real>0.0</real>
-								<key>r</key>
-								<real>0.0</real>
-								<key>space</key>
-								<string>9eaea0911d89d63e39e95f2e2116eaec7e0bb91e</string>
-							</dict>
-						</dict>
 					</dict>
 					<key>Text</key>
 					<dict>
@@ -449,7 +435,7 @@
 \deftab720
 \pard\pardeftab720\qc\partightenfactor0
 
-\f0\fs24 \cf0 Ouput\
+\f0\fs24 \cf0 Output\
 logic}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
@@ -480,20 +466,6 @@ logic}</string>
 						<dict>
 							<key>Draws</key>
 							<string>NO</string>
-						</dict>
-						<key>stroke</key>
-						<dict>
-							<key>Color</key>
-							<dict>
-								<key>b</key>
-								<real>0.0</real>
-								<key>g</key>
-								<real>0.0</real>
-								<key>r</key>
-								<real>0.0</real>
-								<key>space</key>
-								<string>9eaea0911d89d63e39e95f2e2116eaec7e0bb91e</string>
-							</dict>
 						</dict>
 					</dict>
 					<key>Text</key>
@@ -540,7 +512,7 @@ logic}</string>
 						<key>ID</key>
 						<integer>58</integer>
 						<key>Position</key>
-						<real>0.46482566550925924</real>
+						<real>0.46482565999031067</real>
 						<key>RotationType</key>
 						<integer>0</integer>
 					</dict>
@@ -559,31 +531,14 @@ logic}</string>
 					</dict>
 					<key>Text</key>
 					<dict>
-						<key>RTFD</key>
-						<data>
-						BAtzdHJlYW10eXBlZIHoA4QBQISE
-						hBJOU0F0dHJpYnV0ZWRTdHJpbmcA
-						hIQITlNPYmplY3QAhZKEhIQITlNT
-						dHJpbmcBlIQBKwpuZXh0X3N0YXRl
-						hoQCaUkBCpKEhIQMTlNEaWN0aW9u
-						YXJ5AJSEAWkDkoSWlgdOU0NvbG9y
-						hpKEhIQHTlNDb2xvcgCUhAFjA4QC
-						ZmYAAYaShJaWEE5TUGFyYWdyYXBo
-						U3R5bGWGkoSEhBBOU1BhcmFncmFw
-						aFN0eWxlAJSEBENDQFMCAIUAhpKE
-						lpYGTlNGb250hpKEhIQGTlNGb250
-						HpSZHIQFWzI4Y10GAAAAFAAAAP/+
-						SABlAGwAdgBlAHQAaQBjAGEAhAFm
-						DJsAmwGbAJsAhoaG
-						</data>
 						<key>Text</key>
 						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs24 \cf2 next_state}</string>
+\f0\fs24 \cf0 next_state}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -618,7 +573,7 @@ logic}</string>
 						<key>ID</key>
 						<integer>86</integer>
 						<key>Position</key>
-						<real>0.49640842013888886</real>
+						<real>0.49640843272209167</real>
 						<key>RotationType</key>
 						<integer>0</integer>
 					</dict>
@@ -637,31 +592,14 @@ logic}</string>
 					</dict>
 					<key>Text</key>
 					<dict>
-						<key>RTFD</key>
-						<data>
-						BAtzdHJlYW10eXBlZIHoA4QBQISE
-						hBJOU0F0dHJpYnV0ZWRTdHJpbmcA
-						hIQITlNPYmplY3QAhZKEhIQITlNT
-						dHJpbmcBlIQBKwVzdGF0ZYaEAmlJ
-						AQWShISEDE5TRGljdGlvbmFyeQCU
-						hAFpA5KElpYHTlNDb2xvcoaShISE
-						B05TQ29sb3IAlIQBYwOEAmZmAAGG
-						koSWlhBOU1BhcmFncmFwaFN0eWxl
-						hpKEhIQQTlNQYXJhZ3JhcGhTdHls
-						ZQCUhARDQ0BTAgCFAIaShJaWBk5T
-						Rm9udIaShISEBk5TRm9udB6UmRyE
-						BVsyOGNdBgAAABQAAAD//kgAZQBs
-						AHYAZQB0AGkAYwBhAIQBZgybAJsB
-						mwCbAIaGhg==
-						</data>
 						<key>Text</key>
 						<string>{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
-{\*\expandedcolortbl;;\csgray\c0;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc\partightenfactor0
 
-\f0\fs24 \cf2 state}</string>
+\f0\fs24 \cf0 state}</string>
 						<key>TextAlongPathGlyphAnchor</key>
 						<string>center</string>
 					</dict>
@@ -1126,7 +1064,7 @@ logic}</string>
 		<key>Sidebar_Tab</key>
 		<integer>0</integer>
 		<key>VisibleRegion</key>
-		<string>{{175.25, 93.25}, {341.5, 333.5}}</string>
+		<string>{{167.25, 68.75}, {341.5, 333.5}}</string>
 		<key>WindowInfo_InspectorTab</key>
 		<array>
 			<string>com.omnigroup.OmniGraffle.inspectorGroup.object</string>
