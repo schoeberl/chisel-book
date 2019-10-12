@@ -165,12 +165,12 @@ class Example {
   var n = 0
   
   // A setter method
-  def set(v: Integer) {
+  def set(v: Integer) = {
     n = v
   }
   
   // Another method
-  def print() {
+  def print() = {
     println(n)
   }
 }
@@ -433,7 +433,7 @@ class Alu extends Module {
 
 \begin{frame}[fragile]{Generating Wave Forms}
 \begin{itemize}
-\item Additional parameter \code{--fint-write-vcd}
+\item Additional parameters: \code{"--generate-vcd-output", "on"}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
