@@ -3061,7 +3061,7 @@ by connecting them together. This connection generates an \code{Echo} circuit wh
 received character is sent back (echoed).
 
 \section{FIFO Design Variations}
-\label{sec:more:fifo}.
+\label{sec:more:fifo}
 
 In this section we will implement different variations of a FIFO queue.
 To make these implementations interchangeable we will use inheritance,
@@ -3155,7 +3155,7 @@ However, compared to a single bubble FIFO, a restart of the queue takes
 only half the number fo clock cycles for the same buffer capacity.
 Similar the fall through latency is half of the bubble FIFO.
 
-\subsection{FIFO with Memory}
+\subsection{FIFO with Register Memory}
 
 When you come with a software engineering background you may have been
 wondering that we built hardware queues out of many small individual small buffer
@@ -3179,7 +3179,6 @@ Listing~\ref{lst:fifo:reg:mem} shows a FIFO queue implemented with  memory
 and read and write pointers.
 
 \verylonglist{code/fifo_reg_mem.txt}{A FIFO with a register based memory.}{lst:fifo:reg:mem}
-
 
 As there are two pointers that behave the same, being incremented on an
 action and wrap around at the end of the buffer, we define a function \code{counter}
@@ -3226,10 +3225,38 @@ The output of the FIFO is the memory element at the read pointer address.
 The ready and valid flags are simply derived from the full and empty
 flags.
 
+\subsection{FIFO with On-Chip Memory}
 
+The last version of the FIFO used a register files to represent the memory,
+which is a good solution for a small FIFO. For larger FIFOs it is better to
+use on-chip memory.
+Listing~\ref{lst:fifo:mem} shows a FIFO using a synchronous memory for
+storage.
 
+\verylonglist{code/fifo_mem.txt}{A FIFO with a on-chip memory.}{lst:fifo:mem}
 
-\subsection{Discussion}
+The handling of read and write pointer is identical to the register memory
+FIFO. However, a synchronous on-chip memory delivers the result of a read
+in the next clock cycle, where the read of the register file was available in the
+same clock cycle.
+
+Therefore, we need some additional FSM and a shadow register to handle
+this latency. We read the memory out and provide the value of the top of the queue
+to the output port. If that value is not consumed, we need to store it in the
+shadow register \code{shadowReg} while reading the next value from the memory.
+The state machine consists of three states to represent: (1) an empty FIFO, (2) a valid
+data read out from the memory, and (3) head of the queue in the shadow register and
+valid data (the next element) from the memory.
+
+The memory based FIFO can efficiently hold larger amounts of data in the queue
+and has a short fall through latency. In the last design, the output of the FIFO may
+come directly from the memory read. If this data path is in the critical path of the design,
+we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
+shows such a combination. On the output of the memory based FIFO we add a single
+stage double buffer FIFO to decouple the memory read path from the output.
+
+\longlist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
+stage.}{lst:fifo:comb}
 
 \section{Exercises}
 
@@ -3320,7 +3347,26 @@ to check if the transmit buffer is free.
 
 The example code contains only a single buffer for the \code{Tx}. Feel free to
 add the FIFO that you have implemented to add buffering to the transmitter
-and receiver. 
+and receiver.
+
+\subsection{FIFO Exploration}
+
+Write a simple FIFO with 4 buffer elements in dedicated registers.
+Use 2-bit read and write counters, which can just just overflow.
+As a further simplification consider the situation when the read and write
+pointers are equal as empty FIFO. This means you can maximally
+store 3 elements. This simplification avoids the counter function from
+the example in Listing~\ref{lst:fifo:reg:mem} and the handling
+of the empty or full with the same pointer values. We do not need
+empty or full flags, as this can be derived form the pointer values
+alone. How much simpler is this design?
+
+The presented different FIFO designs have different design tradeoffs
+relative to following properties: (1) maximum throughput,
+(2) fall through latency, (3) resource requirement, and (4)
+maximum clock frequency. Explore all FIFO variations in different sizes by
+synthesizing them for an FPGA. Where are the sweet spots for FIFOs of 
+4 words, 16 words, and 256 words?
 
 \chapter{Design of a Processor}
 

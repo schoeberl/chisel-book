@@ -87,7 +87,8 @@ class Rx(frequency: Int, baudRate: Int) extends Module {
   val START_CNT = ((3 * frequency / 2 + baudRate / 2) / baudRate - 1).U
 
   // Sync in the asynchronous RX data
-  val rxReg = RegNext(RegNext(io.rxd))
+  // Reset to 1 to not start reading after a reset
+  val rxReg = RegNext(RegNext(io.rxd, 1.U), 1.U)
 
   val shiftReg = RegInit('A'.U(8.W))
   val cntReg = RegInit(0.U(20.W))
