@@ -98,10 +98,9 @@ class CombWireDefault extends Module {
     val out = Output(UInt(4.W))
   })
 
-  // TODO: change to WireDefault when 3.2 is out
   val cond = io.cond
   //- start comb_wiredefault
-  val w = WireInit(0.U)
+  val w = WireDefault(0.U)
 
   when (cond) {
     w := 3.U

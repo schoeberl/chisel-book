@@ -19,7 +19,7 @@ class ParamFunc extends Module {
   //- start param_func
   def myMux[T <: Data](sel: Bool, tPath: T, fPath: T): T = {
 
-    val ret = WireInit(fPath)
+    val ret = WireDefault(fPath)
     when (sel) {
       ret := tPath
     }

@@ -139,8 +139,8 @@ class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
   // the register based memory
   val memReg = Reg(Vec(depth, gen))
 
-  val incrRead = WireInit(false.B)
-  val incrWrite = WireInit(false.B)
+  val incrRead = WireDefault(false.B)
+  val incrWrite = WireDefault(false.B)
   val (readPtr, nextRead) = counter(depth, incrRead)
   val (writePtr, nextWrite) = counter(depth, incrWrite)
 
@@ -180,8 +180,8 @@ class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
   val mem = SyncReadMem(depth, gen)
 
-  val incrRead = WireInit(false.B)
-  val incrWrite = WireInit(false.B)
+  val incrRead = WireDefault(false.B)
+  val incrWrite = WireDefault(false.B)
   val (readPtr, nextRead) = counter(depth, incrRead)
   val (writePtr, nextWrite) = counter(depth, incrWrite)
 

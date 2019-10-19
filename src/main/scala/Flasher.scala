@@ -13,16 +13,15 @@ class Flasher extends FlasherBase {
   val start = io.start.toBool
 
   // Maybe signals should be Bool?
-  // FIXME: WireInit shall become WireDefault
   //- start flasher_fsm
   val off :: flash1 :: space1 :: flash2 :: space2 :: flash3 :: Nil = Enum(6)
   val stateReg = RegInit(off)
 
-  val light = WireInit(false.B) // FSM output
+  val light = WireDefault(false.B) // FSM output
 
   // Timer connection
-  val timerLoad = WireInit(false.B) // start timer with a load
-  val timerSelect = WireInit(true.B) // select 6 or 4 cycles
+  val timerLoad = WireDefault(false.B) // start timer with a load
+  val timerSelect = WireDefault(true.B) // select 6 or 4 cycles
   val timerDone = Wire(Bool())
 
   timerLoad := timerDone
@@ -86,15 +85,15 @@ class Flasher2 extends FlasherBase {
   val off :: flash :: space :: Nil = Enum(3)
   val stateReg = RegInit(off)
 
-  val light = WireInit(false.B) // FSM output
+  val light = WireDefault(false.B) // FSM output
 
   // Timer connection
-  val timerLoad = WireInit(false.B) // start timer with a load
-  val timerSelect = WireInit(true.B) // select 6 or 4 cycles
+  val timerLoad = WireDefault(false.B) // start timer with a load
+  val timerSelect = WireDefault(true.B) // select 6 or 4 cycles
   val timerDone = Wire(Bool())
   // Counter connection
-  val cntLoad = WireInit(false.B)
-  val cntDecr = WireInit(false.B)
+  val cntLoad = WireDefault(false.B)
+  val cntDecr = WireDefault(false.B)
   val cntDone = Wire(Bool())
 
   timerLoad := timerDone

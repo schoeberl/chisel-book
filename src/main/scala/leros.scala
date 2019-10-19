@@ -24,7 +24,7 @@ class Alu(size: Int) extends Module {
   val op = io.op
   val a = io.a
   val b = io.b
-  val res = WireInit(0.S(size.W))
+  val res = WireDefault(0.S(size.W))
 
   switch(op) {
     is(add) {
@@ -173,9 +173,9 @@ class Decode() extends Module {
     val dout = Output(new DecodeOut)
   })
 
-  val f = WireInit(nop)
-  val imm = WireInit(false.B)
-  val ena = WireInit(false.B)
+  val f = WireDefault(nop)
+  val imm = WireDefault(false.B)
+  val ena = WireDefault(false.B)
 
   io.dout.exit := false.B
   //- end

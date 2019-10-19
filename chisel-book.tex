@@ -1543,9 +1543,7 @@ subsection with a decoder circuit.
 
 For more complex combinational circuits it might be practical to assign
 a default value to a \code{Wire}. A default assignment can be combined with the wire
-declaration with \code{WireDefault}.\footnote{In the current version of Chisel
-it is called WireInit, but will change to \code{WireDefault} with the release of Chisel 3.2}
-
+declaration with \code{WireDefault}.
 
 \shortlist{code/comb_wiredefault.txt}
 
@@ -3071,8 +3069,8 @@ as introduced in Section~\ref{sec:inheritance}.
 
 We define an \code{abstract}
 FIFO class with a Chisel type as parameter to be able to buffer
-any Chisel data type.
-
+any Chisel data type. In the abstract class we also test that the
+parameter \code{depth} has a useful value.
 
 \shortlist{code/fifo_abstract.txt}
 
@@ -3503,7 +3501,7 @@ which is later fed partially into the ALU.
 \shortlist{code/leros_decode_bundle.txt}
 
 \noindent Decode takes as input an 8-bit opcode and delivers the decoded signals
-as output. Those driving signals are assigned a default value with \code{WireInit}.
+as output. Those driving signals are assigned a default value with \code{WireDefault}.
 
 \shortlist{code/leros_decode_init.txt}
 
