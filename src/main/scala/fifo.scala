@@ -15,6 +15,8 @@ class FifoIO[T <: Data](private val gen: T) extends Bundle {
 //- start fifo_abstract
 abstract class Fifo[T <: Data](gen: T, depth: Int) extends Module {
   val io = IO(new FifoIO(gen))
+
+  assert(depth > 0, "Number of buffer elements needs to be larger than 0")
 }
 //- end
 
@@ -35,7 +37,7 @@ package fifo_private {
 //- start fifo_bubble
 class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
-  private class Buffer[T <: Data](gen: T) extends Module {
+  private class Buffer() extends Module {
     val io = IO(new FifoIO(gen))
 
     val fullReg = RegInit(false.B)
@@ -57,7 +59,7 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
     io.deq.bits := dataReg
   }
 
-  private val buffers = Array.fill(depth) { Module(new Buffer(gen)) }
+  private val buffers = Array.fill(depth) { Module(new Buffer()) }
   for (i <- 0 until depth - 1) {
     buffers(i + 1).io.enq <> buffers(i).io.deq
   }
@@ -112,13 +114,13 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
     io.deq.bits := dataReg
   }
 
-  private val buffers = Array.fill(depth/2) { Module(new DoubleBuffer(gen)) }
+  private val buffers = Array.fill((depth+1)/2) { Module(new DoubleBuffer(gen)) }
 
-  for (i <- 0 until depth/2 - 1) {
+  for (i <- 0 until (depth+1)/2 - 1) {
     buffers(i + 1).io.enq <> buffers(i).io.deq
   }
   io.enq <> buffers(0).io.enq
-  io.deq <> buffers(depth/2 - 1).io.deq
+  io.deq <> buffers((depth+1)/2 - 1).io.deq
 }
 //- end
 
