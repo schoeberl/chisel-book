@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/schoeberl/chisel-book.svg?branch=master)](https://travis-ci.com/schoeberl/chisel-book)
+
 # Digital Design with Chisel
 
 ![Book Cover](cover-small.jpg)
