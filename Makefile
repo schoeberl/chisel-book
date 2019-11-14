@@ -5,17 +5,20 @@ all: gencode fig book
 
 gencode:
 	-mkdir code
-	sbt compile
+	sbt test
 	scala scripts/gencode.scala
 
 fig:
-	cd figures; pdflatex *.tex
+	make -C figures
 
 book:
 	pdflatex $(DOC)
 	bibtex $(DOC)
 	pdflatex $(DOC)
 	pdflatex $(DOC)
+
+veryclean:
+	git clean -fd
 
 clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.lol # *.pdf
