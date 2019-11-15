@@ -1,6 +1,5 @@
-install:
- - scala
- - pdflatex
+before_install:
+  - sudo apt-get -y scala pdflatex
 language: scala
 scala:
  - 2.11.7
