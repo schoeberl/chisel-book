@@ -29,7 +29,7 @@ In case you want to cite the book:
 This book project has an accompanying repository containing
 [Chisel examples](https://github.com/schoeberl/chisel-examples).
 
-To build the Chisel book from the source you need make, latex, sbt, and Java JDK (1.8)
+To build the Chisel book from the source you need make, latex, sbt, scala, and Java JDK (1.8)
 installed. Then you simply build with:
 
 ```
