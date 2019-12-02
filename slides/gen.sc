@@ -1,6 +1,6 @@
 #!/usr/bin/env amm
 
-// Confert Markdown
+// Convert Markdown to HTML
 
 import $ivy.`org.jbibtex:jbibtex:1.0.17`, org.jbibtex._
 
