@@ -24,7 +24,7 @@
 
 
 \newif\ifbook
-%\booktrue % comment out for the eBook version
+%\booktrue % comment out for the print book version
 
 \ifbook
 \else
@@ -339,7 +339,10 @@ We include links to further reading in the running text, mostly to
 
 Chisel is a Scala library, and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool. Scala itself depends on the installation
-of the \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}.
+of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}. As Oracle has changed the license for Java, it may be easier to
+install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+
+\subsection{macOS}
 
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} is installed with:
@@ -348,7 +351,14 @@ On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 $ brew install sbt
 \end{verbatim}
 
-\noindent For Ubuntu, which is based on Debian, programs are usually installed from a
+\subsection{Linux/Ubuntu}
+
+Install Java and useful tools in Ubuntu with:
+\begin{verbatim}
+$ sudo apt install openjdk-8-jdk git make gtkwave
+\end{verbatim}
+
+For Ubuntu, which is based on Debian, programs are usually installed from a
 Debian file (.deb). However, as of the time of this writing \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
 is a little bit more involved:
@@ -361,9 +371,13 @@ sudo apt-get update
 sudo apt-get install sbt
 \end{verbatim}
 
+\subsection{Windows}
+
 Chisel and Scala can also be installed and used under Windows.
 \code{sbt} can be installed with a Windows installer, see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
+
+\subsection{FPGA Tools}
 
 To build hardware for an FPGA, you need a synthesize tool. The two major
 FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
@@ -371,6 +385,7 @@ their tools that cover small to medium-sized FPGAs. Those medium-sized
 FPGAs are large enough to build multicore RISC style processors.
 Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
+Both tools are available for Windows and Linux, but not for macOS.
 
 \section{Hello World}
 

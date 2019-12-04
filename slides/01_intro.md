@@ -30,8 +30,24 @@ Martin Schoeberl
 
 ---
 
+# A Image
+
+![Book Cover](../cover-small.jpg)
+
+---
+
 # What you will learn
 
 ---
 
 # Resources
+
+---
+
+# Code examples
+
+```
+This should be
+formatted
+as code
+```
