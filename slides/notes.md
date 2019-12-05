@@ -30,48 +30,10 @@ Martin Schoeberl
 
 ---
 
-# A Image
+# The Book
 
 ![bg right](../cover-small.jpg)
 
----
-
-# More on images
-
-![abc](../cover-small.jpg)
-
-![xxx](../figures/reg_wave.pdf)
-
----
-
-# A Table
-
-| column | next |
-|--------|------|
-| one | two
-
-
-another table
-
-| VHDL | Chisel |
-|------|--------|
-|```process```||
-|```   more stuff```| ```RegInit``` |
-|```end process``` | |
-
----
-
-# next try
-
-.pull-left[
-- One bullet.
-
-- Another bullet.
-]
-
-.pull-right[
-- right stuff
-]
 
 ---
 
