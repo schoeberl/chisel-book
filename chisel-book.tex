@@ -2114,7 +2114,7 @@ The FSM has three states: \emph{green}, \emph{orange}, and \emph{red},
 indicating a level of alarm. The FSM starts at the \emph{green} level.
 When a \emph{bad event} happens the alarm level is switched to \emph{orange}.
 On a second bad event, the alarm level is switched to \emph{red}.
-In that case, we want to ring a bell; \emph{ring bell} it the only output of this FSM.
+In that case, we want to ring a bell; \emph{ring bell} is the only output of this FSM.
 We add the output to the \emph{red} state.
 The alarm can be reset with a \emph{clear} signal.
 
@@ -2328,7 +2328,7 @@ FSM output within the state representing circles.
 \longlist{code/rising_moore_fsm.txt}{Rising edge detection with a Moore FSM.}{lst:fsm:rising:moore}
 
 Listing~\ref{lst:fsm:rising:moore} shows the Moore version of the rising edge detection
-circuit. Is uses double the number of D flip-flops than the Mealy or direct
+circuit. It uses double the number of D flip-flops than the Mealy or direct
 coded version. The resulting next state logic is therefore also larger
 than the Mealy or direct coded version.
 
@@ -2655,7 +2655,7 @@ one parameter for the true path, and one parameter for the false path.
 Both path parameters are of type \code{T}, an information that is
 provided at function call. The function itself is straight forward:
 we define a wire with the default value of \code{fPath} and
-change the value is the condition is true to the \code{tPath}.
+change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
 At the end of the function, we return the multiplexer hardware.
 
@@ -2692,7 +2692,7 @@ Following function shows the alternative way to code the multiplexer.
 We can also parameterize modules with Chisel types.
 Let us assume we want to design a network-on-chip to move data between
 different processing cores. However, we do not want to hardcode the
-data format in the router interface; we want to \emph{parametrize} it.
+data format in the router interface; we want to \emph{parameterize} it.
 Similar to the type parameter for a function, we add a type parameter \code{T}
 to the Module constructor. Furthermore, we need to have one constructor
 parameter of that type. Additionally, in this example, we also make the number
@@ -2710,7 +2710,7 @@ the number of ports to the constructor of the router:
 
 \shortlist{code/param_mod_use.txt}
 
-\subsection{Parametrize Bundles}
+\subsection{Parameterized Bundles}
 
 In the router example, we used two different vectors of fields for the input
 of the router: one for the address and one for the data, which was parameterized.
@@ -2877,7 +2877,7 @@ Data is put into the FIFO by the writer on \code{din} with an active
 A FIFO is initially empty, singled by the \code{empty} signal. Reading
 from an empty FIFO is usually undefined. When data is written and never
 read a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
-and the data lost. In other words, the signals \code{empty} and \code{full}
+and the data are lost. In other words, the signals \code{empty} and \code{full}
 serve as handshake signals 
 
 Several different implementations of a FIFO are possible: E.g., using on-chip
@@ -2923,12 +2923,12 @@ Listing~\ref{lst:fifo} shows the complete FIFO. The complete FIFO has
 the same IO interface as the individual FIFO buffers.
 \code{BubbleFifo} has as parameters the \code{size} of the data
 word and \code{depth} for the number of buffer stages.
-We can build an \code{depth} stages bubble FIFO out of \code{depth}
+We can build a \code{depth} stages bubble FIFO out of \code{depth}
 \code{FifoRegister}s. We crate the stages by filling them into a Scala \code{Array}.
 The Scala array has no hardware meaning, it \emph{just} provides us with
 a container to have references to the created buffers.
 In a Scala \code{for} loop we connect the individual buffers.
-The first buffers enqueueing side is connected to the enqueueing IO of
+The first buffer's enqueueing side is connected to the enqueueing IO of
 the complete FIFO and the last buffer's dequeueing side to the
 dequeueing side of the complete FIFO.
 
@@ -3057,11 +3057,11 @@ by sending a friendly message out. We define the message in a Scala
 string (\code{msg}) and converting it to a Chisel \code{Vec} of \code{UInt}.
 A Scala string is a sequence that supports the \code{map} method.
 The \code{map} method takes as argument a function literal, applies this function to
-each element, and builds a sequence of the functions return values.
+each element, and builds a sequence of the function's return values.
 If the function literal shall have only one argument, as it is in this case, the
 argument can be represented by \code{\_}. Our function literal calls
 the Chisel method \code{.U} to convert the Scala \code{Char} to a Chisel
-\code{UInt}. The sequence is then passed to \code{VecInint} to construct
+\code{UInt}. The sequence is then passed to \code{VecInit} to construct
 a Chisel \code{Vec}. We index into the vector \code{text} with the counter
 \code{cntReg} to provide the individual characters to the buffered transmitter.
 With each \code{ready} signal we increase the counter until the full string
