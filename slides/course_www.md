@@ -29,25 +29,33 @@ Depending on your background the prerequisites are covered in one of following c
 The course is lectured Thursday afternoons 13:00 - 17:00.
 
 First part is usually lectures and second part for project work.
+Students will work in groups of two or three on small lab exercises
+and as a final project on a vending machine.
 
 The course is lectured in building TBD, room TBD.
 
+### Pensum List
+
+TBD 
+
 ## Recommended Textbook
 
- * Dally
- * Schoeberl
+ * Dally: [Digital Design Using VHDL a Systems Approach](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=2ahUKEwiijsD_76vmAhW4AxAIHci4Ai8QFjACegQIAhAB&url=https%3A%2F%2Fwww.cambridge.org%2Fcore%2Fbooks%2Fdigital-design-using-vhdl%2F0649D96BCF9E14D1AC4D192D629A3E5A&usg=AOvVaw3f4XcAOJdrcFfY6QdnGvRm)
+ * Schoeberl: [Digital Design with Chisel](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
 
-The book is available from
+The Dally book is available from
 [Polyteknisk Boghandel](http://www.polyteknisk.dk/)
 in Building 101A.
+
+## Resources
+
+ * [Lab Material](https://github.com/schoeberl/chisel-lab)
+ * [The Chisel Book](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
+ * [Chisel](https://www.chisel-lang.org/)
 
 ## Instructor
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
-
-## Project
-
-Students will work in groups of two or three on a hardware project.
 
 ## Lecture Plan (2020)
 
@@ -165,7 +173,3 @@ Students will work in groups of two or three on a hardware project.
 **Topics:** Outro
 
 **Lab:** Finish VM
-
-## Pensum List
-
-TBD 
