@@ -40,15 +40,139 @@
 %\renewcommand{\author2}[1]{}
 
 
-\title{Digital Design in the 21st Century: Chisel}
+\title{Digital Electronics 2: Introduction}
 \author{Martin Schoeberl}
 \date{\today}
-\institute{Technical University of Denmark}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
 
 \begin{document}
 
 \begin{frame}
 \titlepage
+\end{frame}
+
+
+
+\begin{frame}{Two-column slide}
+ 
+\begin{columns}
+ 
+\column{0.5\textwidth}
+This is a text in first column.
+$$E=mc^2$$
+\begin{itemize}
+\item First item
+\item Second item
+\end{itemize}
+ 
+\column{0.5\textwidth}
+This text will be in the second column
+and on a second tought this is a nice looking
+layout in some cases.
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\item abc
+\item abc
+\item abc
+\item abc
+\begin{itemize}
+\item xxx
+\end{itemize}
+\item abc
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Overview}
+\begin{itemize}
+\item Introduction and motivation
+\item The digital abstraction
+\item Languages for hardware design
+\item Testing (see 2.1.4)??
+\item Tools and setup
+\item A first round in Chisel
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Organization and Workload}
+\begin{itemize}
+\item Usually 2 hours lectures and 2 hours supervised lab
+\item 5 ECTS is equivalent to 9 hours per week
+\item That means 5 hours work on your own
+\begin{itemize}
+\item Do some reading, prepare for the lecture and lab
+\item Get the tools installed on your laptop
+\item You have an FPGA board, experiment with it
+\end{itemize}
+\item This will not be an easy course
+\begin{itemize}
+\item But you will learn a lot, and it will make you a better
+\begin{itemize}
+\item engineer
+\item hardware designer
+\item programmer, and
+\item computer user in general
+\end{itemize}
+\end{itemize}
+\item Try to have fun on building stuff!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Communication and Getting Help}
+\begin{itemize}
+\item Several sources of information:
+\begin{itemize}
+\item The Internet ond Google
+\item Your fellow students
+\item The TAs
+\item Me
+\end{itemize}
+\item We will use Slack for easy communication (if ok for you)
+\item You can always just knock my door or shoot an email
+\item Anonymous feedback
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Anonymous Feedback}
+\begin{itemize}
+\item Inbox available at: 
+\href{https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link}{Anonymous Inbox}
+\item Simple Google form without revealing your identity
+\item I will get notified
+\item Use when you want to complain, give feedback, but also when you like something ;-)
+\item Even when frustrated, please be polite, a human is reading this
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cheating and Plagiarism}
+\begin{itemize}
+\item It is ok and good practice to discuss problems and solutions with your fellow students
+\item But you need to hand in your own solution
+\item Copying stuff or offering stuff is cheating
+\item Copying material from somewhere is plagiarism and copyright violation
+\item Cheating is handled quite rigorous at DTU, you might get expelled
+\item Using source code control (GitHub) is good practice
+\item However, keep it private. Otherwise you might contribute to cheating
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{This is an Open-Access/Open-Source Course}
+\begin{itemize}
+\item Almost all material is public visible
+\item Slides are open access
+\item Lab material is open access
+\item Hosted on GitHub
+\begin{itemize}
+\item \textbf{You} can contribute with a pull request
+\item Becoming an author of this course :-)
+\end{itemize}
+\item The Chisel book is freely available
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Motivating Example:\\
@@ -65,7 +189,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Usage
 \begin{itemize}
 \item Utility processor for small stuff
-% \item Could be used for your vending machine
+\item Could be used for your vending machine
 \item In teaching for introduction to computer architecture
 \end{itemize}
 \item The design took place on the island Lipsi
@@ -75,7 +199,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{frame}[fragile]{The Design of Lipsi on Lipsi}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.3]{lipsi}
+    \includegraphics[scale=0.3]{../slides-tutorial/lipsi}
 \end{figure}
 \end{frame}
 
@@ -125,10 +249,10 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
 \item \url{https://github.com/schoeberl/chisel-book/wiki}
 \end{itemize}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.5]{slides-link}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \includegraphics[scale=0.5]{slides-link}
+%\end{figure}
 \end{frame}
 
 

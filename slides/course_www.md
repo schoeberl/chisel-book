@@ -52,6 +52,7 @@ in Building 101A.
  * [Lab Material](https://github.com/schoeberl/chisel-lab)
  * [The Chisel Book](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
  * [Chisel](https://www.chisel-lang.org/)
+ * [Anonymous Inbox](https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link)
 
 ## Instructor
 
@@ -61,7 +62,7 @@ in Building 101A.
 
 ### Week 1 Introduction
 
-**Topics:** Introduction and motivation, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
+**Topics:** Introduction and motivation, the digital abstraction, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
 
 **Lab:** Chisel “Hello World”
 
