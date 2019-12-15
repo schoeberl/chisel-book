@@ -433,8 +433,8 @@ That hardware then blinks the LED at 1~Hz.
 
 \section{An IDE for Chisel}
 
-This book makes no assumptions about your programming environment or editor to use.
-Learning of the basics should be easy with just using \code{sbt} at the command line
+This book makes no assumptions about your programming environment or editor you use.
+Learning the basics should be easy with just using \code{sbt} at the command line
 and an editor of your choice. In the tradition of other books, all commands that you
 shall type in a shell/terminal/CLI are preceded by a \code{\$} character, which you
 shall not type in. As an example, here is the Unix \code{ls} command, which lists files in
@@ -450,18 +450,25 @@ that support Scala are also good IDEs for Chisel.
 It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
 \myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
 to generate a project from the sbt project configuration in \code{build.sbt}.
-You can create an Eclipse project via
+
+In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
+
+In Eclipse you can create a project via
 \begin{verbatim}
 $ sbt eclipse
 \end{verbatim}
 and import that project into Eclipse.\footnote{This function needs the Eclipse plugin for sbt.}
-In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
 
-\myref{https://code.visualstudio.com/}{Visual Studio Code} with
-\myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals/}{Scala Metals} requires
-no setup beyond installing Visual Studio Code and the Scala Metals plugin. Scala Metals knows how to
-set up everything including but not limited to code completion, Chisel source code download and
-building based on \code{build.sbt}.
+\myref{https://code.visualstudio.com/}{Visual Studio Code} is another option for a Chisel IDE. 
+The \myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals/}{Scala Metals}
+extension provides Scala support.
+On the left bar select \emph{Extensions} and search for \emph{Metals} and install \emph{Scala (Metals)}.
+To import an \code{sbt} based project open the folder with \emph{File - Open}. 
+
+%Open the project folder, e.g., t-crest/patmos/hardware, by selecting File/Open Folder. Make sure the sbt project uses at least Scala version 2.11.12
+%On the left bar select "Metals" and then select "Import build" - This may take a while
+%That's it. However, running and debugging the project still doesn't work.
+
 
 \section{Source Access and eBook Features}
 
