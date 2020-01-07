@@ -27,12 +27,14 @@ Depending on your background the prerequisites are covered in one of following c
 ### Schedule, Format, Place
 
 The course is lectured Thursday afternoons 13:00 - 17:00.
+The course is lectured in English.
 
 First part is usually lectures and second part for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
-The course is lectured in building TBD, room TBD.
+The course is lectured in building 341, room 22. The lab is in building
+308, rooms 117 and 127.
 
 ### Pensum List
 
@@ -52,7 +54,7 @@ in Building 101A.
  * [Lab Material](https://github.com/schoeberl/chisel-lab)
  * [The Chisel Book](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
  * [Chisel](https://www.chisel-lang.org/)
- * [Anonymous Inbox](https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link)
+ * [Anonymous Feedback Inbox](https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link)
 
 ## Instructor
 

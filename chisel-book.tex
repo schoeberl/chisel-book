@@ -265,7 +265,7 @@ This book and Chisel are targeting two groups of developers:
 (1) hardware designers and (2) software programmers.
 Hardware designers who are fluid in VHDL or Verilog and using other languages such as Python,
 Java, or Tcl to generate hardware can move to a single hardware construction language
-where hardware generation is part of the language and
+where hardware generation is part of the language.
 Software programmers may become interested in hardware design,
 e.g., as future chips from Intel will include programmable hardware to speed up programs.
 It is perfectly fine to use Chisel as your first hardware description language.
@@ -302,7 +302,7 @@ As prerequisites for this book, we assume basic knowledge of
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
 Chisel can be your first programming language to describe digital hardware.
-As the build process in the examples is based on \code{sbt} and \code{make}
+As the build process in the examples is based on \code{sbt} and \code{make},
 basic knowledge of the command-line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
@@ -359,7 +359,7 @@ $ sudo apt install openjdk-8-jdk git make gtkwave
 \end{verbatim}
 
 For Ubuntu, which is based on Debian, programs are usually installed from a
-Debian file (.deb). However, as of the time of this writing \code{sbt} is not
+Debian file (.deb). However, as of the time of this writing, \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
 is a little bit more involved:
 \begin{verbatim}
@@ -537,7 +537,7 @@ deal with these low-level details. Chisel provides register components, and thos
 are connected automatically to \code{clock} and \code{reset} (if needed).
 
 The next step is to set up an FPGA project file for the synthesize tool, assign the pins,
-and compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
+compile\footnote{The real process is more elaborated with following steps: synthesizing the logic,
 performing place and route, performing timing analysis, and generating a bitfile.
 However, for the purpose of this introduction example we simply call it ``compile''
 your code.} the Verilog code, and configure the FPGA with the resulting bitfile.
