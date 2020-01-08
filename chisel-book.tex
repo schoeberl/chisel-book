@@ -2073,6 +2073,82 @@ Use that signal as enable signal for the 4-bit counter.
 
 \todo{Luca: More exercises would be nice. Maybe in the future?}
 
+\chapter{Input}
+
+Input signals from the external world into our synchronous circuit are usually
+not synchronous to the clock, they are asynchronous.
+An input signal may come from a source that has not a clean transition from
+0 to 1 or 1 to 0. An example is a bouncing button or switch.
+Input signals may be noisy with spikes that could trigger a transition in our
+synchronous circuit. This chapter describes circuits that deal with such input
+conditions.
+
+The later two issues, debouncing switches and filtering noise, can also be
+solved with external, analog components. However, it is more (cost-)efficient
+to deal with those issues in the digital domain.
+
+\section{Asynchronous Input}
+
+Input signals that are not synchronous to the system clock are called
+asynchronous signals. Those signals may violate the setup and hold time
+of the input of a flip-flop. This violation may result in
+\myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{Metastability}
+of the flip-flop. The metastability may result in an output value between 0 and
+1 or it may result in oscillation. However, after some time the flip-flop will
+stabilize at 0 or 1.
+
+Metastability cannot be avoided, but we can contain it.
+A classic solution is to use two flip-flops at the input. The assumption is:
+when the first flip-flop becomes metastable, it will resolve to a stable
+state within the clock period so that the setup and hold times of the
+second flip-flop will not be violated.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/synchronizer}
+  \caption{Input synchronizer.}
+  \label{fig:synchronizer}
+\end{figure}
+
+Figure~\ref{fig:synchronizer} shows the border between the synchronous
+circuit and the external world. The input synchronizer consists of
+two flip-flops. The Chisel code for the input synchronizer is a one-liner that
+instantiates two registers.
+
+\shortlist{code/input_sync.txt}
+
+\emph{All asynchronous external signals need an input
+synchronizer.}\footnote{The exception is when the input signal is dependent
+from a synchronous output signal and the maximum propagation delay
+is know. A classic example is interfacing an asynchronous SRAM
+to a synchronous circuit, e.g., a microprocessor.}
+This also includes an external reset signal. The reset signal
+shall pass through the two flip-flops before it is used as reset signal
+for other flip-flops in the circuit.
+
+\section{Debouncing}
+
+\section{Filtering and Signal Processing}
+
+\section{Exercise}
+
+Build a complete counter that is incremented by an input button.
+Display the counter value at LEDs on an FPGA board.
+Build the complete input processing chain with: (1) input synchronizer,
+(2) sampling for debouncing, (3) majority voting to suppress noise,
+and (4) an edge detection to trigger the increment of the counter.
+
+As modern buttons and switches might not ``reliable'' bounce you can
+simulate the bouncing and the spikes by pressing the button manually and
+using a low sample frequency. Select 1 second as sample frequency,
+i.e., if the input clock runs at 100~MHz, divide by 100,000,000.
+Simulate a bouncing button by pressing several times in fast succession
+before settling to a stable press. Test your circuit without and with the
+debouncing circuit sampling with 1~Hz.
+With the majority voting you need to press between one and two seconds
+for a reliable increment of the counter. Also the release of the button is
+majority voted in is only recognized when longer than 1--2 seconds.
+
 \chapter{Finite-State Machines}
 
 A finite-state machine (FSM) is a basic building block in digital design.
