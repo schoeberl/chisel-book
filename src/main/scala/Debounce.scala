@@ -15,12 +15,15 @@ class Debounce(fac: Int = 100000000/100) extends Module {
   //- end
 
   /*
+  //- start input_fac
   val FAC = 100000000/100
+  //- end
   */
 
   val FAC = fac
 
-  val btnDeb = Reg(Bool())
+  //- start input_debounce
+  val btnDebReg = Reg(Bool())
 
   val cntReg = RegInit(0.U(32.W))
   val tick = cntReg === (FAC-1).U
@@ -28,13 +31,14 @@ class Debounce(fac: Int = 100000000/100) extends Module {
   cntReg := cntReg + 1.U
   when (tick) {
     cntReg := 0.U
-    btnDeb := btnSync
+    btnDebReg := btnSync
   }
+  //- end
 
   val shiftReg = RegInit(0.U(3.W))
   when (tick) {
     // shift left and input in LSB
-    shiftReg := Cat(shiftReg(1, 0), btnDeb)
+    shiftReg := Cat(shiftReg(1, 0), btnDebReg)
   }
   // Majority voiting
   val btnFilter = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))

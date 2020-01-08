@@ -104,8 +104,8 @@
 \fi
 
 % uncomment following for final submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 \begin{document}
 
@@ -1910,6 +1910,7 @@ to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \myref{https://en.wikipedia.org/wiki/Off-by-one_error}{off-by-one error}.
 
 \subsection{Generating Timing with Counters}
+\label{sec:gen:timing}
 
 Besides counting events, counters are often used to generate timing.
 A synchronous circuit runs with a clock with a fixed frequency.
@@ -2089,6 +2090,8 @@ to deal with those issues in the digital domain.
 
 \section{Asynchronous Input}
 
+\todo{read Dally on this topic to check}
+
 Input signals that are not synchronous to the system clock are called
 asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
@@ -2117,8 +2120,8 @@ instantiates two registers.
 
 \shortlist{code/input_sync.txt}
 
-\emph{All asynchronous external signals need an input
-synchronizer.}\footnote{The exception is when the input signal is dependent
+All asynchronous external signals need an input
+synchronizer.\footnote{The exception is when the input signal is dependent
 from a synchronous output signal and the maximum propagation delay
 is know. A classic example is interfacing an asynchronous SRAM
 to a synchronous circuit, e.g., a microprocessor.}
@@ -2128,7 +2131,67 @@ for other flip-flops in the circuit.
 
 \section{Debouncing}
 
+Switches and buttons may need some time transition between on and off.
+During the transition the switch may bounce between those two states.
+If we use such a signal without further processing we might detect more
+transition events then we intend. One solution is to use time to filter out
+this bouncing. Assuming a bouncing time of $t_{bounce}$ we will sample the
+input signals with a period $T > t_{bounce}$. We will only use the
+sampled signal further downstream.
+
+When sampling the input with this long period, we know that on a transition
+from 0 to 1 only one sample may fall into the bouncing region.
+The sample before will safely read a 0 and the sample after the bouncing
+region will safely read a 1. The sample in the bouncing region will
+either be  0 or a 1. However, this does not matter as it then belongs either
+to the still 0 samples or to the already 1 samples. The important point
+is that we have only one transition from 0 to 1.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/debounce}
+  \caption{Debouncing in input signal.}
+  \label{fig:debounce}
+\end{figure}
+
+Figure~\ref{fig:debounce} shows the sampling for the debouncing in action.
+The top signal shows the bouncing input and the arrows below the sampling
+points. Note that the distance between those sampling points need to longer
+than the bouncing time. The first sample safely samples a 0 and the last
+sample in the figure safely samples a 1. The middle sample falls into the
+bouncing time. It may either be 0 or 1. The two possible outcomes are
+shown as \code{debounce A} and \code{debounce B}. 
+Both have a single transition from 0 to 1.The only difference between these
+two outcomes is that the transition in version B is one sample period later.
+However, this is usually a non-issue.
+
+The Chisel code for the debouncing is a little bit more evolved than the synchronizer.
+We generate the sample timing with a counter that delivers a single
+cycle \code{tick} signal, as we have done in Section~\ref{sec:gen:timing}.
+
+\shortlist{code/input_fac.txt}
+\shortlist{code/input_debounce.txt}
+
+First we need to decide on the sample frequency. The above example
+assumes a 100~MHz clock and result in a sample frequency of 100~Hz
+(assuming that the bouncing time is below 10~ms). The maximum
+counter value is \code{FAC}, the division factor.
+We define a register \code{btnDebReg} for the debounced signal,
+without a reset value. The register \code{cntReg} serves
+as counter and the \code{tick} signal is true when the counter has
+reached the maximum value. In that case the \code{when} condition
+is \code{true} and: (1) the counter is reset to 0 and (2) the debounce
+register stores the input sample. In our example the signal is named
+\code{btnSync} as it is the output from the input synchronizer shown
+in the former section.
+
+The debouncing circuit comes after the synchronizer circuit.
+First we need to synchronize in the asynchronous signal, then
+we can further process it in the digital domain.
+
 \section{Filtering and Signal Processing}
+
+\section{Combining the Input Processing with Functions}
 
 \section{Exercise}
 
@@ -2147,7 +2210,7 @@ before settling to a stable press. Test your circuit without and with the
 debouncing circuit sampling with 1~Hz.
 With the majority voting you need to press between one and two seconds
 for a reliable increment of the counter. Also the release of the button is
-majority voted in is only recognized when longer than 1--2 seconds.
+majority voted in is only recognized when it is longer than 1--2 seconds.
 
 \chapter{Finite-State Machines}
 
