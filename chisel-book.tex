@@ -1466,6 +1466,7 @@ We can also connect the port of a submodule with the parent module.
 
 
 \section{Lightweight Components with Functions}
+\label{sec:functions}
 
 Modules are the general way to structure your hardware description.
 However, there is some boilerplate code when declaring a module and when instantiating and
@@ -2074,7 +2075,7 @@ Use that signal as enable signal for the 4-bit counter.
 
 \todo{Luca: More exercises would be nice. Maybe in the future?}
 
-\chapter{Input}
+\chapter{Input Processing}
 
 Input signals from the external world into our synchronous circuit are usually
 not synchronous to the clock, they are asynchronous.
@@ -2123,18 +2124,18 @@ instantiates two registers.
 All asynchronous external signals need an input
 synchronizer.\footnote{The exception is when the input signal is dependent
 from a synchronous output signal and the maximum propagation delay
-is know. A classic example is interfacing an asynchronous SRAM
-to a synchronous circuit, e.g., a microprocessor.}
+is known. A classic example is the interfacing an asynchronous SRAM
+to a synchronous circuit, e.g., by a microprocessor.}
 This also includes an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as reset signal
 for other flip-flops in the circuit.
 
 \section{Debouncing}
 
-Switches and buttons may need some time transition between on and off.
+Switches and buttons may need some time to transition between on and off.
 During the transition the switch may bounce between those two states.
 If we use such a signal without further processing we might detect more
-transition events then we intend. One solution is to use time to filter out
+transition events then we want to. One solution is to use time to filter out
 this bouncing. Assuming a bouncing time of $t_{bounce}$ we will sample the
 input signals with a period $T > t_{bounce}$. We will only use the
 sampled signal further downstream.
@@ -2150,22 +2151,23 @@ is that we have only one transition from 0 to 1.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/debounce}
-  \caption{Debouncing in input signal.}
+  \caption{Debouncing an input signal.}
   \label{fig:debounce}
 \end{figure}
 
 Figure~\ref{fig:debounce} shows the sampling for the debouncing in action.
-The top signal shows the bouncing input and the arrows below the sampling
-points. Note that the distance between those sampling points need to longer
-than the bouncing time. The first sample safely samples a 0 and the last
+The top signal shows the bouncing input and the arrows below show the sampling
+points. The distance between those sampling points needs to be longer
+than the maximum bouncing time. The first sample safely samples a 0 and the last
 sample in the figure safely samples a 1. The middle sample falls into the
 bouncing time. It may either be 0 or 1. The two possible outcomes are
 shown as \code{debounce A} and \code{debounce B}. 
-Both have a single transition from 0 to 1.The only difference between these
+Both have a single transition from 0 to 1. The only difference between these
 two outcomes is that the transition in version B is one sample period later.
 However, this is usually a non-issue.
 
-The Chisel code for the debouncing is a little bit more evolved than the synchronizer.
+The Chisel code for the debouncing is a little bit more evolved than the
+code for the synchronizer.
 We generate the sample timing with a counter that delivers a single
 cycle \code{tick} signal, as we have done in Section~\ref{sec:gen:timing}.
 
@@ -2173,15 +2175,15 @@ cycle \code{tick} signal, as we have done in Section~\ref{sec:gen:timing}.
 \shortlist{code/input_debounce.txt}
 
 First we need to decide on the sample frequency. The above example
-assumes a 100~MHz clock and result in a sample frequency of 100~Hz
+assumes a 100~MHz clock and results in a sample frequency of 100~Hz
 (assuming that the bouncing time is below 10~ms). The maximum
 counter value is \code{FAC}, the division factor.
 We define a register \code{btnDebReg} for the debounced signal,
 without a reset value. The register \code{cntReg} serves
 as counter and the \code{tick} signal is true when the counter has
-reached the maximum value. In that case the \code{when} condition
-is \code{true} and: (1) the counter is reset to 0 and (2) the debounce
-register stores the input sample. In our example the signal is named
+reached the maximum value. In that case, the \code{when} condition
+is \code{true} and (1) the counter is reset to 0 and (2) the debounce
+register stores the input sample. In our example the input signal is named
 \code{btnSync} as it is the output from the input synchronizer shown
 in the former section.
 
@@ -2189,28 +2191,77 @@ The debouncing circuit comes after the synchronizer circuit.
 First we need to synchronize in the asynchronous signal, then
 we can further process it in the digital domain.
 
-\section{Filtering and Signal Processing}
+\section{Filtering of the Input Signal}
+
+Sometimes our input signal may be noisy, maybe containing spikes
+that we might sample unintentionally with the input synchronizer and
+debouncing unit.
+One option to filter those input spikes is to use a majority voting
+circuit. In the simplest case we take three samples and perform
+the majority vote. The \myref{https://en.wikipedia.org/wiki/Majority_function}{majority function},
+which is related to the median function, results in the value of the majority.
+In our case where we use sampling for the debouncing we perform the
+voting on the sampled signal.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/majority}
+  \caption{Majority voting on the sampled input signal.}
+  \label{fig:majority}
+\end{figure}
+
+Figure~\ref{fig:majority} shows the circuit of the majority voter.
+It consists of a 3-bit shift register enabled by the \code{tick} signal
+we used for the debouncing sampling. The output of the three registers
+is feed into the majority voting circuit. Any signal change shorter than the
+sample period is filtered by the majority voting function.
+
+The following Chisel code shows the 3-bit shift register, enabled by the
+\code{tick} signal and the voting function, resulting in the signal \code{btnClean}.
+
+Note, that a majority voting is very seldom needed.
+
+\shortlist{code/input_majority.txt}
+
+To use the output of our carefully processed input signal, we first detect
+the rising edge with a \code{RegNext} delay element and then use this
+signal to enable the counter to increment.
+
+\shortlist{code/input_usage.txt}
 
 \section{Combining the Input Processing with Functions}
 
+To summarize the input processing we show some more Chisel code.
+As the presented circuits might be tiny, but reusable building blocks, we encapsulate
+them in functions. Section~\ref{sec:functions} showed how we can abstract
+small building blocks in lightweight Chisel functions instead of full modules.
+Those Chisel functions create hardware instances, e.g., the function
+\code{sync} creates two flip-flops connected to the input and to each other.
+The function returns the output of the second flip-flop.
+If useful, those functions can be elevated to some utility class object.
+
+\longlist{code/input_func.txt}{Summarizing input processing with functions.}{lst:input:func}
+
+
+
 \section{Exercise}
 
-Build a complete counter that is incremented by an input button.
-Display the counter value at LEDs on an FPGA board.
-Build the complete input processing chain with: (1) input synchronizer,
-(2) sampling for debouncing, (3) majority voting to suppress noise,
-and (4) an edge detection to trigger the increment of the counter.
+Build a counter that is incremented by an input button.
+Display the counter value in binary with the LEDs on an FPGA board.
+Build the complete input processing chain with: (1) an input synchronizer,
+(2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
+and (4) an edge detection circuit to trigger the increment of the counter.
 
-As modern buttons and switches might not ``reliable'' bounce you can
-simulate the bouncing and the spikes by pressing the button manually and
-using a low sample frequency. Select 1 second as sample frequency,
-i.e., if the input clock runs at 100~MHz, divide by 100,000,000.
+As modern buttons and switches might not ``reliable'' bounce, you can
+simulate the bouncing and the spikes by pressing the button manually in a fast succession
+and using a low sample frequency. Select, e.g., one second as sample frequency,
+i.e., if the input clock runs at 100~MHz, divide it by 100,000,000.
 Simulate a bouncing button by pressing several times in fast succession
 before settling to a stable press. Test your circuit without and with the
-debouncing circuit sampling with 1~Hz.
+debouncing circuit sampling at 1~Hz.
 With the majority voting you need to press between one and two seconds
 for a reliable increment of the counter. Also the release of the button is
-majority voted in is only recognized when it is longer than 1--2 seconds.
+majority voted. Therefore, it is only recognized when the release is longer than 1--2 seconds.
 
 \chapter{Finite-State Machines}
 

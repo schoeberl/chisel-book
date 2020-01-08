@@ -35,26 +35,28 @@ class Debounce(fac: Int = 100000000/100) extends Module {
   }
   //- end
 
+  //- start input_majority
   val shiftReg = RegInit(0.U(3.W))
   when (tick) {
     // shift left and input in LSB
     shiftReg := Cat(shiftReg(1, 0), btnDebReg)
   }
   // Majority voiting
-  val btnFilter = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))
+  val btnClean = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))
+  //- end
 
-  val btnClean = btnFilter
-
+  //- start input_usage
   val risingEdge = btnClean & !RegNext(btnClean)
 
-  // Use the rising edge of the debounced button
-  // to count up
-  val r1 = RegInit(0.U(8.W))
+  // Use the rising edge of the debounced and
+  // filtered button to count up
+  val reg = RegInit(0.U(8.W))
   when (risingEdge) {
-    r1 := r1 + 1.U
+    reg := reg + 1.U
   }
+  //- end
 
-  io.led := r1
+  io.led := reg
 }
 
 class DebounceFunc(fac: Int = 100000000/100) extends Module {
@@ -66,6 +68,7 @@ class DebounceFunc(fac: Int = 100000000/100) extends Module {
 
   val btn = io.btnU
 
+  //- start input_func
   def sync(v: Bool) = RegNext(RegNext(v))
 
   def rising(v: Bool) = v & !RegNext(v)
@@ -87,32 +90,23 @@ class DebounceFunc(fac: Int = 100000000/100) extends Module {
 
   val btnSync = sync(btn)
 
-  /*
-  val FAC = 100000000/100
-  */
-
-  val FAC = fac
-  val tick = tickGen(FAC)
-
+  val tick = tickGen(fac)
   val btnDeb = Reg(Bool())
   when (tick) {
     btnDeb := btnSync
   }
 
-  val btnFilter = filter(btnDeb, tick)
-
-  val btnClean = btnFilter
-
+  val btnClean = filter(btnDeb, tick)
   val risingEdge = rising(btnClean)
 
-  // Use the rising edge of the debounced button
-  // to count up
-  val r1 = RegInit(0.U(8.W))
+  // Use the rising edge of the debounced
+  // and filtered button for the counter
+  val reg = RegInit(0.U(8.W))
   when (risingEdge) {
-    r1 := r1 + 1.U
+    reg := reg + 1.U
   }
-
-  io.led := r1
+  //- end
+  io.led := reg
 }
 
 object Debounce extends App {
