@@ -43,6 +43,8 @@
 \usepackage{cite}
 \usepackage{dirtree}
 \usepackage{pdfpages}
+\usepackage{makeidx}
+%\usepackage{showidx} % for index debugging
 % For alignment on tables
 \usepackage{dcolumn}
 \newcommand{\cc}[1]{\multicolumn{1}{c}{#1}}
@@ -104,8 +106,10 @@
 \fi
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
+
+\makeindex
 
 \begin{document}
 
@@ -422,6 +426,8 @@ solve bigger problems!
 
 \longlist{code/hello.txt}{A hardware Hello World in Chisel}{lst:chisel:hello}
 
+%\index{Hello World} The index on this page does not work, it references to a intro
+% page. Strange!
 Listing~\ref{lst:chisel:hello} shows a blinking LED, described in Chisel.
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
@@ -478,6 +484,8 @@ The code compiles with a recent version of Chisel, and many examples also includ
 We collect larger Chisel examples in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
 You can also provide feedback or comments for improvements by filing an issue on GitHub
 or sending a plain, old school email.
+
+\index{Chisel!Examples}
 
 This book is freely available as a PDF eBook and in classical printed form.
 The eBook version features links to further resources
@@ -588,6 +596,8 @@ Chisel uses \myref{https://en.wikipedia.org/wiki/Two\%27s\_complement}{two's com
 as signed integer representation.
 Here is the definition for different types, an 8-bit \code{Bits}, an 8-bit unsigned integer, and a 10-bit
 signed integer:
+\index{Integer!unsigned}
+\index{Integer!signed}
 
 \shortlist{code/types.txt}
 
@@ -597,9 +607,13 @@ which is used for the definition of the \code{Bits} vector:
 
 \shortlist{code/n_w.txt}
 
+\index{Integer!width}
+
+
 \noindent Constants can be defined by using a Scala integer and converting it to a Chisel type:
 
 \shortlist{code/constants.txt}
+\index{Integer!constant}
 
 \noindent Constants can also be defined with a width, by using the Chisel width type:
 
@@ -631,6 +645,7 @@ The following code shows the definition of type \code{Bool} and the definition o
 and \code{false} to Chisel \code{Bool} constants.
 
 \shortlist{code/bool.txt}
+\index{Bool}
 
 
 \section{Combinational Circuits}
@@ -661,9 +676,13 @@ In this example, we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
 The standard logic operations in Chisel are:
 
+\index{logical operations}
+
 \shortlist{code/bool_ops.txt}
 
 \noindent The arithmetic operations use the standard operators:
+
+\index{arithmetic operations}
 
 \shortlist{code/arith_ops.txt}
 
@@ -679,12 +698,14 @@ value to the wire with the \code{:=} update operator.
 
 A single bit can be extracted as follows:
 \shortlist{code/single_bit.txt}
+\index{Bit!extraction}
 
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
 \noindent Bit fields are concatenated with \code{Cat}.
 \shortlist{code/concat.txt}
+\index{Bit!concatenation}
 
 Table~\ref{tab:operators} shows the full list of operators
 (see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
@@ -735,10 +756,13 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \bottomrule 
   \end{tabular} 
   \caption{Chisel defined hardware functions, invoked on \code{v}.}
-\end{table}                                            
-    
+\end{table}
+
+\index{Bit!reduction}
 
 \subsection{Multiplexer}
+
+\index{Multiplexer}
 
 A \myref{https://en.wikipedia.org/wiki/Multiplexer}{multiplexer} is a circuit that selects between alternatives.
 In the most basic form, it selects between two alternatives. Figure~\ref{fig:mux} shows
@@ -773,6 +797,7 @@ also called register, which is described next.
 
 \section{Registers}
 
+\index{Register}
 Chisel provides a register, which is a collection of
 \myref{https://en.wikipedia.org/wiki/Flip-flop\_(electronics)\#D\_flip-flop}{D flip-flops}.
 The register is implicitly connected to a global clock and is updated on the rising edge.
@@ -802,11 +827,12 @@ a common practice is to postfix register names with \code{Reg}.
 Another common practice, coming from Java and Scala, is to use
 \myref{https://en.wikipedia.org/wiki/Camel_case}{camelCase} for
 identifier consisting of several words. The convention is to start
-functions and variables with a lower case and classes (types) with
-an upper case.
+functions and variables with a lower case letter and classes (types) with
+an upper case letter.
 
 \subsection{Counting}
 
+\index{Counting}
 Counting is a fundamental operation in digital systems. On might count events.
 However, more often counting is used to define a time interval. Counting the
 clock cycles and triggering an action when the time interval has expired.
@@ -820,11 +846,16 @@ till 9 and wraps around to 0 when reaching 9.
 
 \section{Structure with Bundle and Vec}
 
+\index{Structure}
+\index{Array}
+\index{Collection}
+\index{Vector}
+\index{Bundle}
+
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
 signals of different types and (2) a \code{Vec} to represent an indexable collection of signals
 of the same type.
 \code{Bundle}s and \code{Vec}s can be arbitrarily nested.
-
 
 A Chisel bundle groups several signals. The entire bundle can be referenced
 as a whole, or individual fields can be accessed by their name.
@@ -965,6 +996,8 @@ version of Scala and the Chisel libraries.
 
 \section{Building your Project with sbt}
 
+\index{sbt}
+
 The Scala library that represents Chisel and the Chisel testers are automatically
 downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
@@ -976,6 +1009,8 @@ Maybe sometimes it is also good to be able to write hardware code and test it wi
 For example, it is cool to do hardware design on a plane.
 
 \subsection{Source Organization}
+
+\index{Source organization}
 
 \code{sbt} inherits the source convention from the \myref{https://maven.apache.org/}{Maven}
 build automation tool. Maven also organizes repositories of open-source Java libraries.\footnote{That is
@@ -1072,6 +1107,8 @@ with \code{sbt}, we can continue with a simple testing framework.
     
 \section{Testing with Chisel}
 
+\index{Testing}
+
 Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
@@ -1158,6 +1195,8 @@ However, in Chisel, the full power of Scala is available to write testers.
 \todo{Have a link to the not yet written section for: We will show these possibilities later.}
 
 \subsection{Using ScalaTest}
+
+\index{ScalaTest}
 
 \myref{http://www.scalatest.org/}{ScalaTest} is a testing tool for Scala (and Java),
 which we can use to run Chisel testers.
@@ -1312,6 +1351,10 @@ Xilinx Spartan).
 
 \chapter{Components}
 
+\index{Component}
+\index{Module}
+\index{Ports}
+
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/components}
@@ -1342,6 +1385,8 @@ of Chisel code and (2) they provide a library of components ready to be reused
 in your design.
 
 \section{Components in Chisel are Modules}
+
+\index{IO interface}
 
 Hardware components are called modules in Chisel. Each module extends
 the class \code{Module} and contains a field \code{io} for the interface.
@@ -1398,7 +1443,7 @@ components, such an adder, and huge components, such as a full microprocessor,
 
 Beginners in hardware design often start with tiny components.
 The problem is that digital design books use tiny components to show the principles.
-But the sizes of the examples (in those books, and also in this book) is small
+But the sizes of the examples (in those books, and also in this book) are small
 to fit into a page and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
@@ -1414,6 +1459,8 @@ way to describe them as functions that return hardware.
 One of the central components for circuits that compute, e.g., a microprocessor, is an
 \myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic-logic unit},
 or ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
+
+\index{ALU}
 
 \begin{figure}
   \centering
@@ -1445,6 +1492,8 @@ To use this utility function, we need to import another Chisel package:
 
 \section{Bulk Connections}
 
+\index{Bulk connection}
+
 For connecting components with multiple IO ports, Chisel provides the
 bulk connection operator \code{<>}. This operator connects parts of bundles
 in both directions. Chisel uses the names of the leave fields for the connection.
@@ -1468,6 +1517,8 @@ We can also connect the port of a submodule with the parent module.
 \section{Lightweight Components with Functions}
 \label{sec:functions}
 
+\index{Function components}
+
 Modules are the general way to structure your hardware description.
 However, there is some boilerplate code when declaring a module and when instantiating and
 connecting it.
@@ -1485,7 +1536,7 @@ As a simple example, we generate an adder:
 during elaboration, but create two adders (hardware instances). The adder is an artificial example
 to keep it simple. Chisel has already an adder generation function, like \code{+(that: UInt)}.
 
-Functions as lightweight hardware generators can also contain state (including a register).
+Functions, as lightweight hardware generators, can also contain state (including a register).
 Following example returns a one clock cycle delay element (a register).
 If a function has just a single statement, we can write it in one line and omit the curly
 braces ({}).
@@ -1514,6 +1565,8 @@ We let the synthesize tool extract and minimize the Boolean equations.
 Two basic circuits, best described in a table form, are a decoder and an encoder.
 
 \section{Combinational Circuits}
+
+\index{Combinational circuit}
 
 Before describing some standard combinational building blocks, we will explore
 how combinational circuits can be expressed in Chisel.
@@ -1554,6 +1607,11 @@ value assignment:
 
 \shortlist{code/comb_otherwise.txt}
 
+\index{when}
+\index{if/elseif/else}
+\index{otherwise}
+\index{elsewhen}
+
 Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code{.elsewhen}:
 
 \shortlist{code/comb_elsewhen.txt}
@@ -1577,6 +1635,8 @@ Those Scala conditionals have their use in Chisel when we write circuit generato
 which take parameters to conditionally generate \emph{different} hardware instances.
 
 \section{Decoder}
+
+\index{Decoder}
 
 A \myref{https://en.wikipedia.org/wiki/Binary_decoder}{decoder}
 converts a binary number of $n$ bits to an $m$-bit signal, where $m \leq 2^n$.
@@ -1616,6 +1676,8 @@ Therefore, we need to include the elements of the package \code{chisel.util}.
 
 \noindent The following code introduces the \code{switch} statement of Chisel to describe a decoder:
 
+\index{switch}
+
 \shortlist{code/encdec_dec.txt}
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
@@ -1650,6 +1712,7 @@ select signals, e.g., different IO devices connected to a microprocessor.
 
 
 \section{Encoder}
+\index{Encoder}
 
 An \myref{https://en.wikipedia.org/wiki/Encoder_(digital)}{encoder}
 converts a one-hot encoded input signal into a binary encoded output signal.
@@ -1714,6 +1777,9 @@ the so-called registers.
 
 \section{Registers}
 
+\index{Register}
+\index{Flip-flop}
+
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/register}
@@ -1726,6 +1792,7 @@ of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D 
 A D flip-flop captures the value of its input at the rising edge of the clock and stores
 it at its output. Alternatively, in other words: the register updates its output with the value of the input on the rising edge of the clock.
 
+\index{Clock}
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
 \code{D} and an output \code{Q}. Each register also contains an input for a \code{clock} signal.
 As this global clock signal is connected to all registers in a synchronous circuit, it is usually
@@ -1756,6 +1823,8 @@ also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
 Variable names start with lowercase and classes start with upper case.
 
+\index{Reset}
+\index{Initialization}
 A register can also be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
 implicit in Chisel. We supply the reset value, e.g., zero, as a parameter to the register
 constructor \code{RegInit}. The input for the register is connected with a Chisel
@@ -1785,6 +1854,9 @@ resources for the multiplexer.
 Sequential circuits change their value over time. Therefore, their behavior can be described
 by a diagram showing the signals over time. Such a diagram is called a waveform or
 \myref{https://en.wikipedia.org/wiki/Digital_timing_diagram}{timing diagram}.
+
+\index{Timing diagram}
+\index{Waveform diagram}
 
 \todo{from Luca: Do readers know about timing diagrams?}
 
@@ -1816,6 +1888,7 @@ is \code{true} (high), the register captures the input; otherwise, it keeps its 
 The enable can be implemented, similar to the synchronous reset, with
 a multiplexer at the input of the register. One input to the multiplexer is the feedback of the
 output of the register.
+\index{Register!with enable}
 
 \begin{figure}
   \centering
@@ -1859,6 +1932,7 @@ good use and build more interesting sequential circuits.
 
 \section{Counters}
 \label{sec:counter}
+\index{Counter}
 
 \begin{figure}
   \centering
@@ -1913,6 +1987,8 @@ to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \subsection{Generating Timing with Counters}
 \label{sec:gen:timing}
 
+\index{Timing generation}
+
 Besides counting events, counters are often used to generate timing.
 A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
@@ -1944,6 +2020,7 @@ every \code{N} clock cycles.
 
 \shortlist{code/sequ_tick_gen.txt}
 
+\index{Tick}
 \noindent This logical timing of one tick every $n$ clock cycles can then be used
 to advance other parts of our circuit with this slower, logical clock.
 In the following code, we use just another counter that increments by \code{1}
@@ -1951,6 +2028,7 @@ every $n$ clock cycles.
 
 \shortlist{code/sequ_tick_counter.txt}
 
+\index{Logical clock}
 Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
 generating the baud rate for a serial bus, generating signals for 7-segment
 display multiplexing, and subsampling input values for debouncing of buttons
@@ -1983,6 +2061,9 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 \shortlist{code/nerd_counter.txt}
 
 \section{Memory}
+\index{Memory}
+\index{RAM}
+\index{SRAM}
 
 A memory can be built out of a collection of registers, in Chisel a \code{Reg} of a \code{Vec}.
 However, this is expensive in hardware, and larger memory structures are built
@@ -1993,6 +2074,7 @@ Those on-chip memory blocks can be combined for larger memories.
 Memories in an FPGA usually have one read and one write port, or
 two ports where the direction can be switched.
 
+\index{Synchronous memory}
 FPGAs (and also ASICs) usually support synchronous memories.
 Synchronous memories have registers on their inputs (read and write address, write data,
 and write enable). That means the read data is available one clock
@@ -2036,6 +2118,7 @@ Chisel documents that the read data is undefined.
   \label{fig:memory:forwarding}
 \end{figure}
 
+\index{Data forwarding}
 If we want to read out the newly written value, we can build a forwarding
 circuit that detects that the addresses are equal and \emph{forwards} the
 write data. Figure~\ref{fig:memory:forwarding} shows the memory with
@@ -2090,6 +2173,9 @@ solved with external, analog components. However, it is more (cost-)efficient
 to deal with those issues in the digital domain.
 
 \section{Asynchronous Input}
+\index{Asynchronous Input}
+\index{Metastability}
+
 
 \todo{read Dally on this topic to check for correct wording and facts.}
 
@@ -2131,6 +2217,7 @@ shall pass through the two flip-flops before it is used as the reset signal
 for other flip-flops in the circuit.
 
 \section{Debouncing}
+\index{Debouncing}
 
 Switches and buttons may need some time to transition between on and off.
 During the transition, the switch may bounce between those two states.
@@ -2193,6 +2280,8 @@ we can further process it in the digital domain.
 
 \section{Filtering of the Input Signal}
 
+\index{Majority voting}
+
 Sometimes our input signal may be noisy, maybe containing spikes
 that we might sample unintentionally with the input synchronizer and
 debouncing unit.
@@ -2202,6 +2291,7 @@ the majority vote. The \myref{https://en.wikipedia.org/wiki/Majority_function}{m
 which is related to the median function, results in the value of the majority.
 In our case, where we use sampling for the debouncing, we perform the
 majority voting on the sampled signal.
+Majority voting ensures that the signal is stable for longer than the sampling period.
 
 \begin{figure}
   \centering
@@ -2226,6 +2316,8 @@ Note, that a majority voting is very seldom needed.
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean} to enable the counter to increment.
+
+\index{Edge detection}
 
 \shortlist{code/input_usage.txt}
 
@@ -2265,6 +2357,9 @@ majority voted. Therefore, the circuit only recognizes the release when it is
 longer than 1--2 seconds.
 
 \chapter{Finite-State Machines}
+\index{Finite-state machine}
+\index{FSM}
+\index{Synchronous sequential circuit}
 
 A finite-state machine (FSM) is a basic building block in digital design.
 An FSM can be described as a set of \emph{states} and conditional (guarded)
@@ -2298,6 +2393,8 @@ On the next clock tick, \code{state} becomes \code{next\_state}.
 The output logic computes the output (\code{out}). As the output depends on the current
 state only, this state machine is called a
 \myref{https://en.wikipedia.org/wiki/Moore_machine}{Moore machine}.
+\index{Finite-State Machine!Moore}
+
 
 A \myref{https://en.wikipedia.org/wiki/State_diagram}{state diagram}
 describes the behavior of such an FSM visually.
@@ -2307,6 +2404,7 @@ State transitions are shown with arrows between states.
 The guard (or condition) when this transition is taken is drawn as a label
 for the arrow.
 
+\index{State diagram}
 Figure~\ref{fig:diag-moore} shows the state diagram of a simple example FSM.
 The FSM has three states: \emph{green}, \emph{orange}, and \emph{red},
 indicating a level of alarm. The FSM starts at the \emph{green} level.
@@ -2441,6 +2539,7 @@ input with the current state.
 When the output depends also on the input, i.e., there is a combinational path between
 the input of the FSM and the output, this is called a
 \myref{https://en.wikipedia.org/wiki/Mealy_machine}{Mealy machine}.
+\index{Finite-State Machine!Mealy}
 
 \begin{figure}
   \centering
@@ -2578,6 +2677,7 @@ back to green for the priority road.
 Martin: but this is shown at the Chisel homepage without an FSM.}
 
 \chapter{Communicating State Machines}
+\index{Communicating state machines}
 
 A problem is often too complex to describe it with a single FSM.
 In that case, the problem can be divided into two or more smaller and simpler FSMs.
@@ -2680,6 +2780,8 @@ The next section describes the ready-valid interface for flow control of
 unidirectional data exchange.
 
 \section{State Machine with Datapath}
+\index{State machine with datapath}
+\index{FSMD}
 
 One typical example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite state machine
@@ -2709,6 +2811,7 @@ When data is available, valid is asserted. When a receiver can accept data it as
 When both signals are asserted the transfer takes place. The handshake signals are connected
 to the FSM. The FSM is connected with the datapath with control signals towards the datapath
 and with status signals from the datapath.
+\index{Datapath}
 
 \begin{figure}
   \centering
@@ -2771,6 +2874,7 @@ Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 \longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 \section{Ready-Valid Interface}
+\index{Ready-valid interface}
 
 \todo{Luca: This comes very sudden after all this FSM reading.
 Maybe give some more context and a timing diagram.}
@@ -2802,6 +2906,7 @@ allowed to depend combinational on the other signal.
 \todo{Read and cite AXI}
 
 \chapter{Hardware Generators}
+\index{Hardware generators}
 
 The strength of Chisel is that it allows us to write so-called hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
@@ -2812,6 +2917,7 @@ construction. Therefore, we can write our hardware generators in the same
 language and execute them as part of the Chisel circuit generation.
 
 \section{Configure with Parameters}
+\index{Parameters}
 
 Chisel components and functions can be configured with parameters.
 Parameters can be as simple as an integer constant, but can also be a Chisel
@@ -2833,6 +2939,7 @@ passed into the constructor that can be used in the IO bundle.
 \shortlist{code/use_param_adder.txt}
 
 \subsection{Functions with Type Parameters}
+\index{Type parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
 hardware generators. A very flexible configuration is the usage of types.
@@ -2939,6 +3046,8 @@ a \code{Payload} as a parameter:
 
 
 \section{Generate Combinational Logic}
+\index{Logic generation}
+\index{Logic table generation}
 
 In Chisel, we can easily generate logic by creating a logic table with
 a Chisel \code{Vec} from a Scala \code{Array}.
@@ -2962,6 +3071,7 @@ from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-
 The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
 of Chisel types.
 
+\index{File reading}
 
 \longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
 
@@ -2972,6 +3082,8 @@ to generate code for a microprocessor written in Chisel. All those functions
 are in the same code base (same language) and can be executed during
 hardware generation.
 
+\index{Binary-coded decimal}
+\index{BCD}
 A classic example is the conversion of a binary number
 into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
 (BCD) representation. BCD is used to represent a number in a decimal
@@ -2992,6 +3104,9 @@ Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversio
 
 \section{Use Inheritance}
 \label{sec:inheritance}
+
+\index{Inheritance}
+\index{Object-oriented}
 
 Chisel is an object-oriented language. A hardware component, the Chisel \code{Module}
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
@@ -3056,6 +3171,11 @@ which itself may use the FIFO buffer.
 \section{FIFO Buffer}
 \label{sec:fifo}
 
+\index{FIFO}
+\index{FIFO buffer}
+\index{First-in, first-out buffer}
+
+
 We can decouple a write (sender) and a reader (receiver) by a buffer
 between the writer and reader.
 A common buffer is a first-in, first-out
@@ -3117,6 +3237,7 @@ the writer and the reader.
 
 \longlist{code/bubble_fifo_register.txt}{A single stage of the bubble FIFO.}{lst:fifo:stage}
 
+\index{Bubble FIFO}
 Listing~\ref{lst:fifo} shows the complete FIFO. The complete FIFO has
 the same IO interface as the individual FIFO buffers.
 \code{BubbleFifo} has as parameters the \code{size} of the data
@@ -3146,6 +3267,9 @@ the latency from the input to the output is at least the number of buffers.
 I will present other possible implementations of FIFOs in Section~\ref{sec:more:fifo}.
 
 \section{A Serial Port}
+
+\index{Serial port}
+\index{UART}
 
 A serial port (also called
 \myref{https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter}{UART}
@@ -3308,6 +3432,9 @@ of read-valid interfaces.
  The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
 Therefore, enqueue port of the FIFO needs to flip the signal directions.
 
+\index{DecoupledIO}
+\index{Ready-valid interface}
+
 \shortlist{code/fifo_io.txt}
 
 With the abstract base class and an interface we can specialize for different
@@ -3338,6 +3465,8 @@ However, this introduces a combinational path from the consumer handshake
 to the producer handshake, which violates the semantics of the ready-valid protocol.
 
 \subsection{Double Buffer FIFO}
+
+\index{Double buffer FIFO}
 
 One solution is stay \code{ready} even when the buffer register if full.
 To be able to accept a data word from the producer, when the consumer is not
@@ -3373,10 +3502,13 @@ wondering that we built hardware queues out of many small individual small buffe
 elements, all executing in parallel and handshaking with upstream and downstream
 elements. For small buffers this is probably the most efficient implementation.
 
+\index{Circular buffer}
+\index{Circular buffer!read pointer}
+\index{Circular buffer!write pointer}
 A queue in software is usually used by a sequential code in a single thread.
 Or as a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
-\myref{https://en.wikipedia.org/wiki/Circular_buffer}[circular buffer].
+\myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 Two pointers point into read and write positions in a memory set aside
 for the queue. When the pointers reach the end of the memory, the
 are set back to the begin of that memory. The difference between the two
@@ -3403,6 +3535,7 @@ possible next value (increment or 0 on wrap around), we return this value from
 the \code{counter} function as well. In Scala we can return a so called \emph{tuple},
 which is simply a container to hold more than one value. The syntax to create
 such a duple is simply wrapping the comma separated values in parentheses:
+\index{tuple}
 
 \begin{chisel}
   val t = (v1, v2)
@@ -3582,6 +3715,9 @@ Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 
 \chapter{Design of a Processor}
 
+\index{Processor}
+\index{Leros}
+
 As one of the last chapters in this book, we present a medium size project:
 the design, simulation, and testing of a microprocessor.
 To keep this project manageable, we design a simple accumulator machine.
@@ -3639,6 +3775,9 @@ scall & scall A & System call (simulation hook) \\
 \end{table}
 
 \section{Start with an ALU}
+
+\index{ALU}
+\index{Processor!ALU}
 
 A central component of a processor is the
 \myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic logic unit}, or ALU for short.
@@ -3698,6 +3837,8 @@ test Alu Success: 70567 tests passed in 70572 cycles taking
 
 \section{Decoding Instructions}
 
+\index{Processor!instruction decode}
+
 From the ALU, we work backward and implement the instruction decoder.
 However, first, we define the instruction encoding in its own Scala class and
 a \emph{shared} package. We want to share the encoding constants between
@@ -3725,6 +3866,8 @@ instruction that represents the opcode (in Leros for most instructions the upper
 \shortlist{code/leros_decode.txt}
 
 \section{Assembling Instructions}
+
+\index{Assembler}
 
 To write programs for Leros we need an assembler. However, for the very first
 test, we can hard code a few instructions, and put them into a Scala array,
@@ -3780,6 +3923,8 @@ how to build the Leros processor and the needed tools has convinced you that pro
 design and implementation is no magic art, but the engineering that can be very joyful.
 
 \chapter{Contributing to Chisel}
+
+\index{Chisel!Contribution}
 
 Chisel is an open-source project under constant development and improvement.
 Therefore, you can also contribute to the project. Here we describe how to
@@ -3931,6 +4076,8 @@ also contains projects for various popular FPGA boards:
 
 \chapter{Chisel Projects}
 
+\index{Chisel!Examples}
+
 Chisel is not (yet) used in many projects. Therefore, open-source Chisel code
 to learn the language and the coding style is rare. Here we list several projects
 we are aware of that use Chisel and are in open source.
@@ -3986,6 +4133,8 @@ If you know an open-source project that uses Chisel, please drop me a note
 so I can include it in a future edition of the book.
 
 \chapter{Chisel 2}
+
+\index{Chisel 2}
 
 This book covers version 3 of Chisel. Moreover, Chisel 3 is recommended for new designs.
 However, there is still Chisel 2 code out in the wild, which has not yet been converted
@@ -4062,6 +4211,8 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
 
 \bibliographystyle{plain}
 \bibliography{chisel}
+
+\printindex
 
 \end{document}
 

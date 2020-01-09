@@ -14,6 +14,7 @@ fig:
 book:
 	pdflatex $(DOC)
 	bibtex $(DOC)
+	makeindex $(DOC)
 	pdflatex $(DOC)
 	pdflatex $(DOC)
 
