@@ -2162,7 +2162,7 @@ Use that signal as enable signal for the 4-bit counter.
 
 Input signals from the external world into our synchronous circuit are usually
 not synchronous to the clock; they are asynchronous.
-An input signal may come from a source that has not a clean transition from
+An input signal may come from a source that does not have a clean transition from
 0 to 1 or 1 to 0. An example is a bouncing button or switch.
 Input signals may be noisy with spikes that could trigger a transition in our
 synchronous circuit. This chapter describes circuits that deal with such input
@@ -2214,7 +2214,8 @@ A classic example is the interfacing an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
-for other flip-flops in the circuit.
+for other flip-flops in the circuit. Concrete the de-assertion of the reset need
+to be synchronous to the clock.
 
 \section{Debouncing}
 \index{Debouncing}
@@ -2222,8 +2223,8 @@ for other flip-flops in the circuit.
 Switches and buttons may need some time to transition between on and off.
 During the transition, the switch may bounce between those two states.
 If we use such a signal without further processing, we might detect more
-transition events then we want to. One solution is to use time to filter out
-this bouncing. Assuming a bouncing time of $t_{bounce}$ we will sample the
+transition events than we want to. One solution is to use time to filter out
+this bouncing. Assuming a maximum bouncing time of $t_{bounce}$ we will sample the
 input signals with a period $T > t_{bounce}$. We will only use the
 sampled signal further downstream.
 
@@ -2344,8 +2345,8 @@ Build the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
-As modern buttons and switches might not ``reliable'' bounce, you can
-simulate the bouncing and the spikes by pressing the button manually in fast succession
+As there is no guarantee that modern button will always bounce, you can
+simulate the bouncing and the spikes by pressing the button manually in a fast succession
 and using a low sample frequency. Select, e.g., one second as sample frequency,
 i.e., if the input clock runs at 100~MHz, divide it by 100,000,000.
 Simulate a bouncing button by pressing several times in fast succession
