@@ -744,6 +744,8 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
   \caption{Chisel defined hardware operators.}
 \end{table}
 
+\index{Operators}
+
 \begin{table}
  \centering
  \label{tab:functions}
@@ -755,13 +757,16 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \code{v(n)} & extraction of a single bit & UInt, SInt \\
     \code{v(end, start)} & bitfield extraction & UInt, SInt \\
     \code{Fill(n, v)} & bitstring replication, n times & UInt, SInt \\
-    \code{Cat(a, b, ...)} & bit field concatenation & UInt, SInt \\
+    \code{Cat(a, b, ...)} & bitfield concatenation & UInt, SInt \\
     \bottomrule 
   \end{tabular} 
   \caption{Chisel defined hardware functions, invoked on \code{v}.}
 \end{table}
 
 \index{Bit!reduction}
+\index{Bitfield!extraction}
+\index{Bitfield!concatenation}
+
 
 \subsection{Multiplexer}
 
@@ -2077,6 +2082,77 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 
 \shortlist{code/nerd_counter.txt}
 
+\section{Shift Registers}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/shiftregister}
+  \caption{A 4 stage shift register.}
+  \label{fig:shiftregister}
+\end{figure}
+
+
+A \myref{https://en.wikipedia.org/wiki/Shift_register}{shift register} is a collection of flip-flops
+connected in a sequence. Each output of a register (flip-flop) is connected to the input of the
+next register. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
+The circuit \emph{shifts} the date on each clock from left to right. In this simple form the
+circuit implements a 4-tap delay form \code{din} to \code{dout}.
+
+The Chisel code for this simple shift register does: (1) create a 4-bit register \code{shiftReg},
+(2) concatenate the lower 3 bits of the shift register with the input \code{din} for the next
+input to the register, and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
+
+\shortlist{code/shift_register.txt}
+
+Shift registers are often used to convert from serial data to parallel data or from parallel data
+to serial data. Section~\ref{sec:uart} shows a serial port that uses shift registers for the receive and
+send functions.
+
+\subsection{Shift Register with Parallel Output}
+
+A serial-in parallel-out configuration of a shift register transforms a serial input stream into parallel
+words. This may be used in a serial port (UART) for the receive function.
+Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register, where each flip-flop output
+is connected to one output bit. After 4 clock cycles this circuit converts a 4-bits serial data word
+to a 4-bit parallel data word that is available in \code{q}. In this example we assume that bit 0
+(the least significant bit) is sent first and therefore arrives in the last stage when we want to read
+the full word.
+
+In the following Chisel code we initialize the shift register \code{outReg} with 0. Then we shift in from the
+MSB, which means a right shift. The parallel result, \code{q}, is just the reading of the register
+\code{outReg}.
+
+\shortlist{code/shift_paraout.txt}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/shiftreg-paraout}
+  \caption{A 4-bit shift register with parallel output.}
+  \label{fig:shiftreg-paraout}
+\end{figure}
+
+Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register with a parallel output function.
+
+\subsection{Shift Register with Parallel Load}
+
+A parallel-in serial-out configuration of a shift register transforms a parallel input stream of words (bytes)
+into a serial output stream.
+This may be used in a serial port (UART) for the transmit function.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.6]{figures/shiftreg-paraload}
+  \caption{A 4-bit shift register with parallel load.}
+  \label{fig:shiftreg-paraload}
+\end{figure}
+
+Figure~\ref{fig:shiftreg-paraload} shows a 4-bit shift register with a parallel load function.
+The Chisel description of that function is relatively straight forward:
+
+\shortlist{code/shift_paraload.txt}
+
+Note that we are now shifting to the right, filling in zeros at the MSB.
+
 \section{Memory}
 \index{Memory}
 \index{RAM}
@@ -3287,7 +3363,7 @@ the latency from the input to the output is at least the number of buffers.
 I will present other possible implementations of FIFOs in Section~\ref{sec:more:fifo}.
 
 \section{A Serial Port}
-
+\label{sec:uart}
 \index{Serial port}
 \index{UART}
 
