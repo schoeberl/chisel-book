@@ -453,11 +453,14 @@ $ ls
 That said, an integrated development environment (IDE), where a compiler is running in
 the background, can speed up coding. As Chisel is a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
-It is possible in \myref{https://www.eclipse.org/}{Eclipse} and
-\myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ}
+It is possible in
+\myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ} and
+ \myref{https://www.eclipse.org/}{Eclipse}
 to generate a project from the sbt project configuration in \code{build.sbt}.
 
-In IntelliJ you can create a new project from existing sources and then select from \code{build.sbt}.
+In IntelliJ you can create a new project from existing sources with:
+\emph{File - New - Project from Existing Sources...} and then select the \code{build.sbt}
+file from the project.
 
 In Eclipse you can create a project via
 \begin{verbatim}
@@ -513,9 +516,9 @@ project containing small exercises with testers and solutions.
 \item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
 a short users guide to Chisel and links to further information.
 \item The \myref{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
-their repository that contains a Wiki documentation.
-\item The \myref{https://github.com/ucb-bar/generator-bootcamp}{Generator Bootcamp} is
-a Chisel course focusing on hardware generators, as a Jupyter notebook
+their own repository that contains a Wiki documentation.
+\item The \myref{https://github.com/freechipsproject/chisel-bootcamp}{Generator Bootcamp} is
+a Chisel course focusing on hardware generators, as a \myref{https://jupyter.org/}{Jupyter} notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
 \end{itemize}
 
@@ -813,9 +816,21 @@ the output of the register can be used just with the name in an expression:
 
 \shortlist{code/reg_con.txt}
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/register-reset-0}
+  \caption{A D flip-flop based register with a synchronous reset to 0.}
+  \label{fig:register-reset-0}
+\end{figure}
+
 \noindent A register can also be connected to its input at the definition:
 
 \shortlist{code/reg_next.txt}
+
+Figure~\ref{fig:register-reset-0} shows the circuit of our register definition with
+a clock, a synchronous reset to \code{0.U}, input \code{d}, and output \code{q}.
+The global signals \code{clock} and \code{reset} are implicitly connected to
+each register defined.
 
 \noindent A register can also be connected to its input and a constant as
 initial value at the definition:
