@@ -64,7 +64,7 @@ in Building 101A.
 
 ### Week 1 Introduction
 
-**Topics:** Introduction and motivation, the digital abstraction, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
+**Topics:** Introduction and motivation, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
 
 **Lab:** Chisel “Hello World”
 
@@ -77,102 +77,98 @@ in Building 101A.
 
 **Topics:** Recap combinational and synchronous circuits with Chisel code (including comparison with VHDL)
 
-**Lab:** Basic circuits in Chisel, given testers, diagram to code and code to diagram exercises
+**Reading:** Dally 8, 14.1., 14.2 and Chisel 5
 
-**Reading:** Dally 8 and Chisel x
+**Lab:** Basic circuits in Chisel, given testers, diagram to code and code to diagram exercises. TODO: look into Dally 7 examples for the lab. One example with the FPGA board.
 
 
 ### Week 3 Timing
 
-**Topics:** Timing, Metastability, and Power
+**Topics:** Delay and Power, Timing, and Metastability
 
-**Lab:** Book exercises
+**Reading:** Dally: 5.1-5.4, 15.1-15.6, and 28.1-28.4
 
-**Reading:** Dally: 5, 15, and 28
+**Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 
-### Week 4 State Machines in Chisel
+### Week 4 Small Sequential Circuits, Components
 
-**Topics:** Some more Chisel, state machine (repetition)
+**Topics:** Composing circuits out of components, sequential building blocks
 
-**Lab:** 7 segment decoder
+**Reading:** Dally: x Chisel: 5 and 6
 
-**Reading:** Dally: 14, Chisel: 7 (stuff that is in Dally 7) (FIXME: check how this relates to week 2, maybe this is 2 material)
+**Lab:** Sequential circuits and components, maybe blinking LED or PWM with counters
 
- * There should be a simple FSM lab with Chisel
 
 ### Week 5 Testing and Verification
 
 **Topics:** Testing and verification in Chisel, using CLI, unit tests, waveform viewing
 
-**Lab:** Tester for 7 segment decoder, counter for 7 segment display
-
 **Reading:** Dally: 20, Chisel: 3, maybe some text on test driven development
 
-
-### Week 6 State Machine and Datapath
-
-**Topics:** State machine and datapath (FSMD) (1 hour)
-
-**Lab:** Full display
-
-**Reading:** Dally: 16, Chisel: 8.2
+**Lab:** Hexadecimal to 7 segment decoder, Chisel unit testers and debugging with gtkwave, (tester for 7 segment decoder)
 
 
-### Week 7
+### Week 6 State Machines
 
-**Topics:** State Machines and Refactoring (1 hour)
+**Topics:** Some more Chisel, state machine (repetition)
 
-**Lab:** Full display
+**Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
+
+**Lab:**  7 segment display with a counter
+
+
+### Week 7 State Machine and Datapath, Input interface
+
+**Topics:** State machine and datapath (FSMD)
+
+**Reading:** Dally: 16, Chisel: 9.2 (2nd edition), 7
+
+**Lab:** Dally 14.28 and other, FSM exercises in Chisel
+
+
+### Week 8 State Machines and Refactoring (1 hour)
+
+**Topics:** State Machines and Refactoring
 
 **Reading:** Dally: 17
 
+**Lab:** Full display
 
-### Week 8
+
+### Week 9 Communications State Machines (1 hour)
 
 **Topics:** Communicating FSMs and ready/valid interface
 
-**Lab:**
+**Reading:** Dally: 22, Chisel: 9.1
 
-**Reading:** Dally: x, Chisel: 8.1
-
-
-### Week 9
-
-**Topics:** maybe lab only
-
-**Lab:** work on vending machine
+**Lab:** Full display
 
 
-### Week 10
+### Easter Week
 
-**Topics:** maybe lab only
+
+### Week 10 No lecture
 
 **Lab:** work on vending machine
 
 
-### Week 11 Microcoded State Machine
+### Week 11 No lecture
 
-**Topics:** Microcoded FSMs
-
-**Lab:** 18.1 and 18.2
-
-**Reading:** Dally 18
-
- * This is all a little bit late when we want to cover interface, pipelining, and interconnect, memory
+**Lab:** work on vending machine
 
 
-### Week 12 A Simple Processor
+### Week 12 Microcoded State Machine, Pipelining, Memory
 
-**Topics:** Leros as a simple processor
+**Topics:** Microcoded FSMs, pipelining, and interconnect
 
-**Lab:** Work on VM
+**Reading:** Dally 18, 23.1-23.4, 24 Chisel 6.x
 
-**Reading:** Dally x, Chisel: 11
+**Lab:** 18.1 and 18.2, 23.1-23.4, 24.1, (24.2), maybe SRAM exercise
 
 
-### Week 13
+### Week 13 Outro, A Simple Processor
 
-**Topics:** Outro
+**Topics:** Leros as a simple processor, Discussion of course, and followup courses
 
-**Lab:** Finish VM
+**Lab:** Exam examples from last years, finish vending machine and report
