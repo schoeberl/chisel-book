@@ -2,7 +2,8 @@
 
 # Digital Design with Chisel
 
-![Book Cover](cover-small.jpg)
+[![Book Cover](cover-small.jpg)](https://github.com/schoeberl/chisel-book/wiki/chisel-book.pdf)
+
 
 This book is an introduction to digital system design using a modern hardware
 construction language, Chisel.
