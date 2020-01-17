@@ -18,7 +18,7 @@ hardware design. Knowledge on following topics is a prerequisite:
  * Computer usage as a developer (text/program editor, file system, command line interface)
  * Basic programming
 
-Depending on your background the prerequisites are covered in one of following courses:
+Depending on your background the prerequisites are covered in one of the following courses:
 
  * 02138 Digital Electronics 1
  * 02132 Computer Systems
@@ -29,7 +29,7 @@ Depending on your background the prerequisites are covered in one of following c
 The course is lectured Thursday afternoons 13:00 - 17:00.
 The course is lectured in English.
 
-First part is usually lectures and second part for project work.
+First part is usually lectures and second part is reserved for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
@@ -40,7 +40,7 @@ The course is lectured in building 341, room 22. The lab is in building
 
 TBD 
 
-## Recommended Textbook
+## Recommended Textbooks
 
  * Dally: [Digital Design Using VHDL a Systems Approach](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=3&cad=rja&uact=8&ved=2ahUKEwiijsD_76vmAhW4AxAIHci4Ai8QFjACegQIAhAB&url=https%3A%2F%2Fwww.cambridge.org%2Fcore%2Fbooks%2Fdigital-design-using-vhdl%2F0649D96BCF9E14D1AC4D192D629A3E5A&usg=AOvVaw3f4XcAOJdrcFfY6QdnGvRm)
  * Schoeberl: [Digital Design with Chisel](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
@@ -48,12 +48,19 @@ TBD
 The Dally book is available from
 [Polyteknisk Boghandel](http://www.polyteknisk.dk/)
 in Building 101A.
+The Schoeberl book is open access and freely available.
 
 ## Resources
 
  * [Lab Material](https://github.com/schoeberl/chisel-lab)
  * [The Chisel Book](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
  * [Chisel](https://www.chisel-lang.org/)
+
+## Feedback
+
+To keep the course running fine and allow me to react to your feedback, I have setup an anonymous
+Google form where you can send in what you like and (for sure) what you doin't like on this course.
+
  * [Anonymous Feedback Inbox](https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link)
 
 ## Instructor

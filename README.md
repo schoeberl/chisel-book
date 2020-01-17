@@ -2,7 +2,7 @@
 
 # Digital Design with Chisel
 
-![Book Cover](cover-small.jpg)
+[![Book Cover](cover-small.jpg)](http://www.imm.dtu.dk/~masca/chisel-book.html)
 
 This book is an introduction to digital system design using a modern hardware
 construction language, Chisel.

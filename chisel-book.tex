@@ -1124,6 +1124,34 @@ $ sbt "test:runMain mypacket.MyTester"
 
 Now that we know the basic structure of a Chisel project and how to compile and run it
 with \code{sbt}, we can continue with a simple testing framework.
+
+\subsection{Tool Flow}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/flow}
+  \caption{Tool flow of the Chisel ecosystem.}
+  \label{fig:flow}
+\end{figure}
+
+Figure~\ref{fig:flow} shows the tool flow of Chisel. The digital circuit is described in a Chisel class
+shown as \code{Hello.scala}. The Scala compiler compiles this class, together with the Chisel and Scala
+libraries, and generates the Java class \code{Hello.class} that ca be executed by a standard
+\myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
+Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
+RTL (FIRRTL), an intermediate representation of digital circuits. In our example the file is \code{Hello.fir}.
+The FIRRTL compiler performs transformations on the circuit.
+
+Treadle is a FIRRTL interpreter to simulate the circuit. Together with the Chisel tester it can be
+used to debug and test Chisel circuits. With assertions we can provide test results.
+Treadle can also generate waveform files (\code{Hello.vcd}) that can be viewed with
+a waveform viewer (e.g., the free viewer GTKWave or Modelsim).
+
+One FIRRTL transformation, the Verilog emitter, generates Verilog code for synthesis (\code{Hello.v}).
+A circuit synthesize tool (e.g., Intel Quartus, Xilinx Vivado, or an ASIC tool) synthesizes the circuit.
+In an FPGA design flow, the tool generates the FPGA bitstream that is used to configure the FPGA,
+e.g., \code{Hello.bit}.
+
     
 \section{Testing with Chisel}
 
