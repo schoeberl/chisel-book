@@ -9,8 +9,8 @@ construction language, Chisel.
 In this book we focus on a slightly higher abstraction level to get you up to
 speed to build more complex, interacting digital systems.
 
-A compiled PDF version of the book is available at the wiki pages of this project:
-[Digital Design with Chisel](https://github.com/schoeberl/chisel-book/wiki/chisel-book.pdf).
+A compiled PDF version of the book is available at
+[Digital Design with Chisel PDF](http://www.imm.dtu.dk/~masca/chisel-book.pdf).
 
 The book is available [at Amazon](https://www.amazon.com/dp/168933603X/).
 
