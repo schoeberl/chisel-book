@@ -2089,6 +2089,40 @@ specify the width with the type at register definition or with the
 initialization value. Explicit width definition can avoid surprises when a reset value of \code{0.U}
 results in a counter with a width of a single bit.
 
+\subsection{A Timer}
+
+Another form of timer we can create, is a one-shot timer. A one-shot timer is like a
+kitchen timer: you set the timeout value and press start. When the timeout has
+expired the alarm goes off.
+The digital timer is loaded with the time in clock cycles.
+Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/timer}
+  \caption{A one-shot timer.}
+  \label{fig:timer}
+\end{figure}
+
+Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
+the value of \code{din} and asserting \code{load}. When the \code{load} signal is de-asserted
+counting down is selected (by selecting \code{cnt - 1} as the input for the register).
+When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
+counting by selecting the \code{0} input of the multiplexer.
+
+\longlist{code/timer.txt}{A one-shot timer}{lst:timer}
+
+Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{reg},
+that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{reg}
+with \code{0}. For the input multiplexer we introduce the wire \code{next} with a default
+value of \code{0}. The \code{when/elsewhen} block introduces the other two inputs with
+the select function. Signal \code{load} has priority over the decrement selection.
+The last line connects the multiplexer, represented by \code{next}, to the input of the
+register \code{reg}.
+
+If we aim for a bit more concise code, we can directly assign the multiplexer values to
+the register \code{reg}, instead of using the intermediate wire \code{next}.
+
 \subsection{The Nerd Counter}
 
 Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
