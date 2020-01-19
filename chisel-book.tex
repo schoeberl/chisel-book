@@ -1546,7 +1546,7 @@ To use this utility function, we need to import another Chisel package:
 
 For connecting components with multiple IO ports, Chisel provides the
 bulk connection operator \code{<>}. This operator connects parts of bundles
-in both directions. Chisel uses the names of the leave fields for the connection.
+in both directions. Chisel uses the names of the leaf fields for the connection.
 If a name is missing, it is not connected.
 
 As an example, let us assume we build a pipelined processor. The fetch
@@ -1898,7 +1898,7 @@ reset and the data values.
 
 Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
 where the reset drives the multiplexer. However, as synchronous reset is used quite often
-modern FPGAs flip-flops contain a synchronous reset (and set) input to not wast LUT
+modern FPGAs flip-flops contain a synchronous reset (and set) input to not waste LUT
 resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
