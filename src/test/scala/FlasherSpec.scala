@@ -49,13 +49,13 @@ class Flasher2Tester(f: Flasher2) extends PeekPokeTester(f) {
 class FlasherSpec extends FlatSpec with Matchers {
 
   "Flasher" should "pass" in {
-    chisel3.iotesters.Driver.execute(Array("--fint-write-vcd"), () => new Flasher()) { dut =>
+    chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new Flasher()) { dut =>
       new FlasherTester(dut)
     } should be (true)
   }
 
   "Flasher2" should "pass" in {
-    chisel3.iotesters.Driver.execute(Array("--fint-write-vcd"), () => new Flasher2()) { dut =>
+    chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new Flasher2()) { dut =>
       new Flasher2Tester(dut)
     } should be (true)
   }

@@ -79,8 +79,7 @@ class FifoTester(dut: BubbleFifo) extends PeekPokeTester(dut) {
 class BubbleFifoSpec extends FlatSpec with Matchers {
 
   "BubbleFifo" should "pass" in {
-    chisel3.iotesters.Driver.execute(Array("--target-dir", "generated", "--fint-write-vcd"), () => new BubbleFifo(8, 4)) {
-      // iotesters.Driver.execute(Array("--target-dir", "generated", "--fint-write-vcd", "--wave-form-file-name", "generated/BubbleFifo.vcd"), () => new BubbleFifo(8, 4)) {
+    chisel3.iotesters.Driver.execute(Array("--generate-vcd-output", "on"), () => new BubbleFifo(8, 4)) {
       c => new FifoTester(c)
     } should be(true)
   }

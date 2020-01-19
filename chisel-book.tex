@@ -2123,6 +2123,37 @@ register \code{reg}.
 If we aim for a bit more concise code, we can directly assign the multiplexer values to
 the register \code{reg}, instead of using the intermediate wire \code{next}.
 
+\subsection{Pulse-Width Modulation}
+
+\myref{https://en.wikipedia.org/wiki/Pulse-width_modulation}{Pulse-width modulation} (PWM)
+is a signal with a constant period and a modulation of the time the signal is \emph{on}
+within that period.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/pwm}
+  \caption{Pulse-width modulation.}
+  \label{fig:pwm}
+\end{figure}
+
+Figure~\ref{fig:pwm} shows a signal with PWM. The arrows point to the start of the periods
+of the signal. The percentage of time the signal is one, is also called the duty cycle.
+In the first two periods the duty cycle is 25\,\%, in the next two 50\,\%, and in the last
+two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
+
+Adding a \myref{https://en.wikipedia.org/wiki/Low-pass_filter}{low-pass filter} to a PWM
+signal results in a simple
+\myref{https://en.wikipedia.org/wiki/Digital-to-analog_converter}digital-to-analog converter.
+The low-pass filter can be as simple as a resistor and a capacitor.
+
+The following code example will generate a waveform of 3 clock cycles high every 10 clock cycles.
+
+\shortlist{code/pwm.txt}
+
+
+Another application is to use PWM to dim an LED. In that case the eye serves as low-pass
+filter. We expand the above example to drive the PWM generation by a triangular function.
+
 \subsection{The Nerd Counter}
 
 Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
@@ -2310,6 +2341,10 @@ overlapped (all 7 segments will light up).
 Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
+
+Construct a PWM wave from generator and trigger it from a function (triangular or a sine function).
+Drive a LED on an FPGA board with that modulated PWM function. What frequency shall your
+PWM signal be? What frequency is the driver running?
 
 \todo{Luca: More exercises would be nice. Maybe in the future?}
 
