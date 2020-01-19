@@ -217,13 +217,26 @@ Typeset by Martin Schoeberl.}
 \lstlistoflistings
 \endgroup
 
-%\chapter*{Foreword}
-%
-%Here comes the text.
-%
-%\bigskip
-%
-%Jonathan Bachrach, designer of Chisel
+\chapter{Foreword}
+
+\medskip
+\medskip
+
+It is an exciting time to be in the world of digital design. With the end of Dennard Scaling and the slowing of Moore's Law, there has perhaps never been a greater need for innovation in the field. Semiconductor companies continue to squeeze out every drop of performance they can, but the cost of these improvements has been rising drastically. Chisel reduces this cost by improving productivity. If designers can build more in less time, while amortizing the cost of verification through reuse, companies can spend less on Non-Recurring Engineering (NRE). In addition, both students and individual contributors can innovate more easily on their own.
+
+Chisel is unlike most languages in that it is embedded in another programming language, Scala. Fundamentally, Chisel is a library of classes and functions representing the primitives necessary to express synchronous, digital circuits. A Chisel design is really a Scala program that \emph{generates} a circuit as it executes. To many, this may seem counterintuitive: ``Why not just make Chisel a stand-alone language like VHDL or SystemVerilog?'' My answer to this question is as follows: the software world has seen a substantial amount of innovation in design methodology in the past couple of decades. Rather than attempting to adapt these techniques to a new hardware language, we can simply \emph{use} a modern programming language and gain those benefits for free.
+
+A longstanding criticism of Chisel is that it is ``difficult to learn.'' Much of this perception is due to the prevalence of large, complex designs created by experts to solve their own research or commercial needs. When learning a popular language like C++, one does not start by reading the source code of GCC. Rather, there are a plethora of courses, textbooks, and other learning materials that cater toward newcomers. In \emph{Digital Design with Chisel}, Martin has created an important resource for anyone who wishes to learn Chisel.
+
+Martin is an experienced educator, and it shows in the organization of this book. Starting with installation and primitives, he builds the reader's understanding like a building, brick-by-brick. The included exercises are the mortar that solidifies understanding, ensuring that each concept sets in the reader's mind. The book culminates with \emph{hardware generators} like a roof giving the rest of the structure purpose. At the end, the reader is left with the knowledge to build a simple, yet useful design: a RISC processor.
+
+In \emph{Digital Design with Chisel}, Martin has laid a strong foundation for productive digital design. What you build with it is up to you.
+
+\medskip
+\noindent Jack Koenig\\
+Chisel and FIRRTL Maintainer\\
+Staff Engineer, SiFive
+
 
 \chapter{Preface}
 
