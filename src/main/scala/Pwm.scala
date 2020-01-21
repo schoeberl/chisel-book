@@ -7,9 +7,9 @@ class Pwm extends Module {
   })
 
   //- start pwm
-  def pwm(max: Int, din: UInt) = {
-    val cntReg = RegInit(0.U(unsignedBitLength(max).W))
-    cntReg := Mux(cntReg === (max-1).U, 0.U, cntReg + 1.U)
+  def pwm(nrCycles: Int, din: UInt) = {
+    val cntReg = RegInit(0.U(unsignedBitLength(nrCycles-1).W))
+    cntReg := Mux(cntReg === (nrCycles-1).U, 0.U, cntReg + 1.U)
     din > cntReg
   }
 
@@ -18,7 +18,7 @@ class Pwm extends Module {
   //- end
 
   //- start pwm_modulate
-  val FREQ = 100000000   // a 100 MHz board
+  val FREQ = 100000000 // a 100 MHz clock input
   val MAX = FREQ/1000  // 1 kHz
 
   val modulationReg = RegInit(0.U(32.W))

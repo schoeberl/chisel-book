@@ -538,7 +538,9 @@ a Chisel course focusing on hardware generators, as a \myref{https://jupyter.org
 \section{Exercise}
 
 Each chapter ends with a hands-on exercise. For the introduction exercise, we will use an
-FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED} blinking.
+FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED}
+blinking.\footnote{If you at the moment have no FPGA board available, continue to read
+as we will show you a simulation version at the end of the exercise.}
 As a first step clone (or fork) the \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
 repository from GitHub.
 The Hello World example is in the folder \code{hello-world}, set up as
@@ -546,11 +548,11 @@ a minimal project. You can explore the Chisel code of the blinking LED
 in \code{src/main/scala/Hello.scala}.
 Compile the blinking LED with the following steps:
 
-\begin{chisel}
+\begin{verbatim}
 $ git clone https://github.com/schoeberl/chisel-examples.git
 $ cd chisel-examples/hello-world/
-$ make
-\end{chisel}
+$ sbt run
+\end{verbatim}
 
 After some initial downloading of Chisel components, this will produce the Verilog file \code{Hello.v}.
 Explore this Verilog file. You will see that it contains two inputs \code{clock} and \code{reset}
@@ -590,6 +592,22 @@ decouple the change of the LED blinking from the counter reset.
 You will need a second constant where you change the state of the
 \code{blkReg} register. What kind of emotion does this pattern produce?
 Is it alarming or more like a sign-of-live signal?
+
+If you do not have an FPGA board (yet), you can still run the blinking LED example.
+You will use  the Chisel simulation. To avoid a too long simulation time change the
+clock frequency in the Chisel code from 50000000 to 50000. Execute following
+instruction to simulate the blinking LED:
+
+\begin{verbatim}
+$ sbt test
+\end{verbatim}
+
+This will execute the tester that runs for one million clock cycles.
+The blinking frequency depends on the simulation speed, which depends on the
+speed of your computer. Therefore, you might need to experiment a little bit
+with the assumed clock frequency to see the simulated blinking LED.
+
+
 
 
 
@@ -1149,7 +1167,7 @@ with \code{sbt}, we can continue with a simple testing framework.
 
 Figure~\ref{fig:flow} shows the tool flow of Chisel. The digital circuit is described in a Chisel class
 shown as \code{Hello.scala}. The Scala compiler compiles this class, together with the Chisel and Scala
-libraries, and generates the Java class \code{Hello.class} that ca be executed by a standard
+libraries, and generates the Java class \code{Hello.class} that can be executed by a standard
 \myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
 Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
 RTL (FIRRTL), an intermediate representation of digital circuits. In our example the file is \code{Hello.fir}.
@@ -1263,9 +1281,9 @@ However, in Chisel, the full power of Scala is available to write testers.
 which we can use to run Chisel testers.
 To use it, include the library in your \code{build.sbt} with the following line:
 
-\begin{verbatim}
+\begin{chisel}
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-\end{verbatim}
+\end{chisel}
 
 \noindent Tests are usually found in \code{src/test/scala} and can be run with:
 
@@ -2186,11 +2204,12 @@ The following code example will generate a waveform of 3 clock cycles high every
 \shortlist{code/pwm.txt}
 
 \noindent We use a function for the PWM generator to provide a reusable, lightweight component.
-The function has two parameters: a Scala integer configuring the PWM with the number of clock cycles,
-and a Chisel wire that gives the threshold for the PWM output signal. We use a multiplexer in this
+The function has two parameters: a Scala integer configuring the PWM with the number of
+clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the threshold for the
+PWM output signal. We use a multiplexer in this
 example to express the counter. The last line of the function compares the counter value
 with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
-is the return value, in out case the wire connected to the compare function.
+is the return value, in our case the wire connected to the compare function.
 
 We use \code{unsignedBitLength} to specify the number of bits for the counter \code{cntReg}.
 The number of bits to represent an unsigned number $n$ in binary is $\lfloor log_2(n) \rfloor + 1$.
@@ -2266,7 +2285,7 @@ MSB, which means a right shift. The parallel result, \code{q}, is just the readi
   \label{fig:shiftreg-paraout}
 \end{figure}
 
-Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register with a parallel output function.
+\noindent Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register with a parallel output function.
 
 \subsection{Shift Register with Parallel Load}
 
