@@ -8,7 +8,7 @@ class Pwm extends Module {
 
   //- start pwm
   def pwm(max: Int, din: UInt) = {
-    val cntReg = RegInit(0.U(log2Up(max).W))
+    val cntReg = RegInit(0.U(unsignedBitLength(max).W))
     cntReg := Mux(cntReg === (max-1).U, 0.U, cntReg + 1.U)
     din > cntReg
   }
@@ -18,29 +18,29 @@ class Pwm extends Module {
   //- end
 
   //- start pwm_modulate
-  val FREQ = 100000000 // a 100 MHz board
+  val FREQ = 100000000   // a 100 MHz board
   val MAX = FREQ/1000  // 1 kHz
 
-  val modReg = RegInit(0.U(32.W))
+  val modulationReg = RegInit(0.U(32.W))
 
   val upReg = RegInit(true.B)
 
-  when (modReg < FREQ.U && upReg) {
-    modReg := modReg + 1.U
-  } .elsewhen (modReg === FREQ.U) {
+  when (modulationReg < FREQ.U && upReg) {
+    modulationReg := modulationReg + 1.U
+  } .elsewhen (modulationReg === FREQ.U && upReg) {
     upReg := false.B
-  } .elsewhen (modReg > 0.U && !upReg) {
-    modReg := modReg - 1.U
+  } .elsewhen (modulationReg > 0.U && !upReg) {
+    modulationReg := modulationReg - 1.U
   } .otherwise { // 0
     upReg := true.B
   }
 
-  val sig = pwm(MAX, modReg)
+  // divide modReg by 1024 (about the 1 kHz)
+  val sig = pwm(MAX, modulationReg >> 10)
+  //- end
 
-  //-end
 
-
-  io.led := Cat(2.U, sig, dout)
+  io.led := Cat(0.U, sig, dout)
 }
 
 object Pwm extends App {

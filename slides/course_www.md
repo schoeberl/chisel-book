@@ -33,7 +33,7 @@ First part is usually lectures and second part is reserved for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
-The course is lectured in building 341, room 22. The lab is in building
+The course is lectured in building 303A, room 44. The lab is in building
 308, rooms 117 and 127.
 
 ### Pensum List
@@ -89,7 +89,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** Basic circuits in Chisel, given testers, diagram to code and code to diagram exercises. TODO: look into Dally 7 examples for the lab. One example with the FPGA board.
 
 
-### Week 3 Timing
+### Week 3 Timing (guest lecture by Jans Sparsoe)
 
 **Topics:** Delay and Power, Timing, and Metastability
 

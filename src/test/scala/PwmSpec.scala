@@ -8,7 +8,7 @@ class PwmSpec extends FlatSpec with Matchers {
       new PeekPokeTester(c) {
 
         // just let it run to generate the waveform
-        step(50)
+        step(50000)
         // peek(c.io.led(0))
       }
     } should be (true)

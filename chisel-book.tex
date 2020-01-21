@@ -2034,7 +2034,7 @@ with the maximum value and reset the counter to that value when reaching 0.
 
 \shortlist{code/down_counter.txt}
 
-\noindent As we are writing and using more counters, we can
+\noindent As we are coding and using more counters, we can
 define a function with a parameter to generate a counter for us.
 
 \shortlist{code/function_counter.txt}
@@ -2102,6 +2102,28 @@ specify the width with the type at register definition or with the
 initialization value. Explicit width definition can avoid surprises when a reset value of \code{0.U}
 results in a counter with a width of a single bit.
 
+\subsection{The Nerd Counter}
+
+Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
+For example, we want to design a highly optimized version of our counter/tick generation.
+A standard counter needs following resources: one register, one adder (or subtractor),
+and a comparator. We cannot do much about the register or the adder. If we count
+up, we need to compare against a number, which is a bit string. The comparator
+can be built out of inverters for the zeros in the bit string and a large AND gate.
+When counting down to zero, the comparator is a large NOR gate, which might be
+a little bit cheaper than the comparator against a constant in an ASIC.
+In an FPGA, where logic is built out of lookup tables, there is no difference between comparing
+against a 0 or 1 bit. The resource requirement is the same for the up and down counter.
+
+However, there is still one more trick a clever hardware designer can pull off.
+Counting up or down needed a comparison against all counting bits, so far.
+What if we count from N-2 down to -1? A negative number has the most significant bit
+set to 1, and a positive number has this bit set to 0. We need to check this bit only to detect
+that our counter reached -1. Here it is, the counter created by a nerd:
+
+\shortlist{code/nerd_counter.txt}
+
+
 \subsection{A Timer}
 
 Another form of timer we can create, is a one-shot timer. A one-shot timer is like a
@@ -2156,37 +2178,44 @@ two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
 
 Adding a \myref{https://en.wikipedia.org/wiki/Low-pass_filter}{low-pass filter} to a PWM
 signal results in a simple
-\myref{https://en.wikipedia.org/wiki/Digital-to-analog_converter}digital-to-analog converter.
+\myref{https://en.wikipedia.org/wiki/Digital-to-analog_converter}{digital-to-analog converter}.
 The low-pass filter can be as simple as a resistor and a capacitor.
 
 The following code example will generate a waveform of 3 clock cycles high every 10 clock cycles.
 
 \shortlist{code/pwm.txt}
 
+\noindent We use a function for the PWM generator to provide a reusable, lightweight component.
+The function has two parameters: a Scala integer configuring the PWM with the number of clock cycles,
+and a Chisel wire that gives the threshold for the PWM output signal. We use a multiplexer in this
+example to express the counter. The last line of the function compares the counter value
+with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
+is the return value, in out case the wire connected to the compare function.
+
+We use \code{unsignedBitLength} to specify the number of bits for the counter \code{cntReg}.
+The number of bits to represent an unsigned number $n$ in binary is $\lfloor log_2(n) \rfloor + 1$.
+Therefore, we could use following Chisel expression: \code{log2Floor(n)+1}.
+However, with \code{unsignedBitLength} we do not need to remember if it is the ceiling or
+floor function and if we need to add 1. Chisel also has a function
+\code{signedBitLength} to provide the number of bits for a signed representation of a number.
+
 
 Another application is to use PWM to dim an LED. In that case the eye serves as low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
 
-\subsection{The Nerd Counter}
+\shortlist{code/pwm_modulate.txt}
 
-Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
-For example, we want to design a highly optimized version of our counter/tick generation.
-A standard counter needs following resources: one register, one adder (or subtractor),
-and a comparator. We cannot do much about the register or the adder. If we count
-up, we need to compare against a number, which is a bit string. The comparator
-can be built out of inverters for the zeros in the bit string and a large AND gate.
-When counting down to zero, the comparator is a large NOR gate, which might be
-a little bit cheaper than the comparator against a constant in an ASIC.
-In an FPGA, where logic is built out of lookup tables, there is no difference between comparing
-against a 0 or 1 bit. The resource requirement is the same for the up and down counter.
+We use two registers for the modulation: (1) \code{modulationReg} for counting up and down
+and (2) \code{upReg} as a flag to determine if we shall count up or down. We count up
+to the frequency of our clock input (100\,MHz in our example), which results in a signal
+of 0.5\,Hz. The lengthy \code{when/.elsewhen/.otherwise} expression handles the up or
+down counting and the switch of the direction.
 
-However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison against all counting bits, so far.
-What if we count from N-2 down to -1? A negative number has the most significant bit
-set to 1, and a positive number has this bit set to 0. We need to check this bit only to detect
-that our counter reached -1. Here it is, the counter created by a nerd:
-
-\shortlist{code/nerd_counter.txt}
+As our PWM counts only up to the 1000th of the frequency to generate a 1\,kHz signal,
+we need to divide the modulation signal by 1000. As real division is very expensive in hardware,
+we simply shift by 10 to the right, which equates a division by $2^{10} = 1024$.
+As we have defined the PWM circuit as a function, we can simply instantiate that circuit
+with a function call. Wire \code{sig} represents the modulated PWM signal.
 
 \section{Shift Registers}
 
@@ -2299,7 +2328,7 @@ To support on-chip memory, Chisel provides the memory constructor \code{SyncRead
 Listing~\ref{lst:memory} shows a component \code{Memory} that implements
 1~KB of memory with byte-wide input and output data and a write enable.
 
-\longlist{code/memory.txt}{1 KB of synchronous memory.}{lst:memory}
+\longlist{code/memory.txt}{1\,KB of synchronous memory.}{lst:memory}
 
 An interesting question is which value is returned from a read when in the same clock
 cycle a new value is written the same address that is read out.
@@ -2355,7 +2384,11 @@ Therefore, you need to slow down the counting. Create a second
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
 
-Construct a PWM wave from generator and trigger it from a function (triangular or a sine function).
+Construct a PWM waveform with a generator function and set the threshold with a
+function (triangular or a sine function).
+A triangular function can be created by counting up and down. A sinus function with the
+use of a lookup table that you can generate with a few lines of Scala code
+(see Section~\ref{sec:gen:comb:logic}).
 Drive a LED on an FPGA board with that modulated PWM function. What frequency shall your
 PWM signal be? What frequency is the driver running?
 
@@ -3254,6 +3287,7 @@ a \code{Payload} as a parameter:
 \section{Generate Combinational Logic}
 \index{Logic generation}
 \index{Logic table generation}
+\label{sec:gen:comb:logic}
 
 In Chisel, we can easily generate logic by creating a logic table with
 a Chisel \code{Vec} from a Scala \code{Array}.
