@@ -361,12 +361,17 @@ install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 
 \subsection{macOS}
 
+Install the Java OpenJDK 8 as from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
-\code{sbt} is installed with:
+\code{sbt} and git can be installed with:
 
 \begin{verbatim}
-$ brew install sbt
+$ brew install sbt git
 \end{verbatim}
+
+Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
+\myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
+When importing a project, {\textbf select the JDK 1.8} you installed before (not Java 11!)
 
 \subsection{Linux/Ubuntu}
 
@@ -390,9 +395,14 @@ sudo apt-get install sbt
 
 \subsection{Windows}
 
+Install the Java OpenJDK as mentioned above from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 Chisel and Scala can also be installed and used under Windows.
+Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
+\myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
+When importing a project, {\textbf select the JDK 1.8} you installed before (not Java 11!)
 \code{sbt} can be installed with a Windows installer, see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
+Install a \myref{https://git-scm.com/download/win}{git client}.
 
 \subsection{FPGA Tools}
 
@@ -1192,6 +1202,8 @@ Tests of hardware designs are usually called \myref{https://www.xilinx.com/suppo
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
 
+\subsection{PeekPokeTester}
+
 Chisel provides test benches in the form of a \code{PeekPokeTester}.
 One strength of Chisel is that it can use the full power of Scala to write those
 test benches. One can, for example, code the expected functionality of the hardware
@@ -1309,6 +1321,64 @@ test with \code{sbt}, as follows:
 \begin{verbatim}
 $ sbt "testOnly SimpleSpec"
 \end{verbatim}
+
+\subsection{Waveforms}
+
+Testers, as described above, work well for small designs and for 
+\myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
+software development. A collection of unit tests can also serve for
+\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}.
+
+However, for debugging more complex designs, one would like to investigate
+several signals at once. A classic approach to debug digital designs is displaying
+the signals in a waveform. In a waveform the signals are displayed over time.
+
+Chisel testers can generate a waveform that includes all registers and all IO signals.
+In the following examples we show waveform testers for the \code{DeviceUnderTest}
+from the former example (the 2-bit AND function). For the following example we
+import following classes:
+
+\shortlist{code/test_import_wave.txt}
+
+\noindent We start with a simple tester that pokes values to the inputs and advances
+the clock with \code{step}. We do not read any output or compare it with \code{expect}.
+
+\shortlist{code/test_bench_wave.txt}
+
+\noindent Instead we call \code{Driver.execute} with parameters to generate waveform
+files (.vcd files).
+
+\shortlist{code/scalatest_wave.txt}
+
+
+You can view the waveform with the free viewer GTKWave or with ModelSim.
+Start GTKWave and select \emph{File -- Open New Window} and navigate to the
+folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
+are in \code{test\_run\_dir} then the name of the tester appended with a number.
+Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
+You can select the signals from the left side and drag them into the main window.
+If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
+and load it later with \emph{File -- Read Save File}.
+
+Explicitly enumerating all possible input values does not scale. Therefore, we will use
+some Scala code to drive the DUT. Following tester enumerates all possible values for
+the 2 2-bit input signals.
+
+\shortlist{code/test_bench_wave_cnt.txt}
+
+\noindent We add a ScalaTest spec for this new tester
+
+\shortlist{code/scalatest_wave_cnt.txt}
+
+\noindent and execute it with
+
+\begin{verbatim}
+sbt "testOnly WaveformCounterSpec"
+\end{verbatim}
+
+
+\subsection{printf Debugging}
+
 
 \section{Exercises}
 
