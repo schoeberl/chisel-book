@@ -361,7 +361,7 @@ install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 
 \subsection{macOS}
 
-Install the Java OpenJDK 8 as from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK 8 from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} and git can be installed with:
 
@@ -395,7 +395,7 @@ sudo apt-get install sbt
 
 \subsection{Windows}
 
-Install the Java OpenJDK as mentioned above from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 Chisel and Scala can also be installed and used under Windows.
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
@@ -543,6 +543,8 @@ their own repository that contains a Wiki documentation.
 \item The \myref{https://github.com/freechipsproject/chisel-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a \myref{https://jupyter.org/}{Jupyter} notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
+\item The \myref{https://github.com/schoeberl/chisel-lab}{chisel-lab} contains Chisel exercises for the
+course ``Digital Electronics 2'' at the Technical University of Denmark.
 \end{itemize}
 
 \section{Exercise}
@@ -665,6 +667,12 @@ which is used for the definition of the \code{Bits} vector:
 
 \noindent If you find the notion of 8.U and 4.W a little bit funny, consider it as a variant of an integer
 constant with a type. This notation is similar to 8L, representing a long integer constant in C, Java, and Scala.
+
+{\bf Possible pitfall:} One possible error when defining constants with a dedicated width is missing the \code{.W}
+specifier for a width. E.g., \code{1.U(32)} will \emph{not} define a 32-bit wide constant representing 1.
+Instead, the expression \code{(32)} is interpreted as bit extraction from position 32, which results
+in a single bit constant of 0. Probably not what the original intention of the programmer was.
+
 
 Chisel benefits from Scala's type inference and in many places type information can be left out.
 The same is also valid for bit widths. In many cases, Chisel will automatically infer the correct width.
@@ -1372,12 +1380,55 @@ the 2 2-bit input signals.
 
 \noindent and execute it with
 
+
+
+
+
 \begin{verbatim}
 sbt "testOnly WaveformCounterSpec"
 \end{verbatim}
 
 
 \subsection{printf Debugging}
+
+Another form of debugging is the so-called ``printf debugging''. This form comes from
+simply putting \code{printf} statements in C code to print variables of interest during
+the execution of the program. This printf debugging is also available during testing
+of Chisel circuits. The printing happens at the rising edge of the clock.
+A \code{printf} statement can be inserted just anywhere in the module definition,
+as shown in the printf debugging version of the DUT.
+
+\shortlist{code/test_dut_printf.txt}
+
+\noindent When testing this module with the counter based tester, which iterates over all possible
+values, we get following output, verifying that the AND function is correct:
+
+\begin{verbatim}
+Circuit state created
+[info] [0.001] SEED 1579707298694
+dut: 0 0 0
+dut: 0 1 0
+dut: 0 2 0
+dut: 0 3 0
+dut: 1 0 0
+dut: 1 1 1
+dut: 1 2 0
+dut: 1 3 1
+dut: 2 0 0
+dut: 2 1 0
+dut: 2 2 2
+dut: 2 3 2
+dut: 3 0 0
+dut: 3 1 1
+dut: 3 2 2
+dut: 3 3 3
+test DeviceUnderTestPrintf Success: 0 tests passed in 21 cycles
+  taking 0.036380 seconds
+[info] [0.024] RAN 16 CYCLES PASSED
+\end{verbatim}
+
+Chisel printf supports
+\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
 
 
 \section{Exercises}
