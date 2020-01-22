@@ -1947,9 +1947,9 @@ it at its output. Alternatively, in other words: the register updates its output
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
 \code{D} and an output \code{Q}. Each register also contains an input for a \code{clock} signal.
 As this global clock signal is connected to all registers in a synchronous circuit, it is usually
-not drawn in the schematic. The little triangle on the bottom of the box symbolizes the
+not drawn in our schematics. The little triangle on the bottom of the box symbolizes the
 clock input and tells us that this is a register. We omit the clock signal in the following
-drawings.
+schematics.
 The omission of the global clock signal is also reflected by Chisel where no explicit
 connection of a signal to the register's clock input is needed.
 
@@ -1986,8 +1986,9 @@ assignment statement.
 The default implementation of reset in Chisel is a synchronous
 reset.\footnote{Support for asynchronous reset is currently under development}
 For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
-needs to be added to the input that selects between the initialization value under
-reset and the data values.
+needs to be added\footnote{Current FPGA flip-flops contain a synchronous reset input.
+Therefore, no additional resources are needed for the multiplexer.} to the input that
+selects between the initialization value under reset and the data value.
 
 
 \begin{figure}
@@ -2021,16 +2022,16 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
 Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
-In the first clock cycle, before a reset, the register is undefined. In the second clock cycle reset
+In the first clock cycle, before a reset, the register content is undefined. In the second clock cycle reset
 is asserted high, and on the rising edge of this clock cycle (labeled B) the register
-captures the initial value of \code{0}. Input \code{inVal} is ignored. In the next clock cycle
+takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle
 \code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
 edge (labeled C). From then on \code{reset} stays \code{0}, as it should be, and the
 register output follows the input signal with one clock cycle delay.
 
 Waveforms are an excellent tool to specify the behavior of a circuit graphically.
 Especially in more complex circuits where many operations happen in parallel
-and data move pipelined through the circuit, timing diagrams are convenient.
+and data moves pipelined through the circuit, timing diagrams are convenient.
 Chisel testers can also produce waveforms during testing that can be displayed
 with a waveform viewer and used for debugging.
 
@@ -2073,7 +2074,7 @@ with a conditional update:
 
 \shortlist{code/sequ_reg_init_ena.txt}
 
-A register can also be part of an expression. Following circuit detects the rising edge
+A register can also be part of an expression. The following circuit detects the rising edge
 of a signal by comparing its current value with the one from the last clock cycle.
 
 \shortlist{code/sequ_reg_rising.txt}
@@ -2101,7 +2102,15 @@ to 0 again. A counter shall also be reset to a known value.
 
 \shortlist{code/sequ_free_counter.txt}
 
-\noindent When we want to count events, we use a condition to  increment the counter.
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/event-counter}
+  \caption{Counting events.}
+  \label{fig:event-counter}
+\end{figure}
+
+\noindent When we want to count events, we use a condition to increment the counter,
+as shown in Figure~\ref{fig:event-counter} and in the following code.
 
 \shortlist{code/sequ_event_counter.txt}
 
@@ -2117,7 +2126,7 @@ conditional statement.
 
 \shortlist{code/mux_counter.txt}
 
-\noindent If we are in the mood of counting down, we start (reset the counter register)
+\noindent If we are in the mood of counting down, we start by reseting the counter register
 with the maximum value and reset the counter to that value when reaching 0.
 
 \shortlist{code/down_counter.txt}
@@ -2140,7 +2149,8 @@ to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 
 \index{Timing generation}
 
-Besides counting events, counters are often used to generate timing.
+Besides counting events, counters are often used to generate a notion of time
+(time as time on a wall clock).
 A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
 circuit other than counting clock ticks. If we know the clock frequency, we
@@ -2201,7 +2211,7 @@ can be built out of inverters for the zeros in the bit string and a large AND ga
 When counting down to zero, the comparator is a large NOR gate, which might be
 a little bit cheaper than the comparator against a constant in an ASIC.
 In an FPGA, where logic is built out of lookup tables, there is no difference between comparing
-against a 0 or 1 bit. The resource requirement is the same for the up and down counter.
+against 0 or 1. The resource requirement is the same for the up and down counter.
 
 However, there is still one more trick a clever hardware designer can pull off.
 Counting up or down needed a comparison against all counting bits, so far.
@@ -2215,8 +2225,8 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 \subsection{A Timer}
 
 Another form of timer we can create, is a one-shot timer. A one-shot timer is like a
-kitchen timer: you set the timeout value and press start. When the timeout has
-expired the alarm goes off.
+kitchen timer: you set the number of minutes and press start. When the specified amount
+of time has elapsed, the alarm sounds.
 The digital timer is loaded with the time in clock cycles.
 Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
 
@@ -2228,10 +2238,10 @@ Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
 \end{figure}
 
 Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
-the value of \code{din} and asserting \code{load}. When the \code{load} signal is de-asserted
+the value of \code{din} by asserting \code{load}. When the \code{load} signal is de-asserted
 counting down is selected (by selecting \code{cnt - 1} as the input for the register).
 When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
-counting by selecting the \code{0} input of the multiplexer.
+counting by selecting input line of the multiplexer that provides \code{0}.
 
 \longlist{code/timer.txt}{A one-shot timer}{lst:timer}
 
@@ -2249,7 +2259,7 @@ the register \code{reg}, instead of using the intermediate wire \code{next}.
 \subsection{Pulse-Width Modulation}
 
 \myref{https://en.wikipedia.org/wiki/Pulse-width_modulation}{Pulse-width modulation} (PWM)
-is a signal with a constant period and a modulation of the time the signal is \emph{on}
+is a signal with a constant period and a modulation of the time the signal is \emph{high}
 within that period.
 
 \begin{figure}
@@ -2259,8 +2269,8 @@ within that period.
   \label{fig:pwm}
 \end{figure}
 
-Figure~\ref{fig:pwm} shows a signal with PWM. The arrows point to the start of the periods
-of the signal. The percentage of time the signal is one, is also called the duty cycle.
+Figure~\ref{fig:pwm} shows a PWM signal. The arrows point to the start of the periods
+of the signal. The percentage of time the signal is high, is also called the duty cycle.
 In the first two periods the duty cycle is 25\,\%, in the next two 50\,\%, and in the last
 two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
 
@@ -2275,30 +2285,30 @@ The following code example will generate a waveform of 3 clock cycles high every
 
 \noindent We use a function for the PWM generator to provide a reusable, lightweight component.
 The function has two parameters: a Scala integer configuring the PWM with the number of
-clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the threshold for the
+clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulswidth) for the
 PWM output signal. We use a multiplexer in this
 example to express the counter. The last line of the function compares the counter value
 with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
 is the return value, in our case the wire connected to the compare function.
 
-We use \code{unsignedBitLength} to specify the number of bits for the counter \code{cntReg}.
-The number of bits to represent an unsigned number $n$ in binary is $\lfloor log_2(n) \rfloor + 1$.
-Therefore, we could use following Chisel expression: \code{log2Floor(n)+1}.
-However, with \code{unsignedBitLength} we do not need to remember if it is the ceiling or
-floor function and if we need to add 1. Chisel also has a function
-\code{signedBitLength} to provide the number of bits for a signed representation of a number.
+We use the function \code{unsignedBitLength(n)} to specify the number of bits for the counter
+\code{cntReg} needed to represent unsigned numbers up to (and including)
+\code{n}.\footnote{The number of bits to represent an unsigned number $n$ in binary is $\lfloor log_2(n) \rfloor + 1$.}
+Chisel also has a function \code{signedBitLength} to provide the number of bits
+for a signed representation of a number.
 
 
 Another application is to use PWM to dim an LED. In that case the eye serves as low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
+The result is an LED with continuously changing intensity.
 
 \shortlist{code/pwm_modulate.txt}
 
 We use two registers for the modulation: (1) \code{modulationReg} for counting up and down
 and (2) \code{upReg} as a flag to determine if we shall count up or down. We count up
 to the frequency of our clock input (100\,MHz in our example), which results in a signal
-of 0.5\,Hz. The lengthy \code{when/.elsewhen/.otherwise} expression handles the up or
-down counting and the switch of the direction.
+of 0.5\,Hz. The lengthy \code{when/.elsewhen/.otherwise} expression handles the up- or
+down-counting and the switch of the direction.
 
 As our PWM counts only up to the 1000th of the frequency to generate a 1\,kHz signal,
 we need to divide the modulation signal by 1000. As real division is very expensive in hardware,
@@ -2319,8 +2329,8 @@ with a function call. Wire \code{sig} represents the modulated PWM signal.
 A \myref{https://en.wikipedia.org/wiki/Shift_register}{shift register} is a collection of flip-flops
 connected in a sequence. Each output of a register (flip-flop) is connected to the input of the
 next register. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
-The circuit \emph{shifts} the date on each clock from left to right. In this simple form the
-circuit implements a 4-tap delay form \code{din} to \code{dout}.
+The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
+circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
 The Chisel code for this simple shift register does: (1) create a 4-bit register \code{shiftReg},
 (2) concatenate the lower 3 bits of the shift register with the input \code{din} for the next
@@ -2337,7 +2347,7 @@ send functions.
 A serial-in parallel-out configuration of a shift register transforms a serial input stream into parallel
 words. This may be used in a serial port (UART) for the receive function.
 Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register, where each flip-flop output
-is connected to one output bit. After 4 clock cycles this circuit converts a 4-bits serial data word
+is connected to one output bit. After 4 clock cycles this circuit converts a 4-bit serial data word
 to a 4-bit parallel data word that is available in \code{q}. In this example we assume that bit 0
 (the least significant bit) is sent first and therefore arrives in the last stage when we want to read
 the full word.
@@ -2389,7 +2399,7 @@ For an ASIC, a memory compiler constructs memories.
 FPGAs contain on-chip memory blocks, also called block RAMs.
 Those on-chip memory blocks can be combined for larger memories.
 Memories in an FPGA usually have one read and one write port, or
-two ports where the direction can be switched.
+two ports that can be switched between read and write at runtime.
 
 \index{Synchronous memory}
 FPGAs (and also ASICs) usually support synchronous memories.
@@ -2415,12 +2425,12 @@ synchronous behavior.
 
 To support on-chip memory, Chisel provides the memory constructor \code{SyncReadMem}.
 Listing~\ref{lst:memory} shows a component \code{Memory} that implements
-1~KB of memory with byte-wide input and output data and a write enable.
+1~KiB of memory with byte-wide input and output data and a write enable.
 
-\longlist{code/memory.txt}{1\,KB of synchronous memory.}{lst:memory}
+\longlist{code/memory.txt}{1\,KiB of synchronous memory.}{lst:memory}
 
 An interesting question is which value is returned from a read when in the same clock
-cycle a new value is written the same address that is read out.
+cycle a new value is written to the same address that is read out.
 We are interested in the read-during-write behavior of the memory.
 There are three possibilities: the newly written value, the old value, or undefined
 (which might be a mix of some bits from the old value and some of the newly written data).
@@ -2445,8 +2455,9 @@ memory read data. The write data is delayed by one clock cycle with a register.
 
 Listing~\ref{lst:memory:forward} shows the Chisel code for a synchronous memory
 including the forwarding circuit. We need to store the write data into a register
-(\code{wrDataReg}) to be available in the next clock cycle the synchronous
-memory also has a one clock cycle latency.
+(\code{wrDataReg}) to be available in the next clock cycle in order to fit
+the synchronous memory that also provides the read value in the next clock
+cycle.
 We compare the two input addresses (\code{wrAddr} and \code{rdAddr})
 and check if \code{wrEna} is true for the forwarding condition.
 That condition is also delayed by one clock cycle.
@@ -2455,11 +2466,9 @@ data from memory.
 
 \longlist{code/memory_forwarding.txt}{A memory with a forwarding circuit.}{lst:memory:forward}
 
-
-
 Chisel also provides \code{Mem}, which represents a memory with synchronous
 write and an asynchronous read. As this memory type is usually not directly available
-in an FPGA, the synthesize tool will build it out of flip-flops.
+in an FPGA, the synthesise tool will build it out of flip-flops.
 Therefore, we recommend using \code{SyncReadMem}.
 
 
@@ -2469,7 +2478,7 @@ Use the 7-segment encoder from the last exercise and add a 4-bit counter as inpu
 to switch the display from \code{0} to \code{F}. When you directly connect this
 counter to the clock of the FPGA board, you will see all 16 numbers
 overlapped (all 7 segments will light up).
-Therefore, you need to slow down the counting. Create a second
+Therefore, you need to slow down the counting. Create another
 counter that can generate a single-cycle \emph{tick} signal every 500 milliseconds.
 Use that signal as enable signal for the 4-bit counter.
 
