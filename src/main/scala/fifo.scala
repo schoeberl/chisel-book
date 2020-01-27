@@ -24,7 +24,7 @@ abstract class Fifo[T <: Data](gen: T, depth: Int) extends Module {
 package fifo_private {
 
   //- start fifo_decoupled
-  class DecoupledIO[T <: Data](gen: T) {
+  class DecoupledIO[T <: Data](gen: T) extends Bundle {
     val ready = Input(Bool())
     val valid = Output(Bool())
     val bits  = Output(gen)

@@ -4,3 +4,6 @@ all:
 	pdflatex rising.tex
 	pdflatex tick_wave.tex
 	pdflatex uart_wave.tex
+	pdflatex ready_valid1.tex
+	pdflatex ready_valid2.tex
+	pdflatex ready_valid3.tex

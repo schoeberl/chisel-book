@@ -1,0 +1,36 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=2.5ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+{clock}     & [L] 14{C} \\
+{ready} & 2.1L  4L 2H          2L                 2L          1.9L \\
+{valid}   & .1L 2L 6H  4L 1.9L \\
+{data}   & .1U 2U  6D{D}  4U  1.9U  \\
+\extracode
+\vertlines[semitransparent,semithick,blue]{2,4,6,8,10,12}
+\node[font=\sf] at (1,2)  {0};
+\node[font=\sf] at (3,2)  {1};
+\node[font=\sf] at (5,2)  {2};
+\node[font=\sf] at (7,2)  {3};
+\node[font=\sf] at (9,2)  {4};
+\node[font=\sf] at (11,2)  {5};
+\node[font=\sf] at (13,2)  {6};
+\endextracode
+\end{tikztimingtable}
+
+\end{document}
