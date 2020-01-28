@@ -3469,7 +3469,7 @@ Then we can use our parameterized multiplexer with this complex type.
 
 \shortlist{code/param_func_complex.txt}
 
-In our initial design of the function, we used \code{WireInit}
+In our initial design of the function, we used \code{WireDefault}
 to create a wire with the type \code{T} with a default value.
 If we need to create a wire just of the Chisel type without using a default
 value, we can use \code{fPath.cloneType} to get the Chisel type.
