@@ -38,7 +38,6 @@ class WaveformCounterTester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
 //- start scalatest_wave
 class WaveformSpec extends FlatSpec with Matchers {
-
   "Waveform" should "pass" in {
     Driver.execute(Array("--generate-vcd-output", "on"), () => new DeviceUnderTest()) { c =>
       new WaveformTester(c)
