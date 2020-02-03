@@ -5,6 +5,8 @@
 \usepackage{relsize}
 \usepackage[procnames]{listings}
 \usepackage{hyperref}
+\usepackage{dirtree}
+\usepackage{qtree}
 
 
 % fatter TT font
@@ -87,13 +89,18 @@ Embedded Systems Engineering}
 \item Analog circuits only at the edge
 \item The rest is processed in digital
 \item If performance allows, functions are moved to software
-\item But growth/speedup has slowed down
+\item But processor speedup has slowed down
 \item Algorithms are moved back into hardware
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FPGAs in the Cloud}
+\begin{itemize}
+\item TODO: text, links
 \item FPGAs in server, a reason why Intel bought Altera
 \item A good time to be a digital designer
 \end{itemize}
 \end{frame}
-
 
 \begin{frame}[fragile]{The Digital Abstraction}
 \begin{columns}
@@ -218,7 +225,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Several sources of information:
 \begin{itemize}
-\item The Internet ond Google
+\item The Internet, Google, and Stackoverflow
 \item Your fellow students (e.g., via Slack)
 \item The TAs: \href{https://cn.inside.dtu.dk/cnnet/element/612883/participants}{Simon, Kasper, and Anthon}
 \item Me
@@ -444,7 +451,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Goals for this Intro}
+\begin{frame}[fragile]{Introduction to Chisel}
 \begin{itemize}
 \item Get an idea what Chisel is
 \begin{itemize}
@@ -502,6 +509,31 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{The C Language Familie}
+
+\Tree[.C [
+   [.{\bf Verilog} {\bf SystemVerilog} ]
+   [.C++  \emph{SystemC}  ]
+   [.Java [.Scala {\bf Chisel} ] ]
+   [.C\# ]
+   [.\emph{HLS} ] ] ]
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Other Language Families}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Python [.{\bf MyHDL} ] ]
+\end{center}
+\end{columns}
+\end{frame}
+
 \begin{frame}[fragile]{Some Notes on Scala}
 \begin{itemize}
 \item Object oriented
@@ -515,18 +547,13 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Good Java interoperability
 \begin{itemize}
 \item Many libraries available
+\item You can write your testing code in Java
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel vs. Scala}
-\begin{itemize}
-\item A Chisel hardware description is a Scala program
-\item Chisel is a Scala library
-\item When the program is executed it generates hardware
-\item Chisel is a so-called \emph{embedded domain-specific language}
-\end{itemize}
-\end{frame}
+
+
 
 \begin{frame}[fragile]{Expressions are Combinational Circuits}
 \begin{chisel}
@@ -777,7 +804,39 @@ val rom = Vec[Bits](arr)
 %\end{frame}
 %%%%%%%%%%%%%%%%%
 
+\begin{frame}[fragile]{Free Tools for Chisel and FPGA Design}
+\begin{itemize}
+\item \href{https://adoptopenjdk.net/}{Java OpenJDK 8}
+\item \href{https://www.scala-sbt.org/}{sbt, the Scala (and Java) build tool}
+\item \href{https://www.jetbrains.com/idea/download/}{IntelliJ (the free Community version)}
+\item \href{http://gtkwave.sourceforge.net/}{GTKWave}
+\item \href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado WebPACK} or
+\item \href{http://www.altera.com/products/software/quartus-ii/web-edition/qts-we-index.html}{Quartus}
+\item Nice to have:
+\begin{itemize}
+\item make, git
+\end{itemize}
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{Tool Setup for Different OSs}
+\begin{itemize}
+\item Windows
+\begin{itemize}
+\item Use the installers from the websites
+\end{itemize}
+\item macOS
+\begin{itemize}
+\item \code{brew install sbt}
+\item For the rest, use the installer from the websites
+\end{itemize}
+\item Linux/Ubuntu
+\begin{itemize}
+\item \code{sudo apt install openjdk-8-jdk git make gtkwave}
+\item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{An IDE for Chisel}
 \begin{itemize}
@@ -814,6 +873,9 @@ val rom = Vec[Bits](arr)
 \begin{itemize}
 \item Using/offering it in Advanced Computer Architecture
 \item Spring 2016--2018 all projects have been in Chisel
+\begin{itemize}
+\item 2019 one student refused to use Chisel :-(
+\end{itemize}
 \item Several Bachelor and Master projects
 \item Students pick it up reasonable fast
 \item For software engineering students easier than VHDL
@@ -826,12 +888,12 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{A Chisel Book}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.4]{../cover-small}
+    \href{https://github.com/schoeberl/chisel-book}{\includegraphics[scale=0.4]{../cover-small}}
 \end{figure}
 
 \begin{itemize}
 \item Available in open access (PDF)
-\item In paper from Amazon
+\item Amazon can do the printout
 \end{itemize}
 \end{frame}
 
@@ -904,6 +966,8 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
+\item The world is digital
+\item Processors do not get much faster -- we need to design custom hardware
 \item We need a modern language for hardware/systems design
 \item Chisel builds on the power of object-oriented and functional Scala
 \item Chisel is good for hardware generators
@@ -966,24 +1030,6 @@ make
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Two-column slide}
- 
-\begin{columns}
- 
-\column{0.5\textwidth}
-This is a text in first column.
-$$E=mc^2$$
-\begin{itemize}
-\item First item
-\item Second item
-\end{itemize}
- 
-\column{0.5\textwidth}
-This text will be in the second column
-and on a second tought this is a nice looking
-layout in some cases.
-\end{columns}
-\end{frame}
 
 
 \end{document}

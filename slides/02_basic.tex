@@ -1,0 +1,93 @@
+\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
+\usepackage{epsfig,graphicx}
+\usepackage{palatino}
+\usepackage{fancybox}
+\usepackage{relsize}
+\usepackage[procnames]{listings}
+\usepackage{hyperref}
+
+
+% fatter TT font
+\renewcommand*\ttdefault{txtt}
+% another TT, suggested by Alex
+% \usepackage{inconsolata}
+% \usepackage[T1]{fontenc} % needed as well?
+
+\usepackage[procnames]{listings}
+
+\newcommand{\scale}{0.7}
+
+\newif\ifbook
+\input{../shared/chisel.tex}
+
+\hypersetup{
+  linkcolor  = black,
+%  citecolor  = blue,
+  urlcolor   = blue,
+  colorlinks = true,
+}
+
+\newcommand{\code}[1]{{\texttt{#1}}}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
+
+\newcommand{\todo}[1]{{\emph{TODO: #1}}}
+\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
+\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
+
+% uncomment following for final submission
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
+%\renewcommand{\author2}[1]{}
+
+
+\title{Basic Digital Circuits in Chisel}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}[fragile]{Overview}
+\begin{itemize}
+\item TODOs
+\item Repeats from last lecture
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Chisel VHDL Comparison}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{chisel}
+class DecodeExecute extends Bundle {
+  val rs1 = UInt(32.W)
+  val rs2 = UInt(32.W)
+  val immVal = UInt(32.W)
+  val aluOp = new AluOp()
+}
+\end{chisel}
+\column{0.5\textwidth}
+\begin{verbatim}
+VHDL code here
+\end{verbatim}
+\end{columns}
+Also show latch and and using a button as clock
+\end{frame}
+
+
+\end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
