@@ -53,48 +53,63 @@ Embedded Systems Engineering}
 \end{frame}
 
 
-
-\begin{frame}{Two-column slide}
- 
-\begin{columns}
- 
-\column{0.5\textwidth}
-This is a text in first column.
-$$E=mc^2$$
-\begin{itemize}
-\item First item
-\item Second item
-\end{itemize}
- 
-\column{0.5\textwidth}
-This text will be in the second column
-and on a second tought this is a nice looking
-layout in some cases.
-\end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Title}
-\begin{itemize}
-\item \url{https://singularityhub.com/2019/08/26/this-giant-ai-chip-is-the-size-of-an-ipad-and-holds-1-2-trillion-transistors/}
-\item abc
-\item abc
-\item abc
-\item abc
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item abc
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Introduction and motivation
+\item Motivation
+\item Course organization
 \item The digital abstraction
 \item Languages for hardware design
-\item Testing (see 2.1.4)??
+%\item Testing (see 2.1.4)??
 \item A first round in Chisel
 \item Tools and setup
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{A BIG Chip}
+\begin{itemize}
+\item \url{https://singularityhub.com/2019/08/26/this-giant-ai-chip-is-the-size-of-an-ipad-and-holds-1-2-trillion-transistors/}
+\item $1.2 \times 10^{12}$ transistors
+\item If you design 1 transistor per second
+\begin{itemize}
+\item It takes you 38 thousand years
+\end{itemize}
+\item This calls for some abstraction
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hardware Design in DK}
+\begin{itemize}
+\item Oticon
+\item Widex
+\item Microsemi
+\item probably some more...
+\item 
+\item They are all hiring
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Web Resources}
+\begin{itemize}
+\item \href{https://cn.inside.dtu.dk/cnnet/element/612883/frontpage}{DTU Inside}
+\begin{itemize}
+\item Vending machine document
+\item Project report hand in
+\end{itemize}
+\item \href{http://www2.imm.dtu.dk/courses/02139/}{Course website}
+\begin{itemize}
+\item General information, starting point
+\end{itemize}
+\item \href{https://github.com/schoeberl/chisel-lab}{Lab website}
+\begin{itemize}
+\item Lab material on GitHub
+\end{itemize}
+\item \href{http://www.imm.dtu.dk/~masca/chisel-book.html}{Chisel book website}
+\begin{itemize}
+\item Download the free PDF
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -108,17 +123,14 @@ layout in some cases.
 \item Get the tools installed on your laptop
 \item You have an FPGA board, experiment with it
 \end{itemize}
-\item This will not be an easy course
-\begin{itemize}
-\item But you will learn a lot, and it will make you a better
+\item You will learn a lot in this course, it will make you a better:
 \begin{itemize}
 \item engineer
 \item hardware designer
 \item programmer, and
 \item computer user in general
 \end{itemize}
-\end{itemize}
-\item Try to have fun on building stuff!
+\item Try to have fun with building stuff that is real!
 \end{itemize}
 \end{frame}
 
@@ -128,10 +140,13 @@ layout in some cases.
 \begin{itemize}
 \item The Internet ond Google
 \item Your fellow students
-\item The TAs
+\item The TAs: \href{https://cn.inside.dtu.dk/cnnet/element/612883/participants}{Simon, Kasper, and Anthon}
 \item Me
 \end{itemize}
 \item We will use Slack for easy communication (if ok for you)
+\begin{itemize}
+\item \url{https://de2019.slack.com/}
+\end{itemize}
 \item You can always just knock my door or shoot me an email
 \item Anonymous feedback
 \end{itemize}
@@ -192,7 +207,8 @@ layout in some cases.
 \begin{frame}[fragile]{A Vending Machine from 1952}
 \begin{figure}
     \centering
-    \includegraphics[scale=0.4]{CandiesVendingMachine1952}
+    \href{https://en.wikipedia.org/wiki/File:CandiesVendingMachine1952.jpg}{\includegraphics[scale=0.4]{CandiesVendingMachine1952}}
+
 \end{figure}
 
 {\tiny Source: Minnesota Historical Society, \href{https://creativecommons.org/licenses/by-sa/2.0}{CC BY-SA 2.0}}
@@ -285,7 +301,8 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{The Slides are Online}
 \begin{itemize}
-\item \url{https://github.com/schoeberl/chisel-book/wiki}
+\item \url{http://www2.imm.dtu.dk/courses/02139/}
+\item \url{https://github.com/schoeberl/chisel-book/tree/master/slides}
 \end{itemize}
 %\begin{figure}
 %    \centering
@@ -293,7 +310,7 @@ Lipsi: Probably the Smallest Processor in the World}
 %\end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Why Chisel?}
+\begin{frame}[fragile]{Why Chisel Instead of VHDL/Verilog/SystemVerilog?}
 \begin{itemize}
 \item Company O does VHDL, company W does Verilog
 \begin{itemize}
@@ -810,7 +827,27 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Time}
+
+\begin{frame}[fragile]{Lab Time (Basys3)}
+\begin{itemize}
+\item Get a blinking LED working on the FPGA board
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/chisel-lab}
+\end{itemize}
+\item Follow the instructions from the lab page
+\begin{itemize}
+\item Start IntelliJ and follow the instructions from the lab page
+\item \code{sbt run}
+\item Create a Vivado project
+\item Synthesize with the Play button
+\item Configure the FPGA with the Programmer button
+\end{itemize}
+\item {\bf You have your first Chisel design running in an FPGA!}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab Time (DE2-115)}
 \begin{itemize}
 \item Get a blinking LED working on the FPGA board
 \item Clone or download the repository now
@@ -826,13 +863,14 @@ make
 \item Open the project at \code{chisel-examples/hello-world/quartus/altde2-115}
 \item Synthesize with the Play button
 \item Configure the FPGA with the Programmer button
-\item {\bf You have your first Chisel design running!}
+\item {\bf You have your first Chisel design running in an FPGA!}
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}[fragile]{Change the Design}
 \begin{itemize}
-\item Use \code{gedit}, or the editor you like most
+\item Use IntelliJ, \code{gedit}, or the editor you like most
 \item Source is in \code{.../src/main/scala/Hello.scala}
 \item Change blinking frequency
 \item Rerun the example
@@ -842,6 +880,25 @@ make
 \item Setup IntelliJ with a Scala project 
 \end{itemize}
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Two-column slide}
+ 
+\begin{columns}
+ 
+\column{0.5\textwidth}
+This is a text in first column.
+$$E=mc^2$$
+\begin{itemize}
+\item First item
+\item Second item
+\end{itemize}
+ 
+\column{0.5\textwidth}
+This text will be in the second column
+and on a second tought this is a nice looking
+layout in some cases.
+\end{columns}
 \end{frame}
 
 

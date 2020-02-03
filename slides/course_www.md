@@ -2,11 +2,22 @@
 
 This course is a follow up of Digital Electronics 1 for students of Electrical Engineering at DTU, but can also be taken from other study lines.
 
-*This course is being restructured and therefore this web page is under constant change.*
+*This course is being restructured and therefore this web page may change.*
 
 ### Aims of the course
 
+To provide the participants with the competencies necessary to design digital circuits that perform simple calculations or control tasks using typical simulation and synthesis tools and to implement these circuits using reconfigurable hardware (FPGA technology). 
+
 ### Tentative List of Topics
+
+ * Calculation of circuit delay and energy consumption of combinatorial circuits using R-C switch models.
+ * Macromodels and timing parameters for combinatorial circuits and flip-flops. Calculation of critical path.
+ * Hardware description in a hardware description language (Chisel)
+ * Metastability and synchronization of asynchronous input signals.
+ * FPGA technology: Basics of structure and principles of operation.
+ * FSMD-style implementation template for a digital circuit (a so-called data-path controlled by a finite state machine).
+ * Elementary HDL: (a) basic language constructs, (b) understanding its semantics based on how a given circuit simulates, (c) code-templates for combinatorial and sequential circuits.
+ * Lab exercises covering Chisel and related CAD-tools for simulation, synthesis, and prototype implementation using FPGA technology (currently GTKWave and Xilinx Vivado). 
 
 ### Prerequisites
 
@@ -160,18 +171,18 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** work on vending machine
 
 
-### Week 11 No lecture
-
-**Lab:** work on vending machine
-
-
-### Week 12 Microcoded State Machine, Pipelining, Memory
+### Week 11 Microcoded State Machine, Pipelining, Memory
 
 **Topics:** Microcoded FSMs, pipelining, and interconnect
 
 **Reading:** Dally 18, 23.1-23.4, 24 Chisel 6.x
 
 **Lab:** 18.1 and 18.2, 23.1-23.4, 24.1, (24.2), maybe SRAM exercise
+
+
+### Week 12 No lecture
+
+**Lab:** work on vending machine
 
 
 ### Week 13 Outro, A Simple Processor
