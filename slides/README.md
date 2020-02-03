@@ -1,7 +1,7 @@
 
 # Slides for a 13 Week Course on Digital Design with Chisel
 
-Those slides are used in the course Digital Electronics 2 at the
+The slides are used in the course Digital Electronics 2 at the
 Technical University of Denmark. The course aims for second semester
 EE students without programming experience, but basic digital
 electronics knowledge (transistors, gates, timing, minimal VHDL).
@@ -12,4 +12,4 @@ The PDFs will be made available on the
 during the semester.
 
 The slides are open-source, so feel free to adapt them for your
-course needs. Please acknowledge the source.
+course as needed. Please acknowledge the source.

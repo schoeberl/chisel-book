@@ -15,6 +15,8 @@
 
 \usepackage[procnames]{listings}
 
+\newcommand{\scale}{0.7}
+
 \newif\ifbook
 \input{../shared/chisel.tex}
 
@@ -55,28 +57,68 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Motivation
+\item Motivation and the digital abstraction
 \item Course organization
-\item The digital abstraction
 \item Languages for hardware design
-%\item Testing (see 2.1.4)??
+\item Testing (see 2.1.4)
 \item A first round in Chisel
 \item Tools and setup
 \end{itemize}
 \end{frame}
 
 
-
 \begin{frame}[fragile]{A BIG Chip}
 \begin{itemize}
 \item \url{https://singularityhub.com/2019/08/26/this-giant-ai-chip-is-the-size-of-an-ipad-and-holds-1-2-trillion-transistors/}
 \item $1.2 \times 10^{12}$ transistors
-\item If you design 1 transistor per second
+\item If you design 1 gate (= 4 transistors) per second
 \begin{itemize}
-\item It takes you 38 thousand years
+\item It takes you 10 thousand years!
 \end{itemize}
 \item This calls for some abstraction
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Digital Systems are Everywhere}
+\begin{itemize}
+\item Digital systems are all over in our live
+\item No more analog media
+\item CD, mobile phone, TV, DVD,... all digital now
+\item Analog circuits only at the edge
+\item The rest is processed in digital
+\item If performance allows, functions are moved to software
+\item But growth/speedup has slowed down
+\item Algorithms are moved back into hardware
+\item FPGAs in server, a reason why Intel bought Altera
+\item A good time to be a digital designer
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{The Digital Abstraction}
+\begin{columns}
+ 
+\column{0.5\textwidth}
+\begin{itemize}
+\item Just two values: 0 and 1, or low and hight
+\item Represented as voltage
+\item Digital signals tolerate noise
+\item Digital Systems are \emph{simple}, just:
+\begin{itemize}
+\item Combinational circuits and
+\item Registers
+\end{itemize}
+\end{itemize}
+ 
+\column{0.5\textwidth}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/logic}
+\end{figure}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register}
+\end{figure}
+\end{columns}
+
 \end{frame}
 
 \begin{frame}[fragile]{Hardware Design in DK}
@@ -90,6 +132,44 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Digital Design within an EE Master}
+\begin{itemize}
+\item Not an obvious choice, as there is no specialization in digital systems
+\item Select some of the following courses
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02203: Design of Digital Systems
+\item 02211: Advanced Computer Architecture
+\item 02205: VLSI Design
+\item 02217: Design of Arithmetic Processors
+\item 02204: Design of Asynchronous Circuits
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Computer Engineering Education at DTU}
+\begin{itemize}
+\item On the border between hardware and software
+\item Very well payed jobs :-)
+\item Not an easy choice at DTU as well
+\begin{itemize}
+\item No BSc available
+\item Between EE and CS
+\end{itemize}
+\item Start with Bsc. in EE
+\item Specialization in Indlejrede systemer og programmering
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02105: Algoritmer og datastrukturer
+\end{itemize}
+\item Continue as MSc. in Computer Science and Engineering
+\item Specialization in
+\begin{itemize}
+\item Digital Systems
+\item Embedded and Distributed Systems
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Web Resources}
 \begin{itemize}
@@ -139,7 +219,7 @@ Embedded Systems Engineering}
 \item Several sources of information:
 \begin{itemize}
 \item The Internet ond Google
-\item Your fellow students
+\item Your fellow students (e.g., via Slack)
 \item The TAs: \href{https://cn.inside.dtu.dk/cnnet/element/612883/participants}{Simon, Kasper, and Anthon}
 \item Me
 \end{itemize}
@@ -157,7 +237,7 @@ Embedded Systems Engineering}
 \item Inbox available at: 
 \href{https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link}{Anonymous Inbox}
 \item Simple Google form without revealing your identity
-\item I will get notified
+\item I will get notified by an email
 \item Use when you want to complain, give feedback, but also when you like something ;-)
 \item Even when frustrated, please be polite, a human is reading this
 \end{itemize}
@@ -167,7 +247,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item It is ok and good practice to discuss problems and solutions with your fellow students
 \item But you need to hand in your own solution
-\item Copying stuff or offering stuff is cheating
+\item Copying stuff or offering stuff for copying is cheating
 \item Copying material from somewhere is plagiarism and copyright violation
 \item Cheating is handled quite rigorous at DTU, you might get expelled
 \item Using source code control (GitHub) is good practice
@@ -229,7 +309,7 @@ Embedded Systems Engineering}
 \end{frame}
 
 
-\begin{frame}[fragile]{Motivating Example:\\
+\begin{frame}[fragile]{Motivating Example for Chisel:\\
 Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
 \item Tiny processor
@@ -322,39 +402,43 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \item When knowing principles, switching the language is a matter of a week
 \item You are the future engineers and shall learn new tools
-\item You may then bring this in into the company
-\item abc
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item abc
+\item You may then bring Chisel into the company
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{More on Chisel, Success Stories}
 \begin{itemize}
-\item abc
-\item abc
-\item abc
-\item abc
+\item Last week at CCC 2020 (in silicon valley)
+\item More than 40 different (hardware) companies present
+\item Several companies are looking into Chisel
+\item IBM did an open-source PowerPC
+\item \href{https://www.sifive.com/}{SiFive} is a RISC-V startup success
+\begin{itemize}
+\item High productivity with Chisel
+\item Open-source Rocket chip
+\end{itemize}
+\item Experanto uses the BOOM processor in Chisel
+\item Google did a machine learning processor
+\item Intel is looking at Chisel
+\item Chisel is open-source, if there is a bug you can fix it
+\begin{itemize}
+\item You can contribute to the Chisel ecosystem
+\end{itemize}
 \item abc
 \begin{itemize}
 \item xxx
 \end{itemize}
-\item abc
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{More Notes}
 \begin{itemize}
 \item Tell silicon valley story
-\item CCC 2020
-\item Path for HW engineer
-\item Path got computer engineering
 \item Show tools
 \item show success stories
 \begin{itemize}
-\item xxx
+\item Cut most Chisel out from this slides, it is too much for the first intro in DE2
+\item keep it for the faster intro
 \end{itemize}
 \item abc
 \end{itemize}

@@ -16,8 +16,8 @@ To provide the participants with the competencies necessary to design digital ci
  * Metastability and synchronization of asynchronous input signals.
  * FPGA technology: Basics of structure and principles of operation.
  * FSMD-style implementation template for a digital circuit (a so-called data-path controlled by a finite state machine).
- * Elementary HDL: (a) basic language constructs, (b) understanding its semantics based on how a given circuit simulates, (c) code-templates for combinatorial and sequential circuits.
- * Lab exercises covering Chisel and related CAD-tools for simulation, synthesis, and prototype implementation using FPGA technology (currently GTKWave and Xilinx Vivado). 
+ * Elementary HDL: (a) basic language constructs, (b) understanding its semantics based on how a given circuit simulates, (c) code templates for combinatorial and sequential circuits.
+ * Lab exercises covering Chisel and related CAD tools for simulation, synthesis, and prototype implementation using FPGA technology (currently GTKWave and Xilinx Vivado). 
 
 ### Prerequisites
 
