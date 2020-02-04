@@ -5,7 +5,6 @@
 \usepackage{relsize}
 \usepackage[procnames]{listings}
 \usepackage{hyperref}
-\usepackage{dirtree}
 \usepackage{qtree}
 
 
@@ -96,8 +95,13 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{FPGAs in the Cloud}
 \begin{itemize}
-\item TODO: text, links
-\item FPGAs in server, a reason why Intel bought Altera
+\item High performance algorithm in an FPGA
+\item \href{https://aws.amazon.com/ec2/instance-types/f1/}{An FPGA in the cloud}
+\item \href{https://www.intel.com/content/www/us/en/products/docs/storage/programmable/applications/cloud.html}{Intel offers FPGAs for servers}
+\begin{itemize}
+\item There is some reason why Intel bought Altera
+\end{itemize}
+\item We need digital designers to make this work
 \item A good time to be a digital designer
 \end{itemize}
 \end{frame}
@@ -413,10 +417,11 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{More on Chisel, Success Stories}
+\begin{frame}[fragile]{More on Chisel Success Stories}
 \begin{itemize}
 \item Last week at CCC 2020 (in silicon valley)
-\item More than 40 different (hardware) companies present
+\item 90 participants
+\item More than 30 different (hardware) companies present
 \item Several companies are looking into Chisel
 \item IBM did an open-source PowerPC
 \item \href{https://www.sifive.com/}{SiFive} is a RISC-V startup success
@@ -430,10 +435,6 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Chisel is open-source, if there is a bug you can fix it
 \begin{itemize}
 \item You can contribute to the Chisel ecosystem
-\end{itemize}
-\item abc
-\begin{itemize}
-\item xxx
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -515,8 +516,7 @@ Lipsi: Probably the Smallest Processor in the World}
    [.{\bf Verilog} {\bf SystemVerilog} ]
    [.C++  \emph{SystemC}  ]
    [.Java [.Scala {\bf Chisel} ] ]
-   [.C\# ]
-   [.\emph{HLS} ] ] ]
+   [.C\# ] ] ]
  
 \end{frame}
 
@@ -552,7 +552,14 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-
+\begin{frame}[fragile]{Chisel vs. Scala}
+\begin{itemize}
+\item A Chisel hardware description is a Scala program
+\item Chisel is a Scala library
+\item When the program is executed it generates hardware
+\item Chisel is a so-called \emph{embedded domain-specific language}
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Expressions are Combinational Circuits}
@@ -834,7 +841,20 @@ val rom = Vec[Bits](arr)
 \begin{itemize}
 \item \code{sudo apt install openjdk-8-jdk git make gtkwave}
 \item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
+\item IntelliJ as from the website
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Virtual Machine Setup for Chisel}
+\begin{itemize}
+\item Ubuntu based
+\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
+\item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
+\begin{itemize}
+\item But this is VERY large (40 GB for the .zip file)
+\end{itemize}
+\item Use the  \href{https://www.vmware.com/products/workstation-player.html} {VMWare Workstation Player} (free for Linux and Windows)
 \end{itemize}
 \end{frame}
 

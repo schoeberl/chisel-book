@@ -5,6 +5,7 @@
 \usepackage{relsize}
 \usepackage[procnames]{listings}
 \usepackage{hyperref}
+\usepackage{qtree}
 
 
 % fatter TT font
@@ -121,16 +122,37 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{The Slides are Online}
-\begin{itemize}
-\item \url{https://github.com/schoeberl/chisel-book/wiki}
-\end{itemize}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.5]{slides-link}
-\end{figure}
-\end{frame}
+%\begin{frame}[fragile]{The Slides are Online}
+%\begin{itemize}
+%\item \url{https://github.com/schoeberl/chisel-book/wiki}
+%\end{itemize}
+%\begin{figure}
+%    \centering
+%    \includegraphics[scale=0.5]{slides-link}
+%\end{figure}
+%\end{frame}
 
+\begin{frame}[fragile]{More on Chisel Success Stories}
+\begin{itemize}
+\item Last week at CCC 2020 (in silicon valley)
+\item 90 participants
+\item More than 30 different (hardware) companies present
+\item Several companies are looking into Chisel
+\item IBM did an open-source PowerPC
+\item \href{https://www.sifive.com/}{SiFive} is a RISC-V startup success
+\begin{itemize}
+\item High productivity with Chisel
+\item Open-source Rocket chip
+\end{itemize}
+\item Experanto uses the BOOM processor in Chisel
+\item Google did a machine learning processor
+\item Intel is looking at Chisel
+\item Chisel is open-source, if there is a bug you can fix it
+\begin{itemize}
+\item You can contribute to the Chisel ecosystem
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Goals for this Intro}
 \begin{itemize}
@@ -188,6 +210,30 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \item Developed at UC Berkeley
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The C Language Familie}
+
+\Tree[.C [
+   [.{\bf Verilog} {\bf SystemVerilog} ]
+   [.C++  \emph{SystemC}  ]
+   [.Java [.Scala {\bf Chisel} ] ]
+   [.C\# ] ] ]
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Other Language Families}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Python [.{\bf MyHDL} ] ]
+\end{center}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Some Notes on Scala}
@@ -442,29 +488,53 @@ for (i <- 0 until byteArray.length) {
 val rom = Vec[Bits](arr)
 \end{chisel}
 \end{frame}
-%%%%%%%%%%%%%%%%%
-%\begin{frame}[fragile]{zzz}
-%\begin{chisel}
-%code
-%\end{chisel}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%%%%%%%%%%%%%%%%%
 
+\begin{frame}[fragile]{Free Tools for Chisel and FPGA Design}
+\begin{itemize}
+\item \href{https://adoptopenjdk.net/}{Java OpenJDK 8}
+\item \href{https://www.scala-sbt.org/}{sbt, the Scala (and Java) build tool}
+\item \href{https://www.jetbrains.com/idea/download/}{IntelliJ (the free Community version)}
+\item \href{http://gtkwave.sourceforge.net/}{GTKWave}
+\item \href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado WebPACK} or
+\item \href{http://www.altera.com/products/software/quartus-ii/web-edition/qts-we-index.html}{Quartus}
+\item Nice to have:
+\begin{itemize}
+\item make, git
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Setup for Different OSs}
+\begin{itemize}
+\item Windows
+\begin{itemize}
+\item Use the installers from the websites
+\end{itemize}
+\item macOS
+\begin{itemize}
+\item \code{brew install sbt}
+\item For the rest, use the installer from the websites
+\end{itemize}
+\item Linux/Ubuntu
+\begin{itemize}
+\item \code{sudo apt install openjdk-8-jdk git make gtkwave}
+\item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
+\item IntelliJ as from the website
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Virtual Machine Setup for Chisel}
+\begin{itemize}
+\item Ubuntu based
+\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
+\item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
+\begin{itemize}
+\item But this is VERY large (40 GB for the .zip file)
+\end{itemize}
+\item Use the  \href{https://www.vmware.com/products/workstation-player.html} {VMWare Workstation Player} (free for Linux and Windows)
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{An IDE for Chisel}
@@ -592,6 +662,8 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
+\item The world is digital
+\item Processors do not get much faster -- we need to design custom hardware
 \item We need a modern language for hardware/systems design
 \item Chisel builds on the power of object-oriented and functional Scala
 \item Chisel is good for hardware generators
@@ -599,7 +671,26 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Time}
+\begin{frame}[fragile]{Lab Time (Basys3)}
+\begin{itemize}
+\item Get a blinking LED working on the FPGA board
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/chisel-lab}
+\end{itemize}
+\item Follow the instructions from the lab page
+\begin{itemize}
+\item Start IntelliJ and follow the instructions from the lab page
+\item \code{sbt run}
+\item Create a Vivado project
+\item Synthesize with the Play button
+\item Configure the FPGA with the Programmer button
+\end{itemize}
+\item {\bf You have your first Chisel design running in an FPGA!}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab Time (DE2-115)}
 \begin{itemize}
 \item Get a blinking LED working on the FPGA board
 \item Clone or download the repository now
@@ -615,7 +706,7 @@ make
 \item Open the project at \code{chisel-examples/hello-world/quartus/altde2-115}
 \item Synthesize with the Play button
 \item Configure the FPGA with the Programmer button
-\item {\bf You have your first Chisel design running!}
+\item {\bf You have your first Chisel design running in an FPGA!}
 \end{itemize}
 \end{frame}
 
