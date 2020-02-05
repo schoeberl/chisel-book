@@ -100,7 +100,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** Basic circuits in Chisel, given testers, diagram to code and code to diagram exercises. TODO: look into Dally 7 examples for the lab. One example with the FPGA board.
 
 
-### Week 3 Timing (guest lecture by Jans Sparsoe)
+### Week 3 Timing (guest lecture by Jens Sparsø)
 
 **Topics:** Delay and Power, Timing, and Metastability
 

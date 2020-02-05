@@ -6,6 +6,8 @@
 \usepackage[procnames]{listings}
 \usepackage{hyperref}
 \usepackage{qtree}
+\usepackage{booktabs}
+
 
 
 % fatter TT font
@@ -466,8 +468,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
 \item Will show you code snippets
 \end{itemize}
-\item A first high level view of the main features of Chisel
-\item Reconsider how to describe hardware
+\item Basic hardware constructs in Chisel
 \item Some experience report from usage at DTU
 \item Pointers to more information
 \item Have your first Chisel design running in an FPGA!
@@ -484,7 +485,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Say goodby to your unintended latches
 \end{itemize}
 \item Chisel is not a high-level synthesis language
-\item Single source two targets
+\item Single source for two targets
 \begin{itemize}
 \item Cycle accurate simulation (testing)
 \item Verilog for synthesis
@@ -522,13 +523,6 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Tool Flow for Chisel -- probably needs to be moved}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.35]{../figures/flow}
-\end{figure}
-\end{frame}
-
 \begin{frame}[fragile]{Some Notes on Scala}
 \begin{itemize}
 \item Object oriented
@@ -556,12 +550,42 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel Types}
+\begin{frame}[fragile]{A Small Language}
 \begin{itemize}
-\item TODO
-\item All types in hardware are collection of bits
-\item The base type for this in Chisel is \code{Bits}
+\item Chisel is a \emph{small} language
+\item On purpose
+\item Not many constructs to remember
+\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
+\item The power comes with Scala for generators
+\item With Scala, Chisel can grow with you
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Flow for Chisel Defined Hardware}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{../figures/flow}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Signal Types}
+\begin{itemize}
+\item All types in hardware are a collection of bits
+\item The base type in Chisel is \code{Bits}
+\item \code{UInt} represents an unsigned integer
+\item \code{SInt} represents a signed integer (in two's complement)
+\end{itemize}
+\shortlist{../code/types.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Number of Bits: n.W}
+\begin{itemize}
+\item A collection of bits has a \emph{width}
+\item The width is the number of bits
+\item Is written as number followed by \code{.W}
+\item Following example shows the width of \code{n}
+\end{itemize}
+\shortlist{../code/n_w.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Constants}
@@ -569,121 +593,177 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Constants can represent signed or unsigned numbers
 \item We use \code{.U} and \code{.S} to distinguish
 \end{itemize}
-\begin{chisel}
- 0.U // zero unsigned
--3.S // minus 3
- 5.U // unsigned 5
-\end{chisel}
+\shortlist{../code/constants.txt}
 \begin{itemize}
-\item Constants are also used to represent a \emph{width}
-\item The number of bits for a signal or register
-\item We use \code{.W} for a width
+\item Constants can also be specified with a width
 \end{itemize}
-\begin{chisel}
-32.W // 32 bits
-\end{chisel}
+\shortlist{../code/const_width.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Expressions are Combinational Circuits}
-\begin{chisel}
-(a | b) & ~(c ^ d)
-
-val addVal = a + b
-val orVal = a | b
-val boolVal = a >= b
-\end{chisel}
+\begin{frame}[fragile]{Hexadecimal and Binary Representation}
 \begin{itemize}
-\item The usual operations 
-\item Simple name assignment with val
-\item Width inference
-\item Type inference
-\item Types: Bits, UInt, SInt, Bool
+\item We can specify constants with a different base from 10
+\item May come handy sometimes
 \end{itemize}
+\shortlist{../code/const_base.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Registers}
-\begin{chisel}
-val cntReg = RegInit(0.U(32.W))
-
-cntReg := cntReg + 1.U
-\end{chisel}
+\begin{frame}[fragile]{Boolean Values}
 \begin{itemize}
-\item Type inferred by initial value (= reset value)
-\item No need to specify a clock or reset signal
+\item Type for logical values
+\item Can be \code{true} or \code{false}
+\item Almost exchangeable with \code{UInt(1.W)}
+\item Sometimes a signal, such as \code{valid}, may be better represented by a Boolean type
 \end{itemize}
-\begin{itemize}
-\item Also definition with an input signal connected:
-\end{itemize}
-\begin{chisel}
-val r = RegNext(nextVal) 
-\end{chisel}
+\shortlist{../code/bool.txt}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Bundles}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
-}
-\end{chisel}
+\begin{frame}[fragile]{Combinational Circuits}
 \begin{itemize}
-\item Collection of values in named fields 
-\item Like struct or record
+\item Chisel uses Boolean operators, similar to C or Java
+\item \code{\&} is the AND operator and \code{|} is the OR operator
+\item The following code is the same as the schematics
+\item \code{val logic} gives the circuit/expression the name \code{logic}
+\item That name can be used in following expressions
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/logic}
+\end{figure}
+\shortlist{../code/logic.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Standard Logic Operations}
+\shortlist{../code/bool_ops.txt}
+\begin{itemize}
+\item Note that we do not need to define the width of the values
+\item Note also that this is \emph{hardware}
+\item All expressions are evaluated in parallel
+\item Order does not matter
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{IO Ports}
-\begin{chisel}
-class Channel extends Bundle {
-  val data = Input(UInt(8.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-\end{chisel}
+\begin{frame}[fragile]{Arithmetic Operations}
 \begin{itemize}
-\item Ports are Bundles with directions
-\item Direction can also be assigned at instantiation:
+\item Same as in Java or C
+\item The width of the result is automatically computed
+\item E.g., the width of the multiplication is the sum of the width of \code{a} and width of \code{b} 
 \end{itemize}
-\begin{chisel}
-class ExecuteIO extends Bundle {
-  val dec = Input(new DecodeExecute())
-  val mem = Output(new ExecuteMemory())
-}
-\end{chisel}
+\shortlist{../code/arith_ops.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Modules}
-\begin{chisel}
-class Adder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-\end{chisel}
+\begin{frame}[fragile]{Wires}
 \begin{itemize}
-\item Organization of components
-\item IO ports defined as a Bundle named \code{io} and wrapped into an \code{IO()}
-\item Created (instantiated) with:
+\item A signal (or wire) can be first defined
+\item And later assigned an expression with \code{:=}
 \end{itemize}
-\begin{chisel}
-val adder = Module(new Adder())
-\end{chisel}
+\shortlist{../code/wire.txt}
 \end{frame}
+
+\begin{frame}[fragile]{Chisel Defined Hardware Operators}
+\begin{table}
+{\footnotesize
+  \begin{tabular}{lll}
+    \toprule
+    Operator & Description & Data types \\
+    \midrule
+    \code{* / \%} & multiplication, division, modulus & UInt, SInt \\
+    \code{+ -} & addition, subtraction & UInt, SInt \\
+    \code{=== =/=} & equal, not equal & UInt, SInt, returns Bool \\
+    \code{> >= < <=} & comparison & UInt, SInt, returns Bool \\
+    \code{<< >>} & shift left, shift right (sign extend on SInt) & UInt, SInt \\
+    \code{\~} & NOT & UInt, SInt, Bool \\
+    \code{\& | \^} & AND, OR, XOR & UInt, SInt, Bool \\
+    \code{!} & logical NOT & Bool \\
+    \code{\&\& ||} & logical AND, OR & Bool \\
+    \bottomrule 
+  \end{tabular} 
+  }
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Subfields and Concatenation}
+A single bit can be extracted as follows:
+\shortlist{../code/single_bit.txt}
+
+\noindent A subfield can be extracted from end to start position:
+\shortlist{../code/sub_field.txt}
+
+\noindent Bit fields are concatenated with \code{Cat}:
+\shortlist{../code/concat.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
+\begin{itemize}
+\item A Multiplexer selects between alternatives
+\item So common that Chisel provides a construct for it
+\item Selects \code{a} when \code{sel} is \code{true.B} otherwise \code{b}
+\end{itemize}
+\shortlist{../code/mux.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{The World of Combinational Logic}
+\begin{itemize}
+\item With the shown operations (logic, arithmetic, Mux) all possible combinational circuits can be described
+\item Even the \code{Mux} is already \emph{syntactic sugar}
+\begin{itemize}
+\item A \code{Mux} is basically: \code{(a \& sel) | (b \& !sel)}
+\end{itemize}
+\item But Chisel provides further constructs for more elegant description of circuits
+\item Stay tuned!
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Register}
+\begin{itemize}
+\item A register is a collection of flip-flops
+\item Updated on the rising edge of clock
+\item May be set to a value on reset
+\item Clock and reset are implicitly connected to the register
+\item A register can be any Chisel type that can be represented as a collection of bits
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{A Register with Reset}
+
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register-reset-0}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{A Register with Reset}
+
+Following code defines an 8-bit register, initialized with 0 at reset:
+
+\shortlist{../code/register.txt}
+
+\noindent An input is connected to the register with the \code{:=} update operator and
+the output of the register can be used just with the name in an expression:
+
+\shortlist{../code/reg_con.txt}
+\end{frame}
+
 
 \begin{frame}[fragile]{Hello World in Chisel}
 \shortlist{../code/hello.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Chisel is a Hardware Construction Language}
+\begin{itemize}
+\item The code I showed you looks much like Java code
+\item But it is \emph{not} a program in the usual sense
+\item It represents a circuit
+\item The ``program'' constructs the circuit
+\item All statements are ``executed'' in parallel
+\item Statement order has not much meaning
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Free Tools for Chisel and FPGA Design}
 \begin{itemize}
@@ -739,7 +819,7 @@ val adder = Module(new Adder())
 \item Scala plugin
 \item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
 %\item But you are not compiling with Eclipse\\ and against the Chisel source
-\item Show it
+\item Show it (down to the Basys3)
 \end{itemize}
 \end{frame}
 
@@ -811,7 +891,7 @@ val adder = Module(new Adder())
 \begin{itemize}
 \item The world is digital
 \item Processors do not get much faster -- we need to design custom hardware
-\item We need a modern language for hardware/systems design for efficient design
+\item We need a modern language for hardware/systems design for efficient/fast designing
 \item Chisel builds on the power of object-oriented and functional Scala
 %\item Chisel is good for hardware generators
 % \item You can get started with a hardware design in a special course or 4th semester project
