@@ -63,7 +63,7 @@ Embedded Systems Engineering}
 \item Motivation and the digital abstraction
 \item Course organization
 \item Languages for hardware design
-\item Testing (see 2.1.4)
+%\item Testing (see 2.1.4)
 \item A first round in Chisel
 \item Tools and tool setup
 \end{itemize}
@@ -136,8 +136,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Hardware Design in DK}
 \begin{itemize}
-\item Oticon
+\item Demant (former Oticon)
 \item Widex
+\item GN ReSound
 \item Microsemi
 \item Intel (former Altera) Denmark
 \item probably some more...
@@ -147,7 +148,7 @@ Embedded Systems Engineering}
 \end{frame}
 
 \begin{frame}[fragile]{Example Design from Microsemi DK}
-Attached the picture of the board with the \$50k Xilinx in good resolution. This is a new board and is developed for ASIC prototyping in order to do pre-silicon validation as well as SW development. We have on the board currently mapped our current project: 8port industrial gigabit Ethernet switch with full TSN, CPU system ARM A7 with DDR, USB, PCIe and hardware security engines (SHA, AES) for secure boot of Linux and on the fly DRAM encryption. We scale and map all the digital logic to the FPGA.
+A picture of the board with the \$50k Xilinx FPGA. This is a new board and is developed for ASIC prototyping in order to do pre-silicon validation as well as SW development. We have on the board currently mapped our current project: 8port industrial gigabit Ethernet switch with full TSN, CPU system ARM A7 with DDR, USB, PCIe and hardware security engines (SHA, AES) for secure boot of Linux and on the fly DRAM encryption. We scale and map all the digital logic to the FPGA.
 \begin{itemize}
 \item Show the picture
 \end{itemize}
@@ -164,6 +165,7 @@ Attached the picture of the board with the \$50k Xilinx in good resolution. This
 \item 02205: VLSI Design
 \item 02217: Design of Arithmetic Processors
 \item 02204: Design of Asynchronous Circuits
+\item 02209: Test of Digital Systems
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -294,14 +296,9 @@ Attached the picture of the board with the \$50k Xilinx in good resolution. This
 \begin{frame}[fragile]{Lab Work}
 \begin{itemize}
 \item Some paper and pencil exercises
-\item Most work on computer designing digital circuits
-\item abc
-\item abc
-\item abc
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item abc
+\item Most work on designing digital circuits with a hardware description language
+\item Builds up to the final project: a vending machine
+\item The vending machine and the report are graded
 \end{itemize}
 \end{frame}
 
@@ -318,14 +315,17 @@ Attached the picture of the board with the \$50k Xilinx in good resolution. This
 \begin{frame}[fragile]{The Vending Machine}
 \begin{itemize}
 \item Final project is a vending machine
-\item abc
-\item abc
-\item abc
+\item Inputs: coins, buy
+\item Display: price and current ammount
+\item Output: release can or error
+\item Small challenge to multiplex the display
+\item State machine with data path is the \emph{brain} of the VM
+\item Will be guided step by step over several weeks
+\item More details next week
 \item VM in hardware versus VM in software
 \begin{itemize}
 \item This is an exercise that you can solve with reasonable effort
 \end{itemize}
-\item abc
 \end{itemize}
 \end{frame}
 
@@ -413,7 +413,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{Why Chisel Instead of VHDL/Verilog/SystemVerilog?}
 \begin{itemize}
-\item Company O does VHDL, company W does Verilog
+\item Company O does Verilog, company W does VHDL
 \begin{itemize}
 \item Why Chisel?
 \end{itemize}
@@ -429,9 +429,9 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{More on Chisel Success Stories}
 \begin{itemize}
-\item Last week at CCC 2020 (in silicon valley)
+\item Last week at CCC 2020 in silicon valley
 \item 90 participants
-\item More than 30 different (hardware) companies present
+\item More than 30 different chip companies present
 \item Several companies are looking into Chisel
 \item IBM did an open-source PowerPC
 \item \href{https://www.sifive.com/}{SiFive} is a RISC-V startup success
@@ -439,26 +439,13 @@ Lipsi: Probably the Smallest Processor in the World}
 \item High productivity with Chisel
 \item Open-source Rocket chip
 \end{itemize}
-\item Experanto uses the BOOM processor in Chisel
+\item Esperanto uses the BOOM processor in Chisel
 \item Google did a machine learning processor
 \item Intel is looking at Chisel
 \item Chisel is open-source, if there is a bug you can fix it
 \begin{itemize}
-\item You can contribute to the Chisel ecosystem
+\item You can even contribute to the Chisel ecosystem :-)
 \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{More Notes}
-\begin{itemize}
-\item Tell silicon valley story
-\item Show tools
-\item show success stories
-\begin{itemize}
-\item Cut most Chisel out from this slides, it is too much for the first intro in DE2
-\item keep it for the faster intro
-\end{itemize}
-\item abc
 \end{itemize}
 \end{frame}
 
@@ -469,10 +456,11 @@ Lipsi: Probably the Smallest Processor in the World}
 \item Will show you code snippets
 \end{itemize}
 \item Basic hardware constructs in Chisel
-\item Some experience report from usage at DTU
 \item Pointers to more information
 \item Have your first Chisel design running in an FPGA!
-\end{itemize}
+\begin{itemize}
+\item From 0 to 100 in one afternoon
+\end{itemize}\end{itemize}
 \end{frame}
 
 
@@ -514,7 +502,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{columns}
 \column{0.5\textwidth}
 \begin{center}
-\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
+\Tree[.{Algol 68} [.Ada [.{\bf VHDL} ] ] ]
 \end{center}
 \column{0.5\textwidth}
 \begin{center}
@@ -556,7 +544,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item On purpose
 \item Not many constructs to remember
 \item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
-\item The power comes with Scala for generators
+\item The power comes with Scala for circuit generators
 \item With Scala, Chisel can grow with you
 \end{itemize}
 \end{frame}
@@ -602,7 +590,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{Hexadecimal and Binary Representation}
 \begin{itemize}
-\item We can specify constants with a different base from 10
+\item We can specify constants with a different base
 \item May come handy sometimes
 \end{itemize}
 \shortlist{../code/const_base.txt}
@@ -646,7 +634,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
 \item Same as in Java or C
 \item The width of the result is automatically computed
-\item E.g., the width of the multiplication is the sum of the width of \code{a} and width of \code{b} 
+\item E.g., the width of the multiplication is the sum of the width of \code{a} and the width of \code{b} 
 \end{itemize}
 \shortlist{../code/arith_ops.txt}
 \end{frame}
@@ -705,6 +693,18 @@ A single bit can be extracted as follows:
 \shortlist{../code/mux.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Conditional Update}
+\begin{itemize}
+\item With \code{when} we can express a conditional update
+\item The resulting circuit is a multiplexer
+\item In contrast to the \code{Mux} component, we can have several assignments in the \code{when} block
+\item The rule is the the last enabled assignment counts
+\begin{itemize}
+\item Here the order of statements has a meaning
+\end{itemize}
+\end{itemize}
+\shortlist{../code/comb_wire.txt}
+\end{frame}
 
 \begin{frame}[fragile]{The World of Combinational Logic}
 \begin{itemize}
@@ -722,7 +722,7 @@ A single bit can be extracted as follows:
 \begin{frame}[fragile]{Register}
 \begin{itemize}
 \item A register is a collection of flip-flops
-\item Updated on the rising edge of clock
+\item Updated on the rising edge of the clock
 \item May be set to a value on reset
 \item Clock and reset are implicitly connected to the register
 \item A register can be any Chisel type that can be represented as a collection of bits
@@ -761,7 +761,7 @@ the output of the register can be used just with the name in an expression:
 \item It represents a circuit
 \item The ``program'' constructs the circuit
 \item All statements are ``executed'' in parallel
-\item Statement order has not much meaning
+\item Statement order has mostly no meaning
 \end{itemize}
 \end{frame}
 
@@ -790,6 +790,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item \code{brew install sbt}
 \item For the rest, use the installer from the websites
+\item Use an Ubuntu VM to run Vivado
 \end{itemize}
 \item Linux/Ubuntu
 \begin{itemize}
@@ -797,7 +798,7 @@ the output of the register can be used just with the name in an expression:
 \item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
 \item IntelliJ as from the website
 \end{itemize}
-\item If your setup fails, use the databar PCs
+\item If setup fails, we have you covered with the databar PCs
 \end{itemize}
 \end{frame}
 
@@ -831,7 +832,10 @@ the output of the register can be used just with the name in an expression:
 \end{figure}
 
 \begin{itemize}
-\item Available in open access (PDF)
+\item Available in open access (as PDF)
+\begin{itemize}
+\item Optimized for reading on a tablet (size, hyper links)
+\end{itemize}
 \item Amazon can do the printout
 \end{itemize}
 \end{frame}
@@ -839,6 +843,7 @@ the output of the register can be used just with the name in an expression:
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
 \item \url{https://www.chisel-lang.org/}
+\item \url{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}
 \item \url{https://github.com/ucb-bar/chisel-tutorial}
 \item \url{https://github.com/ucb-bar/generator-bootcamp}
 %\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
@@ -882,7 +887,6 @@ the output of the register can be used just with the name in an expression:
 \item Optional:
 \begin{itemize}
 \item Change to an asymmetric blinking, e.g., 200 ms on every second 
-\item Setup IntelliJ with a Scala project 
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -891,7 +895,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item The world is digital
 \item Processors do not get much faster -- we need to design custom hardware
-\item We need a modern language for hardware/systems design for efficient/fast designing
+\item We need a modern language for hardware/systems design for efficient/fast development
 \item Chisel builds on the power of object-oriented and functional Scala
 %\item Chisel is good for hardware generators
 % \item You can get started with a hardware design in a special course or 4th semester project
