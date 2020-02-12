@@ -6,8 +6,7 @@
 \usepackage[procnames]{listings}
 \usepackage{hyperref}
 \usepackage{qtree}
-
-
+\usepackage{booktabs}
 
 % fatter TT font
 \renewcommand*\ttdefault{txtt}
@@ -65,9 +64,8 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Basic digital building blocks
 \item TODOs
+\item Maybe move the bundles to the end
 \item go through the book
-\item when and switch and so on
-\item WireDefault
 \item Have a ref to the Java lecture
 \item The main program (compare Java with Scala)
 \item Introduce vending machine (maybe next time)
@@ -217,18 +215,6 @@ A single bit can be extracted as follows:
 \shortlist{../code/mux.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Conditional Update}
-\begin{itemize}
-\item With \code{when} we can express a conditional update
-\item The resulting circuit is a multiplexer
-\item In contrast to the \code{Mux} component, we can have several assignments in the \code{when} block
-\item The rule is the the last enabled assignment counts
-\begin{itemize}
-\item Here the order of statements has a meaning
-\end{itemize}
-\end{itemize}
-\shortlist{../code/comb_wire.txt}
-\end{frame}
 
 \begin{frame}[fragile]{Register}
 \begin{itemize}
@@ -264,10 +250,10 @@ the output of the register can be used just with the name in an expression:
 \begin{frame}[fragile]{Interlude}
 \begin{itemize}
 \item Before we look at new material
-\item Sprinkle in some general development tools
+\item Sprinkle in some info on general development tools
 \item Get better at using your computer
 \item Learn some tools
-\item Don't be afraid from the command line ;-)
+\item Don't be afraid of the command line ;-)
 \item
 \item
 \item Engineers are power users!
@@ -283,6 +269,7 @@ the output of the register can be used just with the name in an expression:
 \item Draw a figure
 \end{itemize}
 \item To manage source code or other documents
+\item Track changes in computer files
 \item Created by Linus Torvalds for Linux kernel development
 \item Good tool for cooperation
 \item Mostly used as the command line
@@ -310,9 +297,222 @@ the output of the register can be used just with the name in an expression:
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{A Counter}
+\shortlist{../code/counter.txt}
+\begin{itemize}
+\item This counter counts from 0 to 9
+\item And starts from 0 again after reaching 9
+\begin{itemize}
+\item Starting from 0 is common in computer engineering
+\end{itemize}
+\item A counter if the hardware version of a \emph{for loop}
+\item Often needed
+\item Can you draw the schematic?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuits}
+\begin{itemize}
+\item Simplest is a Boolean expression
+\item Assigned a name (\code{e})
+\item This expression can be reused in another expression
+\end{itemize}
+\shortlist{../code/comb_bool.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Fixed Expression}
+\begin{itemize}
+\item Expression is fixed
+\item Trying to reassign with \code{=} results in an error
+\item Trying the Chisel conditional update \code{:=} results in runtime error
+\end{itemize}
+\shortlist{../code/comb_bool.txt}
+\shortlist{../code/comb_error.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuit with Conditional Update}
+\begin{itemize}
+\item Chisel supports conditional update
+\item Value first needs to be wrapped into a \code{Wire}
+\item Updates with the Chisel update operation \code{:=}
+\item With \code{when} we can express a conditional update
+\item The resulting circuit is a multiplexer
+\item The rule is the the last enabled assignment counts
+\begin{itemize}
+\item Here the order of statements has a meaning
+\end{itemize}
+\end{itemize}
+\shortlist{../code/comb_wire.txt}
+\end{frame}
+
+\begin{frame}[fragile]{The ``Else'' Branch}
+\begin{itemize}
+\item We can express a form of ``else''
+\item Note the \code{.} in \code{.otherwise}
+\end{itemize}
+\shortlist{../code/comb_otherwise.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Chain of Conditions}
+\begin{itemize}
+\item To test for different conditions
+\item Logic in priority order
+\item The first that is true count
+\item Results in a chain of mulitplexer
+\end{itemize}
+\shortlist{../code/comb_elsewhen.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Default Assignment}
+\begin{itemize}
+\item Practical for complex expressions
+\item Forgetting to assign a value on all conditions
+\begin{itemize}
+\item Would describe a latch
+\item Runtime error in Chisel
+\end{itemize}
+\item Assign a default value is good practise
+\end{itemize}
+\shortlist{../code/comb_wiredefault.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Logic Can Be Expressed as a Table}
+\begin{itemize}
+\item Sometimes more convenient 
+\item Still combinational logic (gates)
+\item Is converted to Boolean expressions
+\item Let the synthesize tool do the conversion!
+\item We use the \code{switch} statement
+\end{itemize}
+\shortlist{../code/encdec_dec.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Decoder}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/decoder}
+\end{figure}
+\begin{itemize}
+\item Converts a binary number of $n$ bits to an $m$-bit signal, where $m \leq 2^n$
+\item The output is one-hot encoded (exactly one bit is one)
+\item Building block for a $m$-way Mux
+\item Used for address decoding in a computer system
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Truth Table of a Decoder}
+\begin{table}
+  \begin{tabular}{rr}
+    \toprule
+    a & b \\
+    \midrule
+    00 & 0001 \\
+    01 & 0010 \\
+    10 & 0100 \\
+    11 & 1000 \\
+    \bottomrule 
+  \end{tabular} 
+\end{table}
+\begin{itemize}
+\item Does this look like the table we have seen?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Decoder in Chisel}
+\begin{itemize}
+\item Binary strings are a clearer representation
+\end{itemize}
+\shortlist{../code/encdec_decbin.txt}
+\end{frame}
+
+\begin{frame}[fragile]{An Encoder}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/encoder}
+\end{figure}
+\begin{itemize}
+\item Converts one-hot encoded signal
+\item To binary representation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Truth Table of an Encoder}
+\begin{table}
+  \begin{tabular}{rr}
+    \toprule
+    a & b \\
+    \midrule
+    0001 & 00 \\
+    0010 & 01 \\
+    0100 & 10 \\
+    1000 & 11 \\
+    ???? & ?? \\
+    \bottomrule 
+  \end{tabular} 
+\end{table}
+\begin{itemize}
+\item Only defined for on-hot input
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Encoder in Chisel}
+\begin{itemize}
+\item We cannot describe a function with undefined outputs
+\item We use a default assignment of \code{"b00"}
+\end{itemize}
+\shortlist{../code/encdec_enc.txt}
+
+\end{frame}
+
+\begin{frame}[fragile]{Register (Again)}
+\begin{itemize}
+\item Sequential building blocks
+\begin{itemize}
+\item Contain a register
+\item Plus combinational circuits
+\end{itemize}
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register}
+\end{figure}
+\shortlist{../code/sequ_reg.txt}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Register in Two Steps}
+\shortlist{../code/sequ_reg2.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Register With Reset}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register-reset}
+\end{figure}
+\shortlist{../code/sequ_reg_init.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Timing Diagram of That Register}
+\begin{itemize}
+\item Also called waveform diagram
+\item Logic function over time
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/reg_wave}
+\end{figure}
+\end{frame}
+
+
 \begin{frame}[fragile]{XXX}
 \begin{itemize}
 \item
+\item
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
 \begin{itemize}
 \item
 \end{itemize}
@@ -324,28 +524,10 @@ the output of the register can be used just with the name in an expression:
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item
-\item
-\item
-\item
-\item
-\item
-\end{itemize}
-\end{frame}
 
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item
-\item
-\item
-\item
-\item
-\item
-\end{itemize}
-\end{frame}
+
+
 
 \begin{frame}[fragile]{Chisel VHDL Comparison}
 \begin{columns}
@@ -366,6 +548,24 @@ VHDL code here
 Also show latch and and using a button as clock
 \end{frame}
 
+\begin{frame}[fragile]{Structure With Bundles}
+\begin{itemize}
+\item A \code{Bundle} to groups signals
+\item Can be different types
+\item Defined by a class that extends \code{Bundle}
+\item List the fields as \code{val}s within the block
+\end{itemize}
+\shortlist{../code/bundle.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using a Bundle}
+\begin{itemize}
+\item Create it with \code{new}
+\item Wrap it into a \code{Wire}
+\item Field access with \emph{dot} notation
+\end{itemize}
+\shortlist{../code/bundle_use.txt}
+\end{frame}
 
 
 

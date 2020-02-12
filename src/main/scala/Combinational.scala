@@ -61,7 +61,7 @@ class CombOther extends Module {
 
   when (cond) {
     w := 1.U
-  } otherwise {
+  } .otherwise {
     w := 2.U
   }
   //- end
@@ -85,7 +85,7 @@ class CombElseWhen extends Module {
     w := 1.U
   } .elsewhen (cond2) {
     w := 2.U
-  } otherwise {
+  } .otherwise {
     w := 3.U
   }
   //- end
