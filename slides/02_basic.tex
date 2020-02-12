@@ -117,6 +117,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}[fragile]{Chisel is Part of the C Language Family}
 
 \Tree[.C [
@@ -125,6 +126,13 @@ Embedded Systems Engineering}
    [.Java [.Scala {\bf Chisel} ] ]
    [.C\# ] ] ]
  
+\end{frame}
+
+\begin{frame}[fragile]{Tool Flow for Chisel Defined Hardware}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{../figures/flow}
+\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Signal/Wire Types and Width}
@@ -277,7 +285,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item \href{https://github.com/}{GitHub} is a git repository server
 \item GitHub is a classic startup, based in San Francisco
-\item Acquired by Microsoft for \$7.5 billion
+\item Acquired 2018 by Microsoft for \$7.5 billion
 \item Many open-source projects are on GitHub (e.g., Chisel)
 \begin{itemize}
 \item 85 million repositories, and 28 million developers
@@ -323,7 +331,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item E.g., \code{sum} instead of \code{y}
 \end{itemize}
-\item Use \code{camleCase} for identifiers
+\item Use \code{camelCase} for identifiers
 \item \code{Modules} (classes) start with uppercase
 \begin{itemize}
 \item E.g., \code{VendingMachine}
@@ -336,21 +344,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item Chisel style is 2 spaces (blanks)
 \end{itemize}
-\item Use only ASCII ;-)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Counter}
-\shortlist{../code/counter.txt}
-\begin{itemize}
-\item This counter counts from 0 to 9
-\item And starts from 0 again after reaching 9
-\begin{itemize}
-\item Starting from 0 is common in computer engineering
-\end{itemize}
-\item A counter is the hardware version of a \emph{for loop}
-\item Often needed
-\item Can you draw the schematic?
+\item Use ASCII only ;-)
 \end{itemize}
 \end{frame}
 
@@ -553,9 +547,7 @@ the output of the register can be used just with the name in an expression:
 \end{itemize}
 \end{frame}
 
-
 \begin{frame}[fragile]{Register with Enable}
-
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/register-enable}
 \end{figure}
@@ -596,6 +588,20 @@ the output of the register can be used just with the name in an expression:
 \shortlist{../code/sequ_free_counter.txt}
 \end{frame}
 
+
+\begin{frame}[fragile]{A Counter}
+\shortlist{../code/counter.txt}
+\begin{itemize}
+\item This counter counts from 0 to 9
+\item And starts from 0 again after reaching 9
+\begin{itemize}
+\item Starting from 0 is common in computer engineering
+\end{itemize}
+\item A counter is the hardware version of a \emph{for loop}
+\item Often needed
+\item Can you draw the schematic?
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Counting Events}
 \begin{figure}
