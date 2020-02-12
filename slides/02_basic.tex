@@ -64,7 +64,6 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Basic digital building blocks
 \item TODOs
-\item Maybe move the bundles to the end
 \item go through the book
 \item Have a ref to the Java lecture
 \item The main program (compare Java with Scala)
@@ -491,22 +490,70 @@ the output of the register can be used just with the name in an expression:
 \shortlist{../code/sequ_reg_init.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Timing Diagram of That Register}
-\begin{itemize}
-\item Also called waveform diagram
-\item Logic function over time
-\end{itemize}
+\begin{frame}[fragile]{Timing Diagram of the Register with Reset}
 \begin{figure}
   \includegraphics[scale=1]{../figures/reg_wave}
 \end{figure}
+\begin{itemize}
+\item Also called waveform diagram
+\item Logic function over time
+\item Can be used to describe a circuit function
+\item Useful for debugging
+\end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Register with Enable}
+
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register-enable}
+\end{figure}
 \begin{itemize}
-\item
-\item
+\item Only when \code{enable} true is a value is stored
 \end{itemize}
+\shortlist{../code/sequ_reg_ena.txt}
+
+\end{frame}
+
+\begin{frame}[fragile]{Timing Diagram for an Enable Register}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/reg_en_wave}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{More on Register}
+\begin{itemize}
+\item We can combine initialization and enable
+\end{itemize}
+\shortlist{../code/sequ_reg_init_ena.txt}
+\begin{itemize}
+\item A register can also be part of an expression
+\item What does the following circuit do?
+\end{itemize}
+\shortlist{../code/sequ_reg_rising.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Combine a Register with an Adder}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/counter}
+\end{figure}
+\begin{itemize}
+\item Is a free running counter
+\item 0, 1, ... 14, 15, 0, 1, ...
+\end{itemize}
+\shortlist{../code/sequ_free_counter.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Counting Events}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/event-counter}
+\end{figure}
+\begin{itemize}
+\item Is the schematics and the code the same?
+\end{itemize}
+\shortlist{../code/sequ_event_counter.txt}
 \end{frame}
 
 
@@ -569,9 +616,10 @@ Also show latch and and using a button as clock
 
 
 
-\begin{frame}[fragile]{Title}
+\begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item abc
+\item Next lecture on timing given by Jens Sparsoe
 \end{itemize}
 \end{frame}
 
