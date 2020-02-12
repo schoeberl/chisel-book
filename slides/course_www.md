@@ -84,11 +84,13 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Topics:** Introduction and motivation, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
 
-**Lab:** Chisel “Hello World”
+**Lab:** [Chisel “Hello World”](https://github.com/schoeberl/chisel-lab)
 
 **Reading:** Chisel: 1, 2, Dally: 2.1.4 
 
 **Optional reading:** Dally: 1, 2
+
+**Slides:** [01_intro.pdf](01_intro.pdf)
 
 
 ### Week 2 Basic Digital Circuits in Chisel
@@ -97,7 +99,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Reading:** Dally 8, 14.1., 14.2 and Chisel 5
 
-**Lab:** Basic circuits in Chisel, given testers, diagram to code and code to diagram exercises. TODO: look into Dally 7 examples for the lab. One example with the FPGA board.
+**Lab:** [Combinational circuits in Chisel](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 3 Timing (guest lecture by Jens Sparsø)
@@ -109,11 +111,11 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 
-### Week 4 Small Sequential Circuits, Components
+### Week 4 Components, Small Sequential Circuits
 
 **Topics:** Composing circuits out of components, sequential building blocks
 
-**Reading:** Dally: x Chisel: 5 and 6
+**Reading:** Dally: 16.1 and 16.2 Chisel: 4 and 6
 
 **Lab:** Sequential circuits and components, maybe blinking LED or PWM with counters
 
@@ -122,7 +124,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Topics:** Testing and verification in Chisel, using CLI, unit tests, waveform viewing
 
-**Reading:** Dally: 20, Chisel: 3, maybe some text on test driven development
+**Reading:** Dally: 2.1.4 and 20, Chisel: 3, maybe some text on test driven development
 
 **Lab:** Hexadecimal to 7 segment decoder, Chisel unit testers and debugging with gtkwave, (tester for 7 segment decoder)
 
@@ -133,7 +135,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 
-**Lab:**  7 segment display with a counter
+**Lab:** 7 segment display with a counter
 
 
 ### Week 7 State Machine and Datapath, Input interface

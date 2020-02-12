@@ -500,7 +500,7 @@ class Counter2 extends Module {
 \begin{frame}[fragile]{More Chisel Documentation}
 \begin{itemize}
 \item Textbook ``Digital Design with Chisel''
-\item V 1.0 is out
+\item 2nd edition is out
 \item \url{https://github.com/schoeberl/chisel-book}
 \item Feedback is welcome
 \item Contains all the slides
@@ -591,20 +591,45 @@ sbt "test:runMain problems.Launcher Mux4"
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{More Problems}
+\begin{frame}[fragile]{Links to the Examples}
 \begin{itemize}
-\item Explore more problems to solve
-\item Suggestions:
-\begin{itemize}
-\item Accumulator
-\item VecSchiftRegister (maybe)
-\end{itemize}
-\item Change the Blinking LED example so that
-\begin{itemize}
-\item It flashes for 1/5 second every second
-\end{itemize}
+\item Example code
+\item \url{https://github.com/schoeberl/chisel-examples.git}
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Lab Session}
+\begin{itemize}
+\item Run and explore the UART (serial port) example
+\begin{itemize}
+\item There is a make target that builds the UART hardware
+\item \code{make uart}
+\item It shall write some text out
+\item You can observe it with a terminal (e.g., gtkterm)
+\end{itemize}
+\item Combine the UART with a blinking LED
+\begin{itemize}
+\item Write a `0' and `1' out on blink off and on
+\item Best add the LEDs to \code{UartMain} and \code{uart\_top.vhdl}
+\end{itemize}
+\item Write repeated numbers 0--9 at maximum speed 
+\end{itemize}
+\end{frame}
+
+%\begin{frame}[fragile]{More Problems}
+%\begin{itemize}
+%\item Explore more problems to solve
+%\item Suggestions:
+%\begin{itemize}
+%\item Accumulator
+%\item VecSchiftRegister (maybe)
+%\end{itemize}
+%\item Change the Blinking LED example so that
+%\begin{itemize}
+%\item It flashes for 1/5 second every second
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
 
 
 
