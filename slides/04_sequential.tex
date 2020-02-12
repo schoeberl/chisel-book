@@ -59,8 +59,47 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Now just  collection of future slides
 \item TODO: did I collect all the short intro slides here?
-\item 6.2., 6.3
+\item Chisel 6.2., 6.3
+\item TODOs
+\item go through the book
+\item Have a ref to the Java lecture
+\item The main program (compare Java with Scala)
+\item Introduce vending machine (maybe next time)
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\begin{itemize}
+\item
+\end{itemize}
+\item
+\item
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel VHDL Comparison}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{chisel}
+class DecodeExecute extends Bundle {
+  val rs1 = UInt(32.W)
+  val rs2 = UInt(32.W)
+  val immVal = UInt(32.W)
+  val aluOp = new AluOp()
+}
+\end{chisel}
+\column{0.5\textwidth}
+\begin{verbatim}
+VHDL code here
+\end{verbatim}
+\end{columns}
+Also show latch and and using a button as clock
 \end{frame}
 
 

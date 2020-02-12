@@ -1831,9 +1831,21 @@ value assignment:
 \index{otherwise}
 \index{elsewhen}
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/mux-chain}
+  \caption{A chain of multiplexers.}
+  \label{fig:mux-chain}
+\end{figure}
+
 Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code{.elsewhen}:
 
 \shortlist{code/comb_elsewhen.txt}
+
+\noindent This chain of \code{when}, \code{.elsewhen}, and \code{.otherwise}
+construct a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
+That chain introduce a priority, i.e., when \code{cond} is true, the other conditions
+are not evaluated.
 
 Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
 Those \code{.elsewhen} branches can be arbitrary long.

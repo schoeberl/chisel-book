@@ -63,11 +63,8 @@ Embedded Systems Engineering}
 \item If something is unclear, please ask!
 \end{itemize}
 \item Basic digital building blocks
-\item TODOs
-\item go through the book
-\item Have a ref to the Java lecture
-\item The main program (compare Java with Scala)
-\item Introduce vending machine (maybe next time)
+\item And the coding in Chisel
+\item Some coding style
 \end{itemize}
 \end{frame}
 
@@ -271,14 +268,14 @@ the output of the register can be used just with the name in an expression:
 \item Track changes in computer files
 \item Created by Linus Torvalds for Linux kernel development
 \item Good tool for cooperation
-\item Mostly used as the command line
+\item Mostly used at the command line
 \item Command line tool, but Windows clients are available
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{What is GitHub?}
 \begin{itemize}
-\item \href{https://github.com/}{GitHub} is a git server
+\item \href{https://github.com/}{GitHub} is a git repository server
 \item GitHub is a classic startup, based in San Francisco
 \item Acquired by Microsoft for \$7.5 billion
 \item Many open-source projects are on GitHub (e.g., Chisel)
@@ -296,6 +293,53 @@ the output of the register can be used just with the name in an expression:
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}[fragile]{Comment on Character Usage and Language}
+\begin{itemize}
+\item Computers used for long time ASCII characters
+\item Show \href{http://www.asciitable.com/}{ASCII table}
+\item Does NOT contain the special letters of DK, SE, AT,...
+\item Only a subset of ASCII was allowed for identifiers
+\item Languages such as Java or Scala are now more tolerant
+\begin{itemize}
+\item You could use Chinese characters for your Java program!
+\end{itemize}
+\item Please do not use any special characters
+\begin{itemize}
+\item Also not in file names
+\end{itemize}
+\item Programming is international
+\begin{itemize}
+\item Use English identifiers and comments
+\end{itemize}
+\item Avoid spaces in file names and folders
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Coding Style}
+\begin{itemize}
+\item Similar to Java
+\item Use readable, meaningful names
+\begin{itemize}
+\item E.g., \code{sum} instead of \code{y}
+\end{itemize}
+\item Use \code{camleCase} for identifiers
+\item \code{Modules} (classes) start with uppercase
+\begin{itemize}
+\item E.g., \code{VendingMachine}
+\end{itemize}
+\item Mark you register with a postfix \code{Reg}
+\begin{itemize}
+\item E.g., \code{countReg}
+\end{itemize}
+\item Use consistent indentation
+\begin{itemize}
+\item Chisel style is 2 spaces (blanks)
+\end{itemize}
+\item Use only ASCII ;-)
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{A Counter}
 \shortlist{../code/counter.txt}
 \begin{itemize}
@@ -304,7 +348,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item Starting from 0 is common in computer engineering
 \end{itemize}
-\item A counter if the hardware version of a \emph{for loop}
+\item A counter is the hardware version of a \emph{for loop}
 \item Often needed
 \item Can you draw the schematic?
 \end{itemize}
@@ -357,10 +401,17 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item To test for different conditions
 \item Logic in priority order
-\item The first that is true count
+\item The first that is true counts
 \item Results in a chain of mulitplexer
 \end{itemize}
+\begin{columns}
+\column{0.5\textwidth}
 \shortlist{../code/comb_elsewhen.txt}
+\column{0.5\textwidth}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux-chain}
+\end{figure}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Default Assignment}
@@ -557,44 +608,6 @@ the output of the register can be used just with the name in an expression:
 \end{frame}
 
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\begin{itemize}
-\item
-\end{itemize}
-\item
-\item
-\item
-\item
-\item
-\end{itemize}
-\end{frame}
-
-
-
-
-
-
-\begin{frame}[fragile]{Chisel VHDL Comparison}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
-}
-\end{chisel}
-\column{0.5\textwidth}
-\begin{verbatim}
-VHDL code here
-\end{verbatim}
-\end{columns}
-Also show latch and and using a button as clock
-\end{frame}
-
 \begin{frame}[fragile]{Structure With Bundles}
 \begin{itemize}
 \item A \code{Bundle} to groups signals
@@ -614,23 +627,96 @@ Also show latch and and using a button as clock
 \shortlist{../code/bundle_use.txt}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{A Collection of Signals with \code{Vec}}
 \begin{itemize}
-\item abc
-\item Next lecture on timing given by Jens Sparsoe
+\item Chisel \code{Vec} is a collection of signals of the same type
+\item The collection can be accessed by an index
+\item Similar to an array in other languages
 \end{itemize}
+\shortlist{../code/vec.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using a \code{Vec}}
+\shortlist{../code/vec_access.txt}
+\begin{itemize}
+\item Reading from an \code{Vec} is a multplexer
+\item We can put a \code{Vec} into a \code{Reg}
+\end{itemize}
+\shortlist{../code/reg_file.txt}
+\noindent An element of that register file is accessed with an index and used as a normal register.
+
+\shortlist{../code/reg_file_access.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Mixing Vecs and Bundles}
+\begin{itemize}
+\item We can freely mix bundles and vectors
+\item When creating a vector with a bundle
+type, we need to pass a prototype for the vector fields. Using our
+\code{Channel}, which we defined above, we can create a vector of channels with:
+\end{itemize}
+\shortlist{../code/vec_bundle.txt}
+\begin{itemize}
+\item A bundle may as well contain a vector
+\end{itemize}
+\shortlist{../code/bundle_vec.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Lab Today}
 \begin{itemize}
 \item Combinational circuits in Chisel
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab2}{Lab 2 Page}
-\item You need to download again, as I have updated the lab code
-\item TODO: explain what it is about
+\item You need to download again, as I have updated the lab
+\begin{itemize}
+\item Or learn to use git and do a  \code{git pull} ;-)
+\end{itemize}
+\item Each exercise contains a test, which initially fails
+\item \code{sbt test} runs them all
+\begin{itemize}
+\item To just run a single test: \code{sbt "testOnly SimpleSpec"}
+\end{itemize}
+When all test succeed your are done ;-)
+\item Components contain a comment where you shall add your implementation
+\item The initial majority example has an optional implementation in an FPGA
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item Think in hardware
+\begin{itemize}
+\item Draw ``boxes''
+\end{itemize}
+\item Combinational logic (= Boolean function)
+\begin{itemize}
+\item Logical and arithmetic expressions
+\item Conditional update (\code{when})
+\item \code{switch} tables
+\end{itemize}
+\item Registers
+\begin{itemize}
+\item Define as \code{Reg}, \code{RegNext}, or \code{RegInit}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item We looked at basic digital circuit blocks
+\item Now you know all you need to build any digital circuit!
+\begin{itemize}
+\item Digital controller
+\item MP3 player
+\item Microprocessor
+\item Data center accelerator
+\item ...
+\end{itemize}
+\item Will show you some constructs for a more \emph{elegant} style
+\item Next lecture is given by Jens Sparsoe and is on timing
+\end{itemize}
+\end{frame}
+
 
 \end{document}
 
