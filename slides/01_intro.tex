@@ -727,25 +727,20 @@ A single bit can be extracted as follows:
 \item Clock and reset are implicitly connected to the register
 \item A register can be any Chisel type that can be represented as a collection of bits
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}[fragile]{A Register with Reset}
-
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/register-reset-0}
 \end{figure}
 \end{frame}
 
+
 \begin{frame}[fragile]{A Register with Reset}
-
 Following code defines an 8-bit register, initialized with 0 at reset:
-
 \shortlist{../code/register.txt}
-
 \noindent An input is connected to the register with the \code{:=} update operator and
 the output of the register can be used just with the name in an expression:
-
 \shortlist{../code/reg_con.txt}
 \end{frame}
 

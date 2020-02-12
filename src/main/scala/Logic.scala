@@ -28,7 +28,7 @@ class Logic extends Module {
   //- end
 
   //- start const_width
-  8.U(4.W) // An 4-bit constant of 8
+  3.U(4.W) // An 4-bit constant of 3
   //- end
 
   //- start const_base
