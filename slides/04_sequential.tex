@@ -63,6 +63,230 @@ Embedded Systems Engineering}
 \end{frame}
 
 
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{chisel}
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a+b, a-b)
+
+  val res = addSub(cond, a, b)
+  
+  def rising(d: Bool) = d && !RegNext(d)
+\end{chisel}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Bundles}
+\begin{chisel}
+class DecodeExecute extends Bundle {
+  val rs1 = UInt(32.W)
+  val rs2 = UInt(32.W)
+  val immVal = UInt(32.W)
+  val aluOp = new AluOp()
+}
+\end{chisel}
+\begin{itemize}
+\item Collection of values in named fields 
+\item Like struct or record
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Vectors}
+\begin{chisel}
+val myVec = Vec(3, SInt(10.W))
+
+myVec(0) := -3.S
+val y = myVec(2)
+\end{chisel}
+\begin{itemize}
+\item Indexable vector of elements
+\item Bundles and Vecs can be arbitrarely nested
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{IO Ports}
+\begin{chisel}
+class Channel extends Bundle {
+  val data = Input(UInt(8.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+\end{chisel}
+\begin{itemize}
+\item Ports are Bundles with directions
+\item Direction can also be assigned at instantiation:
+\end{itemize}
+\begin{chisel}
+class ExecuteIO extends Bundle {
+  val dec = Input(new DecodeExecute())
+  val mem = Output(new ExecuteMemory())
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Modules}
+\begin{chisel}
+class Adder extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+\end{chisel}
+\begin{itemize}
+\item Organization of components
+\item IO ports defined as a Bundle named \code{io} and wrapped into an \code{IO()}
+\item Created (instantiated) with:
+\end{itemize}
+\begin{chisel}
+val adder = Module(new Adder())
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Connections}
+\begin{itemize}
+\item Simple connections just with assignments, e.g.,
+\begin{chisel}
+  adder.io.a := ina
+  adder.io.b := inb
+\end{chisel}
+\item Automatic bulk connections between components
+\begin{chisel}
+  dec.io <> exe.io
+  mem.io <> exe.io
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Generic Components}
+\begin{chisel}
+val c = Mux(cond, a, b)
+\end{chisel}
+\begin{itemize}
+\item This is a multiplexer
+\item Input can be any type
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing}
+\begin{chisel}
+class CounterTester(c: Counter) extends PeekPokeTester(c) {
+  for (i <- 0 until 5) {
+    println(i.toString + ": " + peek(c.io.out).toString())
+    step(1)
+  }
+}
+\end{chisel}
+\begin{itemize}
+\item Within Chisel with a tester (= Scala program)
+\item May include waveform generation
+\item peek and poke to read and set values
+\begin{itemize}
+\item Remember the BASIC days ;-)
+\end{itemize}
+\item printf in simulation on rising edge
+\begin{chisel}
+printf("Counting %x\n", r1)
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Component Generation}
+\begin{chisel}
+val cores = new Array[Module](32)
+
+for (j <- 0 until 32)
+  cores(j) = Module(new CPU())
+\end{chisel}
+\begin{itemize}
+\item Use Scala array to collect components
+\item Generation with a Scala loop
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Component Generation}
+\begin{chisel}
+val icache =
+  if (TYPE == METHOD)
+    Module(new MCache())
+  else if (TYPE == LINE)
+    Module(new ICache())
+  else
+    ChiselError.error("Unsupported Type")
+\end{chisel}
+\begin{itemize}
+\item Use Scala if/else for conditional component types
+\item Code example from Patmos
+\item We parse an XML file for the configuration
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Logic Generation}
+\begin{itemize}
+\item Read a file into a table
+\begin{itemize}
+\item E.g., to read in ROM content for a processor
+\end{itemize}
+\item Generate a truth table algorithmically
+\begin{itemize}
+\item E.g., generate binary to BCD translation
+\end{itemize}
+\item Use the full power of Scala
+\end{itemize}
+\begin{chisel}
+val byteArray = Files.readAllBytes(Paths.get(fileName))
+val arr = new Array[Bits](byteArray.length)
+for (i <- 0 until byteArray.length) {
+  arr(i) = Bits(byteArray(i), 8)
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\end{frame}
+%%%%%%%%%%%%%%%%%
+%\begin{frame}[fragile]{zzz}
+%\begin{chisel}
+%code
+%\end{chisel}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{yyy}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{What is a Minimal Chisel Project?}
+\begin{itemize}
+\item Scala class (e.g., \code{Hello.scala})
+\item Build info in \code{build.sbt} for \code{sbt}:
+\end{itemize}
+\begin{chisel}
+scalaVersion := "2.11.7"
+
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
+\end{chisel}
+\begin{itemize}
+\item Run the process manually (look into the Makefile)
+\end{itemize}
+\end{frame}
 
 \end{document}
 
