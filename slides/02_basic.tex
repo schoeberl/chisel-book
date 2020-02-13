@@ -374,7 +374,7 @@ the output of the register can be used just with the name in an expression:
 \item Updates with the Chisel update operation \code{:=}
 \item With \code{when} we can express a conditional update
 \item The resulting circuit is a multiplexer
-\item The rule is the the last enabled assignment counts
+\item The rule is that the last enabled assignment counts
 \begin{itemize}
 \item Here the order of statements has a meaning
 \end{itemize}
@@ -495,7 +495,7 @@ the output of the register can be used just with the name in an expression:
   \end{tabular} 
 \end{table}
 \begin{itemize}
-\item Only defined for on-hot input
+\item Only defined for one-hot input
 \end{itemize}
 \end{frame}
 
@@ -680,7 +680,8 @@ type, we need to pass a prototype for the vector fields. Using our
 \item Each exercise contains a test, which initially fails
 \item \code{sbt test} runs them all
 \begin{itemize}
-\item To just run a single test: \code{sbt "testOnly SimpleSpec"}
+\item To just run a single test, run e.g.,\\
+\code{sbt "testOnly MajorityPrinter"}
 \end{itemize}
 When all test succeed your are done ;-)
 \item Components contain a comment where you shall add your implementation
@@ -699,6 +700,7 @@ When all test succeed your are done ;-)
 \item Logical and arithmetic expressions
 \item Conditional update (\code{when})
 \item Function tables with \code{switch}
+\item Large multiplexer with a \code{Vec}
 \end{itemize}
 \item Registers
 \begin{itemize}

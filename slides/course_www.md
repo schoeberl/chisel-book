@@ -101,12 +101,15 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Lab:** [Combinational circuits in Chisel](https://github.com/schoeberl/chisel-lab)
 
+**Slides:** [02_basic.pdf](02_basic.pdf)
 
 ### Week 3 Timing (guest lecture by Jens Sparsø)
 
 **Topics:** Delay and Power, Timing, and Metastability
 
-**Reading:** Dally: 5.1-5.4, 15.1-15.6, and 28.1-28.4
+**Reading:** Dally: 15.1-15.6, and 28.1-28.4
+
+**Optional reading:** Dally: 5.1-5.4 (replaced by slides)
 
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
