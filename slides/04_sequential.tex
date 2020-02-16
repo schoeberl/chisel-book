@@ -62,6 +62,9 @@ Embedded Systems Engineering}
 \item Start with bundle, IO, Moduls, main, App
 \item Chisel: 3.1, 3.2, 4 and 6 (6.2., 6.3)
 \item TODOs
+\item minimize use of acronyms, also check other slides
+\item Have a acronym section in the book - DO IT NOW
+\item have asX here and in the book
 \item go through the book
 \item Have a ref to the Java lecture
 \item The main program (compare Java with Scala)
@@ -95,6 +98,128 @@ Embedded Systems Engineering}
  * Say to take it easy, you do not need to do this, but it will help you to become a better engineer ;-)
 \item \url{https://www.oreilly.com/learning/ten-steps-to-linux-survival}
 
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Verilog Generation}
+\begin{itemize}
+\item TODO: show individual snippets
+\item on @[Hello.scala 17:23]
+\begin{itemize}
+\item
+\end{itemize}
+\item about pin names, e.g., \code{io\_led}
+\item
+\item
+\item
+\item
+\end{itemize}
+\begin{verbatim}
+module Hello(
+  input   clock,
+  input   reset,
+  output  io_led
+);
+  reg [31:0] cntReg; // @[Hello.scala 17:23]
+  reg [31:0] _RAND_0;
+  reg  blkReg; // @[Hello.scala 18:23]
+  reg [31:0] _RAND_1;
+  wire [31:0] _T_1; // @[Hello.scala 20:20]
+  wire  _T_2; // @[Hello.scala 21:15]
+  wire  _T_3; // @[Hello.scala 23:15]
+  assign _T_1 = cntReg + 32'h1; // @[Hello.scala 20:20]
+  assign _T_2 = cntReg == 32'h2faf07f; // @[Hello.scala 21:15]
+  assign _T_3 = ~ blkReg; // @[Hello.scala 23:15]
+  assign io_led = blkReg; // @[Hello.scala 25:10]
+`ifdef RANDOMIZE_GARBAGE_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_INVALID_ASSIGN
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_REG_INIT
+`define RANDOMIZE
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+`define RANDOMIZE
+`endif
+`ifndef RANDOM
+`define RANDOM $random
+`endif
+`ifdef RANDOMIZE_MEM_INIT
+  integer initvar;
+`endif
+`ifndef SYNTHESIS
+initial begin
+  `ifdef RANDOMIZE
+    `ifdef INIT_RANDOM
+      `INIT_RANDOM
+    `endif
+    `ifndef VERILATOR
+      `ifdef RANDOMIZE_DELAY
+        #`RANDOMIZE_DELAY begin end
+      `else
+        #0.002 begin end
+      `endif
+    `endif
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_0 = {1{`RANDOM}};
+  cntReg = _RAND_0[31:0];
+  `endif // RANDOMIZE_REG_INIT
+  `ifdef RANDOMIZE_REG_INIT
+  _RAND_1 = {1{`RANDOM}};
+  blkReg = _RAND_1[0:0];
+  `endif // RANDOMIZE_REG_INIT
+  `endif // RANDOMIZE
+end // initial
+`endif // SYNTHESIS
+  always @(posedge clock) begin
+    if (reset) begin
+      cntReg <= 32'h0;
+    end else if (_T_2) begin
+      cntReg <= 32'h0;
+    end else begin
+      cntReg <= _T_1;
+    end
+    if (reset) begin
+      blkReg <= 1'h0;
+    end else if (_T_2) begin
+      blkReg <= _T_3;
+    end
+  end
+endmodule
+
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\begin{itemize}
+\item
+\end{itemize}
+\item
+\item
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\begin{itemize}
+\item
+\end{itemize}
+\item
+\item
+\item
+\item
+\item
 \end{itemize}
 \end{frame}
 
