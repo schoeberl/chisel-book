@@ -116,20 +116,20 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 ### Week 4 Components, Small Sequential Circuits
 
-**Topics:** Composing circuits out of components, sequential building blocks
+**Topics:** Composing circuits out of components, sequential building blocks, using CLI
 
-**Reading:** Dally: 16.1 and 16.2 Chisel: 4 and 6
+**Reading:** Dally: 16.1 and 16.2 Chisel: 3.1, 3.2, 4 and 6
 
 **Lab:** Sequential circuits and components, maybe blinking LED or PWM with counters
 
 
 ### Week 5 Testing and Verification
 
-**Topics:** Testing and verification in Chisel, using CLI, unit tests, waveform viewing
+**Topics:** Testing and verification in Chisel, unit tests, waveform viewing
 
 **Reading:** Dally: 2.1.4 and 20, Chisel: 3, maybe some text on test driven development
 
-**Lab:** Hexadecimal to 7 segment decoder, Chisel unit testers and debugging with gtkwave, (tester for 7 segment decoder)
+**Lab:** Hexadecimal to 7-segment decoder, Chisel unit testers and debugging with gtkwave, (tester for 7 segment decoder)
 
 
 ### Week 6 State Machines
@@ -138,7 +138,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 
-**Lab:** 7 segment display with a counter
+**Lab:** 7-segment display with a counter
 
 
 ### Week 7 State Machine and Datapath, Input interface
