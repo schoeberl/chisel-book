@@ -4625,6 +4625,9 @@ OpenSoC Fabric is still using Chisel~2.
 that integrates with the RISC-V Rocket processor using the Rocket Custom Coprocessor (RoCC) interface~\cite{RoCC:2015}.
 DANA supports inference and learning.
 
+\item[\myref{https://github.com/antonblanchard/chiselwatt}{Chiselwatt}] is an implementation
+of the POWER Open ISA. It includes instruction to run Micropython.
+
 \end{description}
 
 If you know an open-source project that uses Chisel, please drop me a note
@@ -4706,6 +4709,51 @@ A memory with sequential registered read and write ports is defined in Chisel 2 
     mem(wrAddr) := wrData
   }
 \end{chisel}
+
+\chapter{Acronyms}
+
+Hardware designers and computer engineers like to use acronyms.
+However, it needs time to get used to them. Here is a list of common terms
+related to digital design and computer architecture.
+
+
+\begin{description}
+\item [ADC] Analog to Digital Converter
+\item [ALU] Arithmetic and Logic Unit
+\item [ASIC] Application-Specific Integrated Circuit
+\item [CFG] Control Flow Graph
+\item [CPI] average Clock cycles Per Instruction
+\item [CRC] Cyclic Redundancy Check
+\item [DMA] Direct Memory Access
+\item [DRAM] Dynamic Random Access Memory
+\item [EMC] Electromagnetic Compatibility
+\item [ESD] Electrostatic Discharge
+\item [FIFO] Fist In, First Out
+\item [FPGA] Field Programmable Gate Array
+\item [GC] Garbage Collect(ion/or)
+\item [IC] Instruction Count
+\item [ILP] Instruction Level Parallelism
+\item [ISA] Instruction Set Architecture
+\item [JDK] Java Development Kit
+\item [JIT] Just-In-Time
+\item [JVM] Java Virtual Machine
+\item [LC] Logic Cell
+\item [LRU] Least-Recently Used
+\item [MUX] Multiplexer
+\item [OO] Object Oriented
+\item [OS] Operating System
+\item [RISC] Reduced Instruction Set Computer
+%\item [RT] Real-Time
+%\item [RTOS] Real-Time Operating System
+\item [SDRAM] Synchronous DRAM
+\item [SRAM] Static Random Access Memory
+\item [TOS] Top Of Stack
+\item [UART] Universal Asynchronous Receiver/Transmitter
+\item [VHDL] Very High Speed Integrated Circuit (VHSIC)
+\item [WCET] Worst-Case Execution Time
+\end{description}
+
+
 
 \bibliographystyle{plain}
 \bibliography{chisel}
