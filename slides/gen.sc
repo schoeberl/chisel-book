@@ -18,9 +18,11 @@ val transformer = Transformer
   .from(Markdown)
   .to(HTML)
   .build
-  
 
-val in = Source.fromFile("course_www.md").getLines.mkString("\n")
+var file = "course_www.md"
+// file = "../../../Dropbox/trunksync/notes/StudentProjects.markdown"
+
+val in = Source.fromFile(file).getLines.mkString("\n")
 val res = transformer.transform(in).toString
 val content = res.substring(6, res.length-1) // Something strange is part of the output (Right(...))
 
