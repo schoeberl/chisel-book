@@ -1,44 +1,7 @@
-\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
-\usepackage{epsfig,graphicx}
-\usepackage{palatino}
-\usepackage{fancybox}
-\usepackage{relsize}
-\usepackage[procnames]{listings}
-\usepackage{hyperref}
-
-
-% fatter TT font
-\renewcommand*\ttdefault{txtt}
-% another TT, suggested by Alex
-% \usepackage{inconsolata}
-% \usepackage[T1]{fontenc} % needed as well?
-
-\usepackage[procnames]{listings}
+\input{../slides/slides_common}
 
 \newif\ifbook
-\input{../shared/chisel.tex}
-
-\hypersetup{
-  linkcolor  = black,
-%  citecolor  = blue,
-  urlcolor   = blue,
-  colorlinks = true,
-}
-
-\newcommand{\code}[1]{{\texttt{#1}}}
-
-\beamertemplatenavigationsymbolsempty
-\setbeamertemplate{footline}[frame number]
-
-\newcommand{\todo}[1]{{\emph{TODO: #1}}}
-\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
-\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
-
-% uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
-%\renewcommand{\author2}[1]{}
-
+\input{../shared/chisel}
 
 \title{A Little Bit of Scala and Chisel Background}
 \author{Martin Schoeberl}
@@ -262,6 +225,22 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 \item \code{sbt} looks into current folder and \code{src/main/scala/}
 \item Tests shall be in \code{src/test/scala/}
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{File Organization in Scala/Chisel}
+\dirtree{%
+.1 project.
+.2 src.
+.3 main.
+.4 scala.
+.5 package.
+.6 sub-package.
+.3 test.
+.4 scala.
+.5 package.
+.2 target.
+.2 generated.
+}
 \end{frame}
 
 \begin{frame}[fragile]{Chisel in Scala}

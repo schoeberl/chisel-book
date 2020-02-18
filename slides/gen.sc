@@ -20,7 +20,7 @@ val transformer = Transformer
   .build
 
 var file = "course_www.md"
-// file = "../../../Dropbox/trunksync/notes/StudentProjects.markdown"
+ file = "../../../Dropbox/trunksync/notes/StudentProjects.markdown"
 
 val in = Source.fromFile(file).getLines.mkString("\n")
 val res = transformer.transform(in).toString

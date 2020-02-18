@@ -1,45 +1,7 @@
-\documentclass[xcolor=pdflatex,dvipsnames,table]{beamer}
-\usepackage{epsfig,graphicx}
-\usepackage{palatino}
-\usepackage{fancybox}
-\usepackage{relsize}
-\usepackage[procnames]{listings}
-\usepackage{hyperref}
-
-
-% fatter TT font
-\renewcommand*\ttdefault{txtt}
-% another TT, suggested by Alex
-% \usepackage{inconsolata}
-% \usepackage[T1]{fontenc} % needed as well?
-
-\usepackage[procnames]{listings}
-
-\newcommand{\scale}{0.7}
+\input{slides_common}
 
 \newif\ifbook
-\input{../shared/chisel.tex}
-
-\hypersetup{
-  linkcolor  = black,
-%  citecolor  = blue,
-  urlcolor   = blue,
-  colorlinks = true,
-}
-
-\newcommand{\code}[1]{{\texttt{#1}}}
-
-\beamertemplatenavigationsymbolsempty
-\setbeamertemplate{footline}[frame number]
-
-\newcommand{\todo}[1]{{\emph{TODO: #1}}}
-\newcommand{\martin}[1]{{\color{blue} Martin: #1}}
-\newcommand{\abcdef}[1]{{\color{red} Author2: #1}}
-
-% uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
-%\renewcommand{\author2}[1]{}
+\input{../shared/chisel}
 
 
 \title{Components and Sequential Circuits}
@@ -77,6 +39,14 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Power User II}
 \begin{itemize}
 \item xxx
+ * Talk about tools
+   * see chapter 3 in pragmatic programmer
+   * Tools amplify your talent. The better your tools, and the better you know how to use them, the more productive you can be.
+   * Talk about google, man pages, or even plain --help
+ * Use (and write) tools
+ * link is missing: use simple bash scripts or Makefiles to remember commands (show examples)
+
+
  * Do power user in week 4
  * Have some slides, but mostly show demo
  * link to Linux intro
@@ -98,6 +68,53 @@ Embedded Systems Engineering}
  * Say to take it easy, you do not need to do this, but it will help you to become a better engineer ;-)
 \item \url{https://www.oreilly.com/learning/ten-steps-to-linux-survival}
 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Power User II}
+\begin{itemize}
+\item Every craftsmen starts with good-quality tools
+\item ``Tools amplify your talent''\footnote{The Pragmatic Programmer: From Journeyman to Master, by Andrew Hunt and David Thomas}
+\begin{itemize}
+\item The better your tools, the more productive you are
+\item The better you know them, the more productive you are
+\end{itemize}
+\item IDEs (Eclipse, InelliJ) are nice, I love them too
+\item But we shall go beyond it
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\begin{itemize}
+\item
+\end{itemize}
+\item
+\item
+\item
+\item
+\item
 \end{itemize}
 \end{frame}
 
@@ -193,6 +210,32 @@ endmodule
 \end{verbatim}
 \end{frame}
 
+\begin{frame}[fragile]{File Organization in Scala/Chisel}
+\begin{itemize}
+\item A Scala file can contain several classes (and objects)
+\item For large classes use one file per class with the class name
+\item Scala has packages, like Java
+\item Use folders with the package names for file organization
+\item \code{sbt} looks into current folder and \code{src/main/scala/}
+\item Tests shall be in \code{src/test/scala/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{File Organization in Scala/Chisel}
+\dirtree{%
+.1 project.
+.2 src.
+.3 main.
+.4 scala.
+.5 package.
+.6 sub-package.
+.3 test.
+.4 scala.
+.5 package.
+.2 target.
+.2 generated.
+}
+\end{frame}
 
 \begin{frame}[fragile]{XXX}
 \begin{itemize}
@@ -240,6 +283,7 @@ endmodule
 \item [HDL] hardware description language
 \item [HLS] high-level synthesis
 \item [IC] instruction count
+\item [IDE] integrated development environment
 \item [IO] input/output
 \end{description}
 \end{frame}
