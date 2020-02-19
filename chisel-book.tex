@@ -3656,6 +3656,44 @@ sbt "testOnly TickerSpec"
 
 \longlist{code/ticker_spec.txt}{ScalaTest specifications for the ticker tests.}{lst:ticker:spec}
 
+\section{Hardware Generation with Functional Programming}
+\label{sec:functional}
+
+\index{Functional programming}
+
+Scala supports functional programming, so does Chisel then.
+We can use functions to represent hardware and combine those hardware components
+with functional programming (by using a so-called ``higher-order function'').
+Let us start with a simple example, the sum of a vector:
+
+\shortlist{code/fun_first.txt}
+
+\noindent First we define the hardware for the adder in function \code{add}.
+The vector is located in \code{vec}. The Scala \code{reduce()} method combines
+all elements of a collection with a binary operation, producing a single value.
+The \code{reduce()} method reduces the sequence starting from the left.
+It takes the first two elements and performs the operation. The result is then combined
+with the next element, until a single result is left.
+
+The function to combine to elements is provided as parameter to \code{reduce}, in our case \code{add},
+which returns an adder. The resulting hardware is a chain of adders computing
+the sum of the elements of vector \code{vec}.
+
+Instead of defining the (simple) \code{add} function, we can provide the addition
+as anonymous function and use the Scala wildcard ``\code{\_}'' to represent the
+two operands.
+
+\shortlist{code/fun_func_lit.txt}
+
+\noindent With this one liner we have generated the chain of adders. For the sum function
+a chain is not the ideal configuration, a tree will have a shorter combinational delay.
+If we do not trust the synthesize tool to rearrange our adder chain, we can use Chisel's
+\code{reduceTree} method:
+
+\shortlist{code/fun_reduce_tree.txt}
+
+
+ 
 
 
 
