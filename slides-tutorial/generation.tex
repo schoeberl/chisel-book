@@ -7,7 +7,7 @@
 \item So what?
 \item Wait... What type is \code{a} and \code{b}?
 \begin{itemize}
-\item Can be any!
+\item Can be any Chisel type!
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -47,7 +47,7 @@
 \begin{frame}[fragile]{Define the FIFO Interface}
 \shortlist{../code/fifo_io.txt}
 \begin{itemize}
-\item We need enqueueing and dequeueing ends
+\item We need enqueueing and dequeueing ports
 \item Note the \code{Flipped}
 \begin{itemize}
 \item No more double definition of an interface
@@ -138,7 +138,10 @@ for (int i = 0; i < Math.pow(2, ADDRBITS); ++i) {
 \shortlist{../code/fun_first.txt}
 \shortlist{../code/fun_func_lit.txt}
 \shortlist{../code/fun_reduce_tree.txt}
-
+\begin{itemize}
+\item This is a simple example
+\item What about an arbiter tree with fair arbitration?
+\end{itemize}
 \end{frame}
 
 %\begin{frame}[fragile]{XXX}
