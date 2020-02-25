@@ -375,15 +375,7 @@ val adder = Module(new Adder())
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Generic Components}
-\begin{chisel}
-val c = Mux(cond, a, b)
-\end{chisel}
-\begin{itemize}
-\item This is a multiplexer
-\item Input can be any type
-\end{itemize}
-\end{frame}
+\input{generation.tex}
 
 \begin{frame}[fragile]{Testing}
 \begin{chisel}
@@ -587,57 +579,6 @@ val rom = Vec[Bits](arr)
 \end{frame}
 
 
-\begin{frame}[fragile]{Hello World in Chisel and Examples}
-\begin{chisel}
-git clone https://github.com/schoeberl/chisel-examples.git
-\end{chisel}
-\begin{itemize}
-\item or download from \url{https://github.com/schoeberl/chisel-examples}
-\item This contains a minimal Chisel project with the blinking LED
-\item Has ready to use project files for:
-\begin{itemize}
-\item Altera DE0
-\item Altera DE1
-\item Altera DE2-115
-\item Altera DE10-Nano
-\item BeMicro
-\end{itemize}
-\item Plus a simple ALU for HW test and showing Chisel Tester
-\item Plus some more examples to explore
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{What is a Minimal Chisel Project?}
-\begin{itemize}
-\item Scala class (e.g., \code{Hello.scala})
-\item Build info in \code{build.sbt} for \code{sbt}:
-\end{itemize}
-\begin{chisel}
-scalaVersion := "2.11.7"
-
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
-\end{chisel}
-\begin{itemize}
-\item Run the process manually (look into the Makefile)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Additional Files in the Hello World Example}
-\begin{itemize}
-\item A \code{Makefile}
-\item Optional Verilog or VHDL top level file %\code{verilog/hello\_top.v}
-%\begin{itemize}
-%\item For reset and possible PLLs
-%\item Can also be in VHDL
-%\end{itemize}
-\item Quartus project files \code{quartus/altde2-115/hello.q\{p|s\}f}
-\begin{itemize}
-\item List of source files, device and pin assignments
-\item plain text files, look into hello.qsf
-\end{itemize}
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item The world is digital
@@ -648,60 +589,6 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 % \item You can get started with a hardware design in a special course or 4th semester project
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Lab Time (Basys3)}
-\begin{itemize}
-\item Get a blinking LED working on the FPGA board
-\item Clone or download the repository from:
-\begin{itemize}
-\item \url{https://github.com/schoeberl/chisel-lab}
-\end{itemize}
-\item Follow the instructions from the lab page
-\begin{itemize}
-\item Start IntelliJ and follow the instructions from the lab page
-\item \code{sbt run}
-\item Create a Vivado project
-\item Synthesize with the Play button
-\item Configure the FPGA with the Programmer button
-\end{itemize}
-\item {\bf You have your first Chisel design running in an FPGA!}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Lab Time (DE2-115)}
-\begin{itemize}
-\item Get a blinking LED working on the FPGA board
-\item Clone or download the repository now
-\end{itemize}
-\begin{chisel}
-git clone \\
-   https://github.com/schoeberl/chisel-examples.git
-cd chisel-examples/hello-world
-make
-\end{chisel}
-\begin{itemize}
-\item Start Quartus
-\item Open the project at \code{chisel-examples/hello-world/quartus/altde2-115}
-\item Synthesize with the Play button
-\item Configure the FPGA with the Programmer button
-\item {\bf You have your first Chisel design running in an FPGA!}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Change the Design}
-\begin{itemize}
-\item Use \code{gedit}, or the editor you like most
-\item Source is in \code{.../src/main/scala/Hello.scala}
-\item Change blinking frequency
-\item Rerun the example
-\item Optional:
-\begin{itemize}
-\item Change to an asymmetric blinking, e.g., 200 ms on every second 
-\item Setup IntelliJ with a Scala project 
-\end{itemize}
-\end{itemize}
-\end{frame}
-
 
 \end{document}
 
