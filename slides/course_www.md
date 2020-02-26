@@ -84,28 +84,31 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Topics:** Introduction and motivation, languages for hardware design, testing (see 2.1.4), tools and setup, a first round in Chisel
 
-**Lab:** [Chisel “Hello World”](https://github.com/schoeberl/chisel-lab)
+**Slides:** [01_intro.pdf](01_intro.pdf)
 
 **Reading:** Chisel: 1, 2, Dally: 2.1.4 
 
 **Optional reading:** Dally: 1, 2
 
-**Slides:** [01_intro.pdf](01_intro.pdf)
+**Lab:** [Chisel “Hello World”](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 2 Basic Digital Circuits in Chisel
 
 **Topics:** Recap combinational and synchronous circuits with Chisel code (including comparison with VHDL)
 
+**Slides:** [02_basic.pdf](02_basic.pdf)
+
 **Reading:** Dally 8, 14.1., 14.2 and Chisel 5
 
 **Lab:** [Combinational circuits in Chisel](https://github.com/schoeberl/chisel-lab)
 
-**Slides:** [02_basic.pdf](02_basic.pdf)
 
 ### Week 3 Timing (guest lecture by Jens Sparsø)
 
 **Topics:** Delay and Power, Timing, and Metastability
+
+**Slides:** in DTU Inside
 
 **Reading:** Dally: 15.1-15.6, and 28.1-28.4
 
@@ -114,13 +117,13 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 
-### Week 4 Components, Small Sequential Circuits
+### Week 4 Components and Sequential Circuits
 
 **Topics:** Composing circuits out of components, sequential building blocks, using CLI
 
 **Reading:** Dally: 16.1 and 16.2 Chisel: 3.1, 3.2, 4 and 6
 
-**Lab:** Sequential circuits and components, maybe blinking LED or PWM with counters
+**Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 5 Testing and Verification
@@ -134,7 +137,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 ### Week 6 State Machines
 
-**Topics:** Some more Chisel, state machine (repetition)
+**Topics:** State machine (repetition) and the coding in Chisel
 
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 

@@ -56,11 +56,12 @@ class CombWhen2Untested extends Module {
   })
 
   val coinSum = io.data
+  val price = 5.U
   //- start comb_wire2
   val enoughMoney = Wire(Bool())
 
   enoughMoney := false.B
-  when (coinSum >= 5.U) {
+  when (coinSum >= price) {
     enoughMoney := true.B
   }
   //- end
