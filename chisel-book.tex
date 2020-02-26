@@ -2269,6 +2269,16 @@ every $n$ clock cycles.
 
 \shortlist{code/sequ_tick_counter.txt}
 
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/tick_count_wave}
+  \caption{Using the slow frequency tick.}
+  \label{fig:tick-count-wave}
+\end{figure}
+
+\noindent Figure~\ref{fig:tick-count-wave} shows the waveform of the tick and the
+slow counter that increments every tick ($n$ clock cycles).
+
 \index{Logical clock}
 Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
 generating the baud rate for a serial bus, generating signals for 7-segment
@@ -2310,20 +2320,18 @@ of time has elapsed, the alarm sounds.
 The digital timer is loaded with the time in clock cycles.
 Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=\scale]{figures/timer}
-  \caption{A one-shot timer.}
-  \label{fig:timer}
-\end{figure}
-
 Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
 the value of \code{din} by asserting \code{load}. When the \code{load} signal is de-asserted
 counting down is selected (by selecting \code{cnt - 1} as the input for the register).
 When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
 counting by selecting input line of the multiplexer that provides \code{0}.
 
-\longlist{code/timer.txt}{A one-shot timer}{lst:timer}
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/timer}
+  \caption{A one-shot timer.}
+  \label{fig:timer}
+\end{figure}
 
 Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{reg},
 that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{reg}
@@ -2332,6 +2340,8 @@ value of \code{0}. The \code{when/elsewhen} block introduces the other two input
 the select function. Signal \code{load} has priority over the decrement selection.
 The last line connects the multiplexer, represented by \code{next}, to the input of the
 register \code{reg}.
+
+\longlist{code/timer.txt}{A one-shot timer}{lst:timer}
 
 If we aim for a bit more concise code, we can directly assign the multiplexer values to
 the register \code{reg}, instead of using the intermediate wire \code{next}.

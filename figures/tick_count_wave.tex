@@ -1,0 +1,29 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=2.5ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+{clock}     & [L] 20{C} \\
+{reset} & 2.1E  2H    14L        1.9L \\
+{tick}   & .1U 4U 4L  2H 4L 2H  2L 1.9L \\
+{slow cnt}   & .1U 4U  6D{0}  6D{1} 3.9D{2}  \\
+\extracode
+\vertlines[semitransparent,semithick]{2,4,6,8,10,12, 14, 16, 18}
+\endextracode
+\end{tikztimingtable}
+
+\end{document}
