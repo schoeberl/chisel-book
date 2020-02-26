@@ -2322,9 +2322,9 @@ Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
 
 Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
 the value of \code{din} by asserting \code{load}. When the \code{load} signal is de-asserted
-counting down is selected (by selecting \code{cnt - 1} as the input for the register).
+counting down is selected (by selecting \code{cntReg - 1} as the input for the register).
 When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
-counting by selecting input line of the multiplexer that provides \code{0}.
+counting by selecting input of the multiplexer that provides \code{0}.
 
 \begin{figure}
   \centering
@@ -2580,8 +2580,8 @@ use of a lookup table that you can generate with a few lines of Scala code
 Drive a LED on an FPGA board with that modulated PWM function. What frequency shall your
 PWM signal be? What frequency is the driver running?
 
-Digital designs are often sketched as a circuit on paper. Not all details need to be shown,
-but we use a block diagram, like in the figures in this book. It is an important skill to be able
+Digital designs are often sketched as a circuit on paper. Not all details need to be shown.
+We use block diagrams, like in the figures in this book. It is an important skill to be able
 to fluently translate between a schematic representation of the circuit and a Chisel description.
 Sketch the block diagram for the following circuits:
 
@@ -4786,6 +4786,7 @@ related to digital design and computer architecture.
 \item [CISC] complex instruction set computer
 \item [CPI] clock cycles per instruction
 \item [CRC] cyclic redundancy check
+\item [DAC] digital-to-analog converter
 \item [DFF] D flip-flop, data flip-flop
 \item [DMA] direct memory access
 \item [DRAM] dynamic random access memory
