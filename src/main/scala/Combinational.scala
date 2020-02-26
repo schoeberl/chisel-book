@@ -49,6 +49,24 @@ class CombWhen extends Module {
   io.out := w
 }
 
+class CombWhen2Untested extends Module {
+  val io = IO(new Bundle {
+    val data = Input(UInt(4.W))
+    val out = Output(Bool())
+  })
+
+  val coinSum = io.data
+  //- start comb_wire2
+  val enoughMoney = Wire(Bool())
+
+  enoughMoney := false.B
+  when (coinSum >= 5.U) {
+    enoughMoney := true.B
+  }
+  //- end
+  io.out := enoughMoney
+}
+
 class CombOther extends Module {
   val io = IO(new Bundle {
     val cond = Input(Bool())

@@ -207,15 +207,19 @@ initReg := initReg + 1.U
 \shortlist{../code/sequ_reg_rising.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Multiplexer}
+
+\begin{frame}[fragile]{A Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
 \begin{itemize}
-\item So common: a component provided by Chisel
+\item A Multiplexer selects between alternatives
+\item So common that Chisel provides a construct for it
+\item Selects \code{a} when \code{sel} is \code{true.B} otherwise \code{b}
 \item Could be implemented with conditional updates
 \item Automagical type selection on input types
 \end{itemize}
-\begin{chisel}
-val selection = Mux(cond, trueVal, falseVal)
-\end{chisel}
+\shortlist{../code/mux.txt}
 \end{frame}
 
 \begin{frame}[fragile]{A Small Circuit}
