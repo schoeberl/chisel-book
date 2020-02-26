@@ -322,45 +322,8 @@ val orVal = x || y
 \item We use a default assignment of \code{"b00"}
 \end{itemize}
 \shortlist{../code/encdec_enc.txt}
-
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Power User II}
-\begin{itemize}
-\item xxx
- * Talk about tools
-   * see chapter 3 in pragmatic programmer
-   * Tools amplify your talent. The better your tools, and the better you know how to use them, the more productive you can be.
-   * Talk about google, man pages, or even plain --help
- * Use (and write) tools
- * link is missing: use simple bash scripts or Makefiles to remember commands (show examples)
-
-
- * Do power user in week 4
- * Have some slides, but mostly show demo
- * link to Linux intro
- * Use the Windows VM
- * open a powershell terminal
- * do a mkdir
- * do ls and cd
- * open browser to repo and copy string
- * do a git clone
- * cd and ls, maybe a cat
- * setup IntelliJ
- * run one exercise
- * switch to Mac and change minor thing
- * Do git commit/push
- * do a git pull in Windows, show in IntelliJ README.md
- * On Mac go to GitHub page
- * Do a change
- * On Windows do a git pull in IntelliJ
- * Say to take it easy, you do not need to do this, but it will help you to become a better engineer ;-)
-\item \url{https://www.oreilly.com/learning/ten-steps-to-linux-survival}
-
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Power User II}
 \begin{itemize}
@@ -372,9 +335,51 @@ val orVal = x || y
 \end{itemize}
 \item IDEs (Eclipse, InelliJ) are nice, I love them too
 \item But we shall go beyond it
-\item
-\item
-\item
+\item Use tools (and write your own)
+\item Help with: google, man pages, or even plain --help (or -h)
+\item \url{https://www.oreilly.com/learning/ten-steps-to-linux-survival}
+\begin{itemize}
+\item This is about command line tools, not just Linux
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Power User II}
+\begin{itemize}
+\item Use the command line, shell, terminal
+\item In Windows: PowerShell
+\begin{itemize}
+\item You may want to install the Linux subsystem
+\end{itemize}
+\item Universal Unix commands (Windows, Mac, Linux)
+\item Navigating the file system:
+\begin{itemize}
+\item Change directory: \code{cd}
+\item Print working directory: \code{pwd}
+\item Make a directory: \code{mkdir abc}
+\item Create a file: \code{echo test > abc.txt}
+\item Show file content: \code{cat abc.txt}
+\item Remove a file: \code{rm abc.txt}
+\end{itemize}
+\item Run your Chisel code with \code{sbt run}
+\item You used the terminal already from within IntelliJ ;-)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Power User II}
+\begin{itemize}
+\item We talked about \code{git} last week
+\item To version your source
+\item Maybe hosting on GitHub
+\item Most teaching material is on GitHub
+\item Use \code{git pull} to update the lab material
+\item Show how to use it, now!
+\begin{itemize}
+\item Clone a repo: \code{git clone path}
+\item Get the newest version: \code{git pull}
+\item Further commands: \code{git commit, push, log, status}
+\item Overview of changes: \code{gitk}
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -807,9 +812,10 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
 
 \begin{frame}[fragile]{Summary on Counters}
 \begin{itemize}
-\item Counters are versatile tool
+\item Counters are versatile tools
 \item Count events
-\item Generate timing
+\item Generate timing ticks
+\item Generate a one-shot timer
 \end{itemize}
 \end{frame}
 

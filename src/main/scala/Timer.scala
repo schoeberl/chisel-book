@@ -10,16 +10,16 @@ class Timer extends Module {
   val din = io.din
   val load = io.load
   //- start timer
-  val cnt = RegInit(0.U(8.W))
-  val done = cnt === 0.U
+  val cntReg = RegInit(0.U(8.W))
+  val done = cntReg === 0.U
 
   val next = WireInit(0.U)
   when (load) {
     next := din
   } .elsewhen (!done) {
-    next := cnt - 1.U
+    next := cntReg - 1.U
   }
-  cnt := next
+  cntReg := next
   //- end
   // printf("%d %d %d\n", next, reg, done)
 
