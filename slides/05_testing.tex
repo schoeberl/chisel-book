@@ -26,6 +26,69 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}[fragile]{Generating Timing with Counters}
+\begin{itemize}
+\item Generate a \code{tick} at a lower frequency
+\item E.g., used for driving the display multiplexing at 1~kHz
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=0.8]{../figures/tick_wave}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{The Tick Generation}
+\shortlist{../code/sequ_tick_gen.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using the Tick}
+\begin{itemize}
+\item A counter running at a \emph{slower frequency}
+\item By using the \code{tick} as an enable signal
+\end{itemize}
+\shortlist{../code/sequ_tick_counter.txt}
+\end{frame}
+
+\begin{frame}[fragile]{The \emph{Slow} Counter}
+\begin{itemize}
+\item Increment every \code{tick}
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=0.8]{../figures/tick_count_wave}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{A Timer}
+\begin{itemize}
+\item Like a kitchen timer
+\item Start by loading a timeout value
+\item Count down till 0
+\item Assert \code{done} when finished
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{One-Shot Timer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/timer}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{One-Shot Timer}
+\shortlist{../code/timer.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Summary on Counters}
+\begin{itemize}
+\item Counters are versatile tools
+\item Count events
+\item Generate timing ticks
+\item Generate a one-shot timer
+\end{itemize}
+\end{frame}
+
+
+
 \begin{frame}[fragile]{Chisel VHDL Comparison}
 \begin{columns}
 \column{0.5\textwidth}

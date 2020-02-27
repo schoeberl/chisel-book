@@ -68,7 +68,7 @@ Embedded Systems Engineering}
 \item Sell 1 item and not returning any money
 \item Set price with 5 switches (1--31 kr.)
 \item Display price on two 7-segment displays (hex.)
-\item Accept 2 ad 5 kr. (two push buttons)
+\item Accept 2 and 5 kr. (two push buttons)
 \item Display sum on two 7-segment displays (hex.)
 \begin{itemize}
 \item Amount entered so far
@@ -408,7 +408,7 @@ val orVal = x || y
 \begin{frame}[fragile]{Components}
 \begin{itemize}
 \item Components are building blocks
-\item The have input and output ports (= pins)
+\item Components have input and output ports (= pins)
 \begin{itemize}
 \item Organized as a \code{Bundle}
 \item assigned to field \code{io}
@@ -754,68 +754,6 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
 \shortlist{../code/when_counter.txt}
 \item Down:
 \shortlist{../code/down_counter.txt}
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Generating Timing with Counters}
-\begin{itemize}
-\item Generate a \code{tick} at a lower frequency
-\item E.g., used for driving the display multiplexing at 1~kHz
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=0.8]{../figures/tick_wave}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{The Tick Generation}
-\shortlist{../code/sequ_tick_gen.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Using the Tick}
-\begin{itemize}
-\item A counter running at a \emph{slower frequency}
-\item By using the \code{tick} as an enable signal
-\end{itemize}
-\shortlist{../code/sequ_tick_counter.txt}
-\end{frame}
-
-\begin{frame}[fragile]{The \emph{Slow} Counter}
-\begin{itemize}
-\item Increment every \code{tick}
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=0.8]{../figures/tick_count_wave}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{A Timer}
-\begin{itemize}
-\item Like a kitchen timer
-\item Start by loading with a value
-\item Count down till 0
-\item Assert \code{done} when finished
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{One-Shot Timer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/timer}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{One-Shot Timer}
-\shortlist{../code/timer.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Summary on Counters}
-\begin{itemize}
-\item Counters are versatile tools
-\item Count events
-\item Generate timing ticks
-\item Generate a one-shot timer
 \end{itemize}
 \end{frame}
 

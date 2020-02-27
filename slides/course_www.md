@@ -121,6 +121,8 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Topics:** Composing circuits out of components, sequential building blocks, using CLI
 
+**Slides:** [04_sequential.pdf](04_sequential.pdf)
+
 **Reading:** Dally: 16.1 and 16.2 Chisel: 3.1, 3.2, 4 and 6
 
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
