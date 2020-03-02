@@ -7,3 +7,4 @@ all:
 	pdflatex ready_valid1.tex
 	pdflatex ready_valid2.tex
 	pdflatex ready_valid3.tex
+	pdflatex tick_count_wave.tex
