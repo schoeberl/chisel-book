@@ -133,7 +133,9 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Topics:** Sequential building blocks, testing and verification in Chisel,
 waveform viewing
 
-**Reading:** Dally: 2.1.4 and 20, Chisel: 3, maybe some text on test driven development
+**Slides:** [05_testing.pdf](05_testing.pdf)
+
+**Reading:** Dally: 2.1.4 and 20, Chisel: 3
 
 **Lab:** [Hexadecimal to 7-segment decoder](https://github.com/schoeberl/chisel-lab)
 

@@ -20,6 +20,10 @@ Embedded Systems Engineering}
 \item Review components
 \item Some more sequential circuits
 \item Debugging and testing
+\item Digital designers call testing verification
+\begin{itemize}
+\item To distinguish from final chip testing
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -179,7 +183,8 @@ object Hello extends App {
 \begin{frame}[fragile]{Generating Timing with Counters}
 \begin{itemize}
 \item Generate a \code{tick} at a lower frequency
-\item E.g., used for driving the display multiplexing at 1~kHz
+\item We used it in Lab 1 for the blinking LED
+\item Use it for driving the display multiplexing at 1~kHz
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=0.8]{../figures/tick_wave}
@@ -259,6 +264,7 @@ object Hello extends App {
 \item 20 minutes time, including the break
 \item We will look into it after the break
 \item TODO: enable link
+\item TODO: send link in CN message
 \end{itemize}
 %\begin{figure}
 %  \includegraphics[scale=0.5]{forms2020}
@@ -266,12 +272,6 @@ object Hello extends App {
 %\begin{itemize}
 %\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
 %\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Testing and Debugging}
@@ -298,10 +298,12 @@ object Hello extends App {
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
+\item Import following packages:
+\shortlist{../code/test_import.txt}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Testing Example}
+\begin{frame}[fragile]{Using \code{peek}, \code{poke}, and \code{expect}}
 \begin{chisel}
 // Set input values
 poke(dut.io.a, 3)
@@ -314,22 +316,6 @@ println(res)
 
 // Or compare against expected value
 expect(dut.io.result, 7)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Main for Testing}
-\begin{itemize}
-\item Tests can be written in Scala/Chisel
-\item Tester and device under test (DUT) are two processes
-\item Invoke \code{execute} with some parameters, the DUT, and a tester
-\end{itemize}
-\begin{chisel}
-object CounterTester extends App {
-
-  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
-    c => new CounterTester(c)
-  }
-}
 \end{chisel}
 \end{frame}
 
@@ -348,39 +334,68 @@ class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Println Testing}
-\begin{chisel}
-class CounterTester(c: Counter) extends PeekPokeTester(c) {
-  for (i <- 0 until 5) {
-    println(i.toString + ": " + peek(c.io.out).toString())
-    step(1)
-  }
-}
-\end{chisel}
+\begin{frame}[fragile]{Example DUT}
 \begin{itemize}
-\item Within Chisel with a tester (= Scala program)
-\item May include waveform generation
-\item peek and poke to read and set values
-\begin{itemize}
-\item Remember the BASIC days ;-)
+\item A device-under test (DUT)
+\shortlist{../code/test_dut.txt}
 \end{itemize}
-\item printf in simulation on rising edge
-\begin{chisel}
-printf("Counting %x\n", r1)
-\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{A Simple Tester}
+\begin{itemize}
+\item Just using \code{println} for manual inspection
+\shortlist{../code/test_bench_simple.txt}
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}[fragile]{The Main Program for the Test}
+\begin{itemize}
+\item Extend an App and invoke the \code{iotesters} driver
+\item With the DUT and the tester
+\shortlist{../code/test_main_simple.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Real Tester}
+\begin{itemize}
+\item Poke values and \code{expect} some output
+\shortlist{../code/test_bench.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ScalaTest}
+\begin{itemize}
+\item Testing framework for Scala
+\item \code{sbt} understands ScalaTest
+\item Run all tests:
+\code{sbt test}
+\item When all \code{expect}s are ok, the test passes
+\item A little bit funny syntax
+\item Add library to \code{build.sbt}
+\begin{chisel}
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+\end{chisel}
+\item Import ScalaTest library
+\begin{chisel}
+import org.scalatest._
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ScalaTest Version of our Tester}
+\shortlist{../code/scalatest_simple.txt}
+\end{frame}
+
 \begin{frame}[fragile]{Generating Waveforms}
 \begin{itemize}
 \item Waveforms are timing diagrams
-\item Good to see many parallel signals  and register
+\item Good to see many parallel signals and registers
 \item Additional parameters: \code{"--generate-vcd-output", "on"}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
-\item Viewing with gtkwave or ModelSim
+\item Viewing with GTKWave or ModelSim
 \end{itemize}
 \end{frame}
 
@@ -477,16 +492,26 @@ class Count6WaveSpec extends
 \item Next logical step from regression tests
 \item Run all tests whenever code is changed
 \item Automate this with a repository, e.g., on GitHub
-\item Runs CI on Travis
+\item Run CI on Travis (with GitHub integration)
 \item Show about this on the Chisel book
+\begin{itemize}
+\item Show \code{sbt test}
+\item Mails from travis
+\item Live demo on travis
+\end{itemize}
 \item \url{https://travis-ci.com/schoeberl/chisel-book}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{xxx}
+\begin{frame}[fragile]{Testing versus Debugging}
 \begin{itemize}
-\item yyy
+\item Debugging is during code development
+\item Waveform and println are easy tools for debugging
+\item Debugging does not help for regression tests
+\item Write small test cases for regression tests
+\item Keeps your code base \emph{intact} when doing changes
+\item Better confidence in changes not introducing new bugs
 \end{itemize}
 \end{frame}
 
@@ -501,12 +526,10 @@ class Count6WaveSpec extends
 \end{itemize}
 \begin{chisel}
 sbt "runMain simple.Example"
-\end{chisel}
-\begin{itemize}
-\item Or even just:
-\end{itemize}
-\begin{chisel}
 sbt run
+sbt test
+sbt "testOnly MySpec"
+sbt compile
 \end{chisel}
 \end{frame}
 
@@ -529,18 +552,34 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 \end{chisel}
 \end{frame}
 
-
-
-
-
-
-
+\begin{frame}[fragile]{Today's Lab}
+\begin{itemize}
+\item Binary to 7-segment decoder
+\item First part of your vending machine
+\item Just a single digit, only combinational logic
+\item Use the nice tester provided to develop the circuit
+\item Then synthesize it for the FPGA
+\item Test with switches
+\item Show a TA your working design
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item TODO
+\item Small sequential circuits are our building blocks
+\item We build larger circuits by combining components (moduls)
+\item There is no \emph{println} in hardware
+\item We need to write tests for the development
+\item Debugging versus regression tests
 \end{itemize}
 \end{frame}
+
+%\begin{frame}[fragile]{xxx}
+%\begin{itemize}
+%\item yyy
+%\end{itemize}
+%\end{frame}
 
 
 \end{document}
