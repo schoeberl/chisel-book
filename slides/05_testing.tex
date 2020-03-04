@@ -15,19 +15,166 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-
-\begin{frame}[fragile]{TODO}
+\begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Midterm evaluation
-\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
-\item Show ab solutions for last week
-\item Show lab exercise 7-segment decoder
-\item Also have the shift register (after some repetition)
-\item  * link is missing: use simple bash scripts or Makefiles to remember commands (show examples)
-\item Show CI of my book for testing, see also emails from Travis in jopdesign inbox
+\item Review components
+\item Some more sequential circuits
+\item Debugging and testing
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Last Lab}
+\begin{itemize}
+\item On components and small sequential circuits
+\begin{itemize}
+\item Registers plus combinational circuits
+\end{itemize}
+\item Did you finish the exercises?
+\item They are not mandatory, but helpful for preparation for the final project
+\item Let's look at solutions
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{TODO}
+\begin{itemize}
+\item Show lab exercise 7-segment decoder
+\item Also have the shift register (after some repetition)
+\item Show sbt test and CI of my book for testing, see also emails from Travis in jopdesign inbox
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Components/Modules}
+\begin{itemize}
+\item Components are building blocks
+\item Components have input and output ports (= pins)
+\begin{itemize}
+\item Organized as a \code{Bundle}
+\item assigned to field \code{io}
+\end{itemize}
+\item We build circuits as a hierarchy of components
+\begin{itemize}
+\item You did a 4:1 multiplexer out of 3 2:1 mulitplexers
+\end{itemize}
+\item In Chisel a component is called \code{Module}
+\item Components/Modules are used to organize the circuit
+\begin{itemize}
+\item Similar as using methods in Java
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hierarchy of Components Example}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Ports}
+\begin{itemize}
+\item Ports are the connections of modules
+\item Ports are bundles with a direction
+\item The direction be reversed with \code{Flipped}
+\end{itemize}
+\begin{chisel}
+class Channel extends Bundle {
+  val data = Input(UInt(32.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+class ChannelUsage extends Bundle {
+  val input = new Channel()
+  val output = Flipped(new Channel())
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{An Adder Module}
+\begin{itemize}
+\item A \code{class} that \code{extends} \code{Module}
+\item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
+\item Circuit description in the constructor
+\end{itemize}
+\begin{chisel}
+class Adder extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Connections}
+\begin{itemize}
+\item Simple connections just with assignments, e.g.,
+\begin{chisel}
+  adder.io.a := ina
+  adder.io.b := inb
+\end{chisel}
+\item Automatic bulk connections between components
+\begin{chisel}
+  dec.io <> exe.io
+  mem.io <> exe.io
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Module Usage}
+\begin{itemize}
+\item Create with \code{new} and wrap into a \code{Module()}
+\item Interface port via the \code{io} field
+\item Note the assignment operator \code{:=} on \code{io} fields
+\end{itemize}
+\begin{chisel}
+  val adder = Module(new Adder())
+  adder.io.a := ina
+  adder.io.b := inb
+  val result = adder.io.result
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel Main}
+
+\begin{itemize}
+\item Create one top-level Module
+\item Invoke the Chisel driver from the App
+\item Pass the top module (e.g., \code{new Hello()})
+\item Optional: pass some parameters (in the \code{Array})
+\item Following code generates Verilog code for \emph{Hello World}
+\end{itemize}
+\begin{chisel}
+object Hello extends App {
+  chisel3.Driver.execute(Array[String](), () => new Hello())
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Counters as Building Blocks}
+\begin{itemize}
+\item Counters are versatile tools
+\item Count events
+\item Generate timing ticks
+\item Generate a one-shot timer
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Counting Up and Down}
+\begin{itemize}
+\item Up:
+\shortlist{../code/when_counter.txt}
+\item Down:
+\shortlist{../code/down_counter.txt}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Generating Timing with Counters}
 \begin{itemize}
@@ -54,7 +201,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{The \emph{Slow} Counter}
 \begin{itemize}
-\item Increment every \code{tick}
+\item Incremented every \code{tick}
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=0.8]{../figures/tick_count_wave}
@@ -80,75 +227,128 @@ Embedded Systems Engineering}
 \shortlist{../code/timer.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Summary on Counters}
+\begin{frame}[fragile]{A 4 Stage Shift Register}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/shiftregister}
+\end{figure}
+\shortlist{../code/shift_register.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Shift Register with Parallel Output}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/shiftreg-paraout}
+\end{figure}
+\shortlist{../code/shift_paraout.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Shift Register with Parallel Load}
+\begin{figure}
+  \includegraphics[scale=0.5]{../figures/shiftreg-paraload}
+\end{figure}
+\shortlist{../code/shift_paraload.txt}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{Midterm Evaluation}
 \begin{itemize}
-\item Counters are versatile tools
-\item Count events
-\item Generate timing ticks
-\item Generate a one-shot timer
+\item An anonymous Google form (no login required)
+\item 20 minutes time, including the break
+\item We will look into it after the break
+\item TODO: enable link
+\end{itemize}
+%\begin{figure}
+%  \includegraphics[scale=0.5]{forms2020}
+%\end{figure}
+%\begin{itemize}
+%\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
+%\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
 \end{itemize}
 \end{frame}
 
-
-
-
-\begin{frame}[fragile]{Add the following as new material to the repetition of the component/IO stuff}
+\begin{frame}[fragile]{Testing and Debugging}
+\begin{itemize}
+\item Nobody writes perfect code ;-)
+\item We need a method to improve the code
+\item In Java we can simply print the result:
+\begin{itemize}
+\item \code{println("42");}
+\end{itemize}
+\item What can we do in hardware?
+\begin{itemize}
+\item Describe the whole circuit and hope it works?
+\item We can switch an LED on or off
+\end{itemize}
+\item We need some tools for \href{https://en.wikipedia.org/wiki/Debugging#/media/File:H96566k.jpg}{debugging}
+\item Writing testers in Chisel
+\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Port Directions}
+\begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
-\item Can be reversed with the \code{Flipped}
-\item Convenient to have one bundle definition working as source
-and destination used between two modules
+\item Set input values with \code{poke}
+\item Advance the simulation with \code{step}
+\item Read the output values with \code{peek}
+\item Compare the values with \code{expect}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing Example}
+\begin{chisel}
+// Set input values
+poke(dut.io.a, 3)
+poke(dut.io.b, 4)
+// Execute one iteration
+step(1)
+// Print the result
+val res = peek(dut.io.result)
+println(res)
+
+// Or compare against expected value
+expect(dut.io.result, 7)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel Main for Testing}
+\begin{itemize}
+\item Tests can be written in Scala/Chisel
+\item Tester and device under test (DUT) are two processes
+\item Invoke \code{execute} with some parameters, the DUT, and a tester
 \end{itemize}
 \begin{chisel}
-class Channel extends Bundle {
-  val data = Input(UInt(32.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
+object CounterTester extends App {
+
+  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
+    c => new CounterTester(c)
+  }
 }
+\end{chisel}
+\end{frame}
 
-class ChannelUsage extends Bundle {
-  val input = new Channel()
-  val output = Flipped(new Channel())
+\begin{frame}[fragile]{A Chisel Tester}
+\begin{itemize}
+\item Extends class \code{PeekPokeTester}
+\item Has the DUT as parameter
+\item Testing code can use all features of Scala
+\end{itemize}
+\begin{chisel}
+class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
+
+  // Here comes the Chisel/Scala code
+  // for the testing
 }
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Port Directions}
-\begin{itemize}
-\item Can be assigned at instantiation
-\end{itemize}
-\begin{chisel}
-class ExecuteIO extends Bundle {
-  val dec = Input(new DecodeExecute())
-  val mem = Output(new ExecuteMemory())
-}
-\end{chisel}
-\begin{chisel}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Connections}
-\begin{itemize}
-\item Simple connections just with assignments, e.g.,
-\begin{chisel}
-  adder.io.a := ina
-  adder.io.b := inb
-\end{chisel}
-\item Automatic bulk connections between components
-\begin{chisel}
-  dec.io <> exe.io
-  mem.io <> exe.io
-\end{chisel}
-\end{itemize}
-\end{frame}
-
-
-
-
-
-\begin{frame}[fragile]{Testing}
+\begin{frame}[fragile]{Println Testing}
 \begin{chisel}
 class CounterTester(c: Counter) extends PeekPokeTester(c) {
   for (i <- 0 until 5) {
@@ -172,6 +372,123 @@ printf("Counting %x\n", r1)
 \end{frame}
 
 
+\begin{frame}[fragile]{Generating Waveforms}
+\begin{itemize}
+\item Waveforms are timing diagrams
+\item Good to see many parallel signals  and register
+\item Additional parameters: \code{"--generate-vcd-output", "on"}
+\item IO signals and registers are dumped
+\item Option \code{--debug} puts all wires into the dump
+\item Generates a .vcd file
+\item Viewing with gtkwave or ModelSim
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Waveform Testing Demo}
+\begin{itemize}
+\item Counter with a limit from last week (\code{Count6})
+\item Show Count6 tester: the original and the waveform
+\item Run it and look at waveform
+\item Add the solution
+\item Run again and reload the waveform
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Self-Running Circuit}
+\begin{itemize}
+\item \code{Count6} is a self-running circuit
+\item Needs no stimuli (\code{poke})
+\item Just run for a few cycles
+\end{itemize}
+\begin{chisel}
+class Count6Wave(dut: Count6) extends PeekPokeTester(dut) {
+  step(20)
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Call the Tester}
+\begin{itemize}
+\item Using here ScalaTest
+\item Note \code{Driver.execute}
+\item Note \code{Array("--generate-vcd-output", "on")}
+\end{itemize}
+\begin{chisel}
+class Count6WaveSpec extends
+  FlatSpec with Matchers {
+  
+  "CountWave6 " should "pass" in {
+    chisel3.iotesters.Driver.
+    execute(Array("--generate-vcd-output", "on"),() => new Count6)
+    { c => new Count6Wave(c) }
+    should be (true)
+  }
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Vending Machine Testing}
+\begin{itemize}
+\item I provide a minimal tester to generate a waveform
+\item Adding some coins and buying
+\item You can and shall extend this tester
+\item Better having more than one tester
+\item Show the waveform of the working VM
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Test Driven Development (TDD)}
+\begin{itemize}
+\item Software development process
+\begin{itemize}
+\item Can we learn from SW development for HW design?
+\end{itemize}
+\item Writing the test first, then the implementation
+\item Started with extreme programming
+\begin{itemize}
+\item Frequent releases
+\item Accept change as part of the development
+\end{itemize}
+\item Not used in its pour form
+\begin{itemize}
+\item Writing all those tests is simply considerer too much work
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Regresssion Tests}
+\begin{itemize}
+\item But tests are collected over time
+\item When a bug is found, a test is written to reproduce this bug
+\item Collection of tests increases
+\item Runs every night to test for \emph{regression}
+\begin{itemize}
+\item Did a code change introduce a bug in the current code base?
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Continuous Integration (CI)}
+\begin{itemize}
+\item Next logical step from regression tests
+\item Run all tests whenever code is changed
+\item Automate this with a repository, e.g., on GitHub
+\item Runs CI on Travis
+\item Show about this on the Chisel book
+\item \url{https://travis-ci.com/schoeberl/chisel-book}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Scala Build Tool (sbt)}
 \begin{itemize}
@@ -213,95 +530,10 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 \end{frame}
 
 
-\begin{frame}[fragile]{What is a Minimal Chisel Project?}
-\begin{itemize}
-\item Scala class (e.g., \code{Hello.scala})
-\item Build info in \code{build.sbt} for \code{sbt}:
-\end{itemize}
-\begin{chisel}
-scalaVersion := "2.11.7"
-
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
-\end{chisel}
-\begin{itemize}
-\item Run the process manually (look into the Makefile)
-\end{itemize}
-\end{frame}
 
 
 
 
-\begin{frame}[fragile]{Chisel Main for Testing}
-\begin{itemize}
-\item Tests can be written in Scala/Chisel
-\item Tester and device under test (DUT) are two processes
-\item Invoke \code{execute} with some parameters, the DUT, and a tester
-\end{itemize}
-\begin{chisel}
-object CounterTester extends App {
-
-  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
-    c => new CounterTester(c)
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Chisel Tester}
-\begin{itemize}
-\item Extends class \code{PeekPokeTester}
-\item Has the DUT as parameter
-\item Testing code can use all features of Scala
-\end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing}
-\begin{itemize}
-\item Set input values with \code{poke}
-\item Advance the simulation with \code{step}
-\item Read the output values with \code{peek}
-\item Compare the values with \code{expect}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing Example}
-\begin{chisel}
-// Set input values
-poke(dut.io.a, 3)
-poke(dut.io.b, 4)
-// Execute one iteration
-step(1)
-// Print the result
-val res = peek(dut.io.result)
-println(res)
-
-// Or compare against expected value
-expect(dut.io.result, 7)
-\end{chisel}
-\end{frame}
-
-
-\begin{frame}[fragile]{Generating Wave Forms}
-\begin{itemize}
-\item Additional parameters: \code{"--generate-vcd-output", "on"}
-\item IO signals and registers are dumped
-\item Option \code{--debug} puts all wires into the dump
-\item Generates a .vcd file
-\item Viewing with gtkwave or ModelSim
-\item See the example with \code{make fifo}
-\begin{itemize}
-\item Show it
-\end{itemize}
-\item BubbleFifo contains also longer testing code
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}[fragile]{Summary}

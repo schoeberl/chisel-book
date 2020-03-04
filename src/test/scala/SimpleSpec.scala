@@ -1,4 +1,4 @@
-import chisel3.iotesters.PeekPokeTester
+import chisel3.iotesters._
 import org.scalatest._
 
 //- start scalatest_simple
