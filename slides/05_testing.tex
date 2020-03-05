@@ -254,15 +254,14 @@ object Hello extends App {
 \item An anonymous Google form (no login required)
 \item 20 minutes time, including the break
 \item We will look into it after the break
-\item TODO: enable link
 \item TODO: send link in CN message
 \end{itemize}
-%\begin{figure}
-%  \includegraphics[scale=0.5]{forms2020}
-%\end{figure}
-%\begin{itemize}
-%\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
-%\end{itemize}
+\begin{figure}
+  \includegraphics[scale=0.5]{forms2020}
+\end{figure}
+\begin{itemize}
+\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Testing and Debugging}
@@ -313,7 +312,7 @@ expect(dut.io.result, 7)
 \begin{frame}[fragile]{A Chisel Tester}
 \begin{itemize}
 \item Extends class \code{PeekPokeTester}
-\item Has the DUT as parameter
+\item Has the device-under test (DUT) as parameter
 \item Testing code can use all features of Scala
 \end{itemize}
 \begin{chisel}
