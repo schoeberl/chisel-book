@@ -1614,12 +1614,12 @@ The \code{Bundle} contains fields to represent input and output ports of
 the module. The direction is given by wrapping a field into either a call to \code{Input()}
 or \code{Output()}. The direction is from the view of the component itself.
 
-The following code shows the definition of the two example components A and B from
-Figure~\ref{fig:components}:
 
-\shortlist{code/components_ab.txt}
+\longlist{code/components_ab.txt}{Definitions of component A and B}{lst:comp:ab}
 
-\noindent Component A has two inputs, named \code{a} and \code{b}, and two
+Listing~\ref{lst:comp:ab} shows the definition of the two example components A and B from
+Figure~\ref{fig:components}.
+Component A has two inputs, named \code{a} and \code{b}, and two
 outputs, named \code{x} and \code{y}. For the ports of component B
 we chose the names \code{in1}, \code{in2}, and \code{out}.
 All ports use an unsigned integer (\code{UInt}) with a bit width of 8.
@@ -1631,12 +1631,12 @@ As we have no function associated with those example components,
 we used generic port names. For a real design use descriptive
 port names, such as \code{data}, \code{valid}, or \code{ready}.
 
-Component C has three input and two output ports. It is built out of
+Component C, shown in Listing~\ref{lst:comp:c}, has three input and two output ports. It is built out of
 components A and B. We show how A and B are connected to the ports
 of C and also the connection between an output port of A and an
-input port of B:
+input port of B.
 
-\shortlist{code/components_c.txt}
+\longlist{code/components_c.txt}{Component C}{lst:comp:c}
 
 Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
 into a call to \code{Module()}. The reference to that module is stored in a local variable,
@@ -1645,15 +1645,16 @@ in this example \code{val compA = Module(new CompA())}.
 With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
 and the individual fields of the IO \code{Bundle}.
 
-The simplest component in our design has just an input port, named \code{in}, and
+The simplest component in our design, shown in Listing~\ref{lst:comp:d},
+has just an input port, named \code{in}, and
 an output port named \code{out}.
 
-\shortlist{code/components_d.txt}
+\longlist{code/components_d.txt}{Component D}{lst:comp:d}
 
 The final missing piece of our example design is the top-level component, which itself
-is assembled out of components C and D:
+is assembled out of components C and D, shown in Listing~\ref{lst:comp:top}.
 
-\shortlist{code/components_top.txt}
+\longlist{code/components_top.txt}{Top-level component}{lst:comp:top}
 
 Good component design is similar to the good design of functions or methods in
 software design. One of the main questions is how much functionality shall we put into
