@@ -49,7 +49,29 @@ The course is lectured in building 303A, room 44. The lab is in building
 
 ### Pensum List
 
-TBD 
+#### Dally
+
+In all Dally chapter ignore VHDL code
+
+ * 8.1 - 8.6
+ * 14.1 - 14.5
+ * 15.1 - 15.6
+ * 16.1 - 16.3
+ * 17.1 - 17.2
+ * 28.1 - 28.4
+
+#### Chisel book (Schoeberl)
+
+ * 2
+ * 4.1 - 4.2
+ * 5
+ * 6.1 - 6.3
+ * 8
+ * 9
+
+#### Slides
+
+ * RC switching model from L03 slides (in DTU Inside) 
 
 ## Recommended Textbooks
 
@@ -99,7 +121,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 
 **Slides:** [02_basic.pdf](02_basic.pdf)
 
-**Reading:** Dally 8, 14.1., 14.2 and Chisel 5
+**Reading:** Dally 8, 14.1, 14.2 and Chisel 5
 
 **Lab:** [Combinational circuits in Chisel](https://github.com/schoeberl/chisel-lab)
 
@@ -153,7 +175,7 @@ waveform viewing
 
 **Topics:** State machine and datapath (FSMD)
 
-**Reading:** Dally: 16, Chisel: 9.2 (2nd edition), 7
+**Reading:** Dally: 16.3, 29.1-29.3, Chisel: 9.2 (2nd edition), 7
 
 **Lab:** Dally 14.28 and other, FSM exercises in Chisel
 
@@ -171,7 +193,7 @@ waveform viewing
 
 **Topics:** Communicating FSMs and ready/valid interface
 
-**Reading:** Dally: 22, Chisel: 9.1
+**Reading:** Dally: 22, Chisel: 9.1, 9.3
 
 **Lab:** Full display
 
