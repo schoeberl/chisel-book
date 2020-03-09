@@ -2,8 +2,6 @@
 
 This course is a follow up of Digital Electronics 1 for students of Electrical Engineering at DTU, but can also be taken from other study lines.
 
-*This course is being restructured and therefore this web page may change.*
-
 ### Aims of the course
 
 To provide the participants with the competencies necessary to design digital circuits that perform simple calculations or control tasks using typical simulation and synthesis tools and to implement these circuits using reconfigurable hardware (FPGA technology). 
@@ -51,23 +49,23 @@ The course is lectured in building 303A, room 44. The lab is in building
 
 #### Dally
 
-In all Dally chapter ignore VHDL code
+In all Dally sections ignore VHDL code
 
- * 8.1 - 8.6
- * 14.1 - 14.5
- * 15.1 - 15.6
- * 16.1 - 16.3
- * 17.1 - 17.2
- * 28.1 - 28.4
+ * Section 8.1 - 8.6
+ * Section 14.1 - 14.5
+ * Section 15.1 - 15.6
+ * Section 16.1 - 16.3
+ * Section 17.1 - 17.2
+ * Section 28.1 - 28.4
 
 #### Chisel book (Schoeberl)
 
- * 2
- * 4.1 - 4.2
- * 5
- * 6.1 - 6.3
- * 8
- * 9
+ * Chapter 2
+ * Section 4.1 - 4.2
+ * Chapter 5
+ * Section 6.1 - 6.3
+ * Chapter 8
+ * Chapter 9
 
 #### Slides
 
