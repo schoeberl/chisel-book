@@ -52,6 +52,118 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Testing with Chisel}
+\begin{itemize}
+\item Set input values with \code{poke}
+\item Advance the simulation with \code{step}
+\item Read the output values with \code{peek}
+\item Compare the values with \code{expect}
+\item Import following packages:
+\shortlist{../code/test_import.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Using \code{peek}, \code{poke}, and \code{expect}}
+\begin{chisel}
+// Set input values
+poke(dut.io.a, 3)
+poke(dut.io.b, 4)
+// Execute one iteration
+step(1)
+// Print the result
+val res = peek(dut.io.result)
+println(res)
+
+// Or compare against expected value
+expect(dut.io.result, 7)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{A Chisel Tester}
+\begin{itemize}
+\item Extends class \code{PeekPokeTester}
+\item Has the device-under test (DUT) as parameter
+\item Testing code can use all features of Scala
+\end{itemize}
+\begin{chisel}
+class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
+
+  // Here comes the Chisel/Scala code
+  // for the testing
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Using ScalaTest for our Tester}
+\begin{itemize}
+\item Little verbose syntax
+\item Copy example code to start with
+\end{itemize}
+\shortlist{../code/scalatest_simple.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Generating Waveforms}
+\begin{itemize}
+\item Waveforms are timing diagrams
+\item Good to see many parallel signals and registers
+\item Additional parameters: \code{"--generate-vcd-output", "on"}
+\item IO signals and registers are dumped
+\item Generates a .vcd file
+\item Viewing with GTKWave or ModelSim
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Self-Running Circuit}
+\begin{itemize}
+\item \code{SevenSegTest} is a self-running circuit
+\item Needs no stimuli (\code{poke})
+\item Just run for a few cycles
+\item Tester for today's lab
+\end{itemize}
+\begin{chisel}
+class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
+  step(100)
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Display Waveform with GTKWave}
+\begin{itemize}
+\item Run the tester: \code{sbt test}
+\item Locate the .vcd file
+\item Start GTKWave
+\item Open the .vcd file with
+\begin{itemize}
+\item File -- Open New Tab
+\end{itemize}
+\item Select the circuit
+\item Drag and drop the interesting signals
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Call the Tester}
+\begin{itemize}
+\item Using here ScalaTest
+\item Note \code{Driver.execute}
+\item Note \code{Array("--generate-vcd-output", "on")}
+\end{itemize}
+\begin{chisel}
+class SevenSegCountSpec extends
+  FlatSpec with Matchers {
+  "SevenSegTest " should "pass" in {
+  chisel3.iotesters.Driver
+  .execute(Array("--generate-vcd-output", "on"),
+    () => new CountSevenSeg)
+    { c => new SevenSegTest(c)} should be (true) }
+}
+\end{chisel}
+\end{frame}
+
+
+
+
 \begin{frame}[fragile]{Counters as Building Blocks}
 \begin{itemize}
 \item Counters are versatile tools
@@ -144,12 +256,44 @@ Embedded Systems Engineering}
 \shortlist{../code/shift_paraload.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Scala List for Enumeration}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(2)
+\end{chisel}
+\begin{itemize}
+\item Can be used in wires and registers
+\item Symbols for a state machine
+\end{itemize}
+\end{frame}
 
-%\begin{frame}[fragile]{xxx}
-%\begin{itemize}
-%\item yyy
-%\end{itemize}
-%\end{frame}
+\begin{frame}[fragile]{Finite State Machine}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(2)
+  val stateReg = RegInit(empty)
+  val dataReg = RegInit(0.U(size.W))
+
+  when(stateReg === empty) {
+    when(io.enq.write) {
+      stateReg := full
+      dataReg := io.enq.din
+    }
+  }.elsewhen(stateReg === full) {
+    when(io.deq.read) {
+      stateReg := empty
+    }
+  }
+\end{chisel}
+\begin{itemize}
+\item A simple buffer for a bubble FIFO
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Chisel VHDL Comparison}
@@ -491,37 +635,6 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Scala List for Enumeration}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-\end{chisel}
-\begin{itemize}
-\item Can be used in wires and registers
-\item Symbols for a state machine
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Finite State Machine}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-  val stateReg = RegInit(empty)
-  val dataReg = RegInit(0.U(size.W))
-
-  when(stateReg === empty) {
-    when(io.enq.write) {
-      stateReg := full
-      dataReg := io.enq.din
-    }
-  }.elsewhen(stateReg === full) {
-    when(io.deq.read) {
-      stateReg := empty
-    }
-  }
-\end{chisel}
-\begin{itemize}
-\item A simple buffer for a bubble FIFO
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Parameterization}
 \begin{chisel}
