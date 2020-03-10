@@ -166,7 +166,7 @@ waveform viewing
 
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 
-**Lab:** 7-segment display with a counter, Chisel testers and debugging with gtkwave, 
+**Lab:** 7-segment display with a counter, Chisel testers and debugging with gtkwave 
 
 
 ### Week 7 State Machine and Datapath, Input interface

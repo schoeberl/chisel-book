@@ -3,7 +3,7 @@
 \newif\ifbook
 \input{../shared/chisel}
 
-\title{FSM and stuff for later}
+\title{Finite State Machines}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark\\
@@ -34,23 +34,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
@@ -254,6 +238,66 @@ class SevenSegCountSpec extends
   \includegraphics[scale=0.5]{../figures/shiftreg-paraload}
 \end{figure}
 \shortlist{../code/shift_paraload.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Simple Circuit}
+\begin{itemize}
+\item What does the following circuit?
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/fsm-rising}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Finite-State Machine (FSM)}
+\begin{itemize}
+\item Has a register that contains the state
+\item Has a function to computer the next state
+\begin{itemize}
+\item Depending on current state and input
+\end{itemize}
+\item Has an output depending on the state
+\begin{itemize}
+\item And maybe on the input as well
+\end{itemize}
+\item Every synchronous circuit can be considered a finite state machine
+\item However, sometimes the state space is a little bit too large
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Basic Finite-State Machine}
+\begin{itemize}
+\item A state register
+\item Two combinational blocks
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/fsm}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{State Diagram}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/state-diag-moore}
+\end{figure}
+\begin{itemize}
+\item States and transitions depending on input values
+\item Example is a simple alarm FSM
+\item Nice visualization
+\item Will not work for large FSMs
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Scala List for Enumeration}
