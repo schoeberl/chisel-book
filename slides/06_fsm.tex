@@ -32,6 +32,21 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Lab Work}
+\begin{itemize}
+\item Looks like it went fine last week
+\item This week it will be counters to test the 7-segment display
+\item Got a question: ``Due to the corona out-break, what will happen to our vending machine project if DTU closes down? Will the project get cancelled? or will we all fail the course, because personally I cannot work on the project without any help from the TAs.''
+\item Looks like DTU will close down from next week on
+\item No one should fail because of the Corona outbreak!
+\item We will find a flexible solution for the lab work
+\begin{itemize}
+\item I really want you to get hands on experience to design stuff!
+\end{itemize}
+\item I do not want that your grade is based only on the written exam
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{xxx}
 \begin{itemize}
 \item yyy
@@ -250,6 +265,7 @@ class SevenSegCountSpec extends
 \begin{frame}[fragile]{A Simple Circuit}
 \begin{itemize}
 \item What does the following circuit?
+\item Is this related to a finite-state machine?
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/fsm-rising}
@@ -291,6 +307,141 @@ class SevenSegCountSpec extends
 \item Example is a simple alarm FSM
 \item Nice visualization
 \item Will not work for large FSMs
+\item Complete code in the Chisel book
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{State Table for the Alarm FSM}
+\begin{table}
+\centering
+\begin{tabular}{ccccc}
+\toprule
+& \multicolumn{2}{c}{Input} \\
+\cmidrule{2-3}
+State &  Bad event & Clear & Next state & Ring bell \\
+\midrule
+green & 0 & 0 & green & 0 \\
+green & 1 & - & orange & 0 \\
+orange & 0 & 0 & orange & 0 \\
+orange & 1 & - & red & 0 \\
+orange & 0 & 1 & green & 0 \\
+red & 0 & 0 & red & 1 \\
+red & 0 & 1 & green & 1 \\
+\bottomrule
+\end{tabular}
+\label{tab:state:table}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{The Input and Output of the Alarm FSM}
+\begin{itemize}
+\item Two inputs and one output
+\end{itemize}
+\shortlist{../code/simple_fsm_io.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Encoding the State}
+\begin{itemize}
+\item We can optimize state encoding
+\item Two common encodings are: binary and one-hot
+\item We leave it to the synthesize tool
+\item Use symbolic names with an \code{Enum}
+\item Note the number of states in the \code{Enum} construct
+\item We use a Scala list with the \code{::} operator
+\end{itemize}
+\shortlist{../code/simple_fsm_states.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Start the FSM}
+\begin{itemize}
+\item We have a starting state on reset
+\end{itemize}
+\shortlist{../code/simple_fsm_register.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{The Next State Logic}
+\shortlist{../code/simple_fsm_next.txt}
+\end{frame}
+
+\begin{frame}[fragile]{The Output Logic}
+\shortlist{../code/simple_fsm_output.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Summary on the Alarm Example}
+\begin{itemize}
+\item Three elements:
+\begin{enumerate}
+\item State register
+\item Next state logic
+\item Output logic
+\end{enumerate}
+\item This was a so-called Moore FSM
+\item There is also a FSM type called Mealy machine
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A so-called Mealy FSM}
+\begin{itemize}
+\item Similar to the former FSM
+\item Output also depends in the input
+\item It is \emph{faster}
+\item Less composable (draw it)
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mealy}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{The Mealy FSM for the Rising Edge}
+\begin{itemize}
+\item That was our starting example
+\item Output is also part of the transition arrows
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/state-diag-mealy}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{The Mealy Solution}
+\begin{itemize}
+\item Show code from the book as it is too long for slides
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{State Diagram for the Moore Rising Edge Detection}
+\begin{itemize}
+\item We need three states
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/state-diag-rising-moore}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Comparing with a Timing Diagram}
+\begin{itemize}
+\item Moore is delayed one clock cycle compared to Mealy
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/rising}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{What is Better?}
+\begin{itemize}
+\item It depends ;-)
+\item Moore is on the save side
+\item More is composable
+\item Mealy has \emph{faster} reaction
+\item Both are tools in you toolbox
+\item Keep it simple with your vending machine and use a Moore FSM
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
 \end{itemize}
 \end{frame}
 
@@ -300,23 +451,18 @@ class SevenSegCountSpec extends
 \item yyy
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{Scala List for Enumeration}
+\begin{frame}[fragile]{Another Simple FSM}
+\begin{itemize}
+\item a FSM for a single word buffer
+\item Just two symbols for the state machine
+\end{itemize}
 \begin{chisel}
   val empty :: full :: Nil = Enum(2)
 \end{chisel}
-\begin{itemize}
-\item Can be used in wires and registers
-\item Symbols for a state machine
-\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Finite State Machine}
+\begin{frame}[fragile]{Finite State Machine for a Buffer}
 \begin{chisel}
   val empty :: full :: Nil = Enum(2)
   val stateReg = RegInit(empty)
@@ -335,13 +481,6 @@ class SevenSegCountSpec extends
 \end{chisel}
 \begin{itemize}
 \item A simple buffer for a bubble FIFO
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
 \end{itemize}
 \end{frame}
 
@@ -402,7 +541,11 @@ type, we need to pass a prototype for the vector fields. Using our
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item xxx
+\item Waveform testing is the way to develop/debug
+\item Counters are important tools, e.g., to generate timing
+\item Finite-state machines are another tool of the trade
+\item Two types: Moore and Mealy
+\item A Chisel \code{Vec} is the hardware version of an array
 \end{itemize}
 \end{frame}
 
