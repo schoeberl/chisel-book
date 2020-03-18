@@ -164,6 +164,8 @@ waveform viewing
 
 **Topics:** State machine (repetition) and the coding in Chisel
 
+**Slides:** [06_fsm.pdf](06_fsm.pdf)
+
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 
 **Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
@@ -175,7 +177,7 @@ waveform viewing
 
 **Reading:** Dally: 16.3, 29.1-29.3, Chisel: 9.2 (2nd edition), 7
 
-**Lab:** Dally 14.28 and other, FSM exercises in Chisel
+**Lab:** Dally 14.3, 14.5 (Sketch a Chisel implementation on paper), 14.28, Sketch a Chisel implementation on paper for 14.28
 
 
 ### Week 8 State Machines and Refactoring (1 hour)

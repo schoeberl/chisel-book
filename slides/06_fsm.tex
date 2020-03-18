@@ -15,14 +15,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Prepare answers for the midterm evaluation
-\item State machine stuff (I should have PPT slides on this!)
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Debugging with waveforms
@@ -37,19 +29,13 @@ Embedded Systems Engineering}
 \item Looks like it went fine last week
 \item This week it will be counters to test the 7-segment display
 \item Got a question: ``Due to the corona out-break, what will happen to our vending machine project if DTU closes down? Will the project get cancelled? or will we all fail the course, because personally I cannot work on the project without any help from the TAs.''
-\item Looks like DTU will close down from next week on
+\item DTU has closed down from today on
 \item No one should fail because of the Corona outbreak!
 \item We will find a flexible solution for the lab work
 \begin{itemize}
 \item I really want you to get hands on experience to design stuff!
 \end{itemize}
 \item I do not want that your grade is based only on the written exam
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
 \end{itemize}
 \end{frame}
 
@@ -135,7 +121,7 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \begin{frame}[fragile]{Display Waveform with GTKWave}
 \begin{itemize}
 \item Run the tester: \code{sbt test}
-\item Locate the .vcd file
+\item Locate the .vcd file in test\_run\_dir/SevenSegCountSpecnnn
 \item Start GTKWave
 \item Open the .vcd file with
 \begin{itemize}
@@ -148,7 +134,7 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 
 
 
-\begin{frame}[fragile]{Call the Tester}
+\begin{frame}[fragile]{Call the Tester for Waveform Generation}
 \begin{itemize}
 \item Using here ScalaTest
 \item Note \code{Driver.execute}
@@ -191,6 +177,7 @@ class SevenSegCountSpec extends
 \begin{itemize}
 \item Generate a \code{tick} at a lower frequency
 \item We used it in Lab 1 for the blinking LED
+\item Use it for today's lab
 \item Use it for driving the display multiplexing at 1~kHz
 \end{itemize}
 \begin{figure}
@@ -439,19 +426,6 @@ red & 0 & 1 & green & 1 \\
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Another Simple FSM}
 \begin{itemize}
 \item a FSM for a single word buffer
@@ -532,9 +506,9 @@ type, we need to pass a prototype for the vector fields. Using our
 \end{itemize}
 \item You clock on the board is 100 MHz
 \item The given tester does only generate a waveform, no testing
-\item Use a different count value for waveform debugging
+\item Use a different maximum count value for waveform debugging
 \item Then synthesize it for the FPGA
-\item Show a TA your working design
+\item (Show a TA your working design)
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab6}{Lab 6}
 \end{itemize}
 \end{frame}
@@ -548,28 +522,6 @@ type, we need to pass a prototype for the vector fields. Using our
 \item A Chisel \code{Vec} is the hardware version of an array
 \end{itemize}
 \end{frame}
-
-
-\begin{frame}[fragile]{Chisel VHDL Comparison}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
-}
-\end{chisel}
-\column{0.5\textwidth}
-\begin{verbatim}
-VHDL code here
-\end{verbatim}
-\end{columns}
-Also show latch and and using a button as clock
-\end{frame}
-
-
 
 
 \end{document}
