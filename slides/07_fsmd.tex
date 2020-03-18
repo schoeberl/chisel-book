@@ -18,12 +18,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
-\item Talk on remote learning
-\item Read the message and repeat the content
-\item Explain the lab (at the end)
+\item Explain the paper and pencile (at the end)
 \item Repeat the testing including showing it on the screen
 \item Try it out with some
-\item Have the question on how to proceed with the lab
 \item add cosimulation to the verification story (show Lipsi), maybe later
 \item logic gen., maybe bin bcd directly into vec
 \end{itemize}
@@ -31,7 +28,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item xxx
+\item Remote teaching and learning
+\item Repeat
+\item FSM with Datapaht
 \end{itemize}
 \end{frame}
 
@@ -41,15 +40,18 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item We need to be patient with each other
 \end{itemize}
-\item We will use Slack for quicker communication
+\item We should use Slack for quicker communication
 \item Zoom for lecturing
+\begin{itemize}
+\item \url{https://dtudk.zoom.us/j/7712109832}
+\end{itemize}
 \item Please use a headset
 \item Please mute your mic when not talking
 \item Some nice features
 \begin{itemize}
 \item You can raise your hand
 \item You can ask questions with mic or on chat
-\item Everyone can share the the scree or an individual window
+\item Everyone can share their screen or an individual window
 \end{itemize}
 \item The Dally book is now available online for free!
 \end{itemize}
@@ -57,13 +59,16 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Lab/Exercise Organization}
 \begin{itemize}
-\item Everyone at DTU has access to the professional version
+\item Everyone at DTU can use the professional version of Zoom
+\begin{itemize}
+\item \url{http://dtudk.zoom.us/signin}
+\end{itemize}
 \item You can also use Zoom for your group work
 \item Zoom will also be used for the supervised lab
 \begin{itemize}
 \item Start a Zoom meeting with your group
 \item Schedule a TA for help with Slack, posting your Zoom meeting link
-\item You can also schedule a Zoom meeting with me (at other times)
+\item You can also schedule a Zoom meeting with me (also at other times)
 \end{itemize}
 \item This is a chance to learn how to collaborate remotely
 \begin{itemize}
@@ -99,11 +104,139 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{FSM with Datapath}
+\begin{itemize}
+\item A type of computing machine
+\item Consists of a finite-state machine (FSM) and a datapath
+\item The FSM is the master (the controller) of the datapath
+\item The datapath has computing elements
+\begin{itemize}
+\item E.g., adder, incrementer, constants, multiplexers, ...
+\end{itemize}
+\item The datapath has storage elements (registers)
+\begin{itemize}
+\item E.g., sum of money payed, count of something, ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FSM-Datapath Interaction}
+\begin{itemize}
+\item The FSM controls the datapath
+\begin{itemize}
+\item For example, add 2 to the sum
+\end{itemize}
+\item By controlling multiplexers
+\begin{itemize}
+\item For example, select how much to add
+\item Not adding means selecting 0 to add
+\end{itemize}
+\item Which value goes where
+\item The FSM logic also depends on datapath output
+\begin{itemize}
+\item Is there enough money payed to release a can of soda?
+\end{itemize}
+\item FSM and datapath interact
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Popcount Example}
+\begin{itemize}
+\item An FSMD that computes the popcount
+\item Also called the Hamming weight
+\item Compute the number of `1's in a word
+\item Input is the data word
+\item Output is the count
+\item Code available at \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/PopCount.scala}{PopCount.scala}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Popcount Block Diagram}
+
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/popcnt-fsmd}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Popcount Connection}
+\begin{columns}
+\column{0.6\textwidth}
+\begin{itemize}
+\item Input \code{din} and output \code{popCount}
+\item Both connected to the datapath
+\item We need some handshaking
+\item For data input and for count output
+\end{itemize}
+\column{0.4\textwidth}
+\begin{figure}
+  \includegraphics[scale=0.45]{../figures/popcnt-fsmd}
+\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Popcount Handshake}
+\begin{columns}
+\column{0.6\textwidth}
+\begin{itemize}
+\item We use a ready-valid handshake
+\item When data is available valid is asserted
+\item When the receiver can accept data ready is asserted
+\item Transfer takes place when both are asserted
+\end{itemize}
+\column{0.4\textwidth}
+\begin{figure}
+  \includegraphics[scale=0.45]{../figures/popcnt-fsmd}
+\end{figure}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{The FSM}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/popcnt-states}
+\end{figure}
+\begin{itemize}
+\item A Very Simple FSM
+\item Two transitions depend on input/output handshake
+\item One transition on the datapath output
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{xxx}
 \begin{itemize}
 \item yyy
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Today Lab}
+\begin{itemize}
+\item Paper \& pencil exercises
+\item Exercises on FSM
+\item From the, now free, Dally book
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Chisel VHDL Comparison}
 \begin{columns}
@@ -488,7 +621,7 @@ val m = if (useA) Module(new VariantA())
 
 %\input{../slides-tutorial/generation.tex}
 
-\begin{frame}[fragile]{Generation Slides (inlude) are missing here}
+\begin{frame}[fragile]{Generation Slides (include) are missing here}
 \begin{itemize}
 \item 
 \end{itemize}
