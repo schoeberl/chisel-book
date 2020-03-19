@@ -175,6 +175,8 @@ waveform viewing
 
 **Topics:** State machine and datapath (FSMD)
 
+**Slides:** [07_fsmd.pdf](07_fsmd.pdf)
+
 **Reading:** Dally: 16.3, 29.1-29.3, Chisel: 9.2 (2nd edition), 7
 
 **Lab:** Dally 14.3, 14.5 (Sketch a Chisel implementation on paper), 14.28, Sketch a Chisel implementation on paper for 14.28
