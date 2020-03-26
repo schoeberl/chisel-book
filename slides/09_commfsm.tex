@@ -19,7 +19,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
 \item Repeat stuff
-\item Did I do input processing last time?
+\item Did I do input processing last time? No, do it today
 \item add cosimulation to the verification story (show Lipsi), maybe later
 \item logic gen., maybe bin bcd directly into vec
 \end{itemize}
@@ -265,43 +265,6 @@ sbt "runMain Example"
 
 
 
-\begin{frame}[fragile]{Parameterization}
-\begin{chisel}
-class ParamChannel(n: Int) extends Bundle {
-  val data = Input(UInt(n.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-val ch32 = new ParamChannel(32)
-\end{chisel}
-\begin{itemize}
-\item Bundles and modules can be parametrized
-\item Pass a parameter in the constructor
-\end{itemize}
-
-\end{frame}
-\begin{frame}[fragile]{A Module with a Parameter}
-\begin{chisel}
-class ParamAdder(n: Int) extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(n.W))
-    val b = Input(UInt(n.W))
-    val result = Output(UInt(n.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-
-val add8 = Module(new ParamAdder(8))
-\end{chisel}
-\begin{itemize}
-\item Parameter can also be a Chisel type
-\item Can also be a generic type:
-\item \code{class Mod[T <: Bits](param: T) extends...}
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
 \begin{chisel}
