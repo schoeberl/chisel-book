@@ -40,15 +40,87 @@ Embedded Systems Engineering}
 \item Input are 16 switches for 4 hexadecimal digits
 \end{itemize}
 \item How many have finished it?
+\item Please show it a TA when finished for a ``tick''
 \item There is a simulation available, show it
 \item Maybe extend it with binary to BCD conversion
+\begin{itemize}
+\item This is optional/advanced material
+\end{itemize}
+\item You can also start to work on the full Vending Machine
+\begin{itemize}
+\item Top-level, pin definition, and a simple tester is in:
+\item \url{https://github.com/schoeberl/chisel-lab/tree/master/vending}
+\end{itemize}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{Today Lab}
+\begin{frame}[fragile]{Next Labs}
 \begin{itemize}
-\item xxx
+\item Next week is Easter break
+\item Week after Easter 16/4:
+\begin{itemize}
+\item 4 hours lab, no lecture
+\item Have a short meeting in Zoom to gather
+\item Short reminder what the VM is
+\item Maybe questions
+\end{itemize}
+\item Work on the full Vending Machine
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{yyy}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{yyy}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Binary-Coded Decimal (BCD)}
+\begin{itemize}
+\item Your current display shows numbers in hexadecimal 
+\begin{itemize}
+\item $15_{10}$ is displayed as $0F_{16}$
+\item Which is in binary: 00001111
+\item We would like to see it as a `1' followed by a `5'
+\item Which is in binary: 0001 0101
+\end{itemize}
+\item Convert from binary to binary-coded decimal (BCD)
+\begin{itemize}
+\item But only for display
+\item Computing in BCD is hard
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Binary-Coded Decimal (BCD)}
+\begin{itemize}
+\item Conversion is a table (= function)
+\item Combinational logic
+\item We \emph{could} do the table manually
+\begin{itemize}
+\item But it is large
+\item The table has 100 entries to convert 0 to 99 to BCD
+\end{itemize}
+\item Let's write a program for this
+\item We will write our first \emph{hardware generator}
+\item First we need a little bit of Scala
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Binary to BCD Convertion}
+\shortlist{../code/bcd_table.txt}
+\end{frame}
+
+\begin{frame}[fragile]{yyy}
+\begin{itemize}
+\item yyy
 \end{itemize}
 \end{frame}
 

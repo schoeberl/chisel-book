@@ -13,7 +13,7 @@ class BcdTable extends Module {
   for (i <- 0 to 99) {
     table(i) := (((i/10)<<4) + i%10).U
   }
-  
+
   io.data := table(io.address)
 }
 //- end
