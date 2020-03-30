@@ -11,8 +11,10 @@ class BcdTableTester(f: BcdTable) extends PeekPokeTester(f) {
   expect(f.io.data, 0x13)
   poke(f.io.address, 99)
   expect(f.io.data, 0x99)
-  poke(f.io.address, 100)
-  expect(f.io.data, 0)
+
+  // New table goes only till 99
+  // poke(f.io.address, 100)
+  // expect(f.io.data, 0)
 }
 
 class BcdTableSpec extends FlatSpec with Matchers {

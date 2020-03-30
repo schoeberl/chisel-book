@@ -186,9 +186,12 @@ waveform viewing
 
 **Topics:** State Machines and Refactoring
 
-**Reading:** Dally: 17
+**Slides:** [08_refactor.pdf](08_refactor.pdf)
 
-**Lab:** Full display
+**Reading:** Dally: 17, Chisel: 9.1
+
+**Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
+
 
 
 ### Week 9 Communications State Machines (1 hour)
@@ -197,7 +200,8 @@ waveform viewing
 
 **Reading:** Dally: 22, Chisel: 9.1, 9.3
 
-**Lab:** Full display
+**Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
+
 
 
 ### Easter Week
