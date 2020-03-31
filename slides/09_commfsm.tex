@@ -20,9 +20,8 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Repeat stuff
 \item Did I do input processing last time? No, do it today
-\item Reat Vec for a table
+\item Ready/Valid
 \item a little bit of Scala
-\item logic gen., maybe bin bcd directly into vec
 \item add cosimulation to the verification story (show Lipsi), maybe later
 \end{itemize}
 \end{frame}
@@ -93,10 +92,31 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Convert from binary to binary-coded decimal (BCD)
 \begin{itemize}
-\item But only for display
+\item But only for the display
 \item Computing in BCD is hard
 \end{itemize}
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Binary to BCD Conversion Table}
+\begin{chisel}
+  val bincode = io.sw(7,0)
+  val bcd = WireDefault(bincode)
+
+  switch(bincode) {
+    is(0.U) { bcd := "b0000_0000".U }
+    is(1.U) { bcd := "b0000_0001".U }
+    is(2.U) { bcd := "b0000_0010".U }
+    // ... some more
+    is(9.U) { bcd := "b0000_1001".U }
+    is(10.U) { bcd := "b0001_0000".U }
+    is(11.U) { bcd := "b0001_0001".U }
+    is(12.U) { bcd := "b0001_0010".U }
+    // ... and many more entries
+  }
+
+  dispMux.io.price := bcd
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Binary-Coded Decimal (BCD)}
@@ -114,124 +134,51 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Binary to BCD Convertion}
-\shortlist{../code/bcd_table.txt}
-\end{frame}
 
-\begin{frame}[fragile]{yyy}
+
+\begin{frame}[fragile]{Chisel and Scala}
 \begin{itemize}
-\item yyy
+\item Chisel is a library written in Scala
+\begin{itemize}
+\item Import the library with \code{import chisel3.\_}
+\end{itemize}
+\item Chisel code is Scala code
+\item When it is run is \emph{generates} hardware
+\begin{itemize}
+\item Verilog for synthesize
+\item Scala netlist for simulation (testing)
+\end{itemize}
+\item Chisel is an embedded domain specific language
+\item Two languages in one can be a little bit confusing
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Scala}
 \begin{itemize}
-\item yyy
+\item Is object oriented
+\item Is functional
+\item Strongly typed with very good type inference
+\item Runs on the Java virtual machine
+\item Can call Java libraries
+\item Consider it as Java++
+\begin{itemize}
+\item Can almost be written like Java
+\item With a more lightweight syntax
+% \item Scala for Java Refugees is a nice tutorial (but link is dead)
+% \item \url{http://www.codecommit.com/blog/scala/roundup-scala-for-java-refugees}
+\end{itemize}
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Chisel VHDL Comparison}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
-}
-\end{chisel}
-\column{0.5\textwidth}
-\begin{verbatim}
-VHDL code here
-\end{verbatim}
-\end{columns}
-Also show latch and and using a button as clock
-\end{frame}
-
-\begin{frame}[fragile]{Below Stuff Moved Over}
+\begin{frame}[fragile]{Scala Hello World}
+\shortlist{../src/main/scala/HelloScala.scala}
 \begin{itemize}
-\item From tutorial
-\item Maybe used in the future
+\item Compile with \code{scalac} and run with \code{scala}
+\item You can even use Scala as a scripting language
+\item Or run with \code{sbt run}
+\item Show both
 \end{itemize}
 \end{frame}
-
-
-
-\begin{frame}[fragile]{Component Generation}
-\begin{chisel}
-val cores = new Array[Module](32)
-
-for (j <- 0 until 32)
-  cores(j) = Module(new CPU())
-\end{chisel}
-\begin{itemize}
-\item Use Scala array to collect components
-\item Generation with a Scala loop
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Conditional Component Generation}
-\begin{chisel}
-val icache =
-  if (TYPE == METHOD)
-    Module(new MCache())
-  else if (TYPE == LINE)
-    Module(new ICache())
-  else
-    ChiselError.error("Unsupported Type")
-\end{chisel}
-\begin{itemize}
-\item Use Scala if/else for conditional component types
-\item Code example from Patmos
-\item We parse an XML file for the configuration
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Logic Generation}
-\begin{itemize}
-\item Read a file into a table
-\begin{itemize}
-\item E.g., to read in ROM content for a processor
-\end{itemize}
-\item Generate a truth table algorithmically
-\begin{itemize}
-\item E.g., generate binary to BCD translation
-\end{itemize}
-\item Use the full power of Scala
-\end{itemize}
-\begin{chisel}
-val byteArray = Files.readAllBytes(Paths.get(fileName))
-val arr = new Array[Bits](byteArray.length)
-for (i <- 0 until byteArray.length) {
-  arr(i) = Bits(byteArray(i), 8)
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\end{frame}
-%%%%%%%%%%%%%%%%%
-%\begin{frame}[fragile]{zzz}
-%\begin{chisel}
-%code
-%\end{chisel}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]{Scala Values and Variables}
 \begin{chisel}
@@ -389,6 +336,171 @@ val m = if (useA) Module(new VariantA())
 \item Could even read an XML file for the configuration
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}[fragile]{A Table with a Chisel \code{Vec}}
+\begin{itemize}
+\item A Chisel \code{Vec} is a collection of signals or registers
+\item Similar to an Array in other languages
+\item \code{Vec} in a \code{Wire} is a combinational table
+\item \code{Vec} in a \code{Reg} is a collection of registers
+\item Create with number of elements and hardware type
+\end{itemize}
+\shortlist{../code/vec.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Combinational \code{Vec}}
+\begin{itemize}
+\item A combinational \code{Vec} is basically a multiplexer
+\item Input signal/wire connected with a constant index
+\item Output select with a Chisel \code{UInt} signal
+\end{itemize}
+\shortlist{../code/vec_access.txt}
+\begin{itemize}
+\item Also convenient to represent a larger table
+\begin{itemize}
+\item Instead of a \code{switch} table
+\item Input can be \emph{generated} with Scala code
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Binary to BCD Convertion}
+\shortlist{../code/bcd_table.txt}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel VHDL Comparison}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{chisel}
+class DecodeExecute extends Bundle {
+  val rs1 = UInt(32.W)
+  val rs2 = UInt(32.W)
+  val immVal = UInt(32.W)
+  val aluOp = new AluOp()
+}
+\end{chisel}
+\column{0.5\textwidth}
+\begin{verbatim}
+VHDL code here
+\end{verbatim}
+\end{columns}
+Also show latch and and using a button as clock
+\end{frame}
+
+\begin{frame}[fragile]{Below Stuff Moved Over}
+\begin{itemize}
+\item From tutorial
+\item Maybe used in the future
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Component Generation}
+\begin{chisel}
+val cores = new Array[Module](32)
+
+for (j <- 0 until 32)
+  cores(j) = Module(new CPU())
+\end{chisel}
+\begin{itemize}
+\item Use Scala array to collect components
+\item Generation with a Scala loop
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Component Generation}
+\begin{chisel}
+val icache =
+  if (TYPE == METHOD)
+    Module(new MCache())
+  else if (TYPE == LINE)
+    Module(new ICache())
+  else
+    ChiselError.error("Unsupported Type")
+\end{chisel}
+\begin{itemize}
+\item Use Scala if/else for conditional component types
+\item Code example from Patmos
+\item We parse an XML file for the configuration
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Logic Generation}
+\begin{itemize}
+\item Read a file into a table
+\begin{itemize}
+\item E.g., to read in ROM content for a processor
+\end{itemize}
+\item Generate a truth table algorithmically
+\begin{itemize}
+\item E.g., generate binary to BCD translation
+\end{itemize}
+\item Use the full power of Scala
+\end{itemize}
+\begin{chisel}
+val byteArray = Files.readAllBytes(Paths.get(fileName))
+val arr = new Array[Bits](byteArray.length)
+for (i <- 0 until byteArray.length) {
+  arr(i) = Bits(byteArray(i), 8)
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\end{frame}
+%%%%%%%%%%%%%%%%%
+%\begin{frame}[fragile]{zzz}
+%\begin{chisel}
+%code
+%\end{chisel}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{yyy}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%%%%%%%%%%%%%%%%%
+
 
 %\input{../slides-tutorial/generation.tex}
 
