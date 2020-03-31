@@ -349,8 +349,7 @@ The power of Chisel comes from the embedding of Chisel within
 \myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
 Chisel inherits the feature from Scala being ``a language that grows on you''~\cite{Scala}.
 However, Scala is not the topic of this book.
-% We provide a short section on Scala for hardware designers, but
-%A general introduction to Scala is better served by
+We provide a short section on Scala for hardware designers.
 The textbook by Odersky et al.~\cite{Scala} provides a general introduction
 to Scala.
 This book is a tutorial in digital design and the Chisel language; it is not
@@ -3435,8 +3434,37 @@ In Chisel, the full power of Scala (and Java libraries) is available at hardware
 construction. Therefore, we can write our hardware generators in the same
 language and execute them as part of the Chisel circuit generation.
 
-\section{A Bit of Scala}
+\section{A Little Bit of Scala}
 \index{Scala}
+
+This subsection gives a very brief introduction into Scala. It should be enough
+to write hardware generators for Chisel.
+For an in-depth introduction into Scala I recommend the textbook by Odersky et al.~\cite{Scala}.
+
+Scala has two types of variables: \code{val}s and \code{var}s. A \code{val} gives an expression
+a name and cannot be reassigned a value. This following snippet shows the definition of
+of an integer value called \code{zero}. If we try to reassign a value to \code{zero}, we get
+a compile error.
+
+\shortlist{code/scala_val.txt}
+
+\noindent In Chisel we use \code{val}s only to name hardware components. Note that the \code{:=}
+operator is a Chisel operator and not a Scala operator.
+
+Scala also provides the more classic version of a variable as \code{var}. Following code defines
+an integer variable and reassigns it a new value:
+
+\shortlist{code/scala_var.txt}
+
+\noindent We will need Scala \code{var}s to write hardware \emph{generators}, but never need
+it to use it to name a hardware \emph{component}.
+
+You may have wandered what type those variables have. As we assigned an integer constant
+in the above example, the type of the variables is \emph{inferred}. It is a Scala \code{Int} type.
+The Scala compiler in most cases is ale to infer the type. However, if we are in the mood if
+being more explicit, we can explicitly state the type as follows:
+
+\shortlist{code/scala_int_type.txt}
 
 \section{Configure with Parameters}
 \index{Parameters}
