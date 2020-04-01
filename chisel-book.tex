@@ -3460,11 +3460,32 @@ an integer variable and reassigns it a new value:
 it to use it to name a hardware \emph{component}.
 
 You may have wandered what type those variables have. As we assigned an integer constant
-in the above example, the type of the variables is \emph{inferred}. It is a Scala \code{Int} type.
-The Scala compiler in most cases is ale to infer the type. However, if we are in the mood if
+in the above example, the type of the variable is \emph{inferred}; it is a Scala \code{Int} type.
+In most cases the Scala compiler is able to infer the type. However, if we are in the mood of
 being more explicit, we can explicitly state the type as follows:
 
 \shortlist{code/scala_int_type.txt}
+
+Simple loops are written as follows:
+
+\shortlist{code/scala_loop.txt}
+
+We use a loop for circuit generators. The following loop connects individual bits
+of a shift register.
+
+\shortlist{code/scala_loop_gen.txt}
+
+Conditions are expressed with \code{if} and \code{else}. Note that this condition
+is evaluated at Scala runtime during circuit generation. This construct does \emph{not}
+create a multiplexer.
+
+simple simpel 
+
+\shortlist{code/scala_condition.txt}
+
+
+
+
 
 \section{Configure with Parameters}
 \index{Parameters}

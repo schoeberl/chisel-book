@@ -181,41 +181,50 @@ Embedded Systems Engineering}
 \end{frame}
 
 \begin{frame}[fragile]{Scala Values and Variables}
-\begin{chisel}
-// A value is a constant
-val i = 0
-// No new assignment; this will not compile
-i = 3
+\begin{itemize}
+\item Chisel has two type of variables: \code{val}s and \code{var}s
+\item A \code{val} cannot be reassigned, it is a constant
+\item We use a \code{val} to name a hardware component in Chisel
+\end{itemize}
+\shortlist{../code/scala_val.txt}
+\begin{itemize}
+\item Types are usually inferred
+\item But can be explicitly stated as follows
+\end{itemize}
+\shortlist{../code/scala_int_type.txt}
+\end{frame}
 
-// A variable can change the value
-var v = "Hello"
-v = "Hello World"
-
-// Type usually inferred, but can be declared
-var s: String = "abc"
-\end{chisel}
+\begin{frame}[fragile]{Scala Variables}
+\begin{itemize}
+\item A \code{var} can be reassigned, it is like a classic variable
+\item We use a \code{var} to write a hardware generator in Chisel
+\end{itemize}
+\shortlist{../code/scala_var.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Simple Loops}
-\begin{chisel}
-// Loops from 0 to 9
-// Automatically creates loop value i
-for (i <- 0 until 10) {
-  println(i)
-}
-\end{chisel}
+\shortlist{../code/scala_loop.txt}
+\begin{itemize}
+\item We use a loop to generate hardware components
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
+\shortlist{../code/scala_loop_gen.txt}
+\begin{itemize}
+\item \code{for} is Scala
+\item This loop generates several connections
+\item The connections are parallel hardware
+\item This is a shit register
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Conditions}
-\begin{chisel}
-for (i <- 0 until 10) {
-  if (i%2 == 0) {
-    println(i + " is even")
-  } else {
-    println(i + " is odd")
-  }
-}
-\end{chisel}
+\shortlist{../code/scala_condition.txt}
+\begin{itemize}
+\item Executed at runtime, when the circuit is created
+\item This is \emph{not} a mlutplexer
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Scala Arrays and Lists}
@@ -299,22 +308,7 @@ sbt "runMain Example"
 
 
 
-\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
-\begin{chisel}
-val shiftReg = RegInit(0.U(8.W))
 
-shiftReg(0) := inVal
-
-for (i <- 1 until 8) {
-  shiftReg(i) := shiftReg(i-1)
-}
-\end{chisel}
-\begin{itemize}
-\item \code{for} is Scala
-\item This loop generates several connections
-\item The connections are parallel hardware
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Conditional Circuit Generation}
 \begin{chisel}
