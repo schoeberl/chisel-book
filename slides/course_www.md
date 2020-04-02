@@ -64,6 +64,7 @@ In all Dally sections ignore VHDL code
  * Section 4.1 - 4.2
  * Chapter 5
  * Section 6.1 - 6.3
+ * Chapter 7
  * Chapter 8
  * Chapter 9
 
@@ -171,13 +172,13 @@ waveform viewing
 **Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 7 State Machine and Datapath, Input interface
+### Week 7 State Machine and Datapath
 
 **Topics:** State machine and datapath (FSMD)
 
 **Slides:** [07_fsmd.pdf](07_fsmd.pdf)
 
-**Reading:** Dally: 16.3, 29.1-29.3, Chisel: 9.2 (2nd edition), 7
+**Reading:** Dally: 16.3, 29.1-29.3, Chisel: 9.2 (2nd edition)
 
 **Lab:** Dally 14.3, 14.5 (Sketch a Chisel implementation on paper), 14.28, Sketch a Chisel implementation on paper for 14.28
 
@@ -196,9 +197,11 @@ waveform viewing
 
 ### Week 9 Communications State Machines (1 hour)
 
-**Topics:** Communicating FSMs and ready/valid interface
+**Topics:** Input interface, ready/valid interface, and hardware generators
 
-**Reading:** Dally: 22, Chisel: 9.1, 9.3
+**Slides:** [09_commfsm.pdf](09_commfsm.pdf)
+
+**Reading:** Dally: 22, Chisel: 7, 9.3
 
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 

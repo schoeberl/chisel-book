@@ -15,20 +15,13 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Repeat stuff
-\item Did I do input processing last time? No, do it today
-\item Ready/Valid
-\item a little bit of Scala
-\item add cosimulation to the verification story (show Lipsi), maybe later
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Repeat
+\item Repeat functions and parameters
+\item Input processing
+\item Ready/valid interface
+\item A little bit of Scala
+\item Hardware generators
 \end{itemize}
 \end{frame}
 
@@ -68,18 +61,282 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{yyy}
+\begin{frame}[fragile]{Functions}
 \begin{itemize}
-\item yyy
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item A function is defined with \code{def} \emph{name}
+\item Similar to a method in Java
+\item Simple functions can be a single line
+\end{itemize}
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Function Examples}
+\begin{itemize}
+\item Functions can also contain registers
+\end{itemize}
+\begin{chisel}
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a + b, a - b)
+
+  val res = addSub(cond, a, b)
+
+  def rising(d: Bool) = d && !RegNext(d)
+
+  val edge = rising(cond)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The Counter as a Function}
+\begin{itemize}
+\item Longer functions in curly brackets
+\item Last value is the return value
+\end{itemize}
+\begin{chisel}
+def counter(n: UInt) = {
+  
+  val cntReg = RegInit(0.U(8.W))
+  
+  cntReg := cntReg + 1.U
+  when(cntReg === n) {
+    cntReg := 0.U
+  }
+  cntReg
+}
+
+val counter100 = counter(100.U)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\item More lightweight than a \code{Module}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{yyy}
+%\begin{frame}[fragile]{Functions}
+%\begin{itemize}
+%\item Example from Patmos execute stage
+%\end{itemize}
+%\begin{chisel}
+%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+%  val result = UInt(width = DATA_WIDTH)
+%  // some more lines...
+%  switch(func) {
+%    is(FUNC_ADD) { result := sum }
+%    is(FUNC_SUB) { result := op1 - op2 }
+%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+%    // some more lines
+%  }
+%  result
+%}
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
 \begin{itemize}
-\item yyy
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\shortlist{../code/param_adder.txt}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+%\item Can also be a generic type:
+%\item \code{class Mod[T <: Bits](param: T) extends...}
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Use the Parameter}
+\shortlist{../code/use_param_adder.txt}
+\begin{itemize}
+\item Can be used for the display multiplexing configuration
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Input Processing}
+\begin{itemize}
+\item Input signals are not synchronous to the clock
+\item May violate setup and hold time of a flip-flop
+\item Can lead to metastability
+\item Signals need to be \emph{synchronized}
+\item Using two flip-flops
+\item Metastability cannot be avoided
+\item Assumption is:
+\begin{itemize}
+\item First flip-flop may become metastable
+\item But will resolve within the clock period
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Input Synchronizer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/synchronizer}
+\end{figure}
+\shortlist{../code/input_sync.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Bouncing Buttons}
+\begin{itemize}
+\item Buttons and switches need some time to transition between on and off
+\item May bounce between the two values
+\item Without processing we detect more than one event
+\item Solution is to filter out bouncing
+\begin{itemize}
+\item Can be done electrically
+\item That is why you have the extra PCB with the buttons
+\item But we can also do this digital
+\end{itemize}
+\item Assume  bouncing time $t_{bounce}$
+\item Sample at a period $T > t_{bounce}$
+\item Only use sampled signal
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sampling for Debouncing}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/debounce}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sampling for Debouncing}
+\shortlist{../code/input_fac.txt}
+\shortlist{../code/input_debounce.txt}
+\begin{itemize}
+\item We already know how to do this!
+\item Just generate timing with a counter
+\item We sample at 100 Hz (bouncing below 10 ms)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Noisy Input Signal}
+\begin{itemize}
+\item Sometimes input may be noisy
+\item May contain spikes
+\item Filtering with majority voting
+\item Majority voting of the sampled input signal
+\item However, this is seldom needed
+\item Not for he buttons
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Majority Voting}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/majority}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Majority Voting}
+\shortlist{../code/input_majority.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Detecting the Press Event}
+\begin{itemize}
+\item Edge detection
+\item You have seen this before
+\item Just to complete the input procssing
+\end{itemize}
+\shortlist{../code/input_usage.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Combine Input Processing with Functions}
+\begin{itemize}
+\item Using small functions to abstract the processing
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/Debounce.scala}{Debounce.scala}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Communicating State Machines}
+\begin{itemize}
+\item We did refactor a large FSM into smaller ones last week
+\item FSMs \emph{communicate}
+\item Simple communication is your input processing to FSM with datapath
+\item More complex FSMs may exchange data with handshaking
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Handshaking}
+\begin{itemize}
+\item Producer of data and consumer need to agree when data is transferred
+\item Producer tells when data is available/valid with a \code{valid} signal
+\item Consumer tells when it is ready toe receive data with a \code{ready} signal
+\item When both are asserted the transfer takes place
+\item Also called \emph{flow control}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ready-Valid Interface}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/readyvalid}
+\end{figure}
+\begin{itemize}
+\item Ready-valid flow control
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ready-Valid Interface, Early Ready}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/ready_valid1}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Ready-Valid Interface, Late Ready}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/ready_valid2}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Single Cycle and Back-to-Back}
+\begin{figure}
+  \includegraphics[scale=1]{../figures/ready_valid3}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Common Interface}
+\begin{itemize}
+\item So common interface that Chisel defines a \code{DecoupledIO}
+\end{itemize}
+\shortlist{../code/fifo_decoupled.txt}
+\end{frame}
+
+\begin{frame}[fragile]{First Summary and Break}
+\begin{itemize}
+\item Main topic of today done
+\item Following is advanced material
+\item A little bit of Scala
+\item How to write hardware generators
+\item Maybe extend your display to show decimal number
+\item But first 10 minutes BREAK
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Binary-Coded Decimal (BCD)}
 \begin{itemize}
@@ -367,367 +624,15 @@ val m = if (useA) Module(new VariantA())
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item yyy
+\item External inputs need processing
+\item Minimum is a input synchronizer
+\item Communicating circuits/FSMs need handshaking
+\item Reard-valid interface
+\item Scala can be used to write circuit \emph{generators}
+\item We explored generation of a binary to BCD conversion table
 \end{itemize}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Chisel VHDL Comparison}
-\begin{columns}
-\column{0.5\textwidth}
-\begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
-}
-\end{chisel}
-\column{0.5\textwidth}
-\begin{verbatim}
-VHDL code here
-\end{verbatim}
-\end{columns}
-Also show latch and and using a button as clock
-\end{frame}
-
-\begin{frame}[fragile]{Below Stuff Moved Over}
-\begin{itemize}
-\item From tutorial
-\item Maybe used in the future
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Component Generation}
-\begin{chisel}
-val cores = new Array[Module](32)
-
-for (j <- 0 until 32)
-  cores(j) = Module(new CPU())
-\end{chisel}
-\begin{itemize}
-\item Use Scala array to collect components
-\item Generation with a Scala loop
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Conditional Component Generation}
-\begin{chisel}
-val icache =
-  if (TYPE == METHOD)
-    Module(new MCache())
-  else if (TYPE == LINE)
-    Module(new ICache())
-  else
-    ChiselError.error("Unsupported Type")
-\end{chisel}
-\begin{itemize}
-\item Use Scala if/else for conditional component types
-\item Code example from Patmos
-\item We parse an XML file for the configuration
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Logic Generation}
-\begin{itemize}
-\item Read a file into a table
-\begin{itemize}
-\item E.g., to read in ROM content for a processor
-\end{itemize}
-\item Generate a truth table algorithmically
-\begin{itemize}
-\item E.g., generate binary to BCD translation
-\end{itemize}
-\item Use the full power of Scala
-\end{itemize}
-\begin{chisel}
-val byteArray = Files.readAllBytes(Paths.get(fileName))
-val arr = new Array[Bits](byteArray.length)
-for (i <- 0 until byteArray.length) {
-  arr(i) = Bits(byteArray(i), 8)
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\end{frame}
-%%%%%%%%%%%%%%%%%
-%\begin{frame}[fragile]{zzz}
-%\begin{chisel}
-%code
-%\end{chisel}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%%%%%%%%%%%%%%%%%
-
-
-%\input{../slides-tutorial/generation.tex}
-
-\begin{frame}[fragile]{Generation Slides (include) are missing here}
-\begin{itemize}
-\item 
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Combinational (Truth) Table Generation}
-\begin{chisel}
-val arr = new Array[Bits](length)
-for (i <- 0 until length) {
-  arr(i) = ...
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\begin{itemize}
-\item Generate a table in a Scala array
-\item Use that array as input for a Chisel \code{Vec}
-\item Generates a logic table at hardware construction time
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{BCD Generation Example}
-\begin{itemize}
-\item Explain BCD with examples
-\item Show code
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Ideas for Runtime Table Generation}
-\begin{itemize}
-\item Assembler in Scala/Java generates the boot ROM
-\item Table with a \code{sin} function
-\item Binary to BCD conversion
-\item Schedule table for a TDM based network-on-chip
-\item 
-\item More ideas?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Memory}
-\begin{chisel}
-val mem = Mem(Bits(width = 8), size)
-
-// write
-when(wrEna) {
-  mem(wrAddr) := wrData
-}
-
-// read
-val rdAddrReg = Reg(next = rdAddr)
-rdData := mem(rdAddrReg)
-\end{chisel}
-\begin{itemize}
-\item Write is synchronous
-\item Read can be asynchronous or synchronous
-\item But there are no asynchronous memories in an FPGA
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Factory Methods}
-\begin{itemize}
-\item Simpler component creation and use
-\item Usage similar to built in components, such as \code{Mux}
-\end{itemize}
-\begin{chisel}
-val myAdder = Adder(x, y)
-\end{chisel}
-\begin{itemize}
-\item A little bit more work on component side
-\item Define an \code{apply} method on the companion object that returns the component
-\end{itemize}
-\begin{chisel}
-object Adder {
-  def apply(a: UInt, b: UInt) = {
-    val adder = Module(new Adder)
-    adder.io.a := a
-    adder.io.b := b
-    adder.io.result
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel and Scala}
-\begin{itemize}
-\item Chisel is a library written in Scala
-\begin{itemize}
-\item Import the library with \code{import chisel3.\_}
-\end{itemize}
-\item Chisel code is Scala code
-\item When it is run is \emph{generates} hardware
-\begin{itemize}
-\item Verilog for synthesize
-\item Scala netlist for simulation (testing)
-\end{itemize}
-\item Chisel is an embedded domain specific language
-\item Two languages in one can be a little bit confusing
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Scala}
-\begin{itemize}
-\item Is object oriented
-\item Is functional
-\item Strongly typed with very good type inference
-\item Runs on the Java virtual machine
-\item Can call Java libraries
-\item Consider it as Java++
-\begin{itemize}
-\item Can almost be written like Java
-\item With a more lightweight syntax
-% \item Scala for Java Refugees is a nice tutorial (but link is dead)
-% \item \url{http://www.codecommit.com/blog/scala/roundup-scala-for-java-refugees}
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Scala Hello World}
-\begin{chisel}
-object HelloWorld extends App {
-  println("Hello, World!")
-}
-\end{chisel}
-\begin{itemize}
-\item Compile with \code{scalac} and run with \code{scala}
-\item You can even use Scala as scripting language
-\item Show both
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Generic Components}
-\begin{chisel}
-val c = Mux(cond, a, b)
-\end{chisel}
-\begin{itemize}
-\item This is a multiplexer
-\item Input can be any type
-\end{itemize}
-\end{frame}
-
-
-
-
-\begin{frame}[fragile]{A Tiny ALU: IO Connection}
-\begin{chisel}
-class Alu extends Module {
-  val io = IO(new Bundle {
-    val fn = Input(UInt(2.W))
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  // Use shorter variable names
-  val fn = io.fn
-  val a = io.a
-  val b = io.b
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: The Function}
-\begin{chisel}
-  val result = Wire(UInt(4.W))
-  // some default value is needed
-  result := 0.U
-
-  // The ALU selection
-  switch(fn) {
-    is(0.U) { result := a + b }
-    is(1.U) { result := a - b }
-    is(2.U) { result := a | b }
-    is(3.U) { result := a & b }
-  }
-
-  // Output on the LEDs
-  io.result := result
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compute the expected result in Scala
-\end{itemize}
-\begin{chisel}
-  // This is exhaustive testing,
-  // which usually is impossible
-  for (a <- 0 to 15) {
-    for (b <- 0 to 15) {
-      for (op <- 0 to 3) {
-        val result =
-          op match {
-            case 0 => a + b
-            case 1 => a - b
-            case 2 => a | b
-            case 3 => a & b
-          }
-        val resMask = result & 0x0f
-\end{chisel}
-
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compare the Scala computed result with the hardware result
-\end{itemize}
-\begin{chisel}
-        poke(dut.io.fn, op)
-        poke(dut.io.a, a)
-        poke(dut.io.b, b)
-        step(1)
-        expect(dut.io.result, resMask)
-      }
-    }
-  }
-\end{chisel}
-\end{frame}
-
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item Chisel is a small language
-\item Embedding it in Scala gives the power
-\item We can write circuit generators
-\item We can to co-simulation
-\item We just scratched the surface
-\end{itemize}
-\end{frame}
 
 
 \end{document}
