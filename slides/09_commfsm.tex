@@ -386,6 +386,9 @@ val ch32 = new ParamChannel(32)
 \item The table has 100 entries to convert 0 to 99 to BCD
 \end{itemize}
 \item Let's write a program for this
+\begin{itemize}
+\item We could use Java, Python, TCL,...
+\end{itemize}
 \item We will write our first \emph{hardware generator}
 \item First we need a little bit of Scala
 \end{itemize}
@@ -439,7 +442,7 @@ val ch32 = new ParamChannel(32)
 
 \begin{frame}[fragile]{Scala Values and Variables}
 \begin{itemize}
-\item Chisel has two type of variables: \code{val}s and \code{var}s
+\item Scala has two type of variables: \code{val}s and \code{var}s
 \item A \code{val} cannot be reassigned, it is a constant
 \item We use a \code{val} to name a hardware component in Chisel
 \end{itemize}
@@ -472,7 +475,7 @@ val ch32 = new ParamChannel(32)
 \item \code{for} is Scala
 \item This loop generates several connections
 \item The connections are parallel hardware
-\item This is a shit register
+\item This is a shift register
 \end{itemize}
 \end{frame}
 
@@ -487,7 +490,7 @@ val ch32 = new ParamChannel(32)
 \begin{frame}[fragile]{Scala Arrays and Lists}
 \begin{chisel}
 // An integer array with 10 elements
-val numbers = new Array[Integer](10)
+val numbers = new Array[Int](10)
 for (i <- 0 until numbers.length) {
   numbers(i) = i*10
 }
@@ -512,7 +515,7 @@ class Example {
   var n = 0
   
   // A setter method
-  def set(v: Integer) = {
+  def set(v: Int) = {
     n = v
   }
   
@@ -616,7 +619,7 @@ val m = if (useA) Module(new VariantA())
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Binary to BCD Convertion}
+\begin{frame}[fragile]{Binary to BCD Conversion}
 \shortlist{../code/bcd_table.txt}
 \end{frame}
 
@@ -627,7 +630,7 @@ val m = if (useA) Module(new VariantA())
 \item External inputs need processing
 \item Minimum is a input synchronizer
 \item Communicating circuits/FSMs need handshaking
-\item Reard-valid interface
+\item Ready-valid interface
 \item Scala can be used to write circuit \emph{generators}
 \item We explored generation of a binary to BCD conversion table
 \end{itemize}

@@ -10,7 +10,7 @@ class BcdTable extends Module {
   val table = Wire(Vec(100, UInt(8.W)))
 
   // Convert binary to BCD
-  for (i <- 0 to 99) {
+  for (i <- 0 until 100) {
     table(i) := (((i/10)<<4) + i%10).U
   }
 
