@@ -210,9 +210,9 @@ waveform viewing
 ### Easter Week
 
 
-### Week 10 No lecture
+### Week 10 Digital Exam and Vending Machine Specification (1/2 hour)
 
-**Lab:** work on vending machine
+**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 11 Microcoded State Machine, Pipelining, Memory
@@ -226,7 +226,7 @@ waveform viewing
 
 ### Week 12 No lecture
 
-**Lab:** work on vending machine
+**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 13 Outro, A Simple Processor
