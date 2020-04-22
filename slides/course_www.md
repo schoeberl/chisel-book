@@ -217,13 +217,15 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 11 Microcoded State Machine, Pipelining, Memory
+### Week 11 Interfacing and Memory
 
-**Topics:** Microcoded FSMs, pipelining, and interconnect
+**Topics:** Interfaces, memory, and interconnect
 
-**Reading:** Dally 18, 23.1-23.4, 24 Chisel 6.x
+**Reading:** Dally: 24 Chisel: 6.4
 
-**Lab:** 18.1 and 18.2, 23.1-23.4, 24.1, (24.2), maybe SRAM exercise
+**Lab:** SRAM exercise in DTU Inside: 
+[sram_exercise.pdf](https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805)
+[data sheet](https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb)
 
 
 ### Week 12 No lecture
