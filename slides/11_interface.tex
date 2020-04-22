@@ -18,6 +18,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
+\item UART
 \item Did I do input processing last time? Done, but repeat
 \item Busses (L11)
 \item Memory
@@ -325,9 +326,208 @@ Embedded Systems Engineering}
 \item Usually many of them in units of 2 KiB or 4 KiB
 \item We need some Chisel code to represent it
 \item More memory needs an extra chip
-\item then we need to interface this memory from the FPGA
+\item Then we need to interface this memory from the FPGA
 \end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{SRAM Memory}
+\begin{itemize}
+\item RAM stands for random access memory
+\item SRAM stands for static RAM
+\item There is also something called DRAM for dynamic RAM
+\begin{itemize}
+\item Uses a capacitor and a transistor
+\item DRAM is smaller than SRAM
+\item But needs refreshes
+\item Different technology than technology for logic
+\end{itemize}
+\item All on-chip memory is SRAM (today)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory Interface}
+\begin{itemize}
+\item Interface
+\begin{itemize}
+\item Address input (e.g., 10 bits for 1 KiB)
+\item Write signal (e.g., we)
+\item Data input
+\item Data output
+\end{itemize}
+\item May share pins for the data input and output (tri-state)
+\item May have read and write address
+\begin{itemize}
+\item A so-called dual ported memory
+\item Can do a read and a write in the same clock cycle
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{On-Chip Memory}
+\begin{itemize}
+\item SRAM by itself is asynchronous
+\item No clock, just the correct timing
+\item Apply the address and after some time the data is valid
+\item But one can add input registers, which makes it a synchronous SRAM
+\item Current FPGAs have only synchronous memories
+\item FPGAs usually have dual-ported memories
+\item This means the result of a read is available on clock cycle after the address is given
+\begin{itemize}
+\item This is different from the use of flip-flops (\code{Reg(Vec(..))})
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Synchronous Memory}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/memory}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Use of a Chisel SyncReadMem}
+\shortlist{../code/memory.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Read-During-Write}
+\begin{itemize}
+\item What happens when one writes to and reads from the same address?
+\item Which value is returned?
+\item Three possibilities:
+\begin{enumerate}
+\item The newly written value
+\item The old value
+\item Undefined (mix of old and new)
+\end{enumerate}
+\item Depends on technology, FPGA family, ...
+\item We want to have a defined read-during-write
+\item We add hardware to \emph{forward} the written value
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Condition for Forwarding}
+\begin{itemize}
+\item If read and write addresses are equal
+\item If write enable is true
+\item Multiplex the output to take the new write value instead of the (old) read value
+\item Delay that forwarded write value to have the same timing
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory with Forwarding}
+\begin{figure}
+  \includegraphics[scale=0.5]{../figures/memory-forwarding}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Forwarding in Chisel}
+\begin{chisel}
+  val mem = SyncReadMem(1024, UInt(8.W))
+
+  val wrDataReg = RegNext(io.wrData)
+  val doForwardReg = RegNext(io.wrAddr === io.rdAddr && io.wrEna)
+
+  val memData = mem.read(io.rdAddr)
+
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+  }
+
+  io.rdData := Mux(doForwardReg, wrDataReg, memData)
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{External Memory}
+\begin{itemize}
+\item On-chip memory is limited
+\item We can add an external memory chip
+\begin{itemize}
+\item Is cheaper than FPGA on-chip memory
+\end{itemize}
+\item Sadly the Basys3 board has no external memory
+\item Simple memory is an asynchronous SRAM
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{External SRAM}
+\begin{itemize}
+\item We \emph{buy} a CY7C1041CV33
+\item Let us look into the \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{data sheet}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Interfacing the SRAM}
+\begin{itemize}
+\item FPGA output drives address, control, and data (sometimes)
+\item FPGA reads data
+\item The read signal is asynchronous to the FPGA clock
+\item Do we need an input synchronizer?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Synchronous Interface}
+\begin{itemize}
+\item Logic is synchroous
+\item Memory is asynchronous
+\begin{itemize}
+\item How to interface?
+\end{itemize}
+\item Output signals
+\begin{itemize}
+\item Generate timing with synchronous circuit
+\item Small FSM
+\end{itemize}
+\item Asynchronous input signale
+\begin{itemize}
+\item Usually 2 register for input synchronization
+\item Really needed for the SRAM interface?
+\item We would loose 2 clock cycles
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{SRAM Read}
+\begin{itemize}
+\item Asynchronous timing definition (data sheet)
+\item But, we know the timing and we trigger the SRAM address from
+our synchronous design
+\item No need to use synchronization registers
+\item \emph{Just} get the timing correct
+\item Dra the example
+\begin{itemize}
+\item Address - SRAM - data
+\item Relative to the FPGA clock
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Read Timing Continued}
+\begin{itemize}
+\item Add all time delays
+\begin{itemize}
+\item Within FPGA
+\item Pad to pin
+\item PSB traces
+\item SRAM read timing
+\item PCB traces back
+\item Pin to pad
+\item Into FPGA register
+\end{itemize}
+\item Setup and hold time for FPGA register
+\item Is your today's lab exercise
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Busses}
+\begin{itemize}
+\item Memory interface can be generalized
+\item We use a so-called bus to connect several devices
+\item Usually a microprocessor connected to devices (memory, IO)
+\item The microprocessor is the master
+\item Draw a small microprocessor system
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Summary}
@@ -342,25 +542,27 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item yyy
 \end{itemize}
 \end{frame}
-
-
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item yyy
 \end{itemize}
 \end{frame}
-
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
 \begin{frame}[fragile]{Today Lab}
 \begin{itemize}
 \item Paper \& pencil exercises on SRAM interfacing
