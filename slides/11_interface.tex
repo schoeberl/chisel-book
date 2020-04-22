@@ -19,10 +19,8 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
 \item Repeat stuff
-\item Did I do input processing last time? No, do it today. True?
+\item Did I do input processing last time? Done, but repeat
 \item Talk on exam
-\item Ready/Valid
-\item a little bit of Scala
 \item add cosimulation to the verification story (show Lipsi), maybe later
 \end{itemize}
 \end{frame}
@@ -51,16 +49,236 @@ Embedded Systems Engineering}
 \item Multiple choice
 \item Download and hand in a document (e.g., PDF generated from Word)
 \end{itemize}
-\item We will do a short test exam next week, before the lab
+\item You can play with the very short one today
+\item We will do a test exam next week, before the lab
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{yyy}
+\begin{frame}[fragile]{Using an FSM and a Datapath}
 \begin{itemize}
-\item yyy
+\item About the design of the vending machine (VM)
+\item Some of you start coding the VM directly
+\begin{itemize}
+\item This may work for small designs
+\item But does not scale
+\end{itemize}
+\item Better use a systematic approach
+\item Use a FSM that communicates with a datapath (FSMD)
+\item We will quickly repeat FSMD
 \end{itemize}
 \end{frame}
 
+
+
+\begin{frame}[fragile]{Finite-State Machine (FSM)}
+\begin{itemize}
+\item Has a register that contains the state
+\item Has a function to computer the next state
+\begin{itemize}
+\item Depending on current state and input
+\end{itemize}
+\item Has an output depending on the state
+\item Use a Moore FSM for the VM
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Basic Finite-State Machine}
+\begin{itemize}
+\item A state register
+\item Two combinational blocks
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/fsm}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{State Diagram}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/state-diag-moore}
+\end{figure}
+\begin{itemize}
+\item States and transitions depending on input values
+\item Example is a simple alarm FSM
+\item Nice visualization
+\item Draw the state diagram for your VM during the design
+\item Include a state diagram in the report
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{The Input and Output of the Alarm FSM}
+\begin{itemize}
+\item Two inputs and one output
+\end{itemize}
+\shortlist{../code/simple_fsm_io.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Encoding the State}
+\begin{itemize}
+\item We can optimize state encoding
+\item Two common encodings are: binary and one-hot
+\item We leave it to the synthesize tool
+\item Use symbolic names with an \code{Enum}
+\item Note the number of states in the \code{Enum} construct
+\item We use a Scala list with the \code{::} operator
+\end{itemize}
+\shortlist{../code/simple_fsm_states.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Start the FSM}
+\begin{itemize}
+\item We have a starting state on reset
+\end{itemize}
+\shortlist{../code/simple_fsm_register.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{The Next State Logic}
+\shortlist{../code/simple_fsm_next.txt}
+\end{frame}
+
+\begin{frame}[fragile]{The Output Logic}
+\shortlist{../code/simple_fsm_output.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Summary on the Alarm Example}
+\begin{itemize}
+\item Three elements:
+\begin{enumerate}
+\item State register
+\item Next state logic
+\item Output logic
+\end{enumerate}
+\item This was a so-called Moore FSM
+\item There is also an FSM type called Mealy machine
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{FSM with Datapath}
+\begin{itemize}
+\item A type of computing machine
+\item Consists of a finite-state machine (FSM) and a datapath
+\item The FSM is the master (the controller) of the datapath
+\item The datapath has computing elements
+\begin{itemize}
+\item E.g., adder, incrementer, constants, multiplexers, ...
+\end{itemize}
+\item The datapath has storage elements (registers)
+\begin{itemize}
+\item E.g., sum of money payed, count of something, ...
+\end{itemize}
+\item You VM design shall be a FSMD
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FSM-Datapath Interaction}
+\begin{itemize}
+\item The FSM controls the datapath
+\begin{itemize}
+\item For example, add 2 to the sum
+\end{itemize}
+\item By controlling multiplexers
+\begin{itemize}
+\item For example, select how much to add
+\item Not adding means selecting 0 to add
+\end{itemize}
+\item Which value goes where
+\item The FSM logic also depends on datapath output
+\begin{itemize}
+\item Is there enough money payed to release a can of soda?
+\end{itemize}
+\item FSM and datapath interact
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Popcount Example}
+\begin{itemize}
+\item An FSMD that computes the popcount
+\item Also called the Hamming weight
+\item Compute the number of `1's in a word
+\item Input is the data word
+\item Output is the count
+\item Code available at \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/PopCount.scala}{PopCount.scala}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Popcount Block Diagram}
+
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/popcnt-fsmd}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{The FSM}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/popcnt-states}
+\end{figure}
+\begin{itemize}
+\item A Very Simple FSM
+\item Two transitions depend on input/output handshake
+\item One transition on the datapath output
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Datapath}
+\begin{figure}
+  \includegraphics[scale=0.65]{../figures/popcnt-data}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Let's Explore the Code}
+\begin{itemize}
+\item In \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/PopCount.scala}{PopCount.scala}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Use a FSMD for the VM}
+\begin{itemize}
+\item This is the main part your vending machine
+\item Can be design and tested just with Chisel testers (no FPGA board needed)
+\item See the given tester
+\begin{itemize}
+\item Sets the price to 7
+\item Adds two coins (2 and 5)
+\item Presses the buy button
+\end{itemize}
+\item Extend the test along the development
+\item Remember test driven development?
+\item Maybe write the test before the implementation
+\item Maybe test developer and FSMD developer are not always the same person
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code Snippets}
+\begin{chisel}
+  val idle :: add2 ... :: Nil = Enum(?)
+  val stateReg = RegInit(idle)
+  ...
+  switch (stateReg) {
+    is (idle){
+      when(coin2) {
+        stateReg := ...
+      }
+      when(...) {
+   ...
+   switch(stateReg) {
+     is (add2) { ... }  // drive the datapath for adding a coin 2
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Today Lab}
+\begin{itemize}
+\item Paper \& pencil exercises
+\item Exercises on FSM
+\item On paper or in a plain text editor
+\item As usual, show and discuss with a TA
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
