@@ -18,24 +18,23 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
-\item Repeat stuff
 \item Did I do input processing last time? Done, but repeat
-\item Talk on exam
-\item add cosimulation to the verification story (show Lipsi), maybe later
+\item Busses (L11)
+\item Memory
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Repeat
-\item Today 2 hour lecture
+\item Repeat FSMD (for the vending machine)
+\item Interfaces
+\item Memory (intern and extern)
 \item 2 hours lab SRAM exercise
 \begin{itemize}
 \item Exercise description is in DTU Inside
 \item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
 \item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
 \end{itemize}
-\item
 \end{itemize}
 \end{frame}
 
@@ -236,6 +235,23 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Usage of an FSMD}
+\begin{itemize}
+\item Of course for your VM
+\begin{itemize}
+\item The VM is a simple processor
+\item But not Turing complete
+\item Can \emph{only} process coins of 2 and 5
+\end{itemize}
+\item An FSMD can be used to build a processor
+\item Fine for simple processors
+\item E.g., \href{https://github.com/schoeberl/lipsi}{Lipsi}
+\item Pipelined processor topic of
+\begin{itemize}
+\item Computer Architecture Engineering (02155)
+\end{itemize}\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Use a FSMD for the VM}
 \begin{itemize}
 \item This is the main part your vending machine
@@ -247,9 +263,12 @@ Embedded Systems Engineering}
 \item Presses the buy button
 \end{itemize}
 \item Extend the test along the development
+\begin{itemize}
+
 \item Remember test driven development?
 \item Maybe write the test before the implementation
 \item Maybe test developer and FSMD developer are not always the same person
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -270,29 +289,89 @@ Embedded Systems Engineering}
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Memory}
+\begin{itemize}
+\item Registers are storage elements == memory
+\item Just use a \code{Reg} of a \code{Vec}
+\item This is 1 KiB of memory
+\begin{chisel}
+  val memoryReg = Reg(Vec(1024, UInt(8.W)))
+  // writing into memory
+  memoryReg(wrAddr) := wrData
+  // reading from the memory
+  val rdData = memoryReg(rdAddr)
+\end{chisel}
+\item Simple, right?
+\item But is this a good solution?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Flip-Flop}
+\begin{itemize}
+\item Remember the circuit of a register (flip-flop)?
+\item Two latches: \href{https://en.wikipedia.org/wiki/Flip-flop_(electronics)#Master%E2%80%93slave_edge-triggered_D_flip-flop}{master and slave}
+\item One (enable) latch can be built with 4 NAND gates
+\item a NAND gate needs 6 transistors, an inverter 2 transistors
+\item A flip-flop needs 20 transistors (for a single bit)
+\item Can we do better?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Memory Cell}
+\begin{itemize}
+\item A single bit can be stored in \href{https://en.wikipedia.org/wiki/Static_random-access_memory#/media/File:SRAM_Cell_(6_Transistors).svg}{6 transistors}
+\item That is how larger memories are built
+\item FPGAs have this type of on-chip memories
+\item Usually many of them in units of 2 KiB or 4 KiB
+\item We need some Chisel code to represent it
+\item More memory needs an extra chip
+\item then we need to interface this memory from the FPGA
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Today Lab}
 \begin{itemize}
-\item Paper \& pencil exercises
-\item Exercises on FSM
+\item Paper \& pencil exercises on SRAM interfacing
 \item On paper or in a plain text editor
 \item As usual, show and discuss with a TA
+\item Exercise description is in DTU Inside file sharing
+\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
+\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item yyy
