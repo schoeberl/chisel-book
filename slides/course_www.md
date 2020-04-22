@@ -6,7 +6,7 @@ This course is a follow up of Digital Electronics 1 for students of Electrical E
 
 To provide the participants with the competencies necessary to design digital circuits that perform simple calculations or control tasks using typical simulation and synthesis tools and to implement these circuits using reconfigurable hardware (FPGA technology). 
 
-### Tentative List of Topics
+### List of Topics
 
  * Calculation of circuit delay and energy consumption of combinatorial circuits using R-C switch models.
  * Macromodels and timing parameters for combinatorial circuits and flip-flops. Calculation of critical path.
@@ -211,6 +211,8 @@ waveform viewing
 
 
 ### Week 10 Digital Exam and Vending Machine Specification (1/2 hour)
+
+**Slides:** [10_vending.pdf](10_vending.pdf)
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
