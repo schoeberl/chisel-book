@@ -16,20 +16,12 @@ Embedded Systems Engineering}
 \end{frame}
 
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item UART
-\item Did I do input processing last time? Done, but repeat
-\item Busses (L11)
-\item Memory
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Repeat FSMD (for the vending machine)
 \item Interfaces
 \item Memory (intern and extern)
+\item Serial interface (RS 232)
 \item 2 hours lab SRAM exercise
 \begin{itemize}
 \item Exercise description is in DTU Inside
@@ -201,7 +193,6 @@ Embedded Systems Engineering}
 \item Compute the number of `1's in a word
 \item Input is the data word
 \item Output is the count
-\item Code available at \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/PopCount.scala}{PopCount.scala}
 \end{itemize}
 \end{frame}
 
@@ -273,7 +264,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Code Snippets}
+\begin{frame}[fragile]{Code Snippets for the VM}
 \begin{chisel}
   val idle :: add2 ... :: Nil = Enum(?)
   val stateReg = RegInit(idle)
@@ -286,7 +277,7 @@ Embedded Systems Engineering}
       when(...) {
    ...
    switch(stateReg) {
-     is (add2) { ... }  // drive the datapath for adding a coin 2
+     is (add2) { ... }  // drive the datapath for adding a coin of kr. 2
 \end{chisel}
 \end{frame}
 
@@ -520,50 +511,167 @@ our synchronous design
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Busses}
+\begin{frame}[fragile]{Connecting to the World}
+\begin{itemize}
+\item Logic in the FPGA
+\begin{itemize}
+\item Described in Chisel
+\item Abstracting away electronic properties
+\end{itemize}
+\item Interface to the world
+\begin{itemize}
+\item Simple switches and LEDs
+\item Did we think about timing?
+\end{itemize}
+\item FPGA is one component of the system
+\item Need interconnect to
+\begin{itemize}
+\item Write outputs
+\item Read inputs
+\item Connect to other chips
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bus Interface}
 \begin{itemize}
 \item Memory interface can be generalized
 \item We use a so-called bus to connect several devices
 \item Usually a microprocessor connected to devices (memory, IO)
 \item The microprocessor is the master
-\item Draw a small microprocessor system
+\item A bus is an interface definition
+\begin{itemize}
+\item Logic and timing
+\item Electrical interface
+\end{itemize}
+\item Parallel or serial data
+\item Asynchronous or synchronous
+\begin{itemize}
+\item But interface clock is usually not the logic clock
+\end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Bus Properties}
 \begin{itemize}
-\item yyy
+\item Address bus and data bus
+\item Control lines (read and write)
+\item Several devices connected
+\begin{itemize}
+\item Multiple outputs
+\item Use tri-state to avoid multiple driver
+\end{itemize}
+\item Single or multiple master
+\begin{itemize}
+\item Arbitration for multiple master
+\end{itemize}
+\item Sketch a small microprocessor system
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Serial I/O Interface}
 \begin{itemize}
-\item yyy
+\item Use only one wire for data transfer
+\begin{itemize}
+\item Bits are serialized
+\item That is where you need your shift register
+\end{itemize}
+\item Shared wire or dedicated wires for transmit and receive
+\item Self timed
+\begin{itemize}
+\item Serial UART (RS232)
+\item Ethernet
+\item USB
+\end{itemize}
+\item With a clock signal
+\begin{itemize}
+\item SPI, I2C, ...
+\end{itemize}
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{Summary}
+
+\begin{frame}[fragile]{RS 232}
 \begin{itemize}
-\item yyy
+\item Old, but still common interface standard
+\begin{itemize}
+\item Was common in 90' in PCs
+\item Now substituted by USB
+\item Still common in embedded systems
+\item You Basys3 board has a RS232 interface
+\end{itemize}
+\item Standard defines
+\begin{itemize}
+\item Electrical characteristics
+\item '1' is negative voltage (-15 to -3 V)
+\item '0' is positive voltage (+3 to +15 V)
+\item Converted by a RS232 driver to \emph{normal} logic voltage levels
+\end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile]{Summary}
+
+
+\begin{frame}[fragile]{Serial Transmission}
 \begin{itemize}
-\item yyy
+\item Transmission consists of
+\begin{itemize}
+\item Start bit
+\item 8 data bits
+\item Stop bit(s)
+\end{itemize}
+\item Common baud rate 115200 bits/s
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=0.8]{../figures/uart_wave}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{RS 232 Interface}
+\begin{itemize}
+\item Generate bit clock with with counter
+\begin{itemize}
+\item Like clock tick generation for display multiplexer
+\end{itemize}
+\item Output (transmit)
+\begin{itemize}
+\item Use shift register for parallel to serial conversion
+\item Small FSM to generate start bit, data bits, and stop bits
+\end{itemize}
+\item Input (receive)
+\begin{itemize}
+\item Detect start with the falling edge of the start bit
+\item \emph{Position} into middle of start bit
+\item Sample individual bits
+\item Serial to parallel conversion with a shift register
+\end{itemize}
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile]{Summary}
+
+
+\begin{frame}[fragile]{Chisel Code for RS 232}
 \begin{itemize}
-\item yyy
+\item More explanation can be found in section 11.2
+\item The code is in the Chisel book
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/uart.scala}{uart.scala}
+\item Also see example usage in \href{https://github.com/schoeberl/chisel-examples}{chisel-examples} repo
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile]{Summary}
+
+\begin{frame}[fragile]{RS 232 on the Basys3}
 \begin{itemize}
-\item yyy
+\item Basis3 has an FTDI chip for the USB interface
+\item USB interface for FPAG programming
+\item But also to provide a RS 232 to the FPGA
+\item You can talk with the Laptop
+\item Your VM could write out some text
+\item Open a terminal to watch (show it)
+\item Use the Chisel code I showed you
 \end{itemize}
 \end{frame}
-\begin{frame}[fragile]{Today Lab}
+
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
 \item Paper \& pencil exercises on SRAM interfacing
 \item On paper or in a plain text editor
@@ -576,7 +684,14 @@ our synchronous design
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item yyy
+\item Use an FSMD for the vending machine and simple processors
+\item We need to connect to the world
+\item FPGA (or any chip) is only part of a system
+\item Bus interface to external devices (e.g., memory)
+\item Serial interface to connect systems
+\begin{itemize}
+\item E.g., your Basys3 board to the laptop
+\end{itemize}
 \end{itemize}
 \end{frame}
 
