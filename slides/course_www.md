@@ -219,7 +219,9 @@ waveform viewing
 
 ### Week 11 Interfacing and Memory
 
-**Topics:** Interfaces, memory, and interconnect
+**Topics:** Interfaces, memory, and serial interface
+
+**Slides:** [11_interface.pdf](11_interface.pdf)
 
 **Reading:** Dally: 24 Chisel: 6.4
 

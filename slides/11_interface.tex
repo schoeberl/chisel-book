@@ -28,6 +28,7 @@ Embedded Systems Engineering}
 \item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
 \item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
 \end{itemize}
+\item The course evaluation is open for feedback
 \end{itemize}
 \end{frame}
 
@@ -346,7 +347,7 @@ Embedded Systems Engineering}
 \item Data output
 \end{itemize}
 \item May share pins for the data input and output (tri-state)
-\item May have read and write address
+\item May have read and write addresses
 \begin{itemize}
 \item A so-called dual ported memory
 \item Can do a read and a write in the same clock cycle
@@ -500,7 +501,7 @@ our synchronous design
 \begin{itemize}
 \item Within FPGA
 \item Pad to pin
-\item PSB traces
+\item PCB traces
 \item SRAM read timing
 \item PCB traces back
 \item Pin to pad
@@ -579,7 +580,7 @@ our synchronous design
 \item Shared wire or dedicated wires for transmit and receive
 \item Self timed
 \begin{itemize}
-\item Serial UART (RS232)
+\item Serial UART (RS 232)
 \item Ethernet
 \item USB
 \end{itemize}
@@ -599,14 +600,14 @@ our synchronous design
 \item Was common in 90' in PCs
 \item Now substituted by USB
 \item Still common in embedded systems
-\item You Basys3 board has a RS232 interface
+\item Your Basys3 board has a RS 232 interface
 \end{itemize}
 \item Standard defines
 \begin{itemize}
 \item Electrical characteristics
 \item '1' is negative voltage (-15 to -3 V)
 \item '0' is positive voltage (+3 to +15 V)
-\item Converted by a RS232 driver to \emph{normal} logic voltage levels
+\item Converted by a RS 232 driver to \emph{normal} logic voltage levels
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -661,13 +662,13 @@ our synchronous design
 
 \begin{frame}[fragile]{RS 232 on the Basys3}
 \begin{itemize}
-\item Basis3 has an FTDI chip for the USB interface
+\item Basys3 has an FTDI chip for the USB interface
 \item USB interface for FPAG programming
 \item But also to provide a RS 232 to the FPGA
 \item You can talk with the Laptop
 \item Your VM could write out some text
-\item Open a terminal to watch (show it)
 \item Use the Chisel code I showed you
+\item Open a terminal to watch (show it)
 \end{itemize}
 \end{frame}
 
