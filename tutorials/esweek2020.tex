@@ -8,7 +8,8 @@
 
 \begin{document}
 
-\title{Hardware Design in the 21st Century with the Object Oriented and Functional Language Chisel}
+\title{Software-Defined Hardware:\\ Digital Design with Chisel}
+%\title{Design in the 21st Century with the Object Oriented and Functional Language Chisel}
 
 \author{Martin Schoeberl\\
 \texttt{masca@dtu.dk}}
@@ -18,22 +19,18 @@
 
 \subsection*{Abstract}
 
-To develop future more complex digital circuits in less time we need a better hardware description
-language than VHDL or Verilog. Chisel\footnote{\url{https://chisel.eecs.berkeley.edu/}} is a hardware construction language intended to
-speedup the development of digital hardware and hardware generators.
+To develop future more complex digital circuits in less time we need a better hardware description language than VHDL or Verilog. Chisel\footnote{\url{https://www.chisel-lang.org/}} is a hardware construction language intended to speed up the development of digital hardware and hardware generators.
 
-Chisel is a hardware construction language implemented as a domain specific language in Scala.
+Chisel is a hardware construction language implemented as a domain-specific language in Scala.
 Therefore, the full power of a modern programming language is available to describe hardware and,
 more important, hardware generators.
 Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V
 by UC Berkeley students and a chip for a tensor processing unit by Google.
-Here at the Technical University of Denmark we use Chisel in the T-CREST project\footnote{\url{https://github.com/t-crest}} and
-in teaching advanced computer architecture.
+Here at the Technical University of Denmark we use Chisel in the T-CREST project\footnote{\url{https://github.com/t-crest}} and in teaching digital electronics and advanced computer architecture.
 
 In this tutorial we will give an overview of Chisel to describe circuits, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators.
 
-The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course will give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala. The intended audience is hardware designers with some background in VHDL or Verilog, but Chisel is also a good first hardware language for software programmers entering into hardware design
-(e.g., porting software algorithms to FPGAs for speedup).
+The aim of the course is to get a basic understanding of a modern hardware description language and be able to describe simple circuits in Chisel. This course will give a basis to explore more advanced concepts of circuit generators written in Chisel/Scala. The intended audience is hardware designers with some background in VHDL or Verilog, but Chisel is also a good first hardware language for software programmers entering into hardware design (e.g., porting software algorithms to FPGAs for speedup).
 
 \subsection*{Organizers and Speakers}
 
