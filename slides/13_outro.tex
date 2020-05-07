@@ -19,37 +19,185 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
 \item Talk on exam (maybe again?)
+\item Evaluation
+\item Lipsi
+\item TAs work
 \item add cosimulation to the verification story (show Lipsi), maybe later
+\item Follow-up courses
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item We get guests!
+\item Exam
+\item Evaluation
+\item We have well known guest lectures today
+\begin{itemize}
+\item Kasper, Anthon, and Simon will present today
+\end{itemize}
+\item Who is Turing?
+\item Lipsi, a simple processor
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}[fragile]{The Online Exam}
 \begin{itemize}
-\item On ..
-\item Show it at \url{http://onlineeksamen.dtu.dk/}
+\item At \url{http://onlineeksamen.dtu.dk/}
+\item On Friday 15/5 10:00--12:00 (12:30)
 \item It will be two parts:
 \begin{itemize}
 \item Multiple choice
-\item Download and hand in a document (e.g., PDF generated from Word)
+\item Download and hand in a PDF document (e.g., generated from Word or photo taken)
 \end{itemize}
-\item You can play with the very short one today
-\item We will do a test exam next week, before the lab
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}[fragile]{Evaluation}
+\begin{itemize}
+\item Thank you!
+\item Looks like you enjoyed DE2 and Chisel :-)
+\item Let us look into it
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Write in Chisel from Scratch}
+\begin{itemize}
+\item This was a request from the evaluation
+\item Should not be too hard
+\item We need just two files
+\begin{itemize}
+\item \code{build.sbt} for library dependencies
+\item One Scala file
+\end{itemize}
+\item Let's do it now!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FSMD}
+\begin{itemize}
+\item A state machine and a datapath
+\item Can compute
+\item Your VM is an FSMD
+\item Can we use this to build a general processor?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{What is a \emph{General} Processor?}
+\begin{itemize}
+\item A computing machine that can compute all computable problems
+\item What is computable?
+\item Mr. \href{https://en.wikipedia.org/wiki/Alan_Turing}{Turing} thought about this before computers where built (1936)
+\item The \href{https://en.wikipedia.org/wiki/Turing_machine}{Turing machine} can compute all computable problems
+\item How useful is this?
+\item What is NOT computable?
+\item Assumption is infinite resources (memory)
+\item But even with finite amount of memory it is a VERY useful classification
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item yyy
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Lipsi}
+\begin{itemize}
+\item The paper: \href{https://www.jopdesign.com/doc/lipsi.pdf}{Lipsi: Probably the Smallest Processor in the World}
+\item Code: \href{https://github.com/schoeberl/lipsi}{The Chisel Code}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Lipsi Datapath}
+\begin{figure}
+  \includegraphics[scale=0.5]{../figures/lipsi}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Processor Summary}
+\begin{itemize}
+\item This is a tiny processor as an example
+\item Kind of useful for small systems
+\item You could implement you vending machine on it
+\item Is this the way a general processor is built?
+\item No, we use something called pipelining
+\item You can learn this in:
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Future with Digital Design Education}
+\begin{itemize}
+\item There are several companies in DK doing chip design
+\item Also FPGAs are used in embedded systems
+\item Digital design is only part of a computer engineering education
+\item But DTU does not have a clear path to a computer engineering education
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Digital Design within an EE Master}
+\begin{itemize}
+\item Not an obvious choice, as there is no specialization in digital systems
+\item Select some of the following courses
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02203: Design of Digital Systems
+\item 02211: Advanced Computer Architecture
+\item 02205: VLSI Design
+\item 02217: Design of Arithmetic Processors
+\item 02204: Design of Asynchronous Circuits
+\item 02209: Test of Digital Systems
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Computer Engineering Education at DTU}
+\begin{itemize}
+\item On the border between hardware and software
+\item Very well payed jobs :-)
+\item Not an easy choice at DTU as well
+\begin{itemize}
+\item No BSc available
+\item Between EE and CS
+\end{itemize}
+\item Start with Bsc. in EE
+\item Specialization in Indlejrede systemer og programmering
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02105: Algoritmer og datastrukturer
+\end{itemize}
+\item Continue as MSc. in Computer Science and Engineering
+\item Specialization in
+\begin{itemize}
+\item Digital Systems
+\item Embedded and Distributed Systems
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item yyy
