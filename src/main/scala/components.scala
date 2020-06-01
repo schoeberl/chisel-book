@@ -160,7 +160,7 @@ class Fetch extends Module {
     val instr = Output(UInt(32.W))
     val pc = Output(UInt(32.W))
   })
-  // ... Implementation od fetch
+  // ... Implementation of fetch
 }
 //- end
 
