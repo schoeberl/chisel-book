@@ -16,27 +16,17 @@ Embedded Systems Engineering}
 \end{frame}
 
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Talk on exam (maybe again?)
-\item Evaluation
-\item Lipsi
-\item TAs work
-\item add cosimulation to the verification story (show Lipsi), maybe later
-\item Follow-up courses
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Exam
 \item Evaluation
+\item Chisel from scratch
+\item Who is Alan Turing?
+\item Lipsi, a simple processor
 \item We have well known guest lectures today
 \begin{itemize}
 \item Kasper, Anthon, and Simon will present today
 \end{itemize}
-\item Who is Turing?
-\item Lipsi, a simple processor
 \end{itemize}
 \end{frame}
 
@@ -77,9 +67,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{FSMD}
 \begin{itemize}
-\item A state machine and a datapath
+\item A finite-state machine and a datapath
 \item Can compute
-\item Your VM is an FSMD
+\item Your vending machine is an FSMD
 \item Can we use this to build a general processor?
 \end{itemize}
 \end{frame}
@@ -97,9 +87,21 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{A Practical Turing-Complete Machine}
 \begin{itemize}
-\item yyy
+\item Compute with some operations
+\item Control 1: an FSM to steer the datapath
+\item Control 2: instructions to steer the FSM
+\item Storage: memory for the \emph{infinite/large} storage
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Can We Build Such a Processor?}
+\begin{itemize}
+\item Our Chisel and digital design knowledge should be enough
+\item Let's start with a simple one
+\item An FSMD plus memory
+\item As it is small we  name it after a small island: Lipsi
 \end{itemize}
 \end{frame}
 
@@ -107,12 +109,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item The paper: \href{https://www.jopdesign.com/doc/lipsi.pdf}{Lipsi: Probably the Smallest Processor in the World}
 \item Code: \href{https://github.com/schoeberl/lipsi}{The Chisel Code}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item yyy
+\item A simple Accumulator machine
 \end{itemize}
 \end{frame}
 
@@ -123,23 +120,207 @@ Embedded Systems Engineering}
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Datapath Elemenets}
 \begin{itemize}
-\item yyy
+\item An arithmetic-logic unit (ALU)
+\item An accumulator: register A
+\item Memory for instructions and data
+\item a program counter (PC)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Commanding the FSM}
 \begin{itemize}
-\item yyy
+\item We need so-called instructions
+\item They drive the FSM
+\item To computer (e.g., +, -, or): ALU operations
+\item To load from and store into memory
+\item To (conditionally) branch (implement if/else, loops)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lipsi Instruction Set}
+{\footnotesize
+\begin{table}
+\begin{tabular}{lllll}
+\toprule
+Encoding & & Instruction & Meaning & Operation \\
+\midrule
+\code{0fff rrrr} & & $f$ rx & ALU register & A = A $f$ m[r]\\
+\code{1000 rrrr} & & st rx & store A into register & m[r] = A\\
+\code{1001 rrrr} & & brl rx & branch and link & m[r] = PC, PC = A\\
+\code{1010 rrrr} & & ldind (rx) & load indirect & A = m[m[r]]\\
+\code{1011 rrrr} & & stind (rx) & store indirect &m[m[r]] = A\\
+\code{1100 -fff} & \code{nnnn nnnn} & $fi$ n & ALU immediate & A = A $f$ n\\
+\code{1101 --00} & \code{aaaa aaaa} & br & branch & PC = a\\
+\code{1101 --10} & \code{aaaa aaaa} & brz & branch if A is zero & PC = a\\
+\code{1101 --11} & \code{aaaa aaaa} & brnz & branch if A is not zero & PC = a\\
+\code{1110 --ff} & & sh &ALU shift & A = shift(A)\\
+\code{1111 aaaa} & & io & input and output & IO = A, A = IO \\
+\code{1111 1111} & & exit & exit for the tester & PC = PC\\
+\bottomrule
+\end{tabular}
+\end{table}
+}
+\end{frame}
+
+\begin{frame}[fragile]{ALU Operations}
+\begin{table}
+\begin{tabular}{lll}
+\toprule
+Encoding & Name & Operation \\
+\midrule
+\code{000} & add & $A = A + op$\\
+\code{001} & sub & $A = A - op$\\
+\code{010} & adc & $A = A + op + c$\\
+\code{011} & sbb & $A = A - op - c$\\
+\code{100} & and & $A = A \wedge op$\\
+\code{101} & or & $A = A \vee op$\\
+\code{110} & xor & $A = A \oplus op$\\
+\code{111} & ld & $A = op$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}[fragile]{The ALU}
+\begin{chisel}
+  val add :: sub :: adc :: sbb :: and :: or :: xor :: ld :: Nil = Enum(8)
+  switch(funcReg) {
+    is(add) { res := accuReg + op }
+    is(sub) { res := accuReg - op }
+    is(adc) { res := accuReg + op } // TODO: adc
+    is(sbb) { res := accuReg - op } // TODO: sbb
+    is(and) { res := accuReg & op }
+    is(or) { res := accuReg | op }
+    is(xor) { res := accuReg ^ op }
+    is(ld) { res := op }
+  }
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Some Defaults}
+\begin{chisel}
+  wrEna := false.B
+  wrAddr := rdData
+  rdAddr := Cat(0.U(1.W), nextPC)
+  updPC := true.B
+  nextPC := pcReg + 1.U
+  enaAccuReg := false.B
+  enaPcReg := false.B
+  enaIoReg := false.B
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Conditions for Branches}
+\begin{chisel}
+  val accuZero = accuReg === 0.U
+
+  val doBranch = (rdData(1, 0) === 0.U) ||
+    ((rdData(1, 0) === 2.U) && accuZero) ||
+    ((rdData(1, 0) === 3.U) && !accuZero)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The FSM States and Register}
+\begin{chisel}
+  val fetch :: execute :: stind :: ldind1 :: ldind2 :: exit :: Nil = Enum(6)
+  val stateReg = RegInit(fetch)
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Large State Machine}
+\begin{chisel}
+  switch(stateReg) {
+    is(fetch) {
+      stateReg := execute
+      funcReg := rdData(6, 4)
+      // ALU register
+      when(rdData(7) === 0.U) {
+        updPC := false.B
+        funcReg := rdData(6, 4)
+        enaAccuReg := true.B
+        rdAddr := Cat(0x10.U, rdData(3, 0))
+      }
+      // st rx, is just a single cycle
+      when(rdData(7, 4) === 0x8.U) {
+        wrAddr := Cat(0.U, rdData(3, 0))
+        wrEna := true.B
+        stateReg := fetch
+      }
+    ...
+\end{chisel}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Memory}
+\begin{itemize}
+\item Code memory for instructions
+\item Data memory for data
+\item Merge those two
+\item Instruction memory filled by a program
+\item That program is an assembler written in Scala
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code and Data Memory}
+\begin{chisel}
+  val program = VecInit(util.Assembler.getProgram(prog).map(_.U))
+  val instr = program(rdAddrReg(7, 0))
+
+  val mem = Mem(256, UInt(8.W))
+  val data = mem(rdAddrReg(7, 0))
+  when(io.wrEna) {
+    mem(io.wrAddr) := io.wrData
+  }
+  
+  // Output MUX
+  io.rdData := Mux(rdAddrReg(8), data, instr)
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Assembling Instructions}
+\begin{chisel}
+    for (line <- source.getLines()) {
+      if (!pass2) println(line)
+      val tokens = line.trim.split(" ")
+      val Pattern = "(.*:)".r
+      val instr = tokens(0) match {
+        case "#" => // comment
+        case Pattern(l) => if (!pass2) symbols += (l.substring(0, l.length - 1) -> pc)
+        case "add" => 0x00 + regNumber(tokens(1))
+        case "sub" => 0x10 + regNumber(tokens(1))
+        case "adc" => 0x20 + regNumber(tokens(1))
+        case "sbb" => 0x30 + regNumber(tokens(1))
+        case "and" => 0x40 + regNumber(tokens(1))
+        case "or" => 0x50 + regNumber(tokens(1))
+\end{chisel}
+This is done at hardware generation
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Co-simulation for Testing}
+\begin{itemize}
+\item Write an implementation of Lipsi in Scala
+\item This is an instruction set simulator, not hardware
+\item This is your golden model
+\item Run programs on the simulator and in the Chisel hardware
+\item Compare the results (the value in the accumulator)
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{A Processor Summary}
 \begin{itemize}
 \item This is a tiny processor as an example
+\item Chisel is productive: this was all done in 14 hours!
 \item Kind of useful for small systems
-\item You could implement you vending machine on it
+\item You could implement your vending machine on it
 \item Is this the way a general processor is built?
 \item No, we use something called pipelining
 \item You can learn this in:
@@ -200,7 +381,12 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item yyy
+\item You now know enough digital design to build any digital system
+\item You may get better on it with practice
+\item When you understand the principles you can easily learn Verilog or VHDL in days
+\item Chisel may be the future for hardware design
+\item You might apply for a job in silicon valley with your Chisel knowledge ;-)
+\item Hope to see some of you in upcoming courses
 \end{itemize}
 \end{frame}
 

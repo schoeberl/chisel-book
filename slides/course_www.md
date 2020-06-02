@@ -230,13 +230,15 @@ waveform viewing
 [data sheet](https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb)
 
 
-### Week 12 No lecture
+### Week 12 Test Exam, No lecture
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 13 Outro, A Simple Processor
+### Week 13 2nd Test Exam, Outro, A Simple Processor
 
-**Topics:** Leros as a simple processor, Discussion of course, and followup courses
+**Topics:** Lipsi as a simple processor, Discussion of course, and followup courses
 
-**Lab:** Exam examples from last years, finish vending machine and report
+**Slides:** [13_outro.pdf](13_outro.pdf)
+
+**Lab:** Finish vending machine and report
