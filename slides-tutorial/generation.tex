@@ -12,7 +12,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel has a Multiplexer}
+\begin{frame}[fragile]{Chisel has a Generic Multiplexer}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/mux}
 \end{figure}
@@ -72,7 +72,7 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Abstract Base Class}
+\begin{frame}[fragile]{Abstract Base Class and Concrete Extension}
 \shortlist{../code/fifo_abstract.txt}
 \begin{itemize}
 \item May contain common code
@@ -123,15 +123,24 @@ for (int i = 0; i < Math.pow(2, ADDRBITS); ++i) {
 \end{frame}
 
 \begin{frame}[fragile]{Chisel Version of Binary to BCD Conversion}
+%\begin{chisel}
+%  val array = new Array[Int](256)
+%  for (i <- 0 to 99) {
+%    array(i) = ((i/10)<<4) + i%10
+%  }
+%  val table = VecInit(array.map(_.U(8.W)))
+%\end{chisel}
 \begin{chisel}
-  val array = new Array[Int](256)
-  for (i <- 0 to 99) {
-    array(i) = ((i/10)<<4) + i%10
+  val table = Wire(Vec(100, UInt(8.W)))
+  for (i <- 0 until 100) {
+    table(i) := (((i/10)<<4) + i%10).U
   }
-  val table = VecInit(array.map(_.U(8.W)))
+  val bcd = table(bin)
 \end{chisel}
 \begin{itemize}
-\item Directly generates the hardware (\code{VecInit})
+\item Directly generates the hardware table as a \code{Vec}
+\item At hardware construction time
+\item In the same language
 \end{itemize}
 \end{frame}
 

@@ -16,6 +16,14 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{TODO}
+\begin{itemize}
+\item Conditional update, but no latches, Chisel checks
+\item offer additional lectures and labs if there is interest
+\item Update BCD code for the simpler one
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example:\\
 Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
@@ -108,7 +116,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item High productivity with Chisel
 \item Open-source Rocket chip
 \end{itemize}
-\item Experanto uses the BOOM processor in Chisel
+\item Esperanto uses the BOOM processor in Chisel
 \item Google did a machine learning processor
 \item Intel is looking at Chisel
 \item Chisel is open-source, if there is a bug you can fix it
@@ -157,7 +165,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \item A hardware \emph{construction} language
 \begin{itemize}
 \item Constructing Hardware In a Scala Embedded Language
-\item If it compiles, it is synthesisable hardware 
+\item If it compiles, it is synthesysable hardware 
 \item Say goodby to your unintended latches
 \end{itemize}
 \item Chisel is not a high-level synthesis language
@@ -257,6 +265,15 @@ val boolVal = a >= b
 \item Width inference
 \item Type inference
 \item Types: Bits, UInt, SInt, Bool
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Updates for Combinational Circuits}
+\shortlist{../code/comb_elsewhen.txt}
+\begin{itemize}
+\item Similar to VHDL \code{process} or SystemVerilog \code{always\_comb}
+\item Chisel checks for complete assignments in all branches
+\item Latches give compile error
 \end{itemize}
 \end{frame}
 
@@ -482,11 +499,50 @@ class ExecuteIO extends Bundle {
 \item Several Bachelor and Master projects
 \item Students pick it up reasonable fast
 \item For software engineering students easier than VHDL
-\item Switch Digital Electronics 2 at DTU to Chisel (spring semester 2020)
+\item Switched Digital Electronics 2 at DTU to Chisel (spring semester 2020)
 \item Issue of \emph{writing a program} instead of describing hardware remains
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Chisel in Digital Electronic 2}
+\begin{itemize}
+\item Basic RTL level digital design wit Chisel
+\item Chisel testers for debugging
+\item Very FPGA centric course
+\item Final project is a vending machine
+\item All material (slides, book, lab material) in open source
+\item Tried to coordinate with introduction to programming (Java)
+\begin{itemize}
+\item But sometimes I was ahead with Chisel constructs (e.g., classes)
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Then there was the Lockdown}
+\begin{itemize}
+\item Usually one FPGA board per group
+\item No group meetings
+\item Just virtual labs
+\item Can I do something about it with Chisel?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Teaching Feedback}
+\begin{itemize}
+\item General positive feedback of the course
+\item Most students liked Chisel
+\item They also liked the (free) Chisel book
+\item Better link to Java programming (same JVM)
+\begin{itemize}
+\item Similar setup (IDE)
+\end{itemize}
+\item Lab finish about the same time as last year with VHDL
+\begin{itemize}
+\item So Chisel is not more productive than VHDL?
+\item But we had the Corona lockdown
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{A Chisel Book}
 \begin{figure}
@@ -497,6 +553,7 @@ class ExecuteIO extends Bundle {
 \begin{itemize}
 \item Available in open access (PDF)
 \item In paper from Amazon
+\item see \url{http://www.imm.dtu.dk/~masca/chisel-book.html}
 \end{itemize}
 \end{frame}
 
@@ -514,6 +571,7 @@ class ExecuteIO extends Bundle {
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
 \item \url{https://www.chisel-lang.org/}
+\item \url{http://www.imm.dtu.dk/~masca/chisel-book.html}
 \item \url{https://github.com/ucb-bar/chisel-tutorial}
 \item \url{https://github.com/ucb-bar/generator-bootcamp}
 %\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
@@ -523,6 +581,7 @@ class ExecuteIO extends Bundle {
 %\end{itemize}
 \item \url{http://groups.google.com/group/chisel-users}
 \item \url{https://github.com/schoeberl/chisel-book}
+\item \url{https://github.com/schoeberl/chisel-lab}
 \end{itemize}
 \end{frame}
 
@@ -536,6 +595,7 @@ class ExecuteIO extends Bundle {
 \item We can write circuit generators
 \item We can do co-simulation
 % \item You can get started with a hardware design in a special course or 4th semester project
+\item I can provide further introduction into Chisel including labs
 \end{itemize}
 \end{frame}
 
