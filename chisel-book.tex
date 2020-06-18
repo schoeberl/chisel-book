@@ -4065,7 +4065,7 @@ Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with ready-valid
 interface. Note what we put the \code{Buffer} component inside from \code{BubbleFifo}
 as private class. This helper class is only needed for this component and therefore
 we hide it and avoid polluting the name space. The buffer class has also been
-simplified. Instead of an FSM e use only a single bit, \code{fullReg}, to note
+simplified. Instead of an FSM we use only a single bit, \code{fullReg}, to note
 the state of the buffer: full or empty.
 
 The bubble FIFO is simply, easy to understand, and uses minimal resources.
