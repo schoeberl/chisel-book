@@ -3375,7 +3375,7 @@ interface. However, in that case the data will probably not change on signaling
   \label{fig:ready_valid3}
 \end{figure}
 
-Figure~\ref{fig:ready_valid2} shows further variations of the ready-valid
+Figure~\ref{fig:ready_valid3} shows further variations of the ready-valid
 interface. In clock cycle 1 both signals (\code{ready} and \code{valid}
 become asserted just for a single clock cycle and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
@@ -3423,6 +3423,40 @@ that once \code{ready} or \code{valid} is asserted it is not allowed to get de-a
 until the data transfer happened.
 
 \todo{Read and cite AXI, and check if the above is true}
+
+\chapter{Debugging, Testing, and Verification}
+\index{Debugging}
+\index{Testing}
+\index{Verification}
+
+During your design and coding phase you often debug your design.
+\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
+finding defects in your code. Those defects are called
+\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
+Debugging is often performed in parallel with writing new code.
+
+Testing and verification have slightly different meaning in software development
+and digital design.
+
+\section{Debugging}
+
+One can debug a program by using a debugger or simply by printing interesting
+values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
+In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
+debugging is generating waveforms and watching how interesting signals evolve over time.
+We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
+we should create one.}
+
+A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
+However, for quick checks it is also possible to print signal values during simulation of the circuit.
+Values are printed at the rising edge of the clock.
+
+
+\section{Testing in Chisel}
+
+
+\subsection{Verilator}
+
 
 \chapter{Hardware Generators}
 \index{Hardware generators}
