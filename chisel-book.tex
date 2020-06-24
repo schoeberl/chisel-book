@@ -1136,7 +1136,7 @@ call \code{generated}.
 
 
 To use the facility of namespaces in Chisel, you need to declare that a class/module
-is defined in a package, in this example in \code{mypacket}:
+is defined in a package, in this example in \code{mypack}:
 
 \shortlist{code/packet.txt}
 
@@ -1144,12 +1144,12 @@ is defined in a package, in this example in \code{mypacket}:
 to use Chisel classes.
 
 To use the module \code{Abc} in a different context (packet name space),
-the components of packet \code{mypacket} need to be imported. The underscore
-(\_) acts as wildcard, meaning that all classes of \code{mypacket} are imported.
+the components of packet \code{mypack} need to be imported. The underscore
+(\_) acts as wildcard, meaning that all classes of \code{mypack} are imported.
 
 \shortlist{code/usepacket.txt}
 
-\noindent It is also possible to not import all types from \code{mypacket},
+\noindent It is also possible to not import all types from \code{mypack},
 but use the fully qualified name \code{mypack.Abc} to refer to the module
 \code{Abc} in packet \code{mypack}.
 
