@@ -1138,26 +1138,26 @@ call \code{generated}.
 To use the facility of namespaces in Chisel, you need to declare that a class/module
 is defined in a package, in this example in \code{mypack}:
 
-\shortlist{code/packet.txt}
+\shortlist{code/mypack.txt}
 
-\noindent Note that in this example we see the import of the \code{chisel3} packet
+\noindent Note that in this example we see the import of the \code{chisel3} package
 to use Chisel classes.
 
-To use the module \code{Abc} in a different context (packet name space),
+To use the module \code{Abc} in a different context (package name space),
 the components of packet \code{mypack} need to be imported. The underscore
 (\_) acts as wildcard, meaning that all classes of \code{mypack} are imported.
 
-\shortlist{code/usepacket.txt}
+\shortlist{code/usemypack.txt}
 
 \noindent It is also possible to not import all types from \code{mypack},
 but use the fully qualified name \code{mypack.Abc} to refer to the module
-\code{Abc} in packet \code{mypack}.
+\code{Abc} in package \code{mypack}.
 
-\shortlist{code/usepacket2.txt}
+\shortlist{code/usemypack2.txt}
 
 \noindent It is also possible to import just a single class and create an instance of it:
 
-\shortlist{code/usepacket3.txt}
+\shortlist{code/usemypack3.txt}
 
 
 \subsection{Running sbt}

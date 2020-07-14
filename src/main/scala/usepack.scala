@@ -1,7 +1,7 @@
 
 import chisel3._
 
-//- start usepacket2
+//- start usemypack2
 class AbcUser2 extends Module {
   val io = IO(new Bundle{})
 
@@ -10,7 +10,7 @@ class AbcUser2 extends Module {
 }
 //- end
 
-//- start usepacket3
+//- start usemypack3
 import mypack.Abc
 
 class AbcUser3 extends Module {
@@ -21,7 +21,7 @@ class AbcUser3 extends Module {
 }
 //- end
 
-//- start usepacket
+//- start usemypack
 import mypack._
 
 class AbcUser extends Module {

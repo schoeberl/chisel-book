@@ -1,7 +1,7 @@
 
 // This should be placed in sub folder mypack, by the extraction script currently looks just into this folder
 
-//- start packet
+//- start mypack
 package mypack
 
 import chisel3._
