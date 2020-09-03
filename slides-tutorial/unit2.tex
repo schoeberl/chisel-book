@@ -473,40 +473,40 @@ class Counter2 extends Module {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel Tutorial from UCB}
-\begin{itemize}
-\item Collection of small exercises
-\item Only in simulation, no hardware required (+/-)
-\item All examples in \emph{one} design
-\begin{itemize}
-\item Results in a little bit more complex setup
-\end{itemize}
-\item Needs an Internet connection
-\begin{itemize}
-\item  Tests against latest Chisel version
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Tutorial}
-\begin{itemize}
-\item Get the tutorial
-\end{itemize}
-\begin{chisel}
-git clone https://github.com/ucb-bar/chisel-tutorial.git
-cd chisel-tutorial
-\end{chisel}
-\begin{itemize}
-\item Test the installation with a Hello World
-\item Living in \code{src/main/scala/hello/Hello.scala}
-\end{itemize}
-\begin{chisel}
-sbt run
-\end{chisel}
-\begin{itemize}
-\item May take some time
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Chisel Tutorial from UCB}
+%\begin{itemize}
+%\item Collection of small exercises
+%\item Only in simulation, no hardware required (+/-)
+%\item All examples in \emph{one} design
+%\begin{itemize}
+%\item Results in a little bit more complex setup
+%\end{itemize}
+%\item Needs an Internet connection
+%\begin{itemize}
+%\item  Tests against latest Chisel version
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Chisel Tutorial}
+%\begin{itemize}
+%\item Get the tutorial
+%\end{itemize}
+%\begin{chisel}
+%git clone https://github.com/ucb-bar/chisel-tutorial.git
+%cd chisel-tutorial
+%\end{chisel}
+%\begin{itemize}
+%\item Test the installation with a Hello World
+%\item Living in \code{src/main/scala/hello/Hello.scala}
+%\end{itemize}
+%\begin{chisel}
+%sbt run
+%\end{chisel}
+%\begin{itemize}
+%\item May take some time
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Very Minimal Hello World}
 \begin{chisel}
@@ -535,36 +535,43 @@ class HelloTests(c: Hello) extends PeekPokeTester(c) {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Tutorial Problems}
-\begin{chisel}
-sbt "test:runMain problems.Launcher Mux2"
-\end{chisel}
-\begin{itemize}
-\item This example should already work
-\item Read the hardware description and test code
-\item Source organized in \code{main} and \code{test} folders
-\item Problems and testers are in package/folder \code{problems}
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Tutorial Problems}
+%\begin{chisel}
+%sbt "test:runMain problems.Launcher Mux2"
+%\end{chisel}
+%\begin{itemize}
+%\item This example should already work
+%\item Read the hardware description and test code
+%\item Source organized in \code{main} and \code{test} folders
+%\item Problems and testers are in package/folder \code{problems}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Tutorial Problems}
+%\begin{chisel}
+%sbt "test:runMain problems.Launcher Mux4"
+%\end{chisel}
+%\begin{itemize}
+%\item The test should fail
+%\item Fix the Mux4 component so that the tests complete
+%\end{itemize}
+%\end{frame}
 
-\begin{frame}[fragile]{Tutorial Problems}
-\begin{chisel}
-sbt "test:runMain problems.Launcher Mux4"
-\end{chisel}
-\begin{itemize}
-\item The test should fail
-\item Fix the Mux4 component so that the tests complete
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Links to the Examples}
+\begin{frame}[fragile]{Link to Some Examples}
 \begin{itemize}
 \item Example code
 \item \url{https://github.com/schoeberl/chisel-examples.git}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Session}
+\begin{frame}[fragile]{Simulation Lab Session}
+\begin{itemize}
+\item Combinational circuits
+\item \url{https://github.com/schoeberl/chisel-lab/tree/master/lab2}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FPGA Lab Session}
 \begin{itemize}
 \item Run and explore the UART (serial port) example
 \begin{itemize}

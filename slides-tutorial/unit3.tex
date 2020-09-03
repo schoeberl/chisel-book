@@ -42,9 +42,11 @@
 \begin{itemize}
 \item Can almost be written like Java
 \item With a more lightweight syntax
-\item Scala for Java Refugees is a nice tutorial
-\item \url{http://www.codecommit.com/blog/scala/roundup-scala-for-java-refugees}
+\item Compiled to the JVM
+\item Good Java interoperability
+\item Many libraries available
 \end{itemize}
+\item \url{https://docs.scala-lang.org/tour/tour-of-scala.html}
 \end{itemize}
 \end{frame}
 
@@ -496,8 +498,16 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Lab Session}
+\begin{frame}[fragile]{Simulation Lab Session}
 \begin{itemize}
+\item Components and Small Sequential Circuits
+\item \url{https://github.com/schoeberl/chisel-lab/tree/master/lab4}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Optional Lab Session (FPGA)}
+\begin{itemize}
+\item Examples from \url{https://github.com/schoeberl/chisel-examples}
 \item Explore the ALU example
 \begin{itemize}
 \item It contains a tester
