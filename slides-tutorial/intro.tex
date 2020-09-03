@@ -14,6 +14,12 @@
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{Welcome}
+\begin{itemize}
+\item Let us have an introduction round
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Motivating Example:\\
 Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
@@ -80,7 +86,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{Motivating Example: Lipsi, a Tiny Processor}
 \begin{itemize}
-\item Show in IntelliJ (if beamer allows)
+\item Show in IntelliJ
 \end{itemize}
 \end{frame}
 
@@ -96,7 +102,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{More on Chisel Success Stories}
 \begin{itemize}
-\item Last week at CCC 2020 (in silicon valley)
+\item Before the lockdown at CCC 2020 (in silicon valley)
 \item 90 participants
 \item More than 30 different (hardware) companies present
 \item Several companies are looking into Chisel
@@ -224,6 +230,17 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{A Small Language}
+\begin{itemize}
+\item Chisel is a \emph{small} language
+\item On purpose
+\item Not many constructs to remember
+\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
+\item The power comes with Scala for circuit generators
+\item With Scala, Chisel can grow with you
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Expressions are Combinational Circuits}
 \begin{chisel}
 (a | b) & ~(c ^ d)
@@ -238,6 +255,15 @@ val boolVal = a >= b
 \item Width inference
 \item Type inference
 \item Types: Bits, UInt, SInt, Bool
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Updates for Combinational Circuits}
+\shortlist{../code/comb_elsewhen.txt}
+\begin{itemize}
+\item Similar to VHDL \code{process} or SystemVerilog \code{always\_comb}
+\item Chisel checks for complete assignments in all branches
+\item Latches give compile error
 \end{itemize}
 \end{frame}
 
@@ -508,7 +534,7 @@ val rom = Vec[Bits](arr)
 
 \begin{frame}[fragile]{An IDE for Chisel}
 \begin{itemize}
-\item Eclipse or IntelliJ
+\item IntelliJ (Eclipse Scala support is/was shaky)
 \item Scala plugin
 \item For an Eclipse project: sbt eclipse
 \item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
@@ -549,6 +575,45 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Chisel in Digital Electronic 2}
+\begin{itemize}
+\item Basic RTL level digital design wit Chisel
+\item Chisel testers for debugging
+\item Very FPGA centric course
+\item Final project is a vending machine
+\item All material (slides, book, lab material) in open source
+\item Tried to coordinate with introduction to programming (Java)
+\begin{itemize}
+\item But sometimes I was ahead with Chisel constructs (e.g., classes)
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Then there was the Lockdown}
+\begin{itemize}
+\item Usually one FPGA board per group
+\item No group meetings
+\item Just virtual labs
+\item Can I do something about it with Chisel?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Teaching Feedback}
+\begin{itemize}
+\item General positive feedback of the course
+\item Most students liked Chisel
+\item They also liked the (free) Chisel book
+\item Better link to Java programming (same JVM)
+\begin{itemize}
+\item Similar setup (IDE)
+\end{itemize}
+\item Lab finish about the same time as last year with VHDL
+\begin{itemize}
+\item So Chisel is not more productive than VHDL?
+\item But we had the Corona lockdown
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{A Chisel Book}
 \begin{figure}
@@ -559,8 +624,33 @@ val rom = Vec[Bits](arr)
 \begin{itemize}
 \item Available in open access (PDF)
 \item In paper from Amazon
+\item see \url{http://www.imm.dtu.dk/~masca/chisel-book.html}
+\item Source at \url{https://github.com/schoeberl/chisel-book}
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{What May Happen with an Open-Source Book}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../cover-small-chinese}
+\end{figure}
+
+\begin{itemize}
+\item A free Chinese translation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Several Weeks ago I got This}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../japanese}
+\end{figure}
+
+\begin{itemize}
+\item A Japanese translation
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
@@ -631,12 +721,34 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item The world is digital
-\item Processors do not get much faster -- we need to design custom hardware
+% \item The world is digital
+\item Processors do not get much faster -- we need to design domain specific hardware accelerators
 \item We need a modern language for hardware/systems design
-\item Chisel builds on the power of object-oriented and functional Scala
+\item Chisel is a small language
+\item Embedding it in Scala gives the power
 \item Chisel is good for hardware generators
 % \item You can get started with a hardware design in a special course or 4th semester project
+\item We can do co-simulation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab Time (Simulation)}
+\begin{itemize}
+\item Get a blinking LED working in simulation
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/chisel-lab}
+\end{itemize}
+\item Follow the instructions from the lab page
+\begin{itemize}
+\item Start IntelliJ and follow the instructions from the lab page
+\item \code{sbt run}
+\item Observe the generated Verilog file
+\item For simulation change the factor for the counter and run the simulation
+\item \code{val CNT\_MAX = (100000 / 2 - 1).U;}
+\item \code{sbt test}
+\end{itemize}
+\item {\bf You have your first Chisel design running in simulation!}
 \end{itemize}
 \end{frame}
 
