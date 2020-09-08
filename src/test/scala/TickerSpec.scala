@@ -32,7 +32,7 @@ class TickerSpec extends FlatSpec with Matchers {
 
   "UpTicker 5" should "pass" in {
     chisel3.iotesters.Driver(() => new UpTicker(5)) { c =>
-      new TickerTester(c, 5)
+      new TickerTester(c, 6)
     } should be (true)
   }
 
