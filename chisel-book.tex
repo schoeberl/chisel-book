@@ -509,7 +509,7 @@ $ sbt eclipse
 and import that project into Eclipse.\footnote{This function needs the Eclipse plugin for sbt.}
 
 \myref{https://code.visualstudio.com/}{Visual Studio Code} is another option for a Chisel IDE. 
-The \myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals/}{Scala Metals}
+The \myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals}{Scala Metals}
 extension provides Scala support.
 On the left bar select \emph{Extensions} and search for \emph{Metals} and install \emph{Scala (Metals)}.
 To import an \code{sbt} based project open the folder with \emph{File - Open}. 
@@ -3424,38 +3424,40 @@ until the data transfer happened.
 
 \todo{Read and cite AXI, and check if the above is true}
 
-\chapter{Debugging, Testing, and Verification}
-\index{Debugging}
-\index{Testing}
-\index{Verification}
+\todo{Reconsider writing the testing chapter}
 
-During your design and coding phase you often debug your design.
-\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
-finding defects in your code. Those defects are called
-\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
-Debugging is often performed in parallel with writing new code.
-
-Testing and verification have slightly different meaning in software development
-and digital design.
-
-\section{Debugging}
-
-One can debug a program by using a debugger or simply by printing interesting
-values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
-In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
-debugging is generating waveforms and watching how interesting signals evolve over time.
-We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
-we should create one.}
-
-A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
-However, for quick checks it is also possible to print signal values during simulation of the circuit.
-Values are printed at the rising edge of the clock.
-
-
-\section{Testing in Chisel}
-
-
-\subsection{Verilator}
+%\chapter{Debugging, Testing, and Verification}
+%\index{Debugging}
+%\index{Testing}
+%\index{Verification}
+%
+%During your design and coding phase you often debug your design.
+%\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
+%finding defects in your code. Those defects are called
+%\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
+%Debugging is often performed in parallel with writing new code.
+%
+%Testing and verification have slightly different meaning in software development
+%and digital design.
+%
+%\section{Debugging}
+%
+%One can debug a program by using a debugger or simply by printing interesting
+%values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
+%In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
+%debugging is generating waveforms and watching how interesting signals evolve over time.
+%We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
+%we should create one.}
+%
+%A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
+%However, for quick checks it is also possible to print signal values during simulation of the circuit.
+%Values are printed at the rising edge of the clock.
+%
+%
+%\section{Testing in Chisel}
+%
+%
+%\subsection{Verilator}
 
 
 \chapter{Hardware Generators}
