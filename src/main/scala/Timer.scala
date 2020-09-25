@@ -13,7 +13,7 @@ class Timer extends Module {
   val cntReg = RegInit(0.U(8.W))
   val done = cntReg === 0.U
 
-  val next = WireInit(0.U)
+  val next = WireDefault(0.U)
   when (load) {
     next := din
   } .elsewhen (!done) {
