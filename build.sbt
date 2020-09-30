@@ -1,6 +1,7 @@
 
 scalaVersion := "2.11.7"
 
+
 // libraryDependencies += "edu.berkeley.cs" %% "chisel" % "latest.release"
 
 // libraryDependencies += "edu.berkeley.cs" %% "chisel" % "2.2.38"
@@ -12,7 +13,12 @@ resolvers ++= Seq(
 
 scalacOptions := Seq("-deprecation")
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.3.2"
+// libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
+// libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.3.2"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+// TODO: towards Chisel x.3/4
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.4.2"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.2.2"
+
+
+// libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
