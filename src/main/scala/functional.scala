@@ -45,6 +45,8 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     val idx = UInt(8.W)
   }
 
+  class X (v: UInt(w.W), idx: UInt) extends Bundle
+
   //- start fun_min
   // that would be the real functional thing with a tuple
   // def foo(x: (UInt, UInt), y: (UInt, UInt)) = Mux((x._1 < y._1), x, y)
@@ -54,14 +56,24 @@ class FunctionalMin(n: Int, w: Int) extends Module {
   // doesn't like tuples here :-(
   // val inDup = Wire(Vec(n, (UInt, UInt)))
 
+  val a = new Array[X](n)
+  for (i <- 0  until n) {
+    a(i) = X(io.in(i), i.U)
+  }
+
+  val inDup = Wire(VecInit(a))
+
+
+  /*
   val inDup = Wire(Vec(n, new Dup()))
   for (i <- 0 until n) {
     inDup(i).v := io.in(i)
     inDup(i).idx := i.U
   }
+   */
 
   // the less functional function
-  def min(x: Dup, y: Dup) = Mux(x.v < y.v, x, y)
+  def min(x: X, y: X) = Mux(x.v < y.v, x, y)
 
   val res = inDup.reduceTree(min)
   //- end
