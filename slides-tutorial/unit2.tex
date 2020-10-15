@@ -20,12 +20,13 @@
 \item Raw collection of bits is type \code{Bits}
 \item Simple types to represent integer numbers
 \begin{itemize}
-\item Unsigned and signed
+\item Unsigned: \code{UInt}
+\item Signedigned: \code{SInt}
 \item Subtype of \code{Bits}
 \end{itemize}
-\item \emph{Interesting} way to specify constants
 \item Automatic bit width inference
 \item Boolean values are of type \code{Bool}, a single bit value
+\item \emph{Interesting} way to specify constants
 \end{itemize}
 \begin{chisel}
 1.U
@@ -45,13 +46,13 @@ true.B
 \end{itemize}
 \end{itemize}
 \begin{chisel}
+UInt(8.W)
+SInt(16.W)
 0.U(32.W)
 "habcd".U(24.W)
 -5.S(16.W)
 \end{chisel}
 \begin{itemize}
-\item \emph{Bundles} for a named collection of values
-\item \emph{Vecs} for indexable collection of values
 \item Chisel data types are different from Scala builtin types (e.g., Scala's \code{Int})
 \end{itemize}
 \end{frame}
