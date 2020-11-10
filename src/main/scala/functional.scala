@@ -22,7 +22,6 @@ class FunctionalAdd extends Module {
   //- start fun_func_lit
   val sum = vec.reduce(_ + _)
   //- end
-
    */
 
   //- start fun_reduce_tree
@@ -40,10 +39,7 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     val idx = Output(UInt(8.W))
   })
 
-  class Dup extends Bundle {
-    val v = UInt(w.W)
-    val idx = UInt(8.W)
-  }
+
 
   // class X (v: UInt(w.W), idx: UInt) extends Bundle
 
@@ -56,19 +52,10 @@ class FunctionalMin(n: Int, w: Int) extends Module {
   // doesn't like tuples here :-(
   // val inDup = Wire(Vec(n, (UInt, UInt)))
 
-  /*
-  val a = new Array[Dup](n)
-  for (i <- 0  until n) {
-    // a(i) = new Dup(io.in(i), i.U)
-    a(i) = new Dup()
-    a(i).v := io.in(i)
-    a(i).idx := i.U
+  class Dup extends Bundle {
+    val v = UInt(w.W)
+    val idx = UInt(8.W)
   }
-
-
-  val inDup = Wire(VecInit(a))
-   */
-
 
   val inDup = Wire(Vec(n, new Dup()))
   for (i <- 0 until n) {
@@ -77,14 +64,40 @@ class FunctionalMin(n: Int, w: Int) extends Module {
   }
 
   // the less functional function
-  def min(x: Dup, y: Dup) = Mux(x.v < y.v, x, y)
+  // def min(x: Dup, y: Dup) = Mux(x.v < y.v, x, y)
 
-  val res = inDup.reduceTree(min)
+  val res = inDup.reduceTree((x, y) => Mux(x.v < y.v, x, y))
   //- end
+
+
+  case class Pair(v: UInt, idx: UInt)
+
+  val v = io.in
+  // val z = Vec((0 until 5).toList.map(x => x.U))
+  val z = Wire(Vec(v.length, UInt(8.W)))
+  for (i <- 0 until v.length) z(i) := i.U
+  System.out.println(v)
+  System.out.println(z)
+  // This zip gives a Scala Vector, although the inputs are Chisel Vecs
+  val d = v.zip(z)
+  System.out.println(d)
+
+  val h = v.zipWithIndex
+  System.out.println(h)
+
+
+
+
 
   io.res := res.v
   io.idx := res.idx
+}
 
+object ScalaFunctionalMin {
+
+  def findMin(v: Seq[Int]) = {
+    v.zip((0 until v.length).toList).reduce((x, y) => if (x._1 <= y._1) x else y)
+  }
 }
 
 object FunctionalMin extends App {
