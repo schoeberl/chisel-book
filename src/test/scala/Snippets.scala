@@ -17,8 +17,10 @@ class Snippets extends FlatSpec with ChiselScalatestTester with Matchers {
   def testFun(dut: Dut) = {
     dut.io.in.poke(true.B)
     println(dut.io.out.peek())
+    dut.io.out.expect(false.B)
     dut.io.in.poke(false.B)
     println(dut.io.out.peek())
+    dut.io.out.expect(true.B)
   }
 
   "Combinational test with Treadle" should "pass" in {
