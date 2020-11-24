@@ -35,62 +35,57 @@ class FunctionalAdd extends Module {
 class FunctionalMin(n: Int, w: Int) extends Module {
   val io = IO(new Bundle {
     val in = Input(Vec(n, UInt(w.W)))
-    val res = Output(UInt(w.W))
-    val idx = Output(UInt(8.W))
+    val min = Output(UInt(w.W))
+    val resA = Output(UInt(w.W))
+    val idxA = Output(UInt(8.W))
+    val resB = Output(UInt(w.W))
+    val idxB = Output(UInt(8.W))
   })
 
 
 
   // class X (v: UInt(w.W), idx: UInt) extends Bundle
 
-  //- start fun_min
   // that would be the real functional thing with a tuple
   // def foo(x: (UInt, UInt), y: (UInt, UInt)) = Mux((x._1 < y._1), x, y)
-
   // TODO: I don't have the functional version right now to map a Vec to the tuple thing
-
   // doesn't like tuples here :-(
   // val inDup = Wire(Vec(n, (UInt, UInt)))
 
-  class Dup extends Bundle {
+  val vec = io.in
+
+  //- start fun_min
+  val min = vec.reduceTree((x, y) => Mux(x < y, x, y))
+  //- end
+
+  //- start fun_min2
+  class Two extends Bundle {
     val v = UInt(w.W)
     val idx = UInt(8.W)
   }
 
-  val inDup = Wire(Vec(n, new Dup()))
+  val vecTwo = Wire(Vec(n, new Two()))
   for (i <- 0 until n) {
-    inDup(i).v := io.in(i)
-    inDup(i).idx := i.U
+    vecTwo(i).v := vec(i)
+    vecTwo(i).idx := i.U
   }
 
-  // the less functional function
-  // def min(x: Dup, y: Dup) = Mux(x.v < y.v, x, y)
-
-  val res = inDup.reduceTree((x, y) => Mux(x.v < y.v, x, y))
+  val res = vecTwo.reduceTree((x, y) => Mux(x.v < y.v, x, y))
   //- end
 
+  //- start fun_min3
+  val resFun = vec.zipWithIndex
+    .map ((x) => (x._1, x._2.U))
+    .reduce((x, y) => (Mux(x._1 < y._1, x._1, y._1), Mux(x._1 < y._1, x._2, y._2)))
+  //- end
 
-  case class Pair(v: UInt, idx: UInt)
+  io.min := min
 
-  val v = io.in
-  // val z = Vec((0 until 5).toList.map(x => x.U))
-  val z = Wire(Vec(v.length, UInt(8.W)))
-  for (i <- 0 until v.length) z(i) := i.U
-  System.out.println(v)
-  System.out.println(z)
-  // This zip gives a Scala Vector, although the inputs are Chisel Vecs
-  val d = v.zip(z)
-  System.out.println(d)
+  io.resA := res.v
+  io.idxA := res.idx
 
-  val h = v.zipWithIndex
-  System.out.println(h)
-
-
-
-
-
-  io.res := res.v
-  io.idx := res.idx
+  io.resB := resFun._1
+  io.idxB := resFun._2
 }
 
 object ScalaFunctionalMin {

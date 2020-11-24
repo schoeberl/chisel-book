@@ -3782,7 +3782,7 @@ Let us start with a simple example, the sum of a vector:
 \shortlist{code/fun_first.txt}
 
 \noindent First we define the hardware for the adder in function \code{add}.
-The vector is located in \code{vec}. The Scala \code{reduce()} method combines
+The vector (Chisel type \code{Vec}) is located in \code{vec}. The Scala method \code{reduce()} combines
 all elements of a collection with a binary operation, producing a single value.
 The \code{reduce()} method reduces the sequence starting from the left.
 It takes the first two elements and performs the operation. The result is then combined
@@ -3805,12 +3805,51 @@ If we do not trust the synthesize tool to rearrange our adder chain, we can use 
 
 \shortlist{code/fun_reduce_tree.txt}
 
-Here a more elaborate example to find the minimum.
-\todo{Find a better coding and elaborate on it.}
+As a more elaborate example we build a circuit to find the minimum value in \code{vec}. To express this circuit
+we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
+literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
+
+\begin{chisel}
+  (param) => function body
+\end{chisel}
+
+\noindent The function literal for the minimum function uses two parameters \code{x} and \code{y}
+and returns a multiplexer (\code{Mux}) that compares the two parameters and returns the smaller
+value.
 
 \shortlist{code/fun_min.txt}
 
+Let us extend this circuit to return not only the minimal value from the \code{vec}, but also the
+position (index) in the \code{vec}. To return two values we define the Bundle \code{Two} to
+hold the value and the index. We declare the \code{vecTwo} \code{Vec} that can hold these bundles
+and connect them in a loop to the original input and the index within the \code{Vec}.
 
+As before we use an function literal in the \code{reduceTree} method of the \code{vecTwo},
+comparing the value field within the bundle and returning the complete bundle from the multiplexer.
+Value \code{res} points to the bundle containing the minimum value and the position.
+
+\shortlist{code/fun_min2.txt}
+
+As a final variation we using more Scala features to avoid creating the bundle to return the value
+and index. Scala has he notion of a \myref{https://en.wikibooks.org/wiki/Scala/Tuples}{tuple}
+that are immutable sequence of values of different types. The following code shows the application
+of a chain of functions to the original sequence. Chaining functions is a typical pattern in functional programming.
+This pattern can also be seen as a pipeline of operations.
+
+The first function (\code{zipWithIndex})
+transforms the original sequence to a sequence of tuples, where the second element is the index
+value. In general a \code{zip} function merges two sequences (zips them) into a single one
+containing the two elements as tuples. The next function maps our duple of a Chisel \code{UInt}
+and a Scala \code{Int} to two Chisel \code{UInt}s. The \code{reduce} function provides the generation of
+the minimum finding. We compare the first element of the tuple in two multiplexers and returning
+a tuple containing the minimum value and the position as Chisel \code{UInt} types.
+
+\shortlist{code/fun_min3.txt}
+
+Note that the whole functional expression uses a Scala \code{Vector} to hold intermediate results,
+but returns hardware (connected multiplexers) consisting of Chisel types only.
+As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is available on Chisel's
+\code{Vec} only.
  
 
 
