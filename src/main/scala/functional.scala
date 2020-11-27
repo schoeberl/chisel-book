@@ -1,4 +1,5 @@
 import chisel3._
+import chisel3.util._
 
 class FunctionalAdd extends Module {
   val io = IO(new Bundle {
@@ -40,6 +41,8 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     val idxA = Output(UInt(8.W))
     val resB = Output(UInt(w.W))
     val idxB = Output(UInt(8.W))
+    val resC = Output(UInt(w.W))
+    val idxC = Output(UInt(8.W))
   })
 
 
@@ -79,6 +82,15 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     .reduce((x, y) => (Mux(x._1 < y._1, x._1, y._1), Mux(x._1 < y._1, x._2, y._2)))
   //- end
 
+  //- start fun_min4
+  val resFun2 = vec.zipWithIndex
+    .map((x) => MixedVecInit(x._1, x._2.U))
+  System.out.println(resFun2)
+  // Hello
+
+
+  //- end
+
   io.min := min
 
   io.resA := res.v
@@ -86,6 +98,9 @@ class FunctionalMin(n: Int, w: Int) extends Module {
 
   io.resB := resFun._1
   io.idxB := resFun._2
+
+  io.resC := 0.U
+  io.idxC := 0.U
 }
 
 object ScalaFunctionalMin {
