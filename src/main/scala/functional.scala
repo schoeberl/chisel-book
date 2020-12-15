@@ -82,13 +82,18 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     .reduce((x, y) => (Mux(x._1 < y._1, x._1, y._1), Mux(x._1 < y._1, x._2, y._2)))
   //- end
 
+
+  // An implicit conversion, can be used as:
+  // val x = scalaVector.toVec
+  implicit class ToMixedVecConv[T <: Data](seq: Seq[T]) {
+    def toVec: Vec[T] = VecInit(seq)
+  }
+
   //- start fun_min4
-  val resFun2 = vec.zipWithIndex
-    .map((x) => MixedVecInit(x._1, x._2.U))
-  System.out.println(resFun2)
-  // Hello
-
-
+  val scalaVector = vec.zipWithIndex
+    .map((x) => MixedVecInit(x._1, x._2.U(8.W)))
+  val resFun2 = VecInit(scalaVector)
+    .reduceTree((x, y) => Mux(x(0) < y(0), x, y))
   //- end
 
   io.min := min
@@ -99,8 +104,8 @@ class FunctionalMin(n: Int, w: Int) extends Module {
   io.resB := resFun._1
   io.idxB := resFun._2
 
-  io.resC := 0.U
-  io.idxC := 0.U
+  io.resC := resFun2(0)
+  io.idxC := resFun2(1)
 }
 
 object ScalaFunctionalMin {

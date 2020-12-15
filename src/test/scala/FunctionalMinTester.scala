@@ -22,10 +22,12 @@ class FunctionalMinTester extends FlatSpec with ChiselScalatestTester with Match
       d.io.idxA.expect(2.U)
       d.io.resB.expect(1.U)
       d.io.idxB.expect(2.U)
+      d.io.resC.expect(1.U)
+      d.io.idxC.expect(2.U)
     }
   }
 
-    "FunctionalMin random tests" should "pass" in {
+  "FunctionalMin random tests" should "pass" in {
       val r = new scala.util.Random()
       for (n <- 0 until 5) {
         val size = r.nextInt(10) + 1
@@ -46,6 +48,8 @@ class FunctionalMinTester extends FlatSpec with ChiselScalatestTester with Match
           d.io.idxA.expect(idx.U)
           d.io.resB.expect(min.U)
           d.io.idxB.expect(idx.U)
+          d.io.resC.expect(min.U)
+          d.io.idxC.expect(idx.U)
         }
       }
     }
