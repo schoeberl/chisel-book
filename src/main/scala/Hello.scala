@@ -35,11 +35,15 @@ class Hello extends Module {
 }
 //- end
 
+// following does not produce a Verilog file
+// chisel3.stage.ChiselStage.emitVerilog(new Hello())
+
 /**
  * An object extending App to generate the Verilog code.
  */
+
 //- start generate
 object Hello extends App {
-  chisel3.stage.ChiselStage.emitVerilog(new Hello())
+  (new chisel3.stage.ChiselStage).emitVerilog(new Hello())
 }
 //- end
