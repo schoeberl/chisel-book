@@ -1,12 +1,16 @@
 
 DOC=chisel-book
 
-all: gencode fig book genslides
+all: test gencode fig book genslides
+
+#	scala scripts/gencode.scala
+
+test:
+	sbt test
 
 gencode:
 	-mkdir code
-	sbt test
-	scala scripts/gencode.scala
+	sbt -Dsbt.main.class=sbt.ScriptMain scripts/gencode.scala
 
 fig:
 	make -C figures
@@ -34,9 +38,6 @@ chisel:
 	sbt "runMain Counter"
 	sbt "test:runMain RegisterTester"
 	sbt "test:runMain LogicTester"
-
-test:
-	sbt test
 
 # test only one
 flasher:
