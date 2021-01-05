@@ -343,11 +343,6 @@ object Assembler {
         case "ori" => (ORI << 8) + toInt(tokens(1))
         case "xori" => (XORI << 8) + toInt(tokens(1))
         case "shr" => (SHR << 8)
-        // ...
-        case "" => // println("Empty line")
-        case t: String => throw new Exception("Assembler error: unknown instruction: " + t)
-        case _ => throw new Exception("Assembler error")
-        //- end
         case "loadi" => (LDI << 8) + toInt(tokens(1))
         case "loadhi" => (LDHI << 8) + toInt(tokens(1))
         case "loadh2i" => (LDH2I << 8) + toInt(tokens(1))
@@ -366,7 +361,12 @@ object Assembler {
         case "in" => (IN << 8) + toInt(tokens(1))
         case "out" => (OUT << 8) + toInt(tokens(1))
         case "scall" => (SCALL << 8) + toInt(tokens(1))
+        // ...
+        case "" => // println("Empty line")
+        case t: String => throw new Exception("Assembler error: unknown instruction: " + t)
+        case _ => throw new Exception("Assembler error")
       }
+      //- end
 
       instr match {
         case (a: Int) => {

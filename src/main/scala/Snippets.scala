@@ -105,5 +105,5 @@ class Snippets extends Module {
 }
 
 object Snippets extends App {
-  chisel3.Driver.execute(Array("--target-dir", "generated"), () => new Conditional())
+  (new chisel3.stage.ChiselStage).emitVerilog(new Conditional(), Array("--target-dir", "generated"))
 }

@@ -10,7 +10,7 @@ class FlasherBase extends Module {
 
 class Flasher extends FlasherBase {
 
-  val start = io.start.toBool
+  val start = io.start.asBool
 
   // Maybe signals should be Bool?
   //- start flasher_fsm
@@ -79,7 +79,7 @@ class Flasher extends FlasherBase {
 
 class Flasher2 extends FlasherBase {
 
-  val start = io.start.toBool
+  val start = io.start.asBool
 
   //- start flasher2_fsm
   val off :: flash :: space :: Nil = Enum(3)

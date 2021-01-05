@@ -8,11 +8,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-
-// libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
-// libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.3.2"
-
-// TODO: towards Chisel x.3/4
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.4.2"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.2.2"
+// Chisel 3.4
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
 

@@ -40,6 +40,6 @@ class Hello extends Module {
  */
 //- start generate
 object Hello extends App {
-  chisel3.Driver.execute(Array[String](), () => new Hello())
+  chisel3.stage.ChiselStage.emitVerilog(new Hello())
 }
 //- end

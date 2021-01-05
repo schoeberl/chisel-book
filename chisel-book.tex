@@ -271,6 +271,15 @@ shows how to design a debouncing circuit, and how to filter a noisy input signal
 The example designs chapter has been extended to show different implementations of a FIFO.
 The FIFO variations also show how to use type parameters and inheritance in digital design. 
 
+\section*{Foreword for the Third Edition}
+
+Chisel has been moving forward in the last year, so it is time for a new edition
+of the Chisel book.
+
+We changed all examples to the latest version of Chisel (3.4.1) and the recommended
+Scala version (2.12.12).
+
+
 \section*{Acknowledgements}
 
 I want to thank everyone who has worked on Chisel for creating such
@@ -1498,16 +1507,18 @@ For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel lib
 we need a \code{build.sbt}:
 
 \begin{chisel}
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.12"
+
+scalacOptions := Seq("-deprecation", "-Xsource:2.11")
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases")
 )
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.3.2"
-
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
+// Chisel 3.4.1 is loaded as a dependency on the testers
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on

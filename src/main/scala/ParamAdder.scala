@@ -33,6 +33,5 @@ class UseAdder extends Module {
 }
 
 object UseAdder extends App {
-  // chisel3.Driver.execute(Array[String](), () => new UseAdder())
-  println(chisel3.Driver.emitVerilog(new UseAdder()))
+  println(chisel3.stage.ChiselStage.emitVerilog(new UseAdder()))
 }

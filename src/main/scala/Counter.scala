@@ -110,5 +110,5 @@ class NerdCounter(n: Int) extends Counter(n) {
 }
 
 object Counter extends App {
-  chisel3.Driver.execute(Array("--target-dir", "generated"), () => new WhenCounter(10))
+  (new chisel3.stage.ChiselStage).emitVerilog(new WhenCounter(10), Array("--target-dir", "generated"))
 }
