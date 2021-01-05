@@ -534,14 +534,14 @@ class Adder extends Module {
 
 \begin{itemize}
 \item Create one top-level Module
-\item Invoke the Chisel driver from the App
+\item Invoke the Chisel code emitter from the App
 \item Pass the top module (e.g., \code{new Hello()})
 \item Optional: pass some parameters (in the \code{Array})
 \item Following code generates Verilog code for \emph{Hello World}
 \end{itemize}
 \begin{chisel}
 object Hello extends App {
-  chisel3.Driver.execute(Array[String](), () => new Hello())
+  (new chisel3.stage.ChiselStage).emitVerilog(new Hello())
 }
 \end{chisel}
 \end{frame}
@@ -653,9 +653,18 @@ module Hello(
 \item Build info in \code{build.sbt} for \code{sbt}:
 \end{itemize}
 \begin{chisel}
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.12"
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.2.2"
+scalacOptions := Seq("-deprecation", "-Xsource:2.11")
+
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases")
+)
+
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
+// Chisel 3.4.1 is loaded as a dependency on the testers
 \end{chisel}
 \end{frame}
 
