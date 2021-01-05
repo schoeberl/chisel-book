@@ -1,7 +1,7 @@
 
 DOC=chisel-book
 
-all: gencode fig book
+all: gencode fig book genslides
 
 gencode:
 	-mkdir code
@@ -17,6 +17,9 @@ book:
 	makeindex $(DOC)
 	pdflatex $(DOC)
 	pdflatex $(DOC)
+
+genslides:
+	cd slides; ./doslides.sh
 
 veryclean:
 	git clean -fd
