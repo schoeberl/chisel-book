@@ -4632,11 +4632,163 @@ design and implementation is no magic art, but the engineering that can be very 
 \index{Chisel!Contribution}
 
 Chisel is an open-source project under constant development and improvement.
-Therefore, you can also contribute to the project. Here we describe how to
+Therefore, you can also contribute to the project. Your contribution can be twofold:
+(1) publish your Chisel circuits in open-source and as a library or (2) contribute
+enhancements to Chisel itself.
+Here we describe first, how to publish a library and second, how to
 set up your environment for Chisel library development and how to contribute
 to Chisel.
 
-\section{Setup the Development Environment}
+\section{Publishing a Chisel Library}
+
+When you develop a circuit in open-source and share it on e.g., GitHub,
+this a very educational act, as other can learn describing hardware in Chisel from your code example.
+However, sharing just the source code forces other to copy your code into their
+project. This leads to at least two problems: (1) \emph{Two copies are never the
+same}\footnote{I learned this phrase from Doug Locke during discussion sessions
+developing the safety-critical specification for Java}. This means that changes will
+happen to the source and they are not in sync anymore.
+(2) It is cumbersome to update the copy when the original design has been improved
+with a bug fix or a new feature.
+
+A better approach is to publish that open-source circuit as a library.
+Compiled Chisel code are simply Java class files. And those class files are
+platform independent. Therefore, this is an ideal way to share Chisel libraries.
+Java (and Scala) have a long tradition and good infrastructure to support
+public sharing of libraries with unique group identifiers and version control.
+That is also the way Chisel itself, and some support libraries are published.
+
+This section describes the steps needed to publish a Chisel library. As the tools you
+use for publishing may change quickly, consider finding the latest information on the
+Internet. A good block entry on the topic can be found
+\myref{https://medium.com/rahasak/publish-scala-library-project-to-maven-central-with-sonatype-d7edaa67d275}{here}.
+
+\subsection{Using a Library}
+
+A Chisel library can be used in your project by adding it to \code{build.sbt}. Here as and
+example a collection of Chisel circuits in \myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}:
+
+\begin{verbatim}
+libraryDependencies += "edu.berkeley.cs" % "ip-contributions" % "0.4.0"
+\end{verbatim}
+
+\noindent The \code{ip-contributions} library contains also the UART and the FIFOs, described in this book.
+Modern IDEs let you automatically download the source code of the library for inspection, when configured
+in \code{build.sbt}.
+
+If you have a Chisel circuit that you would like to share, consider contributing it to \code{ip-contributions}.
+Contribution starts with a git pull request of your addition. This will start a friendly review process.
+
+\subsection{Prerequisite}
+
+\myref{https://mvnrepository.com/repos/central}{Maven Central} is one of the largest repository
+hosting software libraries. Publishing to Maven Central is easiest via
+\myref{https://www.sonatype.com/}{Sonatype}. Sonatype offers free hosting of open-source
+projects via the \myref{https://central.sonatype.org/pages/ossrh-guide.html}{Sonatype Repository}.
+Following initial steps are needed before publishing a library:
+
+\begin{enumerate}
+\item Create a Sonatype account, a \myref{https://issues.sonatype.org/secure/Signup!default.jspa}{JIRA account}
+\item You need a unique \code{groupId}, which is usually a domain name in reverse order, e.g., \code{edu.berkeley.cs}.
+You can also use your GitHub account as a groupId, e.g., mine is \code{io.github.schoeberl}. You register this groupId
+by opening an \myref{https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134}{issue}.
+This is a manual process where you get a request to prove that you \emph{own} the requested groupId.
+When using the GitHub domain name, you are requested to setup a repository to show your ownership.
+\item Create \code{sonatype.sbt} in \code{\$HOME/.sbt/1.0} with your Sonatype login information:
+\begin{verbatim}
+credentials += Credentials(
+    "Sonatype Nexus Repository Manager",
+    "oss.sonatype.org",
+    "<user name>",
+    "<password>"
+)
+\end{verbatim}
+\item All artefacts must be signed with a \myref{https://en.wikipedia.org/wiki/Pretty_Good_Privacy}{PGP} key pair.
+You can use the open-source \myref{https://en.wikipedia.org/wiki/GNU_Privacy_Guard}{GNU Privacy Guard}.
+You can create, list, and upload your public PGP key with:
+\begin{verbatim}
+gpg --gen-key
+gpg --list-keys
+gpg --keyserver keyserver.ubuntu.com --send-keys keyID
+\end{verbatim}
+\end{enumerate}
+
+\subsection{Library Setup}
+
+Per library you need to setup following once:
+
+\begin{enumerate}
+\item Install sbt plugins in \code{project/plugins.sbt}:
+\begin{verbatim}
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.2")
+\end{verbatim}
+\item Add information of the library into \code{build.sbt}. Here as an example
+the relevant section of \myref{https://github.com/freechipsproject/ip-contributions/blob/master/build.sbt}{build.sbt}
+in \code{ip-contributions}:
+\end{enumerate}
+
+{\small
+\begin{verbatim}
+name := "ip-contributions"
+
+version := "0.4.0"
+
+// groupId, SCM, license information
+organization := "edu.berkeley.cs"
+homepage := Some(url("https://github.com/freechipsproject/ip-contributions"))
+scmInfo := Some(ScmInfo(url("https://github.com/freechipsproject/ip-contributions"),
+  "git@github.com/freechipsproject/ip-contributions"))
+developers := List(Developer("schoeberl", "schoeberl", "martin@jopdesign.com",
+  url("https://github.com/schoeberl")))
+licenses += ("Unlicense", url("https://unlicense.org/"))
+publishMavenStyle := true
+
+// disable publish with Scala version
+crossPaths := false
+
+publishTo := Some(
+  if (isSnapshot.value)
+    Opts.resolver.sonatypeSnapshots
+  else
+    Opts.resolver.sonatypeStaging
+)
+\end{verbatim}
+}
+
+\subsection{Regular Publishing}
+
+All is now setup to sign and publish the library to Sonatype with:
+
+\begin{verbatim}
+sbt publishSigned
+\end{verbatim}
+
+In my setup the sign from \code{sbt} does not work, so I have to copy
+out the \code{pgp} command to sign, something similar to:
+
+\begin{verbatim}
+gpg --detach-sign --armor --use-agent --output path-to.asc path-to-0.1.pom
+\end{verbatim}
+
+\noindent and repeat \code{sbt publishSigned}.
+
+You can already use that library from Sonatype, e.g., for an internal project.
+However, to release your library to Maven Central run:
+
+\begin{verbatim}
+sbt sonatypeRelease
+\end{verbatim}
+
+A few minutes later it should be visible on \myref{https://search.maven.org/}{Maven Central
+Repository Search}.
+
+\section{Contributing to Chisel}
+
+The following is an advanced topic and I propose you first start following the discussion
+of the project issues on GitHub.
+
+\subsection{Setup the Development Environment}
 
 Chisel consists of several different repositories; all hosted at
 the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
@@ -4700,7 +4852,7 @@ library.)
 See also \myref{https://github.com/freechipsproject/chisel3}{some notes
 at the Chisel repo}.
 
-\section{Testing}
+\subsection{Testing}
 
 When you change the Chisel library, you should run the Chisel tests.
 In an \code{sbt} based project, this is usually run with:
@@ -4712,7 +4864,7 @@ $ sbt test
 Furthermore, if you add functionality to Chisel, you should also provide tests for the
 new features.
 
-\section{Contribute with a Pull Request}
+\subsection{Contribute with a Pull Request}
 
 In the Chisel project, no developer commits directly to the main repository.
 A contribution is organized via a
