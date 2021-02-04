@@ -18,12 +18,80 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
+\item Remote teaching and learning
 \item Motivation and the digital abstraction
 \item Course organization
 \item Languages for digital hardware design
 %\item Testing (see 2.1.4)
 \item A first round of Chisel
 \item Tools and tool setup
+\item Lab: a hardware ``Hello World''
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Remote Learning}
+\begin{itemize}
+\item First: this is all new for the most of us
+\begin{itemize}
+\item We need to be patient with each other
+\end{itemize}
+\item We should use Slack for quicker communication
+\item Zoom for lecturing and lab: you are already there
+\item Please have your camera on
+\item Please mute your mic when not talking
+\item Some nice features
+\begin{itemize}
+\item You can raise your hand
+\item You can ask questions with the mic or on chat
+\item Everyone can share their screen or an individual window
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab/Exercise Organization}
+\begin{itemize}
+\item Everyone at DTU can use the professional version of Zoom
+\begin{itemize}
+\item \url{http://dtudk.zoom.us/signin}
+\end{itemize}
+\item You can also use Zoom for your group work
+\item Zoom will also be used for the supervised lab
+\begin{itemize}
+\item We will keep this Zoom meeting running with breakout rooms
+\item Schedule a TA for help with Slack
+\item You can also schedule a Zoom meeting with me at other times
+\end{itemize}
+\item This is a chance to learn how to collaborate remotely
+\begin{itemize}
+\item This will be part of your future work as an engineer anyway
+\end{itemize}
+\item This experiment might change how we teach in the future
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab Work}
+\begin{itemize}
+\item We will stick to the plan of a working Vending Machine
+\begin{itemize}
+\item At the end it shall run in your FPGA board
+\item I am a big fan of running stuff in real hardware
+\end{itemize}
+\item Demo your work to a TA via the camera
+\item I know many groups have only one physical FPGA board
+\item A lot can be done in simulation
+\item I developed a simulation of the Basys3 board (during last lockdown)
+\item I assume you will find a solution for file sharing
+\begin{itemize}
+\item GitHub is a popular one for source code
+\item Can also be used if you plan to write your report in LaTeX
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Questions?}
+\begin{itemize}
+\item On lectures
+\item On the group/lab work
 \end{itemize}
 \end{frame}
 
@@ -60,6 +128,7 @@ Embedded Systems Engineering}
 \item \href{https://www.intel.com/content/www/us/en/products/docs/storage/programmable/applications/cloud.html}{Intel offers FPGAs for servers}
 \begin{itemize}
 \item There was some reason why Intel bought Altera
+\item And why AMD will buy Xilinx
 \end{itemize}
 \item We need digital designers to make this work
 \item A good time to be a digital designer
@@ -95,10 +164,15 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Hardware Design in DK}
 \begin{itemize}
 \item Demant (former Oticon)
-\item Widex
+\item WSAudiology (former Widex)
 \item GN ReSound
 \item Microsemi
 \item Intel (former Altera) Denmark
+\item SyoSil
+\item Comcores
+\item Synopsys
+\item Napatech
+\item Teledyn
 \item probably some more...
 \item 
 \item They are all hiring
@@ -107,9 +181,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Example Design from Microsemi DK}
 A picture of the board with the \$50k Xilinx FPGA. This is a new board and is developed for ASIC prototyping in order to do pre-silicon validation as well as SW development. We have on the board currently mapped our current project: 8port industrial gigabit Ethernet switch with full TSN, CPU system ARM A7 with DDR, USB, PCIe and hardware security engines (SHA, AES) for secure boot of Linux and on the fly DRAM encryption. We scale and map all the digital logic to the FPGA.
-\begin{itemize}
-\item Show the picture
-\end{itemize}
+%\begin{itemize}
+%\item Show the picture
+%\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Digital Design within an EE Master}
@@ -154,7 +228,7 @@ A picture of the board with the \$50k Xilinx FPGA. This is a new board and is de
 
 \begin{frame}[fragile]{Web Resources}
 \begin{itemize}
-\item \href{https://cn.inside.dtu.dk/cnnet/element/612883/frontpage}{DTU Inside}
+\item \href{https://learn.inside.dtu.dk/d2l/home}{DTU Learn}
 \begin{itemize}
 \item Vending machine document
 \item Project report hand in
@@ -201,28 +275,28 @@ A picture of the board with the \$50k Xilinx FPGA. This is a new board and is de
 \begin{itemize}
 \item The Internet, Google, and Stackoverflow
 \item Your fellow students (e.g., via Slack)
-\item The TAs: \href{https://cn.inside.dtu.dk/cnnet/element/612883/participants}{Simon, Kasper, and Anthon}
+\item The TAs: Kasper and Tjark
 \item Me
 \end{itemize}
 \item We will use Slack for easy communication (if ok for you)
 \begin{itemize}
-\item \url{https://de2019.slack.com/}
+\item \url{https://de2021.slack.com/}
 \end{itemize}
-\item You can always just knock on my door or shoot me an email
+\item You can always just (virtually) knock on my door or shoot me an email
 \item There is also anonymous feedback
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Anonymous Feedback}
-\begin{itemize}
-\item Inbox available at: 
-\href{https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link}{Anonymous Inbox}
-\item Simple Google form without revealing your identity
-\item I will get notified by an email
-\item Use when you want to complain, give feedback, but also when you like something ;-)
-\item Even when frustrated, please be polite, a human is reading this
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Anonymous Feedback}
+%\begin{itemize}
+%\item Inbox available at: 
+%\href{https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link}{Anonymous Inbox}
+%\item Simple Google form without revealing your identity
+%\item I will get notified by an email
+%\item Use when you want to complain, give feedback, but also when you like something ;-)
+%\item Even when frustrated, please be polite, a human is reading this
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Cheating and Plagiarism}
 \begin{itemize}
@@ -369,6 +443,16 @@ Lipsi: Probably the Smallest Processor in the World}
 %\end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{20 Minutes Break}
+\begin{itemize}
+\item An active break
+\item In Engineering we often use drawings for communication
+\item How can we do this interactive in home office?
+\item Use your smartphone with Zoom!
+\item Break work: build your own smartphone camera stand
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Why Chisel Instead of VHDL/Verilog/SystemVerilog?}
 \begin{itemize}
 \item Company O does Verilog, company W does VHDL
@@ -387,7 +471,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{More on Chisel Success Stories}
 \begin{itemize}
-\item Last week at CCC 2020 in silicon valley
+\item Last year at CCC 2020 in silicon valley
 \item 90 participants
 \item More than 30 different chip companies present
 \item Several companies are looking into Chisel
@@ -751,19 +835,23 @@ the output of the register can be used just with the name in an expression:
 \item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
 \item IntelliJ as from the website
 \end{itemize}
-\item If setup fails, we have you covered with the databar PCs
+% \item If setup fails, we have you covered with the databar PCs
+\item If setup fails, we have you covered with a Virtual Machine
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Virtual Machine Setup for Chisel}
 \begin{itemize}
 \item Ubuntu based
-\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
 \item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
 \begin{itemize}
 \item But this is VERY large (40 GB for the .zip file)
 \end{itemize}
+\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
 \item Use the  \href{https://www.vmware.com/products/workstation-player.html} {VMWare Workstation Player} (free for Linux and Windows)
+\begin{itemize}
+\item Use payed VMWare Fusion for macOS
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -852,6 +940,14 @@ the output of the register can be used just with the name in an expression:
 \item Chisel builds on the power of object-oriented and functional Scala
 %\item Chisel is good for hardware generators
 % \item You can get started with a hardware design in a special course or 4th semester project
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Let's have a Chat}
+\begin{itemize}
+\item I will put you in random breakout rooms
+\item Step in to chat, answer questions
+\item Just a few minutes, then is lab time
 \end{itemize}
 \end{frame}
 
