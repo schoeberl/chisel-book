@@ -42,8 +42,7 @@ First part is usually lectures and second part is reserved for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
-The course is lectured in building 303A, room 44. The lab is in building
-308, rooms 117 and 127.
+The course is lectured online on Zoom. Link is in DTU Learn.
 
 ### Pensum List
 
@@ -88,18 +87,14 @@ The Schoeberl book is open access and freely available.
  * [The Chisel Book](http://www.imm.dtu.dk/%7Emasca/chisel-book.html)
  * [Chisel](https://www.chisel-lang.org/)
 
-## Feedback
-
-To keep the course running fine and allow me to react to your feedback, I have setup an anonymous
-Google form where you can send in what you like and (for sure) what you doin't like on this course.
-
- * [Anonymous Feedback Inbox](https://docs.google.com/forms/d/e/1FAIpQLSclKyEM_foF7U0TF-CoIZhla5EFEcE8-EGD7Jvle6TBB90WZw/viewform?vc=0&c=0&w=1&usp=mail_form_link)
 
 ## Instructor
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
 
-## Lecture Plan (2020)
+## Lecture Plan (2021)
+
+*This lecture plan may change during the semester, adapting to the current teaching situation.*
 
 ### Week 1 Introduction
 
@@ -125,20 +120,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** [Combinational circuits in Chisel](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 3 Timing (guest lecture by Jens Sparsø)
-
-**Topics:** Delay and Power, Timing, and Metastability
-
-**Slides:** in DTU Inside
-
-**Reading:** Dally: 15.1-15.6, and 28.1-28.4
-
-**Optional reading:** Dally: 5.1-5.4 (replaced by slides)
-
-**Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
-
-
-### Week 4 Components and Sequential Circuits
+### Week 3 Components and Sequential Circuits
 
 **Topics:** Composing circuits out of components, sequential building blocks, using CLI
 
@@ -149,7 +131,7 @@ Google form where you can send in what you like and (for sure) what you doin't l
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 5 Testing and Verification
+### Week 4 Testing and Verification
 
 **Topics:** Sequential building blocks, testing and verification in Chisel,
 waveform viewing
@@ -159,6 +141,19 @@ waveform viewing
 **Reading:** Dally: 2.1.4 and 20, Chisel: 3
 
 **Lab:** [Hexadecimal to 7-segment decoder](https://github.com/schoeberl/chisel-lab)
+
+
+### Week 5 Timing (guest lecture by Jens Sparsø)
+
+**Topics:** Delay and Power, Timing, and Metastability
+
+**Slides:** in DTU Inside
+
+**Reading:** Dally: 15.1-15.6, and 28.1-28.4
+
+**Optional reading:** Dally: 5.1-5.4 (replaced by slides)
+
+**Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 
 ### Week 6 State Machines
@@ -194,6 +189,8 @@ waveform viewing
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
 
+### Easter Week
+
 
 ### Week 9 Communications State Machines (1 hour)
 
@@ -204,10 +201,6 @@ waveform viewing
 **Reading:** Dally: 22, Chisel: 7, 9.3
 
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
-
-
-
-### Easter Week
 
 
 ### Week 10 Digital Exam and Vending Machine Specification (1/2 hour)
@@ -235,7 +228,7 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 13 2nd Test Exam, Outro, A Simple Processor
+### Week 13 Outro, A Simple Processor
 
 **Topics:** Lipsi as a simple processor, Discussion of course, and followup courses
 

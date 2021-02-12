@@ -19,12 +19,12 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Quick repeat of last lecture
+\item Quick recap of last lecture
 \begin{itemize}
 \item If something is unclear, please ask!
 \end{itemize}
 \item Basic digital building blocks
-\item And the coding in Chisel
+\item And the coding of it in Chisel
 \item Some coding style
 \end{itemize}
 \end{frame}
@@ -34,7 +34,7 @@ Embedded Systems Engineering}
  
 \column{0.5\textwidth}
 \begin{itemize}
-\item Just two values: 0 and 1, or low and hight
+\item Just two values: 0 and 1, or low and high
 \item Represented as voltage
 \item Digital signals tolerate noise
 \item Digital Systems are \emph{simple}, just:
@@ -148,9 +148,26 @@ Embedded Systems Engineering}
 \shortlist{../code/bool_ops.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Operators}
+\begin{itemize}
+\item Operators precedence is the same as in Java
+\begin{itemize}
+\item E.g., \code{*} has precedence over \code{+}
+\item But different in VHDL or Verilog
+\item Use parentheses when unsure (especially for logical expressions)
+\end{itemize}
+\item \code{+} and \code{-} is relatively cheap
+\item \code{*} is expensive, know what you do
+\item \code{/} and \code{\%} is VERY expensive, usually no direct use in hardware
+\begin{itemize}
+\item Implement as a multi-cycle operation
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Wires}
 \begin{itemize}
-\item A signal (or wire) can be first defined
+\item A wire (a signal) can be first defined
 \item And later assigned an expression with \code{:=}
 \end{itemize}
 \shortlist{../code/wire.txt}
@@ -219,6 +236,9 @@ the output of the register can be used just with the name in an expression:
 \item Get better at using your computer
 \item Learn some tools
 \item Don't be afraid of the command line ;-)
+\begin{itemize}
+\item Show \code{sbt} usage
+\end{itemize}
 \item
 \item
 \item Engineers are power users!
@@ -231,7 +251,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item What does that mean?
 \item \href{https://en.wikipedia.org/wiki/Git}{Wikipedia on git}
-\item Draw a figure
+% \item Draw a figure
 \end{itemize}
 \item To manage source code or other documents
 \item Track changes in computer files
@@ -239,6 +259,7 @@ the output of the register can be used just with the name in an expression:
 \item Good tool for cooperation
 \item Mostly used at the command line
 \item But graphical clients are available (i.e., with a GUI)
+\item Show the CLI commands
 \end{itemize}
 \end{frame}
 
@@ -473,7 +494,7 @@ the output of the register can be used just with the name in an expression:
 \begin{itemize}
 \item Sequential building blocks
 \begin{itemize}
-\item Contain a register
+\item Contains a register
 \item Plus combinational circuits
 \end{itemize}
 \end{itemize}
@@ -559,8 +580,11 @@ the output of the register can be used just with the name in an expression:
 \item Starting from 0 is common in computer engineering
 \end{itemize}
 \item A counter is the hardware version of a \emph{for loop}
+\begin{itemize}
+\item But runs forever (over and over again)
+\end{itemize}
 \item Often needed
-\item Can you draw the schematic?
+\item Can we draw the schematic?
 \end{itemize}
 \end{frame}
 
@@ -569,7 +593,7 @@ the output of the register can be used just with the name in an expression:
   \includegraphics[scale=\scale]{../figures/event-counter}
 \end{figure}
 \begin{itemize}
-\item Is the schematics and the code the same?
+\item The Chisel book has a slightly different figure
 \end{itemize}
 \shortlist{../code/sequ_event_counter.txt}
 \end{frame}
@@ -634,10 +658,6 @@ type, we need to pass a prototype for the vector fields. Using our
 \begin{itemize}
 \item Combinational circuits in Chisel
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab2}{Lab 2 Page}
-\item You need to download again, as I have updated the lab
-\begin{itemize}
-\item Or learn to use git and do a  \code{git pull} ;-)
-\end{itemize}
 \item Each exercise contains a test, which initially fails
 \item \code{sbt test} runs them all
 \begin{itemize}
@@ -682,15 +702,15 @@ When all test succeed your are done ;-)
 \item ...
 \end{itemize}
 \item Will show you some constructs for a more \emph{elegant} style
-\item Next lecture is given by Jens Sparsoe and is on timing
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Questions and Feedback}
+\begin{itemize}
+\item Let us have a quick round in the breakout rooms
+\end{itemize}
+\end{frame}
 
 \end{document}
 
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item abc
-\end{itemize}
-\end{frame}
+
