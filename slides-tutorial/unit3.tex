@@ -259,15 +259,10 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 
 \begin{itemize}
 \item Create one top-level Module
-\item Invoke the Chisel driver from the Scala \code{main} (or App)
-\item Pass some parameters and the top module
+\item Invoke the Verilog emitter from the Scala \code{main} (or App)
 \item Following code generates Verilog code
 \end{itemize}
-\begin{chisel}
-object Hello extends App {
-  chisel3.Driver.execute(Array[String](), () => new Hello())
-}
-\end{chisel}
+\shortlist{../code/generate.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Chisel Main for Testing}
@@ -498,10 +493,20 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item Chisel is a library in Scala
+\item RTL circuits are described in (plain) Chisel
+\item Scala is the meta-circuit description language
+\item Scala is used to write circuit generators
+\item You write your tests in Scala
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Simulation Lab Session}
 \begin{itemize}
 \item Components and Small Sequential Circuits
-\item \url{https://github.com/schoeberl/chisel-lab/tree/master/lab4}
+\item \url{https://github.com/schoeberl/chisel-lab/tree/master/lab3}
 \end{itemize}
 \end{frame}
 
