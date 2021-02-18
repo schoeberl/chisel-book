@@ -124,7 +124,7 @@ The Schoeberl book is open access and freely available.
 
 **Topics:** Composing circuits out of components, sequential building blocks, using CLI
 
-**Slides:** [04_sequential.pdf](04_sequential.pdf)
+**Slides:** [03_sequential.pdf](03_sequential.pdf)
 
 **Reading:** Dally: 16.1 and 16.2 Chisel: 3.1, 3.2, 4 and 6
 

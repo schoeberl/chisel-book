@@ -31,11 +31,12 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Admin}
 \begin{itemize}
 \item How is the lab work going so far?
-\item Start to organize yourself in groups of 2--3
+\item Start to organize yourself in groups of 2--3 
 \begin{itemize}
-\item You can ask for finding a group via slack
+\item 1 is also OK
+\item You can ask for finding a group via slack (in channel general)
 \end{itemize}
-\item Register at \href{https://docs.google.com/spreadsheets/d/1Hp81EyFYYvjm336DrwtCym9oRQUEzRKe6VceFp0ZCAQ/edit?usp=sharing}{Google spreadsheet}
+\item Register at \href{https://docs.google.com/spreadsheets/d/1aQs_VnPw3uiJxUz9WuzPcM1R6VkDXqPtri7a3pWoTvs/edit?usp=sharing}{Google spreadsheet}
 \end{itemize}
 \end{frame}
 
@@ -53,7 +54,11 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{The Vending Machine}
 \begin{itemize}
 \item Final project is a vending machine
-\item \emph{Specification document is in DTU Inside (show it)}
+\item Specification document is in DTU Learn (show it)
+\begin{itemize}
+\item \href{https://learn.inside.dtu.dk/d2l/common/viewFile.d2lfile/Content/L2NvbnRlbnQvZW5mb3JjZWQvNjAyMzgtT0ZGRVJJTkctNjMzODE1L1ZlbmRpbmdNYWNoaW5lLnBkZg/VendingMachine.pdf?ou=60238}{VendingMachine.pdf}
+\item Please test if you can download it
+\end{itemize}
 \item Inputs: coins, buy
 \item Display: price and current amount
 \item Output: release can or error
@@ -405,9 +410,12 @@ val orVal = x || y
 
 
 
-\begin{frame}[fragile]{Components}
+\begin{frame}[fragile]{Components/Modules}
 \begin{itemize}
 \item Components are building blocks
+\begin{itemize}
+\item Components and modules are two names for the same thing
+\end{itemize}
 \item Components have input and output ports (= pins)
 \begin{itemize}
 \item Organized as a \code{Bundle}
@@ -422,15 +430,10 @@ val orVal = x || y
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Hierarchy of Components Example}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/components}
-\end{figure}
-\end{frame}
-
 
 \begin{frame}[fragile]{Input/Output Ports}
 \begin{itemize}
+\item Ports are the \emph{interface} to a module
 \item Ports are bundles with directions
 \item Ports used to connect modules
 \end{itemize}
@@ -668,6 +671,15 @@ libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Show It}
+\begin{itemize}
+\item The absolute minimum is two files
+\begin{itemize}
+\item \code{build.sbt}
+\item A single \code{.scala} file
+\end{itemize}
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Sequential Building Blocks}
@@ -879,7 +891,7 @@ object CounterTester extends App {
 \begin{frame}[fragile]{Lab Today}
 \begin{itemize}
 \item Components and Small Sequential Circuits
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab4}{Lab 4 Page}
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab3}{Lab 3 Page}
 \item You need to download again, as I have updated the lab
 \begin{itemize}
 \item Or learn to use git and do a  \code{git pull} ;-)
@@ -890,7 +902,7 @@ object CounterTester extends App {
 \item To just run a single test, run e.g.,\\
 \code{sbt "testOnly SingleTest"}
 \end{itemize}
-When all test succeed your are done ;-)
+When all tests succeed your are done ;-)
 \item Except: additional some drawing exercise
 \end{itemize}
 \end{frame}
