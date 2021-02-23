@@ -51,16 +51,6 @@ class ParamChannel(n: Int) extends Bundle {
 }
 
 
-class Adder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
 
 class Conditional extends Module {
   val io = IO(new Bundle {

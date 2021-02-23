@@ -1,7 +1,7 @@
 import chisel3._
 import chisel3.iotesters._
 
-class RegisterTester(c: Register) extends PeekPokeTester(c) {
+class RegisterTester(c: Registers) extends PeekPokeTester(c) {
   
   peek(c.io.out)
   poke(c.io.in, 13)
@@ -14,7 +14,7 @@ class RegisterTester(c: Register) extends PeekPokeTester(c) {
  */
 object RegisterTester {
     def main(args: Array[String]): Unit = {
-    chisel3.iotesters.Driver(() => new Register()) { c =>
+    chisel3.iotesters.Driver(() => new Registers()) { c =>
       new RegisterTester(c) }
   }
 }

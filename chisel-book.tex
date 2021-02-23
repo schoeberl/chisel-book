@@ -1585,14 +1585,6 @@ Xilinx Spartan).
 \index{Module}
 \index{Ports}
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=\scale]{figures/components}
-  \caption{A design consisting of a hierarchy of components.}
-  \label{fig:components}
-\end{figure}
-
-
 A larger digital design is structured into a set of components, often in
 a hierarchical way. Each component has an interface with input and output
 wires, usually called ports. These are similar to input and output pins on an integrated circuit (IC).
@@ -1601,18 +1593,12 @@ Components may contain subcomponents to build the hierarchy.
 The outermost component, which is connected to physical pins
 on a chip, is called the top-level component.
 
-Figure~\ref{fig:components} shows an example design. Component C has
-three input ports and two output ports. The component itself is assembled out
-of two subcomponents: B and C, which are connected to the inputs and
-outputs of C. One output of A is connected to an input of B.
-Component D is at the same hierarchy level as component C and connected
-to it.
-
 In this chapter, we will explain how components are described in Chisel and
-provide several examples of standard components.
-Those standard components serve two purposes: (1) they provide examples
-of Chisel code and (2) they provide a library of components ready to be reused
-in your design.
+provide several simple examples of components.
+Note that the components in this section are very small (e.g., just an adder),
+just to show the principles how to define, instantiate, and connect components.
+Real-world examples should contain more ``meat'' then just a single line for
+an adder.
 
 \section{Components in Chisel are Modules}
 
@@ -1625,6 +1611,58 @@ The \code{Bundle} contains fields to represent input and output ports of
 the module. The direction is given by wrapping a field into either a call to \code{Input()}
 or \code{Output()}. The direction is from the view of the component itself.
 
+We show an example design where we build a counter out of two components:
+an adder and a register.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/components-adder}
+  \caption{An adder component.}
+  \label{fig:components-adder}
+\end{figure}
+
+\longlist{code/components_add.txt}{The adder component in Chisel.}{lst:comp:add}
+
+Figure~\ref{fig:components-adder} shows the schematics of the adder component.
+It has two inputs (\code{a} and \code{b}) and one output (\code{y}).
+Listing~\ref{lst:comp:add} shows the Chisel definition of the adder.
+Note the input and output signals in the \code{Bundle}, 
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/components-register}
+  \caption{A register components.}
+  \label{fig:components-register}
+\end{figure}
+
+\longlist{code/components_reg.txt}{The register component in Chisel.}{lst:comp:reg}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/components-counter}
+  \caption{A counter built out of components.}
+  \label{fig:components-counter}
+\end{figure}
+
+\longlist{code/components_cnt.txt}{A counter built out of components.}{lst:comp:cnt}
+
+\section{Nested Components}
+
+A medium to high complex hardware design is built out of a hierarchy of
+nested components.
+Figure~\ref{fig:components} shows the structure of such an example design. Component C has
+three input ports and two output ports. The component itself is assembled out
+of two subcomponents: B and C, which are connected to the inputs and
+outputs of C. One output of A is connected to an input of B.
+Component D is at the same hierarchy level as component C and connected
+to it.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/components}
+  \caption{A design consisting of a hierarchy of components.}
+  \label{fig:components}
+\end{figure}
 
 \longlist{code/components_ab.txt}{Definitions of component A and B}{lst:comp:ab}
 

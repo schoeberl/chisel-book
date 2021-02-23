@@ -4,6 +4,54 @@ import chisel3._
 import chisel3.util._
 //- end
 
+//- start components_add
+class Adder extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(8.W))
+    val b = Input(UInt(8.W))
+    val y = Output(UInt(8.W))
+  })
+
+  io.y := io.a + io.b
+}
+//- end
+
+//- start components_reg
+class Register extends Module {
+  val io = IO(new Bundle {
+    val d = Input(UInt(8.W))
+    val q = Output(UInt(8.W))
+  })
+
+  val reg = RegInit(0.U)
+  reg := io.d
+  io.q := reg
+}
+//- end
+
+//- start components_cnt
+class Count10 extends Module {
+  val io = IO(new Bundle {
+    val dout = Output(UInt(8.W))
+  })
+
+  val add = Module(new Adder())
+  val reg = Module(new Register())
+
+  val count = reg.io.q
+
+  // connect the adder
+  add.io.a := 1.U
+  add.io.b := count
+  val result = add.io.y
+
+  val next = Mux(count === 9.U, 0.U, result)
+  reg.io.d := next
+
+  io.dout := count
+}
+//- end
+
 //- start components_ab
 class CompA extends Module {
   val io = IO(new Bundle {

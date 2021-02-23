@@ -3,7 +3,7 @@ import Chisel._
 /**
  * Test the counter by printing out the value at each clock cycle.
  */
-class RegisterTester(c: Register) extends Tester(c) {
+class RegisterTester(c: Registers) extends Tester(c) {
 
   peek(c.io.out)
   poke(c.io.in, 13)
@@ -18,7 +18,7 @@ object RegisterTester {
   def main(args: Array[String]): Unit = {
     chiselMainTest(Array("--genHarness", "--test", "--backend", "c",
       "--compile", "--targetDir", "generated"),
-      () => Module(new Register())) {
+      () => Module(new Registers())) {
         c => new RegisterTester(c)
       }
   }

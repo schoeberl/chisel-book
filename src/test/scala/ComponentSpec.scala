@@ -30,5 +30,25 @@ class ComponentSpec extends FlatSpec with Matchers {
       new ComponentFnTester(c)
     } should be (true)
   }
+
+  "Count10" should "pass" in {
+    chisel3.iotesters.Driver(() => new Count10()) { c =>
+      new PeekPokeTester(c) {
+        expect(c.io.dout, 0)
+        step(1)
+        expect(c.io.dout, 1)
+        step(1)
+        expect(c.io.dout, 2)
+        step(1)
+        expect(c.io.dout, 3)
+        step(1)
+        expect(c.io.dout, 4)
+        step(5)
+        expect(c.io.dout, 9)
+        step(1)
+        expect(c.io.dout, 0)
+      }
+    } should be (true)
+  }
 }
 
