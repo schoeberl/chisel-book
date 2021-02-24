@@ -1626,7 +1626,9 @@ an adder and a register.
 Figure~\ref{fig:components-adder} shows the schematics of the adder component.
 It has two inputs (\code{a} and \code{b}) and one output (\code{y}).
 Listing~\ref{lst:comp:add} shows the Chisel definition of the adder.
-Note the input and output signals in the \code{Bundle}, 
+The input and output signals are accessed with
+the \emph{dot notation}, such as \code{io.a}, as they are part of the \code{io}
+\code{Bundle}.
 
 \begin{figure}
   \centering
@@ -1637,6 +1639,10 @@ Note the input and output signals in the \code{Bundle},
 
 \longlist{code/components_reg.txt}{The register component in Chisel.}{lst:comp:reg}
 
+Figure~\ref{fig:components-register} shows another simple component, an 8-bit register.
+The Chisel code for this component is shown in Listing~\ref{lst:comp:reg}.
+
+
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/components-counter}
@@ -1645,6 +1651,25 @@ Note the input and output signals in the \code{Bundle},
 \end{figure}
 
 \longlist{code/components_cnt.txt}{A counter built out of components.}{lst:comp:cnt}
+
+We build now with those two components a counter, which counts from 0 to 9 and repeats.
+Figure~\ref{fig:components-counter} shows the schematics of the counter. We use an adder
+add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
+That result, called \code{next} is the input for the register component. The output of the
+register is the \code{count} value and also the output of the \code{Count10} component (\code{dout}).
+
+Listing~\ref{lst:comp:cnt} shows the Chisel code for the \code{Count10} component.
+The two components are instantiated by creating them with \code{new}, wrapping them
+into a \code{Module()} call, and assigning it a name. In our example \code{add} and \code{reg}.
+In this example we give the output of the register (\code{reg.io.q}) the name (\code{count}).
+We connect \code{1.U} and \code{count} to the two inputs of the adder component.
+We give the output of the adder the name \code{result}.
+The multiplexer selects between \code{0.U} and \code{result} depending on the counter
+value \code{count}. We name the output of the multiplexer \code{next} and connect it
+to the input of the register. Finally, we connect the counter value \code{count}
+to the single output of the \code{Count10} component, \code{io.dout}.
+
+
 
 \section{Nested Components}
 
@@ -1694,12 +1719,11 @@ in this example \code{val compA = Module(new CompA())}.
 With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
 and the individual fields of the IO \code{Bundle}.
 
+\longlist{code/components_d.txt}{Component D}{lst:comp:d}
+
 The simplest component in our design, shown in Listing~\ref{lst:comp:d},
 has just an input port, named \code{in}, and
 an output port named \code{out}.
-
-\longlist{code/components_d.txt}{Component D}{lst:comp:d}
-
 The final missing piece of our example design is the top-level component, which itself
 is assembled out of components C and D, shown in Listing~\ref{lst:comp:top}.
 

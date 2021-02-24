@@ -28,6 +28,25 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Clearification}
+\begin{itemize}
+\item Online learning is hard, I understand
+\item Installing all tools on your laptop can also be hard
+\item I take this into consideration on final grading
+\item Don't be afraid from the \emph{power user} demos
+\begin{itemize}
+\item Just for ``entertainment'' and for advanced users
+\item You can also simply ignore it
+\end{itemize}
+\item Learning Objectives
+\begin{itemize}
+\item How to build medium sized digital circuits
+\item Describe them in Chisel  and implement them in an FPGA
+\item Timing analysis of digital circuits
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Last Lab}
 \begin{itemize}
 \item On components and small sequential circuits
@@ -56,22 +75,104 @@ Embedded Systems Engineering}
 \item Components/Modules are used to organize the circuit
 \begin{itemize}
 \item Similar as using methods in Java
+\item But they are connected with \emph{wires}
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Hierarchy of Components Example}
+
+\begin{frame}[fragile]{A Binary Watch}
+\begin{itemize}
+\item Built out of discrete, digital components
+\end{itemize}
 \begin{figure}
-  \includegraphics[scale=\scale]{../figures/components}
+    \centering
+    \href{https://commons.wikimedia.org/wiki/File:Relogio_binario.JPG}{\includegraphics[scale=0.3]{binary-watch.jpg}}
+\end{figure}
+
+{\tiny Source: Diogo Sousa, \href{https://en.wikipedia.org/wiki/Public_domain}{public domain}}
+\end{frame}
+
+
+\begin{frame}[fragile]{Let Us Build a Counter}
+\begin{itemize}
+\item Counting from 0 up to 9
+\item Restart from 0
+\item Build it out of components
+\item We need:
+\begin{itemize}
+\item Adder
+\item Register
+\item Multiplexer
+\end{itemize}
+\item
+\item But these are very tiny components
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An Adder (Component/Modul)}
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components-adder}
+\end{figure}
+\end{column}
+\begin{column}{0.6\textwidth}
+\shortlist{../code/components_add.txt}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{A Register}
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components-register}
+\end{figure}
+\end{column}
+\begin{column}{0.6\textwidth}
+\shortlist{../code/components_reg.txt}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{The Counter Schematics}
+\begin{figure}
+  \includegraphics[scale=0.6]{../figures/components-counter}
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{The Counter in Chisel}
+\shortlist{../code/components_cnt.txt}
+\end{frame}
 
-\begin{frame}[fragile]{Ports}
+\begin{frame}[fragile]{XXX}
 \begin{itemize}
-\item Ports are the connections of modules
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Input/Output Ports}
+\begin{itemize}
+\item Ports are the \emph{interface} to a module
+\item Like pins on a discrete chip
 \item Ports are bundles with a direction
-\item The direction be reversed with \code{Flipped}
+\item The direction can be reversed with \code{Flipped}
 \end{itemize}
 \begin{chisel}
 class Channel extends Bundle {
@@ -155,21 +256,6 @@ object Hello extends App {
 \end{frame}
 
 
-
-
-\begin{frame}[fragile]{Midterm Evaluation}
-\begin{itemize}
-\item An anonymous Google form (no login required)
-\item 20 minutes time, including the break
-\item We will look into it after the break
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=0.5]{forms2020}
-\end{figure}
-\begin{itemize}
-\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Testing and Debugging}
 \begin{itemize}
@@ -471,7 +557,6 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
 \item Debugging versus regression tests
 \end{itemize}
 \end{frame}
-
 
 \end{document}
 
