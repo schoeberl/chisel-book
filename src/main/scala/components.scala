@@ -25,7 +25,7 @@ class Register extends Module {
 
   val reg = RegInit(0.U)
   reg := io.d
-  io.q := regggg
+  io.q := reg
 }
 //- end
 
