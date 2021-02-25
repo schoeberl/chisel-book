@@ -28,7 +28,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Clearification}
+\begin{frame}[fragile]{Some Clarification}
 \begin{itemize}
 \item Online learning is hard, I understand
 \item Installing all tools on your laptop can also be hard
@@ -54,6 +54,9 @@ Embedded Systems Engineering}
 \item Registers plus combinational circuits
 \end{itemize}
 \item Did you finish the exercises?
+\begin{itemize}
+\item Do the poll
+\end{itemize}
 \item They are not mandatory, but helpful for preparation for the final project
 \item Let's look at solutions
 \end{itemize}
@@ -69,7 +72,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \item We build circuits as a hierarchy of components
 \begin{itemize}
-\item You did a 4:1 multiplexer out of 3 2:1 mulitplexers
+\item You did a 4:1 multiplexer out of three 2:1 mulitplexers
 \end{itemize}
 \item In Chisel a component is called \code{Module}
 \item Components/Modules are used to organize the circuit
@@ -146,113 +149,38 @@ Embedded Systems Engineering}
 \shortlist{../code/components_cnt.txt}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{XXX}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{XXX}
+%\begin{itemize}
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\item xxx
+%\end{itemize}
+%\end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Input/Output Ports}
-\begin{itemize}
-\item Ports are the \emph{interface} to a module
-\item Like pins on a discrete chip
-\item Ports are bundles with a direction
-\item The direction can be reversed with \code{Flipped}
-\end{itemize}
-\begin{chisel}
-class Channel extends Bundle {
-  val data = Input(UInt(32.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-class ChannelUsage extends Bundle {
-  val input = new Channel()
-  val output = Flipped(new Channel())
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{An Adder Module}
-\begin{itemize}
-\item A \code{class} that \code{extends} \code{Module}
-\item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
-\item Circuit description in the constructor
-\end{itemize}
-\begin{chisel}
-class Adder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-\end{chisel}
-\end{frame}
-
-
-\begin{frame}[fragile]{Connections}
-\begin{itemize}
-\item Simple connections just with assignments, e.g.,
-\begin{chisel}
-  adder.io.a := ina
-  adder.io.b := inb
-\end{chisel}
-\item Automatic bulk connections between components
-\begin{chisel}
-  dec.io <> exe.io
-  mem.io <> exe.io
-\end{chisel}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Module Usage}
-\begin{itemize}
-\item Create with \code{new} and wrap into a \code{Module()}
-\item Interface port via the \code{io} field
-\item Note the assignment operator \code{:=} on \code{io} fields
-\end{itemize}
-\begin{chisel}
-  val adder = Module(new Adder())
-  adder.io.a := ina
-  adder.io.b := inb
-  val result = adder.io.result
-\end{chisel}
-\end{frame}
 
 
 \begin{frame}[fragile]{Chisel Main}
 
 \begin{itemize}
 \item Create one top-level Module
-\item Invoke the Chisel driver from the App
+\item Invoke the \code{emitVerilog()} from the App
 \item Pass the top module (e.g., \code{new Hello()})
-\item Optional: pass some parameters (in the \code{Array})
-\item Following code generates Verilog code for \emph{Hello World}
+\item Optional: pass some parameters (in an \code{Array})
+\item Following code generates Verilog code for the \emph{Hello World}
 \end{itemize}
-\begin{chisel}
-object Hello extends App {
-  chisel3.Driver.execute(Array[String](), () => new Hello())
-}
-\end{chisel}
+\shortlist{../code/generate.txt}
 \end{frame}
 
 
@@ -523,20 +451,26 @@ sbt compile
 \item File name: \code{build.sbt}
 \end{itemize}
 \begin{chisel}
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.12"
+
+scalacOptions := Seq("-deprecation", "-Xsource:2.11")
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases")
 )
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.2.2"
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
+// Chisel 3.4.1 is loaded as a dependency on the tester
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
+\item This is the start of group work
+\begin{itemize}
+\item Please register your group \href{https://docs.google.com/spreadsheets/d/1aQs_VnPw3uiJxUz9WuzPcM1R6VkDXqPtri7a3pWoTvs/edit?usp=sharing}{here}
+\end{itemize}
 \item Binary to 7-segment decoder
 \item First part of your vending machine
 \item Just a single digit, only combinational logic
