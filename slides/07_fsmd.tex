@@ -17,28 +17,11 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Synopsis and Syosil presentation on verification
-\item TODO: some new material
-\item TODO: display multiplexing
-\item TODO: midterm evaluation, new form, new link, move slide
+\item Jacob from Syosil presents on verification
+%\item TODO: some new material, maybe 2022
 \item Counter based circuits
 \item Finite-state machines (FSMs) 
 \item FSM with Datapath
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Midterm Evaluation}
-\begin{itemize}
-\item TODO: create a new form, no need for the graphics, as we are not live
-\item An anonymous Google form (no login required)
-\item 20 minutes time, including the break
-\item We will look into it after the break
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=0.5]{forms2020}
-\end{figure}
-\begin{itemize}
-\item \url{https://forms.gle/wtvDrA4peD4oLvt16}
 \end{itemize}
 \end{frame}
 
@@ -99,7 +82,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{One Possible Solution for Last Lab}
 \begin{chisel}
-  val MAX_CNT = 50000000.U // use a small value for waveform viewing
+  val MAX_CNT = 50000000.U // use a smaller value for waveform viewing
   
   val tickCntReg = RegInit(0.U(32.W))
   val cntReg = RegInit(0.U(4.W))
@@ -163,59 +146,6 @@ class SevenSegCountSpec extends
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{A Timer}
-\begin{itemize}
-\item Like a kitchen timer
-\item Start by loading a timeout value
-\item Count down till 0
-\item Assert \code{done} when finished
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{One-Shot Timer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/timer}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{One-Shot Timer}
-\shortlist{../code/timer.txt}
-\end{frame}
-
-\begin{frame}[fragile]{A 4 Stage Shift Register}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/shiftregister}
-\end{figure}
-\shortlist{../code/shift_register.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{A Shift Register with Parallel Output}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/shiftreg-paraout}
-\end{figure}
-\shortlist{../code/shift_paraout.txt}
-\end{frame}
-
-\begin{frame}[fragile]{A Shift Register with Parallel Load}
-\begin{figure}
-  \includegraphics[scale=0.5]{../figures/shiftreg-paraload}
-\end{figure}
-\shortlist{../code/shift_paraload.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{A Simple Circuit}
-\begin{itemize}
-\item What does the following circuit?
-\item Is this related to a finite-state machine?
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/fsm-rising}
-\end{figure}
-\end{frame}
-
 \begin{frame}[fragile]{Finite-State Machine (FSM)}
 \begin{itemize}
 \item Has a register that contains the state
@@ -236,13 +166,17 @@ class SevenSegCountSpec extends
 \begin{itemize}
 \item A state register
 \item Two combinational blocks
+\begin{itemize}
+\item Next state logic
+\item Output logic
+\end{itemize}
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/fsm}
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{State Diagram}
+\begin{frame}[fragile]{State Diagrams are Convenient}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/state-diag-moore}
 \end{figure}
@@ -251,87 +185,16 @@ class SevenSegCountSpec extends
 \item Example is a simple alarm FSM
 \item Nice visualization
 \item Will not work for large FSMs
-\item Complete code in the Chisel book
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{State Table for the Alarm FSM}
-\begin{table}
-\centering
-\begin{tabular}{ccccc}
-\toprule
-& \multicolumn{2}{c}{Input} \\
-\cmidrule{2-3}
-State &  Bad event & Clear & Next state & Ring bell \\
-\midrule
-green & 0 & 0 & green & 0 \\
-green & 1 & - & orange & 0 \\
-orange & 0 & 0 & orange & 0 \\
-orange & 1 & - & red & 0 \\
-orange & 0 & 1 & green & 0 \\
-red & 0 & 0 & red & 1 \\
-red & 0 & 1 & green & 1 \\
-\bottomrule
-\end{tabular}
-\label{tab:state:table}
-\end{table}
-\end{frame}
-
-\begin{frame}[fragile]{The Input and Output of the Alarm FSM}
-\begin{itemize}
-\item Two inputs and one output
-\end{itemize}
-\shortlist{../code/simple_fsm_io.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Encoding the State}
-\begin{itemize}
-\item We can optimize state encoding
-\item Two common encodings are: binary and one-hot
-\item We leave it to the synthesize tool
-\item Use symbolic names with an \code{Enum}
-\item Note the number of states in the \code{Enum} construct
-\item We use a Scala list with the \code{::} operator
-\end{itemize}
-\shortlist{../code/simple_fsm_states.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Start the FSM}
-\begin{itemize}
-\item We have a starting state on reset
-\end{itemize}
-\shortlist{../code/simple_fsm_register.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{The Next State Logic}
-\shortlist{../code/simple_fsm_next.txt}
-\end{frame}
-
-\begin{frame}[fragile]{The Output Logic}
-\shortlist{../code/simple_fsm_output.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Summary on the Alarm Example}
-\begin{itemize}
-\item Three elements:
-\begin{enumerate}
-\item State register
-\item Next state logic
-\item Output logic
-\end{enumerate}
-\item This was a so-called Moore FSM
-\item There is also a FSM type called Mealy machine
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A so-called Mealy FSM}
+\begin{frame}[fragile]{A Mealy FSM}
 \begin{itemize}
 \item Similar to the former FSM
 \item Output also depends in the input
-\item It is \emph{faster}
-\item Less composable (draw it)
+\item Output is \emph{faster}
+\item Less composable as we may have combinational circles
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/mealy}
@@ -340,7 +203,6 @@ red & 0 & 1 & green & 1 \\
 
 \begin{frame}[fragile]{The Mealy FSM for the Rising Edge}
 \begin{itemize}
-\item That was our starting example
 \item Output is also part of the transition arrows
 \end{itemize}
 \begin{figure}
@@ -348,16 +210,9 @@ red & 0 & 1 & green & 1 \\
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{The Mealy Solution}
-\begin{itemize}
-\item Show code from the book as it is too long for slides
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{State Diagram for the Moore Rising Edge Detection}
 \begin{itemize}
 \item We need three states
-\item Show the code
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/state-diag-rising-moore}
@@ -366,7 +221,7 @@ red & 0 & 1 & green & 1 \\
 
 \begin{frame}[fragile]{Comparing with a Timing Diagram}
 \begin{itemize}
-\item Moore is delayed one clock cycle compared to Mealy
+\item Moore is delayed by one clock cycle compared to Mealy
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=1]{../figures/rising}
@@ -381,38 +236,6 @@ red & 0 & 1 & green & 1 \\
 \item Mealy has \emph{faster} reaction
 \item Both are tools in you toolbox
 \item Keep it simple with your vending machine and use a Moore FSM
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Another Simple FSM}
-\begin{itemize}
-\item a FSM for a single word buffer
-\item Just two symbols for the state machine
-\end{itemize}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Finite State Machine for a Buffer}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-  val stateReg = RegInit(empty)
-  val dataReg = RegInit(0.U(size.W))
-
-  when(stateReg === empty) {
-    when(io.enq.write) {
-      stateReg := full
-      dataReg := io.enq.din
-    }
-  }.elsewhen(stateReg === full) {
-    when(io.deq.read) {
-      stateReg := empty
-    }
-  }
-\end{chisel}
-\begin{itemize}
-\item A simple buffer for a bubble FIFO
 \end{itemize}
 \end{frame}
 
@@ -542,7 +365,7 @@ red & 0 & 1 & green & 1 \\
 \begin{itemize}
 \item Paper \& pencil exercises
 \item Exercises on FSM
-\item From the, now free, Dally book
+\item From the Dally book
 \item Just sketch the Chisel code
 \item On paper or in a plain text editor
 \item As usual, show and discuss with a TA
@@ -551,11 +374,10 @@ red & 0 & 1 & green & 1 \\
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item We ave interesting teaching constraints
-\item We will still be able to build a vending machine
-\item Counters make interesting circuits
-\item Counter are used to generate timing
-\item An FSM can control a datapath
+\item Counters are used to generate timing
+\item Adapt your counter maximum values for simulation
+\item An FSM can control a datapath, an FSMD
+\item An FSMD is a computing machine
 \end{itemize}
 \end{frame}
 

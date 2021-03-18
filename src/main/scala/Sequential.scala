@@ -92,7 +92,7 @@ class SequCounter extends Module {
 
   val N = 5
   //- start sequ_tick_gen
-  val tickCounterReg = RegInit(0.U(4.W))
+  val tickCounterReg = RegInit(0.U(32.W))
   val tick = tickCounterReg === (N-1).U
 
   tickCounterReg := tickCounterReg + 1.U

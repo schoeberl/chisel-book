@@ -2897,9 +2897,9 @@ out of smaller FSMs by combining them into communicating FSMs.
 \end{figure}
 
 Figure~\ref{fig:fsm} shows the schematics of an FSM. The register contains the current \code{state}.
-The next state logic computes the next state value (\code{next\_state})
+The next state logic computes the next state value (\code{nextState})
 from the current \code{state} and the input (\code{in}).
-On the next clock tick, \code{state} becomes \code{next\_state}.
+On the next clock tick, \code{state} becomes \code{nextState}.
 The output logic computes the output (\code{out}). As the output depends on the current
 state only, this state machine is called a
 \myref{https://en.wikipedia.org/wiki/Moore_machine}{Moore machine}.
