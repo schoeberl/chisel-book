@@ -691,7 +691,7 @@ which is used for the definition of the \code{Bits} vector:
 
 \shortlist{code/const_width.txt}
 
-\noindent If you find the notion of 3.U and 4.W a little bit funny, consider it as a variant of an integer
+\noindent If you find the notation of 3.U and 4.W a little bit funny, consider it as a variant of an integer
 constant with a type. This notation is similar to 3L, representing a long integer constant in C, Java, and Scala.
 
 {\bf Possible pitfall:} One possible error when defining constants with a dedicated width is missing the \code{.W}
@@ -1568,7 +1568,7 @@ to build an AND gate and a multiplexer and run this hardware in an FPGA.
 We will now use this example and test the functionality with a Chisel tester
 to automate testing and also to be independent of an FPGA.
 Use your designs from the previous chapter and add a Chisel tester to test the functionality.
-Try to enumerate all possible inputs and test the output with \code{except()}.
+Try to enumerate all possible inputs and test the output with \code{expect()}.
 
 Testing within Chisel can speed up the debugging of your design.
 However, it is always a good idea to synthesize your design for an FPGA and run tests
@@ -1895,7 +1895,7 @@ Keep in mind that we describe hardware circuits and not a software program with 
 execution.
 
 The Chisel condition construct \code{when} also has a form of \emph{else}, it is called
-\code{otherwise}. With assigning a value under any condition we can omit the default
+\code{.otherwise}. With assigning a value under any condition we can omit the default
 value assignment:
 
 \shortlist{code/comb_otherwise.txt}
@@ -1933,7 +1933,7 @@ declaration with \code{WireDefault}.
 
 \shortlist{code/comb_wiredefault.txt}
 
-One might question why using \code{when}, \code{.elsewhen}, and \code{otherwise}
+One might question why using \code{when}, \code{.elsewhen}, and \code{.otherwise}
 when Scala has \code{if}, \code{else if}, and \code{else}? Those statements are for
 conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
 Those Scala conditionals have their use in Chisel when we write circuit generators,
@@ -2215,7 +2215,7 @@ dedicated enable input, and no additional resources are needed.
 \end{figure}
 
 Figure~\ref{fig:register-en-wave} shows an example waveform for a register
-with enable. Most of the time, enable it high (\code{true}) and the register
+with enable. Most of the time, \code{enable} is high (\code{true}) and the register
 follows the input with one clock cycle delay. Only in the fourth clock cycle
 \code{enable} is low, and the register keeps its value (5) at rising edge D.
 
@@ -3455,7 +3455,7 @@ of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 4 and 5 with the transfer of
 \code{D2} and \code{D3}
 
-To make this interface composable neither \code{ready} not \code{valid} is
+To make this interface composable neither \code{ready} nor \code{valid} is
 allowed to depend combinational on the other signal.
 As this interface is so common, Chisel defines the \code{DecoupledIO}
 bundle, similar to the following:
@@ -4010,7 +4010,7 @@ the same IO interface as the individual FIFO buffers.
 \code{BubbleFifo} has as parameters the \code{size} of the data
 word and \code{depth} for the number of buffer stages.
 We can build a \code{depth} stages bubble FIFO out of \code{depth}
-\code{FifoRegister}s. We crate the stages by filling them into a Scala \code{Array}.
+\code{FifoRegister}s. We create the stages by filling them into a Scala \code{Array}.
 The Scala array has no hardware meaning, it \emph{just} provides us with
 a container to have references to the created buffers.
 In a Scala \code{for} loop we connect the individual buffers.
@@ -4112,7 +4112,7 @@ the FIFO register for the bubble FIFO. The input port is a \code{Channel}
 interface, and the output is the \code{Channel} interface with
 flipped directions. The buffer contains the minimal state machine
 to indicate \code{empty} or \code{full}. The buffer driven handshake
-signals (\code{in.ready} and \code{out.valid} depend on the state
+signals (\code{in.ready} and \code{out.valid}) depend on the state
 register.
 
 When the state is \code{empty}, and data on the input is \code{valid},
@@ -4235,7 +4235,7 @@ to the producer handshake, which violates the semantics of the ready-valid proto
 
 \index{Double buffer FIFO}
 
-One solution is stay \code{ready} even when the buffer register if full.
+One solution is stay \code{ready} even when the buffer register is full.
 To be able to accept a data word from the producer, when the consumer is not
 \code{ready} we need a second buffer, we call it the shadow register.
 When the the buffer is full, new data is stored in the shadow register and \code{ready}
@@ -4451,7 +4451,7 @@ line when the LED is off and on. Use the \code{BufferedTx}, as in the \code{Send
 example.
 
 With the slow output of characters (two per second), you can write the data
-to the UART transmit register and can ignore the read/valid handshake.
+to the UART transmit register and can ignore the ready/valid handshake.
 Extend the example by writing repeated numbers 0-9 as fast as the baud rate allows.
 In this case, you have to extend your state machine to poll the UART status
 to check if the transmit buffer is free.
@@ -4463,7 +4463,7 @@ and receiver.
 \subsection{FIFO Exploration}
 
 Write a simple FIFO with 4 buffer elements in dedicated registers.
-Use 2-bit read and write counters, which can just just overflow.
+Use 2-bit read and write counters, which can just overflow.
 As a further simplification consider the situation when the read and write
 pointers are equal as empty FIFO. This means you can maximally
 store 3 elements. This simplification avoids the counter function from
@@ -4571,7 +4571,7 @@ For the testing, we write the ALU function in plain Scala, as shown in Listing~\
 
 \longlist{code/leros_alu_ref.txt}{The Leros ALU function written in Scala.}{lst:leros-alu-scala}
 
-\noindent While this duplication of hardware written in Chisel by a Scala implementation does not
+\noindent While this duplication of hardware written in Chisel and Scala implementation does not
 detect errors in the specification; it is at least some sanity check.
 We use some corner case values as the test vector:
 
@@ -4683,7 +4683,7 @@ fiddle with the code by breaking it and see that tests fail.
 Another option is to write your implementation of Leros.
 The implementation in the repository is just one possible organization of a pipeline.
 You could write a Chisel simulation version of Leros with just a single pipeline stage,
-or go creasy and superpipeline Leros for the highest possible clocking frequency.
+or go crazy and superpipeline Leros for the highest possible clocking frequency.
 
 A third option is to design your processor from scratch. Maybe the demonstration of
 how to build the Leros processor and the needed tools has convinced you that processor
