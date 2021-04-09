@@ -1,0 +1,10 @@
+.bloop/*
+.bsp/*
+.metals/*
+.vscode/*
+.idea/*
+target/*
+test_run_dir/*
+project/*
+generated/*
+code/*

@@ -32,6 +32,8 @@ clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.lol # *.pdf
 	rm -rf code
 	rm -rf test_run_dir
+	rm -rf target
+	rm -rf generated
 
 chisel:
 	sbt "runMain Snippets"

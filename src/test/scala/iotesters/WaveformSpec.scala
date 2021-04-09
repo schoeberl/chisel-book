@@ -1,11 +1,8 @@
 
-//- start test_import_wave
 import chisel3.iotesters.PeekPokeTester
 import chisel3.iotesters.Driver
 import org.scalatest._
-//- end
 
-//- start test_bench_wave
 class WaveformTester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   poke(dut.io.a, 0)
@@ -21,9 +18,7 @@ class WaveformTester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
   poke(dut.io.b, 1)
   step(1)
 }
-//- end
 
-//- start test_bench_wave_cnt
 class WaveformCounterTester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   for (a <- 0 until 4) {
@@ -34,9 +29,7 @@ class WaveformCounterTester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
     }
   }
 }
-//- end
 
-//- start scalatest_wave
 class WaveformSpec extends FlatSpec with Matchers {
   "Waveform" should "pass" in {
     Driver.execute(Array("--generate-vcd-output", "on"), () => new DeviceUnderTest()) { c =>
@@ -44,9 +37,7 @@ class WaveformSpec extends FlatSpec with Matchers {
     } should be (true)
   }
 }
-//- end
 
-//- start scalatest_wave_cnt
 class WaveformCounterSpec extends FlatSpec with Matchers {
 
   "WaveformCounter" should "pass" in {
@@ -55,4 +46,3 @@ class WaveformCounterSpec extends FlatSpec with Matchers {
     } should be (true)
   }
 }
-//- end
