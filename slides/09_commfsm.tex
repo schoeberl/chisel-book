@@ -31,7 +31,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Input are 16 switches for 4 hexadecimal digits
 \end{itemize}
-\item How many have finished it?
+\item Almost 12/27 have already finished. This is GREAT!
 \item Please show it a TA when finished for a ``tick''
 \item There is a simulation available, show it
 \item Maybe extend it with binary to BCD conversion
@@ -40,7 +40,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \item You can also start to work on the full Vending Machine
 \begin{itemize}
-\item Top-level, pin definition, and a simple tester is in:
+\item Top-level, pin definition, and a simple tester are in:
 \item \url{https://github.com/schoeberl/chisel-lab/tree/master/vending}
 \end{itemize}
 \end{itemize}
@@ -49,12 +49,10 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Next Labs}
 \begin{itemize}
-\item Next week is Easter break
-\item Week after Easter 16/4:
+\item Next week:
 \begin{itemize}
-\item 4 hours lab, no lecture
-\item Have a short meeting in Zoom to gather
-\item Short reminder what the VM is
+\item Almost 4 hours lab
+\item Just vending machine specification recap
 \item Maybe questions
 \end{itemize}
 \item Work on the full Vending Machine
@@ -171,6 +169,7 @@ val ch32 = new ParamChannel(32)
 \shortlist{../code/use_param_adder.txt}
 \begin{itemize}
 \item Can be used for the display multiplexing configuration
+\item Switching between a constant for simulation and a constant for the FPGA
 \end{itemize}
 \end{frame}
 
@@ -205,9 +204,9 @@ val ch32 = new ParamChannel(32)
 \item Without processing we detect more than one event
 \item Solution is to filter out bouncing
 \begin{itemize}
-\item Can be done electrically
+\item Can be done electrically (R + C + Schmitt trigger)
 \item That is why you have the extra PCB with the buttons
-\item But we can also do this digital
+\item But we can also do this digitally
 \end{itemize}
 \item Assume  bouncing time $t_{bounce}$
 \item Sample at a period $T > t_{bounce}$

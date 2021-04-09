@@ -203,7 +203,7 @@ waveform viewing
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 10 Digital Exam and Vending Machine Specification (1/2 hour)
+### Week 10 Vending Machine Specification (1/2 hour)
 
 **Slides:** [10_vending.pdf](10_vending.pdf)
 
