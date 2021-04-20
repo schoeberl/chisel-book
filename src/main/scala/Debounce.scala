@@ -4,7 +4,6 @@ import chisel3.util._
 class Debounce(fac: Int = 100000000/100) extends Module {
   val io = IO(new Bundle {
     val btnU = Input(Bool())
-    val sw = Input(UInt(8.W))
     val led = Output(UInt(8.W))
   })
 
@@ -26,7 +25,7 @@ class Debounce(fac: Int = 100000000/100) extends Module {
   val btnDebReg = Reg(Bool())
 
   val cntReg = RegInit(0.U(32.W))
-  val tick = cntReg === (FAC-1).U
+  val tick = cntReg === (fac-1).U
 
   cntReg := cntReg + 1.U
   when (tick) {
@@ -39,7 +38,7 @@ class Debounce(fac: Int = 100000000/100) extends Module {
   val shiftReg = RegInit(0.U(3.W))
   when (tick) {
     // shift left and input in LSB
-    shiftReg := Cat(shiftReg(1, 0), btnDebReg)
+    shiftReg := shiftReg(1, 0) ## btnDebReg
   }
   // Majority voiting
   val btnClean = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))
@@ -62,18 +61,15 @@ class Debounce(fac: Int = 100000000/100) extends Module {
 class DebounceFunc(fac: Int = 100000000/100) extends Module {
   val io = IO(new Bundle {
     val btnU = Input(Bool())
-    val sw = Input(UInt(8.W))
     val led = Output(UInt(8.W))
   })
-
-  val btn = io.btnU
 
   //- start input_func
   def sync(v: Bool) = RegNext(RegNext(v))
 
   def rising(v: Bool) = v & !RegNext(v)
 
-  def tickGen(fac: Int) = {
+  def tickGen() = {
     val reg = RegInit(0.U(log2Up(fac).W))
     val tick = reg === (fac-1).U
     reg := Mux(tick, 0.U, reg + 1.U)
@@ -83,14 +79,14 @@ class DebounceFunc(fac: Int = 100000000/100) extends Module {
   def filter(v: Bool, t: Bool) = {
     val reg = RegInit(0.U(3.W))
     when (t) {
-      reg := Cat(reg(1, 0), v)
+      reg := reg(1, 0) ## v
     }
     (reg(2) & reg(1)) | (reg(2) & reg(0)) | (reg(1) & reg(0))
   }
 
-  val btnSync = sync(btn)
+  val btnSync = sync(io.btnU)
 
-  val tick = tickGen(fac)
+  val tick = tickGen()
   val btnDeb = Reg(Bool())
   when (tick) {
     btnDeb := btnSync

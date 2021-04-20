@@ -1,11 +1,12 @@
 import chisel3._
 import chiseltest._
 import chiseltest.experimental.TestOptionBuilder._
+//- start verilator_import
 import chiseltest.internal.VerilatorBackendAnnotation
+//- end
 import org.scalatest._
 
-class Snippets extends FlatSpec with ChiselScalatestTester with Matchers {
-
+class Snippets extends FlatSpec with ChiselScalatestTester {
   class Dut extends Module {
     val io = IO(new Bundle{
       val in = Input(Bool())
@@ -24,11 +25,12 @@ class Snippets extends FlatSpec with ChiselScalatestTester with Matchers {
   }
 
   "Combinational test with Treadle" should "pass" in {
-    test(new Dut()) { c => testFun(c)}
+    test(new Dut()) { c => testFun(c) }
   }
 
   "Combinational test with Verilator" should "pass" in {
-    test(new Dut()).withAnnotations(Seq(VerilatorBackendAnnotation)) { c => testFun(c)}
+    test(new Dut()).withAnnotations(Seq(VerilatorBackendAnnotation)) { 
+      c => testFun(c) 
+    }
   }
-
 }

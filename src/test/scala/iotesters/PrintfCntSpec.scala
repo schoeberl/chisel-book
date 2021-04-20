@@ -17,15 +17,3 @@ class PrintfCntSpec extends FlatSpec with Matchers {
     }
   }
 }
-
-class PrintfCntSpec2 extends FlatSpec with ChiselScalatestTester with Matchers {
-
-  "Printf in ChiselTest" should "pass" in {
-    test(new PrintfCnt()) { c =>
-      for (i <- 0 until 8) {
-        println("from tester2: " + c.io.out.peek().litValue())
-        c.clock.step()
-      }
-    }
-  }
-}
