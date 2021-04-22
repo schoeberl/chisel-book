@@ -210,17 +210,15 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 11 Interfacing and Memory
+### Week 11 Interfacing and Memory, and some Testing
 
-**Topics:** Interfaces, memory, and serial interface
+**Topics:** Interfaces, memory, and serial interface plus repetition on testing
 
 **Slides:** [11_interface.pdf](11_interface.pdf)
 
 **Reading:** Dally: 24 Chisel: 6.4
 
-**Lab:** SRAM exercise in DTU Inside: 
-[sram_exercise.pdf](https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805)
-[data sheet](https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb)
+**Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 12 Test Exam, No lecture

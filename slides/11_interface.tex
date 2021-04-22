@@ -19,33 +19,43 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Repeat FSMD (for the vending machine)
+\begin{itemize}
+\item I have seen some intermix of FSM and datapath
+\item Works only for small designs
+\end{itemize}
 \item Interfaces
 \item Memory (intern and extern)
 \item Serial interface (RS 232)
-\item 2 hours lab SRAM exercise
-\begin{itemize}
-\item Exercise description is in DTU Inside
-\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
-\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
-\end{itemize}
+\item Testing with Chisel (repetition)
+\item 2 hours testing exerise
 \item The course evaluation is open for feedback
+\begin{itemize}
+\item Closes 1st May night
+\end{itemize}
+\item Next week we will do a test exam
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{The Online Exam}
+\begin{frame}[fragile]{I have seen similar code}
+\begin{chisel}
+  when(io.coin2) {
+    sum := sum + 2.U
+  } .elsewhen(io.coin5) {
+    sum := sum + 5.U
+  }
+\end{chisel}
 \begin{itemize}
-\item We will use the ``old'' online system
-\item Show it at \url{http://onlineeksamen.dtu.dk/}
-\item It will be two parts:
+\item This may work for tiny projects
+\item This style does not scale for larger designs
+\item I recommend using an FSM + datapath
 \begin{itemize}
-\item Multiple choice
-\item Download and hand in a document (e.g., PDF generated from Word)
+\item Split responsibility
+\item Can be individually tested
+\item Can be developed in parallel
 \end{itemize}
-\item You can play with the very short one today
-\item We will do a test exam next week, before the lab
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{Using an FSM and a Datapath}
 \begin{itemize}
@@ -99,14 +109,6 @@ Embedded Systems Engineering}
 \end{frame}
 
 
-
-\begin{frame}[fragile]{The Input and Output of the Alarm FSM}
-\begin{itemize}
-\item Two inputs and one output
-\end{itemize}
-\shortlist{../code/simple_fsm_io.txt}
-\end{frame}
-
 \begin{frame}[fragile]{Encoding the State}
 \begin{itemize}
 \item We can optimize state encoding
@@ -129,23 +131,6 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{The Next State Logic}
 \shortlist{../code/simple_fsm_next.txt}
-\end{frame}
-
-\begin{frame}[fragile]{The Output Logic}
-\shortlist{../code/simple_fsm_output.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Summary on the Alarm Example}
-\begin{itemize}
-\item Three elements:
-\begin{enumerate}
-\item State register
-\item Next state logic
-\item Output logic
-\end{enumerate}
-\item This was a so-called Moore FSM
-\item There is also an FSM type called Mealy machine
-\end{itemize}
 \end{frame}
 
 
@@ -236,6 +221,7 @@ Embedded Systems Engineering}
 \item But not Turing complete
 \item Can \emph{only} process coins of 2 and 5
 \end{itemize}
+\item Have the FSM and the data path in two \code{Module}s
 \item An FSMD can be used to build a processor
 \item Fine for simple processors
 \item E.g., \href{https://github.com/schoeberl/lipsi}{Lipsi}
@@ -508,7 +494,7 @@ our synchronous design
 \item Into FPGA register
 \end{itemize}
 \item Setup and hold time for FPGA register
-\item Is your today's lab exercise
+%\item Is your today's lab exercise
 \end{itemize}
 \end{frame}
 
@@ -665,23 +651,146 @@ our synchronous design
 \item Basys3 has an FTDI chip for the USB interface
 \item USB interface for FPAG programming
 \item But also to provide a RS 232 to the FPGA
-\item You can talk with the Laptop
+\item You can talk with your laptop
 \item Your VM could write out some text
 \item Use the Chisel code I showed you
-\item Open a terminal to watch (show it)
+\item Open a terminal to watch % (show it)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{RS 232 from ip-contributions}
+\begin{itemize}
+\item A collection of Chisel hardware components
+\item Contains the RS232 interface
+\item Distributed as library from Maven Central
+\item No need to copy source around
+\item Just include it in your \code{build.sbt}
+\item Very easy distribution of open-source components
+\item You can contribute!
+\item \href{https://github.com/freechipsproject/ip-contributions}{ip-contributions}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing and Debugging}
+\begin{itemize}
+\item For debugging waveforms are fine
+\item Can become cumbersome as it needs \emph{manual inspection}
+\item Better having real tests
+\item Tests that check the result
+\item Can also be automated (e.g, continuous integration)
+\item Writing testers in Chisel may include some Scala code
+\item In principle you could also include Java code for testing ;-)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing with Chisel}
+\begin{itemize}
+\item Set input values with \code{poke}
+\item Advance the simulation with \code{step}
+\item Read the output values with \code{peek}
+\item Compare the values with \code{expect}
+\item Import following packages:
+\shortlist{../code/test_import.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Chisel Tester}
+\begin{itemize}
+\item Extends class \code{PeekPokeTester}
+\item Has the device-under test (DUT) as parameter
+\item Testing code can use all features of Scala
+\end{itemize}
+\begin{chisel}
+class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
+
+  // Here comes the Chisel/Scala code
+  // for the testing
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Example DUT}
+\begin{itemize}
+\item A device-under test (DUT)
+\shortlist{../code/test_dut.txt}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{The Main Program for the Test}
+\begin{itemize}
+\item Extend an App and invoke the \code{iotesters} driver
+\item With the DUT and the tester
+\shortlist{../code/test_main_simple.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Tester}
+\begin{itemize}
+\item Poke values and \code{expect} some output
+\shortlist{../code/test_bench.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ScalaTest}
+\begin{itemize}
+\item Testing framework for Scala
+\item Tests live in \code{src/test/scala}
+\item \code{sbt} understands ScalaTest
+\item Run all tests:
+\code{sbt test}
+\item When all \code{expect}s are ok, the test passes
+\item A little bit funny syntax
+\item Add library to \code{build.sbt}
+\begin{chisel}
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+\end{chisel}
+\item Import ScalaTest library
+\begin{chisel}
+import org.scalatest._
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ScalaTest Version of our Tester}
+\shortlist{../code/scalatest_simple.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Testing Your Vending Machine}
+\begin{itemize}
+\item Write (unit) tests for each component/module
+\item E.g., one for the data path, one for the state machine
+\item Then one (integration) test for the top-level component/module
+\item Maybe do some \href{https://en.wikipedia.org/wiki/Extreme_programming}{extreme programming (XP)}
+\begin{itemize}
+\item Write the test first
+\item Then the code of the component
+\item The test can serve as a specification
+\item We can do \href{https://en.wikipedia.org/wiki/Agile_software_development}{agile} hardware development
+\end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
-\item Paper \& pencil exercises on SRAM interfacing
-\item On paper or in a plain text editor
+\item You requested a testing exercise at the midterm evaluation
+\item Testing a 5:1 Mux that contains errors
+\item see \href{https://github.com/schoeberl/chisel-lab/tree/master/lab11}{lab 11}
 \item As usual, show and discuss with a TA
-\item Exercise description is in DTU Inside file sharing
-\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
-\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
 \end{itemize}
 \end{frame}
+
+
+%\begin{frame}[fragile]{Today's Lab}
+%\begin{itemize}
+%\item Paper \& pencil exercises on SRAM interfacing
+%\item On paper or in a plain text editor
+%\item As usual, show and discuss with a TA
+%\item Exercise description is in DTU Inside file sharing
+%\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/39a98e6a-f453-4aa7-98c4-cb13eae6c805}{sram\_exercise.pdf}
+%\item \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{SRAM data sheet: CYCC1041...}
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
@@ -693,6 +802,7 @@ our synchronous design
 \begin{itemize}
 \item E.g., your Basys3 board to the laptop
 \end{itemize}
+\item Testing is more than looking at waveforms
 \end{itemize}
 \end{frame}
 
