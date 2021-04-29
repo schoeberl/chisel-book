@@ -223,6 +223,8 @@ waveform viewing
 
 ### Week 12 Test Exam, No lecture
 
+**Slides:** [12_exam.pdf](12_exam.pdf)
+
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
