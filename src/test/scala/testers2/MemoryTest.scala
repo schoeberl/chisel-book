@@ -33,7 +33,7 @@ class MemoryTest extends FlatSpec with ChiselScalatestTester {
   }
 
   "Initialized memory" should "pass" in {
-    test(new Memory) { dut =>
+    test(new InitMemory) { dut =>
       // Some defaults
       dut.io.rdAddr.poke(0.U)
       dut.io.wrEna.poke(false.B)
