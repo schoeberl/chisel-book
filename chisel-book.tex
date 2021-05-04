@@ -294,6 +294,10 @@ Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
+For the third edition I would like to acknowledge Hans Jakob Damsgaard for rewriting
+all test code to ChiselTest, adding ChiselTest to the testing chapter, adding the black
+box description, and an example for a multi-clock memory.
+
 
 \mainmatter
 
@@ -2746,22 +2750,12 @@ synchronous behavior.
 To support on-chip memory, Chisel provides the memory constructor \code{SyncReadMem}.
 Listing~\ref{lst:memory} shows a component \code{Memory} that implements
 1~KiB of memory with byte-wide input and output data and a write enable. 
-Note that reads are performed either by using the \code{read} method or through 
-simple indexing when the memory is on the right-hand side of an assignment. 
-Similarly, writes are performed either by using the \code{write} method or by 
-rewriting the statement into an assignment such as \code{mem(address) := data}.
+%Note that reads are performed either by using the \code{read} method or through 
+%simple indexing when the memory is on the right-hand side of an assignment. 
+%Similarly, writes are performed either by using the \code{write} method or by 
+%rewriting the statement into an assignment such as \code{mem(address) := data}.
 
 \longlist{code/memory.txt}{1\,KiB of synchronous memory.}{lst:memory}
-
-Memories can be initialized with either binary or hexadecimal initialization files. 
-The files are simple ASCII text files with the same number of lines as there are 
-entries in the corresponding memory. Each character represents either a single bit 
-or four bits. Traditionally, binary files use the \code{.bin} file extension, while 
-hexadecimal files use \code{.hex}. Using \code{loadMemoryFromFile} will result in 
-emission of a separate Verilog file and works in ChiselTest. Using instead 
-\code{loadMemoryFromFileInline} results in an inlined initialization and does not 
-yet work in ChiselTest. Either way, initializations are based around calls to 
-\code{readmemb} or \code{readmemh}.
 
 An interesting question is which value is returned from a read when in the same clock
 cycle a new value is written to the same address that is read out.
@@ -2808,6 +2802,16 @@ the resources are available in the FPGA you are using (e.g., in the shape of LUT
 FPGAs), you can manually implement this as a \code{BlackBox}. Vendors typically provide
 code templates that can be used directly for this.
 
+
+%Memories in FPGAs can be initialized with either binary or hexadecimal initialization files. 
+%The files are simple ASCII text files with the same number of lines as there are 
+%entries in the corresponding memory. Each character represents either a single bit 
+%or four bits. Traditionally, binary files use the \code{.bin} file extension, while 
+%hexadecimal files use \code{.hex}. Using \code{loadMemoryFromFile} will result in 
+%emission of a separate Verilog file and works in ChiselTest. Using instead 
+%\code{loadMemoryFromFileInline} results in an inlined initialization and does not 
+%yet work in ChiselTest. Either way, initializations are based around calls to 
+%\code{readmemb} or \code{readmemh}.
 
 \section{Exercise}
 
@@ -4446,7 +4450,7 @@ elements. For small buffers this is probably the most efficient implementation.
 \index{Circular buffer!read pointer}
 \index{Circular buffer!write pointer}
 A queue in software is usually used by a sequential code in a single thread.
-Or as a queue to decouple a producer and consumer thread.
+We us a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 Two pointers point into read and write positions in a memory set aside
