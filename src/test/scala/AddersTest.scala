@@ -3,6 +3,7 @@ import chiseltest._
 import chiseltest.experimental.TestOptionBuilder._
 import chiseltest.internal.WriteVcdAnnotation
 import org.scalatest._
+import scala.language.implicitConversions
 
 trait AbstractAdderTest {
   def testFn[T <: AbstractAdder](dut: T, w: Int = 32) = {

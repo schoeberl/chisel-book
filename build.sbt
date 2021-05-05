@@ -1,7 +1,16 @@
 
 scalaVersion := "2.12.13"
 
-scalacOptions := Seq("-deprecation", "-Xsource:2.11")
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-Xfatal-warnings",
+  "-Xsource:2.11",
+  "-language:reflectiveCalls",
+  // Enables autoclonetype2
+  "-P:chiselplugin:useBundlePlugin"
+)
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots"),

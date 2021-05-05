@@ -3,15 +3,11 @@
 import java.io._
 import scala.io.Source
 
-val files = new File("src/main/scala").listFiles
+  new File("src/main/scala").listFiles
   .map(f => extract("src/main/scala/" + f.getName))
 
-val iotfiles = new File("src/test/scala/iotesters").listFiles
-  .map(f => extract("src/test/scala/iotesters/" + f.getName))
-val cttfiles = new File("src/test/scala/testers2").listFiles
-  .map(f => extract("src/test/scala/testers2/" + f.getName))
-
-val tfiles = iotfiles ++ cttfiles
+  new File("src/test/scala").listFiles
+  .map(f => extract("src/test/scala/" + f.getName))
 
 def extract(f: String) {
   println(f)

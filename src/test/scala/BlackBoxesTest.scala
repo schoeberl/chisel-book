@@ -4,6 +4,7 @@ import chiseltest._
 import chiseltest.internal.VerilatorBackendAnnotation
 import chiseltest.experimental.TestOptionBuilder._
 import org.scalatest._
+import scala.language.implicitConversions
 
 class BlackBoxesTest extends FlatSpec with ChiselScalatestTester {
   behavior of "BlackBoxAdder"
