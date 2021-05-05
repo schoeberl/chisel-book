@@ -1,4 +1,5 @@
 import chisel3._
+import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFile
 import firrtl.annotations.MemoryLoadFileType
 
@@ -18,31 +19,6 @@ class Memory() extends Module {
 
   when(io.wrEna) {
     mem.write(io.wrAddr, io.wrData)
-  }
-}
-//- end
-
-//- start memory_init
-class InitMemory() extends Module {
-  val io = IO(new Bundle {
-    val rdAddr = Input(UInt(10.W))
-    val rdData = Output(UInt(8.W))
-    val wrEna = Input(Bool())
-    val wrData = Input(UInt(8.W))
-    val wrAddr = Input(UInt(10.W))
-  })
-
-  val mem = SyncReadMem(1024, UInt(8.W))
-  loadMemoryFromFile(
-    mem, "./src/main/resources/init.hex", MemoryLoadFileType.Hex
-  )
-
-  io.rdData := mem.read(io.rdAddr)
-  // alternatively, io.rdData := mem(io.rdAddr)
-
-  when(io.wrEna) {
-    mem.write(io.wrAddr, io.wrData)
-    // alternatively, mem(io.wrAddr) := io.wrData
   }
 }
 //- end
@@ -71,3 +47,60 @@ class ForwardingMemory() extends Module {
   io.rdData := Mux(doForwardReg, wrDataReg, memData)
 }
 //- end
+
+class TrueDualPortMemory() extends Module {
+  val io = IO(new Bundle {
+    val addrA = Input(UInt(10.W))
+    val rdDataA = Output(UInt(8.W))
+    val wrEnaA = Input(Bool())
+    val wrDataA = Input(UInt(8.W))
+    val addrB = Input(UInt(10.W))
+    val rdDataB = Output(UInt(8.W))
+    val wrEnaB = Input(Bool())
+    val wrDataB = Input(UInt(8.W))
+  })
+
+  //- start memory_dual_port
+  // This dual-port memory generates registers (in Quartus with Cyclone V)
+  val mem = SyncReadMem(1024, UInt(8.W))
+
+  io.rdDataA := mem.read(io.addrA)
+  when(io.wrEnaA) {
+    mem.write(io.addrA, io.wrDataA)
+  }
+  io.rdDataB := mem.read(io.addrB)
+  when(io.wrEnaB) {
+    mem.write(io.addrA, io.wrDataB)
+  }
+  //- end
+}
+
+object TrueDualPortMemory extends App {
+  new (ChiselStage).emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated"))
+  // new (ChiselStage).emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
+}
+
+class InitMemory() extends Module {
+  val io = IO(new Bundle {
+    val rdAddr = Input(UInt(10.W))
+    val rdData = Output(UInt(8.W))
+    val wrEna = Input(Bool())
+    val wrData = Input(UInt(8.W))
+    val wrAddr = Input(UInt(10.W))
+  })
+
+  //- start memory_init
+  val mem = SyncReadMem(1024, UInt(8.W))
+  loadMemoryFromFile(
+    mem, "./src/main/resources/init.hex", MemoryLoadFileType.Hex
+  )
+
+  io.rdData := mem.read(io.rdAddr)
+  // alternatively, io.rdData := mem(io.rdAddr)
+
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+    // alternatively, mem(io.wrAddr) := io.wrData
+  }
+  //- end
+}
