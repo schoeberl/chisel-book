@@ -18,16 +18,15 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Exam
 \item Evaluation
-\item Chisel from scratch
+% \item Chisel from scratch
 \item Who is Alan Turing?
 \item Lipsi, a simple processor
-\item TODO: plan on continuing the study, CAE in fall, fagproject on building a processor pipeline
-\item TODO: talk about report and hand in date, show VM today
+\item Show VM today
+\item Report hand-in at DTU Learn (24 May)
 \item We have well known guest lectures today
 \begin{itemize}
-\item Kasper, Anthon, and Simon will present today
+\item Tjark and Kasper will present today
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -48,24 +47,26 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Evaluation}
 \begin{itemize}
-\item Thank you!
+%\item Thank you!
 \item Looks like you enjoyed DE2 and Chisel :-)
+\item Some found it to easy -- Maybe I should change that
+\item Not so many answers, is there an evaluation fatigue?
 \item Let us look into it
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Write in Chisel from Scratch}
-\begin{itemize}
-\item This was a request from the evaluation
-\item Should not be too hard
-\item We need just two files
-\begin{itemize}
-\item \code{build.sbt} for library dependencies
-\item One Scala file
-\end{itemize}
-\item Let's do it now!
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Write in Chisel from Scratch}
+%\begin{itemize}
+%\item This was a request from the evaluation
+%\item Should not be too hard
+%\item We need just two files
+%\begin{itemize}
+%\item \code{build.sbt} for library dependencies
+%\item One Scala file
+%\end{itemize}
+%\item Let's do it now!
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{FSMD}
 \begin{itemize}
@@ -103,7 +104,7 @@ Embedded Systems Engineering}
 \item Our Chisel and digital design knowledge should be enough
 \item Let's start with a simple one
 \item An FSMD plus memory
-\item As it is small we  name it after a small island: Lipsi
+\item As it is small, we  name it after a small island: Lipsi
 \end{itemize}
 \end{frame}
 
@@ -286,6 +287,24 @@ Encoding & Name & Operation \\
 \end{frame}
 
 
+\begin{frame}[fragile]{An Assembly Program Example}
+\begin{itemize}
+\item Digital hardware and processors only understand 0 and 1
+\item But, we do not want to program in 0s and 1s
+\item We write in \href{https://en.wikipedia.org/wiki/Assembly_language}{assembly language}
+\end{itemize}
+\begin{chisel}
+ldi 0x12
+st r1
+ldi 0x34
+st r2
+ldi 0
+add r1
+add r2
+# now it is 0x46
+\end{chisel}
+\end{frame}
+
 \begin{frame}[fragile]{Assembling Instructions}
 \begin{chisel}
     for (line <- source.getLines()) {
@@ -324,7 +343,7 @@ This is done at hardware generation
 \item Kind of useful for small systems
 \item You could implement your vending machine on it
 \item Is this the way a general processor is built?
-\item No, we use something called pipelining
+\item Not today, we use something called pipelining
 \item You can learn this in:
 \begin{itemize}
 \item 02155: Computer Architecture and Engineering
@@ -332,36 +351,44 @@ This is done at hardware generation
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{02155: Computer Architecture and Engineering}
+\begin{itemize}
+\item Given by Alberto and me
+\item \href{http://www2.imm.dtu.dk/courses/02155/}{Course description}
+\item Learn how a real-world processor work
+\item Learn the language of the machine (instructions)
+\item Virtual memory and caches
+\item We use RISC-V, the free instruction set
+\item Project: write a simulator for the RISC-V
+\begin{itemize}
+\item In any language, may be in Chisel
+\item May even be a full implementation in an FPGA
+\end{itemize}
+\item You can also do a complete RISC-V in an FPGA in a Fagproject
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Future with Digital Design Education}
 \begin{itemize}
 \item There are several companies in DK doing chip design
+\item FPGAs are available in the cloud
+\begin{itemize}
+\item To speedup computing
+\item You can rent them from Amazon
+\end{itemize}
 \item Also FPGAs are used in embedded systems
 \item Digital design is only part of a computer engineering education
 \item But DTU does not have a clear path to a computer engineering education
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Digital Design within an EE Master}
-\begin{itemize}
-\item Not an obvious choice, as there is no specialization in digital systems
-\item Select some of the following courses
-\begin{itemize}
-\item 02155: Computer Architecture and Engineering
-\item 02203: Design of Digital Systems
-\item 02211: Advanced Computer Architecture
-\item 02205: VLSI Design
-\item 02217: Design of Arithmetic Processors
-\item 02204: Design of Asynchronous Circuits
-\item 02209: Test of Digital Systems
-\end{itemize}
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{Computer Engineering Education at DTU}
 \begin{itemize}
-\item On the border between hardware and software
+\item On the interaction between hardware and software
 \item Very well payed jobs :-)
-\item Not an easy choice at DTU as well
+\item Not an easy choice at DTU
 \begin{itemize}
 \item No BSc available
 \item Between EE and CS
@@ -377,6 +404,40 @@ This is done at hardware generation
 \begin{itemize}
 \item Digital Systems
 \item Embedded and Distributed Systems
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Computer Engineering within the EE Bachelor}
+\begin{itemize}
+\item You get well educated in electronics
+\item Add the software side to your education
+\item Select some of the following courses
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02105: Algorithms and Data Structures 1
+\item 02161: Software Engineering 1
+\item 02159: Operating Systems
+\item 02157: Functional Programming
+\item 02141: Computer Science Modelling
+\item 02110: Algorithms and Data Structures 2
+\end{itemize}
+\item See also \href{https://www.dtu.dk/da/english/Education/msc/Programmes/computer_science_and_engineering/Prerequisites}{Prerequisites for EE Bsc}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Digital Design within an EE Master}
+\begin{itemize}
+\item Not an obvious choice, as there is no specialization in digital systems
+\item Select some of the following courses
+\begin{itemize}
+\item 02155: Computer Architecture and Engineering
+\item 02203: Design of Digital Systems
+\item 02211: Advanced Computer Architecture
+\item 02205: VLSI Design
+\item 02217: Design of Arithmetic Processors
+\item 02204: Design of Asynchronous Circuits
+\item 02209: Test of Digital Systems
 \end{itemize}
 \end{itemize}
 \end{frame}
