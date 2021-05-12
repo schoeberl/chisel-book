@@ -70,7 +70,7 @@ class TrueDualPortMemory() extends Module {
   }
   io.rdDataB := mem.read(io.addrB)
   when(io.wrEnaB) {
-    mem.write(io.addrA, io.wrDataB)
+    mem.write(io.addrB, io.wrDataB)
   }
   //- end
 }
