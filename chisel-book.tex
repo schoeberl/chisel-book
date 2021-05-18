@@ -429,7 +429,7 @@ Install the Java OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 Chisel and Scala can also be installed and used under Windows.
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
-When importing a project, {\textbf select the JDK 1.8} you installed before (not Java 11!)
+When importing a project, {\textbf select the JDK 1.8} you installed before.
 \code{sbt} can be installed with a Windows installer, see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
 Install a \myref{https://git-scm.com/download/win}{git client}.
@@ -1084,7 +1084,8 @@ without configuring an FPGA and toggle switches.
 \chapter{Build Process}
 
 To get started with more interesting Chisel code we first need to learn how to compile
-Chisel programs, how to generate Verilog code for execution in an FPGA, and how
+Chisel programs, how to generate Verilog code for execution in an FPGA.
+the following chapter shows how
 to write tests for debugging and to verify that our circuits are correct.
 
 Chisel is written in Scala, so any build process that supports Scala is possible
@@ -1204,6 +1205,33 @@ $ sbt "test:runMain mypacket.MyTester"
 Now that we know the basic structure of a Chisel project and how to compile and run it
 with \code{sbt}, we can continue with a simple testing framework.
 
+\subsection{Generating Verilog}
+
+\index{Verilog}
+\index{generate Verilog}
+\index{emit Verilog}
+
+To synthesize the Chisel code for an FPGA or ASIC we need to translate Chisel into
+a hardware description language that a synthesize tool understands.
+With Chisel we can generate a synthesizable Verilog description of the circuit.
+
+To generate the Verilog description, we need an application. A Scala object that \code{extends App}
+is an application that implicitly generates the main function where the application starts.
+The only action of this application is to create a new \code{Hello} object and pass it
+to the Chisel \code{emitVerilog()} function.
+The following code will generate the Verilog file \code{Hello.v}.
+
+\shortlist{code/generate.txt}
+
+However, just using the default version of \code{emitVerilog()} will put the generated files
+into the root folder of our project (where we run the \code{sbt} command).
+To put the generated files into a subfolder, we need to specify options to \code{emitVerilog()}.
+I recommend to specify a folder \code{generated}, as shown in Figure~\ref{fig:folders}.
+The build options can be set as a second argument, which is an array of Strings,
+The following code will generate the Verilog file \code{Hello.v} in the subfolder \code{generated}. 
+
+\shortlist{code/generate_options.txt}
+
 \subsection{Tool Flow}
 
 \begin{figure}
@@ -1248,19 +1276,16 @@ Each file starts with the import of Chisel and related packages:
 \shortlist{code/import.txt}
 
 \noindent Then follows the hardware description, as shown in Listing~\ref{lst:chisel:hello}.
-To generate the Verilog description, we need an application. A Scala object that \code{extends App}
-is an application that implicitly generates the main function where the application starts.
-The only action of this application is to create a new \code{HelloWorld} object and pass it
-to the Chisel driver \code{execute} function. The first argument is an array of Strings,
-where build options can be set (e.g., the output folder). The following code will
-generate the Verilog file \code{Hello.v}.
+To generate the Verilog description, we need an application. 
+The only action of this application is to create a new \code{Hello} object and pass it
+to the \code{emitVerilog()} function.
 
 \shortlist{code/generate.txt}
 
 \noindent Run the generation of the example manually with
 
 \begin{chisel}
-$ sbt "runMain Hello"
+$ sbt run
 \end{chisel}
 
 and explore the generated \code{Hello.v} with an editor. The generated Verilog code may not be

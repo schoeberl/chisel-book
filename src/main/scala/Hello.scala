@@ -47,3 +47,9 @@ object Hello extends App {
   (new chisel3.stage.ChiselStage).emitVerilog(new Hello())
 }
 //- end
+
+//- start generate_options
+object HelloOption extends App {
+  (new chisel3.stage.ChiselStage).emitVerilog(new Hello(), Array("--target-dir", "generated"))
+}
+//- end
