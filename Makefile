@@ -12,6 +12,10 @@ gencode:
 	-mkdir code
 	sbt -Dsbt.main.class=sbt.ScriptMain scripts/gencode.scala
 
+keywords:
+	sbt -Dsbt.main.class=sbt.ScriptMain scripts/keywords.scala
+
+
 fig:
 	make -C figures
 

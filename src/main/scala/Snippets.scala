@@ -9,7 +9,26 @@ class BasicExercise extends Module {
     val led = Output(UInt(1.W))
   })
   //- end
+
+  // This is possible
+  val + = 1.U
+  val Module = 2.U
+  val when = 3.U
+
   io.led := io.sw(0) & io.sw(1)
+}
+
+class NosensKeywords extends Module {
+  val io = IO(new Bundle {
+    val led = Output(UInt(1.W))
+  })
+
+  // This is possible, but does not make sense
+  val + = 1.U
+  val Module = 2.U
+  val when = 3.U
+
+  io.led := `+` | Module | when
 }
 
 class AluIO extends Bundle {

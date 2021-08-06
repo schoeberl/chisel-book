@@ -275,9 +275,12 @@ The FIFO variations also show how to use type parameters and inheritance in digi
 
 Chisel has been moving forward in the last year, so it is time for a new edition
 of the Chisel book.
-
 We changed all examples to the latest version of Chisel (3.4.1) and the recommended
 Scala version (2.12.12).
+
+Chisel is part of the Scala/Java ecosystem. Therefore, it is possible to use the Java infrastructure
+Maven Central to distribute open-source hardware designs. We have added a section on how to publish
+a Chisel design on Maven Central
 
 
 \section*{Acknowledgements}
@@ -737,7 +740,7 @@ as they are defined in C, Java, Scala, and several other programming languages,
 to described combinational circuits: \code{\&} is the AND operator and \code{|} is
 the OR operator.
 Following line of code defines a circuit that combines signals \code{a} and \code{b} with \emph{and}
-gates and combines the result with signal \code{c} with \emph{or} gates.
+gates and combines the result with signal \code{c} with \emph{or} gates and names it \code{logic}.
 
 \shortlist{code/logic.txt}
 
@@ -926,8 +929,15 @@ a common practice is to postfix register names with \code{Reg}.
 Another common practice, coming from Java and Scala, is to use
 \myref{https://en.wikipedia.org/wiki/Camel_case}{camelCase} for
 identifier consisting of several words. The convention is to start
-functions and variables with a lower case letter and classes (types) with
-an upper case letter.
+functions and variables with a lower case letter and classes (types),
+e.g., a \code{Module} name, with an upper case letter.
+
+In Chisel you are relative free to name your identifiers. However, use taste and
+descriptive names. Furthermore, several words are reserved. They are listed
+in Appendix~\ref{sec:reserved}.
+
+
+
 
 \subsection{Counting}
 
@@ -3094,7 +3104,7 @@ out of smaller FSMs by combining them into communicating FSMs.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/fsm}
-  \caption{A finite state machine (Moore type).}
+  \caption{A finite-state machine (Moore type).}
   \label{fig:fsm}
 \end{figure}
 
@@ -3256,7 +3266,7 @@ the input of the FSM and the output, this is called a
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/mealy}
-  \caption{A Mealy type finite state machine.}
+  \caption{A Mealy type finite-state machine.}
   \label{fig:mealy}
 \end{figure}
 
@@ -3498,7 +3508,7 @@ unidirectional data exchange.
 \index{FSMD}
 
 One typical example of communicating state machines is a state machine
-combined with a datapath. This combination is often called a finite state machine
+combined with a datapath. This combination is often called a finite-state machine
 with datapath (FSMD). The state machine controls the datapath, and the datapath
 performs the computation. The FSM input is the input from the environment and the input
 from the datapath. The data from the environment is fed into the datapath, and the
@@ -5224,6 +5234,49 @@ also contains projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
 
 \appendix
+
+\chapter{Reserved Keywords}
+\index{Reserved keywords}
+\label{sec:reserved}
+
+Several keywords are reserved in Chisel, and cannot be used as identifiers
+for your hardware design.
+Table~\ref{tab:reserved:scala} lists the reserved words from Scala.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llllll}
+\code{:}  & \code{<-}  & \code{<:}  & \code{<\%}  & \code{=}  & \code{=>} \\
+\code{>:}  & \code{@}  & \code{\#}  & \code{\_}  & \code{abstract}  & \code{case} \\
+\code{catch}  & \code{class}  & \code{def}  & \code{do}  & \code{else}  & \code{extends} \\
+\code{false}  & \code{final}  & \code{finally}  & \code{for}  & \code{forSome}  & \code{if} \\
+\code{implicit}  & \code{import}  & \code{lazy}  & \code{match}  & \code{new}  & \code{null} \\
+\code{object}  & \code{override}  & \code{package}  & \code{private}  & \code{protected}  & \code{return} \\
+\code{sealed}  & \code{super}  & \code{this}  & \code{throw}  & \code{trait}  & \code{true} \\
+\code{try}  & \code{type}  & \code{val}  & \code{var}  & \code{while}  & \code{with} \\
+\code{yield}  & \\
+\end{tabular}
+\caption{Reserved keywords from the Scala language.}
+\label{tab:reserved:scala}
+\end{table}
+
+Table~\ref{tab:reserved:chisel} lists the reserved words added by the Chisel library.
+In contrast to the Scala reserved word listing, it also contains type/class names defined by Chisel.
+Although technically possible, you should also avoid to use Chisel (and Scala) operators, such as e.g.,
+\code{+} or \code{<<}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llllll}
+\code{\#\#}  & \code{andR}  & \code{Bits}  & \code{Bool}  & \code{Cat}  & \code{clock} \\
+\code{elsewhen}  & \code{io}  & \code{is}  & \code{Mem}  & \code{Module}  & \code{orR} \\
+\code{otherwise}  & \code{Reg}  & \code{RegEnable}  & \code{RegInit}  & \code{RegNext}  & \code{reset} \\
+\code{SInt}  & \code{switch}  & \code{SyncMem}  & \code{UInt}  & \code{Vec}  & \code{VecInit} \\
+\code{when}  & \code{Wire}  & \code{WireDefault}  & \code{xorR}  & \\
+\end{tabular}
+\caption{Reserved keywords from the Chisel language.}
+\label{tab:reserved:chisel}
+\end{table}
 
 \chapter{Chisel Projects}
 
