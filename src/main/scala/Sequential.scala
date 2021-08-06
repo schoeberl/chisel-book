@@ -13,6 +13,7 @@ class Sequential extends Module {
     val q4 = Output(UInt(4.W))
     val q5 = Output(UInt(4.W))
     val q6 = Output(UInt(4.W))
+    val q7 = Output(UInt(4.W))
     val riseIn = Input(UInt(1.W))
     val riseOut = Output(UInt(1.W))
   })
@@ -62,6 +63,11 @@ class Sequential extends Module {
   val enableReg2 = RegEnable(inVal, enable)
   //- end
   io.q6 := enableReg2
+
+  //- start sequ_reg_init_ena2
+  val resetEnableReg2 = RegEnable(inVal, 0.U(4.W), enable)
+  //- end
+  io.q7 := resetEnableReg2
 
   val din = io.riseIn
   //- start sequ_reg_rising

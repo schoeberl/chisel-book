@@ -2419,12 +2419,26 @@ with a conditional update:
 
 \shortlist{code/sequ_reg_ena.txt}
 
+\noindent Using an enable signal for a register is so common that Chisel defines
+\code{RegEnable} where the second parameter is the enable signal:
+
+\shortlist{code/sequ_reg_ena2.txt}
+
 \noindent A register with enable can also be reset:
 
 \shortlist{code/sequ_reg_init_ena.txt}
 
-A register can also be part of an expression. The following circuit detects the rising edge
-of a signal by comparing its current value with the one from the last clock cycle.
+\noindent The functionality of enable and initialization at reset can be combined when
+using the three-parameter version of \code{RegEnable}. The first parameter is the input signal,
+the second parameter the initialization value, ad the third parameter the enable signal:
+
+\shortlist{code/sequ_reg_init_ena2.txt}
+
+
+
+A register can also be part of an expression, without giving it a name.
+The following circuit detects the rising edge of a signal by comparing its current
+value with the one from the last clock cycle.
 
 \shortlist{code/sequ_reg_rising.txt}
 
