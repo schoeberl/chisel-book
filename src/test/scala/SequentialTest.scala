@@ -22,6 +22,7 @@ class SequentialTest extends FlatSpec with ChiselScalatestTester {
       dut.io.q3.expect(0xf.U)
       dut.io.q4.expect(0xf.U)
       dut.io.q5.expect(0xf.U)
+      dut.io.q6.expect(0xf.U)
       dut.io.riseIn.poke(true.B)
       dut.io.riseOut.expect(true.B)
       dut.clock.step()
@@ -30,11 +31,13 @@ class SequentialTest extends FlatSpec with ChiselScalatestTester {
       dut.io.q3.expect(0x3.U)
       dut.io.q4.expect(0xf.U)
       dut.io.q5.expect(0xf.U)
+      dut.io.q6.expect(0xf.U)
       dut.io.ena.poke(true.B)
       dut.io.riseOut.expect(false.B)
       dut.clock.step()
       dut.io.q4.expect(0x3.U)
       dut.io.q5.expect(0x3.U)
+      dut.io.q6.expect(0x3.U)
       dut.io.riseOut.expect(false.B)
     }
   }

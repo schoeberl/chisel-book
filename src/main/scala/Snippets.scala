@@ -28,7 +28,6 @@ class NosensKeywords extends Module {
   val Module = 2.U
   val when = 3.U
 
-  io.led := `+` | Module | when
 }
 
 class AluIO extends Bundle {

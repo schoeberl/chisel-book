@@ -1,4 +1,5 @@
 import chisel3._
+import chisel3.util.RegEnable
 
 class Sequential extends Module {
   val io = IO(new Bundle {
@@ -11,6 +12,7 @@ class Sequential extends Module {
     val ena = Input(Bool())
     val q4 = Output(UInt(4.W))
     val q5 = Output(UInt(4.W))
+    val q6 = Output(UInt(4.W))
     val riseIn = Input(UInt(1.W))
     val riseOut = Output(UInt(1.W))
   })
@@ -55,6 +57,11 @@ class Sequential extends Module {
   }
   //- end
   io.q5 := resetEnableReg
+
+  //- start sequ_reg_ena2
+  val enableReg2 = RegEnable(inVal, enable)
+  //- end
+  io.q6 := enableReg2
 
   val din = io.riseIn
   //- start sequ_reg_rising
