@@ -788,9 +788,11 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
-\noindent Bit fields are concatenated with \code{Cat}.
+\noindent Bit fields are concatenated with the \code{\#\#} operator.
 \shortlist{code/concat.txt}
 \index{Bit!concatenation}
+\noindent Note, that there is a \code{Cat} function available that performs the same
+operation with \code{Cat(highByte, lowByte)}.
 
 Table~\ref{tab:operators} shows the full list of operators
 (see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).

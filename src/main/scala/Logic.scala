@@ -7,6 +7,7 @@ class Logic extends Module {
     val b = Input(UInt(1.W))
     val c = Input(UInt(1.W))
     val out = Output(UInt(1.W))
+    val cat = Output(UInt(16.W))
   })
 
   //- start types
@@ -92,8 +93,9 @@ class Logic extends Module {
   val highByte = 0xff.U
 
   //- start concat
-  val word = Cat(highByte, lowByte)
+  val word = highByte ## lowByte
   //- end
+  io.cat := word
 
   val sel = b === c
   //- start mux
