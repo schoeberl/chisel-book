@@ -8,6 +8,7 @@ class Logic extends Module {
     val c = Input(UInt(1.W))
     val out = Output(UInt(1.W))
     val cat = Output(UInt(16.W))
+    val ch = Output(UInt(8.W))
   })
 
   //- start types
@@ -37,6 +38,11 @@ class Logic extends Module {
   "o377".U       // octal representation of 255
   "b1111_1111".U // binary representation of 255
   //- end
+
+  //- start const_char
+  val aChar = 'A'.U
+  //- end
+  io.ch := aChar
 
   //- start bool
   Bool()

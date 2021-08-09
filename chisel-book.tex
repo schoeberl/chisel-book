@@ -723,6 +723,12 @@ the constants in, in this case 8 bits.
 \noindent The above code shows how to use an underscore to group digits in the
 string that represents a constant. The underscore is ignored.
 
+Characters to represent text (in \myref{https://en.wikipedia.org/wiki/ASCII}{ASCII} encoding)
+can also be used a constants in Chisel:
+
+\shortlist{code/const_char.txt}
+
+
 To represent logic values, Chisel defines the type \code{Bool}.
 \code{Bool} can represent a \emph{true} or \emph{false} value.
 The following code shows the definition of type \code{Bool} and the definition of
@@ -3964,8 +3970,13 @@ a Chisel \code{Vec} from a Scala \code{Array}.
 We might have data in a file, that we can read in during hardware generation
 time for the logic table.
 Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
-class form the Scala standard library to read the file ``data.txt'', which
+class form the Scala standard library to read the file \code{data.txt}, which
 contains integer constants in a textual representation.
+
+\index{File reading}
+
+\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
+
 
 A few words on the maybe a bit intimidating expression:
 \begin{chisel}
@@ -3981,9 +3992,17 @@ from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-
 The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
 of Chisel types.
 
-\index{File reading}
+We can use this initialization of a Chisel \code{Vec} from a Scala sequence to represent
+a message that we may send out to a serial port. Following code converts the standard greeting
+from a Scala/Java \code{String} to a Chisel \code{Vec}:
 
-\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
+\shortlist{code/hello_table.txt}
+
+\noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
+function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
+This code is extracted from the serial port example, later in the text, to send a welcome
+message. 
+
 
 We can use the full power of Scala to generate our logic (tables).
 E.g., generate a table of fixpoint constants to represent a trigonometric function,
