@@ -9,6 +9,7 @@ class Logic extends Module {
     val out = Output(UInt(1.W))
     val cat = Output(UInt(16.W))
     val ch = Output(UInt(8.W))
+    val word = Output(UInt(16.W))
   })
 
   //- start types
@@ -107,4 +108,31 @@ class Logic extends Module {
   //- start mux
   val result = Mux(sel, a, b)
   //- end
+
+  /*
+  //- start no_partial_assign
+  val assignWord = Wire(UInt(16.W))
+
+  assignWord(7, 0) := lowByte
+  assignWord(15, 8) := highByte
+  //- end
+  */
+
+  //- start partial_assign_solution
+  val assignWord = Wire(UInt(16.W))
+
+  class Split extends Bundle {
+    val high = UInt(8.W)
+    val low = UInt(8.W)
+  }
+
+  val split = Wire(new Split())
+  split.low := lowByte
+  split.high := highByte
+
+  assignWord := split.asUInt()
+  //- end
+
+  io.word := assignWord
+
 }

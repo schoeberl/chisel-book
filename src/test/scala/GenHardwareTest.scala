@@ -2,7 +2,6 @@ import chisel3._
 import chiseltest._
 import org.scalatest._
 
-//- start basic_chiseltest
 class GenHardwareTest extends FlatSpec with ChiselScalatestTester {
   "GenHardware" should "work" in {
     test(new GenHardware) { dut =>
@@ -12,4 +11,3 @@ class GenHardwareTest extends FlatSpec with ChiselScalatestTester {
     }
   }
 }
-//- end

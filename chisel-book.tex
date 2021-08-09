@@ -1041,6 +1041,22 @@ as needed, and then passing this bundle to a \code{RegInit}:
 With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
 structures, which are powerful abstractions.
 
+{\bf Possible pitfall:} In Chisel partial assignments are not allowed, although they haven been
+allowed in Chisel 2 and are possible in Verilog and VHDL. Following code will generate
+an error during circuit elaboration:
+
+\shortlist{code/no_partial_assign.txt}
+
+\noindent The argument is that it would be better to use bundles for this use case.
+One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
+from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
+to a \code{UInt}, and assigning this value to the target \code{UInt}.
+
+\shortlist{code/partial_assign_solution.txt}
+
+\noindent The small drawback of this solution is that one needs to know in which orders
+bundle fields are merged to a singe bit vector.
+
 \section{Chisel Generates Hardware}
 
 After seeing some initial Chisel code, it might look similar to classic programming
