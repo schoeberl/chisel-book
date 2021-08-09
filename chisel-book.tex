@@ -537,21 +537,48 @@ To import an \code{sbt} based project open the folder with \emph{File - Open}.
 
 \section{Source Access and eBook Features}
 
-This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{chisel-book}.
+This book is open source and hosted at GitHub: \myref{https://github.com/schoeberl/chisel-book}{schoeberl/chisel-book}.
 All Chisel code examples, shown in this book, are included in the repository.
-The code compiles with a recent version of Chisel, and many examples also include a test bench.
-We collect larger Chisel examples in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}. If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
+All code shown in the book passed the compiler and therefore should not contain any syntax errors.
+Furthermore, most examples also include a test bench.
+The code is extracted automatically from that source.
+\index{Chisel!Examples}
+We collect larger Chisel examples in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+
+If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
 You can also provide feedback or comments for improvements by filing an issue on GitHub
 or sending a plain, old school email.
 
-\index{Chisel!Examples}
+The repository of the book also contains
+\myref{https://github.com/schoeberl/chisel-book/tree/master/slides}{slides in Latex}
+that I use for a 13 week course on
+\myref{http://www2.imm.dtu.dk/courses/02139/}{Digital Electronics} at the
+Technical University of Denmark.
+That course also contains \myref{https://github.com/schoeberl/chisel-lab}{lab exercises}
+in Chisel.
+If you are teaching digital design with Chisel, feel free to adapt the slides and lab
+exercises to your needs. All material is open-source. To build the book and slides
+you need a recent version of Latex and the needed tools for Chisel (\code{sbt} and
+a Java JDK installation). All code is compiled, tested, extracted, and the Latex compiled with
+a simple:
 
-This book is freely available as a PDF eBook and in classical printed form.
+\begin{chisel}
+make
+\end{chisel}
+
+\noindent Note that the slides are not automatically compiled with that \code{Makefile}, but need
+the generated code and figures from the book. 
+
+
+This book is freely available as a PDF eBook and in classical printed form
+\myref{https://www.amazon.com/dp/168933603X/}{Amazon}.
 The eBook version features links to further resources
 and \myref{https://www.wikipedia.org/}{Wikipedia} entries.
 We use Wikipedia entries for background information (e.g., binary number system)
 that does not directly fit into this book.
 We optimized the format of the eBook for reading on a tablet, such as an iPad.
+
+
 
 \section{Further Reading}
 
@@ -569,15 +596,15 @@ download and learn Chisel.
 \item The \myref{https://github.com/ucb-bar/chisel-tutorial}{Chisel Tutorial} provides a ready setup
 project containing small exercises with testers and solutions.
 
-\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
-a short users guide to Chisel and links to further information.
+%\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
+%a short users guide to Chisel and links to further information.
 \item The \myref{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
 their own repository that contains a Wiki documentation.
 \item The \myref{https://github.com/freechipsproject/chisel-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a \myref{https://jupyter.org/}{Jupyter} notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
-\item The \myref{https://github.com/schoeberl/chisel-lab}{chisel-lab} contains Chisel exercises for the
-course ``Digital Electronics 2'' at the Technical University of Denmark.
+\item The \myref{https://github.com/schoeberl/chisel-lab}{schoeberl/chisel-lab} GitHub repo
+contains Chisel exercises for the course ``Digital Electronics 2'' at the Technical University of Denmark.
 \end{itemize}
 
 \section{Exercise}
@@ -794,14 +821,14 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
-\noindent Bit fields are concatenated with the \code{\#\#} operator.
+\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note, that there is a \code{Cat} function available that performs the same
+operation with \code{Cat(highByte, lowByte)}.}
+
 \shortlist{code/concat.txt}
 \index{Bit!concatenation}
-\noindent Note, that there is a \code{Cat} function available that performs the same
-operation with \code{Cat(highByte, lowByte)}.
 
 Table~\ref{tab:operators} shows the full list of operators
-(see also \myref{https://github.com/freechipsproject/chisel3/wiki/Builtin-Operators}{builtin operators}).
+(see also \myref{https://www.chisel-lang.org/chisel3/docs/explanations/operators.html}{builtin operators}).
 The Chisel operator precedence is determined by the evaluation order of the circuit,
 which follows the \myref{https://docs.scala-lang.org/tour/operators.html}{Scala operator precedence}.
 If in doubt, it is always a good praxis to use parentheses.\footnote{The operator precedence in
@@ -815,7 +842,6 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
 
 \begin{table}
  \centering
- \label{tab:operators}
   \begin{tabular}{lll}
     \toprule
     Operator & Description & Data types \\
@@ -832,13 +858,13 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \bottomrule 
   \end{tabular} 
   \caption{Chisel defined hardware operators.}
+ \label{tab:operators}
 \end{table}
 
 \index{Operators}
 
 \begin{table}
  \centering
- \label{tab:functions}
   \begin{tabular}{lll}
     \toprule
     Function & Description & Data types \\
@@ -851,6 +877,7 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \bottomrule 
   \end{tabular} 
   \caption{Chisel defined hardware functions, invoked on \code{v}.}
+   \label{tab:functions}
 \end{table}
 
 \index{Bit!reduction}

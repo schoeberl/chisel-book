@@ -11,7 +11,7 @@ speed to build more complex, interacting digital systems.
 
 A compiled PDF version of the book is available at
 [Digital Design with Chisel PDF](http://www.imm.dtu.dk/~masca/chisel-book.pdf).
-Translations in Chinese and Japanese are also available
+Translations in Chinese, Japanese, and Vietnamese are also available
 [here](http://www.imm.dtu.dk/~masca/chisel-book.html).
 
 The book is available [at Amazon](https://www.amazon.com/dp/168933603X/).
@@ -38,7 +38,7 @@ installed. Then you simply build with:
 make
 ```
 
-The book also contains slides for a one semester course on digital eletronics
+The book also contains slides for a one semester course on digital electronics
 with Chisel. The slides are [here](slides). You can see a
 [lecture plan](http://www2.imm.dtu.dk/courses/02139/) for a course
 given at DTU and the corresponding
