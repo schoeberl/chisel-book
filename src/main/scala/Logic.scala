@@ -10,6 +10,7 @@ class Logic extends Module {
     val cat = Output(UInt(16.W))
     val ch = Output(UInt(8.W))
     val word = Output(UInt(16.W))
+    val result = Output(UInt(4.W))
   })
 
   //- start types
@@ -132,7 +133,20 @@ class Logic extends Module {
 
   assignWord := split.asUInt()
   //- end
-
   io.word := assignWord
+
+  val data = 5.U(4.W)
+  //- start partial_vec_bool
+  val vecResult = Wire(Vec(4, Bool()))
+
+  // example assignments
+  vecResult(0) := data(0)
+  vecResult(1) := data(1)
+  vecResult(2) := data(2)
+  vecResult(3) := data(3)
+
+  val uintResult = vecResult.asUInt
+  //- end
+  io.result := uintResult
 
 }

@@ -1078,11 +1078,16 @@ an error during circuit elaboration:
 One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
 from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
 to a \code{UInt}, and assigning this value to the target \code{UInt}.
+Note, that we define here a \code{Bundle} as a local data structure as we need it only
+locally.
 
 \shortlist{code/partial_assign_solution.txt}
 
 \noindent The small drawback of this solution is that one needs to know in which orders
-bundle fields are merged to a singe bit vector.
+bundle fields are merged to a singe bit vector. Another option is to use a vector of \code{Bool}
+to individually assign values and then convert it to a \code{UInt}.
+
+\shortlist{code/partial_vec_bool.txt}
 
 \section{Chisel Generates Hardware}
 

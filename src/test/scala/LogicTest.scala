@@ -13,6 +13,7 @@ class LogicTest extends FlatSpec with ChiselScalatestTester {
       dut.io.cat.expect("hff01".U)
       dut.io.ch.expect(65.U)
       dut.io.word.expect("hff01".U)
+      dut.io.result.expect(5.U)
     }
   }
 }
