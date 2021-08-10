@@ -58,6 +58,15 @@
 % \usepackage{inconsolata}
 % \usepackage[T1]{fontenc} % needed as well?
 
+% Smaller verbatim text
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@verbatim}
+  {\verbatim@font}
+  {\verbatim@font\small}
+  {}{}
+\makeatother
+
 \usepackage[procnames]{listings}
 
 
@@ -821,8 +830,8 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
-\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note, that there is a \code{Cat} function available that performs the same
-operation with \code{Cat(highByte, lowByte)}.}
+\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note, that there is a \codefoot{Cat} function available that performs the same
+operation with \codefoot{Cat(highByte, lowByte)}.}
 
 \shortlist{code/concat.txt}
 \index{Bit!concatenation}
@@ -1338,13 +1347,18 @@ include short descriptions and examples of both.
 Chisel provides two testing methods, the older \code{PeekPokeTester} in package \code{iotesters}
 and the newer \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} in package \code{chiseltest}.
 Here we describe the ChiselTest method and for completeness include a description of
-the PeekPokeTester in Chapter~~\ref{chap:testing}.
+the PeekPokeTester in Chapter~\ref{chap:testing}.
 
 \subsection{ScalaTest}
 \index{ScalaTest}
 
 \myref{http://www.scalatest.org/}{ScalaTest} is  testing tool for Scala (and Java). ChiselTest is an extension
-of ScalaTest. Therefore, we first explore a simple ScalaTest example.
+of ScalaTest. Therefore, we first explore a simple ScalaTest example. To use it, include the library
+in your \code{build.sbt} with following line:
+
+\begin{chisel}
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+\end{chisel}
 
 \noindent Tests are usually found in \code{src/test/scala} and the entire test suite can be run with:
 
@@ -1352,22 +1366,39 @@ of ScalaTest. Therefore, we first explore a simple ScalaTest example.
 $ sbt test
 \end{verbatim}
 
-or a single test can be run with:
-
-\begin{verbatim}
-$ sbt "testOnly testClass"
-\end{verbatim}
-
-where \code{testClass} is the name of the test you wish to run.
-
 \noindent A minimal test (a testing hello world) to test a Scala Integer
-addition looks as follows:
+addition and a multiplication looks as follows:
 
 \shortlist{code/scalatest_hello_world.txt}
 
-Where the \code{Matchers} trait enables use of the \code{should be} structure, which is not 
-needed for Chisel tests.
+\noindent ScalaTest enables simple unit tests that read like an executable specification.
+The example above contains two tests and the output of the test run will repeat the specification
+and show that both tests passed:
 
+\begin{verbatim}
+[info] ExampleTest:
+[info] Integers
+[info] - should add
+[info] Integers
+[info] - should multiply
+[info] ScalaTest
+[info] Run completed in 119 milliseconds.
+[info] Total number of tests run: 2
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 2, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[info] Passed: Total 2, Failed 0, Errors 0, Passed 2
+\end{verbatim}
+
+
+\code{sbt test} executes all available test, which is useful for regression
+test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
+will see more than 70 tests passing.}
+However, if you want to run a single test (suit) you can do this with:
+
+\begin{verbatim}
+$ sbt "testOnly ExampleTest"
+\end{verbatim}
 
 \subsection{ChiselTest}
 \index{ChiselTest}
@@ -1390,6 +1421,7 @@ libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
 \end{chisel}
 
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
+Therefore, you do not need to include a line for the ScalaTest library.
 
 To use the \code{PeekPokeTester}, the following packages need to be imported:
 
