@@ -1147,12 +1147,13 @@ process works to generate an FPGA configuration. Furthermore, we will also
 explore a simple testing framework from Chisel, which allows you to test circuits
 without configuring an FPGA and toggle switches.
 
-\chapter{Build Process}
+\chapter{Build Process and Testing}
 
 To get started with more interesting Chisel code we first need to learn how to compile
-Chisel programs, how to generate Verilog code for execution in an FPGA.
-the following chapter shows how
-to write tests for debugging and to verify that our circuits are correct.
+Chisel programs, how to generate Verilog code for execution in an FPGA,
+and how to write tests for debugging and to verify that our circuits are correct.
+A more detailed description on debugging, testing, and verification is given
+in Chapter~\ref{chap:testing}.
 
 Chisel is written in Scala, so any build process that supports Scala is possible
 with a Chisel project. One popular build tool for Scala is \myref{https://www.scala-sbt.org/}{sbt},
@@ -1325,10 +1326,158 @@ A circuit synthesize tool (e.g., Intel Quartus, Xilinx Vivado, or an ASIC tool) 
 In an FPGA design flow, the tool generates the FPGA bitstream that is used to configure the FPGA,
 e.g., \code{Hello.bit}.
 
-\section{A Minimal Exercise}
+
+\section{Testing with Chisel}
+
+Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
+The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
+and compares them with expected values. Testing of Chisel modules is possible in two ways; either by using 
+Chisel's native \code{iotesters} package or with the \code{chiseltest} package. For completeness, we 
+include short descriptions and examples of both.
+
+Chisel provides two testing methods, the older \code{PeekPokeTester} in package \code{iotesters}
+and the newer \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} in package \code{chiseltest}.
+Here we describe the ChiselTest method and for completeness include a description of
+the PeekPokeTester in Chapter~~\ref{chap:testing}.
+
+\subsection{ScalaTest}
+\index{ScalaTest}
+
+\myref{http://www.scalatest.org/}{ScalaTest} is  testing tool for Scala (and Java). ChiselTest is an extension
+of ScalaTest. Therefore, we first explore a simple ScalaTest example.
+
+\noindent Tests are usually found in \code{src/test/scala} and the entire test suite can be run with:
+
+\begin{verbatim}
+$ sbt test
+\end{verbatim}
+
+or a single test can be run with:
+
+\begin{verbatim}
+$ sbt "testOnly testClass"
+\end{verbatim}
+
+where \code{testClass} is the name of the test you wish to run.
+
+\noindent A minimal test (a testing hello world) to test a Scala Integer
+addition looks as follows:
+
+\shortlist{code/scalatest_hello_world.txt}
+
+Where the \code{Matchers} trait enables use of the \code{should be} structure, which is not 
+needed for Chisel tests.
+
+
+\subsection{ChiselTest}
+\index{ChiselTest}
+
+
+Chisel provides test benches in the form of a \code{PeekPokeTester}.
+One strength of Chisel is that it can use the full power of Scala to write those
+test benches. One can, for example, code the expected functionality of the hardware
+in a software simulator and compare the simulation of the hardware with the
+software simulation. This method is very efficient when testing an implementation
+of a processor~\cite{lipsi:arcs2018}.
+
+\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the new standard testing tool 
+for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
+and Java, which we can use to run Chisel tests more efficiently.
+To use it, include the library in your \code{build.sbt} with the following line:
+
+\begin{chisel}
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
+\end{chisel}
+
+\noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
+
+To use the \code{PeekPokeTester}, the following packages need to be imported:
+
+\shortlist{code/test_import.txt}
+
+\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
+called DUT), (2) the testing logic, also called a testbench, and (3) the tester objects
+that contain the \code{main} function to start the testing.
+
+The following code shows our simple design under test. It contains two input
+ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
+to its inputs \code{a} and \code{b} and outputs the result on \code{out}:
+
+\shortlist{code/test_dut.txt}
+
+\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
+the DUT as a parameter for the constructor:
+
+\shortlist{code/test_bench_simple.txt}
+
+\noindent A \code{PeekPokeTester} can set input values with \code{poke(port, value)} and
+read back output values with \code{peek(port)}. The tester advances the simulation by $n$
+clock cycles with \code{step(n)}.
+We can print the values of the outputs with \code{println()}.
+
+The test is created and run with the following tester main:
+
+\shortlist{code/test_main_simple.txt}
+
+\noindent When you run the test
+
+\begin{chisel}
+$ sbt "runMain TesterSimple"
+\end{chisel}
+
+you will see the results printed to the terminal
+(besides other information):
+
+\begin{verbatim}
+[info] [0.004] SEED 1544207645120
+[info] [0.008] Result is: 0
+[info] [0.009] Result is: 2
+test DeviceUnderTest Success: 0 tests passed in 7 cycles
+taking 0.021820 seconds
+[info] [0.010] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
+Besides manually inspecting printouts, which is an excellent starting point, we can also
+express our expectations in the test bench itself with \code{expect(port, value)},
+having the output port and the expected value as parameters.
+The following example shows testing with expectations:
+
+\shortlist{code/test_bench.txt}
+
+\noindent Executing this test does not print out any values from the hardware,
+but that all tests passed as all expect values are correct.
+
+\begin{verbatim}
+[info] [0.001] SEED 1544208437832
+test DeviceUnderTest Success: 2 tests passed in 7 cycles
+taking 0.018000 seconds
+[info] [0.009] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent A failed test, when either the DUT or the test bench contains an error,
+produces an error message describing the difference between the expected and actual
+value. In the following, we changed the test bench to expect a 4, which is an error:
+
+\begin{verbatim}
+[info] [0.002] SEED 1544208642263
+[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
+test DeviceUnderTest Success: 1 tests passed in 7 cycles
+taking 0.022101 seconds
+[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
+\end{verbatim}
+
+In this section, we described the basic testing facility with Chisel for simple tests.
+However, in Chisel, the full power of Scala is available to write testers.
+
+
+\section{Exercises}
 
 For this exercise, we will revisit the blinking LED from
-\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+and explore Chisel testing.
+
+\subsection{A Minimal Project}
 
 First, let us find out what a minimal Chisel project is. Explore the files in the
 \myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world}{Hello World}
@@ -1425,358 +1574,8 @@ Note that the \emph{Hello World} is a minimal Chisel project.
 More realistic projects have their source files organized in packages and contain testers.
 The next chapter's exercise will explore such a project.
 
-\chapter{Testing with Chisel}
+\subsection{A Testing Exercise}
 
-\index{Testing}
-
-Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
-The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
-and compares them with expected values. Testing of Chisel modules is possible in two ways; either by using 
-Chisel's native \code{iotesters} package or with the \code{chiseltest} package. For completeness, we 
-include short descriptions and examples of both.
-
-\section{PeekPokeTester}
-
-Chisel provides test benches in the form of a \code{PeekPokeTester}.
-One strength of Chisel is that it can use the full power of Scala to write those
-test benches. One can, for example, code the expected functionality of the hardware
-in a software simulator and compare the simulation of the hardware with the
-software simulation. This method is very efficient when testing an implementation
-of a processor~\cite{lipsi:arcs2018}.
-
-To use the \code{PeekPokeTester}, the following packages need to be imported:
-
-\shortlist{code/test_import.txt}
-
-\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
-called DUT), (2) the testing logic, also called a testbench, and (3) the tester objects
-that contain the \code{main} function to start the testing.
-
-The following code shows our simple design under test. It contains two input
-ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
-to its inputs \code{a} and \code{b} and outputs the result on \code{out}:
-
-\shortlist{code/test_dut.txt}
-
-\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
-the DUT as a parameter for the constructor:
-
-\shortlist{code/test_bench_simple.txt}
-
-\noindent A \code{PeekPokeTester} can set input values with \code{poke(port, value)} and
-read back output values with \code{peek(port)}. The tester advances the simulation by $n$
-clock cycles with \code{step(n)}.
-We can print the values of the outputs with \code{println()}.
-
-The test is created and run with the following tester main:
-
-\shortlist{code/test_main_simple.txt}
-
-\noindent When you run the test
-
-\begin{chisel}
-$ sbt "runMain TesterSimple"
-\end{chisel}
-
-you will see the results printed to the terminal
-(besides other information):
-
-\begin{verbatim}
-[info] [0.004] SEED 1544207645120
-[info] [0.008] Result is: 0
-[info] [0.009] Result is: 2
-test DeviceUnderTest Success: 0 tests passed in 7 cycles
-taking 0.021820 seconds
-[info] [0.010] RAN 2 CYCLES PASSED
-\end{verbatim}
-
-\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
-Besides manually inspecting printouts, which is an excellent starting point, we can also
-express our expectations in the test bench itself with \code{expect(port, value)},
-having the output port and the expected value as parameters.
-The following example shows testing with expectations:
-
-\shortlist{code/test_bench.txt}
-
-\noindent Executing this test does not print out any values from the hardware,
-but that all tests passed as all expect values are correct.
-
-\begin{verbatim}
-[info] [0.001] SEED 1544208437832
-test DeviceUnderTest Success: 2 tests passed in 7 cycles
-taking 0.018000 seconds
-[info] [0.009] RAN 2 CYCLES PASSED
-\end{verbatim}
-
-\noindent A failed test, when either the DUT or the test bench contains an error,
-produces an error message describing the difference between the expected and actual
-value. In the following, we changed the test bench to expect a 4, which is an error:
-
-\begin{verbatim}
-[info] [0.002] SEED 1544208642263
-[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
-test DeviceUnderTest Success: 1 tests passed in 7 cycles
-taking 0.022101 seconds
-[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
-\end{verbatim}
-
-In this section, we described the basic testing facility with Chisel for simple tests.
-However, in Chisel, the full power of Scala is available to write testers.
-
-\section{ChiselTest}
-
-\index{ChiselTest}
-\index{ScalaTest}
-
-\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the new standard testing tool 
-for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
-and Java, which we can use to run Chisel tests more efficiently.
-To use it, include the library in your \code{build.sbt} with the following line:
-
-\begin{chisel}
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
-\end{chisel}
-
-\noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
-
-\noindent Tests are usually found in \code{src/test/scala} and the entire test suite can be run with:
-
-\begin{verbatim}
-$ sbt test
-\end{verbatim}
-
-or a single test can be run with:
-
-\begin{verbatim}
-$ sbt "testOnly testClass"
-\end{verbatim}
-
-where \code{testClass} is the name of the test you wish to run.
-
-\noindent A minimal test (a testing hello world) to test a Scala Integer
-addition looks as follows:
-
-\shortlist{code/scalatest_hello_world.txt}
-
-Where the \code{Matchers} trait enables use of the \code{should be} structure, which is not 
-needed for Chisel tests.
-
-\noindent Although Chisel testing is more heavyweight than unit testing of Scala programs,
-we can wrap a Chisel test into a ScalaTest class. The main benefit of this exercise is to 
-be able to run all tests with a simple \code{sbt test} (instead of a running \code{main}). 
-ScalaTest also supports multithreaded testing out of the box meaning that if you have more 
-test classes in your project, they can run in parallel. Additionally, you can make use of 
-the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
-
-\noindent You define Chisel tests as classes that extend \code{FlatSpec} with 
-the \code{ChiselScalatestTester} trait. ChiselTest inverts the order of the \code{peek}, 
-\code{poke}, \code{expect} and \code{step} methods to now operate on the DUT's IO ports, 
-and where the iotesters methods operate on Scala type inputs (i.e., \code{Integer}s and 
-\code{Boolean}s), the ChiselTest methods operate on Chisel types (i.e., \code{UInt}s, 
-\code{SInt}s, \code{Bool}s etc.). Similarly, to advance the simulation by one clock cycle, 
-you should call \code{step} on the DUT's implicit clock.
-
-You can define individual tests within the \code{test} function which takes two parameter 
-lists, one being the module to test and the other being the test description itself which 
-is passed the DUT as parameter. As an example, the following tester tests a few inputs to 
-a BCD table:
-
-\shortlist{code/basic_chiseltest.txt}
-
-\noindent Alternatively, you can use the \code{behavior of "module name"} syntax to easily 
-refer to the module with \code{it}. This is useful when you have several tests for a 
-single module.
-
-\shortlist{code/basic_chiseltest_it.txt}
-
-\noindent If you have a large test suite, you may wish to run only a subset of your tests 
-as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration} 
-run or similar. The easiest way to achieve this and still have to run only a single SBT command 
-is by tagging your tests.
-
-\shortlist{code/tag_test.txt}
-
-\noindent Per default, all tests can be run by using \code{sbt test} or \code{sbt testOnly *}. 
-To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
-
-\begin{verbatim}
-$ sbt "testOnly * -- -l Unnecessary"
-\end{verbatim}
-
-\noindent When you run the command, the test will show up as ignored in the terminal:
-
-\begin{verbatim}
-[info] TagTest:
-[info] Integers
-...
-[info] No tests were executed.
-\end{verbatim}
-
-\noindent If your tests (and tags) are part of a package, remember to provide the full 
-reference path to both. Next, we will look at a few useful debugging techniques.
-
-\subsection{Waveforms}
-
-Testers, as described above, work well for small designs and for 
-\myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
-software development. A collection of unit tests can also serve for
-\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
-for debugging more complex designs, one would like to investigate several signals at 
-once. A classic approach to debug digital designs is displaying the signals in a 
-waveform. In a waveform the signals are displayed over time.
-
-\noindent Chisel testers can generate a waveform that includes all registers and all 
-IO signals. In the following examples we show waveform testers for the 
-\code{DeviceUnderTest} from the former example (the 2-bit AND function). For the 
-following example we import following classes and packages:
-
-\shortlist{code/test_import_wave.txt}
-
-\noindent We start with a simple tester that pokes values to the inputs and advances
-the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-
-\shortlist{code/test_bench_wave.txt}
-
-\noindent Instead, we add the \code{WriteVcdAnnotation} to the options for the 
-test to make it produce a waveform file (\code{.vcd} file).
-
-You can view the waveform with the free viewer GTKWave or with ModelSim.
-Start GTKWave and select \emph{File -- Open New Window} and navigate to the
-folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
-are in \code{test\_run\_dir} then the description of the test.
-Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
-You can select the signals from the left side and drag them into the main window.
-If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
-and load it later with \emph{File -- Read Save File}.
-
-Explicitly enumerating all possible input values does not scale. Therefore, we will use
-some Scala code to drive the DUT. The following tester enumerates all possible values for
-the 2 2-bit input signals.
-
-\shortlist{code/test_bench_wavecnt.txt}
-
-\noindent and execute it with
-
-\begin{verbatim}
-$ sbt "testOnly WaveformCounterTest"
-\end{verbatim}
-
-\subsection{printf Debugging}
-
-Another form of debugging is the so-called ``printf debugging''. This form comes from
-simply putting \code{printf} statements in C code to print variables of interest during
-the execution of the program. This printf debugging is also available during testing
-of Chisel circuits. The printing happens at the rising edge of the clock.
-A \code{printf} statement can be inserted just anywhere in the module definition,
-as shown in the printf debugging version of the DUT.
-
-\shortlist{code/test_dut_printf.txt}
-
-\noindent When testing this module with the counter based tester, which iterates over all possible
-values, we get following output, verifying that the AND function is correct:
-
-\begin{verbatim}
-Elaborating design...
-Done elaborating.
-dut:  0  0  0
-dut:  0  1  0
-dut:  0  2  0
-dut:  0  3  0
-dut:  1  0  0
-dut:  1  1  1
-dut:  1  2  0
-dut:  1  3  1
-dut:  2  0  0
-dut:  2  1  0
-dut:  2  2  2
-dut:  2  3  2
-dut:  3  0  0
-dut:  3  1  1
-dut:  3  2  2
-dut:  3  3  3
-dut:  0  0  0
-test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
-  in 0,117769 seconds 152,84 Hz
-\end{verbatim}
-
-Chisel printf supports
-\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
-
-The following subsections present advanced testing techniques that you likely do 
-not need yet. You can skip ahead to the exercise and return later if you find the need.
-
-\subsection{Advanced: Multithreaded Testing}
-
-ChiselTest has support for multithreaded testing through the use of \code{fork} and 
-\code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
-as its parameter, while \code{join} may be called on a tester thread variable (
-returned by a \code{fork} call) to wait for it to join the main thread. 
-
-Running multiple threads does present some new limitations to \code{peek}s and 
-\code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
-same signal at the same time. Similarly, to guarantee correct operation, the threads 
-are synchronized on calls to \code{step}.
-
-The following snippet is a small test of a FIFO that enqueues an element in one thread 
-and dequeues it in the main thread:
-
-\shortlist{code/fork_join_example.txt}
-
-Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads 
-represent a hierarchy in which the first thread should not finish before one of the 
-subsequent threads.
-
-\subsection{Advanced: Simulator Backends}
-
-Per default, tests written with ChiselTest are run by the Treadle simulation backend. However, 
-larger system tests may either require another backend to support, e.g., latches, or may 
-benefit in terms of simulation time. To enable this, ChiselTest supports two other backends; 
-\myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
-\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
-Verilator is open-source, we will use it for the examples presented in this section. Note 
-that in all cases, VCS can be directly substituted in instead of Verilator.
-
-Switching to a different backend is simply a matter of adding another annotation to the 
-\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, import 
-the following:
-
-\shortlist{code/verilator_import.txt}
-
-Additional flexibility arises from the ability to supply your own switches to the 
-simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
-to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
-switches to GCC. They should be in the list of annotations along with the backend 
-annotation. Alternatively, you can write your own custom test command by using 
-\code{TestCommandOverride}. Either way, you should refer to the tool's user manual 
-to find a detailed list of command line arguments.
-
-Note that ChiselTest 0.3.4 and on support code coverage measures directly in simulation. 
-To support this, make sure to install Verilator version 4.028 or newer.
-
-Also, beware that different simulators work in different ways. Verilator is a so-called 
-synchronous simulator, which means that it runs updates only at the rising edge of the 
-clock and thus does not support latches. It also does not officially support multiple 
-clocks. VCS, on the other hand, is an event-based simulator, which is significantly more 
-detailed in its simulations and supports all synthesizable Verilog constructs. 
-Generally, for single-clock circuits, Verilator is the fastest and 
-most widely available tool.
-
-\section{A Testing Exercise}
-
-In the last chapter's exercise, you have extended the blinking LED example with some input
-to build an AND gate and a multiplexer and run this hardware in an FPGA.
-We will now use this example and test the functionality with a Chisel tester
-to automate testing and also to be independent of an FPGA.
-Use your designs from the previous chapter and add a Chisel tester to test the functionality.
-Try to enumerate all possible inputs and test the output with \code{expect()}.
-
-Testing within Chisel can speed up the debugging of your design.
-However, it is always a good idea to synthesize your design for an FPGA and run tests
-with the FPGA. There you can perform a reality check on the size of your design (usually
-in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
-As a reference point, a textbook style pipelined RISC processor may consume about 3000
-4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
-Xilinx Spartan).
 
 \chapter{Components}
 
@@ -3781,38 +3580,270 @@ until the data transfer happened.
 
 \todo{Reconsider writing the testing chapter}
 
-%\chapter{Debugging, Testing, and Verification}
-%\index{Debugging}
-%\index{Testing}
-%\index{Verification}
-%
-%During your design and coding phase you often debug your design.
-%\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
-%finding defects in your code. Those defects are called
-%\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
-%Debugging is often performed in parallel with writing new code.
-%
-%Testing and verification have slightly different meaning in software development
-%and digital design.
-%
-%\section{Debugging}
-%
-%One can debug a program by using a debugger or simply by printing interesting
-%values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
-%In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
-%debugging is generating waveforms and watching how interesting signals evolve over time.
-%We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
-%we should create one.}
-%
-%A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
-%However, for quick checks it is also possible to print signal values during simulation of the circuit.
-%Values are printed at the rising edge of the clock.
-%
-%
-%\section{Testing in Chisel}
-%
-%
-%\subsection{Verilator}
+\chapter{Debugging, Testing, and Verification}
+\label{chap:testing}
+
+\index{Debugging}
+\index{Testing}
+\index{Verification}
+
+During your design and coding phase you often debug your design.
+\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
+finding defects in your code. Those defects are called
+\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
+Debugging is often performed in parallel with writing new code.
+
+Testing and verification have slightly different meaning in software development
+and digital design.
+
+\section{Debugging}
+
+One can debug a program by using a debugger or simply by printing interesting
+values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
+In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
+debugging is generating waveforms and watching how interesting signals evolve over time.
+We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
+we should create one.}
+
+A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
+However, for quick checks it is also possible to print signal values during simulation of the circuit.
+Values are printed at the rising edge of the clock.
+
+
+\section{Testing in Chisel}
+
+
+\subsection{Verilator}
+
+
+
+
+
+\section{PeekPokeTester}
+
+\todo{Rewrite this}
+
+
+\section{ChiselTest}
+
+
+\noindent Although Chisel testing is more heavyweight than unit testing of Scala programs,
+we can wrap a Chisel test into a ScalaTest class. The main benefit of this exercise is to 
+be able to run all tests with a simple \code{sbt test} (instead of a running \code{main}). 
+ScalaTest also supports multithreaded testing out of the box meaning that if you have more 
+test classes in your project, they can run in parallel. Additionally, you can make use of 
+the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
+
+\noindent You define Chisel tests as classes that extend \code{FlatSpec} with 
+the \code{ChiselScalatestTester} trait. ChiselTest inverts the order of the \code{peek}, 
+\code{poke}, \code{expect} and \code{step} methods to now operate on the DUT's IO ports, 
+and where the iotesters methods operate on Scala type inputs (i.e., \code{Integer}s and 
+\code{Boolean}s), the ChiselTest methods operate on Chisel types (i.e., \code{UInt}s, 
+\code{SInt}s, \code{Bool}s etc.). Similarly, to advance the simulation by one clock cycle, 
+you should call \code{step} on the DUT's implicit clock.
+
+You can define individual tests within the \code{test} function which takes two parameter 
+lists, one being the module to test and the other being the test description itself which 
+is passed the DUT as parameter. As an example, the following tester tests a few inputs to 
+a BCD table:
+
+\shortlist{code/basic_chiseltest.txt}
+
+\noindent Alternatively, you can use the \code{behavior of "module name"} syntax to easily 
+refer to the module with \code{it}. This is useful when you have several tests for a 
+single module.
+
+\shortlist{code/basic_chiseltest_it.txt}
+
+\noindent If you have a large test suite, you may wish to run only a subset of your tests 
+as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration} 
+run or similar. The easiest way to achieve this and still have to run only a single SBT command 
+is by tagging your tests.
+
+\shortlist{code/tag_test.txt}
+
+\noindent Per default, all tests can be run by using \code{sbt test} or \code{sbt testOnly *}. 
+To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
+
+\begin{verbatim}
+$ sbt "testOnly * -- -l Unnecessary"
+\end{verbatim}
+
+\noindent When you run the command, the test will show up as ignored in the terminal:
+
+\begin{verbatim}
+[info] TagTest:
+[info] Integers
+...
+[info] No tests were executed.
+\end{verbatim}
+
+\noindent If your tests (and tags) are part of a package, remember to provide the full 
+reference path to both. Next, we will look at a few useful debugging techniques.
+
+\subsection{Waveforms}
+
+Testers, as described above, work well for small designs and for 
+\myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
+software development. A collection of unit tests can also serve for
+\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
+for debugging more complex designs, one would like to investigate several signals at 
+once. A classic approach to debug digital designs is displaying the signals in a 
+waveform. In a waveform the signals are displayed over time.
+
+\noindent Chisel testers can generate a waveform that includes all registers and all 
+IO signals. In the following examples we show waveform testers for the 
+\code{DeviceUnderTest} from the former example (the 2-bit AND function). For the 
+following example we import following classes and packages:
+
+\shortlist{code/test_import_wave.txt}
+
+\noindent We start with a simple tester that pokes values to the inputs and advances
+the clock with \code{step}. We do not read any output or compare it with \code{expect}.
+
+\shortlist{code/test_bench_wave.txt}
+
+\noindent Instead, we add the \code{WriteVcdAnnotation} to the options for the 
+test to make it produce a waveform file (\code{.vcd} file).
+
+You can view the waveform with the free viewer GTKWave or with ModelSim.
+Start GTKWave and select \emph{File -- Open New Window} and navigate to the
+folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
+are in \code{test\_run\_dir} then the description of the test.
+Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
+You can select the signals from the left side and drag them into the main window.
+If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
+and load it later with \emph{File -- Read Save File}.
+
+Explicitly enumerating all possible input values does not scale. Therefore, we will use
+some Scala code to drive the DUT. The following tester enumerates all possible values for
+the 2 2-bit input signals.
+
+\shortlist{code/test_bench_wavecnt.txt}
+
+\noindent and execute it with
+
+\begin{verbatim}
+$ sbt "testOnly WaveformCounterTest"
+\end{verbatim}
+
+\subsection{printf Debugging}
+
+Another form of debugging is the so-called ``printf debugging''. This form comes from
+simply putting \code{printf} statements in C code to print variables of interest during
+the execution of the program. This printf debugging is also available during testing
+of Chisel circuits. The printing happens at the rising edge of the clock.
+A \code{printf} statement can be inserted just anywhere in the module definition,
+as shown in the printf debugging version of the DUT.
+
+\shortlist{code/test_dut_printf.txt}
+
+\noindent When testing this module with the counter based tester, which iterates over all possible
+values, we get following output, verifying that the AND function is correct:
+
+\begin{verbatim}
+Elaborating design...
+Done elaborating.
+dut:  0  0  0
+dut:  0  1  0
+dut:  0  2  0
+dut:  0  3  0
+dut:  1  0  0
+dut:  1  1  1
+dut:  1  2  0
+dut:  1  3  1
+dut:  2  0  0
+dut:  2  1  0
+dut:  2  2  2
+dut:  2  3  2
+dut:  3  0  0
+dut:  3  1  1
+dut:  3  2  2
+dut:  3  3  3
+dut:  0  0  0
+test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
+  in 0,117769 seconds 152,84 Hz
+\end{verbatim}
+
+Chisel printf supports
+\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
+
+The following subsections present advanced testing techniques that you likely do 
+not need yet. You can skip ahead to the exercise and return later if you find the need.
+
+\subsection{Advanced: Multithreaded Testing}
+
+ChiselTest has support for multithreaded testing through the use of \code{fork} and 
+\code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
+as its parameter, while \code{join} may be called on a tester thread variable (
+returned by a \code{fork} call) to wait for it to join the main thread. 
+
+Running multiple threads does present some new limitations to \code{peek}s and 
+\code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
+same signal at the same time. Similarly, to guarantee correct operation, the threads 
+are synchronized on calls to \code{step}.
+
+The following snippet is a small test of a FIFO that enqueues an element in one thread 
+and dequeues it in the main thread:
+
+\shortlist{code/fork_join_example.txt}
+
+Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads 
+represent a hierarchy in which the first thread should not finish before one of the 
+subsequent threads.
+
+\subsection{Advanced: Simulator Backends}
+
+Per default, tests written with ChiselTest are run by the Treadle simulation backend. However, 
+larger system tests may either require another backend to support, e.g., latches, or may 
+benefit in terms of simulation time. To enable this, ChiselTest supports two other backends; 
+\myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
+\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
+Verilator is open-source, we will use it for the examples presented in this section. Note 
+that in all cases, VCS can be directly substituted in instead of Verilator.
+
+Switching to a different backend is simply a matter of adding another annotation to the 
+\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, import 
+the following:
+
+\shortlist{code/verilator_import.txt}
+
+Additional flexibility arises from the ability to supply your own switches to the 
+simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
+to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
+switches to GCC. They should be in the list of annotations along with the backend 
+annotation. Alternatively, you can write your own custom test command by using 
+\code{TestCommandOverride}. Either way, you should refer to the tool's user manual 
+to find a detailed list of command line arguments.
+
+Note that ChiselTest 0.3.4 and on support code coverage measures directly in simulation. 
+To support this, make sure to install Verilator version 4.028 or newer.
+
+Also, beware that different simulators work in different ways. Verilator is a so-called 
+synchronous simulator, which means that it runs updates only at the rising edge of the 
+clock and thus does not support latches. It also does not officially support multiple 
+clocks. VCS, on the other hand, is an event-based simulator, which is significantly more 
+detailed in its simulations and supports all synthesizable Verilog constructs. 
+Generally, for single-clock circuits, Verilator is the fastest and 
+most widely available tool.
+
+\section{A Testing Exercise}
+
+In the last chapter's exercise, you have extended the blinking LED example with some input
+to build an AND gate and a multiplexer and run this hardware in an FPGA.
+We will now use this example and test the functionality with a Chisel tester
+to automate testing and also to be independent of an FPGA.
+Use your designs from the previous chapter and add a Chisel tester to test the functionality.
+Try to enumerate all possible inputs and test the output with \code{expect()}.
+
+Testing within Chisel can speed up the debugging of your design.
+However, it is always a good idea to synthesize your design for an FPGA and run tests
+with the FPGA. There you can perform a reality check on the size of your design (usually
+in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
+As a reference point, a textbook style pipelined RISC processor may consume about 3000
+4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
+Xilinx Spartan).
+
 
 
 \chapter{Hardware Generators}
