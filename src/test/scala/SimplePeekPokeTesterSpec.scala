@@ -2,7 +2,7 @@ import chisel3.iotesters._
 import org.scalatest._
 
 //- start scalatest_simple
-class SimpleSpec extends FlatSpec with Matchers {
+class SimplePeekPokeTesterSpec extends FlatSpec with Matchers {
   "Tester" should "pass" in {
     chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
       new Tester(c)
@@ -13,7 +13,7 @@ class SimpleSpec extends FlatSpec with Matchers {
 
 
 
-class SimpleTesterPrintf(dut: DeviceUnderTestPrintf) extends PeekPokeTester(dut) {
+class SimplePeekPokeTesterPrintf(dut: DeviceUnderTestPrintf) extends PeekPokeTester(dut) {
 
   for (a <- 0 until 4) {
     for (b <- 0 until 4) {
@@ -24,11 +24,11 @@ class SimpleTesterPrintf(dut: DeviceUnderTestPrintf) extends PeekPokeTester(dut)
   }
 }
 
-class SimplePrintfSpec extends FlatSpec with Matchers {
+class SimplePeekPokeTesterPrintfSpec extends FlatSpec with Matchers {
 
   "TesterPrinter" should "pass" in {
     chisel3.iotesters.Driver(() => new DeviceUnderTestPrintf()) { c =>
-      new SimpleTesterPrintf(c)
+      new SimplePeekPokeTesterPrintf(c)
     } should be (true)
   }
 }
