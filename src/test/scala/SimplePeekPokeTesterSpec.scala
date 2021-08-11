@@ -5,7 +5,7 @@ import org.scalatest._
 class SimplePeekPokeTesterSpec extends FlatSpec with Matchers {
   "Tester" should "pass" in {
     chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
-      new Tester(c)
+      new TesterPeekPoke(c)
     } should be (true)
   }
 }

@@ -1,6 +1,6 @@
 import Chisel._
 
-class LogicTester(c: Logic) extends Tester(c) {
+class LogicTester(c: Logic) extends TesterPeekPoke(c) {
 
   poke(c.io.a, 1)
   poke(c.io.b, 0)

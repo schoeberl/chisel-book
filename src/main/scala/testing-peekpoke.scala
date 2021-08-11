@@ -1,4 +1,5 @@
-//- start test_import
+
+//- start test_import_peek_poke
 import chisel3._
 import chisel3.iotesters._
 //- end
@@ -28,8 +29,11 @@ class DeviceUnderTestPrintf extends Module {
 }
 //- end
 
-//- start test_bench_simple
-class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
+// TODO: shall we keep the code below for describing iotesters?
+// If so, we should still use ScalaTest to drive them, not an App
+
+//- start test_bench_simple_peek_poke
+class TesterSimplePeekPoke(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   poke(dut.io.a, 0.U)
   poke(dut.io.b, 1.U)
@@ -42,16 +46,16 @@ class TesterSimple(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 }
 //- end
 
-//- start test_main_simple
-object TesterSimple extends App {
+//- start test_main_simple_peek_poke
+object TesterSimplePeekPoke extends App {
   chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
-    new TesterSimple(c)
+    new TesterSimplePeekPoke(c)
   }
 }
 //- end
 
-//- start test_bench
-class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
+//- start test_bench_peek_poke
+class TesterPeekPoke(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 
   poke(dut.io.a, 3.U)
   poke(dut.io.b, 1.U)
@@ -64,10 +68,10 @@ class Tester(dut: DeviceUnderTest) extends PeekPokeTester(dut) {
 }
 //- end
 
-//- start test_main
-object Tester extends App {
+//- start test_main_peek_poke
+object TesterPeekPoke extends App {
   chisel3.iotesters.Driver(() => new DeviceUnderTest()) { c =>
-    new Tester(c)
+    new TesterPeekPoke(c)
   }
 }
 //- end

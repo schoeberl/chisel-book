@@ -3,7 +3,7 @@ import Chisel._
 /**
  * Test the counter by printing out the value at each clock cycle.
  */
-class RegisterTester(c: Registers) extends Tester(c) {
+class RegisterTester(c: Registers) extends TesterPeekPoke(c) {
 
   peek(c.io.out)
   poke(c.io.in, 13)

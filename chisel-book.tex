@@ -1400,11 +1400,13 @@ However, if you want to run a single test (suit) you can do this with:
 $ sbt "testOnly ExampleTest"
 \end{verbatim}
 
+\noindent If you misspell the class name, for example, \code{Exampletest},
+there will be a relative silent error message: \code{No tests were executed}.
+
 \subsection{ChiselTest}
 \index{ChiselTest}
 
 
-Chisel provides test benches in the form of a \code{PeekPokeTester}.
 One strength of Chisel is that it can use the full power of Scala to write those
 test benches. One can, for example, code the expected functionality of the hardware
 in a software simulator and compare the simulation of the hardware with the
@@ -1423,13 +1425,13 @@ libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
 Therefore, you do not need to include a line for the ScalaTest library.
 
-To use the \code{PeekPokeTester}, the following packages need to be imported:
+To use ChiselTest, the following packages need to be imported:
 
 \shortlist{code/test_import.txt}
 
-\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
-called DUT), (2) the testing logic, also called a testbench, and (3) the tester objects
-that contain the \code{main} function to start the testing.
+\noindent Testing a circuit contains (at least) two components: the device under test (often
+called DUT) and the testing logic, also called a test bench. Tests are started with \code{sbt test}.
+No object with a \code{main} function is needed.
 
 The following code shows our simple design under test. It contains two input
 ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
@@ -1437,71 +1439,95 @@ to its inputs \code{a} and \code{b} and outputs the result on \code{out}:
 
 \shortlist{code/test_dut.txt}
 
-\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
-the DUT as a parameter for the constructor:
+The test bench for this DUT extends \code{FlatSpec} with \code{ChiselScalatestTester},
+which provides ChiselTest functionality within ScalaTest.
+The method \code{test()} is invoked with the DUT as parameter and the test code as a function literal.
 
 \shortlist{code/test_bench_simple.txt}
 
-\noindent A \code{PeekPokeTester} can set input values with \code{poke(port, value)} and
-read back output values with \code{peek(port)}. The tester advances the simulation by $n$
-clock cycles with \code{step(n)}.
+
+The input and output ports of the DUT are accessed with \code{dut.io}.
+You can set values via a \code{poke} on a port, which takes the value as a Chisel type of the
+input port as parameter.
+An output port can be read by invoking \code{peek()} on the port, which will return
+the value as a Chisel type. The method \code{toString} converts that value to a
+string.
+The tester advances the simulation by one clock cycle with \code{dut.clock.step()}.
+For advancing the simulation by seveal clock cycles, we can provide a parameter to
+\code{step()}.
 We can print the values of the outputs with \code{println()}.
 
-The test is created and run with the following tester main:
 
-\shortlist{code/test_main_simple.txt}
 
-\noindent When you run the test
+When you run the test
 
 \begin{chisel}
-$ sbt "runMain TesterSimple"
+$ sbt "testOnly SimpleTest"
 \end{chisel}
 
-you will see the results printed to the terminal
+\noindent you will see the results printed to the terminal
 (besides other information):
 
 \begin{verbatim}
-[info] [0.004] SEED 1544207645120
-[info] [0.008] Result is: 0
-[info] [0.009] Result is: 2
-test DeviceUnderTest Success: 0 tests passed in 7 cycles
-taking 0.021820 seconds
-[info] [0.010] RAN 2 CYCLES PASSED
+...
+Done elaborating.
+Result is: UInt<2>(0)
+Result is: UInt<2>(2)
+test DeviceUnderTest Success: 0 tests passed in 4 cycles in 0,029944 ...
+...
 \end{verbatim}
 
-\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
+We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
+The \code{toString} method also tells us the Chisel type of a 2-bit \code{UInt}.
 Besides manually inspecting printouts, which is an excellent starting point, we can also
-express our expectations in the test bench itself with \code{expect(port, value)},
-having the output port and the expected value as parameters.
+express our expectations in the test bench itself by invoking
+\code{expect(value)} on the output port and the expected value as parameter.
 The following example shows testing with expectations:
 
 \shortlist{code/test_bench.txt}
 
-\noindent Executing this test does not print out any values from the hardware,
+Executing this test does not print out any values from the hardware,
 but that all tests passed as all expect values are correct.
 
 \begin{verbatim}
-[info] [0.001] SEED 1544208437832
-test DeviceUnderTest Success: 2 tests passed in 7 cycles
-taking 0.018000 seconds
-[info] [0.009] RAN 2 CYCLES PASSED
+[info] SimpleTestExpect:
+[info] DUT
+[info] - should pass
+[info] ScalaTest
+[info] Run completed in 1 second, 85 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[info] Passed: Total 1, Failed 0, Errors 0, Passed 1
 \end{verbatim}
 
-\noindent A failed test, when either the DUT or the test bench contains an error,
+A failed test, when either the DUT or the test bench contains an error,
 produces an error message describing the difference between the expected and actual
 value. In the following, we changed the test bench to expect a 4, which is an error:
 
 \begin{verbatim}
-[info] [0.002] SEED 1544208642263
-[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
-test DeviceUnderTest Success: 1 tests passed in 7 cycles
-taking 0.022101 seconds
-[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
+[info] SimpleTestExpect:
+[info] DUT
+[info] - should pass *** FAILED ***
+[info]   io_out=2 (0x2) did not equal expected=4 (0x4) 
+                   (lines in testing.scala: 27) (testing.scala:35)
+[info] ScalaTest
+[info] Run completed in 1 second, 214 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 0, failed 1, canceled 0, ignored 0, pending 0
+[info] *** 1 TEST FAILED ***
+[error] Failed: Total 1, Failed 1, Errors 0, Passed 0
+[error] Failed tests:
+[error] 	SimpleTestExpect
 \end{verbatim}
 
 In this section, we described the basic testing facility with Chisel for simple tests.
-However, in Chisel, the full power of Scala is available to write testers.
+However, keep in mind that the full power of Scala is available to write testers.
+This includes, e.g., writing a reference model in Scala to test against.
 
+\subsection{WaveForm and Printing from below}
 
 \section{Exercises}
 
@@ -1607,6 +1633,21 @@ More realistic projects have their source files organized in packages and contai
 The next chapter's exercise will explore such a project.
 
 \subsection{A Testing Exercise}
+
+In the last chapter's exercise, you have extended the blinking LED example with some input
+to build an AND gate and a multiplexer and run this hardware in an FPGA.
+We will now use this example and test the functionality with a Chisel tester
+to automate testing and also to be independent of an FPGA.
+Use your designs from the previous chapter and add a Chisel tester to test the functionality.
+Try to enumerate all possible inputs and test the output with \code{expect()}.
+
+Testing within Chisel can speed up the debugging of your design.
+However, it is always a good idea to synthesize your design for an FPGA and run tests
+with the FPGA. There you can perform a reality check on the size of your design (usually
+in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
+As a reference point, a textbook style pipelined RISC processor may consume about 3000
+4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
+Xilinx Spartan).
 
 
 \chapter{Components}
@@ -3653,6 +3694,8 @@ Values are printed at the rising edge of the clock.
 
 \section{PeekPokeTester}
 
+Later, just for completenes
+
 \todo{Rewrite this}
 
 
@@ -3859,22 +3902,7 @@ detailed in its simulations and supports all synthesizable Verilog constructs.
 Generally, for single-clock circuits, Verilator is the fastest and 
 most widely available tool.
 
-\section{A Testing Exercise}
 
-In the last chapter's exercise, you have extended the blinking LED example with some input
-to build an AND gate and a multiplexer and run this hardware in an FPGA.
-We will now use this example and test the functionality with a Chisel tester
-to automate testing and also to be independent of an FPGA.
-Use your designs from the previous chapter and add a Chisel tester to test the functionality.
-Try to enumerate all possible inputs and test the output with \code{expect()}.
-
-Testing within Chisel can speed up the debugging of your design.
-However, it is always a good idea to synthesize your design for an FPGA and run tests
-with the FPGA. There you can perform a reality check on the size of your design (usually
-in LUTs and flip-flops) and your performance of your design in maximum clocking frequency.
-As a reference point, a textbook style pipelined RISC processor may consume about 3000
-4-bit LUTs and may run around 100~MHz in a low-cost FPGA (Intel Cyclone or
-Xilinx Spartan).
 
 
 
