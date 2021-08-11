@@ -32,7 +32,7 @@ class SimpleTestExpect extends FlatSpec with ChiselScalatestTester {
       dut.io.a.poke(3.U)
       dut.io.b.poke(2.U)
       dut.clock.step()
-      dut.io.out.expect(4.U)
+      dut.io.out.expect(2.U)
     }
   }
 }

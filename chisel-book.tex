@@ -282,14 +282,17 @@ The FIFO variations also show how to use type parameters and inheritance in digi
 
 \section*{Foreword for the Third Edition}
 
-Chisel has been moving forward in the last year, so it is time for a new edition
-of the Chisel book.
+Chisel has been moving forward in the last year, so it is time for a new edition of the Chisel book.
 We changed all examples to the latest version of Chisel (3.4.1) and the recommended
 Scala version (2.12.12).
 
+We have changed the testing description to the new ChiselTest framework. For more detailed
+description of testing and verification we have added a new chapter. That chapter also
+include description of the ``old'' \code{PeekPokeTester}
+
 Chisel is part of the Scala/Java ecosystem. Therefore, it is possible to use the Java infrastructure
 Maven Central to distribute open-source hardware designs. We have added a section on how to publish
-a Chisel design on Maven Central
+a Chisel design on Maven Central.
 
 
 \section*{Acknowledgements}
@@ -306,7 +309,13 @@ Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
-For the third edition I would like to acknowledge Hans Jakob Damsgaard for rewriting
+It was a pleasure to use Chisel in the last two years of teaching a digital electronics
+course. I know it is a challenge to pickup Chisel and Java in parallel in the second
+semester. Thank you to all students from this course, who had on open mind to
+pickup a modern programming language for hardware description.
+
+For the third edition, I would like to acknowledge Hans Jakob Damsgaard
+(\myref{https://github.com/hansemandse}{@hansemandse }) for rewriting
 all test code to ChiselTest, adding ChiselTest to the testing chapter, adding the black
 box description, and an example for a multi-clock memory.
 
