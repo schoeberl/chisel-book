@@ -584,10 +584,6 @@ a simple:
 make
 \end{chisel}
 
-\noindent Note that the slides are not automatically compiled with that \code{Makefile}, but need
-the generated code and figures from the book. 
-
-
 This book is freely available as a PDF eBook and in classical printed form
 \myref{https://www.amazon.com/dp/168933603X/}{Amazon}.
 The eBook version features links to further resources
@@ -1349,14 +1345,17 @@ e.g., \code{Hello.bit}.
 
 Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
-and compares them with expected values. Testing of Chisel modules is possible in two ways; either by using 
-Chisel's native \code{iotesters} package or with the \code{chiseltest} package. For completeness, we 
-include short descriptions and examples of both.
-
+and compares them with expected values.
 Chisel provides two testing methods, the older \code{PeekPokeTester} in package \code{iotesters}
 and the newer \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} in package \code{chiseltest}.
 Here we describe the ChiselTest method and for completeness include a description of
 the PeekPokeTester in Chapter~\ref{chap:testing}.
+
+One strength of Chisel is that it can use the full power of Scala to write those
+test benches. One can, for example, code the expected functionality of the hardware
+in a software simulator and compare the simulation of the hardware with the
+software simulation. This method is very efficient when testing an implementation
+of a processor~\cite{lipsi:arcs2018}.
 
 \subsection{ScalaTest}
 \index{ScalaTest}
@@ -1380,7 +1379,7 @@ addition and a multiplication looks as follows:
 
 \shortlist{code/scalatest_hello_world.txt}
 
-\noindent ScalaTest enables simple unit tests that read like an executable specification.
+ScalaTest enables simple unit tests that read like an executable specification.
 The example above contains two tests and the output of the test run will repeat the specification
 and show that both tests passed:
 
@@ -1415,12 +1414,6 @@ there will be a relative silent error message: \code{No tests were executed}.
 \subsection{ChiselTest}
 \index{ChiselTest}
 
-
-One strength of Chisel is that it can use the full power of Scala to write those
-test benches. One can, for example, code the expected functionality of the hardware
-in a software simulator and compare the simulation of the hardware with the
-software simulation. This method is very efficient when testing an implementation
-of a processor~\cite{lipsi:arcs2018}.
 
 \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the new standard testing tool 
 for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
@@ -1536,7 +1529,106 @@ In this section, we described the basic testing facility with Chisel for simple 
 However, keep in mind that the full power of Scala is available to write testers.
 This includes, e.g., writing a reference model in Scala to test against.
 
-\subsection{WaveForm and Printing from below}
+\subsection{Waveforms}
+
+Testers, as described above, work well for small designs and for 
+\myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
+software development. A collection of unit tests can also serve for
+\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
+for debugging more complex designs, one would like to investigate several signals at 
+once. A classic approach to debug digital designs is displaying the signals in a 
+waveform. In a waveform the signals are displayed over time.
+
+\noindent Chisel testers can generate a waveform that includes all registers and all 
+IO signals. In the following examples we show waveform testers for the 
+\code{DeviceUnderTest} from the former example (the 2-bit AND function).
+To generate a waveform for a test pass a definition of \code{writeVcd=1} to
+the test, as shown in the following \code{sbt} command:
+
+\begin{verbatim}
+sbt "testOnly SimpleTest -- -DwriteVcd=1"
+\end{verbatim}
+
+You can view the waveform with the free viewer
+\myref{http://gtkwave.sourceforge.net/}{GTKWave} or with ModelSim.
+Start GTKWave and select \emph{File -- Open New Window} and navigate to the
+folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
+are in \code{test\_run\_dir} then the description of the test.
+Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
+You can select the signals from the left side and drag them into the main window.
+If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
+and load it later with \emph{File -- Read Save File}. 
+
+The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
+annotation to the \code{test()} function.
+To enable passing annotation to the testing we need to import following classes and packages:
+
+\shortlist{code/test_import_wave.txt}
+
+We start with a simple tester that pokes values to the inputs and advances
+the clock with \code{step}. We do not read any output or compare it with \code{expect}.
+Instead, we add the \code{WriteVcdAnnotation} to the options for the 
+test to make it produce a waveform file (\code{.vcd} file).
+
+
+\shortlist{code/test_bench_wave.txt}
+
+
+
+
+Explicitly enumerating all possible input values does not scale. Therefore, we will use
+some Scala code to drive the DUT. The following tester enumerates all possible values for
+the 2 2-bit input signals.
+
+\shortlist{code/test_bench_wavecnt.txt}
+
+\noindent and execute it with
+
+\begin{verbatim}
+$ sbt "testOnly WaveformCounterTest"
+\end{verbatim}
+
+\subsection{printf Debugging}
+
+Another form of debugging is the so-called ``printf debugging''. This form comes from
+simply putting \code{printf} statements in C code to print variables of interest during
+the execution of the program. This printf debugging is also available during testing
+of Chisel circuits. The printing happens at the rising edge of the clock.
+A \code{printf} statement can be inserted just anywhere in the module definition,
+as shown in the printf debugging version of the DUT.
+
+\shortlist{code/test_dut_printf.txt}
+
+\noindent When testing this module with the counter based tester, which iterates over all possible
+values, we get following output, verifying that the AND function is correct:
+
+\begin{verbatim}
+Elaborating design...
+Done elaborating.
+dut:  0  0  0
+dut:  0  1  0
+dut:  0  2  0
+dut:  0  3  0
+dut:  1  0  0
+dut:  1  1  1
+dut:  1  2  0
+dut:  1  3  1
+dut:  2  0  0
+dut:  2  1  0
+dut:  2  2  2
+dut:  2  3  2
+dut:  3  0  0
+dut:  3  1  1
+dut:  3  2  2
+dut:  3  3  3
+dut:  0  0  0
+test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
+  in 0,117769 seconds 152,84 Hz
+\end{verbatim}
+
+Chisel printf supports
+\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
+
 
 \section{Exercises}
 
@@ -3765,92 +3857,6 @@ $ sbt "testOnly * -- -l Unnecessary"
 \noindent If your tests (and tags) are part of a package, remember to provide the full 
 reference path to both. Next, we will look at a few useful debugging techniques.
 
-\subsection{Waveforms}
-
-Testers, as described above, work well for small designs and for 
-\myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
-software development. A collection of unit tests can also serve for
-\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
-for debugging more complex designs, one would like to investigate several signals at 
-once. A classic approach to debug digital designs is displaying the signals in a 
-waveform. In a waveform the signals are displayed over time.
-
-\noindent Chisel testers can generate a waveform that includes all registers and all 
-IO signals. In the following examples we show waveform testers for the 
-\code{DeviceUnderTest} from the former example (the 2-bit AND function). For the 
-following example we import following classes and packages:
-
-\shortlist{code/test_import_wave.txt}
-
-\noindent We start with a simple tester that pokes values to the inputs and advances
-the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-
-\shortlist{code/test_bench_wave.txt}
-
-\noindent Instead, we add the \code{WriteVcdAnnotation} to the options for the 
-test to make it produce a waveform file (\code{.vcd} file).
-
-You can view the waveform with the free viewer GTKWave or with ModelSim.
-Start GTKWave and select \emph{File -- Open New Window} and navigate to the
-folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
-are in \code{test\_run\_dir} then the description of the test.
-Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
-You can select the signals from the left side and drag them into the main window.
-If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
-and load it later with \emph{File -- Read Save File}.
-
-Explicitly enumerating all possible input values does not scale. Therefore, we will use
-some Scala code to drive the DUT. The following tester enumerates all possible values for
-the 2 2-bit input signals.
-
-\shortlist{code/test_bench_wavecnt.txt}
-
-\noindent and execute it with
-
-\begin{verbatim}
-$ sbt "testOnly WaveformCounterTest"
-\end{verbatim}
-
-\subsection{printf Debugging}
-
-Another form of debugging is the so-called ``printf debugging''. This form comes from
-simply putting \code{printf} statements in C code to print variables of interest during
-the execution of the program. This printf debugging is also available during testing
-of Chisel circuits. The printing happens at the rising edge of the clock.
-A \code{printf} statement can be inserted just anywhere in the module definition,
-as shown in the printf debugging version of the DUT.
-
-\shortlist{code/test_dut_printf.txt}
-
-\noindent When testing this module with the counter based tester, which iterates over all possible
-values, we get following output, verifying that the AND function is correct:
-
-\begin{verbatim}
-Elaborating design...
-Done elaborating.
-dut:  0  0  0
-dut:  0  1  0
-dut:  0  2  0
-dut:  0  3  0
-dut:  1  0  0
-dut:  1  1  1
-dut:  1  2  0
-dut:  1  3  1
-dut:  2  0  0
-dut:  2  1  0
-dut:  2  2  2
-dut:  2  3  2
-dut:  3  0  0
-dut:  3  1  1
-dut:  3  2  2
-dut:  3  3  3
-dut:  0  0  0
-test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
-  in 0,117769 seconds 152,84 Hz
-\end{verbatim}
-
-Chisel printf supports
-\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
 
 The following subsections present advanced testing techniques that you likely do 
 not need yet. You can skip ahead to the exercise and return later if you find the need.

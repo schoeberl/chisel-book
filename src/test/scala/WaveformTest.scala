@@ -1,9 +1,9 @@
 //- start test_import_wave
 import chisel3._
 import chiseltest._
+import org.scalatest._
 import chiseltest.experimental.TestOptionBuilder._
 import chiseltest.internal.WriteVcdAnnotation
-import org.scalatest._
 //- end
 
 //- start test_bench_wave
@@ -15,11 +15,13 @@ class WaveformTest extends FlatSpec with ChiselScalatestTester {
       dut.io.b.poke(0.U)
       dut.clock.step()
       dut.io.a.poke(1.U)
+      dut.io.b.poke(0.U)
       dut.clock.step()
       dut.io.a.poke(0.U)
       dut.io.b.poke(1.U)
       dut.clock.step()
       dut.io.a.poke(1.U)
+      dut.io.b.poke(1.U)
       dut.clock.step()
     }
   }
