@@ -1399,17 +1399,17 @@ and show that both tests passed:
 \end{verbatim}
 
 
-\code{sbt test} executes all available test, which is useful for regression
+\code{sbt test} executes all available tests, which is useful for regression
 test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
 will see more than 70 tests passing.}
-However, if you want to run a single test (suit) you can do this with:
+However, if you want to run just a single test (suit) you can do this with:
 
 \begin{verbatim}
 $ sbt "testOnly ExampleTest"
 \end{verbatim}
 
 \noindent If you misspell the class name, for example, \code{Exampletest},
-there will be a relative silent error message: \code{No tests were executed}.
+there will be a relatively silent error message: \code{No tests were executed}.
 
 \subsection{ChiselTest}
 \index{ChiselTest}
@@ -1417,8 +1417,8 @@ there will be a relative silent error message: \code{No tests were executed}.
 
 \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the new standard testing tool 
 for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
-and Java, which we can use to run Chisel tests more efficiently.
-To use it, include the library in your \code{build.sbt} with the following line:
+and Java, which we can use to run Chisel tests.
+To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
 \begin{chisel}
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
@@ -1622,12 +1622,12 @@ dut:  3  1  1
 dut:  3  2  2
 dut:  3  3  3
 dut:  0  0  0
-test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
-  in 0,117769 seconds 152,84 Hz
+test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles 
+in 0,031521 seconds 571,04 Hz
 \end{verbatim}
 
 Chisel printf supports
-\myref{https://github.com/freechipsproject/chisel3/wiki/Printing-in-Chisel}{C and Scala style formatting}.
+\myref{https://www.chisel-lang.org/chisel3/docs/explanations/printing.html}{C and Scala style formatting}.
 
 
 \section{Exercises}
@@ -1677,7 +1677,7 @@ For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel lib
 we need a \code{build.sbt}:
 
 \begin{chisel}
-scalaVersion := "2.12.13"
+scalaVersion := "2.12.12"
 
 scalacOptions := Seq("-deprecation", "-Xsource:2.11")
 
@@ -1686,10 +1686,9 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.4.3" cross CrossVersion.full)
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.3"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
-// Chisel 3.4.3 is loaded as a dependency on the testers
+// Chisel 3.4
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on

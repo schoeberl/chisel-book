@@ -37,3 +37,17 @@ class SimpleTestExpect extends FlatSpec with ChiselScalatestTester {
   }
 }
 //- end
+
+class SimplePrintfTest extends FlatSpec with ChiselScalatestTester {
+  "WaveformCounter" should "pass" in {
+    test(new DeviceUnderTestPrintf) { dut =>
+        for (a <- 0 until 4) {
+          for (b <- 0 until 4) {
+            dut.io.a.poke(a.U)
+            dut.io.b.poke(b.U)
+            dut.clock.step()
+          }
+        }
+      }
+  }
+}
