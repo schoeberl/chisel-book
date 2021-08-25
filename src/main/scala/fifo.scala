@@ -147,17 +147,17 @@ class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
   val emptyReg = RegInit(true.B)
   val fullReg = RegInit(false.B)
 
+  when (io.deq.ready && !emptyReg) {
+    fullReg := false.B
+    emptyReg := nextRead === writePtr
+    incrRead := true.B
+  }
+  
   when (io.enq.valid && !fullReg) {
     memReg(writePtr) := io.enq.bits
     emptyReg := false.B
     fullReg := nextWrite === readPtr
     incrWrite := true.B
-  }
-
-  when (io.deq.ready && !emptyReg) {
-    fullReg := false.B
-    emptyReg := nextRead === writePtr
-    incrRead := true.B
   }
 
   io.deq.bits := memReg(readPtr)
