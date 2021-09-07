@@ -422,7 +422,7 @@ $ brew install sbt git
 
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
-When importing a project, {\textbf select the JDK 1.8} you installed before (not Java 11!)
+When importing a project, {\textbf select the JDK 1.8} you installed before.
 
 \subsection{Linux/Ubuntu}
 
@@ -434,15 +434,8 @@ $ sudo apt install openjdk-8-jdk git make gtkwave
 For Ubuntu, which is based on Debian, programs are usually installed from a
 Debian file (.deb). However, as of the time of this writing, \code{sbt} is not
 available as a ready to install package. Therefore, the installation process
-is a little bit more involved:
-\begin{verbatim}
-echo "deb https://dl.bintray.com/sbt/debian /" | \
-  sudo tee -a /etc/apt/sources.list.d/sbt.list
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 \
-  --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
-sudo apt-get update
-sudo apt-get install sbt
-\end{verbatim}
+is a little bit more involved.
+Follow the instructions from \myref{https://www.scala-sbt.org/download.html}{sbt download}
 
 \subsection{Windows}
 
@@ -581,7 +574,7 @@ a Java JDK installation). All code is compiled, tested, extracted, and the Latex
 a simple:
 
 \begin{chisel}
-make
+$ make
 \end{chisel}
 
 This book is freely available as a PDF eBook and in classical printed form
