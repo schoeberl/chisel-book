@@ -1,0 +1,423 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+\title{Software Defined Hardware, Chip Design with the Hardware Construction Language Chisel}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel is Productive}
+\begin{itemize}
+\item A tiny microprocessor (called Lipsi)
+\item The hardware in Chisel
+\item Assembler in Scala
+\item Some assembler programs (blinking LED)
+\item Co-imulation in Scala
+\item Two testers
+\end{itemize}
+\begin{itemize}
+\item All coded and tested in less than 14 hours!
+\item BUT, this does not include the design (done on paper)
+\end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{Chisel}
+\begin{itemize}
+\item A hardware \emph{construction} language
+\begin{itemize}
+\item Constructing Hardware In a Scala Embedded Language
+\item If it compiles, it is synthesisable hardware 
+\item Say goodby to your unintended latches
+\end{itemize}
+\item Chisel is not a high-level synthesis language
+\item Single source two targets
+\begin{itemize}
+\item Cycle accurate simulation (testing)
+\item Verilog for synthesis
+\end{itemize}
+\item Embedded in Scala
+\begin{itemize}
+\item Full power of Scala available
+\item But to start with, no Scala knowledge needed
+\end{itemize}
+\item Developed at UC Berkeley
+\item Drives the Rocket chip (open-source RISC-V)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The C Language Family}
+
+\Tree[.C [
+   [.{\bf Verilog} {\bf SystemVerilog} ]
+   [.C++  \emph{SystemC}  ]
+   [.Java [.Scala {\bf Chisel} ] ]
+   [.C\# ] ] ]
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Other Language Families}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Python [.{\bf MyHDL} ] ]
+\end{center}
+\end{columns}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{A Small Language}
+\begin{itemize}
+\item Chisel is a \emph{small} language
+\item On purpose
+\item Not many constructs to remember
+\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
+\item The power comes with Scala for circuit generators
+\item With Scala, Chisel can grow with you
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Expressions are Combinational Circuits}
+\begin{chisel}
+(a | b) & ~(c ^ d)
+
+val addVal = a + b
+val orVal = a | b
+val boolVal = a >= b
+\end{chisel}
+\begin{itemize}
+\item The usual operations 
+\item Simple name assignment with val
+\item Width inference
+\item Type inference
+\item Types: Bits, UInt, SInt, Bool
+\item Conditional updates available (like if/else)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Registers}
+\begin{chisel}
+val cntReg = RegInit(0.U(32.W))
+
+cntReg := cntReg + 1.U
+\end{chisel}
+\begin{itemize}
+\item Type inferred by initial value (= reset value)
+\item No need to specify a clock or reset signal
+\end{itemize}
+\begin{itemize}
+\item Also definition with an input signal connected:
+\end{itemize}
+\begin{chisel}
+val r = RegNext(nextVal) 
+\end{chisel}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Chisel has a Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
+\shortlist{../code/mux.txt}
+\begin{itemize}
+\item So what?
+\item Wait... What type is \code{a} and \code{b}?
+\begin{itemize}
+\item Can be any Chisel type!
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel has a Generic Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
+\shortlist{../code/mux.txt}
+\begin{itemize}
+\item SW people may not be impressed
+\item They have generics since Java 1.5 in 2004
+\begin{itemize}
+\item \code{List<Flowers> != List<Cars>}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Generics in Hardware Construction}
+\begin{itemize}
+\item Chisel supports generic classes with type parameters
+\item Write hardware generators independent of concrete type
+\item This is a multiplexer \emph{generator}
+\end{itemize}
+\shortlist{../code/param_func.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Object Oriented Hardware Design}
+\shortlist{../code/fifo_abstract.txt}
+\begin{itemize}
+\item Abstract base class, may contain common code
+\item Extend by concrete classes
+\end{itemize}
+\begin{chisel}
+class BubbleFifo[T <: Data](....) extends Fifo(...)
+
+class MemoryFifo[T <: Data](....) extends Fifo(...)
+
+\end{chisel}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Select a Concrete FIFO Implementation}
+\begin{itemize}
+\item Decide at hardware generation
+\item Can use all Scala/Java power for the decision
+\begin{itemize}
+\item Connect to a web service, get \sout{Google} Alphabet stock price, and decide on which to use ;-)
+\item For sure a silly idea, but you see what is possible...
+\item Developers may find clever use of the Scala/Java power
+\item We could present a GUI to the user to select from
+\end{itemize}
+\item We use XML files parsed at hardware generation time
+\item End of TCL, Python,... generated hardware
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Functional Programming for Generators}
+\shortlist{../code/fun_first.txt}
+\shortlist{../code/fun_func_lit.txt}
+\shortlist{../code/fun_reduce_tree.txt}
+\begin{itemize}
+\item This is a simple example
+\item What about an arbiter tree with fair arbitration?
+\item Example: sorting hardware that is generic of the data type
+\item This is a field to be explored
+\end{itemize}
+\end{frame}
+
+
+% Use this for single talk
+%\input{generation.tex}
+
+
+
+
+
+
+\begin{frame}[fragile]{A Chisel Book}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../cover-small}
+\end{figure}
+
+\begin{itemize}
+\item Available in open access (PDF)
+\item In paper from Amazon
+\item see \url{http://www.imm.dtu.dk/~masca/chisel-book.html}
+\item Source at \url{https://github.com/schoeberl/chisel-book}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{What May Happen with an Open-Source Book}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../cover-small-chinese}
+\end{figure}
+
+\begin{itemize}
+\item A free Chinese translation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Several Weeks ago I got This}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../cover-small-jp}
+\end{figure}
+
+\begin{itemize}
+\item A Japanese translation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{And one More}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{../cover-small-vi}
+\end{figure}
+
+\begin{itemize}
+\item A Vietnamise translation
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+% \item The world is digital
+\item Processors do not get much faster -- we need to design domain specific hardware accelerators
+\item We need a modern language for hardware/system design
+\item Chisel is a small language
+\item Embedding it in Scala gives the power
+\item Chisel is good for hardware generators
+% \item You can get started with a hardware design in a special course or 4th semester project
+%\item We can do co-simulation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{More on Chisel Success Stories}
+\begin{itemize}
+\item Before the lockdown at CCC 2020 (in silicon valley)
+\item 90 participants
+\item More than 30 different (hardware) companies present
+\item Several companies are looking into Chisel
+\item IBM did an open-source PowerPC
+\item \href{https://www.sifive.com/}{SiFive} is a RISC-V startup success
+\begin{itemize}
+\item High productivity with Chisel
+\item Open-source Rocket chip
+\end{itemize}
+\item Experanto uses the BOOM processor in Chisel
+\item Google did a machine learning processor
+\item Intel is looking at Chisel
+\item Chisel is open-source, if there is a bug you can fix it
+\begin{itemize}
+\item You can contribute to the Chisel ecosystem
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Some Notes on Scala}
+\begin{itemize}
+\item Object oriented
+\item Functional
+\item Strongly typed
+\begin{itemize}
+\item With very good type inference
+\end{itemize}
+\item Could be seen as Java++
+\item Compiled to the JVM
+\item Good Java interoperability
+\begin{itemize}
+\item Many libraries available
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{chisel}
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a+b, a-b)
+
+  val res = addSub(cond, a, b)
+  
+  def rising(d: Bool) = d && !RegNext(d)
+\end{chisel}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Hello World in Chisel}
+\shortlist{../code/hello.txt}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Logic Generation}
+\begin{itemize}
+\item Read a file into a table
+\begin{itemize}
+\item E.g., to read in ROM content for a processor
+\end{itemize}
+\item Generate a truth table algorithmically
+\begin{itemize}
+\item E.g., generate binary to BCD translation
+\end{itemize}
+\item Use the full power of Scala
+\end{itemize}
+\begin{chisel}
+val byteArray = Files.readAllBytes(Paths.get(fileName))
+val arr = new Array[Bits](byteArray.length)
+for (i <- 0 until byteArray.length) {
+  arr(i) = Bits(byteArray(i), 8)
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Flow for Chisel}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{../figures/flow}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel in Teaching}
+\begin{itemize}
+\item Using/offering it in Advanced Computer Architecture
+\item Spring 2016--2018 all projects have been in Chisel
+\item Several Bachelor and Master projects
+\item Students pick it up reasonable fast
+\item For software engineering students easier than VHDL
+\item Switch Digital Electronics 2 at DTU to Chisel (spring semester 2020)
+\item Issue of \emph{writing a program} instead of describing hardware remains
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel in Digital Electronic 2}
+\begin{itemize}
+\item Basic RTL level digital design wit Chisel
+\item Chisel testers for debugging
+\item Very FPGA centric course
+\item Final project is a vending machine
+\item All material (slides, book, lab material) in open source
+\item Tried to coordinate with introduction to programming (Java)
+\begin{itemize}
+\item But sometimes I was ahead with Chisel constructs (e.g., classes)
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Then there was the Lockdown}
+\begin{itemize}
+\item Usually one FPGA board per group
+\item No group meetings
+\item Just virtual labs
+\item Can I do something about it with Chisel?
+\end{itemize}
+\end{frame}
+
+\end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
