@@ -116,8 +116,8 @@
 \fi
 
 % uncomment following for final submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -4316,7 +4316,9 @@ Note that the whole functional expression uses a Scala \code{Vector} to hold int
 but returns hardware (connected multiplexers) consisting of Chisel types only.
 As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is available on Chisel's
 \code{Vec} only.
- 
+
+\todo{Explain the following code}
+
 \shortlist{code/fun_min4.txt}
 
 
@@ -5333,7 +5335,7 @@ the Scala version is different between your Chisel library and your application 
 it picks up the SNAPSHOT version from the server instead of your local published
 library.)
 
-See also \myref{https://github.com/freechipsproject/chisel3}{some notes
+See also \myref{https://github.com/chipsalliance/chisel3}{some notes
 at the Chisel repo}.
 
 \subsection{Testing}
