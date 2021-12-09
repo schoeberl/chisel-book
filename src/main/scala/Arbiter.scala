@@ -1,15 +1,20 @@
 import chisel3._
 import chisel3.util._
 
-class ArbiterIO[T <: Data](n: Int, private val gen: T) extends Bundle {
-  val in = Flipped(Vec(n, new DecoupledIO(gen)))
-  val out = new DecoupledIO(gen)
-}
+// Only one will be ready, as we cannot take two values
+// This would need a shadow register, a reasonable optimisation
+// Without optimisation one channel can only take one data every 2 clock cycles
 
+// the following should error (in the Module), as this is the wrong direction
+// out.ready := a.ready
+
+//- start fun_arbiter
 class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
-  val io = IO(new ArbiterIO(n, gen))
+  val io = IO(new Bundle {
+    val in = Flipped(Vec(n, new DecoupledIO(gen)))
+    val out = new DecoupledIO(gen)
+  })
 
-  // incomplete function, just a placeholder
   def foo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
 
 
@@ -17,9 +22,6 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
     val regValid = RegInit(false.B)
     val out = Wire(new DecoupledIO(gen))
 
-    // Only one will be ready, as we cannot take two values
-    // This would need a shadow register, a reasonable optimisation
-    // Without optimisation one channel can only take one data every 2 clock cycles
     val turnA = RegInit(true.B)
     turnA := !turnA
     a.ready := !regValid & turnA
@@ -39,9 +41,6 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
       }
     }
 
-    // the following should error, as this is the wrong direction
-    // out.ready := a.ready
-
     out.bits := regData
     out.valid := regValid
     out
@@ -50,6 +49,7 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
   // io.out <> io.in.reduceTree(foo)
   io.out <> io.in.reduce(foo)
 }
+//- end
 
 object Arbiter extends App {
   println((new chisel3.stage.ChiselStage).emitVerilog(new Arbiter(4, UInt(8.W))))
