@@ -154,19 +154,66 @@ for (int i = 0; i < Math.pow(2, ADDRBITS); ++i) {
 \end{itemize}
 \end{frame}
 
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item TODO: s4noc connection is part of the generator story
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
+\begin{frame}[fragile]{Functional Generation}
+\begin{itemize}
+\item Anonymous functions, called \emph{function literal}
+\begin{chisel}
+  (param) => function body
+\end{chisel}
+\item A function for a minimum search
+\shortlist{../code/fun_min.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Minimal Function with Index}
+\begin{itemize}
+\item Was the example for Tjark's heap sort
+\shortlist{../code/fun_min2.txt}
+\item We need an extra bundle to hold both values
+\item A for loop is not so functional
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
+\begin{itemize}
+\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
+with second element is the index
+\item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
+\item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
+\shortlist{../code/fun_min3.txt}
+\item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Solution with a Vec}
+\begin{itemize}
+\item Don't remember the details
+\item But this results in a \code{Vec}
+\shortlist{../code/fun_min4.txt}
+\item
+\item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An Arbiter}
+\shortlist{../code/fun_arbiter.txt}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item TODO: s4noc connection is part of the generator story
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
 
