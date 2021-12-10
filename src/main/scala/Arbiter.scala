@@ -17,7 +17,6 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
 
   def foo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
 
-
     val regData = Reg(gen)
     val regValid = RegInit(false.B)
     val out = Wire(new DecoupledIO(gen))

@@ -1524,6 +1524,10 @@ This includes, e.g., writing a reference model in Scala to test against.
 
 \subsection{Waveforms}
 
+\index{Waveform}
+\index{Vcd}
+
+
 Testers, as described above, work well for small designs and for 
 \myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
 software development. A collection of unit tests can also serve for
@@ -1541,6 +1545,8 @@ the test, as shown in the following \code{sbt} command:
 \begin{verbatim}
 sbt "testOnly SimpleTest -- -DwriteVcd=1"
 \end{verbatim}
+
+\todo{Is this still true for ChiselTest?}
 
 You can view the waveform with the free viewer
 \myref{http://gtkwave.sourceforge.net/}{GTKWave} or with ModelSim.
@@ -3875,6 +3881,8 @@ represent a hierarchy in which the first thread should not finish before one of 
 subsequent threads.
 
 \subsection{Advanced: Simulator Backends}
+
+\index{Verilator}
 
 Per default, tests written with ChiselTest are run by the Treadle simulation backend. However, 
 larger system tests may either require another backend to support, e.g., latches, or may 
