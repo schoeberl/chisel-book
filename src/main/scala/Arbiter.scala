@@ -52,6 +52,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
   })
 
   // TODO: the odd case is not correct, try with 5
+  // TODO: rewrite with Luca's idea
   def myTree[T: Manifest](s: Seq[T], op: (T, T) => T): T = {
 
     val l = s.length
@@ -60,6 +61,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
       case 1 => s(0)
       case 2 => op(s(0), s(1))
       case _ => {
+        // Maybe with Array[Any] we can avoid the Manifest thing
         val ns = new Array[T]((l+1)/2)
         for (i <- 0 until l/2) {
           ns(i) = op(s(i * 2), s(i * 2 + 1))
@@ -102,7 +104,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
     out
   }
 
-  def baz(a: DecoupledIO[T], b: DecoupledIO[T]) = {
+  def add(a: DecoupledIO[T], b: DecoupledIO[T]) = {
     val out = Wire(new DecoupledIO(gen))
     out.bits := a.bits.asUInt() + b.bits.asUInt()
     a.ready := true.B
@@ -111,8 +113,8 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
     out
   }
   // io.out <> io.in.reduceTree(foo)
-  // io.out <> io.in.reduce(baz)
-  io.out <> myTree(io.in, baz)
+  // io.out <> io.in.reduce(foo)
+  io.out <> myTree(io.in, foo)
 }
 //- end
 
