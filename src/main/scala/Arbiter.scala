@@ -44,8 +44,22 @@ object MyImplicits {
 
  */
 
+object TreeReduce {
+  implicit class SeqToTreeReducible[T](xs: Seq[T]) {
+    def treeReduce(op: (T,T) => T): T = {
+      xs match {
+        case Seq(x) => x
+        case s => s.grouped(2).map {
+          case Seq(x) => x
+          case Seq(x,y) => op(x,y)
+        }.toSeq.treeReduce(op)
+      }
+    }
+  }
+}
+import TreeReduce.SeqToTreeReducible
 //- start fun_arbiter
-class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
+class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
   val io = IO(new Bundle {
     val in = Flipped(Vec(n, new DecoupledIO(gen)))
     val out = new DecoupledIO(gen)
@@ -114,7 +128,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
   }
   // io.out <> io.in.reduceTree(foo)
   // io.out <> io.in.reduce(foo)
-  io.out <> myTree(io.in, foo)
+  io.out <> io.in.treeReduce(foo)
 }
 //- end
 
