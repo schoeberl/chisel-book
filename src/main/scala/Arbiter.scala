@@ -8,41 +8,6 @@ import chisel3.util._
 // the following should error (in the Module), as this is the wrong direction
 // out.ready := a.ready
 
-/*
-class MyDecoupledIO[T <: Data](gen: T) extends Bundle {
-  val ready = Input(Bool())
-  val valid = Output(Bool())
-  val bits = Output(gen)
-}
-*/
-
-/*
-object MyImplicits {
-  implicit class TreeReducter[T: Manifest](s: Seq[T]) {
-    def treeReduce[T: Manifest](op: (T, T) => T): T = {
-
-      val l = s.length
-      require(l > 0, "Cannot apply reduction on a Seq of size 0")
-      l match {
-        case 1 => s(0)
-        case 2 => op(s(0), s(1))
-        case _ => {
-          val ns = new Array[T]((l+1)/2)
-          for (i <- 0 until l/2) {
-            ns(i) = op(s(i * 2), s(i * 2 + 1))
-          }
-          if (l % 2 == 1) {
-            ns(l / 2) = s(l - 1)
-          }
-          (Seq) (ns).treeReduce(op)
-        }
-      }
-    }
-  }
-
-}
-
- */
 
 object TreeReduce {
   implicit class SeqToTreeReducible[T](xs: Seq[T]) {
@@ -58,8 +23,9 @@ object TreeReduce {
   }
 }
 import TreeReduce.SeqToTreeReducible
+// TODO Tjark's code did not need the Manifest
 //- start fun_arbiter
-class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
+class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
   val io = IO(new Bundle {
     val in = Flipped(Vec(n, new DecoupledIO(gen)))
     val out = new DecoupledIO(gen)
@@ -67,13 +33,13 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
 
   // TODO: the odd case is not correct, try with 5
   // TODO: rewrite with Luca's idea
-  def myTree[T: Manifest](s: Seq[T], op: (T, T) => T): T = {
+  def myUnfairTree[T: Manifest](s: Seq[T], op: (T, T) => T): T = {
 
     val l = s.length
     require(l > 0, "Cannot apply reduction on a Seq of size 0")
     l match {
       case 1 => s(0)
-      case 2 => op(s(0), s(1))
+      case 2 => println("in case 2"); op(s(0), s(1))
       case _ => {
         // Maybe with Array[Any] we can avoid the Manifest thing
         val ns = new Array[T]((l+1)/2)
@@ -83,9 +49,60 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
         if (l % 2 == 1) {
           ns(l / 2) = s(l - 1)
         }
-        myTree(ns, op)
+        myUnfairTree(ns, op)
       }
     }
+  }
+
+  def myTree[T: Manifest](s: Seq[T], op: (T, T) => T): T = {
+
+    val n = s.length
+    require(n > 0, "Cannot apply reduction on a Seq of size 0")
+
+    import Math._
+
+    println(s"Arbit between $n")
+
+    n match {
+      case 1 => s(0)
+      case 2 => println("in case 2"); op(s(0), s(1))
+      case _ =>
+        val m =  pow(2, floor(log10(n-1)/log10(2))).toInt // number of nodes in upper level
+        val ns = new Array[T](m)
+        val k = 2 * (n - m)
+        val p = n - k
+        println(s"$m new nodes, $p promoted, and $k combined")
+        // promote first few nodes directly up
+        // this will only be done in the first round
+        for (i <- 0 until p) {
+          println(s"promote $i")
+          ns(i) = s(i)
+        }
+        for (i <- 0 until k by 2) {
+          println(s"combine ${p+i} and ${p+i+1} to ${p + i/2}")
+          println(s"${s(p+i)}")
+          println(s"${s(p+i+1)}")
+          ns(p + i/2) = op(s(p+i), s(p+i+1))
+        }
+        myTree(ns, op)
+    }
+
+        /*
+        println(s"Start of $n")
+        val l =  s.take(p)
+        println(s"left: $l of ${l.length} elements")
+        println(l)
+        val r = s.drop(p).grouped(2).map{
+          case Seq(a) => a
+          case Seq(a, b) => op(a, b)
+        }.toSeq
+        println(s"right: $r of ${r.length} elements")
+        println(r)
+
+        val nx = l ++ r
+        println(s"all: $nx of ${nx.length} elements")
+
+         */
   }
 
   def foo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
@@ -120,6 +137,8 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
 
   def add(a: DecoupledIO[T], b: DecoupledIO[T]) = {
     val out = Wire(new DecoupledIO(gen))
+    println(s"in add first $a")
+    println(s"in add second $b")
     out.bits := a.bits.asUInt() + b.bits.asUInt()
     a.ready := true.B
     b.ready := true.B
@@ -128,10 +147,12 @@ class Arbiter[T <: Data](n: Int, private val gen: T) extends Module {
   }
   // io.out <> io.in.reduceTree(foo)
   // io.out <> io.in.reduce(foo)
-  io.out <> io.in.treeReduce(foo)
+  // io.out <> io.in.treeReduce(add)
+  io.out <> myTree(io.in, add)
 }
 //- end
 
 object Arbiter extends App {
-  println((new chisel3.stage.ChiselStage).emitVerilog(new Arbiter(5, UInt(8.W))))
+
+  println((new chisel3.stage.ChiselStage).emitVerilog(new Arbiter(7, UInt(8.W))))
 }
