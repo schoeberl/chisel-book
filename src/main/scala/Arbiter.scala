@@ -1,6 +1,8 @@
 import chisel3._
 import chisel3.util._
 
+import java.lang.Math.{floor, log10, pow}
+
 // Only one will be ready, as we cannot take two values
 // This would need a shadow register, a reasonable optimisation
 // Without optimisation one channel can only take one data every 2 clock cycles
@@ -59,8 +61,6 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
     val n = s.length
     require(n > 0, "Cannot apply reduction on a Seq of size 0")
 
-    import Math._
-
     println(s"Arbit between $n")
 
     n match {
@@ -86,23 +86,40 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
         }
         myTree(ns, op)
     }
+  }
 
-        /*
+  def myTreeFunctional[T: Manifest](s: Seq[T], op: (T, T) => T): T = {
+
+    val n = s.length
+    require(n > 0, "Cannot apply reduction on a Seq of size 0")
+
+    n match {
+      case 1 => s(0)
+      case 2 => op(s(0), s(1))
+      case _ =>
+        val m =  pow(2, floor(log10(n-1)/log10(2))).toInt // number of nodes in upper level
+        val k = 2 * (n - m)
+        val p = n - k
+
         println(s"Start of $n")
         val l =  s.take(p)
         println(s"left: $l of ${l.length} elements")
         println(l)
-        val r = s.drop(p).grouped(2).map{
-          case Seq(a) => a
+        val r = s.drop(p).grouped(2).map {
           case Seq(a, b) => op(a, b)
         }.toSeq
         println(s"right: $r of ${r.length} elements")
         println(r)
 
-        val nx = l ++ r
-        println(s"all: $nx of ${nx.length} elements")
+        val ns = l ++ r
+        println(s"all: $ns of ${ns.length} elements")
 
-         */
+        myTreeFunctional(ns, op)
+    }
+
+
+
+
   }
 
   def foo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
@@ -148,7 +165,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
   // io.out <> io.in.reduceTree(foo)
   // io.out <> io.in.reduce(foo)
   // io.out <> io.in.treeReduce(add)
-  io.out <> myTree(io.in, add)
+  io.out <> myTreeFunctional(io.in, add)
 }
 //- end
 
