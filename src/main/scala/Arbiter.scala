@@ -99,33 +99,47 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
     }
   }
 
-  def foo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
+  def arbitrateTwo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
 
+    val idleA :: idleB :: hasA :: hasB :: Nil = Enum(4)
     val regData = Reg(gen)
-    val regValid = RegInit(false.B)
+    val regState = RegInit(idleA)
     val out = Wire(new DecoupledIO(gen))
 
-    val turnA = RegInit(true.B)
-    turnA := !turnA
-    a.ready := !regValid & turnA
-    b.ready := !regValid & !turnA
+    a.ready := regState === idleA
+    b.ready := regState === idleB
+    out.valid := (regState === hasA || regState === hasB)
 
-    when (regValid) {
-      when (out.ready) {
-        regValid := false.B
+    switch(regState) {
+      is (idleA) {
+        when (a.valid) {
+          regData := a.bits
+          regState := hasA
+        } otherwise {
+          regState := idleB
+        }
       }
-    } .otherwise {
-      when (turnA & a.valid) {
-        regData := a.bits
-        regValid := true.B
-      } .elsewhen(!turnA & b.valid) {
-        regData := b.bits
-        regValid := true.B
+      is (idleB) {
+        when (b.valid) {
+          regData := b.bits
+          regState := hasB
+        } otherwise {
+          regState := idleA
+        }
+      }
+      is (hasA) {
+        when (out.ready) {
+          regState := idleB
+        }
+      }
+      is (hasB) {
+        when (out.ready) {
+          regState := idleA
+        }
       }
     }
 
     out.bits := regData
-    out.valid := regValid
     out
   }
 
@@ -138,9 +152,9 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
     out
   }
   // io.out <> io.in.reduceTree(foo)
-  // io.out <> io.in.reduce(foo)
+  // io.out <> io.in.reduce(arbitrateTwo)
   // io.out <> io.in.treeReduce(add)
-  io.out <> myTreeFunctional(io.in, add)
+  io.out <> myTreeFunctional(io.in, arbitrateTwo)
 }
 //- end
 
