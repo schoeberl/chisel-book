@@ -87,8 +87,7 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
       case 2 => op(s(0), s(1))
       case _ =>
         val m =  pow(2, floor(log10(n-1)/log10(2))).toInt // number of nodes in next level, will be a power of 2
-        val k = 2 * (n - m) // number of nodes combined
-        val p = n - k // number of nodes promoted
+        val p = 2 * m - n // number of nodes promoted
 
         val l =  s.take(p)
         val r = s.drop(p).grouped(2).map {
