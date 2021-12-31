@@ -40,7 +40,7 @@ class Debounce(fac: Int = 100000000/100) extends Module {
     // shift left and input in LSB
     shiftReg := shiftReg(1, 0) ## btnDebReg
   }
-  // Majority voiting
+  // Majority voting
   val btnClean = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))
   //- end
 
