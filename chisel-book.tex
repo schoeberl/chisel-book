@@ -3066,7 +3066,7 @@ Majority voting ensures that the signal is stable for longer than the sampling p
 Figure~\ref{fig:majority} shows the circuit of the majority voter.
 It consists of a 3-bit shift register enabled by the \code{tick} signal
 we used for the debouncing sampling. The output of the three registers
-is feed into the majority voting circuit. The majority voting function filters
+is fed into the majority voting circuit. The majority voting function filters
 any signal change shorter than the sample period. 
 
 The following Chisel code shows the 3-bit shift register, enabled by the
