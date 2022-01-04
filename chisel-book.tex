@@ -1336,7 +1336,7 @@ e.g., \code{Hello.bit}.
 
 \section{Testing with Chisel}
 
-Tests of hardware designs are usually called \myref{https://www.xilinx.com/support/documentation/sw_manuals/xilinx10/isehelp/ise_c_simulation_test_bench.htm}{test benches}.
+Tests of hardware designs are usually called \myref{https://en.wikipedia.org/wiki/Test_bench}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
 Chisel provides two testing methods, the older \code{PeekPokeTester} in package \code{iotesters}
@@ -1465,10 +1465,12 @@ $ sbt "testOnly SimpleTest"
 
 \begin{verbatim}
 ...
-Done elaborating.
 Result is: UInt<2>(0)
 Result is: UInt<2>(2)
-test DeviceUnderTest Success: 0 tests passed in 4 cycles in 0,029944 ...
+[info] SimpleTest:
+[info] DUT
+[info] - should pass
+[info] ScalaTest
 ...
 \end{verbatim}
 
@@ -1545,8 +1547,6 @@ the test, as shown in the following \code{sbt} command:
 \begin{verbatim}
 sbt "testOnly SimpleTest -- -DwriteVcd=1"
 \end{verbatim}
-
-\todo{Is this still true for ChiselTest?}
 
 You can view the waveform with the free viewer
 \myref{http://gtkwave.sourceforge.net/}{GTKWave} or with ModelSim.
