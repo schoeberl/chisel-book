@@ -3,9 +3,9 @@ before_install:
   - sudo apt-get install scala texlive-full verilator
 language: scala
 scala:
- - 2.11.7
+ - 2.12.13
 jdk:
- - openjdk8
+ - openjdk11
 script:
  - verilator --version
  - make
