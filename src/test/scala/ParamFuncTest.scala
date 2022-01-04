@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class ParamFuncTest extends FlatSpec with ChiselScalatestTester {
+class ParamFuncTest extends AnyFlatSpec with ChiselScalatestTester {
   "ParamFunc" should "pass" in {
     test(new ParamFunc) { dut =>
       dut.io.selA.poke(true.B)

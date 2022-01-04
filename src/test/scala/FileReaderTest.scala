@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FileReaderTest extends FlatSpec with ChiselScalatestTester {
+class FileReaderTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "FileReader"
 
   it should "pass" in {

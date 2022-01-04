@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class SequentialTest extends FlatSpec with ChiselScalatestTester {
+class SequentialTest extends AnyFlatSpec with ChiselScalatestTester {
   "Sequential" should "pass" in {
     test(new Sequential) { dut =>
       dut.io.d.poke(0xc.U)

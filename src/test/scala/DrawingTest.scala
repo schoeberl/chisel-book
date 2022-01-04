@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class DrawingTest extends FlatSpec with ChiselScalatestTester {
+class DrawingTest extends AnyFlatSpec with ChiselScalatestTester {
   "DrawAcc" should "pass" in {
     test(new DrawAcc) { dut =>
       dut.io.din.poke(3.U)

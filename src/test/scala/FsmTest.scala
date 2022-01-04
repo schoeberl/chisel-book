@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FsmTest extends FlatSpec with ChiselScalatestTester {
+class FsmTest extends AnyFlatSpec with ChiselScalatestTester {
   "SimpleFsm" should "pass" in {
     test(new SimpleFsm) { dut =>
       dut.io.clear.poke(false.B)

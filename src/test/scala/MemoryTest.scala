@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class MemoryTest extends FlatSpec with ChiselScalatestTester {
+class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
   "Memory" should "pass" in {
     test(new Memory) { dut =>
       // Fill the memory

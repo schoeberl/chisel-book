@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class DebounceTest extends FlatSpec with ChiselScalatestTester {
+class DebounceTest extends AnyFlatSpec with ChiselScalatestTester {
   val FAC = 100
 
   "Debounce" should "debounce inputs" in {

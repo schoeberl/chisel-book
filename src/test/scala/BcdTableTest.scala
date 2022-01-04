@@ -1,9 +1,10 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
 //- start basic_chiseltest
-class BcdTableTest extends FlatSpec with ChiselScalatestTester {
+class BcdTableTest extends AnyFlatSpec with ChiselScalatestTester {
   "BCD table" should "output BCD encoded numbers" in {
     test(new BcdTable) { dut =>
       dut.io.address.poke(0.U)

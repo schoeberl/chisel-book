@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FlasherTest extends FlatSpec with ChiselScalatestTester {
+class FlasherTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "Flasher"
   def testFn[T <: FlasherBase](f: T) = {
     f.io.start.poke(0.U)

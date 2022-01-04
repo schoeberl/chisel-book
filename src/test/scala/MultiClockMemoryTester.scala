@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class MultiClockMemoryTester extends FlatSpec with ChiselScalatestTester {
+class MultiClockMemoryTester extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "Multi-clock memory"
 
   it should "operate" in {

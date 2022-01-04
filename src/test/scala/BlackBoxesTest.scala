@@ -3,8 +3,9 @@ import chisel3.experimental.BundleLiterals._
 import chiseltest._
 import org.scalatest._
 import scala.language.implicitConversions
+import org.scalatest.flatspec.AnyFlatSpec
 
-class BlackBoxesTest extends FlatSpec with ChiselScalatestTester {
+class BlackBoxesTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "BlackBoxAdder"
 
   private[this] abstract class BlackBoxAdder extends Module {

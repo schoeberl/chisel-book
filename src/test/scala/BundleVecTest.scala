@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class BundleVecTest extends FlatSpec with ChiselScalatestTester {
+class BundleVecTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "BundleVec"
 
   it should "pass" in {

@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class BubbleFifoTest extends FlatSpec with ChiselScalatestTester {
+class BubbleFifoTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "Bubble FIFO"
 
   it should "pass" in {

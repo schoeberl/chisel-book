@@ -1,6 +1,8 @@
 //- start ticker_tester
 import chisel3.iotesters.PeekPokeTester
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 class TickerTester[T <: Ticker](dut: T, n: Int) extends PeekPokeTester(dut: T) {
 
@@ -28,7 +30,7 @@ class TickerTester[T <: Ticker](dut: T, n: Int) extends PeekPokeTester(dut: T) {
 //- end
 
 //- start ticker_spec
-class TickerSpec extends FlatSpec with Matchers {
+class TickerSpec extends AnyFlatSpec with Matchers {
 
   "UpTicker 5" should "pass" in {
     chisel3.iotesters.Driver(() => new UpTicker(5)) { c =>

@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class RegisterTest extends FlatSpec with ChiselScalatestTester {
+class RegisterTest extends AnyFlatSpec with ChiselScalatestTester {
   "Registers" should "store values" in {
     test(new Registers) { dut =>
       println(s"Register stores ${dut.io.out.peek.litValue}")

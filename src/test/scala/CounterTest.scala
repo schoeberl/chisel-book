@@ -1,6 +1,7 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
 trait CountTest {
   def testFn[T <: Counter](c: T, n: Int) = {
@@ -20,7 +21,7 @@ trait CountTest {
   }
 }
 
-class CounterTest extends FlatSpec with ChiselScalatestTester with CountTest {
+class CounterTest extends AnyFlatSpec with ChiselScalatestTester with CountTest {
   // `testFn` could have been defined here instead of in a separate trait.
 
   "WhenCounter 4" should "count" in {

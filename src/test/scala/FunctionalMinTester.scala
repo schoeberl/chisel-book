@@ -2,8 +2,9 @@ import chisel3._
 import chiseltest._
 import org.scalatest._
 import ScalaFunctionalMin._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FunctionalMinTester extends FlatSpec with ChiselScalatestTester {
+class FunctionalMinTester extends AnyFlatSpec with ChiselScalatestTester {
   "ScalaFunctionalMin" should "pass" in {
      assert(findMin(List(1, 0, 3, 2, 0, 5)) == (0, 1))
   }

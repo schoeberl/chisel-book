@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class CombinationalTest extends FlatSpec with ChiselScalatestTester {
+class CombinationalTest extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "Combinational logic"
 
   it should "work with purely combinational logic" in {

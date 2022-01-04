@@ -2,10 +2,11 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 //- end
 
 //- start test_bench_simple
-class SimpleTest extends FlatSpec with ChiselScalatestTester {
+class SimpleTest extends AnyFlatSpec with ChiselScalatestTester {
   "DUT" should "pass" in {
     test(new DeviceUnderTest) { dut =>
       dut.io.a.poke(0.U)
@@ -22,7 +23,7 @@ class SimpleTest extends FlatSpec with ChiselScalatestTester {
 //- end
 
 //- start test_bench
-class SimpleTestExpect extends FlatSpec with ChiselScalatestTester {
+class SimpleTestExpect extends AnyFlatSpec with ChiselScalatestTester {
   "DUT" should "pass" in {
     test(new DeviceUnderTest) { dut =>
       dut.io.a.poke(0.U)
@@ -38,7 +39,7 @@ class SimpleTestExpect extends FlatSpec with ChiselScalatestTester {
 }
 //- end
 
-class SimplePrintfTest extends FlatSpec with ChiselScalatestTester {
+class SimplePrintfTest extends AnyFlatSpec with ChiselScalatestTester {
   "WaveformCounter" should "pass" in {
     test(new DeviceUnderTestPrintf) { dut =>
         for (a <- 0 until 4) {

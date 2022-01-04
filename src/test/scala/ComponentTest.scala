@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class ComponentTest extends FlatSpec with ChiselScalatestTester {
+class ComponentTest extends AnyFlatSpec with ChiselScalatestTester {
   "ComponentFn" should "pass" in {
     test(new CompFn) { dut =>
       dut.io.a.poke(0x1.U)

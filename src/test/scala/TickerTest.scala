@@ -1,6 +1,7 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
 trait TickerTestFunc {
   def testFn[T <: Ticker](dut: T, n: Int) = {
@@ -23,7 +24,7 @@ trait TickerTestFunc {
   }
 }
 
-class TickerTest extends FlatSpec with ChiselScalatestTester with TickerTestFunc {
+class TickerTest extends AnyFlatSpec with ChiselScalatestTester with TickerTestFunc {
   "UpTicker 5" should "pass" in {
     test(new UpTicker(5)) { dut => testFn(dut, 5) }
   }

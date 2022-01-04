@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class TimerTest extends FlatSpec with ChiselScalatestTester {
+class TimerTest extends AnyFlatSpec with ChiselScalatestTester {
   "Timer" should "pass" in {
     test(new Timer) { dut =>
       // Timer should start at 0

@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class GenHardwareTest extends FlatSpec with ChiselScalatestTester {
+class GenHardwareTest extends AnyFlatSpec with ChiselScalatestTester {
   "GenHardware" should "work" in {
     test(new GenHardware) { dut =>
       dut.io.data(0).expect('H'.U)

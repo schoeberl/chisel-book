@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class Snippets extends FlatSpec with ChiselScalatestTester {
+class Snippets extends AnyFlatSpec with ChiselScalatestTester {
   class Dut extends Module {
     val io = IO(new Bundle{
       val in = Input(Bool())

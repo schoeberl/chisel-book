@@ -3,8 +3,9 @@ package fifo
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FifoTest extends FlatSpec with ChiselScalatestTester {
+class FifoTest extends AnyFlatSpec with ChiselScalatestTester {
   def testFn[T <: Fifo[_ <: Data]](dut: T) = {
     // Default values for all signals
     dut.io.enq.bits.asUInt.poke(0xab.U)

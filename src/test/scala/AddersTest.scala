@@ -2,6 +2,7 @@ import chisel3._
 import chiseltest._
 import org.scalatest._
 import scala.language.implicitConversions
+import org.scalatest.flatspec.AnyFlatSpec
 
 trait AbstractAdderTest {
   def testFn[T <: AbstractAdder](dut: T, w: Int = 32) = {
@@ -35,7 +36,7 @@ trait AbstractAdderTest {
   }
 }
 
-class AddersTest extends FlatSpec with ChiselScalatestTester with AbstractAdderTest {
+class AddersTest extends AnyFlatSpec with ChiselScalatestTester with AbstractAdderTest {
   behavior of "Adders"
 
   it should "add numbers" in {

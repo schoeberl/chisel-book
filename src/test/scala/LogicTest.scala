@@ -1,8 +1,9 @@
 import chisel3._
 import chiseltest._
 import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class LogicTest extends FlatSpec with ChiselScalatestTester {
+class LogicTest extends AnyFlatSpec with ChiselScalatestTester {
   "Logic" should "pass" in {
     test(new Logic) { dut =>
       dut.io.a.poke(1.U)
