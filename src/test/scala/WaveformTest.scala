@@ -1,13 +1,11 @@
 //- start test_import_wave
 import chisel3._
 import chiseltest._
-import org.scalatest._
-import chiseltest.experimental.TestOptionBuilder._
-import chiseltest.internal.WriteVcdAnnotation
+import org.scalatest.flatspec.AnyFlatSpec
 //- end
 
 //- start test_bench_wave
-class WaveformTest extends FlatSpec with ChiselScalatestTester {
+class WaveformTest extends AnyFlatSpec with ChiselScalatestTester {
   "Waveform" should "pass" in {
     test(new DeviceUnderTest)
       .withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
@@ -29,7 +27,7 @@ class WaveformTest extends FlatSpec with ChiselScalatestTester {
 //- end
 
 //- start test_bench_wavecnt
-class WaveformCounterTest extends FlatSpec with ChiselScalatestTester {
+class WaveformCounterTest extends AnyFlatSpec with ChiselScalatestTester {
   "WaveformCounter" should "pass" in {
     test(new DeviceUnderTest)
       .withAnnotations(Seq(WriteVcdAnnotation)) { dut =>

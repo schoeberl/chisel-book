@@ -1,9 +1,5 @@
 import chisel3._
 import chiseltest._
-import chiseltest.experimental.TestOptionBuilder._
-//- start verilator_import
-import chiseltest.internal.VerilatorBackendAnnotation
-//- end
 import org.scalatest._
 
 class Snippets extends FlatSpec with ChiselScalatestTester {
@@ -29,7 +25,9 @@ class Snippets extends FlatSpec with ChiselScalatestTester {
   }
 
   "Combinational test with Verilator" should "pass" in {
-    test(new Dut()).withAnnotations(Seq(VerilatorBackendAnnotation)) { 
+    //- start verilator_anno
+    test(new Dut()).withAnnotations(Seq(VerilatorBackendAnnotation)) {
+          //- end
       c => testFun(c) 
     }
   }

@@ -2,8 +2,6 @@ package fifo
 
 import chisel3._
 import chiseltest._
-import chiseltest.experimental.TestOptionBuilder._
-import chiseltest.internal.WriteVcdAnnotation
 import org.scalatest._
 
 class FifoTest extends FlatSpec with ChiselScalatestTester {

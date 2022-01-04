@@ -1,6 +1,5 @@
 import chisel3._
 import chiseltest._
-import chiseltest.internal.WriteVcdAnnotation
 import org.scalatest._
 
 class FlasherTest extends FlatSpec with ChiselScalatestTester {

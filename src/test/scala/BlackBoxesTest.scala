@@ -1,8 +1,6 @@
 import chisel3._
 import chisel3.experimental.BundleLiterals._
 import chiseltest._
-import chiseltest.internal.VerilatorBackendAnnotation
-import chiseltest.experimental.TestOptionBuilder._
 import org.scalatest._
 import scala.language.implicitConversions
 
@@ -50,7 +48,7 @@ class BlackBoxesTest extends FlatSpec with ChiselScalatestTester {
       val adder = Module(new InlineBlackBoxAdder)
       io <> adder.io
     }
-    test(new InlineAdder).withAnnotations(Seq(VerilatorBackendAnnotation)) { 
+    test(new InlineAdder).withAnnotations(Seq(VerilatorBackendAnnotation)) {
       dut => testFn(dut)
     }
   }

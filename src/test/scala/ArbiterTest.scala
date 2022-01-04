@@ -1,8 +1,6 @@
 import chisel3._
 import chiseltest._
 import org.scalatest.FlatSpec
-import chiseltest.experimental.TestOptionBuilder._
-import chiseltest.internal.WriteVcdAnnotation
 
 class ArbiterTest extends FlatSpec with ChiselScalatestTester {
 
