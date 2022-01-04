@@ -1,7 +1,7 @@
 package leros
 
 import chisel3._
-import chisel3.iotesters.PeekPokeTester
+// import chisel3.iotesters.PeekPokeTester
 import chisel3.util._
 import Types._
 import leros.shared.Constants._
@@ -57,6 +57,7 @@ class Alu(size: Int) extends Module {
 }
 //- end
 
+/*
 class AluTester(dut: Alu) extends PeekPokeTester(dut) {
 
   // TODO: this is not the best way look at functions defined as Enum.
@@ -115,6 +116,8 @@ object AluTester extends App {
     c => new AluTester(c)
   }
 }
+
+ */
 
 //- start leros_constants
 package leros.shared {

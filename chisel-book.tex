@@ -283,13 +283,10 @@ The FIFO variations also show how to use type parameters and inheritance in digi
 \section*{Foreword for the Third Edition}
 
 Chisel has been moving forward in the last year, so it is time for a new edition of the Chisel book.
-We changed all examples to the latest version of Chisel (3.4.1) and the recommended
+We changed all examples to the latest version of Chisel (3.5.0) and the recommended
 Scala version (2.12.12).
 
-We have changed the testing description to the new ChiselTest framework. For more detailed
-description of testing and verification we have added a new chapter. That chapter also
-include description of the ``old'' \code{PeekPokeTester}
-
+We have changed the testing description to the new ChiselTest framework.
 Chisel is part of the Scala/Java ecosystem. Therefore, it is possible to use the Java infrastructure
 Maven Central to distribute open-source hardware designs. We have added a section on how to publish
 a Chisel design on Maven Central.
@@ -1339,10 +1336,12 @@ e.g., \code{Hello.bit}.
 Tests of hardware designs are usually called \myref{https://en.wikipedia.org/wiki/Test_bench}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
-Chisel provides two testing methods, the older \code{PeekPokeTester} in package \code{iotesters}
-and the newer \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} in package \code{chiseltest}.
-Here we describe the ChiselTest method and for completeness include a description of
-the PeekPokeTester in Chapter~\ref{chap:testing}.
+Chisel provides two testing methods, the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
+in package \code{chiseltest} and the older \code{PeekPokeTester} in package
+\code{iotesters}.\footnote{\codefoot{iotesters} is deprecated since Chisel 3.5.
+A description how to use the \codefoot{PeekPokeTester} can be found in the 2nd edition
+of the Chisel Book.}
+Here we describe the ChiselTest method.
 
 One strength of Chisel is that it can use the full power of Scala to write those
 test benches. One can, for example, code the expected functionality of the hardware
@@ -1566,8 +1565,9 @@ To enable passing annotation to the testing we need to import following classes 
 
 We start with a simple tester that pokes values to the inputs and advances
 the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-Instead, we add the \code{WriteVcdAnnotation} to the options for the 
-test to make it produce a waveform file (\code{.vcd} file).
+Instead, we can add the \code{WriteVcdAnnotation} to the options for the 
+test to make it produce a waveform file (\code{.vcd} file).\footnote{This is an alternative to
+use the command line options.}
 
 
 \shortlist{code/test_bench_wave.txt}
@@ -3791,12 +3791,6 @@ Values are printed at the rising edge of the clock.
 
 
 
-\section{PeekPokeTester}
-
-Later, just for completenes
-
-\todo{Rewrite this}
-
 
 \section{ChiselTest}
 
@@ -4235,13 +4229,13 @@ less hardware by avoiding the comparator.
 
 We can test all three versions of the ticker by using ScalaTest specifications,
 creating instances of the different versions of the ticker and passing them
-to the generic test bench. Listing~\ref{lst:ticker:spec} shows the specification.
+to the generic test bench. Listing~\ref{lst:ticker:spec} shows the test specification.
 We run only the ticker tests with:
 \begin{chisel}
-sbt "testOnly TickerSpec"
+sbt "testOnly TickerTest"
 \end{chisel}
 
-\longlist{code/ticker_spec.txt}{ScalaTest specifications for the ticker tests.}{lst:ticker:spec}
+\longlist{code/ticker_test.txt}{ChiselTest for the ticker tests.}{lst:ticker:spec}
 
 \section{Hardware Generation with Functional Programming}
 \label{sec:functional}

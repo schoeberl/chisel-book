@@ -1,6 +1,6 @@
+//- start ticker_tester
 import chisel3._
 import chiseltest._
-import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
 
 trait TickerTestFunc {
@@ -23,7 +23,9 @@ trait TickerTestFunc {
     }
   }
 }
+//- end
 
+//- start ticker_test
 class TickerTest extends AnyFlatSpec with ChiselScalatestTester with TickerTestFunc {
   "UpTicker 5" should "pass" in {
     test(new UpTicker(5)) { dut => testFn(dut, 5) }
@@ -37,3 +39,5 @@ class TickerTest extends AnyFlatSpec with ChiselScalatestTester with TickerTestF
     test(new NerdTicker(11)) { dut => testFn(dut, 11) }
   }
 }
+//- end
+

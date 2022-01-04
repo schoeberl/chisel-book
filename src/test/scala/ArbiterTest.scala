@@ -38,7 +38,7 @@ class ArbiterTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.clock.step()
       for (i <- 0 until 40) {
         if (dut.io.out.valid.peek().litToBoolean) {
-          println(dut.io.out.bits.peek().litValue())
+          println(dut.io.out.bits.peek().litValue)
         }
         dut.clock.step()
       }

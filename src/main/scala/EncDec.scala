@@ -56,26 +56,6 @@ class EncDec extends Module {
   //- end
 
   io.encout := b
-
 }
 
-class EncDecTester(dut: EncDec) extends PeekPokeTester(dut) {
-
-  for (i <- 0 to 3) {
-    poke(dut.io.decin, i)
-    step(1)
-    expect(dut.io.decout, 1 << i)
-  }
-  for (i <- 0 to 3) {
-    poke(dut.io.encin, 1 << i)
-    step(1)
-    expect(dut.io.encout, i)
-  }
-}
-
-object EncDecTester extends App {
-  chisel3.iotesters.Driver(() => new EncDec()) { c =>
-    new EncDecTester(c)
-  }
-}
 
