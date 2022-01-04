@@ -6,4 +6,5 @@ scala:
 jdk:
  - openjdk8
 script:
+ - verilator --version
  - make
