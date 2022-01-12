@@ -284,7 +284,7 @@ The FIFO variations also show how to use type parameters and inheritance in digi
 
 Chisel has been moving forward in the last year, so it is time for a new edition of the Chisel book.
 We changed all examples to the latest version of Chisel (3.5.0) and the recommended
-Scala version (2.12.12).
+Scala version (2.12.13).
 
 We have changed the testing description to the new ChiselTest framework.
 Chisel is part of the Scala/Java ecosystem. Therefore, it is possible to use the Java infrastructure
@@ -404,7 +404,9 @@ We include links to further reading in the running text, mostly to
 
 Chisel is a Scala library, and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool. Scala itself depends on the installation
-of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}. As Oracle has changed the license for Java, it may be easier to
+of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}
+(or a later version).
+As Oracle has changed the license for Java, it may be easier to
 install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 
 \subsection{macOS}
@@ -551,7 +553,9 @@ All code shown in the book passed the compiler and therefore should not contain 
 Furthermore, most examples also include a test bench.
 The code is extracted automatically from that source.
 \index{Chisel!Examples}
-We collect larger Chisel examples in the accompanying repository \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+We collect larger Chisel examples in the accompanying repository
+\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
+and in \myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}.
 
 If you find an error or typo in the book, a GitHub pull request is the most convenient way to incorporate your improvement.
 You can also provide feedback or comments for improvements by filing an issue on GitHub
@@ -560,8 +564,8 @@ or sending a plain, old school email.
 The repository of the book also contains
 \myref{https://github.com/schoeberl/chisel-book/tree/master/slides}{slides in Latex}
 that I use for a 13 week course on
-\myref{http://www2.imm.dtu.dk/courses/02139/}{Digital Electronics} at the
-Technical University of Denmark.
+\myref{http://www2.imm.dtu.dk/courses/02139/}{Digital Electronics}\footnote{The course page
+contains the PDF versions of the slides} at the Technical University of Denmark.
 That course also contains \myref{https://github.com/schoeberl/chisel-lab}{lab exercises}
 in Chisel.
 If you are teaching digital design with Chisel, feel free to adapt the slides and lab
@@ -3969,9 +3973,7 @@ of a shift register.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
 is evaluated at Scala runtime during circuit generation. This construct does \emph{not}
-create a multiplexer.
-
-simple simpel 
+create a multiplexer, but allows to write configurable \emph{hardware generators}.
 
 \shortlist{code/scala_condition.txt}
 
@@ -4323,9 +4325,9 @@ As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is 
 
 \shortlist{code/fun_min4.txt}
 
-Listing~\ref{lst:fun:arbiter} shows how to use \code{reduce} to generate an arbitration circuit.
+%Listing~\ref{lst:fun:arbiter} shows how to use \code{reduce} to generate an arbitration circuit.
 
-\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
+%\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
 
 
 \todo{explain the function, talk about reduceTree}
