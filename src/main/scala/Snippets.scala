@@ -129,7 +129,7 @@ class ExplainWireAndCo extends Module {
 
   //- start wire_reg_reassign
   number := 10.U
-  reg := value - 3.S
+  reg := value - 3.U
   //- end
 
 }

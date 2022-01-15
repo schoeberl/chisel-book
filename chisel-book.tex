@@ -819,6 +819,7 @@ details are available in the \myref{https://github.com/freechipsproject/firrtl/b
 
 A signal can also first be defined as a \code{Wire} of some type. Afterward, we can assign a
 value to the wire with the \code{:=} update operator.
+\index{Wire}
 
 \shortlist{code/wire.txt}
 
@@ -932,6 +933,8 @@ also called register, which is described next.
 \section{Registers}
 
 \index{Register}
+\index{Reg}
+
 Chisel provides a register, which is a collection of
 \myref{https://en.wikipedia.org/wiki/Flip-flop\_(electronics)\#D\_flip-flop}{D flip-flops}.
 The register is implicitly connected to a global clock and is updated on the rising edge.
@@ -1099,6 +1102,9 @@ to individually assign values and then convert it to a \code{UInt}.
 \shortlist{code/partial_vec_bool.txt}
 
 \section{Wire, Reg, and IO}
+\index{Wire}
+\index{Reg}
+\index{IO}
 
 \code{UInt}, \code{SInt}, and \code{Bits} are Chisel types, which themself do not
 represent hardware. Only wrapping them into a \code{Wire}, \code{Reg}, or \code{IO}
