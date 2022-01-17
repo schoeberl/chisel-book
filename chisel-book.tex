@@ -28,7 +28,9 @@
 
 \ifbook
 \else
-\cfoot{\hyperlink{contents}{{\textnormal{Contents}}}}
+\ifoot{\hyperlink{contents}{{\textnormal{Contents}}}}
+\ofoot{\hyperlink{contents}{{\textnormal{Contents}}}}
+\cfoot{\hyperlink{index}{{\textnormal{Index}}}}
 \fi
 
 
@@ -88,6 +90,9 @@
   pdfpagemode=UseOutlines,
 }
 \fi
+
+
+\makeindex
 
 % not really used
 \newenvironment{comment}
@@ -286,10 +291,34 @@ Chisel has been moving forward in the last year, so it is time for a new edition
 We changed all examples to the latest version of Chisel (3.5.0) and the recommended
 Scala version (2.12.13).
 
-We have changed the testing description to the new ChiselTest framework.
-Chisel is part of the Scala/Java ecosystem. Therefore, it is possible to use the Java infrastructure
-Maven Central to distribute open-source hardware designs. We have added a section on how to publish
-a Chisel design on Maven Central.
+With Chisel 3.5 the testing environment \code{PeekPokeTester} as part of the \code{iotesters}
+package has been deprecated. Therefore, we have changed the testing description to the new
+\myref{https://github.com/ucb-bar/chiseltest}{ChiselTest} framework.
+As there are still many Chisel designs available that use the \code{PeekPokeTester},
+we have moved the description for it into the appendix.
+
+One of the fascinating aspects of the Chisel/Scala/Java environment is that we
+can piggyback on the available infrastructure to distribute open-source libraries.
+We can publish hardware components on Maven as simply as any other open-source Java library.
+Publishing on Maven means that a 3rd party component can be integrated into the
+compile flow with a single reference in the \code{build.sbt} configuration.
+This is the same process as how you include the chisel library for your design.
+We have added a section on how to publish a Chisel design on Maven Central.
+
+We have improved the explanation of components with a simpler example.
+
+Hardware \emph{generators} are written in Scala. Therefore, we have added a short
+section on Scala. We have extended the hardware generator chapter with a section
+on using functional programing to write generators.
+
+The appendix has been extended with a list of reserved keywords and a list
+of acronyms.
+
+Hans has contributed the description on how to use external components, as
+so called \emph{black boxes}, and how to use memories for clock domain crossing
+(multi-clock memories).
+
+
 
 
 \section*{Acknowledgements}
@@ -312,7 +341,7 @@ semester. Thank you to all students from this course, who had on open mind to
 pickup a modern programming language for hardware description.
 
 For the third edition, I would like to acknowledge Hans Jakob Damsgaard
-(\myref{https://github.com/hansemandse}{@hansemandse }) for rewriting
+(\myref{https://github.com/hansemandse}{@hansemandse}) for rewriting
 all test code to ChiselTest, adding ChiselTest to the testing chapter, adding the black
 box description, and an example for a multi-clock memory.
 
@@ -408,6 +437,12 @@ of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-download
 (or a later version).
 As Oracle has changed the license for Java, it may be easier to
 install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+
+More detailed setup instructions can be found in
+\myref{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}{Setup.md}
+from the \myref{https://github.com/schoeberl/chisel-lab}{chisel-leb}.
+The \myref{https://github.com/schoeberl/chisel-lab/tree/master/lab1}{first lab}
+explains how to open an existing Chisel project in IntelliJ.
 
 \subsection{macOS}
 
@@ -5717,6 +5752,8 @@ related to digital design and computer architecture.
 \bibliographystyle{plain}
 \bibliography{chisel}
 
+\phantomsection
+\hypertarget{index}{}
 \printindex
 
 \end{document}

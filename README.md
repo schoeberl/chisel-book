@@ -31,8 +31,8 @@ In case you want to cite the book:
 This book project has an accompanying repository containing
 [Chisel examples](https://github.com/schoeberl/chisel-examples).
 
-To build the Chisel book from the source you need make, latex, sbt, and Java JDK (1.8)
-installed. Then you simply build with:
+To build the Chisel book from the source you need make, latex, sbt, and
+a Java JDK (1.8 or later) installed. Then you simply build with:
 
 ```
 make
