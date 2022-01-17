@@ -121,8 +121,8 @@
 \fi
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -1426,8 +1426,7 @@ and compares them with expected values.
 Chisel provides two testing methods, the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
 in package \code{chiseltest} and the older \code{PeekPokeTester} in package
 \code{iotesters}.\footnote{\codefoot{iotesters} is deprecated since Chisel 3.5.
-A description how to use the \codefoot{PeekPokeTester} can be found in the 2nd edition
-of the Chisel Book.}
+A description how to use the \codefoot{PeekPokeTester} can be found in Appendix~\ref{chap:peekpoke}}
 Here we describe the ChiselTest method.
 
 One strength of Chisel is that it can use the full power of Scala to write those
@@ -5196,14 +5195,14 @@ One option is to reread the chapter and read along with all the source code in t
 \myref{https://github.com/leros-dev/leros}{Leros repository}, run the test cases,
 fiddle with the code by breaking it and see that tests fail.
 
-Another option is to write your implementation of Leros.
+Another option is to write your own implementation of Leros.
 The implementation in the repository is just one possible organization of a pipeline.
 You could write a Chisel simulation version of Leros with just a single pipeline stage,
 or go crazy and superpipeline Leros for the highest possible clocking frequency.
 
 A third option is to design your processor from scratch. Maybe the demonstration of
 how to build the Leros processor and the needed tools has convinced you that processor
-design and implementation is no magic art, but the engineering that can be very joyful.
+design and implementation is no magic art, but engineering that can be very joyful.
 
 \chapter{Contributing to Chisel}
 
@@ -5613,6 +5612,89 @@ of the POWER Open ISA. It includes instruction to run Micropython.
 
 If you know an open-source project that uses Chisel, please drop me a note
 so I can include it in a future edition of the book.
+
+
+\chapter{PeekPokeTester}
+\index{PeekPokeTester}
+\label{chap:peekpoke}
+
+Chisel before version 3.5 provides test benches in the form of a \code{PeekPokeTester}.
+From version 3.5 \code{PeekPokeTester} is deprecated and it is recommended to
+switch to ChiselTest. However, there are probably many projects still using
+the old \code{PeekPokeTester}. Therefore we give a short overview of it in this
+appendix. 
+
+To use the \code{PeekPokeTester}, following packages need to be imported:
+
+\shortlist{code/test_import_peek_poke.txt}
+
+\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
+called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
+that contains the \code{main} function to start the testing.
+
+The following code shows our simple design under test. It contains two input
+ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
+to it returns on the output:
+
+\shortlist{code/test_dut.txt}
+
+\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
+the DUT as a parameter for the constructor:
+
+\shortlist{code/test_bench_simple_peek_poke.txt}
+
+\noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
+read back output values with \code{peek()}. The tester advances the simulation by one
+step (= one clock cycle) with \code{step(1)}.
+We can print the values of the outputs with \code{println()}.
+
+The test is created and run with the following tester main:
+
+\shortlist{code/test_main_simple_peek_poke.txt}
+
+\noindent When you run the test, you will see the results printed to the terminal
+(besides other information):
+
+\begin{verbatim}
+[info] [0.004] SEED 1544207645120
+[info] [0.008] Result is: 0
+[info] [0.009] Result is: 2
+test DeviceUnderTest Success: 0 tests passed in 7 cycles
+taking 0.021820 seconds
+[info] [0.010] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
+Besides manually inspecting printouts, which is an excellent starting point, we can also
+express our expectations in the test bench itself with \code{expect()},
+having the output port and the expected value as parameters.
+The following example shows testing with \code{expect()}:
+
+\shortlist{code/test_bench_peek_poke.txt}
+
+\noindent Executing this test does not print out any values from the hardware,
+but that all tests passed as all expect values are correct.
+
+\begin{verbatim}
+[info] [0.001] SEED 1544208437832
+test DeviceUnderTest Success: 2 tests passed in 7 cycles
+taking 0.018000 seconds
+[info] [0.009] RAN 2 CYCLES PASSED
+\end{verbatim}
+
+\noindent A failed test, when either the DUT or the test bench contains an error,
+produces an error message describing the difference between the expected and actual
+value. In the following, we changed the test bench to expect a 4, which is an error:
+
+\begin{verbatim}
+[info] [0.002] SEED 1544208642263
+[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
+test DeviceUnderTest Success: 1 tests passed in 7 cycles
+taking 0.022101 seconds
+[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
+\end{verbatim}
+
+
 
 \chapter{Chisel 2}
 
