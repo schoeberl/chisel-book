@@ -1,7 +1,6 @@
 //- start test_import
 import chisel3._
 import chiseltest._
-import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
 //- end
 

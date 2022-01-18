@@ -1,6 +1,5 @@
 import chisel3._
 import chiseltest._
-import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
 
 class DebounceTest extends AnyFlatSpec with ChiselScalatestTester {

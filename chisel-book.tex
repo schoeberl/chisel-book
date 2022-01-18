@@ -641,13 +641,16 @@ project containing small exercises with testers and solutions.
 
 %\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
 %a short users guide to Chisel and links to further information.
-\item The \myref{https://github.com/freechipsproject/chisel-testers}{Chisel Testers} are in
-their own repository that contains a Wiki documentation.
+\item \myref{https://github.com/ucb-bar/chiseltest}{ChiselTest} is in
+its own repository.
 \item The \myref{https://github.com/freechipsproject/chisel-bootcamp}{Generator Bootcamp} is
 a Chisel course focusing on hardware generators, as a \myref{https://jupyter.org/}{Jupyter} notebook
 \item A \myref{https://github.com/ccelio/chisel-style-guide}{Chisel Style Guide} by Christopher Celio.
 \item The \myref{https://github.com/schoeberl/chisel-lab}{schoeberl/chisel-lab} GitHub repo
 contains Chisel exercises for the course ``Digital Electronics 2'' at the Technical University of Denmark.
+\item The \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project} is a good starting
+point with a very minimal hardware (an adder) and test. That project is a GitHub template where you
+base your GitHub repository on.
 \end{itemize}
 
 \section{Exercise}
@@ -1352,16 +1355,19 @@ $ sbt "runMain mypacket.MyObject"
 
 Per default \code{sbt} searches only the \code{main} part of the source tree and not
 the \code{test} part.\footnote{This is a convention form Java/Scala that the test folder contains
-unit tests and not objects with a \codefoot{main}.} However, Chisel testers, as described here,
-contain a \code{main}, but shall be placed in the \code{test} part of the source tree.
-To execute a \code{main} in the tester tree use following \code{sbt} command:
-
+unit tests and not objects with a \codefoot{main}.}
+To execute tests based in ChiselTest and ScalaTest you can simply run them with
 \begin{verbatim}
-$ sbt "test:runMain mypacket.MyTester"
+$ sbt test
 \end{verbatim}
 
-Now that we know the basic structure of a Chisel project and how to compile and run it
-with \code{sbt}, we can continue with a simple testing framework.
+If you have a test that does not follow the ChiselTest convention and it contains a \code{main}
+function, but is placed in the \code{test} part of the source tree you can execute it
+with following \code{sbt} command:
+
+\begin{verbatim}
+$ sbt "test:runMain mypacket.MyMainTest"
+\end{verbatim}
 
 \subsection{Generating Verilog}
 
@@ -1416,6 +1422,9 @@ One FIRRTL transformation, the Verilog emitter, generates Verilog code for synth
 A circuit synthesize tool (e.g., Intel Quartus, Xilinx Vivado, or an ASIC tool) synthesizes the circuit.
 In an FPGA design flow, the tool generates the FPGA bitstream that is used to configure the FPGA,
 e.g., \code{Hello.bit}.
+
+Now that we know the basic structure of a Chisel project and how to compile and run it
+with \code{sbt}, we can continue with a simple testing framework.
 
 
 \section{Testing with Chisel}
@@ -1760,20 +1769,24 @@ Note, that Chisel generates a synchronous reset.
 
 For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library,
 we need a \code{build.sbt}:
+\index{build.sbt}
 
 \begin{chisel}
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.13"
 
-scalacOptions := Seq("-deprecation", "-Xsource:2.11")
+scalacOptions ++= Seq(
+  "-feature",
+  "-language:reflectiveCalls",
+)
 
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
   Resolver.sonatypeRepo("releases")
 )
 
-// Chisel 3.4
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
+// Chisel 3.5
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.0" cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.0"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
@@ -1816,6 +1829,36 @@ and then configure the FPGA.
 Note that the \emph{Hello World} is a minimal Chisel project.
 More realistic projects have their source files organized in packages and contain testers.
 The next chapter's exercise will explore such a project.
+
+\subsection{Using a GitHub Template}
+
+The \myref{https://github.com/schoeberl/chisel-empty}{chisel-empty} project is a minimal Chisel
+project that contains an adder circuits, a tester, and a \code{Makefile} for generating
+Verilog code, test the circuit, and cleanup the repository.
+That project is a GitHub template, which means you can simply start a new GitHub repository
+using this template.
+
+Navigate to that GitHub repository and press the button ``Use this template'' to create
+your GitHub project. Then clone your new project locally and explore the \code{Makefile}.
+Generate Verilog code with:
+
+\begin{chisel}
+make
+\end{chisel}
+
+\noindent Test the adder with:
+
+\begin{chisel}
+make test
+\end{chisel}
+
+\noindent Remove all generated files with:
+
+\begin{chisel}
+make clean
+\end{chisel}
+
+\noindent You can also execute these tasks by running the \code{sbt} and \code{git} commands directly.
 
 \subsection{A Testing Exercise}
 
@@ -2107,7 +2150,7 @@ functions.
 \section{External Modules}
 \index{Blackbox}
 
-Sometimes you might wish to include a component whose description you already have 
+Sometimes you might wish to include a component whose description is 
 written in Verilog, or you might wish to ensure the emitted Verilog of a component 
 has a very specific structure that your synthesis tool can recognize and map to an 
 available primitive. Chisel provides support for this through its \code{BlackBox} and 
@@ -2116,7 +2159,7 @@ Both are parameterized with a \code{Map[String, Param]} which is translated to m
 parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog 
 files, while \code{ExtModule}s act as placeholders and are emitted as source-less module 
 instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g., 
-Xilinx or Altera device primitives such as clock or input buffers.
+Xilinx or Intel device primitives such as clock or input buffers.
 
 \shortlist{code/xilinx_bufgce.txt}
 \shortlist{code/altera_alt_inbuf.txt}
@@ -5222,9 +5265,9 @@ When you develop a circuit in open-source and share it on e.g., GitHub,
 this a very educational act, as other can learn describing hardware in Chisel from your code example.
 However, sharing just the source code forces other to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
-same}\footnote{I learned this phrase from Doug Locke during discussion sessions
-developing the safety-critical specification for Java}. This means that changes will
-happen to the source and they are not in sync anymore.
+same}.\footnote{I learned this phrase from Doug Locke during discussion sessions
+developing the safety-critical specification for Java} This means that changes will
+happen to the source of one copy and they are then not in sync anymore.
 (2) It is cumbersome to update the copy when the original design has been improved
 with a bug fix or a new feature.
 
@@ -5607,6 +5650,9 @@ DANA supports inference and learning.
 
 \item[\myref{https://github.com/antonblanchard/chiselwatt}{Chiselwatt}] is an implementation
 of the POWER Open ISA. It includes instruction to run Micropython.
+
+\item[\myref{https://github.com/apache/tvm-vta}{VTA Hardware Design Stack}] is an accelerator for
+machine learning for the Apache TVM machine learning compiler framework.
 
 \end{description}
 
