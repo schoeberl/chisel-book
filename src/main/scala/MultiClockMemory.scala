@@ -35,6 +35,5 @@ class MultiClockMemory(ports: Int, n: Int = 1024, w: Int = 32) extends Module {
 //- end
 
 object MultiClockMemory extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new MultiClockMemory(3), Array("--target-dir", "generated"))
+  emitVerilog(new MultiClockMemory(3), Array("--target-dir", "generated"))
 }

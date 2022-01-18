@@ -45,7 +45,7 @@ class UseParamRouter() extends Module {
 }
 
 object UseParamRouter extends App {
-  println(chisel3.stage.ChiselStage.emitVerilog(new UseParamRouter()))
+  println(getVerilogString(new UseParamRouter()))
 }
 
 /*
@@ -101,5 +101,5 @@ class UseParamRouter2() extends Module {
 }
 
 object UseParamRouter2 extends App {
-  println(chisel3.stage.ChiselStage.emitVerilog(new UseParamRouter2()))
+  println(getVerilogString(new UseParamRouter2()))
 }

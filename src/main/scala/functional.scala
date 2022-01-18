@@ -116,5 +116,5 @@ object ScalaFunctionalMin {
 }
 
 object FunctionalMin extends App {
-  println(chisel3.stage.ChiselStage.emitVerilog(new FunctionalMin(5, 8)))
+  println(getVerilogString(new FunctionalMin(5, 8)))
 }

@@ -107,5 +107,5 @@ class DebounceFunc(fac: Int = 100000000/100) extends Module {
 
 object Debounce extends App {
   println("Generating the Debounce hardware")
-  (new chisel3.stage.ChiselStage).emitVerilog(new Debounce(), Array("--target-dir", "generated"))
+  emitVerilog(new Debounce(), Array("--target-dir", "generated"))
 }

@@ -232,6 +232,6 @@ class UartMain(frequency: Int, baudRate: Int) extends Module {
 }
 
 object UartMain extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new UartMain(50000000, 115200), Array("--target-dir", "generated"))
+  emitVerilog(new UartMain(50000000, 115200), Array("--target-dir", "generated"))
 }
 

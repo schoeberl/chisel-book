@@ -76,8 +76,8 @@ class TrueDualPortMemory() extends Module {
 }
 
 object TrueDualPortMemory extends App {
-  new (ChiselStage).emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated"))
-  // new (ChiselStage).emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
+  emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated"))
+  // emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
 }
 
 class InitMemory() extends Module {

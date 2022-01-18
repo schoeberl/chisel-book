@@ -158,5 +158,5 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
 //- end
 
 object Arbiter extends App {
-  println((new chisel3.stage.ChiselStage).emitVerilog(new Arbiter(7, UInt(8.W))))
+  println(getVerilogString(new Arbiter(7, UInt(8.W))))
 }

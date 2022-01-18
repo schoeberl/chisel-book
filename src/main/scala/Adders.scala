@@ -28,8 +28,7 @@ class CarryRippleAdder(w: Int = 32) extends AbstractAdder(w) {
 }
 
 object CarryRippleAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new CarryRippleAdder, Array("--target-dir", "generated"))
+  emitVerilog(new CarryRippleAdder, Array("--target-dir", "generated"))
 }
 
 class CarrySelectAdder(w: Int = 32) extends AbstractAdder(w) {
@@ -48,8 +47,7 @@ class CarrySelectAdder(w: Int = 32) extends AbstractAdder(w) {
 }
 
 object CarrySelectAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new CarrySelectAdder, Array("--target-dir", "generated"))
+  emitVerilog(new CarrySelectAdder, Array("--target-dir", "generated"))
 }
 
 class CarrySkipAdder(w: Int = 32) extends AbstractAdder(w) {
@@ -67,8 +65,7 @@ class CarrySkipAdder(w: Int = 32) extends AbstractAdder(w) {
 }
 
 object CarrySkipAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new CarrySkipAdder, Array("--target-dir", "generated"))
+  emitVerilog(new CarrySkipAdder, Array("--target-dir", "generated"))
 }
 
 class CarryLookaheadAdder(w: Int = 32) extends AbstractAdder(w) {
@@ -89,8 +86,7 @@ class CarryLookaheadAdder(w: Int = 32) extends AbstractAdder(w) {
 }
 
 object CarryLookaheadAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new CarryLookaheadAdder, Array("--target-dir", "generated"))
+  emitVerilog(new CarryLookaheadAdder, Array("--target-dir", "generated"))
 }
 
 abstract class PrefixAdder(w: Int) extends AbstractAdder(w) {
@@ -159,8 +155,7 @@ class BasicPrefixAdder(w: Int = 32) extends PrefixAdder(w) {
 }
 
 object BasicPrefixAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new BasicPrefixAdder, Array("--target-dir", "generated"))
+  emitVerilog(new BasicPrefixAdder, Array("--target-dir", "generated"))
 }
 
 class MinFanoutPrefixAdder(w: Int = 32) extends PrefixAdder(w) {
@@ -183,6 +178,5 @@ class MinFanoutPrefixAdder(w: Int = 32) extends PrefixAdder(w) {
 }
 
 object MinFanoutPrefixAdder extends App {
-  (new chisel3.stage.ChiselStage)
-    .emitVerilog(new MinFanoutPrefixAdder, Array("--target-dir", "generated"))
+  emitVerilog(new MinFanoutPrefixAdder, Array("--target-dir", "generated"))
 }

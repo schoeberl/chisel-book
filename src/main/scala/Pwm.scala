@@ -44,5 +44,5 @@ class Pwm extends Module {
 }
 
 object Pwm extends App {
-  chisel3.stage.ChiselStage.emitVerilog(new Pwm())
+  emitVerilog(new Pwm())
 }

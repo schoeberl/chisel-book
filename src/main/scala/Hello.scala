@@ -44,12 +44,19 @@ class Hello extends Module {
 
 //- start generate
 object Hello extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Hello())
+  emitVerilog(new Hello())
 }
 //- end
 
 //- start generate_options
 object HelloOption extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Hello(), Array("--target-dir", "generated"))
+  emitVerilog(new Hello(), Array("--target-dir", "generated"))
+}
+//- end
+
+//- start generate_string
+object HelloString extends App {
+  val s = getVerilogString(new Hello())
+  println(s)
 }
 //- end

@@ -150,5 +150,5 @@ class ExplainWireAndCo2 extends Module {
 }
 
 object Snippets extends App {
-  (new chisel3.stage.ChiselStage).emitVerilog(new Conditional(), Array("--target-dir", "generated"))
+  emitVerilog(new Conditional(), Array("--target-dir", "generated"))
 }

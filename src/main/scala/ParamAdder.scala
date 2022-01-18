@@ -33,5 +33,5 @@ class UseAdder extends Module {
 }
 
 object UseAdder extends App {
-  println(chisel3.stage.ChiselStage.emitVerilog(new UseAdder()))
+  println(getVerilogString(new UseAdder()))
 }
