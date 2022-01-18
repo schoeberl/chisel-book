@@ -65,7 +65,7 @@ class DownCounter(n: Int) extends Counter(n) {
   }
   //- end
 
-  io.tick := cntReg === N
+  io.tick := cntReg === 0.U
   io.cnt := cntReg
 }
 
@@ -106,7 +106,7 @@ class NerdCounter(n: Int) extends Counter(n) {
   }
   //- end
 
-  io.cnt := cntReg.asUInt()
+  io.cnt := cntReg.asUInt
 }
 
 object Counter extends App {
