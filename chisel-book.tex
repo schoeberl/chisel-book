@@ -3115,7 +3115,7 @@ A classic example is the interfacing an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
-for other flip-flops in the circuit. Concrete the de-assertion of the reset need
+for other flip-flops in the circuit. Concrete, the de-assertion of the reset need
 to be synchronous to the clock.
 
 \section{Debouncing}
@@ -3236,6 +3236,33 @@ If useful, those functions can be elevated to some utility class object.
 
 \longlist{code/input_func.txt}{Summarizing input processing with functions.}{lst:input:func}
 
+\section{Synchronizing Reset}
+
+Any digital circuit needs a reset signal to reset registers to a defined state. The reset state is
+set in Chisel with the \code{RegInit} constructor. A reset signal is usually an asynchronous
+input to the circuit. That means when directly connected to the reset of a flip-flop it may
+violate timing constraints. In case of a synchronous reset it may violate setup and hold times
+of the flip-flop. Also when used as an asynchronous reset input, it still need to be synchronized
+to the clock. Concrete, the \emph{release} of the reset signal needs to be synchronized to the clock.
+Another failure with an asynchronous reset can be that different parts of the circuit may be
+reset in two different clock cycles and therefore be inconsistent.
+
+The solution for this issue is to synchronize the reset signal in the very same way as
+any other asynchronous input with two flip-flops.
+
+The reset and clock signals are usually hidden from the Chisel design.
+However, it is possible to access and set those signals. Each module has an implicit field
+\code{reset}. The solution is to have a top-level module that performs the synchronizing
+of the external reset signals and connects that synchronized signal to the reset input
+of the contained module.
+
+\shortlist{code/sync_reset.txt}
+
+In the above example \code{SyncReset} is the top level module that contains a
+counter (\code{WhenCounter}). The reset signal of the top-level module is called
+\code{reset} and is connected to the input synchronizer (\code{RegNext(RegNext(reset))}).
+The output of that input synchronizer (\code{syncReset}) is connected to the reset \emph{input}
+of the counter (\code{cnt.reset := syncReset}).
 
 
 \section{Exercise}
