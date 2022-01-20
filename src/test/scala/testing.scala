@@ -64,7 +64,7 @@ class SimpleTestExpect extends AnyFlatSpec with ChiselScalatestTester {
 //- end
 
 class SimplePrintfTest extends AnyFlatSpec with ChiselScalatestTester {
-  "WaveformCounter" should "pass" in {
+  "DUT" should "pass" in {
     test(new DeviceUnderTestPrintf) { dut =>
         for (a <- 0 until 4) {
           for (b <- 0 until 4) {

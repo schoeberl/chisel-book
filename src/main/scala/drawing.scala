@@ -2,7 +2,6 @@ import chisel3._
 import chisel3.util._
 
 // Some Chisel code as drawing exercise
-// TODO: write tester and include it in the Chisel book
 
 class DrawAcc extends Module {
   val io = IO(new Bundle {
