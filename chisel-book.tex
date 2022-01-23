@@ -29,7 +29,6 @@
 \ifbook
 \else
 \ifoot{\hyperlink{contents}{{\textnormal{Contents}}}}
-\ofoot{\hyperlink{contents}{{\textnormal{Contents}}}}
 \cfoot{\hyperlink{index}{{\textnormal{Index}}}}
 \fi
 
@@ -1518,7 +1517,7 @@ and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
 \begin{chisel}
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.3"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \end{chisel}
 
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
@@ -2335,12 +2334,11 @@ of the decoder with a truth table, such as Table~\ref{tab:decoder}.
 \end{table}
 
 A Chisel \code{switch} statement describes the logic as a truth table.
-The \code{switch} statement is not part of the core Chisel language.
-Therefore, we need to include the elements of the package \code{chisel.util}.
+To use the \code{switch} statement we need to include the the package \code{chisel.util}.
 
 \shortlist{code/encdec_util.txt}
 
-\noindent The following code introduces the \code{switch} statement of Chisel to describe a decoder:
+\noindent The following code uses the \code{switch} statement of Chisel to describe a decoder:
 
 \index{switch}
 
@@ -3615,8 +3613,8 @@ In that case, the problem can be divided into two or more smaller and simpler FS
 Those FSMs then communicate with signals. One FSMs output is
 another FSMs input, and the FSM watches the output of the other FSM.
 When we split a large FSM into simpler ones, this is called factoring FSMs.
-However, often communicating FSMs are directly designed from the specification,
-as often a single FSM would be infeasible large.
+Communicating FSMs are often directly designed from the specification
+of the design. A single FSM for the design would be too large in the first place.
 
 \section{A Light Flasher Example}
 
@@ -3889,7 +3887,7 @@ One question remains if the \code{ready} or \code{valid} may be de-asserted
 after being active and \emph{no} data transfer has happened.
 For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
-The same can be envisioned with the sender, having data valid only some clock
+The same can be envisioned with the sender, having data valid only some
 clock cycles and becoming non-valid without a data transfer.
 If this behavior is allowed or not is not part of the ready-valid interface,
 but needs to be defined by the concrete usage of the interface.
