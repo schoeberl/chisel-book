@@ -24,7 +24,7 @@
 
 
 \newif\ifbook
-%\booktrue % comment out for the print book version
+\booktrue % comment out for the print book version
 
 \ifbook
 \else
@@ -5219,8 +5219,12 @@ That is also the way Chisel itself, and some support libraries are published.
 
 This section describes the steps needed to publish a Chisel library. As the tools you
 use for publishing may change quickly, consider finding the latest information on the
-Internet. A good block entry on the topic can be found
+Internet. A good blog entry on the topic can be found
+\ifbook
+\myref{https://medium.com/rahasak/}{here}.
+\else
 \myref{https://medium.com/rahasak/publish-scala-library-project-to-maven-central-with-sonatype-d7edaa67d275}{here}.
+\fi
 
 \subsection{Using a Library}
 
@@ -5296,7 +5300,8 @@ version := "0.4.0"
 // groupId, SCM, license information
 organization := "edu.berkeley.cs"
 homepage := Some(url("https://github.com/freechipsproject/ip-contributions"))
-scmInfo := Some(ScmInfo(url("https://github.com/freechipsproject/ip-contributions"),
+scmInfo := Some(ScmInfo(url(
+  "https://github.com/freechipsproject/ip-contributions"),
   "git@github.com/freechipsproject/ip-contributions"))
 developers := List(Developer("schoeberl", "schoeberl", "martin@jopdesign.com",
   url("https://github.com/schoeberl")))
