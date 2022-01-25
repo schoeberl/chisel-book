@@ -15,6 +15,9 @@ gencode:
 keywords:
 	sbt -Dsbt.main.class=sbt.ScriptMain scripts/keywords.scala
 
+checkref:
+	sbt -Dsbt.main.class=sbt.ScriptMain scripts/checkref.scala
+
 
 fig:
 	make -C figures
