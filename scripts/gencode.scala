@@ -3,11 +3,13 @@
 import java.io._
 import scala.io.Source
 
-  new File("src/main/scala").listFiles
-  .map(f => extract("src/main/scala/" + f.getName))
+  list("src/main/scala/")
+  list("src/test/scala/")
 
-  new File("src/test/scala").listFiles
-  .map(f => extract("src/test/scala/" + f.getName))
+def list(folder: String): Unit = {
+  new File(folder).listFiles(_.isFile).map(f => extract(folder + f.getName))
+  new File(folder).listFiles(_.isDirectory).map(f => list(folder + f.getName + "/"))
+}
 
 def extract(f: String) {
   println(f)

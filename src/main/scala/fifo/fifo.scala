@@ -20,20 +20,6 @@ abstract class Fifo[T <: Data](gen: T, val depth: Int) extends Module {
 }
 //- end
 
-// Ok here to redefine when having it in it's own packet
-package fifo_private {
-
-  //- start fifo_decoupled
-  class DecoupledIO[T <: Data](gen: T) extends Bundle {
-    val ready = Input(Bool())
-    val valid = Output(Bool())
-    val bits  = Output(gen)
-  }
-  //- end
-}
-
-
-
 //- start fifo_bubble
 class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
@@ -67,7 +53,9 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
   io.enq <> buffers(0).io.enq
   io.deq <> buffers(depth - 1).io.deq
 }
-//- end
+  //- end
+
+
 
 //- start fifo_double_buffer
 class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
@@ -258,4 +246,12 @@ class CombFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
   memFifo.io.deq <> bufferFIFO.io.enq
   bufferFIFO.io.deq <> io.deq
 }
+//- end
+
+//- start fifo_decoupled
+  class DecoupledIO[T <: Data](gen: T) extends Bundle {
+    val ready = Input(Bool())
+    val valid = Output(Bool())
+    val bits  = Output(gen)
+  }
 //- end
