@@ -42,7 +42,7 @@ First part is usually lectures and second part is reserved for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
-The course is lectured online on Zoom. Link is in DTU Learn.
+The course is lectured online on Zoom for the first 4 weeks. Link is in DTU Learn.
 
 ### Pensum List
 
@@ -92,7 +92,7 @@ The Schoeberl book is open access and freely available.
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
 
-## Lecture Plan (2021)
+## Lecture Plan (2022)
 
 *This lecture plan may change during the semester, adapting to the current teaching situation.*
 
@@ -130,20 +130,7 @@ The Schoeberl book is open access and freely available.
 
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
-
-### Week 4 Testing and Verification
-
-**Topics:** Sequential building blocks, testing and verification in Chisel,
-waveform viewing
-
-**Slides:** [04_testing.pdf](04_testing.pdf)
-
-**Reading:** Dally: 2.1.4 and 20, Chisel: 3
-
-**Lab:** [Hexadecimal to 7-segment decoder](https://github.com/schoeberl/chisel-lab)
-
-
-### Week 5 Timing (guest lecture by Jens Sparsø)
+### Week 4 Timing (guest lecture by Jens Sparsø)
 
 **Topics:** Delay and Power, Timing, and Metastability
 
@@ -156,6 +143,18 @@ waveform viewing
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 
+### Week 5 Testing and Verification
+
+**Topics:** Sequential building blocks, testing and verification in Chisel,
+waveform viewing
+
+**Slides:** [04_testing.pdf](04_testing.pdf)
+
+**Reading:** Dally: 2.1.4 and 20, Chisel: 3
+
+**Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
+
+
 ### Week 6 State Machines
 
 **Topics:** State machine (repetition) and the coding in Chisel
@@ -164,7 +163,7 @@ waveform viewing
 
 **Reading:** Dally: 14.3-14.5, Chisel: 8 (2nd edition)
 
-**Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
+**Lab:** [Hexadecimal to 7-segment decoder](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 7 State Machine and Datapath
@@ -186,10 +185,7 @@ waveform viewing
 
 **Reading:** Dally: 17, Chisel: 9.1
 
-**Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
-
-
-### Easter Week
+**Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 9 Communications State Machines (1 hour)
@@ -210,6 +206,9 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
+### Easter Week
+
+
 ### Week 11 Interfacing and Memory, and some Testing
 
 **Topics:** Interfaces, memory, and serial interface plus repetition on testing
@@ -218,12 +217,10 @@ waveform viewing
 
 **Reading:** Dally: 24 Chisel: 6.4
 
-**Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
+**Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 12 Test Exam, No lecture
-
-**Slides:** [12_exam.pdf](12_exam.pdf)
+### Week 12 No lecture
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
