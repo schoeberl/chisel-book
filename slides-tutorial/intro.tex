@@ -415,14 +415,6 @@ val c = Mux(cond, a, b)
 %\input{generation.tex}
 
 \begin{frame}[fragile]{Testing}
-\begin{chisel}
-class CounterTester(c: Counter) extends PeekPokeTester(c) {
-  for (i <- 0 until 5) {
-    println(i.toString + ": " + peek(c.io.out).toString())
-    step(1)
-  }
-}
-\end{chisel}
 \begin{itemize}
 \item Within Chisel with a tester (= Scala program)
 \item May include waveform generation
@@ -435,6 +427,10 @@ class CounterTester(c: Counter) extends PeekPokeTester(c) {
 printf("Counting %x\n", r1)
 \end{chisel}
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing Example}
+\shortlist{../code/test_bench_simple.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Component Generation}
@@ -538,7 +534,7 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Virtual Machine Setup for Chisel}
 \begin{itemize}
 \item Ubuntu based
-\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
+\item \href{https://patmos-download.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
 \item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
 \begin{itemize}
 \item But this is VERY large (40 GB for the .zip file)
@@ -582,7 +578,7 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Chisel in Teaching}
 \begin{itemize}
 \item Using/offering it in Advanced Computer Architecture
-\item Spring 2016--2018 all projects have been in Chisel
+\item Spring 2016--2018, 2020--2021 all projects have been in Chisel
 \item Several Bachelor and Master projects
 \item Students pick it up reasonable fast
 \item For software engineering students easier than VHDL
@@ -656,7 +652,7 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Several Weeks ago I got This}
+\begin{frame}[fragile]{Then I got This}
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{../cover-small-jp}
@@ -667,17 +663,16 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{And one More}
+\begin{frame}[fragile]{And One More}
 \begin{figure}
     \centering
     \includegraphics[scale=0.4]{../cover-small-vi}
 \end{figure}
 
 \begin{itemize}
-\item A Vietnamise translation
+\item A Vietnamese translation
 \end{itemize}
 \end{frame}
-
 
 \begin{frame}[fragile]{Further Information}
 \begin{itemize}
@@ -722,9 +717,16 @@ git clone https://github.com/schoeberl/chisel-examples.git
 \item Build info in \code{build.sbt} for \code{sbt}:
 \end{itemize}
 \begin{chisel}
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.13"
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
+scalacOptions ++= Seq(
+  "-feature",
+  "-language:reflectiveCalls",
+)
+
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.0" cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.0"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \end{chisel}
 \begin{itemize}
 \item Run the process manually (look into the Makefile)
@@ -755,6 +757,7 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.1.2"
 \item Chisel is a small language
 \item Embedding it in Scala gives the power
 \item Chisel is good for hardware generators
+\item Supports agile hardware development
 % \item You can get started with a hardware design in a special course or 4th semester project
 \item We can do co-simulation
 \end{itemize}
