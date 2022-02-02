@@ -1117,7 +1117,7 @@ as needed, and then passing this bundle to a \code{RegInit}:
 With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
 structures, which are powerful abstractions.
 
-{\bf Possible pitfall:} In Chisel partial assignments are not allowed, although they haven been
+{\bf Possible pitfall:} In Chisel partial assignments are not allowed, although they have been
 allowed in Chisel 2 and are possible in Verilog and VHDL. Following code will generate
 an error during circuit elaboration:
 
@@ -1174,7 +1174,7 @@ Therefore, the former code is better rewritten as follows.
 
 \shortlist{code/wire_reg_default.txt}
 
-\noindent Although Chisel infers the needed bit width for signals and register, it is also a good practice
+\noindent Although Chisel infers the needed bit width for signals and registers, it is also a good practice
 to specify the intended bit width at the creation of the hardware object.
 In most cases it is also good practice to set registers to known initial values on
 reset:\footnote{Leaving the register value undefined on reset may save some load on the reset
@@ -1498,7 +1498,7 @@ and show that both tests passed:
 \code{sbt test} executes all available tests, which is useful for regression
 test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
 will see more than 70 tests passing.}
-However, if you want to run just a single test (suit) you can do this with:
+However, if you want to run just a single test (suite) you can do this with:
 
 \begin{verbatim}
 $ sbt "testOnly ExampleTest"
@@ -1824,13 +1824,13 @@ make
 %which wires the reset signal to 0.
 %This works for our example in an FPGA, as registers usually power up 0.
 Besides a \code{README} file, the example project also contains project
-files for different FPGA board. E.g., in
+files for different FPGA boards. E.g., in
 \myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world/quartus/altde2-115}{quartus/altde2-115} 
 you can find the two project files to define a Quartus project for the DE2-115 board.
 The main definitions (source files, device, pin assignments) can be found in a plain text file
 \myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/quartus/altde2-115/hello.qsf}{hello.qsf}.
 Explore the file and find out which pins are connected to which signals.
-If you need to adapt the project to a different board, there is where the changes are applied.
+If you need to adapt the project to a different board, this is where the changes are applied.
 If you have Quartus installed, open that project, compile with the green \emph{Play} button,
 and then configure the FPGA.
 
@@ -1903,7 +1903,7 @@ on a chip, is called the top-level component.
 In this chapter, we will explain how components are described in Chisel and
 provide several simple examples of components.
 Note that the components in this section are very small (e.g., just an adder),
-just to show the principles how to define, instantiate, and connect components.
+just to show the principles: how to define, instantiate, and connect components.
 Real-world examples should contain more ``meat'' then just a single line for
 an adder.
 
@@ -1930,7 +1930,7 @@ an adder and a register.
 
 \longlist{code/components_add.txt}{The adder component in Chisel.}{lst:comp:add}
 
-Figure~\ref{fig:components-adder} shows the schematics of the adder component.
+Figure~\ref{fig:components-adder} shows the schematic of the adder component.
 It has two inputs (\code{a} and \code{b}) and one output (\code{y}).
 Listing~\ref{lst:comp:add} shows the Chisel definition of the adder.
 The input and output signals are accessed with
@@ -1959,9 +1959,9 @@ The Chisel code for this component is shown in Listing~\ref{lst:comp:reg}.
 
 \longlist{code/components_cnt.txt}{A counter built out of components.}{lst:comp:cnt}
 
-We build now with those two components a counter, which counts from 0 to 9 and repeats.
-Figure~\ref{fig:components-counter} shows the schematics of the counter. We use an adder
-add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
+Now we build a counter with those two components, which counts from 0 to 9 and repeats.
+Figure~\ref{fig:components-counter} shows the schematic of the counter. We use an adder
+to add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
 That result, called \code{next} is the input for the register component. The output of the
 register is the \code{count} value and also the output of the \code{Count10} component (\code{dout}).
 
@@ -2044,7 +2044,7 @@ components, such an adder, and huge components, such as a full microprocessor,
 Beginners in hardware design often start with tiny components.
 The problem is that digital design books use tiny components to show the principles.
 But the sizes of the examples (in those books, and also in this book) are small
-to fit into a page and to not distract by too many details.
+to fit onto a page and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
 IO construction). As a rule of thumb, I would propose that the core of the component,
