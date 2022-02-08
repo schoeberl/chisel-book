@@ -5,7 +5,7 @@
 [![Book Cover](cover-small.jpg)](http://www.imm.dtu.dk/~masca/chisel-book.html)
 
 This book is an introduction to digital system design using a modern hardware
-construction language, Chisel.
+construction language, [Chisel](https://www.chisel-lang.org/).
 In this book we focus on a slightly higher abstraction level to get you up to
 speed to build more complex, interacting digital systems.
 
