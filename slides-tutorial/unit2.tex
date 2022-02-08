@@ -467,7 +467,7 @@ class Counter2 extends Module {
 \begin{frame}[fragile]{More Chisel Documentation}
 \begin{itemize}
 \item Textbook ``Digital Design with Chisel''
-\item 2nd edition is out
+\item 3rd edition is out
 \item \url{https://github.com/schoeberl/chisel-book}
 \item Feedback is welcome
 \item Contains all the slides
@@ -523,18 +523,18 @@ class Hello extends Module {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Testing the Minimal Hello World}
-\begin{chisel}
-class HelloTests(c: Hello) extends PeekPokeTester(c) {
-  step(1)
-  expect(c.io.out, 42)
-}
-\end{chisel}
-\begin{itemize}
-\item Drive the simulation with \code{step(1)}, which is a single clock tick
-\item Test output against expected value
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Testing the Minimal Hello World}
+%\begin{chisel}
+%class HelloTests(c: Hello) extends PeekPokeTester(c) {
+%  step(1)
+%  expect(c.io.out, 42)
+%}
+%\end{chisel}
+%\begin{itemize}
+%\item Drive the simulation with \code{step(1)}, which is a single clock tick
+%\item Test output against expected value
+%\end{itemize}
+%\end{frame}
 
 %\begin{frame}[fragile]{Tutorial Problems}
 %\begin{chisel}

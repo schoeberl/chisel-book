@@ -130,6 +130,7 @@ The Schoeberl book is open access and freely available.
 
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
+
 ### Week 4 Timing (guest lecture by Jens Sparsø)
 
 **Topics:** Delay and Power, Timing, and Metastability

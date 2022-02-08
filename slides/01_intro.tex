@@ -29,13 +29,26 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Important Help}
+\begin{itemize}
+\item We have two great TAs for this semester
+\item Emil Arnika Skydsgaard
+\item Tjark Petersen
+\item Pleas say hello
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Remote Learning}
 \begin{itemize}
-\item First: this is all new for the most of us
+\item First 4 weeks online, then probably physical at DTU
+\item First: this is all new for the most of you
 \begin{itemize}
 \item We need to be patient with each other
 \end{itemize}
 \item We should use Slack for quicker communication
+\begin{itemize}
+\item Please join all channels
+\end{itemize}
 \item Zoom for lecturing and lab: you are already there
 \item Please have your camera on
 \item Please mute your mic when not talking
@@ -58,28 +71,30 @@ Embedded Systems Engineering}
 \item Zoom will also be used for the supervised lab
 \begin{itemize}
 \item We will keep this Zoom meeting running with breakout rooms
-\item Schedule a TA for help with Slack
+\item Schedule a TA for help with Slack (channel \#help-queue)
 \item You can also schedule a Zoom meeting with me at other times
 \end{itemize}
 \item This is a chance to learn how to collaborate remotely
 \begin{itemize}
 \item This will be part of your future work as an engineer anyway
 \end{itemize}
-\item This experiment might change how we teach in the future
+%\item This experiment might change how we teach in the future
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Lab Work}
 \begin{itemize}
-\item We will stick to the plan of a working Vending Machine
+\item A Vending Machine
 \begin{itemize}
 \item At the end it shall run in your FPGA board
 \item I am a big fan of running stuff in real hardware
 \end{itemize}
-\item Demo your work to a TA via the camera
 \item I know many groups have only one physical FPGA board
+\begin{itemize}
+\item You are allowed and should meet physically as a group
 \item A lot can be done in simulation
 \item I developed a simulation of the Basys3 board (during last lockdown)
+\end{itemize}
 \item I assume you will find a solution for file sharing
 \begin{itemize}
 \item GitHub is a popular one for source code
@@ -179,12 +194,12 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Example Design from Microsemi DK}
-A picture of the board with the \$50k Xilinx FPGA. This is a new board and is developed for ASIC prototyping in order to do pre-silicon validation as well as SW development. We have on the board currently mapped our current project: 8port industrial gigabit Ethernet switch with full TSN, CPU system ARM A7 with DDR, USB, PCIe and hardware security engines (SHA, AES) for secure boot of Linux and on the fly DRAM encryption. We scale and map all the digital logic to the FPGA.
-%\begin{itemize}
-%\item Show the picture
-%\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Example Design from Microsemi DK}
+%A picture of the board with the \$50k Xilinx FPGA. This is a new board and is developed for ASIC prototyping in order to do pre-silicon validation as well as SW development. We have on the board currently mapped our current project: 8port industrial gigabit Ethernet switch with full TSN, CPU system ARM A7 with DDR, USB, PCIe and hardware security engines (SHA, AES) for secure boot of Linux and on the fly DRAM encryption. We scale and map all the digital logic to the FPGA.
+%%\begin{itemize}
+%%\item Show the picture
+%%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Digital Design within an EE Master}
 \begin{itemize}
@@ -275,15 +290,15 @@ A picture of the board with the \$50k Xilinx FPGA. This is a new board and is de
 \begin{itemize}
 \item The Internet, Google, and Stackoverflow
 \item Your fellow students (e.g., via Slack)
-\item The TAs: Kasper and Tjark
+\item The TAs: Tjark and Emil
 \item Me
 \end{itemize}
 \item We will use Slack for easy communication (if ok for you)
 \begin{itemize}
-\item \url{https://de2021.slack.com/}
+\item \url{https://de2022.slack.com/}
 \end{itemize}
 \item You can always just (virtually) knock on my door or shoot me an email
-\item There is also anonymous feedback
+%\item There is also anonymous feedback
 \end{itemize}
 \end{frame}
 
@@ -471,7 +486,7 @@ Lipsi: Probably the Smallest Processor in the World}
 
 \begin{frame}[fragile]{More on Chisel Success Stories}
 \begin{itemize}
-\item Last year at CCC 2020 in silicon valley
+\item Last live conference CCC 2020 in silicon valley
 \item 90 participants
 \item More than 30 different chip companies present
 \item Several companies are looking into Chisel
@@ -718,7 +733,7 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{../code/sub_field.txt}
 
-\noindent Bit fields are concatenated with \code{Cat}:
+\noindent Bit fields are concatenated with the \code{\#\#} operator:
 \shortlist{../code/concat.txt}
 \end{frame}
 
@@ -798,13 +813,13 @@ the output of the register can be used just with the name in an expression:
 \item It represents a circuit
 \item The ``program'' constructs the circuit
 \item All statements are ``executed'' in parallel
-\item Statement order has mostly no meaning
+\item Statement order has \emph{mostly} no meaning
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Free Tools for Chisel and FPGA Design}
 \begin{itemize}
-\item \href{https://adoptopenjdk.net/}{Java OpenJDK 8} already installed for Java course
+\item \href{https://adoptopenjdk.net/}{Java OpenJDK 8} (or 11) already installed for Java course
 \item \href{https://www.scala-sbt.org/}{sbt, the Scala (and Java) build tool}
 \item \href{https://www.jetbrains.com/idea/download/}{IntelliJ (the free Community version)}
 \item \href{http://gtkwave.sourceforge.net/}{GTKWave}
@@ -832,25 +847,26 @@ the output of the register can be used just with the name in an expression:
 \item Linux/Ubuntu
 \begin{itemize}
 \item \code{sudo apt install openjdk-8-jdk git make gtkwave}
-\item Install sbt, see \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
+\item Install sbt
 \item IntelliJ as from the website
 \end{itemize}
 % \item If setup fails, we have you covered with the databar PCs
-\item If setup fails, we have you covered with a Virtual Machine
+\item Instruction details: \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Virtual Machine Setup for Chisel}
 \begin{itemize}
+\item If setup fails, we have you covered with a Virtual Machine
 \item Ubuntu based
 \item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
 \begin{itemize}
 \item But this is VERY large (40 GB for the .zip file)
 \end{itemize}
-\item \href{http://patmos.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
+%\item \href{http://patmos-download.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
 \item Use the  \href{https://www.vmware.com/products/workstation-player.html} {VMWare Workstation Player} (free for Linux and Windows)
 \begin{itemize}
-\item Use payed VMWare Fusion for macOS
+\item Use the free VMWare Fusion for macOS
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -861,7 +877,7 @@ the output of the register can be used just with the name in an expression:
 \item Scala plugin
 \item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
 %\item But you are not compiling with Eclipse\\ and against the Chisel source
-\item Show it (down to the Basys3)
+\item Show it %(down to the Basys3)
 \end{itemize}
 \end{frame}
 
@@ -914,6 +930,9 @@ the output of the register can be used just with the name in an expression:
 \item Configure the FPGA with the Programmer button
 \end{itemize}
 \item {\bf You have your first Chisel design running in an FPGA!}
+\begin{itemize}
+\item There is also a simulation version available
+\end{itemize}
 \end{itemize}
 \end{frame}
 
