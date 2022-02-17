@@ -30,13 +30,19 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Admin}
 \begin{itemize}
+\item Sadly still in quarantine:-(
+\item Where are you sitting today?
 \item How is the lab work going so far?
-\item Start to organize yourself in groups of 2--3 
+\item Continue to organize yourself in groups of 2--3 
 \begin{itemize}
 \item 1 is also OK
 \item You can ask for finding a group via slack (in channel general)
 \end{itemize}
-\item Register at \href{https://docs.google.com/spreadsheets/d/1aQs_VnPw3uiJxUz9WuzPcM1R6VkDXqPtri7a3pWoTvs/edit?usp=sharing}{Google spreadsheet}
+\item Register at \href{https://dtudk-my.sharepoint.com/:x:/g/personal/s186083_dtu_dk/EWnmIP9K1MFFuwsZbfDRyXEBGnkA68SSFuksje2LRVZQFQ?e=ZRHVdP}{this spreadsheet}
+\item Next week physical at B308-A012
+\begin{itemize}
+\item Guest lecture by Jens on timing
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -54,10 +60,9 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{The Vending Machine}
 \begin{itemize}
 \item Final project is a vending machine
-\item Specification document is in DTU Learn (show it)
+\item Specification document will given
 \begin{itemize}
-\item \href{https://learn.inside.dtu.dk/d2l/common/viewFile.d2lfile/Content/L2NvbnRlbnQvZW5mb3JjZWQvNjAyMzgtT0ZGRVJJTkctNjMzODE1L1ZlbmRpbmdNYWNoaW5lLnBkZg/VendingMachine.pdf?ou=60238}{VendingMachine.pdf}
-\item Please test if you can download it
+\item Put into the public in chisel-lab
 \end{itemize}
 \item Inputs: coins, buy
 \item Display: price and current amount
@@ -96,6 +101,8 @@ is pressed and reduce \emph{sum} by the price of the item
 \item Supplement alarm by some visuals (e.g., blinking display)
 \item Count coins and display an alarm when compartment is full ($>$ 20 coins)
 \item Have some text scrolling on the display
+\item Supplement alarm with some audio
+\item Talk to the user
 \item ...
 \item Your ideas :-)
 \end{itemize}
@@ -125,12 +132,15 @@ is pressed and reduce \emph{sum} by the price of the item
 
 \begin{frame}[fragile]{Vending Machine Design and Implementation Steps}
 \begin{itemize}
-\item We start next week
-\item 2 + 2 + 3 + 3 + 4 + 4 = 18 supervised lab hours
-\item 1a. Hexadecimal to 7-segment decoder
-\item 1b. 7-segment display with a counter
-\item 2. Multiplexed Seven-Segment Display
-\item 3. Complete Vending Machine
+\item We start in week 6
+%\item 2 + 2 + 3 + 3 + 4 + 4 = 18 supervised lab hours
+\begin{itemize}
+\item Hexadecimal to 7-segment decoder
+\item 7-segment display with a counter
+\item Multiplexed Seven-Segment Display
+\item Testing the Vending Machine
+\item Complete Vending Machine
+\end{itemize}
 \item \emph{Show your working design to a TA}
 \end{itemize}
 \end{frame}
@@ -142,7 +152,7 @@ is pressed and reduce \emph{sum} by the price of the item
 \begin{itemize}
 \item Your group number is part of the file name (e.g., group7.pdf)
 \item Code as listing in an appendix (no .zip files)
-\item Hand in in DTU Inside
+\item Hand in in DTU Learn
 \end{itemize}
 \item Content
 \begin{itemize}
@@ -388,6 +398,9 @@ val orVal = x || y
 \end{itemize}
 \end{frame}
 
+
+
+
 \begin{frame}[fragile]{Structure With Bundles}
 \begin{itemize}
 \item A \code{Bundle} to group signals
@@ -408,24 +421,53 @@ val orVal = x || y
 \shortlist{../code/bundle_use.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Write, Reg, and IO}
+\begin{itemize}
+\item \code{UInt}, \code{SInt}, and \code{Bits} are Chisel types, not hardware
+\item \code{Wire}, \code{Reg}, or \code{IO} generates hardware
+\begin{itemize}
+\item A \code{Wire} is a combinational circuit
+\item A \code{Reg} is a register
+\item A \code{IO} is a connection (for a module)
+\end{itemize}
+\item Can wrap any Chisel type, also \code{Bundle} or \code{Vec}
+\item Give it a name by assigning it to a \code{val}
+\end{itemize}
+\shortlist{../code/wire_reg.txt}
+\end{frame}
 
+\begin{frame}[fragile]{Using = or :=}
+\begin{itemize}
+\item Later assign or reassign a value or expression with \code{:=}
+\end{itemize}
+\shortlist{../code/wire_reg_reassign.txt}
+\begin{itemize}
+\item Note the small difference between \code{=} and \code{:=}
+\begin{itemize}
+\item May be confusing to start with
+\end{itemize}
+\item Use \code{=} when \emph{creating} a hardware object to give it a name
+\item Use \code{:=} when assigning or reassigning to an \emph{existing} hardware object
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Components/Modules}
 \begin{itemize}
-\item Components are building blocks
+\item Components/Modules are building blocks
 \begin{itemize}
-\item Components and modules are two names for the same thing
+\item Component and module are two names for the same thing
 \end{itemize}
 \item Components have input and output ports (= pins)
 \begin{itemize}
 \item Organized as a \code{Bundle}
-\item assigned to field \code{io}
+\item Wrapped into an \code{IO()}
+\item assigned to a field \code{io}
 \end{itemize}
 \item We build circuits as a hierarchy of components
 \item In Chisel a component is called \code{Module}
 \item Components/Modules are used to organize the circuit
 \begin{itemize}
-\item Similar as using methods in Java
+\item Similar to using methods in Java
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -652,18 +694,25 @@ module Hello(
 \item Build info in \code{build.sbt} for \code{sbt}:
 \end{itemize}
 \begin{chisel}
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.13"
 
-scalacOptions := Seq("-deprecation", "-Xsource:2.11")
-
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases")
+scalacOptions ++= Seq(
+  "-feature",
+  "-language:reflectiveCalls",
 )
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
-// Chisel 3.4.1 is loaded as a dependency on the testers
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases")
+)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Minimal Chisel Project Cont.}
+\begin{chisel}
+// Chisel 3.5
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.0" cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.0"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \end{chisel}
 \end{frame}
 
@@ -775,63 +824,63 @@ libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.3.1"
 \end{frame}
 
 
-\begin{frame}[fragile]{Preview: Testing with Chisel}
-\begin{itemize}
-\item Tester extends class \code{PeekPokeTester}
-\item Has the device under test (DUT) as parameter
-\item Testing code can use all features of Scala
-\end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing}
-\begin{itemize}
-\item Set input values with \code{poke}
-\item Advance the simulation with \code{step}
-\item Read the output values with \code{peek}
-\item Compare the values with \code{expect}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing Example}
-\begin{chisel}
-// Set input values
-poke(dut.io.a, 3)
-poke(dut.io.b, 4)
-// Execute one iteration
-step(1)
-// Print the result
-val res = peek(dut.io.result)
-println(res)
-
-// Or compare against expected value
-expect(dut.io.result, 7)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel Main for Testing}
-\begin{itemize}
-\item Tests can be written in Scala/Chisel
-\item Invoke \code{execute} with some parameters, the DUT, and a tester
-\end{itemize}
-\begin{chisel}
-object CounterTester extends App {
-
-  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
-    c => new CounterTester(c)
-  }
-}
-\end{chisel}
-\begin{itemize}
-\item More on testing and waveform generation next week
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Preview: Testing with Chisel}
+%\begin{itemize}
+%\item Tester extends class \code{PeekPokeTester}
+%\item Has the device under test (DUT) as parameter
+%\item Testing code can use all features of Scala
+%\end{itemize}
+%\begin{chisel}
+%class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
+%
+%  // Here comes the Chisel/Scala code
+%  // for the testing
+%}
+%\end{chisel}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Testing}
+%\begin{itemize}
+%\item Set input values with \code{poke}
+%\item Advance the simulation with \code{step}
+%\item Read the output values with \code{peek}
+%\item Compare the values with \code{expect}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Testing Example}
+%\begin{chisel}
+%// Set input values
+%poke(dut.io.a, 3)
+%poke(dut.io.b, 4)
+%// Execute one iteration
+%step(1)
+%// Print the result
+%val res = peek(dut.io.result)
+%println(res)
+%
+%// Or compare against expected value
+%expect(dut.io.result, 7)
+%\end{chisel}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Chisel Main for Testing}
+%\begin{itemize}
+%\item Tests can be written in Scala/Chisel
+%\item Invoke \code{execute} with some parameters, the DUT, and a tester
+%\end{itemize}
+%\begin{chisel}
+%object CounterTester extends App {
+%
+%  iotesters.Driver.execute(Array[String](), () => new Counter(2)) {
+%    c => new CounterTester(c)
+%  }
+%}
+%\end{chisel}
+%\begin{itemize}
+%\item More on testing and waveform generation next week
+%\end{itemize}
+%\end{frame}
 
 
 \begin{frame}[fragile]{Common Acronyms}
@@ -888,10 +937,10 @@ object CounterTester extends App {
 \begin{itemize}
 \item Components and Small Sequential Circuits
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab3}{Lab 3 Page}
-\item You need to download again, as I have updated the lab
-\begin{itemize}
-\item Or learn to use git and do a  \code{git pull} ;-)
-\end{itemize}
+%\item You need to download again, as I have updated the lab
+%\begin{itemize}
+%\item Or learn to use git and do a  \code{git pull} ;-)
+%\end{itemize}
 \item Each exercise contains a test, which initially fails
 \item \code{sbt test} runs them all
 \begin{itemize}
