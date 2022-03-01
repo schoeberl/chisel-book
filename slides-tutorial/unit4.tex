@@ -177,6 +177,10 @@ rdData := mem(rdAddrReg)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Better Use Synchronous Memory}
+\shortlist{../code/memory.txt}
+\end{frame}
+
 \begin{frame}[fragile]{Factory Methods}
 \begin{itemize}
 \item Simpler component creation and use
@@ -219,8 +223,35 @@ object Adder {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{ScalaTest}
+\begin{itemize}
+\item Testing framework for Scala and Java
+\item \code{sbt} understands ScalaTest
+\item Add library to \code{build.sbt}
+\begin{chisel}
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.4" % "test"
+\end{chisel}
+\item Run all tests with:
+\begin{chisel}
+sbt test
+\end{chisel}
+\item When all (unit) tests are ok, the test passes
+\item A little bit funny syntax
+\item ChiselTest is based on ScalaTest
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ScalaTest Hello World}
+\shortlist{../code/scalatest_hello_world.txt}
+\end{frame}
+
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
+\item A test contains:
+\begin{itemize}
+\item a device under test (DUT) and
+\item the testing logic
+\end{itemize}
 \item Set input values with \code{poke}
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
@@ -230,41 +261,20 @@ object Adder {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Using \code{peek}, \code{poke}, and \code{expect}}
-\begin{chisel}
-// Set input values
-poke(dut.io.a, 3)
-poke(dut.io.b, 4)
-// Execute one iteration
-step(1)
-// Print the result
-val res = peek(dut.io.result)
-println(res)
-
-// Or compare against expected value
-expect(dut.io.result, 7)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Chisel Tester}
-\begin{itemize}
-\item Extends class \code{PeekPokeTester}
-\item Has the device-under test (DUT) as parameter
-\item Testing code can use all features of Scala
-\end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Example DUT}
+\begin{frame}[fragile]{An Example DUT}
 \begin{itemize}
 \item A device-under test (DUT)
+\item Just 2-bit AND logic
 \shortlist{../code/test_dut.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A ChiselTest}
+\begin{itemize}
+\item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
+\item Has the device-under test (DUT) as parameter of the \code{test} function
+\item Test function contains the test code
+\item Testing code can use all features of Scala
 \end{itemize}
 \end{frame}
 
@@ -276,15 +286,6 @@ class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 \end{frame}
 
 
-\begin{frame}[fragile]{The Main Program for the Test}
-\begin{itemize}
-\item Extend an App and invoke the \code{iotesters} driver
-\item With the DUT and the tester
-\item TODO adapt for ChiselTest
-% \shortlist{../code/test_main_simple.txt}
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{A Real Tester}
 \begin{itemize}
 \item Poke values and \code{expect} some output
@@ -292,34 +293,20 @@ class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{ScalaTest}
-\begin{itemize}
-\item Testing framework for Scala
-\item \code{sbt} understands ScalaTest
-\item Run all tests:
-\code{sbt test}
-\item When all \code{expect}s are ok, the test passes
-\item A little bit funny syntax
-\item Add library to \code{build.sbt}
-\begin{chisel}
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-\end{chisel}
-\item Import ScalaTest library
-\begin{chisel}
-import org.scalatest._
-\end{chisel}
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{ScalaTest Version of our Tester}
-\shortlist{../code/scalatest_simple.txt}
-\end{frame}
 
 \begin{frame}[fragile]{Generating Waveforms}
 \begin{itemize}
 \item Waveforms are timing diagrams
 \item Good to see many parallel signals and registers
-\item Additional parameters: \code{"--generate-vcd-output", "on"}
+\begin{verbatim}
+sbt "testOnly SimpleTest -- -DwriteVcd=1"
+\end{verbatim}
+\item Or as additional parameters to test:
+\begin{chisel}
+test(new DeviceUnderTest)
+.withAnnotations(Seq(WriteVcdAnnotation))
+\end{chisel}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
@@ -327,25 +314,14 @@ import org.scalatest._
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Call the Tester}
+\begin{frame}[fragile]{Printf Debugging}
 \begin{itemize}
-\item Using here ScalaTest
-\item Note \code{Driver.execute}
-\item Note \code{Array("--generate-vcd-output", "on")}
+\item We can \emph{print} in the hardware
+\item Printing happens on the rising edge of the clock
+\item Good to see many parallel signals and registers
+\item \code{printf} anywhere in the module definition
 \end{itemize}
-\begin{chisel}
-class Count6WaveSpec extends
-  FlatSpec with Matchers {
-  
-  "CountWave6 " should "pass" in {
-    chisel3.iotesters.Driver.
-    execute(Array("--generate-vcd-output", "on"),() => new Count6)
-    { c => new Count6Wave(c) }
-    should be (true)
-  }
-}
-\end{chisel}
+\shortlist{../code/test_dut_printf.txt}
 \end{frame}
 
 
@@ -361,6 +337,7 @@ class Count6WaveSpec extends
 \item Frequent releases
 \item Accept change as part of the development
 \end{itemize}
+\item A path to \emph{Agile Hardware Development!}
 \item Not used in its pour form
 \begin{itemize}
 \item Writing all those tests is simply considerer too much work
@@ -368,6 +345,14 @@ class Count6WaveSpec extends
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Continuous Integration}
+\begin{itemize}
+\item Run your tests on each change
+\item Do it also when using source control
+\item GitHub Actions (or Trevis)
+\item I am doing it even for the Chisel book
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Testing versus Debugging}
 \begin{itemize}
@@ -425,7 +410,6 @@ https://github.com/schoeberl/chisel-book.git
 \item A more interesting tester on an ALU accumulator
 \item Project and DUT in GitHub lab1 and lab2
 \item \url{https://github.com/chisel-uvm/class2020}
-\item Extend it with ScalaTest (see Chisel book)
 \end{itemize}
 \end{frame}
 
