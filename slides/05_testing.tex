@@ -27,26 +27,37 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Some Clarification}
+\begin{frame}[fragile]{DTU Chip Day}
 \begin{itemize}
-\item Online learning is hard, I understand
-\item Installing all tools on your laptop can also be hard
-\begin{itemize}
-\item We are back physical now
-\end{itemize}
-\item Don't be afraid from the \emph{power user} demos
-\begin{itemize}
-\item Just for ``entertainment'' and for advanced users
-\item You can also simply ignore it
-\end{itemize}
-\item Learning Objectives
-\begin{itemize}
-\item How to build medium sized digital circuits
-\item Describe them in Chisel  and implement them in an FPGA
-\item Timing analysis of digital circuits
-\end{itemize}
+\item Note the date: Tu 19 April afternoon
+\item Start with sandwiches and finish with beer
+\item Presentation of chip design and verification work/companies in Denmark
+\item The first open-source chip from DTU
+\item Several chip companies will present and are prticipating
+\item Opportunity to network for: theses with companies, internship, student jobs
 \end{itemize}
 \end{frame}
+
+%\begin{frame}[fragile]{Some Clarification - TODO: Maybe drop or change}
+%\begin{itemize}
+%\item Online learning is hard, I understand
+%\item Installing all tools on your laptop can also be hard
+%\begin{itemize}
+%\item We are back physical now
+%\end{itemize}
+%\item Don't be afraid from the \emph{power user} demos
+%\begin{itemize}
+%\item Just for ``entertainment'' and for advanced users
+%\item You can also simply ignore it
+%\end{itemize}
+%\item Learning Objectives
+%\begin{itemize}
+%\item How to build medium sized digital circuits
+%\item Describe them in Chisel  and implement them in an FPGA
+%\item Timing analysis of digital circuits
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Last Chisel Lab (week 3)}
 \begin{itemize}
@@ -298,9 +309,9 @@ test(new DeviceUnderTest)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Waveform Testing Demo - UPDATE!}
+\begin{frame}[fragile]{Waveform Testing Demo}
 \begin{itemize}
-\item Counter with a limit from last week (\code{Count6})
+\item Counter with a limit from last Chisel lab (\code{Count6})
 \item Show Count6 tester: the original and the waveform
 \item Run it and look at waveform
 \item Add the solution
@@ -308,46 +319,42 @@ test(new DeviceUnderTest)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Self-Running Circuit - UPDATE!}
+\begin{frame}[fragile]{A Self-Running Circuit}
 \begin{itemize}
 \item \code{Count6} is a self-running circuit
 \item Needs no stimuli (\code{poke})
 \item Just run for a few cycles
 \end{itemize}
 \begin{chisel}
-class Count6Wave(dut: Count6) extends PeekPokeTester(dut) {
-  step(20)
-}
+    test(new Count6) { dut =>
+      dut.clock.step(20)
+    }
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Call the Tester - UPDATE!}
+\begin{frame}[fragile]{The WaveForm}
 \begin{itemize}
-\item Using here ScalaTest
-\item Note \code{Driver.execute}
-\item Note \code{Array("--generate-vcd-output", "on")}
+\item The complete test
+\item Note \code{.withAnnotations(Seq(WriteVcdAnnotation)}
 \end{itemize}
 \begin{chisel}
-class Count6WaveSpec extends
-  FlatSpec with Matchers {
-  
+class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
   "CountWave6 " should "pass" in {
-    chisel3.iotesters.Driver.
-    execute(Array("--generate-vcd-output", "on"),() => new Count6)
-    { c => new Count6Wave(c) }
-    should be (true)
+    test(new Count6).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      dut.clock.step(20)
+    }
   }
 }
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Vending Machine Testing - UPDATE!}
+\begin{frame}[fragile]{Vending Machine Testing}
 \begin{itemize}
 \item I provide a minimal tester to generate a waveform
 \item Adding some coins and buying
 \item You can and shall extend this tester
 \item Better having more than one tester
-\item Show the waveform of the working VM
+\item Show the waveform of the test
 \end{itemize}
 \end{frame}
 
@@ -396,19 +403,25 @@ class Count6WaveSpec extends
 \end{frame}
 
 
-\begin{frame}[fragile]{Continuous Integration (CI) - TODO: check Travis or move to GitHub Acions}
+\begin{frame}[fragile]{Continuous Integration (CI)}
 \begin{itemize}
 \item Next logical step from regression tests
 \item Run all tests whenever code is changed
 \item Automate this with a repository, e.g., on GitHub
-\item Run CI on Travis (with GitHub integration)
+\item Run CI on GitHub (moved from Travis yesterday)
 \item Show about this on the Chisel book
 \begin{itemize}
 \item Show \code{sbt test}
-\item Mails from travis
-\item Live demo on travis
+\item Live demo on GitHub
+\item Mail from GitHub when it fails
 \end{itemize}
-\item \url{https://travis-ci.com/schoeberl/chisel-book}
+\item \url{https://github.com/schoeberl/chisel-book/actions}
+\item Maybe show how to set this up (it is easy ;)
+\begin{itemize}
+\item Start with \href{https://github.com/schoeberl/chisel-empty}{chisel-empty} template
+\item Open with IntelliJ
+\item Add action in GitHub
+\end{itemize}
 \end{itemize}
 \end{frame}
 
