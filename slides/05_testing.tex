@@ -20,7 +20,7 @@ Embedded Systems Engineering}
 \item Thomas Aakjer presents digital design at Microchip
 \item Review components
 \item Debugging and testing
-\item Digital designers call testing verification
+\item Digital designers (sometimes) call testing verification
 \begin{itemize}
 \item To distinguish from final chip testing
 \end{itemize}
@@ -31,7 +31,9 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Online learning is hard, I understand
 \item Installing all tools on your laptop can also be hard
-\item I take this into consideration on final grading
+\begin{itemize}
+\item We are back physical now
+\end{itemize}
 \item Don't be afraid from the \emph{power user} demos
 \begin{itemize}
 \item Just for ``entertainment'' and for advanced users
@@ -46,7 +48,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Last Lab}
+\begin{frame}[fragile]{Last Chisel Lab (week 3)}
 \begin{itemize}
 \item On components and small sequential circuits
 \begin{itemize}
@@ -61,9 +63,12 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Components/Modules}
+\begin{frame}[fragile]{Components are Modules}
 \begin{itemize}
 \item Components are building blocks
+\begin{itemize}
+\item Like concrete, physical ICs
+\end{itemize}
 \item Components have input and output ports (= pins)
 \begin{itemize}
 \item Organized as a \code{Bundle}
@@ -76,7 +81,7 @@ Embedded Systems Engineering}
 \item In Chisel a component is called \code{Module}
 \item Components/Modules are used to organize the circuit
 \begin{itemize}
-\item Similar as using methods in Java
+\item Similar to using methods in Java
 \item But they are connected with \emph{wires}
 \end{itemize}
 \end{itemize}
@@ -112,7 +117,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{An Adder (Component/Modul)}
+\begin{frame}[fragile]{An Adder (Component/Module)}
 \begin{columns}
 \begin{column}{0.4\textwidth}
 \begin{figure}
@@ -148,16 +153,23 @@ Embedded Systems Engineering}
 \shortlist{../code/components_cnt.txt}
 \end{frame}
 
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\item xxx
-%\end{itemize}
-%\end{frame}
-%
+\begin{frame}[fragile]{Summarize Components}
+\begin{itemize}
+\item Think like concrete components (ICs)
+\item They have named pins (\code{io.name})
+\begin{itemize}
+\item In hardware language these pins are often called ports
+\item Ports have a direction (input or output)
+\end{itemize}
+\item They need to be created:
+\begin{itemize}
+\item \code{val mc = Module(new MyComponent())}
+\end{itemize}
+\item and pins need to be connected with \code{:=}
+\item One module is special, as it is the top model
+\end{itemize}
+\end{frame}
+
 %\begin{frame}[fragile]{XXX}
 %\begin{itemize}
 %\item xxx
@@ -182,8 +194,6 @@ Embedded Systems Engineering}
 \shortlist{../code/generate.txt}
 \end{frame}
 
-
-
 \begin{frame}[fragile]{Testing and Debugging}
 \begin{itemize}
 \item Nobody writes perfect code ;-)
@@ -202,8 +212,28 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{ScalaTest}
+\begin{itemize}
+\item Testing framework for Scala and Java
+\item Tests are placed under \code{src/test/scala}
+\item \code{sbt} understands ScalaTest
+\item Run all tests with:
+\begin{chisel}
+sbt test
+\end{chisel}
+\item When all (unit) tests are ok, the test passes
+\item A little bit funny syntax
+\item ChiselTest is based on ScalaTest
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
+\item A test contains:
+\begin{itemize}
+\item a device under test (DUT) and
+\item the testing logic
+\end{itemize}
 \item Set input values with \code{poke}
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
@@ -213,41 +243,22 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Using \code{peek}, \code{poke}, and \code{expect}}
-\begin{chisel}
-// Set input values
-poke(dut.io.a, 3)
-poke(dut.io.b, 4)
-// Execute one iteration
-step(1)
-// Print the result
-val res = peek(dut.io.result)
-println(res)
-
-// Or compare against expected value
-expect(dut.io.result, 7)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Chisel Tester}
-\begin{itemize}
-\item Extends class \code{PeekPokeTester}
-\item Has the device-under test (DUT) as parameter
-\item Testing code can use all features of Scala
-\end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Example DUT}
+\begin{frame}[fragile]{An Example DUT}
 \begin{itemize}
 \item A device-under test (DUT)
+\item Just 2-bit AND logic
 \shortlist{../code/test_dut.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A ChiselTest}
+\begin{itemize}
+\item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
+\item Has the device-under test (DUT) as parameter of the \code{test} function
+\item Test function contains the test code
+\item Testing code can use all features of Scala
+\item Is placed in \code{src/test/scala}
+\item Is run with: \code{sbt test}
 \end{itemize}
 \end{frame}
 
@@ -259,15 +270,6 @@ class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 \end{frame}
 
 
-\begin{frame}[fragile]{The Main Program for the Test}
-\begin{itemize}
-\item Extend an App and invoke the \code{iotesters} driver
-\item With the DUT and the tester
-\item TODO: update to ChiselTest
-% \shortlist{../code/test_main_simple.txt}
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{A Real Tester}
 \begin{itemize}
 \item Poke values and \code{expect} some output
@@ -275,35 +277,20 @@ class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{ScalaTest}
-\begin{itemize}
-\item Testing framework for Scala
-\item \code{sbt} understands ScalaTest
-\item Run all tests:
-\code{sbt test}
-\item When all \code{expect}s are ok, the test passes
-\item A little bit funny syntax
-\item Add library to \code{build.sbt}
-\begin{chisel}
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-\end{chisel}
-\item Import ScalaTest library
-\begin{chisel}
-import org.scalatest._
-\end{chisel}
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{ScalaTest Version of our Tester}
-TODO: update for ChiselTest
-%\shortlist{../code/scalatest_simple.txt}
-\end{frame}
 
 \begin{frame}[fragile]{Generating Waveforms}
 \begin{itemize}
 \item Waveforms are timing diagrams
 \item Good to see many parallel signals and registers
-\item Additional parameters: \code{"--generate-vcd-output", "on"}
+\begin{verbatim}
+sbt "testOnly SimpleTest -- -DwriteVcd=1"
+\end{verbatim}
+\item Or as additional parameters to test:
+\begin{chisel}
+test(new DeviceUnderTest)
+.withAnnotations(Seq(WriteVcdAnnotation))
+\end{chisel}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
@@ -311,8 +298,7 @@ TODO: update for ChiselTest
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Waveform Testing Demo}
+\begin{frame}[fragile]{Waveform Testing Demo - UPDATE!}
 \begin{itemize}
 \item Counter with a limit from last week (\code{Count6})
 \item Show Count6 tester: the original and the waveform
@@ -322,7 +308,7 @@ TODO: update for ChiselTest
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Self-Running Circuit}
+\begin{frame}[fragile]{A Self-Running Circuit - UPDATE!}
 \begin{itemize}
 \item \code{Count6} is a self-running circuit
 \item Needs no stimuli (\code{poke})
@@ -335,7 +321,7 @@ class Count6Wave(dut: Count6) extends PeekPokeTester(dut) {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Call the Tester}
+\begin{frame}[fragile]{Call the Tester - UPDATE!}
 \begin{itemize}
 \item Using here ScalaTest
 \item Note \code{Driver.execute}
@@ -355,7 +341,7 @@ class Count6WaveSpec extends
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Vending Machine Testing}
+\begin{frame}[fragile]{Vending Machine Testing - UPDATE!}
 \begin{itemize}
 \item I provide a minimal tester to generate a waveform
 \item Adding some coins and buying
@@ -365,6 +351,16 @@ class Count6WaveSpec extends
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}[fragile]{Printf Debugging}
+\begin{itemize}
+\item We can \emph{print} in the hardware
+\item Printing happens on the rising edge of the clock
+\item Good to see many parallel signals and registers
+\item \code{printf} anywhere in the module definition
+\end{itemize}
+\shortlist{../code/test_dut_printf.txt}
+\end{frame}
 
 
 \begin{frame}[fragile]{Test Driven Development (TDD)}
@@ -379,6 +375,7 @@ class Count6WaveSpec extends
 \item Frequent releases
 \item Accept change as part of the development
 \end{itemize}
+\item A path to \emph{Agile Hardware Development!}
 \item Not used in its pour form
 \begin{itemize}
 \item Writing all those tests is simply considerer too much work
@@ -386,7 +383,7 @@ class Count6WaveSpec extends
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Regresssion Tests}
+\begin{frame}[fragile]{Regression Tests}
 \begin{itemize}
 \item But tests are collected over time
 \item When a bug is found, a test is written to reproduce this bug
@@ -399,7 +396,7 @@ class Count6WaveSpec extends
 \end{frame}
 
 
-\begin{frame}[fragile]{Continuous Integration (CI)}
+\begin{frame}[fragile]{Continuous Integration (CI) - TODO: check Travis or move to GitHub Acions}
 \begin{itemize}
 \item Next logical step from regression tests
 \item Run all tests whenever code is changed
@@ -415,17 +412,26 @@ class Count6WaveSpec extends
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Continuous Integration}
+\begin{itemize}
+\item Run your tests on each change
+\item Do it also when using source control
+\item GitHub Actions (or Trevis)
+\item I am doing it even for the Chisel book
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Testing versus Debugging}
 \begin{itemize}
 \item Debugging is during code development
-\item Waveform and println are easy tools for debugging
+\item Waveform and \code{println} are easy tools for debugging
 \item Debugging does not help for regression tests
 \item Write small test cases for regression tests
 \item Keeps your code base \emph{intact} when doing changes
 \item Better confidence in changes not introducing new bugs
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{Scala Build Tool (sbt)}
 \begin{itemize}
@@ -445,7 +451,7 @@ sbt compile
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Build Configuration}
+\begin{frame}[fragile]{Build Configuration - UPDATE!}
 \begin{itemize}
 \item Defines needed Scala version
 \item Library dependencies
@@ -466,29 +472,19 @@ libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Today's Lab}
+\begin{frame}[fragile]{Today's Lab - UPDATE}
 \begin{itemize}
-\item TODO: Update, it will be testing
-\item This is the start of group work
-\begin{itemize}
-\item Please register your group \href{https://docs.google.com/spreadsheets/d/1aQs_VnPw3uiJxUz9WuzPcM1R6VkDXqPtri7a3pWoTvs/edit?usp=sharing}{here}
-\end{itemize}
-\item Binary to 7-segment decoder
-\item First part of your vending machine
-\item Just a single digit, only combinational logic
-\item Use the nice tester provided to develop the circuit
-\item Then synthesize it for the FPGA
-\item Test with switches
-\item Show a TA your working design
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab4}{Lab 4}
+\item xxx
+\item Show and discuss your testing code with a TA (or me)
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item Small sequential circuits are our building blocks
-\item We build larger circuits by combining components (moduls)
-\item There is no \emph{println} in hardware
+\item We build larger circuits by combining components (modules)
+\item There is no \emph{println} in (real) hardware
 \item We need to write tests for the development
 \item Debugging versus regression tests
 \end{itemize}
