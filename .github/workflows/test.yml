@@ -18,5 +18,7 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - name: Setup Verilator
+      run: sudo apt-get install verilator
     - name: Run tests
       run: sbt test
