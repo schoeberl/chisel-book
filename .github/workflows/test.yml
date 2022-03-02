@@ -19,6 +19,8 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Setup Verilator
+      # should include texlive-full for Latex test
       run: sudo apt-get install verilator
     - name: Run tests
+      # should run make for the test including Latex
       run: sbt test
