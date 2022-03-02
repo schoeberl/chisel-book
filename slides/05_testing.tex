@@ -83,7 +83,7 @@ Embedded Systems Engineering}
 \item Components have input and output ports (= pins)
 \begin{itemize}
 \item Organized as a \code{Bundle}
-\item assigned to field \code{io}
+\item Assigned to the field \code{io}
 \end{itemize}
 \item We build circuits as a hierarchy of components
 \begin{itemize}
@@ -209,17 +209,19 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Nobody writes perfect code ;-)
 \item We need a method to improve the code
-\item In Java we can simply print the result:
+\item In Java we can simply print values:
 \begin{itemize}
 \item \code{println("42");}
 \end{itemize}
 \item What can we do in hardware?
 \begin{itemize}
 \item Describe the whole circuit and hope it works?
-\item We can switch an LED on or off
+\item We can switch an LED on and off
+\item Test it with switches and LEDs in an FPGA
 \end{itemize}
 \item We need some tools for \href{https://en.wikipedia.org/wiki/Debugging#/media/File:H96566k.jpg}{debugging}
 \item Writing testers in Chisel
+\item We test by running a simulation of the circuit
 \end{itemize}
 \end{frame}
 
@@ -232,7 +234,7 @@ Embedded Systems Engineering}
 \begin{chisel}
 sbt test
 \end{chisel}
-\item When all (unit) tests are ok, the test passes
+\item When all (unit) tests are ok, the test suit passes
 \item A little bit funny syntax
 \item ChiselTest is based on ScalaTest
 \end{itemize}
@@ -240,7 +242,7 @@ sbt test
 
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
-\item A test contains:
+\item A test contains
 \begin{itemize}
 \item a device under test (DUT) and
 \item the testing logic
@@ -249,7 +251,7 @@ sbt test
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
-\item Import following packages:
+\item Import following packages
 \shortlist{../code/test_import.txt}
 \end{itemize}
 \end{frame}
@@ -265,11 +267,11 @@ sbt test
 \begin{frame}[fragile]{A ChiselTest}
 \begin{itemize}
 \item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
-\item Has the device-under test (DUT) as parameter of the \code{test} function
+\item Has the device-under test (DUT) as parameter of the \code{test()} function
 \item Test function contains the test code
 \item Testing code can use all features of Scala
 \item Is placed in \code{src/test/scala}
-\item Is run with: \code{sbt test}
+\item Is run with \code{sbt test}
 \end{itemize}
 \end{frame}
 
@@ -297,7 +299,7 @@ sbt test
 \begin{verbatim}
 sbt "testOnly SimpleTest -- -DwriteVcd=1"
 \end{verbatim}
-\item Or as additional parameters to test:
+\item Or setting an attribute for the \code{test()} function
 \begin{chisel}
 test(new DeviceUnderTest)
 .withAnnotations(Seq(WriteVcdAnnotation))
@@ -335,7 +337,7 @@ test(new DeviceUnderTest)
 \begin{frame}[fragile]{The WaveForm}
 \begin{itemize}
 \item The complete test
-\item Note \code{.withAnnotations(Seq(WriteVcdAnnotation)}
+\item Note the \code{.withAnnotations(Seq(WriteVcdAnnotation)}
 \end{itemize}
 \begin{chisel}
 class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
@@ -361,7 +363,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{Printf Debugging}
 \begin{itemize}
-\item We can \emph{print} in the hardware
+\item We can \emph{print} in the hardware during simulation
 \item Printing happens on the rising edge of the clock
 \item Good to see many parallel signals and registers
 \item \code{printf} anywhere in the module definition
@@ -386,13 +388,14 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Not used in its pour form
 \begin{itemize}
 \item Writing all those tests is simply considerer too much work
+\item \textbf{But}, write at least one test for each component
 \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Regression Tests}
 \begin{itemize}
-\item But tests are collected over time
+\item Tests are collected over time
 \item When a bug is found, a test is written to reproduce this bug
 \item Collection of tests increases
 \item Runs every night to test for \emph{regression}
@@ -408,29 +411,20 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Next logical step from regression tests
 \item Run all tests whenever code is changed
 \item Automate this with a repository, e.g., on GitHub
-\item Run CI on GitHub (moved from Travis yesterday)
+\item Run CI on GitHub
 \item Show about this on the Chisel book
 \begin{itemize}
 \item Show \code{sbt test}
-\item Live demo on GitHub
+\item Live demo on GitHub (I moved from Travis yesterday)
 \item Mail from GitHub when it fails
 \end{itemize}
 \item \url{https://github.com/schoeberl/chisel-book/actions}
 \item Maybe show how to set this up (it is easy ;)
 \begin{itemize}
-\item Start with \href{https://github.com/schoeberl/chisel-empty}{chisel-empty} template
-\item Open with IntelliJ
+\item Start with the \href{https://github.com/schoeberl/chisel-empty}{chisel-empty} template
+\item Open it with IntelliJ
 \item Add action in GitHub
 \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Continuous Integration}
-\begin{itemize}
-\item Run your tests on each change
-\item Do it also when using source control
-\item GitHub Actions (or Trevis)
-\item I am doing it even for the Chisel book
 \end{itemize}
 \end{frame}
 
@@ -464,30 +458,31 @@ sbt compile
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Build Configuration - UPDATE!}
+\begin{frame}[fragile]{Build Configuration}
 \begin{itemize}
+\item File name: \code{build.sbt}
 \item Defines needed Scala version
 \item Library dependencies
-\item File name: \code{build.sbt}
 \end{itemize}
 \begin{chisel}
-scalaVersion := "2.12.12"
+scalaVersion := "2.12.13"
 
-scalacOptions := Seq("-deprecation", "-Xsource:2.11")
+scalacOptions ++= Seq("-feature", "-language:reflectiveCalls")
 
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases")
-)
+resolvers ++= Seq(Resolver.sonatypeRepo("releases"))
 
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "1.5.1"
-// Chisel 3.4.1 is loaded as a dependency on the tester
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.0" cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.0"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Today's Lab - UPDATE}
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
-\item xxx
+\item Testing a faulty multiplexer
+\item Do not look into the multiplexer code, find out with testing
+\item Use ChiselTest (the description has been updated)
+\item You have to start from scratch with the tester
 \item Show and discuss your testing code with a TA (or me)
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
 \end{itemize}
