@@ -150,7 +150,7 @@ The Schoeberl book is open access and freely available.
 **Topics:** Sequential building blocks, testing and verification in Chisel,
 waveform viewing
 
-**Slides:** [04_testing.pdf](04_testing.pdf)
+**Slides:** [05_testing.pdf](05_testing.pdf)
 
 **Reading:** Dally: 2.1.4 and 20, Chisel: 3
 
