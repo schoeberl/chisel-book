@@ -45,7 +45,7 @@ class MuxCounter(n: Int) extends Counter(n) {
   //- start mux_counter
   val cntReg = RegInit(0.U(8.W))
 
-  cntRegXXX := Mux(cntReg === N, 0.U, cntReg + 1.U)
+  cntReg := Mux(cntReg === N, 0.U, cntReg + 1.U)
   //- end
 
   io.tick := cntReg === N
