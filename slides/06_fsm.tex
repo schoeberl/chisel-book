@@ -26,73 +26,79 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Organization and Lab Work}
 \begin{itemize}
-\item Look into files at DTU Learn
-\item Looks like it the 7-segment decoder was fine last week
-\item This week it will be counters to test the 7-segment display
-\item I am aware of that not everyone has an FPGA board
+\item Labs are in B308-IT127, B308-IT017
+\item Use both rooms, you have more space then
+\item How did the testing lab work? Did you find both bugs?
+\item This week the 7-segment decoder
 \item A lot can be done with simulation and testing
-\item I do provide some FPGA board simulation
 \item But, at the end of the day I want to see a vending machine in an FPGA
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
+\item A test contains
+\begin{itemize}
+\item a device under test (DUT) and
+\item the testing logic
+\end{itemize}
 \item Set input values with \code{poke}
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
-\item Import following packages:
+\item Import following packages
 \shortlist{../code/test_import.txt}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Using \code{peek}, \code{poke}, and \code{expect}}
-\begin{chisel}
-// Set input values
-poke(dut.io.a, 3)
-poke(dut.io.b, 4)
-// Execute one iteration
-step(1)
-// Print the result
-val res = peek(dut.io.result)
-println(res)
-
-// Or compare against expected value
-expect(dut.io.result, 7)
-\end{chisel}
+\begin{frame}[fragile]{An Example DUT}
+\begin{itemize}
+\item A device-under test (DUT)
+\item Just 2-bit AND logic
+\shortlist{../code/test_dut.txt}
+\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Chisel Tester}
+\begin{frame}[fragile]{A ChiselTest}
 \begin{itemize}
-\item Extends class \code{PeekPokeTester}
-\item Has the device-under test (DUT) as parameter
+\item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
+\item Has the device-under test (DUT) as parameter of the \code{test()} function
+\item Test function contains the test code
 \item Testing code can use all features of Scala
+\item Is placed in \code{src/test/scala}
+\item Is run with \code{sbt test}
 \end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Using ScalaTest for our Tester}
+\begin{frame}[fragile]{A Simple Tester}
 \begin{itemize}
-\item Little verbose syntax
-\item Copy example code to start with
+\item Just using \code{println} for manual inspection
+\shortlist{../code/test_bench_simple.txt}
 \end{itemize}
-TODO: update tests
-%\shortlist{../code/scalatest_simple.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Real Tester}
+\begin{itemize}
+\item Poke values and \code{expect} some output
+\shortlist{../code/test_bench.txt}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Generating Waveforms}
 \begin{itemize}
 \item Waveforms are timing diagrams
 \item Good to see many parallel signals and registers
-\item Additional parameters: \code{"--generate-vcd-output", "on"}
+\begin{verbatim}
+sbt "testOnly SimpleTest -- -DwriteVcd=1"
+\end{verbatim}
+\item Or setting an attribute for the \code{test()} function
+\begin{chisel}
+test(new DeviceUnderTest)
+.withAnnotations(Seq(WriteVcdAnnotation))
+\end{chisel}
 \item IO signals and registers are dumped
+\item Option \code{--debug} puts all wires into the dump
 \item Generates a .vcd file
 \item Viewing with GTKWave or ModelSim
 \end{itemize}
@@ -100,18 +106,29 @@ TODO: update tests
 
 \begin{frame}[fragile]{A Self-Running Circuit}
 \begin{itemize}
-\item \code{SevenSegTest} is a self-running circuit
+\item \code{Count6} is a self-running circuit
 \item Needs no stimuli (\code{poke})
 \item Just run for a few cycles
-\item Tester for today's lab
-\item This tester does NOT test the circuit
-\begin{itemize}
-\item You are not finished when this test does not show an error
-\end{itemize}
 \end{itemize}
 \begin{chisel}
-class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
-  step(100)
+    test(new Count6) { dut =>
+      dut.clock.step(20)
+    }
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Call the Tester for Waveform Generation}
+\begin{itemize}
+\item The complete test
+\item Note the \code{.withAnnotations(Seq(WriteVcdAnnotation)}
+\end{itemize}
+\begin{chisel}
+class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
+  "CountWave6 " should "pass" in {
+    test(new Count6).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      dut.clock.step(20)
+    }
+  }
 }
 \end{chisel}
 \end{frame}
@@ -119,7 +136,7 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \begin{frame}[fragile]{Display Waveform with GTKWave}
 \begin{itemize}
 \item Run the tester: \code{sbt test}
-\item Locate the .vcd file in test\_run\_dir/SevenSegCountSpecnnn
+\item Locate the .vcd file in test\_run\_dir/...
 \item Start GTKWave
 \item Open the .vcd file with
 \begin{itemize}
@@ -130,25 +147,6 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \end{itemize}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Call the Tester for Waveform Generation}
-\begin{itemize}
-\item Using here ScalaTest
-\item Note \code{Driver.execute}
-\item Note \code{Array("--generate-vcd-output", "on")}
-\end{itemize}
-\begin{chisel}
-class SevenSegCountSpec extends
-  FlatSpec with Matchers {
-  "SevenSegTest " should "pass" in {
-  chisel3.iotesters.Driver
-  .execute(Array("--generate-vcd-output", "on"),
-    () => new CountSevenSeg)
-    { c => new SevenSegTest(c)} should be (true) }
-}
-\end{chisel}
-\end{frame}
 
 
 
@@ -495,12 +493,11 @@ type, we need to pass a prototype for the vector fields. Using our
 \shortlist{../code/bundle_vec.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Today's Lab - UPDATE}
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
-\item TODO: Update, it will be testing
 \item This is the start of group work
 \begin{itemize}
-\item Please register your group UPDATE! \href{https://docs.google.com/spreadsheets/d/1aQs_VnPw3uiJxUz9WuzPcM1R6VkDXqPtri7a3pWoTvs/edit?usp=sharing}{here}
+\item Please register your group \href{https://dtudk-my.sharepoint.com/:x:/g/personal/s186083_dtu_dk/EWnmIP9K1MFFuwsZbfDRyXEBGnkA68SSFuksje2LRVZQFQ?e=ZRHVdP}{here}
 \end{itemize}
 \item Binary to 7-segment decoder
 \item First part of your vending machine
@@ -509,26 +506,11 @@ type, we need to pass a prototype for the vector fields. Using our
 \item Then synthesize it for the FPGA
 \item Test with switches
 \item Show a TA your working design
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab4}{Lab 4}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Today's Lab - Move to next week}
-\begin{itemize}
-\item Driving your 7-segment decoder
-\item Use a counter to count from 0 to 15, driving your display
-\item Use another counter to generate your timing
-\begin{itemize}
-\item We talked about this today
-\end{itemize}
-\item You clock on the board is 100 MHz
-\item The given tester does only generate a waveform, no testing
-\item Use a different maximum count value for waveform debugging
-\item Then synthesize it for the FPGA
-\item Show a TA your working design
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab6}{Lab 6}
 \end{itemize}
 \end{frame}
+
+
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
