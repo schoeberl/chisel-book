@@ -16,7 +16,7 @@ class ShiftRegister extends Module {
 
   //- start shift_register
   val shiftReg = Reg(UInt(4.W))
-  shiftReg := Cat(shiftReg(2, 0), din)
+  shiftReg := shiftReg(2, 0) ## din
   val dout = shiftReg(3)
   //- end
 
@@ -26,7 +26,7 @@ class ShiftRegister extends Module {
 
   //- start shift_paraout
   val outReg = RegInit(0.U(4.W))
-  outReg := Cat(serIn, outReg(3, 1))
+  outReg := serIn ## outReg(3, 1)
   val q = outReg
   //- end
 
@@ -37,7 +37,7 @@ class ShiftRegister extends Module {
   when (load) {
     loadReg := d
   } otherwise  {
-    loadReg := Cat(0.U, loadReg(3, 1))
+    loadReg := 0.U ## loadReg(3, 1)
   }
   val serOut = loadReg(0)
   //- end
