@@ -1090,6 +1090,21 @@ A vector wrapped into a \code{Wire} is just a multiplexer.
 
 \shortlist{code/vec_access.txt}
 
+Here is another example of using \code{Vec} as a multiplexer.
+The three inputs are connected to the three wires \code{x}, \code{y},
+and \code{z}. The \code{select} wire selects which input is used and
+connects it to \code{muxOut}.
+
+\shortlist{code/vec_mux.txt}
+
+Figure~\ref{fig:vec-mux} shows the resulting schematic of the above code snippet.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/vec-mux}
+  \caption{A vector wrapped in a \code{Wire} is just a mulitplexer.}
+  \label{fig:vec-mux}
+\end{figure}
 
 We can also wrap a vector into a register to define an array of registers.
 Following code shows a vector of three registers.

@@ -44,6 +44,13 @@ class BundleVecTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.dout.expect(3.U)
       dut.io.rdIdx.poke(2.U)
       dut.io.dout.expect(7.U)
+
+      dut.io.selMux.poke(0.U)
+      dut.io.muxOut.expect(0.U)
+      dut.io.selMux.poke(1.U)
+      dut.io.muxOut.expect(11.U)
+      dut.io.selMux.poke(2.U)
+      dut.io.muxOut.expect(22.U)
     }
   }
 }

@@ -21,6 +21,8 @@ class BundleVec extends Module {
     val dout = Output(UInt(8.W))
     val rdIdx = Input(UInt(2.W))
     val wrIdx = Input(UInt(2.W))
+    val selMux = Input(UInt(2.W))
+    val muxOut = Output(UInt(8.W))
   })
 
   //- start bundle_use
@@ -61,6 +63,21 @@ class BundleVec extends Module {
   regVec(wrIdx) := din
   //- end
   io.dout := dout
+
+  io.muxOut := 3.U
+  val x = 0.U
+  val y = 11.U
+  val z = 22.U
+  val select = io.selMux
+  //- start vec_mux
+  val vec = Wire(Vec(3, UInt(8.W)))
+  vec(0) := x
+  vec(1) := y
+  vec(2) := z
+  val muxOut = vec(select)
+  //- end
+  io.muxOut := muxOut
+
 
 
   //- start reg_file

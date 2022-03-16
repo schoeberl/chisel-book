@@ -34,14 +34,40 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{TODO: Vec}
+\begin{frame}[fragile]{Vectors and Bundles}
 \begin{itemize}
-\item TODO
+\item You where skeptic on vectors last week
+\item Let us repeat it today
+\item Vectors (\code{Vec}) is an indexable collection
+\item Similar to an array in Java
+\item Selecting an element for read is a mulitplexer
+\item Selecting an element to write is an input to a multiplexer or a register enable
+\item Bundles are constructs to structure data
+\item Similar to a class in Java or a record in C/VHDL
 \end{itemize}
-\shortlist{../code/vec_reg.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Schematic fo the Reg of Vec}
+\begin{frame}[fragile]{A Vector is a Multiplexer}
+\begin{itemize}
+\item Follwing code is a 3:1 multiplexer
+\end{itemize}
+\shortlist{../code/vec_mux.txt}
+\begin{figure}
+  \includegraphics[scale=0.6]{../figures/vec-mux}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{A Vector of Registers}
+\begin{itemize}
+\item Following code shows vectors and registers in action
+\end{itemize}
+\shortlist{../code/vec_reg.txt}
+\begin{itemize}
+\item Can you draw the schematic?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Schematic of the Reg of Vec}
 \begin{figure}
   \includegraphics[scale=0.6]{../figures/vec-reg}
 \end{figure}
