@@ -17,6 +17,10 @@ class BundleVec extends Module {
     val dOut = Output(UInt(32.W))
     val bvOut = Output(UInt(8.W))
     val chreg = Output(new Channel())
+    val din = Input(UInt(8.W))
+    val dout = Output(UInt(8.W))
+    val rdIdx = Input(UInt(2.W))
+    val wrIdx = Input(UInt(2.W))
   })
 
   //- start bundle_use
@@ -40,12 +44,24 @@ class BundleVec extends Module {
   v(1) := 3.U
   v(2) := 5.U
 
-  val idx = 1.U(2.W)
-  val a = v(idx)
+  val index = 1.U(2.W)
+  val a = v(index)
   //- end
 
   io.array := v(io.idx)
   io.chan := ch
+
+  val din = io.din
+  val rdIdx = io.rdIdx
+  val wrIdx = io.wrIdx
+  //- start vec_reg
+  val regVec = Reg(Vec(3, UInt(8.W)))
+
+  val dout = regVec(rdIdx)
+  regVec(wrIdx) := din
+  //- end
+  io.dout := dout
+
 
   //- start reg_file
   val registerFile = Reg(Vec(32, UInt(32.W)))
@@ -54,8 +70,8 @@ class BundleVec extends Module {
   val dIn = io.dIn
 
   //- start reg_file_access
-  registerFile(idx) := dIn
-  val dOut = registerFile(idx)
+  registerFile(index) := dIn
+  val dOut = registerFile(index)
   //- end
 
   io.dOut := dOut

@@ -1047,6 +1047,7 @@ till 9 and wraps around to 0 when reaching 9.
 \index{Collection}
 \index{Vector}
 \index{Bundle}
+\index{Vec}
 
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
 signals of different types and (2) a \code{Vec} to represent an indexable collection of signals
@@ -1085,11 +1086,36 @@ needs to be wrapped into a \code{Wire}
 \shortlist{code/vec.txt}
 
 \noindent Individual elements are accessed with \code{(index)}.
+A vector wrapped into a \code{Wire} is just a multiplexer.
 
 \shortlist{code/vec_access.txt}
 
-A vector wrapped into a \code{Wire} is a multiplexer.
+
 We can also wrap a vector into a register to define an array of registers.
+Following code shows a vector of three registers.
+\shortlist{code/vec_reg.txt}
+
+Figure~\ref{fig:vec-reg} shows the schematic of that circuit. It contains three registers.
+The read index (\code{rdIdx}) selects the multiplexer connected to the output of the three
+registers. The output signal is \code{dout}
+
+The write index (\code{wrIdx}) selects which register will be written with the data
+from \code{din}. \code{wrIdx} is driving a decoder which selects one of the three
+enable signals of the registers.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale=\scale]{figures/vec-reg}
+  \caption{A vector of registers.}
+  \label{fig:vec-reg}
+\end{figure}
+
+
+
+
+
+
+
 Following example defines a register file for a processor; 32 registers
 each 32-bits wide, as for a classic 32-bit 
 \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{RISC}
