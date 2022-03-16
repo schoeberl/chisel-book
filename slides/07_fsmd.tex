@@ -368,6 +368,119 @@ class SevenSegCountSpec extends
 \end{frame}
 
 
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item A function is defined with \code{def} \emph{name}
+\item Similar to methods in Java
+\item Simple functions can be a single line
+\end{itemize}
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Function Examples}
+\begin{itemize}
+\item Functions can also contain registers
+\end{itemize}
+\begin{chisel}
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a + b, a - b)
+
+  val res = addSub(cond, a, b)
+
+  def rising(d: Bool) = d && !RegNext(d)
+
+  val edge = rising(cond)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The Counter as a Function}
+\begin{itemize}
+\item Longer functions in curly brackets
+\item Last value is the return value
+\end{itemize}
+\begin{chisel}
+def counter(n: UInt) = {
+  
+  val cntReg = RegInit(0.U(8.W))
+  
+  cntReg := cntReg + 1.U
+  when(cntReg === n) {
+    cntReg := 0.U
+  }
+  cntReg
+}
+
+val counter100 = counter(100.U)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\item More lightweight than a \code{Module}
+\end{itemize}
+\end{frame}
+
+%\begin{frame}[fragile]{Functions}
+%\begin{itemize}
+%\item Example from Patmos execute stage
+%\end{itemize}
+%\begin{chisel}
+%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+%  val result = UInt(width = DATA_WIDTH)
+%  // some more lines...
+%  switch(func) {
+%    is(FUNC_ADD) { result := sum }
+%    is(FUNC_SUB) { result := op1 - op2 }
+%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+%    // some more lines
+%  }
+%  result
+%}
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
+\begin{itemize}
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\shortlist{../code/param_adder.txt}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+%\item Can also be a generic type:
+%\item \code{class Mod[T <: Bits](param: T) extends...}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Use the Parameter}
+\shortlist{../code/use_param_adder.txt}
+\begin{itemize}
+\item Can be used for the display multiplexing configuration
+\item Different maximum value for the counter for the simulation and for the FPGA
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Today Lab}
