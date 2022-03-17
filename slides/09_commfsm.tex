@@ -17,6 +17,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
+\item TODO: adapt to this year
 \item Repeat functions and parameters
 \item Input processing
 \item Ready/valid interface
@@ -25,7 +26,74 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Last (and Today's) Lab}
+\begin{frame}[fragile]{One Possible Solution for Last Lab}
+\begin{chisel}
+  val MAX_CNT = 50000000.U // use a smaller value for waveform viewing
+  
+  val tickCntReg = RegInit(0.U(32.W))
+  val cntReg = RegInit(0.U(4.W))
+  
+  val tick = tickCntReg === MAX_CNT
+  tickCntReg := Mux(tick, 0.U, tickCntReg + 1.U)
+  when (tick) {
+    cntReg := cntReg + 1.U
+  }
+  
+  val m = Module(new SevenSegDec())
+  m.io.in := cntReg
+  sevSeg := m.io.out
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Call the Tester}
+\begin{itemize}
+\item Using here ScalaTest
+\item Note \code{Driver.execute}
+\item Note \code{Array("--generate-vcd-output", "on")}
+\end{itemize}
+\begin{chisel}
+class SevenSegCountSpec extends
+  FlatSpec with Matchers {
+  
+  "SevenSegTest " should "pass" in {
+      chisel3.iotesters.Driver.execute(
+      Array("--generate-vcd-output", "on"),
+      () => new CountSevenSeg)
+        { c => new SevenSegTest(c)}
+        should be (true)
+	}
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{A Self-Running Tester}
+\begin{itemize}
+\item \code{CountSevenSeg} is a self-running circuit
+\item Has no input
+\item Needs no stimuli (\code{poke})
+\item Just run for a few cycles
+\end{itemize}
+\begin{chisel}
+class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
+  step(100)
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Running the Test}
+\begin{itemize}
+\item Does not really do any testing
+\item Just generated the waveform for debugging
+\item Just running 100 cycles does not show much
+\item Increase the number of running cycles to 100000000?
+\item Or use a different constant for testing?
+\item Let us explore now
+\item This issue will be the same for your display multiplexing
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
 \item Display multiplexer
 \begin{itemize}

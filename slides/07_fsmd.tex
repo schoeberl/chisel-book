@@ -17,7 +17,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item TODO: some new material, maybe 2022
+\item Review \code{Vec}
 \item Counter based circuits
 \item Finite-state machines (FSMs) 
 \item FSM with Datapath
@@ -28,9 +28,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Last Lab}
 \begin{itemize}
-\item A table to describe a 7-segment encoding
+\item A table to describe a 7-segment decoder
 \item Did you finish the exercises?
-\item Did you run it on your Basys3 board
+\item Did you run it on your Basys3 board?
 \end{itemize}
 \end{frame}
 
@@ -38,7 +38,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item You where skeptic on vectors last week
 \item Let us repeat it today
-\item Vectors (\code{Vec}) is an indexable collection
+\item A vector (\code{Vec}) is an indexable collection
 \item Similar to an array in Java
 \item Selecting an element for read is a mulitplexer
 \item Selecting an element to write is an input to a multiplexer or a register enable
@@ -77,7 +77,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Generate a \code{tick} at a lower frequency
 \item We used it in Lab 1 for the blinking LED
-\item Used for last lab
+\item We will use it again in next week's lab
 \item Use it for driving the display multiplexing at 1~kHz
 \end{itemize}
 \begin{figure}
@@ -109,77 +109,12 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{What is the Use of This \emph{Slow} Counter?}
 \begin{itemize}
-\item This was your lab exercise last week!
-\item Is a preparation for the display multiplexing (next week)
+\item This will be your lab exercise next week
+\item Is a preparation for the display multiplexing
 \item Then you need to generate a timing of 1 kHz (1 ms)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{One Possible Solution for Last Lab}
-\begin{chisel}
-  val MAX_CNT = 50000000.U // use a smaller value for waveform viewing
-  
-  val tickCntReg = RegInit(0.U(32.W))
-  val cntReg = RegInit(0.U(4.W))
-  
-  val tick = tickCntReg === MAX_CNT
-  tickCntReg := Mux(tick, 0.U, tickCntReg + 1.U)
-  when (tick) {
-    cntReg := cntReg + 1.U
-  }
-  
-  val m = Module(new SevenSegDec())
-  m.io.in := cntReg
-  sevSeg := m.io.out
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Self-Running Tester}
-\begin{itemize}
-\item \code{CountSevenSeg} is a self-running circuit
-\item Has no input
-\item Needs no stimuli (\code{poke})
-\item Just run for a few cycles
-\end{itemize}
-\begin{chisel}
-class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
-  step(100)
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Call the Tester}
-\begin{itemize}
-\item Using here ScalaTest
-\item Note \code{Driver.execute}
-\item Note \code{Array("--generate-vcd-output", "on")}
-\end{itemize}
-\begin{chisel}
-class SevenSegCountSpec extends
-  FlatSpec with Matchers {
-  
-  "SevenSegTest " should "pass" in {
-      chisel3.iotesters.Driver.execute(
-      Array("--generate-vcd-output", "on"),
-      () => new CountSevenSeg)
-        { c => new SevenSegTest(c)}
-        should be (true)
-	}
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Running the Test}
-\begin{itemize}
-\item Does not really do any testing
-\item Just generated the waveform for debugging
-\item Just running 100 cycles does not show much
-\item Increase the number of running cycles to 100000000?
-\item Or use a different constant for testing?
-\item Let us explore now
-\item This issue will be the same for your display multiplexing
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Finite-State Machine (FSM)}
 \begin{itemize}
@@ -355,6 +290,7 @@ class SevenSegCountSpec extends
 \item When data is available valid is asserted
 \item When the receiver can accept data ready is asserted
 \item Transfer takes place when both are asserted
+\item Draw the ready/valid handshake on the black board
 \end{itemize}
 \column{0.4\textwidth}
 \begin{figure}
@@ -509,23 +445,23 @@ val ch32 = new ParamChannel(32)
 \end{frame}
 
 
-\begin{frame}[fragile]{Today Lab}
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
 \item Paper \& pencil exercises
-\item Exercises on FSM
+\item Exercises on FSMs
 \item From the Dally book
 \item Just sketch the Chisel code
 \item On paper or in a plain text editor
-\item As usual, show and discuss with a TA
+\item As usual, show and discuss your solution with a TA
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item Counters are used to generate timing
-\item Adapt your counter maximum values for simulation
-\item An FSM can control a datapath, an FSMD
+\item An FSM can control a datapath, which is an FSMD
 \item An FSMD is a computing machine
+\item Functions to structure your code
 \end{itemize}
 \end{frame}
 
