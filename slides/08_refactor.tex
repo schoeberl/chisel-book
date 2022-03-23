@@ -17,14 +17,12 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
-\item TODO: Maybe more on display multiplexing
-\item TODO: coordinate with last week - I moved functions to last week
-\item TODO: have some more material
-\item Today one hour lecture planned, but probably a bit longer
+\item TODO: some more words on reset sync.
+\item Repeat functions and parameters
 \item Repeat finite-state machine with datapath
 \item Factoring of finite-state machines
-\item Advanced Chisel: functions and parametrization
-\item Talk on todays (and next week) lab exercise
+\item Input processing
+\item Reset input
 \end{itemize}
 \end{frame}
 
@@ -37,52 +35,120 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Exam Info}
+\begin{frame}[fragile]{Functions}
 \begin{itemize}
-\item Exam will be online at home
-\item All aids allowed with open Internet
-\item But DTU is very harsh on cheating, just don't do it
-\item Multiple choice plus PDF with questions
-\item Upload solution in a single PDF
-\begin{itemize}
-\item Please use your study number as file name
-\item Train to do a drawing and integrate it into a PDF
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item A function is defined with \code{def} \emph{name}
+\item Similar to methods in Java
+\item Simple functions can be a single line
 \end{itemize}
-\item Timing exercise, some coding, understanding questions, drawing circuits
-\item We will do a test exam
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More Function Examples}
+\begin{itemize}
+\item Functions can also contain registers
+\end{itemize}
+\begin{chisel}
+  def addSub(add: Bool, a: UInt, b: UInt) =
+    Mux(add, a + b, a - b)
+
+  val res = addSub(cond, a, b)
+
+  def rising(d: Bool) = d && !RegNext(d)
+
+  val edge = rising(cond)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The Counter as a Function}
+\begin{itemize}
+\item Longer functions in curly brackets
+\item Last value is the return value
+\end{itemize}
+\begin{chisel}
+def counter(n: UInt) = {
+  
+  val cntReg = RegInit(0.U(8.W))
+  
+  cntReg := cntReg + 1.U
+  when(cntReg === n) {
+    cntReg := 0.U
+  }
+  cntReg
+}
+
+val counter100 = counter(100.U)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\item More lightweight than a \code{Module}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A (Minimal) Project from Scratch}
+%\begin{frame}[fragile]{Functions}
+%\begin{itemize}
+%\item Example from Patmos execute stage
+%\end{itemize}
+%\begin{chisel}
+%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+%  val result = UInt(width = DATA_WIDTH)
+%  // some more lines...
+%  switch(func) {
+%    is(FUNC_ADD) { result := sum }
+%    is(FUNC_SUB) { result := op1 - op2 }
+%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+%    // some more lines
+%  }
+%  result
+%}
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
 \begin{itemize}
-\item \emph{It is cumbersome to set up new Chisel project without a template.}
-\item \emph{I would like if we were taught how to create our own programs in Chisel, instead of just filling out the necessary code in a program you have already created.}
-\item Just two files: \code{build.sbt} and a \code{.scala} file
-\item Create the folder/directory structure
-\item Copy a \code{build.sbt}
-\item Import in InteliJ
-\item Create a \code{.scala} class
-\item Show it now
-\item Do this exercise today!
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\shortlist{../code/param_adder.txt}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+%\item Can also be a generic type:
+%\item \code{class Mod[T <: Bits](param: T) extends...}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Workflow}
+\begin{frame}[fragile]{Use the Parameter}
+\shortlist{../code/use_param_adder.txt}
 \begin{itemize}
-\item \emph{It could be nice to hear more about how to best organize a project/workflow when you are multiple people working on the same project. Maybe some guiding principles and good practices that can be followed.}
-\item Share code on GitHub (private repo)
-\item Meet in Zoom: you all have a full license from DTU
-\begin{itemize}
-\item You can take over a screen to type
-\item You can draw on it
-\item Besides ad-hoc meetings, have a regular project meeting
-\end{itemize}
-\item Use Slack for quick notes and quick sharing of files
-\item Maybe also try to share the \code{.bit} file for the FPGA board
-\item Use Google docs for taking notes, start your report
-\item If you like Latex, use overleaf
+\item Can be used for the display multiplexing configuration
+\item Different maximum value for the counter for the simulation and for the FPGA
 \end{itemize}
 \end{frame}
+
 
 
 %\begin{frame}[fragile]{Show Example on ``Whiteboard''}
@@ -425,8 +491,114 @@ and \code{space}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Input Processing}
+\begin{itemize}
+\item Input signals are not synchronous to the clock
+\item May violate setup and hold time of a flip-flop
+\item Can lead to metastability
+\item Signals need to be \emph{synchronized}
+\item Using two flip-flops
+\item Metastability cannot be avoided
+\item Assumption is:
+\begin{itemize}
+\item First flip-flop may become metastable
+\item But will resolve within the clock period
+\end{itemize}
+\end{itemize}
+\end{frame}
 
-\begin{frame}[fragile]{Today's Lab - Update below}
+\begin{frame}[fragile]{Input Synchronizer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/synchronizer}
+\end{figure}
+\shortlist{../code/input_sync.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Bouncing Buttons}
+\begin{itemize}
+\item Buttons and switches need some time to transition between on and off
+\item May bounce between the two values
+\item Without processing we detect more than one event
+\item Solution is to filter out bouncing
+\begin{itemize}
+\item Can be done electrically (R + C + Schmitt trigger)
+\item That is why you have the extra PCB with the buttons
+\item But we can also do this digitally
+\end{itemize}
+\item Assume  bouncing time $t_{bounce}$
+\item Sample at a period $T > t_{bounce}$
+\item Only use sampled signal
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sampling for Debouncing}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/debounce}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sampling for Debouncing}
+\shortlist{../code/input_fac.txt}
+\shortlist{../code/input_debounce.txt}
+\begin{itemize}
+\item We already know how to do this!
+\item Just generate timing with a counter
+\item We sample at 100 Hz (bouncing below 10 ms)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Noisy Input Signal}
+\begin{itemize}
+\item Sometimes input may be noisy
+\item May contain spikes
+\item Filtering with majority voting
+\item Majority voting of the sampled input signal
+\item However, this is seldom needed
+\item Not for he buttons
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Majority Voting}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/majority}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Majority Voting}
+\shortlist{../code/input_majority.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Detecting the Press Event}
+\begin{itemize}
+\item Edge detection
+\item You have seen this before
+\item Just to complete the input procssing
+\end{itemize}
+\shortlist{../code/input_usage.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Combine Input Processing with Functions}
+\begin{itemize}
+\item Using small functions to abstract the processing
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/Debounce.scala}{Debounce.scala}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Reset is an Asynchronous Signal}
+\begin{itemize}
+\item Needs a input synchronizer
+\item Usually hidden in Chisel, but easy to access
+\item Do the reset synchronizer at the top level module
+\end{itemize}
+\shortlist{../code/sync_reset.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
 \item Driving your 7-segment decoder
 \item Use a counter to count from 0 to 15, driving your display
@@ -440,28 +612,6 @@ and \code{space}
 \item Then synthesize it for the FPGA
 \item Show a TA your working design
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab8}{Lab 8}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Today Lab}
-\begin{itemize}
-\item Do a project from scratch
-\item Display multiplexing
-\item Described in Vending Machine Specification (show)
-\item This week and next week
-\item Can also be developed in simulation
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Display Multiplexing -- Move to next week}
-\begin{itemize}
-\item Saving of pins in the FPGA
-\item Switch between the four digits at around 1 kHz
-\item Switch \emph{faster} in simulation
-\item Show code
-\item Also includes a display simulation for those without an FPGA
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab8}{Lab 8}
-%\item Sketch needed hardware
 \end{itemize}
 \end{frame}
 
