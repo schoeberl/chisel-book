@@ -179,24 +179,24 @@ waveform viewing
 **Lab:** Dally 14.3, 14.5 (Sketch a Chisel implementation on paper), 14.28, Sketch a Chisel implementation on paper for 14.28
 
 
-### Week 8 State Machines and Refactoring (1 hour)
+### Week 8 State Machines and Refactoring
 
-**Topics:** State Machines and Refactoring
+**Topics:** Refactoring of state machines, input processing, reset
 
 **Slides:** [08_refactor.pdf](08_refactor.pdf)
 
-**Reading:** Dally: 17, Chisel: 9.1
+**Reading:** Dally: 17, Chisel: 7, 9.1
 
 **Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 9 Communications State Machines (1 hour)
+### Week 9 Communications State Machines (1 hour, maybe)
 
-**Topics:** Input interface, ready/valid interface, and hardware generators
+**Topics:** Ready/valid interface, and hardware generators
 
 **Slides:** [09_commfsm.pdf](09_commfsm.pdf)
 
-**Reading:** Dally: 22, Chisel: 7, 9.3
+**Reading:** Dally: 22, Chisel: 9.3
 
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
@@ -205,7 +205,7 @@ waveform viewing
 
 **Slides:** [10_vending.pdf](10_vending.pdf)
 
-**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
+**Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
 ### Easter Week
@@ -219,7 +219,7 @@ waveform viewing
 
 **Reading:** Dally: 24 Chisel: 6.4
 
-**Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
+**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 12 No lecture
