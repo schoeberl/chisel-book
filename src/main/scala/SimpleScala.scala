@@ -40,7 +40,6 @@ class SimpleScala extends Module {
 
   val inVal = 1.U
 
-  //- start scala_loop_gen
   val shiftReg = RegInit(0.U(8.W))
 
   shiftReg(0) := inVal
@@ -48,7 +47,6 @@ class SimpleScala extends Module {
   for (i <- 1 until 8) {
     shiftReg(i) := shiftReg(i-1)
   }
-  //- end
 
   //- start scala_condition
   for (i <- 0 until 10) {

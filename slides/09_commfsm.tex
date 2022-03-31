@@ -17,13 +17,9 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item TODO: adapt to this year
-\item TODO: answer questions from mid term evaluation
-\item TODO: Maybe more on display multiplexing
-\item TODO: maybe this is a one hour lecture?
-\item TODO: on exam
 \item Input processing
 \item Ready/valid interface
+\item Display multiplexing
 \item A little bit of Scala
 \item Hardware generators
 \end{itemize}
@@ -31,37 +27,37 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Exam Info}
 \begin{itemize}
-\item Exam will be online at home
-\item All aids allowed with open Internet
-\item But DTU is very harsh on cheating, just don't do it
-\item Multiple choice plus PDF with questions
+\item \emph{I would like to hear about the exam}
+\item \emph{... nice if we could get the exams from earlier years...}
+\item \emph{Old examsets to get a better understing of what the level is...}
+\item Exam will be online
+\item All aids allowed, except Internet
+\item PDF with exam questions
 \item Upload solution in a single PDF
 \begin{itemize}
 \item Please use your study number as file name
 \item Train to do a drawing and integrate it into a PDF
 \end{itemize}
 \item Timing exercise, some coding, understanding questions, drawing circuits
-\item We will do a test exam
+\item I uploaded an older exam at DTU Learn and solutions
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{A (Minimal) Project from Scratch}
 \begin{itemize}
-\item \emph{It is cumbersome to set up new Chisel project without a template.}
-\item \emph{I would like if we were taught how to create our own programs in Chisel, instead of just filling out the necessary code in a program you have already created.}
+\item \emph{How do we make a new project ourselves without editing the provided build.sbt files?}
 \item Just two files: \code{build.sbt} and a \code{.scala} file
 \item Create the folder/directory structure
 \item Copy a \code{build.sbt}
 \item Import in InteliJ
 \item Create a \code{.scala} class
-\item Show it now
+\item Show it now (in explorer or in terminal?)
 \item Do this exercise today!
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Workflow}
+\begin{frame}[fragile]{Group Workflow Suggestions}
 \begin{itemize}
-\item \emph{It could be nice to hear more about how to best organize a project/workflow when you are multiple people working on the same project. Maybe some guiding principles and good practices that can be followed.}
 \item Share code on GitHub (private repo)
 \item Meet in Zoom: you all have a full license from DTU
 \begin{itemize}
@@ -73,6 +69,7 @@ Embedded Systems Engineering}
 \item Maybe also try to share the \code{.bit} file for the FPGA board
 \item Use Google docs for taking notes, start your report
 \item If you like Latex, use overleaf
+\item You can also work on the lab assignments at other times than the lab time ;-)
 \end{itemize}
 \end{frame}
 
@@ -96,40 +93,25 @@ Embedded Systems Engineering}
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Call the Tester}
-\begin{itemize}
-\item Using here ScalaTest
-\item Note \code{Driver.execute}
-\item Note \code{Array("--generate-vcd-output", "on")}
-\end{itemize}
-\begin{chisel}
-class SevenSegCountSpec extends
-  FlatSpec with Matchers {
-  
-  "SevenSegTest " should "pass" in {
-      chisel3.iotesters.Driver.execute(
-      Array("--generate-vcd-output", "on"),
-      () => new CountSevenSeg)
-        { c => new SevenSegTest(c)}
-        should be (true)
-	}
-}
-\end{chisel}
-\end{frame}
-
 \begin{frame}[fragile]{A Self-Running Tester}
 \begin{itemize}
-\item \code{CountSevenSeg} is a self-running circuit
+\item \code{SevenSegCountSpec} is a self-running circuit
 \item Has no input
 \item Needs no stimuli (\code{poke})
 \item Just run for a few cycles
 \end{itemize}
 \begin{chisel}
-class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
-  step(100)
+class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
+    "SevenSegTest " should "pass" in {
+      test(new CountSevenSeg)
+      .withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+        dut.clock.step(100)
+      }
+   }
 }
 \end{chisel}
 \end{frame}
+
 
 \begin{frame}[fragile]{Running the Test}
 \begin{itemize}
@@ -138,8 +120,6 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \item Just running 100 cycles does not show much
 \item Increase the number of running cycles to 100000000?
 \item Or use a different constant for testing?
-\item Let us explore now
-\item This issue will be the same for your display multiplexing
 \end{itemize}
 \end{frame}
 
@@ -150,7 +130,6 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \begin{itemize}
 \item Input are 16 switches for 4 hexadecimal digits
 \end{itemize}
-\item Almost 12/27 have already finished. This is GREAT!
 \item Please show it a TA when finished for a ``tick''
 \item There is a simulation available, show it
 \item Maybe extend it with binary to BCD conversion
@@ -162,19 +141,15 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \item Top-level, pin definition, and a simple tester are in:
 \item \url{https://github.com/schoeberl/chisel-lab/tree/master/vending}
 \end{itemize}
+\item Update your copy. I have updated the description yesterday
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}[fragile]{Next Labs}
 \begin{itemize}
-\item Next week:
-\begin{itemize}
-\item Almost 4 hours lab
-\item Just vending machine specification recap
-\item Maybe questions
-\end{itemize}
-\item Work on the full Vending Machine
+\item Next week: test a given Vending Machine
+\item The remaining weeks: work on the full Vending Machine
 \end{itemize}
 \end{frame}
 
@@ -239,50 +214,15 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \end{frame}
 
 
-\begin{frame}[fragile]{Noisy Input Signal}
-\begin{itemize}
-\item Sometimes input may be noisy
-\item May contain spikes
-\item Filtering with majority voting
-\item Majority voting of the sampled input signal
-\item However, this is seldom needed
-\item Not for he buttons
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Majority Voting}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/majority}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{Majority Voting}
-\shortlist{../code/input_majority.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Detecting the Press Event}
-\begin{itemize}
-\item Edge detection
-\item You have seen this before
-\item Just to complete the input procssing
-\end{itemize}
-\shortlist{../code/input_usage.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Combine Input Processing with Functions}
-\begin{itemize}
-\item Using small functions to abstract the processing
-\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/Debounce.scala}{Debounce.scala}
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Communicating State Machines}
 \begin{itemize}
 \item We did refactor a large FSM into smaller ones last week
 \item FSMs \emph{communicate}
-\item Simple communication is your input processing to FSM with datapath
+\item Simple communication is: 
+\begin{itemize}
+\item Input processing to the FSM
+\item FSM with the datapath
+\end{itemize}
 \item More complex FSMs may exchange data with handshaking
 \end{itemize}
 \end{frame}
@@ -331,7 +271,19 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \shortlist{../code/fifo_decoupled.txt}
 \end{frame}
 
-\begin{frame}[fragile]{First Summary and Break}
+\begin{frame}[fragile]{Display Multiplexing}
+\begin{itemize}
+\item Saving of pins in the FPGA
+\item Switch between the four digits at around 1 kHz
+\item Switch \emph{faster} in simulation
+\item Show \href{https://digilent.com/reference/basys3/refmanual#basic_io}{schematics}
+\item Also includes a display simulation for those without an FPGA
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab9}{Lab 9}
+\item Sketch needed hardware on black board
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{First Summary and a Break}
 \begin{itemize}
 \item Main topic of today done
 \item Following is advanced material
@@ -339,6 +291,9 @@ class SevenSegTest(dut: CountSevenSeg) extends PeekPokeTester(dut) {
 \item How to write hardware generators
 \item Maybe extend your display to show decimal number
 \item But first 10 minutes BREAK
+\begin{itemize}
+\item You wrote: \emph{More breaks. A lot of people lose focus after around 30 - 45 min. }
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -601,7 +556,7 @@ val m = if (useA) Module(new VariantA())
 \begin{itemize}
 \item A Chisel \code{Vec} is a collection of signals or registers
 \item Similar to an Array in other languages
-\item \code{Vec} in a \code{Wire} is a combinational table
+\item \code{Vec} in a \code{Wire} is a combinational table (mulitplexer)
 \item \code{Vec} in a \code{Reg} is a collection of registers
 \item Create with number of elements and hardware type
 \end{itemize}
@@ -632,24 +587,9 @@ val m = if (useA) Module(new VariantA())
 \begin{itemize}
 \item Do a project from scratch
 \item Display multiplexing
-\item Described in Vending Machine Specification (show)
-\item This week and next week
 \item Can also be developed in simulation
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Display Multiplexing}
-\begin{itemize}
-\item Saving of pins in the FPGA
-\item Switch between the four digits at around 1 kHz
-\item Switch \emph{faster} in simulation
-\item Show code
-\item Also includes a display simulation for those without an FPGA
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab9}{Lab 9}
-%\item Sketch needed hardware
-\end{itemize}
-\end{frame}
-
 
 
 \begin{frame}[fragile]{Summary}
