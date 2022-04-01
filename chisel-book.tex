@@ -4080,6 +4080,12 @@ of a shift register.
 
 \shortlist{code/scala_loop_gen.txt}
 
+\noindent Note that this is not the most concise expression of a shift register.
+Better use a plain \code{UInt} with the right size and assign the new value for the
+register with an expression using the \code{\#\#} operator
+and proper indexing. This code snipped is just to show how a Scala for loop can be used
+for circuit generation.
+
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
 is evaluated at Scala runtime during circuit generation. This construct does \emph{not}
 create a multiplexer, but allows to write configurable \emph{hardware generators}.
