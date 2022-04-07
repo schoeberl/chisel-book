@@ -17,17 +17,13 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item TODO: GoL example in Chisel
-\item TODO: more from the mid-term eval, e.g., \emph{Potentially utilizing some more memory (BRAM) or potentially some of the hardware interfaces which the Basys3 Board provides, such as USB and VGA.} This might be in week 11 with serial port. Or I move more stuff into week 10.
-\item TODO: FIFO as example of the ready valid thing (next week)
-\item TODO: FPGA internals
-\item TODO: A bit more about the physical chip design/architechture. When a chip is shown and referes to, and i have no idea what im looking at, its a bit difficult to follow along.
 \item Your final grade
 \item Online exam
+\item GoL in hardware
 \item The Vending Machine project
 \item
-\item 21/27 have finished the display multiplexer!
-\item One group even finished the Vending Machine
+\item How did it go with the display multiplexer!
+\item Please show working versions to your TA
 \end{itemize}
 \end{frame}
 
@@ -49,7 +45,6 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Exam Topics and Questions}
 \begin{itemize}
 \item The pensum (reading lis) is on the \href{http://www2.imm.dtu.dk/courses/02139/}{web site}
-\item Answer multiple choice questions on digital design
 \item Compute maximum frequency and delays of a given circuit
 \item Given a Chisel description of a circuit, draw it
 \item Given a circuit drawing, sketch the Chisel description
@@ -58,26 +53,48 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Game of Live}
+\begin{itemize}
+\item \href{https://en.wikipedia.org/wiki/Conway\%27s_Game_of_Life}{Conway's Game of Life}
+\item Any live cell with two or three live neighbors survives. 
+\item Any dead cell with three live neighbors becomes a live cell.
+\item All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+\end{itemize}
+\end{frame}
 
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%\item Hi Martin, I hope it is alright that I'm writing through this forum. But I am extremely nervous regarding the current situation, especially when we can see that DTU is not doing anything to help the students in ANY way. Why have we still not gotten any information regarding the exams? Whereas most of the other universities have already switched to digital exams? We need to soon start preparing soon and it is not helping when we do not have any idea of how things are going to turn out or what DTU plans on doing. I know that it is an ever-changing situation, but so far the situation has been predicted to worsen so why is DTU waiting to throw a "bomb" on its students regarding the exams. I have had already many sleepless night regarding this and would much rather not go down with stress, therefore could you please give us a better picture of what the future holds for us as students at DTU for this semester? 
-%
-%\item But a HUGE thank you to you for providing such great forums, such as Zoom and Slack for all of us to stay connected and allowing us to work efficiently, but most of my other professors are just ignoring this situation and going on as if we are not going through a global pandemic right now! 
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{yyy}
-%\begin{itemize}
-%%\item Jeg ved at det er meget at sp¿rge om, men jeg ville gerne vide, om det er mugligt, at fŒ et eksempel pŒ hvordan digi examen kommer til at se ud, nu chisel bliver brugt og ikke VHDL. Kunne vi mŒske fŒ en opgave, der kunne havt v¾ret eksamens opgaven? AltsŒ en opgave med lige sŒ mange sp¿rgsmŒl der minder om den vi kommer til at have til examen?
-%%Selv ville jeg f¿le mig meget mere forberet til examen, hvis jeg kunne se og gennemf¿re en examens opgave, f¿r den rigtige examen.
-%
-%\item I know that's a lot to ask, but I wanted to know if it's possible to get an example of what the digi exam will look like, now chisel is being used and not VHDL. Could we maybe get a task that could have been the exam task? So an assignment with just as many questions reminiscent of the one we will have for the exam?
-%Even I would feel much more prepared for the exam if I could see and complete an exam assignment before the real exam.
-%\end{itemize}
-%\end{frame}
+\begin{frame}[fragile]{Game of Live}
+\begin{itemize}
+\item You did an implementation in Java
+\item The problem is highly parallel
+\item I will show you a Chisel (and Java) implementation
+\item FPGA version is extremely fast compared to the Java implementation
+\item \url{https://github.com/schoeberl/game-of-live}
+\end{itemize}
+\end{frame}
 
-
+\begin{frame}[fragile]{Performance Comparison}
+\begin{table}
+  \centering
+\begin{tabular}{crrrrrr}
+    \toprule
+    & &\multicolumn{3}{c}{Execution time (us)} & \multicolumn{2}{c}{FPGA Speedup}\\
+World & Cells&Mac&Rasperry&FPGA& Mac& Rasperry\\
+\midrule
+10x10 & 100&0.10&1.783&0.0040&25&445\\
+20x20 & 400&0.33&5.137&0.0040&82&1284\\
+30x30 & 900&0.70&9.965&0.0041&170&2430\\
+40x40 & 1600&1.21&17.212&0.0040&302&4302\\
+50x50 & 2500&1.81&25.204&0.0044&411&5728\\
+60x60 & 3600&2.76&37.822&0.0045&613&8404\\
+70x70 & 4900&3.54&57.665&0.0040&884&14416\\
+80x80 & 6400&4.81&64.396&0.0047&1023&13701\\
+90x90 & 8100&6.50&81.309&0.0045&1444&18068\\
+100x100 & 10000&7.51&109.964&0.0048&1564&22909\\
+\bottomrule
+\end{tabular}
+    \label{tab:speedup}
+\end{table}
+\end{frame}
 
 \begin{frame}[fragile]{A Vending Machine from 1952}
 \begin{figure}
@@ -92,7 +109,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{The Vending Machine}
 \begin{itemize}
 \item Final project is a vending machine
-\item Official document: \href{https://learn.inside.dtu.dk/d2l/common/viewFile.d2lfile/Content/L2NvbnRlbnQvZW5mb3JjZWQvNjAyMzgtT0ZGRVJJTkctNjMzODE1L1ZlbmRpbmdNYWNoaW5lLnBkZg/VendingMachine.pdf?ou=60238}{VendingMachine.pdf} on DTU Learn
+\item Description is on GitHub: \href{https://github.com/schoeberl/chisel-lab/tree/master/vending}{README.md}
 \item Will repeat the overview now
 \item Group work
 \item Final version shall be run in an FPGA
@@ -133,15 +150,19 @@ Embedded Systems Engineering}
 \item If enough money, activate \emph{release item} for as long as \emph{buy}
 is pressed and reduce \emph{sum} by the price of the item
 \end{itemize}
-\item Optional extras (for a 12)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Optional Extras}
 \begin{itemize}
+\item Needed for a 10 or 12
 \item Display decimal numbers
 \item Supplement alarm by some visuals (e.g., blinking display)
 \item Count coins and display an alarm when compartment is full ($>$ 20 coins)
 \item Have some text scrolling on the display
+\item Connect a UART to your VM and sending messages to your laptop
 \item ...
 \item Your ideas :-)
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -179,15 +200,13 @@ is pressed and reduce \emph{sum} by the price of the item
 \end{frame}
 
 
-
 \begin{frame}[fragile]{Vending Machine Design and Implementation Steps}
 \begin{itemize}
-\item We started in week 5 (now we are at week 10)
-\item 2 + 2 + 3 + 3 + 4 + 4 = 18 supervised lab hours
-\item 1a. Hexadecimal to 7-segment decoder
-\item 1b. 7-segment display with a counter
-\item 2. Multiplexed Seven-Segment Display
-\item 3. Complete Vending Machine
+\item We started in week 6 (now we are in week 10)
+\item lab 6: Hexadecimal to 7-segment decoder
+\item lab 8: 7-segment display with a counter
+\item lab 9: Multiplexed Seven-Segment Display
+\item lab 10--13: Complete Vending Machine
 \item \emph{Show your working design to a TA}
 \end{itemize}
 \end{frame}
@@ -227,10 +246,24 @@ is pressed and reduce \emph{sum} by the price of the item
 \item A top-level component
 \item XDC file for Basys pins and frequency
 \item A start of a tester generating waveforms
-\item A simulation (coming soon)
+\item A simulation of the board
 \item Show it (in IntelliJ)
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{An Optional Lab}
+\begin{itemize}
+\item Testing the a Vending Machine
+\item Black box testing (you don't see the implementation)
+\item I give you two implementations
+\item One is OK, one is broken
+\item Which one is broken, and what it the error?
+\item Issue is that you need Verilator and a C compiler to run the tests
+\item Therefore, only if you really want to do it
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab10}{Lab 10}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Questions on Final Project?}
 \end{frame}
@@ -238,13 +271,11 @@ is pressed and reduce \emph{sum} by the price of the item
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item We are in challenging times
-\item Online exam will be challenging
-\item We will prepare for it
-\item Try to be not afraid of this
-\item You will NOT fail because of issues with the online exam
+\item Now you have four weeks for the Vending Machine
+\item Should be plenty of time
+\item Standard solution is good for a standard grade
+\item Add features as you like
 \item Have a good time with your Vending Machine construction
-\item I would like to chat with you during the lab time
 \end{itemize}
 \end{frame}
 
