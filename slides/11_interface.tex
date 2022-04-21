@@ -18,25 +18,24 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item TODO: more from the mid-term eval, e.g., \emph{Potentially utilizing some more memory (BRAM) or potentially some of the hardware interfaces which the Basys3 Board provides, such as USB and VGA.} This might be in week 11 with serial port. Or I move more stuff into week 10.
-\item TODO: FIFO as example of the ready valid thing (next week)
-\item TODO: FPGA internals
-\item TODO: A bit more about the physical chip design/architechture. When a chip is shown and referes to, and i have no idea what im looking at, its a bit difficult to follow along.
-\item Repeat FSMD (for the vending machine)
-\begin{itemize}
-\item I have seen some intermix of FSM and datapath
-\item Works only for small designs
-\end{itemize}
+%\item TODO: more from the mid-term eval, e.g., \emph{Potentially utilizing some more memory (BRAM) or potentially some of the hardware interfaces which the Basys3 Board provides, such as USB and VGA.} This might be in week 11 with serial port. Or I move more stuff into week 10.
+%\item TODO: FIFO as example of the ready valid thing (next week)
+%\item TODO: FPGA internals
+%\item TODO: A bit more about the physical chip design/architechture. When a chip is shown and referes to, and i have no idea what im looking at, its a bit difficult to follow along.
+%\item Repeat FSMD (for the vending machine)
+%\begin{itemize}
+%\item I have seen some intermix of FSM and datapath
+%\item Works only for small designs
+%\end{itemize}
+\item Quick reminder on FSMD
 \item Interfaces
 \item Memory (intern and extern)
 \item Serial interface (RS 232)
-\item Testing with Chisel (repetition)
-\item 2 hours testing exerise
-\item The course evaluation is open for feedback
+\item The course evaluation should be open for feedback
+\item Lab is the vending machine
 \begin{itemize}
-\item Closes 1st May night
+\item What is your lab status? Display multiplexing working?
 \end{itemize}
-\item Next week we will do a test exam
 \end{itemize}
 \end{frame}
 
@@ -59,163 +58,46 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{itemize}
 \end{frame}
+%
+%
+%\begin{frame}[fragile]{Using an FSM and a Datapath}
+%\begin{itemize}
+%\item About the design of the vending machine (VM)
+%\item Some of you start coding the VM directly
+%\begin{itemize}
+%\item This may work for small designs
+%\item But does not scale
+%\end{itemize}
+%\item Better use a systematic approach
+%\item Use a FSM that communicates with a datapath (FSMD)
+%\item We will quickly repeat FSMD
+%\end{itemize}
+%\end{frame}
 
 
-\begin{frame}[fragile]{Using an FSM and a Datapath}
-\begin{itemize}
-\item About the design of the vending machine (VM)
-\item Some of you start coding the VM directly
-\begin{itemize}
-\item This may work for small designs
-\item But does not scale
-\end{itemize}
-\item Better use a systematic approach
-\item Use a FSM that communicates with a datapath (FSMD)
-\item We will quickly repeat FSMD
-\end{itemize}
-\end{frame}
 
 
-
-\begin{frame}[fragile]{Finite-State Machine (FSM)}
-\begin{itemize}
-\item Has a register that contains the state
-\item Has a function to computer the next state
-\begin{itemize}
-\item Depending on current state and input
-\end{itemize}
-\item Has an output depending on the state
-\item Use a Moore FSM for the VM
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Basic Finite-State Machine}
-\begin{itemize}
-\item A state register
-\item Two combinational blocks
-\end{itemize}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/fsm}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{State Diagram}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/state-diag-moore}
-\end{figure}
-\begin{itemize}
-\item States and transitions depending on input values
-\item Example is a simple alarm FSM
-\item Nice visualization
-\item Draw the state diagram for your VM during the design
-\item Include a state diagram in the report
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{FSM-Datapath Interaction}
+%\begin{itemize}
+%\item The FSM controls the datapath
+%\begin{itemize}
+%\item For example, add 2 to the sum
+%\end{itemize}
+%\item By controlling multiplexers
+%\begin{itemize}
+%\item For example, select how much to add
+%\item Not adding means selecting 0 to add
+%\end{itemize}
+%\item Which value goes where
+%\item The FSM logic also depends on datapath output
+%\begin{itemize}
+%\item Is there enough money payed to release a can of soda?
+%\end{itemize}
+%\item FSM and datapath interact
+%\end{itemize}
+%\end{frame}
 
 
-\begin{frame}[fragile]{Encoding the State}
-\begin{itemize}
-\item We can optimize state encoding
-\item Two common encodings are: binary and one-hot
-\item We leave it to the synthesize tool
-\item Use symbolic names with an \code{Enum}
-\item Note the number of states in the \code{Enum} construct
-\item We use a Scala list with the \code{::} operator
-\end{itemize}
-\shortlist{../code/simple_fsm_states.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Start the FSM}
-\begin{itemize}
-\item We have a starting state on reset
-\end{itemize}
-\shortlist{../code/simple_fsm_register.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{The Next State Logic}
-\shortlist{../code/simple_fsm_next.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{FSM with Datapath}
-\begin{itemize}
-\item A type of computing machine
-\item Consists of a finite-state machine (FSM) and a datapath
-\item The FSM is the master (the controller) of the datapath
-\item The datapath has computing elements
-\begin{itemize}
-\item E.g., adder, incrementer, constants, multiplexers, ...
-\end{itemize}
-\item The datapath has storage elements (registers)
-\begin{itemize}
-\item E.g., sum of money payed, count of something, ...
-\end{itemize}
-\item You VM design shall be a FSMD
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{FSM-Datapath Interaction}
-\begin{itemize}
-\item The FSM controls the datapath
-\begin{itemize}
-\item For example, add 2 to the sum
-\end{itemize}
-\item By controlling multiplexers
-\begin{itemize}
-\item For example, select how much to add
-\item Not adding means selecting 0 to add
-\end{itemize}
-\item Which value goes where
-\item The FSM logic also depends on datapath output
-\begin{itemize}
-\item Is there enough money payed to release a can of soda?
-\end{itemize}
-\item FSM and datapath interact
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Popcount Example}
-\begin{itemize}
-\item An FSMD that computes the popcount
-\item Also called the Hamming weight
-\item Compute the number of `1's in a word
-\item Input is the data word
-\item Output is the count
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Popcount Block Diagram}
-
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/popcnt-fsmd}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{The FSM}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/popcnt-states}
-\end{figure}
-\begin{itemize}
-\item A Very Simple FSM
-\item Two transitions depend on input/output handshake
-\item One transition on the datapath output
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{The Datapath}
-\begin{figure}
-  \includegraphics[scale=0.65]{../figures/popcnt-data}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Let's Explore the Code}
-\begin{itemize}
-\item In \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/PopCount.scala}{PopCount.scala}
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Usage of an FSMD}
 \begin{itemize}
@@ -235,7 +117,7 @@ Embedded Systems Engineering}
 \end{itemize}\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Use a FSMD for the VM}
+\begin{frame}[fragile]{Test the FSMD for the VM}
 \begin{itemize}
 \item This is the main part your vending machine
 \item Can be design and tested just with Chisel testers (no FPGA board needed)
@@ -247,7 +129,6 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Extend the test along the development
 \begin{itemize}
-
 \item Remember test driven development?
 \item Maybe write the test before the implementation
 \item Maybe test developer and FSMD developer are not always the same person
@@ -255,21 +136,36 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Code Snippets for the VM}
-\begin{chisel}
-  val idle :: add2 ... :: Nil = Enum(?)
-  val stateReg = RegInit(idle)
-  ...
-  switch (stateReg) {
-    is (idle){
-      when(coin2) {
-        stateReg := ...
-      }
-      when(...) {
-   ...
-   switch(stateReg) {
-     is (add2) { ... }  // drive the datapath for adding a coin of kr. 2
-\end{chisel}
+%\begin{frame}[fragile]{Code Snippets for the VM}
+%\begin{chisel}
+%  val idle :: add2 ... :: Nil = Enum(?)
+%  val stateReg = RegInit(idle)
+%  ...
+%  switch (stateReg) {
+%    is (idle){
+%      when(coin2) {
+%        stateReg := ...
+%      }
+%      when(...) {
+%   ...
+%   switch(stateReg) {
+%     is (add2) { ... }  // drive the datapath for adding a coin of kr. 2
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Testing Your Vending Machine}
+\begin{itemize}
+\item Write (unit) tests for each component/module
+\item E.g., one for the data path, one for the state machine
+\item Then one (integration) test for the top-level component/module
+\item Maybe do some \href{https://en.wikipedia.org/wiki/Extreme_programming}{extreme programming (XP)}
+\begin{itemize}
+\item Write the test first
+\item Then the code of the component
+\item The test can serve as a specification
+\item We can do \href{https://en.wikipedia.org/wiki/Agile_software_development}{agile} hardware development
+\end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Memory}
@@ -307,7 +203,7 @@ Embedded Systems Engineering}
 \item FPGAs have this type of on-chip memories
 \item Usually many of them in units of 2 KiB or 4 KiB
 \item We need some Chisel code to represent it
-\item More memory needs an extra chip
+\item More memory needs an extrnal chip
 \item Then we need to interface this memory from the FPGA
 \end{itemize}
 \end{frame}
@@ -353,11 +249,11 @@ Embedded Systems Engineering}
 \item Apply the address and after some time the data is valid
 \item But one can add input registers, which makes it a synchronous SRAM
 \item Current FPGAs have only synchronous memories
-\item FPGAs usually have dual-ported memories
-\item This means the result of a read is available on clock cycle after the address is given
+\item This means the result of a read is available one clock cycle after the address is given
 \begin{itemize}
 \item This is different from the use of flip-flops (\code{Reg(Vec(..))})
 \end{itemize}
+\item FPGAs usually have dual-ported memories
 \end{itemize}
 \end{frame}
 
@@ -435,7 +331,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{External SRAM}
 \begin{itemize}
 \item We \emph{buy} a CY7C1041CV33
-\item Let us look into the \href{https://cn.inside.dtu.dk/cnnet/filesharing/download/618360ca-01b4-42e4-86e2-765835963deb}{data sheet}
+\item Let us look into the \href{https://www.infineon.com/dgdl/Infineon-CY7C1041CV33_Automotive_4-Mbit_(256_K_16)_Static_RAM_Datasheet-AdditionalTechnicalInformation-v04_00-EN.pdf?fileId=8ac78c8c7d0d8da4017d0ecb80544500}{data sheet}
 \end{itemize}
 \end{frame}
 
@@ -607,9 +503,9 @@ our synchronous design
 \begin{itemize}
 \item Transmission consists of
 \begin{itemize}
-\item Start bit
+\item Start bit (low)
 \item 8 data bits
-\item Stop bit(s)
+\item Stop bit(s) (high)
 \end{itemize}
 \item Common baud rate is 115200 bits/s
 \end{itemize}
@@ -618,6 +514,16 @@ our synchronous design
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{RS 232 Interface}
+\begin{itemize}
+\item How would we implement this?
+\item Baud  rate is 115200 bit/s (ca. 10 us)
+\item Clock on Basys 3 is 100 MHz (10 ns)
+\item Output (transmit)
+\item Input (receive)
+\item Let us do it now together
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{RS 232 Interface}
 \begin{itemize}
@@ -645,7 +551,7 @@ our synchronous design
 \begin{itemize}
 \item More explanation can be found in section 11.2
 \item The code is in the Chisel book
-\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/uart.scala}{uart.scala}
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/uart/uart.scala}{uart.scala}
 \item Also see example usage in \href{https://github.com/schoeberl/chisel-examples}{chisel-examples} repo
 \end{itemize}
 \end{frame}
@@ -654,7 +560,7 @@ our synchronous design
 \begin{itemize}
 \item Basys3 has an FTDI chip for the USB interface
 \item USB interface for FPAG programming
-\item But also to provide a RS 232 to the FPGA
+\item But also provides a RS 232 to the FPGA
 \item You can talk with your laptop
 \item Your VM could write out some text
 \item Use the Chisel code I showed you
@@ -675,114 +581,15 @@ our synchronous design
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Testing and Debugging}
+
+
+\begin{frame}[fragile]{Today's  and next Lab}
 \begin{itemize}
-\item For debugging waveforms are fine
-\item Can become cumbersome as it needs \emph{manual inspection}
-\item Better having real tests
-\item Tests that check the result
-\item Can also be automated (e.g, continuous integration)
-\item Writing testers in Chisel may include some Scala code
-\item In principle you could also include Java code for testing ;-)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing with Chisel}
-\begin{itemize}
-\item Set input values with \code{poke}
-\item Advance the simulation with \code{step}
-\item Read the output values with \code{peek}
-\item Compare the values with \code{expect}
-\item Import following packages:
-\shortlist{../code/test_import.txt}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Chisel Tester}
-\begin{itemize}
-\item Extends class \code{PeekPokeTester}
-\item Has the device-under test (DUT) as parameter
-\item Testing code can use all features of Scala
-\end{itemize}
-\begin{chisel}
-class CounterTester(dut: Counter) extends PeekPokeTester(dut) {
-
-  // Here comes the Chisel/Scala code
-  // for the testing
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Example DUT}
-\begin{itemize}
-\item A device-under test (DUT)
-\shortlist{../code/test_dut.txt}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{The Main Program for the Test}
-\begin{itemize}
-\item Extend an App and invoke the \code{iotesters} driver
-\item With the DUT and the tester
-\item TODO adapt
-% \shortlist{../code/test_main_simple.txt}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Tester}
-\begin{itemize}
-\item Poke values and \code{expect} some output
-\shortlist{../code/test_bench.txt}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{ScalaTest}
-\begin{itemize}
-\item Testing framework for Scala
-\item Tests live in \code{src/test/scala}
-\item \code{sbt} understands ScalaTest
-\item Run all tests:
-\code{sbt test}
-\item When all \code{expect}s are ok, the test passes
-\item A little bit funny syntax
-\item Add library to \code{build.sbt}
-\begin{chisel}
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-\end{chisel}
-\item Import ScalaTest library
-\begin{chisel}
-import org.scalatest._
-\end{chisel}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{ScalaTest Version of our Tester}
-TODO: update tests
-%\shortlist{../code/scalatest_simple.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Testing Your Vending Machine}
-\begin{itemize}
-\item Write (unit) tests for each component/module
-\item E.g., one for the data path, one for the state machine
-\item Then one (integration) test for the top-level component/module
-\item Maybe do some \href{https://en.wikipedia.org/wiki/Extreme_programming}{extreme programming (XP)}
-\begin{itemize}
-\item Write the test first
-\item Then the code of the component
-\item The test can serve as a specification
-\item We can do \href{https://en.wikipedia.org/wiki/Agile_software_development}{agile} hardware development
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Today's Lab}
-\begin{itemize}
-\item You requested a testing exercise at the midterm evaluation
-\item Testing a 5:1 Mux that contains errors
-\item see \href{https://github.com/schoeberl/chisel-lab/tree/master/lab11}{lab 11}
+\item Work on your Vending Machine
 \item As usual, show and discuss with a TA
+\item Get a tick from a TA when done. This is VERY important!
+\item Add features and show again to the TA
+\item Next week: no lecture, just development in the lab
 \end{itemize}
 \end{frame}
 
