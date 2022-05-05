@@ -48,6 +48,11 @@ class ForwardingMemory() extends Module {
 }
 //- end
 
+object ForwardingMemory extends App {
+  emitVerilog(new ForwardingMemory(), Array("--target-dir", "generated"))
+  // emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
+}
+
 class TrueDualPortMemory() extends Module {
   val io = IO(new Bundle {
     val addrA = Input(UInt(10.W))
