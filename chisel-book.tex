@@ -5040,12 +5040,13 @@ or AXI exist. This chapter explores different forms of interconnect.
 Interconnects can be used between chips (external) or within a chip, often
 then called a system-on-chip (SoC).
 
-\section{A Classic Processor Bus}
+\section{A Classic Micorprocessor Bus}
 
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/bus}
-  \caption{A classic computer consisting of a processor (CPU), memory, and I/O}
+  \caption{A classic computer consisting of a processor (CPU), memory, and I/O;
+  connected via address, data, and control busses.}
   \label{fig:bus}
 \end{figure}
 
@@ -5079,29 +5080,53 @@ driver.
 Note, that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
-Modern computers have different busses for different peripherals, e.g., a dedicated memory
+Modern computers have different busses for different peripheral devicrs, e.g., a dedicated memory
 bus for external memory and I/O busses for peripheral devices.
 Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
 are serial busses and use point-to-point connections.
 
-The concept of a bus is also used on-chip, but with some adaptions.
-Shared busses and the needed tri-state drivers are not practical within a chip. Furthermore,
-wires in a chip are cheaper than wires on a PCB or a connector. Therefore, the data bus
-is split into input and output signals.
-The output of the peripherals is selected with a multiplexer. 
-The address decoder drives the select of the multiplexer.
+\section{On-Chip Bus}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/bus-on-chip}
+  \caption{The translation of the off-chip bus concept to an on-chip ``bus''.}
+  \label{fig:bus-on-chip}
+\end{figure}
+
+We can translate the concept of such an external bus to an on-chip bus. However, we need to adapt some aspects.
+Shared busses with the need of tri-state drivers are not practical within a chip. Furthermore,
+wires in a chip are cheaper than wires on a PCB or at a connector. Therefore, we split the data bus
+into two collection of wires: one for the input and and one for the output signals.
 Furthermore, on-chip connections use a clock to define the timing.
 
+Figure~\ref{fig:bus-on-chip} shows the implementation of the bus concept within a chip.
+The address, data output, and control signals are connected from the CPU to all peripherals.
+For the data input we use a multiplexer (instead of a tri-state bus).
+The address decoder, besides generating the chip select signals, drives the selection of
+the data input multiplexer.
+
+
 The on-chip version of an interconnect definition can be generalized to a point-to-point
-connection. Masters and devices are connected with such a point-to-point
+connection. Masters and peripheral devices are connected with such a point-to-point
 interface to a switching fabric.
 
+\todo{Multiple masters need an arbiter.}
+
+
+\todo{Next step to multiple masters and a generic interconnect (cloud)}
 
 
 
 \section{Wishbone}
 
 The Wishbone bus is a definition of a point-to-point communication. (Not a bus in the classic sense)
+
+\todo{Sample code for a servant, how to test?}
+
+\section{AXI}
+
+\todo{Sample code for a servant, how to test?}
 
 \chapter{Design of a Processor}
 
