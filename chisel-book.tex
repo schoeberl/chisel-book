@@ -5029,6 +5029,80 @@ synthesizing them for an FPGA; the source is available at
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
 Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 
+\chapter{Interconnect}
+\index{Interconnect}
+
+We build larger systems often by combining different components.
+To simplify the composition of components, interconnect standards such as
+\myref{https://en.wikipedia.org/wiki/Wishbone_(computer_bus)}{Wishbone}
+or AXI exist. This chapter explores different forms of interconnect.
+
+Interconnects can be used between chips (external) or within a chip, often
+then called a system-on-chip (SoC).
+
+\section{A Classic Processor Bus}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/bus}
+  \caption{A classic computer consisting of a processor (CPU), memory, and I/O}
+  \label{fig:bus}
+\end{figure}
+
+Figure~\ref{fig:bus} shows the schematic of a simple, classic computer.
+The central processing unit (CPU) is connected via a
+\myref{https://en.wikipedia.org/wiki/System_bus}{system bus} to
+external memory and input/output (I/O) devices.
+This type of bus interconnection was common with early microprocessors,
+such as, \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} and
+\myref{https://en.wikipedia.org/wiki/MOS_Technology_6502}{6502}.
+
+The bus is split into an address bus, a data bus, and control signals
+such as \emph{read} and \emph{write}.
+The CPU drives the address and control signals. The data bus is bidirectional.
+The CPU is the master in the system and issues read or write commands.
+Both commands include an address (\code{addr} in the schematic) to select
+a data word from memory or a register from an I/O device.
+Not all address lines are connected at all peripheral devices.
+To select between different devices upper bits of the address bus are the
+input of a decoder. The outputs of the decoder are connected to the chip select (CS)
+inputs of the peripheral devices.
+
+On a read command the selected device will provide the data after some access time
+on the data bus. The peripheral device drives the data bus.
+On a write command, the processor provides the data and the peripheral has to
+accept that data (often on a rising edge of a signal). The CPU drives the data bus.
+As the data bus is bi-directional and the data lines are shared between al devices,
+the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logic}{tri-state}
+driver.
+
+Note, that in the simplest form the bus does not contain a clock. The timing is defined by
+read and write access times of the peripheral devices.
+
+Modern computers have different busses for different peripherals, e.g., a dedicated memory
+bus for external memory and I/O busses for peripheral devices.
+Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
+are serial busses and use point-to-point connections.
+
+The concept of a bus is also used on-chip, but with some adaptions.
+Shared busses and the needed tri-state drivers are not practical within a chip. Furthermore,
+wires in a chip are cheaper than wires on a PCB or a connector. Therefore, the data bus
+is split into input and output signals.
+The output of the peripherals is selected with a multiplexer. 
+The address decoder drives the select of the multiplexer.
+Furthermore, on-chip connections use a clock to define the timing.
+
+The on-chip version of an interconnect definition can be generalized to a point-to-point
+connection. Masters and devices are connected with such a point-to-point
+interface to a switching fabric.
+
+
+
+
+\section{Wishbone}
+
+The Wishbone bus is a definition of a point-to-point communication. (Not a bus in the classic sense)
+
 \chapter{Design of a Processor}
 
 \index{Processor}
@@ -5925,6 +5999,7 @@ related to digital design and computer architecture.
 \item [Chisel] constructing hardware in a Scala embedded language
 \item [CISC] complex instruction set computer
 \item [CPI] clock cycles per instruction
+\item [CPU] central processing unit
 \item [CRC] cyclic redundancy check
 \item [DAC] digital-to-analog converter
 \item [DFF] D flip-flop, data flip-flop
@@ -5954,6 +6029,7 @@ related to digital design and computer architecture.
 \item [OO] object oriented
 \item [OOO] out-of order
 \item [OS] operating system
+\item [RAM] random access memory
 \item [RISC] reduced instruction set computer
 %\item [RT] Real-Time
 %\item [RTOS] Real-Time Operating System
@@ -5963,7 +6039,7 @@ related to digital design and computer architecture.
 \item [UART] universal asynchronous receiver/transmitter
 \item [VHDL] VHSIC hardware description language
 \item [VHSIC] very high speed integrated circuit
-\item [WCET] Worst-Case Execution Time
+%\item [WCET] Worst-Case Execution Time
 \end{description}
 
 
