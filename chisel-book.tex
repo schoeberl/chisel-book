@@ -2402,7 +2402,6 @@ of an encode circuit uses the binary notation:
 
 \shortlist{code/encdec_decbin.txt}
 
-\todo{from Luca: for very small examples. What if the one-hot input is 256 wires? Can Chisel capture that? Or I need 256 lines? I would suggest to put an additional example. Maybe there is something like the for loop in VHDL.}
 
 A table gives a very readable representation of the decoder function but is also
 a little bit verbose.
@@ -2461,6 +2460,47 @@ The following Chisel code assigns a default value of 00 and then uses the switch
 for the legal input values.
 
 \shortlist{code/encdec_enc.txt}
+
+For the encoder we found an elegant single line statement to express the logic.
+This also enables to describe a wide decoder. However, we are not aware
+of such an expression for the encoder.
+
+To express larger encoders, we need to write a (simple) hardware generator.
+Therefore, we need to introduce the Scala loop construct. Following two lines
+of Scala code express a loop, counting from \code{0} to \code{9}.
+
+\shortlist{code/scala_loop_comment.txt}
+
+\noindent The loop variable \code{i} can be used to index individual bits from a \code{Wire} or
+\code{Reg}; or an element in a \code{Vec}. This Scala generator loop is the simplest form of describing
+a hardware generator. Chapter~\ref{ch:gen} describes how to write hardware generators in more detail.
+Note that the loop is executed at circuit generation time. This is not a hardware counter.
+
+For the encoder generator we will use a \code{Vec}, where each element represents one column
+of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits:
+
+\shortlist{code/encdec_large.txt}
+
+\noindent The input of the encoder is \code{hotIn} and the output is \code{encOut}.
+\code{Vec} element \code{0} is the default case (\code{0}), and also represents the output
+value when the least significant bit (LSB) is set in \code{hotIn}.
+
+Each \code{Vec} elements 1 till 15 are connected to a multiplexer. Depending if the ith bit
+is set in \code{hotIn} the multiplexer output is the index, otherwise it is 0. For the correct
+behavior of our encoder we assume that the input signal is one-hot encoded.
+Finally we need to merge all vector elements for a single output. As the vector elements
+are \code{0} when the corresponding bit in the input is \code{0}, we can simply combine
+all elements with an OR function. In the loop we or the current element with one vector
+element before (\code{... | v(i-1)}). When several elements are combined with a function
+we call this operation also reduce. Therefore, here we perform an OR reduction.
+
+\section{Arbiter}
+\index{Arbiter}
+
+\section{Priority Encoder}
+\index{Encoder!Priority encoder}
+
+\todo{We solve the issue of undefined behaviour when the input is not on-hot with an arbiter}
 
 \section{Exercise}
 
@@ -4030,6 +4070,7 @@ until the data transfer happened.
 
 \chapter{Hardware Generators}
 \index{Hardware generators}
+\label{ch:gen}
 
 The strength of Chisel is that it allows us to write so-called hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
@@ -5040,7 +5081,7 @@ or AXI exist. This chapter explores different forms of interconnect.
 Interconnects can be used between chips (external) or within a chip, often
 then called a system-on-chip (SoC).
 
-\section{A Classic Micorprocessor Bus}
+\section{A Classic Microprocessor Bus}
 
 \begin{figure}
   \centering
@@ -5065,7 +5106,7 @@ The CPU is the master in the system and issues read or write commands.
 Both commands include an address (\code{addr} in the schematic) to select
 a data word from memory or a register from an I/O device.
 Not all address lines are connected at all peripheral devices.
-To select between different devices upper bits of the address bus are the
+To select between different devices, the upper bits of the address bus are the
 input of a decoder. The outputs of the decoder are connected to the chip select (CS)
 inputs of the peripheral devices.
 
@@ -5073,17 +5114,21 @@ On a read command the selected device will provide the data after some access ti
 on the data bus. The peripheral device drives the data bus.
 On a write command, the processor provides the data and the peripheral has to
 accept that data (often on a rising edge of a signal). The CPU drives the data bus.
-As the data bus is bi-directional and the data lines are shared between al devices,
+As the data bus is bi-directional and the data lines are shared between all devices,
 the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logic}{tri-state}
 driver.
 
 Note, that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
-Modern computers have different busses for different peripheral devicrs, e.g., a dedicated memory
+Modern computers have different busses for different peripheral devices, e.g., a dedicated memory
 bus for external memory and I/O busses for peripheral devices.
 Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
 are serial busses and use point-to-point connections.
+
+Nevertheless, the notion of the classic processor bus with an address bus, a data bus, and chip select signals
+is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
+on-chip interconnect in the next chapter.
 
 \section{On-Chip Bus}
 
@@ -5108,11 +5153,10 @@ the data input multiplexer.
 
 
 The on-chip version of an interconnect definition can be generalized to a point-to-point
-connection. Masters and peripheral devices are connected with such a point-to-point
-interface to a switching fabric.
-
-\todo{Multiple masters need an arbiter.}
-
+connection. The processor and peripheral devices are connected with such a point-to-point
+interface to a switching fabric. If the system contains more than one processor (or master)
+we need arbitration within the switching fabric to decide which master is allowed to issue
+read and write commands.
 
 \todo{Next step to multiple masters and a generic interconnect (cloud)}
 
@@ -5637,7 +5681,7 @@ for the book repository for any fixes and improvements.
 \section*{Source Access}
 
 This book is available in open source.
-The repository also contains slides for a Chisel course and
+The repository also contains slides for a digital design course with Chisel and
 all Chisel examples: \url{https://github.com/schoeberl/chisel-book}
 
 A collection of medium-sized examples, which most are referenced
@@ -5651,7 +5695,7 @@ also contains projects for various popular FPGA boards:
 \index{Reserved keywords}
 \label{sec:reserved}
 
-Several keywords are reserved in Chisel, and cannot be used as identifiers
+Several keywords are reserved in Chisel (and Scala), and cannot be used as identifiers
 for your hardware design.
 Table~\ref{tab:reserved:scala} lists the reserved words from Scala.
 
@@ -6049,7 +6093,9 @@ related to digital design and computer architecture.
 \item [JVM] Java virtual machine
 \item [LC] logic cell
 \item [LRU] least-recently used
+\item [LSB] least significant bit
 \item [MMIO] memory-mapped IO
+\item [MSB] most significant bit
 \item [MUX] multiplexer
 \item [OO] object oriented
 \item [OOO] out-of order

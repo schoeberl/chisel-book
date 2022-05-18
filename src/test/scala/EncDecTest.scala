@@ -15,4 +15,13 @@ class EncDecTest extends AnyFlatSpec with ChiselScalatestTester {
       }
     }
   }
+  "Large encoder" should "work" in {
+    test(new EncDec()) { dut =>
+      for (i <- 0 to 15) {
+        dut.io.largeEncIn.poke((1 << i).U)
+        dut.clock.step()
+        dut.io.largeEncOut.expect(i.U)
+      }
+    }
+  }
 }

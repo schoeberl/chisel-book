@@ -38,6 +38,13 @@ class SimpleScala extends Module {
   }
   //- end
 
+  //- start scala_loop_comment
+  // Loops i from 0 to 9
+  for (i <- 0 until 10) {
+    // use i to index into a Wire or Vec
+  }
+  //- end
+
   val inVal = 1.U
 
   val shiftReg = RegInit(0.U(8.W))

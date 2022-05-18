@@ -11,6 +11,8 @@ class EncDec extends Module {
     val decout = Output(UInt(4.W))
     val encin = Input(UInt(4.W))
     val encout = Output(UInt(2.W))
+    val largeEncIn = Input(UInt(16.W))
+    val largeEncOut = Output(UInt(4.W))
   })
 
   val sel = io.decin
@@ -56,6 +58,18 @@ class EncDec extends Module {
   //- end
 
   io.encout := b
+
+  val hotIn = io.largeEncIn
+
+  //- start encdec_large
+  val v = Wire(Vec(16, UInt(4.W)))
+  v(0) := 0.U
+  for (i <- 1 until 16) {
+    v(i) := Mux(hotIn(i), i.U, 0.U) | v(i - 1)
+  }
+  val encOut = v(15)
+  //- end
+  io.largeEncOut := encOut
 }
 
 
