@@ -2,12 +2,12 @@ import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 
-class ArbiterTest extends AnyFlatSpec with ChiselScalatestTester {
+class ArbiterTreeTest extends AnyFlatSpec with ChiselScalatestTester {
 
   behavior of "Arbiter"
 
   it should "pass" in {
-    test(new Arbiter(4, UInt(8.W))).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+    test(new ArbiterTree(4, UInt(8.W))).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
     // test(new Arbiter(4, UInt(8.W))) { dut =>
       for (i <- 0 until 4) {
         dut.io.in(i).valid.poke(false.B)
@@ -28,7 +28,7 @@ class ArbiterTest extends AnyFlatSpec with ChiselScalatestTester {
 
   // TODO: finish the test
   it should "be fair" in {
-    test(new Arbiter(5, UInt(16.W))).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+    test(new ArbiterTree(5, UInt(16.W))).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
       for (i <- 0 until 5) {
         dut.io.in(i).valid.poke(true.B)
         dut.io.in(i).bits.poke((i*100).U)

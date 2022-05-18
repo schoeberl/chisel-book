@@ -27,7 +27,7 @@ object TreeReduce {
 import TreeReduce.SeqToTreeReducible
 
 //- start fun_arbiter
-class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
+class ArbiterTree[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
   val io = IO(new Bundle {
     val in = Flipped(Vec(n, new DecoupledIO(gen)))
     val out = new DecoupledIO(gen)
@@ -157,6 +157,6 @@ class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
 }
 //- end
 
-object Arbiter extends App {
-  println(getVerilogString(new Arbiter(7, UInt(8.W))))
+object ArbiterTree extends App {
+  println(getVerilogString(new ArbiterTree(7, UInt(8.W))))
 }
