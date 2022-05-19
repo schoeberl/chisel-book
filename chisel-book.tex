@@ -2485,8 +2485,8 @@ of the encoder table. The following code shows a 16-bit encoder, where the outpu
 \code{Vec} element \code{0} is the default case (\code{0}), and also represents the output
 value when the least significant bit (LSB) is set in \code{hotIn}.
 
-Each \code{Vec} elements 1 till 15 are connected to a multiplexer. Depending if the ith bit
-is set in \code{hotIn} the multiplexer output is the index, otherwise it is 0. For the correct
+Each \code{Vec} elements 1 till 15 are connected to a multiplexer. if the bit at position \code{i}
+is set in \code{hotIn}, the multiplexer output is the index, otherwise it is 0. For the correct
 behavior of our encoder we assume that the input signal is one-hot encoded.
 Finally we need to merge all vector elements for a single output. As the vector elements
 are \code{0} when the corresponding bit in the input is \code{0}, we can simply combine
@@ -2496,6 +2496,19 @@ we call this operation also reduce. Therefore, here we perform an OR reduction.
 
 \section{Arbiter}
 \index{Arbiter}
+
+\todo{Draw schematic}
+
+\todo{talk on arbitration...}
+Following code shows an arbiter for 3 clients.
+
+\shortlist{code/arbiter3.txt}
+
+\todo{Small arbiters an also be directly implemented}
+
+\todo{The loop version}
+
+
 
 \section{Priority Encoder}
 \index{Encoder!Priority encoder}
