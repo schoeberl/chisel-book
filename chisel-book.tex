@@ -2575,7 +2575,23 @@ last request (\code{n - 1}). That wire is not used and the synthesize tools will
 \section{Priority Encoder}
 \index{Encoder!Priority encoder}
 
-\todo{We solve the issue of undefined behaviour when the input is not on-hot with an arbiter}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/priority-encoder}
+  \caption{With an arbiter and an encoder we can build a priority encoder.}
+  \label{fig:priority-encoder}
+\end{figure}
+
+With our original encoder design we had to assume that the input is one-hot
+encoded, meaning maximal one bit is allowed to be \code{1}. Inputs with several
+bits set are illegal and lead to undefined behavior.
+
+We can solve this problem by combining an arbitration circuit, which selects only
+the highest-priority bit set. When we feed the output of the arbiter into an encoder
+we create a priority encoder.
+Figure~\ref{fig:priority-encoder} shows the schematic.
+
 
 \section{Comperator}
 
