@@ -639,11 +639,12 @@ The official Chisel documentation and further documents are available online:
 \item The \myref{https://www.chisel-lang.org/}{Chisel} home page is the official starting point to
 download and learn Chisel.
 \item The website of the \myref{http://www2.imm.dtu.dk/courses/02139/}{Digital Electronics 2} course
-at the Technical University of Denmark contains the slides for a 13 weeks course, based in Chisel.
+at the Technical University of Denmark contains the slides for a 13 weeks course, based on Chisel.
 The source code for the \myref{https://github.com/schoeberl/chisel-book/tree/master/slides}{slides}
 is available as part of the source code for this book. Feel free to adapt them for your teaching needs.
 \item The \myref{https://github.com/schoeberl/chisel-lab}{schoeberl/chisel-lab} GitHub repo
-contains Chisel exercises for the course ``Digital Electronics 2'' .
+contains Chisel exercises for the course \myref{http://www2.imm.dtu.dk/courses/02139/}{Digital Electronics 2}.
+The exercises also fit well for a selfstudy with this book.
 \item The \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project} is a good starting
 point with a very minimal hardware (an adder) and a test. That project is a GitHub template where you
 base your GitHub repository on.
@@ -720,7 +721,7 @@ You will need a second constant where you change the state of the
 \code{blkReg} register. What kind of emotion does this pattern produce?
 Is it alarming or more like a sign-of-live signal?
 
-If you do not have an FPGA board (yet), you can still run the blinking LED example.
+If you do not (yet) have an FPGA board, you can still run the blinking LED example.
 You will use  the Chisel simulation. To avoid a too long simulation time change the
 clock frequency in the Chisel code from 50000000 to 50000. Execute following
 instruction to simulate the blinking LED:
@@ -2504,16 +2505,70 @@ we call this operation also reduce. Therefore, here we perform an OR reduction.
 \section{Arbiter}
 \index{Arbiter}
 
-\todo{Draw schematic}
 
-\todo{talk on arbitration...}
+We use an arbiter to arbitrate requests from several clients to a single shared resource.
+An example would be several processor cores sharing a single serial port (UART).
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/arbiter-box}
+  \caption{A symbol for a 4-bit arbiter.}
+  \label{fig:arbiter-box}
+\end{figure}
+
+Figure~\ref{fig:arbiter-box} shows the schematic symbol for a 4-bit arbiter.
+It consists of four request lines (\code{r0}--\code{r3}) and four grant lines
+(\code{g0}--\code{g3}). The arbiter grants only a single request, usually the
+lower bits first. For example, a request input of \code{0101} will result in
+a grant output of \code{0001}. Therefore, the arbiter prioritizes the lower
+inputs. Therefore, we call it a priority arbiter. The lower the bit number,
+the higher the priority.
+
+To build a fair arbiter we need to add
+state to remember the last arbitration. We will present a fair round-robin arbiter
+in the interconnect chapter.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/arbiter}
+  \caption{A 4-bit arbiter.}
+  \label{fig:arbiter}
+\end{figure}
+
+Figure~\ref{fig:arbiter} shows the schematic of a 4-bit arbiter.
+The individual grant requests need to check if a lower bit has already
+won the arbitration. For the first request the grant \code{g0} depends only on the
+request \code{r0}. The second grant can only win the arbitration when request \code{r1}
+is asserted and request \code{r0} is de-asserted. For the next requests these lookup
+is further chained.
+
 Following code shows an arbiter for 3 clients.
 
 \shortlist{code/arbiter3.txt}
 
-\todo{Small arbiters an also be directly implemented}
+\noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}.
+We use vectors of \code{Bool} to represent the request, grant, and not-granted chain.
+We can see that \code{grant(0)} depends only on \code{request(0)}.
+\code{notGranted} is used to chain the information that no lower bit requests
+have been granted.
 
-\todo{The loop version}
+Small arbiters an also be directly described with a logic table. Following code
+shows the table for a 3-bit arbiter.
+
+\shortlist{code/arbiter3-direct.txt}
+
+\todo{Maybe also use the pattern matching with ??? in Chisel}
+
+However, for larger arbitration circuits we will use our newly learned trick of using
+a \code{for} loop as a generator loop. The following code shows a parameterized
+arbiter for \code{n} requests and grants. Here we use again \code{Vec} of \code{Bool}.
+
+\shortlist{code/arbiter3-loop.txt}
+
+\noindent The code shown above is the loop version of the initial arbiter version.
+It generates the arbitration circuit for \code{n} requests. The small difference to the
+manual version (unrolled loop) is that we generate a \code{notGranted} wire also for the
+last request (\code{n - 1}). That wire is not used and the synthesize tools will optimize it away.
 
 
 
@@ -2521,6 +2576,8 @@ Following code shows an arbiter for 3 clients.
 \index{Encoder!Priority encoder}
 
 \todo{We solve the issue of undefined behaviour when the input is not on-hot with an arbiter}
+
+\section{Comperator}
 
 \section{Exercise}
 
