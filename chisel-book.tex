@@ -2593,7 +2593,28 @@ we create a priority encoder.
 Figure~\ref{fig:priority-encoder} shows the schematic.
 
 
-\section{Comperator}
+\section{Comparator}
+
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/comparator}
+  \caption{A simple comparator.}
+  \label{fig:comparator}
+\end{figure}
+
+As the last circuit for the chapter of combinational building blocks we present the comparator.
+Figure~\ref{fig:comparator} shows the schematic of a comparator. It has two multi-bit inputs and
+compares those two values. It has two outputs: (1) signaling that \code{a} and \code{b} are equal (\code{equ})
+and (2) that \code{a} is greater than \code{b}. These two outputs are enough for all possible
+comparisons. For example, the if \code{equ} or \code{gt} are asserted we know that the condition
+$a >= b$ is true. For the condition $a <= b$ we test for not \code{gt}.
+
+Following code snippet shows the comparator. As you can see, these are just two lines of
+Chisel code. Therefore, compare functions are usually just directly used in other components and
+not wrapped into a module.
+
+\shortlist{code/comparator.txt}
 
 \section{Exercise}
 
