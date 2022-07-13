@@ -1,8 +1,5 @@
-import chisel3._
+class SimpleScala {
 
-class SimpleScala extends Module {
-
-  val io = new Bundle() {}
 
   /*
   //- start scala_val
@@ -45,15 +42,7 @@ class SimpleScala extends Module {
   }
   //- end
 
-  val inVal = 1.U
 
-  val shiftReg = RegInit(0.U(8.W))
-
-  shiftReg(0) := inVal
-
-  for (i <- 1 until 8) {
-    shiftReg(i) := shiftReg(i-1)
-  }
 
   //- start scala_condition
   for (i <- 0 until 10) {
@@ -63,5 +52,11 @@ class SimpleScala extends Module {
       println(i + " is odd")
     }
   }
+  //- end
+
+  //- start scala_tuple
+  val city = (2000, "Frederiksberg")
+  val zipCode = city._1
+  val name = city._2
   //- end
 }

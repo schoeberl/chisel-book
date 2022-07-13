@@ -2177,46 +2177,6 @@ We can also connect the port of a submodule with the parent module.
 \shortlist{code/bundle_connect.txt}
 
 
-\section{Lightweight Components with Functions}
-\label{sec:functions}
-
-\index{Function components}
-
-Modules are the general way to structure your hardware description.
-However, there is some boilerplate code when declaring a module and when instantiating and
-connecting it.
-A lightweight way to structure your hardware is to use functions.
-Scala functions can take Chisel (and Scala) parameters and return generated hardware.
-As a simple example, we generate an adder:
-
-\shortlist{code/components_fn_def.txt}
-
-\noindent We can then create two adders by simply calling the function \code{adder}.
-
-\shortlist{code/components_fn_use.txt}
-
-\noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
-during elaboration, but create two adders (hardware instances). The adder is an artificial example
-to keep it simple. Chisel has already an adder generation function, like \code{+(that: UInt)}.
-
-Functions, as lightweight hardware generators, can also contain state (including a register).
-Following example returns a one clock cycle delay element (a register).
-If a function has just a single statement, we can write it in one line and omit the curly
-braces (\{\}).
-
-\shortlist{code/components_fn_delay.txt}
-
-\noindent By calling the function with the function itself as parameter, this generated a two
-clock cycle delay.
-
-\shortlist{code/components_fn_2delay.txt}
-
-\noindent Again, this is a too short example to be useful, as \code{RegNext()}
-already is that function creating the register for the delay.
-
-Functions can be declared as part of a \code{Module}. However, functions that shall be
-used in different modules are better placed into a Scala object that collects utility
-functions.
 
 \section{External Modules}
 \index{Blackbox}
@@ -4210,6 +4170,9 @@ language and execute them as part of the Chisel circuit generation.
 This subsection gives a very brief introduction into Scala. It should be enough
 to write hardware generators for Chisel.
 For an in-depth introduction into Scala I recommend the textbook by Odersky et al.~\cite{Scala}.
+The \myref{https://www.scala-lang.org/}{Scala website} also contains an
+\myref{https://docs.scala-lang.org/overviews/scala-book/introduction.html}{online Scala book}.\footnote{The link
+points to the Scala 2 version of the book, as Chisel is still based on Scala 2.}
 
 Scala has two types of variables: \code{val}s and \code{var}s. A \code{val} gives an expression
 a name and cannot be reassigned a value. This following snippet shows the definition of
@@ -4257,8 +4220,62 @@ create a multiplexer, but allows to write configurable \emph{hardware generators
 
 \shortlist{code/scala_condition.txt}
 
+Scala has the notion of a \myref{https://en.wikibooks.org/wiki/Scala/Tuples}{tuple}.
+A tuple can hold a sequence of different types. The tuple is built by placing the individual fields
+with in parentheses. The fields are then accessed with \code{.\_n}, starting with 1 for the first field.
+Following code creates a tuple to represent a city with the zip code and the name.
+
+\shortlist{code/scala_tuple.txt}
+
+\noindent Tuples are useful when we want to return more than one value from a function.
+Tuples allow us to represent Chisel components with more than one output as a lightweight
+function instead of a full blown module.
 
 
+\section{Lightweight Components with Functions}
+\label{sec:functions}
+
+\index{Function components}
+
+Modules are the general way to structure your hardware description.
+However, there is some boilerplate code when declaring a module and when instantiating and
+connecting it.
+A lightweight way to structure your hardware is to use functions.
+Scala functions can take Chisel (and Scala) parameters and return generated hardware.
+As a simple example, we generate an adder:
+
+\shortlist{code/components_fn_def.txt}
+
+\noindent We can then create two adders by simply calling the function \code{adder}.
+
+\shortlist{code/components_fn_use.txt}
+
+\noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
+during elaboration, but create two adders (hardware instances). The adder is an artificial example
+to keep it simple. Chisel has already an adder generation function, like \code{+(that: UInt)}.
+
+Functions, as lightweight hardware generators, can also contain state (including a register).
+Following example returns a one clock cycle delay element (a register).
+If a function has just a single statement, we can write it in one line and omit the curly
+braces (\{\}).
+
+\shortlist{code/components_fn_delay.txt}
+
+\noindent By calling the function with the function itself as parameter, this generated a two
+clock cycle delay.
+
+\shortlist{code/components_fn_2delay.txt}
+
+\noindent Again, this is a too short example to be useful, as \code{RegNext()}
+already is that function creating the register for the delay.
+
+
+\todo{Example with tuple return}
+
+
+Functions can be declared as part of a \code{Module}. However, functions that shall be
+used in different modules are better placed into a Scala object that collects utility
+functions.
 
 
 \section{Configure with Parameters}
@@ -4581,8 +4598,8 @@ Value \code{res} points to the bundle containing the minimum value and the posit
 \shortlist{code/fun_min2.txt}
 
 As a final variation we using more Scala features to avoid creating the bundle to return the value
-and index. Scala has he notion of a \myref{https://en.wikibooks.org/wiki/Scala/Tuples}{tuple}
-that are immutable sequence of values of different types. The following code shows the application
+and index. We will use a tuple to represent both values.
+The following code shows the application
 of a chain of functions to the original sequence. Chaining functions is a typical pattern in functional programming.
 This pattern can also be seen as a pipeline of operations.
 
