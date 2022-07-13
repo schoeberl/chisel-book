@@ -756,9 +756,9 @@ can only have one of two possible values. These values are often called 0 and 1.
 also use following terms: low/high, false/true, and de-asserted/asserted.
 These terms mean the same two possible values of a binary signal.
 
-\section{Signal Types and Constants}
+\section{Chisel Types and Constants}
 
-Chisel provides three data types to describe signals, combinational logic, and registers:
+Chisel provides three data types to describe connections, combinational logic, and registers:
 \code{Bits}, \code{UInt}, and \code{SInt}. \code{UInt} and \code{SInt} extend \code{Bits},
 and all three types represent a vector of bits. \code{UInt} gives this vector of
 bits the meaning of an unsigned integer and \code{SInt} of a signed
@@ -4222,7 +4222,7 @@ create a multiplexer, but allows to write configurable \emph{hardware generators
 
 Scala has the notion of a \myref{https://en.wikibooks.org/wiki/Scala/Tuples}{tuple}.
 A tuple can hold a sequence of different types. The tuple is built by placing the individual fields
-with in parentheses. The fields are then accessed with \code{.\_n}, starting with 1 for the first field.
+within parentheses. The fields are then accessed with \code{.\_n}, starting with 1 for the first field.
 Following code creates a tuple to represent a city with the zip code and the name.
 
 \shortlist{code/scala_tuple.txt}
@@ -4246,13 +4246,17 @@ As a simple example, we generate an adder:
 
 \shortlist{code/components_fn_def.txt}
 
-\noindent We can then create two adders by simply calling the function \code{adder}.
+\noindent The return value of a function in Scala is the result of the last
+expression.\footnote{Scala also contains a \code{return} statement. The code could have been written
+a bit more verbose as \code{return x + y}.}
+We can then create two adders by simply calling the function \code{adder}.
 
 \shortlist{code/components_fn_use.txt}
 
-\noindent Note that this is a \emph{hardware generator}. You are not executing any add operation
-during elaboration, but create two adders (hardware instances). The adder is an artificial example
-to keep it simple. Chisel has already an adder generation function, like \code{+(that: UInt)}.
+\noindent Note that this is a \emph{hardware generator}. That code is not executing any add operation
+during elaboration, but creates two adders (hardware instances). Or in other words, it returns
+a wire to the output of the adder. The adder is an artificial example
+to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
 Functions, as lightweight hardware generators, can also contain state (including a register).
 Following example returns a one clock cycle delay element (a register).
@@ -4267,10 +4271,27 @@ clock cycle delay.
 \shortlist{code/components_fn_2delay.txt}
 
 \noindent Again, this is a too short example to be useful, as \code{RegNext()}
-already is that function creating the register for the delay.
+is already that function that creats the register for the delay.
 
+Functions return only one value. In order to provide more than one output, we
+can wrap several output wires into a Scala tuple. Following code generates hardware that
+compares two inputs and has two outputs.
 
-\todo{Example with tuple return}
+\shortlist{code/fun_comp.txt}
+
+\noindent With the parenthesis we wrap the two wires that are connected to the outputs of
+the equal and the greater circuit into a Scala tuple.
+
+When creating a comparator component
+with the \code{compare} function, it returns a tuple of two wires. We can access the two
+wires with the \code{.\_n} syntax.
+
+\shortlist{code/fun_comp_use1.txt}
+
+\noindent However, we can directly decompose the tuple into two wires, in this case \code{equ}
+and \code{gt}, with following syntax.
+
+\shortlist{code/fun_comp_use2.txt}
 
 
 Functions can be declared as part of a \code{Module}. However, functions that shall be

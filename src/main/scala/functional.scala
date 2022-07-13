@@ -32,6 +32,44 @@ class FunctionalAdd extends Module {
   io.res := sum
 }
 
+class FunctionalComp extends Module {
+  val io = IO(new Bundle() {
+    val a = Input(UInt(8.W))
+    val b = Input(UInt(8.W))
+    val equ = Output(UInt(8.W))
+    val gt = Output(UInt(8.W))
+  })
+
+  val inA = io.a
+  val inB = io.b
+
+  //- start fun_comp
+  def compare(a: UInt, b: UInt) = {
+    val equ = a === b
+    val gt = a > b
+    (equ, gt)
+  }
+  //- end
+
+  //- start fun_comp_use1
+  val cmp = compare(inA, inB)
+  val equResult = cmp._1
+  val gtResult = cmp._2
+  //- end
+
+  //- start fun_comp_use2
+  val (equ, gt) = compare(inA, inB)
+  //- end
+
+  io.equ := equResult
+  io.gt := gtResult
+
+  io.equ := equ
+  io.gt := gt
+
+
+
+}
 
 class FunctionalMin(n: Int, w: Int) extends Module {
   val io = IO(new Bundle {
