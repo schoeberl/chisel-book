@@ -320,7 +320,17 @@ Hans has contributed the description on how to use external components, as
 so called \emph{black boxes}, and how to use memories for clock domain crossing
 (multi-clock memories).
 
+\section*{Foreword for the Fourth Edition}
 
+
+\section*{Translations}
+
+This book has been translated to several languages. All translations are available as free PDF
+from the books \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page}.
+I would like to thank Yuda Wang, Qiwei Sun, and Yun Chen for the Chinese translation,
+Shumpei Kawasaki Japanese translation, and VieLe Duc Hung for the Vietnamese translation.
+If you are interested to translate it to another language, feel free to do it and publish it under the same
+license. Please contact me then, so I can point to your translation.
 
 
 \section*{Acknowledgements}
@@ -4219,7 +4229,7 @@ an integer variable and reassigns it a new value:
 \noindent We will need Scala \code{var}s to write hardware \emph{generators}, but never need
 it to use it to name a hardware \emph{component}.
 
-You may have wandered what type those variables have. As we assigned an integer constant
+You may have wondered what type those variables have. As we assigned an integer constant
 in the above example, the type of the variable is \emph{inferred}; it is a Scala \code{Int} type.
 In most cases the Scala compiler is able to infer the type. However, if we are in the mood of
 being more explicit, we can explicitly state the type as follows:
