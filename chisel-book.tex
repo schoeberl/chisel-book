@@ -149,7 +149,7 @@
 {\usekomafont{title}\mdseries\huge Digital Design with Chisel}
 \ \\
 \vspace{1cm}
-{\usekomafont{title}\mdseries\Large Third Edition}
+{\usekomafont{title}\mdseries\Large Forth Edition}
 \cleardoublepage
 \end{flushleft}
 \newpage
@@ -161,7 +161,7 @@
 \vspace{1cm}
 {\usekomafont{title}\Huge Digital Design with Chisel\\
 \bigskip
-{\usekomafont{title}\huge Third Edition}\\
+{\usekomafont{title}\huge Forth Edition}\\
 \bigskip
 \bigskip
 \bigskip
@@ -316,7 +316,7 @@ on using functional programing to write generators.
 The appendix has been extended with a list of reserved keywords and a list
 of acronyms.
 
-Hans has contributed the description on how to use external components, as
+Hans Jakob Damsgaard has contributed the description on how to use external components, as
 so called \emph{black boxes}, and how to use memories for clock domain crossing
 (multi-clock memories).
 
@@ -325,12 +325,13 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 
 \section*{Translations}
 
-This book has been translated to several languages. All translations are available as free PDF
+This book has been translated to Chinese, Japanese, and Vietnamese. All translations are available as free PDF
 from the books \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page}.
-I would like to thank Yuda Wang, Qiwei Sun, and Yun Chen for the Chinese translation,
-Shumpei Kawasaki Japanese translation, and VieLe Duc Hung for the Vietnamese translation.
-If you are interested to translate it to another language, feel free to do it and publish it under the same
-license. Please contact me then, so I can point to your translation.
+I would like to thank Yuda Wang, Qiwei Sun, and Yun Chen for the Chinese translation;
+Seiji Munetoh, Masatoshi Tanabata, and Takaaki Hagino for the Japanese translation;
+and VieLe Duc Hung for the Vietnamese translation.
+If you are interested to translate this book into another language, feel free to do it and
+publish it under the same license. Please contact me then, so I can point to your translation.
 
 
 \section*{Acknowledgements}
@@ -347,7 +348,7 @@ Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
-It was a pleasure to use Chisel in the last two years of teaching a digital electronics
+It was a pleasure to use Chisel in the last three years of teaching a digital electronics
 course. I know it is a challenge to pickup Chisel and Java in parallel in the second
 semester. Thank you to all students from this course, who had on open mind to
 pickup a modern programming language for hardware description.
@@ -378,7 +379,7 @@ e.g., as future chips from Intel will include programmable hardware to speed up 
 It is perfectly fine to use Chisel as your first hardware description language.
 
 Chisel brings advances in software engineering, such as object-orientated
-and functional languages, into digital design.
+and functional programming, into digital design.
 Chisel does not only allow to express hardware at the register-transfer level
 but allows you to write hardware generators.
 
@@ -395,7 +396,7 @@ block that can be synthesized into an
 For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
-This book is not a general introduction to hardware design and the fundamentals of it.
+This book is not a general introduction to digital design and the fundamentals of it.
 For an introduction of the basics in digital design, such as how to build a gate out of
 CMOS transistors, refer to other digital design books.
 However, this book intends to teach digital design at an abstraction level that is
@@ -458,7 +459,7 @@ explains how to open an existing Chisel project in IntelliJ.
 
 \subsection{macOS}
 
-Install the Java OpenJDK 8 from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK 8 (or 11) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} and git can be installed with:
 
@@ -468,7 +469,7 @@ $ brew install sbt git
 
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
-When importing a project, {\textbf select the JDK 1.8} you installed before.
+When importing a project, select the JDK you installed before.
 
 \subsection{Linux/Ubuntu}
 
@@ -485,11 +486,11 @@ Follow the instructions from \myref{https://www.scala-sbt.org/download.html}{sbt
 
 \subsection{Windows}
 
-Install the Java OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK (8 or 11) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 Chisel and Scala can also be installed and used under Windows.
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
-When importing a project, {\textbf select the JDK 1.8} you installed before.
+When importing a project, select the JDK you installed before.
 \code{sbt} can be installed with a Windows installer, see:
 \myref{https://www.scala-sbt.org/1.x/docs/Installing-sbt-on-Windows.html}{Installing sbt on Windows}.
 Install a \myref{https://git-scm.com/download/win}{git client}.
@@ -497,12 +498,15 @@ Install a \myref{https://git-scm.com/download/win}{git client}.
 \subsection{FPGA Tools}
 
 To build hardware for an FPGA, you need a synthesize tool. The two major
-FPGA vendors, Intel\footnote{former Altera} and Xilinx, provide free versions of
+FPGA vendors, Intel\footnote{former Altera} and AMD,\footnote{former Xilinx} provide free versions of
 their tools that cover small to medium-sized FPGAs. Those medium-sized
-FPGAs are large enough to build multicore RISC style processors.
+FPGAs are large enough to build a multicore RISC style processors.
 Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 Both tools are available for Windows and Linux, but not for macOS.
+
+With \myref{https://f4pga.org/}{F4PGA} it is now possible to use a fully open-source synthesis tool
+for selected FPGAs.
 
 \section{Hello World}
 
@@ -571,7 +575,7 @@ It is possible in
  \myref{https://www.eclipse.org/}{Eclipse}
 to generate a project from the sbt project configuration in \code{build.sbt}.
 
-In IntelliJ you can create a new project from existing sources with:
+In IntelliJ you need to install the Scala plugin. Then you can create a new project from existing sources with:
 \emph{File - New - Project from Existing Sources...} and then select the \code{build.sbt}
 file from the project.
 
@@ -657,9 +661,10 @@ contains Chisel exercises for the course \myref{http://www2.imm.dtu.dk/courses/0
 The exercises also fit well for a selfstudy with this book.
 \item The \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project} is a good starting
 point with a very minimal hardware (an adder) and a test. That project is a GitHub template where you
-base your GitHub repository on.
+can base your GitHub repository on.
+\item The \myref{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel3 Cheat Sheet} summarizes the main constructs of Chisel on a single page.
 \item Scott Beamer's course \myref{https://classes.soe.ucsc.edu/cse293/Winter22/}{Agile Hardware Design}
-contains many advanced Chisel examples. The \myref{https://github.com/agile-hw/lectures}{lectures}
+contains advanced Chisel examples. The \myref{https://github.com/agile-hw/lectures}{lectures}
 include executable source examples and are available as Jupyter notebooks.
 %\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
 %a short users guide to Chisel and links to further information.
@@ -706,7 +711,7 @@ performing place and route, performing timing analysis, and generating a bitfile
 However, for the purpose of this introduction example we simply call it ``compile''
 your code.} the Verilog code, and configure the FPGA with the resulting bitfile.
 We cannot provide the details of these steps. Please consult the manual of
-your Intel Quartus or Xilinx Vivado tool.
+your Intel Quartus or AMD Vivado tool.
 However, the examples repository contains some ready to use Quartus
 projects in folder \code{quartus} for several popular FPGA boards (e.g., DE2-115).
 If the repository contains support for your board, start Quartus, open the project,
@@ -720,7 +725,7 @@ the reset input is connected to SW0.
 
 Now change the blinking frequency to a slower or a faster value and
 rerun the build process. Blinking frequencies and also blinking patterns
-communicate different ``emotions''. E.g., a slow blinking LED signals that
+communicate different ``emotions''. For example, a slow blinking LED signals that
 everything is ok, a fast blinking LED signals an alarm state.
 Explore which frequencies express best those two different emotions.
 
@@ -751,7 +756,7 @@ In this section, we introduce the basic components for digital design:
 combinational circuits and flip-flops.
 These essential elements can be combined to build larger, more interesting circuits.
 
-Digital systems in general built use binary signals, which means a single bit or signal
+Digital systems, in general, use binary signals, which means a single bit or signal
 can only have one of two possible values. These values are often called 0 and 1. However, we
 also use following terms: low/high, false/true, and de-asserted/asserted.
 These terms mean the same two possible values of a binary signal.
@@ -873,7 +878,7 @@ The standard logic operations in Chisel are:
 \noindent The resulting width of the operation is the maximum width of the operators for
 addition and subtraction, the sum of the two widths for the multiplication, and usually
 the width of the numerator for divide and modulo operations.\footnote{The exact
-details are available in the \myref{https://github.com/freechipsproject/firrtl/blob/master/spec/spec.pdf}{FIRRTL specification}.}
+details are available in the \myref{https://github.com/chipsalliance/firrtl-spec/releases/latest/download/spec.pdf}{FIRRTL specification}.}
 
 A signal can also first be defined as a \code{Wire} of some type. Afterward, we can assign a
 value to the wire with the \code{:=} update operator.
@@ -1226,7 +1231,7 @@ with the Chisel operator \code{:=}
 
 \noindent Note the small difference between the Scala assignment operator ``\code{=}''
 and the Chisel operator ``\code{:=}''. You use Scala's ``\code{=}'' operator when \emph{creating} a hardware
-object but you use Chisel's ``\code{:=}'' operator when assigning or reassigning a value to
+object (and giving it a name) but you use Chisel's ``\code{:=}'' operator when assigning or reassigning a value to
 an \emph{existing} hardware object.
 
 Combinational values can be conditionally assigned, but need to be assigned in every branch
@@ -5886,11 +5891,11 @@ Although technically possible, you should also avoid to use Chisel (and Scala) o
 \begin{table}[h]
 \centering
 \begin{tabular}{llllll}
-\code{:=} & \code{\#\#}  & \code{andR}  & \code{Bits}  & \code{Bool}  & \code{Cat} \\
-\code{clock} & \code{elsewhen}  & \code{io}  & \code{is}  & \code{Mem}  & \code{Module} \\
-\code{orR}  & \code{otherwise}  & \code{Reg}  & \code{RegEnable}  & \code{RegInit}  & \code{RegNext} \\
-\code{reset} & \code{SInt}  & \code{switch}  & \code{SyncMem}  & \code{UInt}  & \code{Vec} \\
-\code{VecInit} & \code{when}  & \code{Wire}  & \code{WireDefault}  & \code{xorR}  \\
+\code{:=}  & \code{\#\#}  & \code{andR}  & \code{Bits}  & \code{Bool}  & \code{Cat} \\
+\code{clock}  & \code{elsewhen}  & \code{io}  & \code{is}  & \code{Mem}  & \code{Module} \\
+\code{name}  & \code{orR}  & \code{otherwise}  & \code{Reg}  & \code{RegEnable}  & \code{RegInit} \\
+\code{RegNext}  & \code{reset}  & \code{SInt}  & \code{switch}  & \code{SyncMem}  & \code{UInt} \\
+\code{Vec}  & \code{VecInit}  & \code{when}  & \code{Wire}  & \code{WireDefault}  & \code{xorR} \\
 \end{tabular}
 \caption{Reserved keywords from the Chisel language.}
 \label{tab:reserved:chisel}

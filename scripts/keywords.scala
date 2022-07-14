@@ -12,8 +12,8 @@ val scala = List(
 )
 
 val chisel = List("when", "otherwise", "elsewhen", "switch", "is",
-"io", "clock", "reset",
-"Cat", "\\#\\#", ":="
+"io", "clock", "reset", "name",
+"Cat", "\\#\\#", ":=",
 // Do we include class names in this list?
 "Wire", "WireDefault", "Vec", "VecInit",
 "Module", "Bool", "UInt", "SInt", "Bits",
