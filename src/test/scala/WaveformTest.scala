@@ -1,8 +1,6 @@
-//- start test_import_wave
 import chisel3._
 import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
-//- end
 
 //- start test_bench_wave
 class WaveformTest extends AnyFlatSpec with ChiselScalatestTester {

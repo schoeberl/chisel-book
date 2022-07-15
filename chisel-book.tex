@@ -1072,12 +1072,12 @@ till 9 and wraps around to 0 when reaching 9.
 \index{Bundle}
 \index{Vec}
 
-Chisel provides two constructs to group related signals: (1) a \code{Bundle} to group
-signals of different types and (2) a \code{Vec} to represent an indexable collection of signals
-of the same type.
+Chisel provides two constructs to group related signals: (1) a \code{Bundle} and (2) a \code{Vec}.
+A \code{Bundle} groups signals of different types as named fields.
+A \code{Vec} represents an indexable collection of signals (elements) of the same type.
 \code{Bundle}s and \code{Vec}s can be arbitrarily nested.
 
-A Chisel bundle groups several signals. The entire bundle can be referenced
+A Chisel \code{Bundle} groups several signals. The entire bundle can be referenced
 as a whole, or individual fields can be accessed by their name.
 We can define a bundle (collection of signals) by defining a class that
 extends \code{Bundle} and list the fields as \code{val}s within the constructor block.
@@ -1092,8 +1092,7 @@ The fields are accessed with the dot notation:
 Dot notation is common in object-oriented languages, where \code{x.y} means
 \code{x} is a reference to an object and \code{y} is a field of that object.
 As Chisel is object-oriented, we use dot notation to access fields in a bundle.
-A bundle is similar to a \code{struct} in C, a \code{record} in VHDL, or a
-\code{struct} in SystemVerilog.
+A \code{Bundle} is similar to a \code{struct} in C and SystemVerilog or a \code{record} in VHDL.
 A bundle can also be referenced as a whole:
 
 \shortlist{code/bundle_ref.txt}
@@ -1129,14 +1128,13 @@ Figure~\ref{fig:vec-mux} shows the resulting schematic of the above code snippet
   \label{fig:vec-mux}
 \end{figure}
 
-We can also wrap a vector into a register to define an array of registers.
+We can also wrap a \code{Vec} into a register to define an array of registers.
 Following code shows a vector of three registers.
 \shortlist{code/vec_reg.txt}
 
 Figure~\ref{fig:vec-reg} shows the schematic of that circuit. It contains three registers.
 The read index (\code{rdIdx}) selects the multiplexer connected to the output of the three
 registers. The output signal is \code{dout}
-
 The write index (\code{wrIdx}) selects which register will be written with the data
 from \code{din}. \code{wrIdx} is driving a decoder which selects one of the three
 enable signals of the registers.
@@ -1193,7 +1191,7 @@ an error during circuit elaboration:
 \noindent The argument is that it would be better to use bundles for this use case.
 One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
 from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
-to a \code{UInt}, and assigning this value to the target \code{UInt}.
+to a \code{UInt}, and assigne this value to the target \code{UInt}.
 Note, that we define here a \code{Bundle} as a local data structure as we need it only
 locally.
 
@@ -1218,8 +1216,8 @@ connection of a module (like pins of a concrete integrated circuit (IC)).
 \code{Wire}, \code{Reg}, or \code{IO} can be wrapped over any Chisel type, also
 a \code{Bundle} or a \code{Vec}.
 
-You can give a hardware component a name by assigning it to a Scala immutable
-variables:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are of no use
+You give a hardware component a name by assigning it to a Scala immutable
+variable:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are of no use
 when describing hardware in Chisel}
 
 \shortlist{code/wire_reg.txt}
@@ -1266,9 +1264,9 @@ generates gates and/or flip-flops.
 More technically, when Chisel executes your code it runs as a Scala program, and
 by executing the Chisel statements, it \emph{collects} the hardware components
 and connects those nodes. This network of hardware nodes is the hardware,
-which can spill out Verilog code for ASIC or FPGA synthesis or can be
+which Chisel can spill out as Verilog code for ASIC or FPGA synthesis or can be
 tested with a Chisel tester.
-The network of hardware nodes is what is executed in fully parallel.
+The network of hardware nodes is what is executed fully parallel.
 
 For a software engineer imagine this immense parallelism that you can
 create in hardware without needing to partition your application into threads
@@ -1285,7 +1283,7 @@ with \code{val sw = Input(UInt(2.W))}.
 
 \shortlist{code/basic_exercise.txt}
 
-\noindent For those switches, you also need to assign the pin names for the FPGA board.
+\noindent For those switches, you also need to assign the pins for the FPGA board.
 You can find examples of pin assignments in the Quartus project files of the ALU project
 (e.g., for the \myref{https://github.com/schoeberl/chisel-examples/blob/master/quartus/altde2-115/alu.qsf}{DE2-115
 FPGA board}).
@@ -1367,7 +1365,7 @@ The root of the project is the project home, which contains \code{build.sbt}.
 It may also include a \code{Makefile} for the build process, a README, and a LICENSE file.
 Folder \code{src} contains all source code. From there it is split between \code{main},
 containing the hardware sources and \code{test} containing testers.
-Chisel inherits from Scala, which inherits from Java the organization of source
+Chisel inherits from Scala, which itself inherits from Java, the organization of source
 in \myref{https://en.wikipedia.org/wiki/Java_package}{packages}.
 Packages organize your Chisel code into namespaces. Packages can also contain
 sub-packages.
@@ -1386,7 +1384,7 @@ to use Chisel classes.
 
 To use the module \code{Abc} in a different context (package name space),
 the components of packet \code{mypack} need to be imported. The underscore
-(\_) acts as wildcard, meaning that all classes of \code{mypack} are imported.
+(\code{\_}) acts as wildcard, meaning that all classes of \code{mypack} are imported.
 
 \shortlist{code/usemypack.txt}
 
@@ -1453,7 +1451,7 @@ The following code will generate the Verilog file \code{Hello.v}.
 
 \shortlist{code/generate.txt}
 
-However, just using the default version of \code{emitVerilog()} will put the generated files
+Using the default version of \code{emitVerilog()} will put the generated files
 into the root folder of our project (where we run the \code{sbt} command).
 To put the generated files into a subfolder, we need to specify options to \code{emitVerilog()}.
 I recommend to specify a folder \code{generated}, as shown in Figure~\ref{fig:folders}.
@@ -1468,7 +1466,8 @@ You can simply print out the string for testing.
 \shortlist{code/generate_string.txt}
 
 \noindent This form of output is popular when showing small Chisel examples in
-\myref{https://scastie.scala-lang.org/}{Scastie}. See as an example the
+\myref{https://scastie.scala-lang.org/}{Scastie}, a web based Scala compiler and runtim.
+See as an example of the
 \myref{https://scastie.scala-lang.org/schoeberl/SN7rDb9iS027ORiWqXMGsQ/6}{Hello World on Scastie}.
 
 
@@ -1495,7 +1494,7 @@ Treadle can also generate waveform files (\code{Hello.vcd}) that can be viewed w
 a waveform viewer (e.g., the free viewer GTKWave or Modelsim).
 
 One FIRRTL transformation, the Verilog emitter, generates Verilog code for synthesis (\code{Hello.v}).
-A circuit synthesize tool (e.g., Intel Quartus, Xilinx Vivado, or an ASIC tool) synthesizes the circuit.
+A circuit synthesize tool (e.g., Intel Quartus, AMD/Xilinx Vivado, or an ASIC tool) synthesizes the circuit.
 In an FPGA design flow, the tool generates the FPGA bitstream that is used to configure the FPGA,
 e.g., \code{Hello.bit}.
 
@@ -1538,7 +1537,7 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.4" % "test"
 $ sbt test
 \end{verbatim}
 
-\noindent A minimal test (a testing hello world) to test a Scala Integer
+\noindent A minimal test (a testing hello world) to test a Scala integer
 addition and a multiplication looks as follows:
 
 \shortlist{code/scalatest_hello_world.txt}
@@ -1565,7 +1564,7 @@ and show that both tests passed:
 
 \code{sbt test} executes all available tests, which is useful for regression
 test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
-will see more than 70 tests passing.}
+will see more than 80 tests passing.}
 However, if you want to run just a single test (suite) you can do this with:
 
 \begin{verbatim}
@@ -1579,7 +1578,7 @@ there will be a relatively silent error message: \code{No tests were executed}.
 \index{ChiselTest}
 
 
-\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the new standard testing tool 
+\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the standard testing tool 
 for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
 and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
@@ -1604,7 +1603,7 @@ to its inputs \code{a} and \code{b} and outputs the result on \code{out}:
 
 \shortlist{code/test_dut.txt}
 
-The test bench for this DUT extends \code{FlatSpec} with \code{ChiselScalatestTester},
+The test bench for this DUT extends \code{AnyFlatSpec} with \code{ChiselScalatestTester},
 which provides ChiselTest functionality within ScalaTest.
 The method \code{test()} is invoked with the DUT as parameter and the test code as a function literal.
 
@@ -1618,7 +1617,7 @@ An output port can be read by invoking \code{peek()} on the port, which will ret
 the value as a Chisel type. The method \code{toString} converts that value to a
 string.
 The tester advances the simulation by one clock cycle with \code{dut.clock.step()}.
-For advancing the simulation by seveal clock cycles, we can provide a parameter to
+For advancing the simulation by several clock cycles, we can provide a parameter to
 \code{step()}.
 We can print the values of the outputs with \code{println()}.
 
@@ -1646,7 +1645,7 @@ Result is: UInt<2>(2)
 
 We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
 The \code{toString} method also tells us the Chisel type of a 2-bit \code{UInt}.
-Besides manually inspecting printouts, which is an excellent starting point, we can also
+Besides manually inspecting printouts, which is a good starting point, we can also
 express our expectations in the test bench itself by invoking
 \code{expect(value)} on the output port and the expected value as parameter.
 The following example shows testing with expectations:
@@ -1692,7 +1691,7 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 
 In this section, we described the basic testing facility with Chisel for simple tests.
 However, keep in mind that the full power of Scala is available to write testers.
-This includes, e.g., writing a reference model in Scala to test against.
+This includes, e.g., writing a reference model of your hardware in Scala to test against.
 
 \subsection{Waveforms}
 
@@ -1702,7 +1701,7 @@ This includes, e.g., writing a reference model in Scala to test against.
 
 Testers, as described above, work well for small designs and for 
 \myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
-software development. A collection of unit tests can also serve for
+software development. A collection of unit tests can also serve
 \myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
 for debugging more complex designs, one would like to investigate several signals at 
 once. A classic approach to debug digital designs is displaying the signals in a 
@@ -1730,14 +1729,9 @@ and load it later with \emph{File -- Read Save File}.
 
 The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
 annotation to the \code{test()} function.
-To enable passing annotation to the testing we need to import following classes and packages:
-
-\shortlist{code/test_import_wave.txt}
-
 We start with a simple tester that pokes values to the inputs and advances
 the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-Instead, we can add the \code{WriteVcdAnnotation} to the options for the 
-test to make it produce a waveform file (\code{.vcd} file).\footnote{This is an alternative to
+Instead, we will inspect the generated waveform in the \code{.vcd} file.\footnote{This is an alternative to
 use the command line options.}
 
 
@@ -1748,7 +1742,7 @@ use the command line options.}
 
 Explicitly enumerating all possible input values does not scale. Therefore, we will use
 some Scala code to drive the DUT. The following tester enumerates all possible values for
-the 2 2-bit input signals.
+the two 2-bit input signals.
 
 \shortlist{code/test_bench_wavecnt.txt}
 
@@ -1760,7 +1754,7 @@ $ sbt "testOnly WaveformCounterTest"
 
 \subsection{printf Debugging}
 
-Another form of debugging is the so-called ``printf debugging''. This form comes from
+Another form of debugging is the so-called ``printf debugging''. The name of this debugging method comes from
 simply putting \code{printf} statements in C code to print variables of interest during
 the execution of the program. This printf debugging is also available during testing
 of Chisel circuits. The printing happens at the rising edge of the clock.
@@ -1904,12 +1898,12 @@ and then configure the FPGA.
 
 Note that the \emph{Hello World} is a minimal Chisel project.
 More realistic projects have their source files organized in packages and contain testers.
-The next chapter's exercise will explore such a project.
+%The next chapter's exercise will explore such a project.
 
 \subsection{Using a GitHub Template}
 
 The \myref{https://github.com/schoeberl/chisel-empty}{chisel-empty} project is a minimal Chisel
-project that contains an adder circuit, a tester, and a \code{Makefile} for generating
+project that contains an adder circuit, a tester, and a \code{Makefile} to generate
 Verilog code, test the circuit, and cleanup the repository.
 That project is a GitHub template, which means you can simply start a new GitHub repository
 using this template.
@@ -1941,7 +1935,7 @@ make clean
 In the last chapter's exercise, you have extended the blinking LED example with some input
 to build an AND gate and a multiplexer and run this hardware in an FPGA.
 We will now use this example and test the functionality with a Chisel tester
-to automate testing and also to be independent of an FPGA.
+to automate testing and also to be independent of an FPGA board.
 Use your designs from the previous chapter and add a Chisel tester to test the functionality.
 Try to enumerate all possible inputs and test the output with \code{expect()}.
 
