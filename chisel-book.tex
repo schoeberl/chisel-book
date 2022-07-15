@@ -1956,7 +1956,7 @@ Xilinx Spartan).
 
 A larger digital design is structured into a set of components, often in
 a hierarchical way. Each component has an interface with input and output
-wires, usually called ports. These are similar to input and output pins on an integrated circuit (IC).
+wires, sometimes called ports. These are similar to input and output pins on an integrated circuit (IC).
 Components are connected by wiring up the inputs and outputs.
 Components may contain subcomponents to build the hierarchy.
 The outermost component, which is connected to physical pins
@@ -1966,7 +1966,7 @@ In this chapter, we will explain how components are described in Chisel and
 provide several simple examples of components.
 Note that the components in this section are very small (e.g., just an adder),
 just to show the principles: how to define, instantiate, and connect components.
-Real-world examples should contain more ``meat'' then just a single line for
+Real-world examples shall contain more ``meat'' then just a single line for
 an adder.
 
 \section{Components in Chisel are Modules}
@@ -2021,7 +2021,7 @@ The Chisel code for this component is shown in Listing~\ref{lst:comp:reg}.
 
 \longlist{code/components_cnt.txt}{A counter built out of components.}{lst:comp:cnt}
 
-Now we build a counter with those two components, which counts from 0 to 9 and repeats.
+Now we build a counter with those two components that counts from 0 to 9 and repeats.
 Figure~\ref{fig:components-counter} shows the schematic of the counter. We use an adder
 to add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
 That result, called \code{next} is the input for the register component. The output of the
@@ -2030,7 +2030,7 @@ register is the \code{count} value and also the output of the \code{Count10} com
 Listing~\ref{lst:comp:cnt} shows the Chisel code for the \code{Count10} component.
 The two components are instantiated by creating them with \code{new}, wrapping them
 into a \code{Module()} call, and assigning it a name. In our example \code{add} and \code{reg}.
-In this example we give the output of the register (\code{reg.io.q}) the name (\code{count}).
+In this example we give the output of the register (\code{reg.io.q}) the name \code{count}.
 We connect \code{1.U} and \code{count} to the two inputs of the adder component.
 We give the output of the adder the name \code{result}.
 The multiplexer selects between \code{0.U} and \code{result} depending on the counter
@@ -2109,7 +2109,7 @@ But the sizes of the examples (in those books, and also in this book) are small
 to fit onto a page and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
-IO construction). As a rule of thumb, I would propose that the core of the component,
+IO construction). As a rule of thumb, I propose that the core of the component,
 the function, should be at least as long as the interface of the component.
 
 For tiny components, such as a counter, Chisel provides a more lightweight
@@ -2131,14 +2131,14 @@ or ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
   \label{fig:alu}
 \end{figure}
 
-The ALU has two data inputs, labeled \code{A} and \code{B} in the figure, one function input \code{fn},
-and an output, labeled {Y}. The ALU operates on \code{A} and \code{B} and provides the result
-at the output. The input \code{fn} selects the operation on \code{A} and \code{B}.
+The ALU has two data inputs, labeled \code{a} and \code{b} in the figure, one function input \code{fn},
+and an output, labeled {y}. The ALU operates on \code{a} and \code{b} and provides the result
+at the output. The input \code{fn} selects the operation on \code{a} and \code{b}.
 The operations are usually some arithmetic, such as addition and subtraction, and some logical
 functions such as and, or, xor. That's why it is called ALU.
 
-The function input \code{fn} selects the operation. The ALU is usually a combinational
-circuit without any state elements. An ALU might also have additional outputs to signal properties
+The ALU is usually a combinational circuit without any state elements.
+An ALU might also have additional outputs to signal properties
 of the result, such as zero or the sign.
 
 The following code shows an ALU with 16-bit inputs and outputs that supports: addition, subtraction, or, and and
@@ -2213,14 +2213,16 @@ a separate file. They are declared as follows.
 \shortlist{code/blackbox_adder_resource.txt}
 \shortlist{code/blackbox_adder_path.txt}
 
-The \code{HasBlackBoxPath} version can be provided any relative path from the project 
-folder, while the \code{HasBlackBoxResource} version expects to find its Verilog source 
-in the \code{./src/main/resource} folder.
+The \code{HasBlackBoxResource} version expects to find its Verilog source 
+in the\\
+\code{./src/main/resource} folder.
+The \code{HasBlackBoxPath} version can be provided with any relative path from the project 
+folder.
 
 Blackboxes are instantiated the same way as other modules by wrapping them as 
 \code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped 
 either in a named class or in an anonymous class in the tester. Both are allowed to have 
-the same IO as the blackbox.
+the same IO as the black box.
 \shortlist{code/blackbox_named.txt}
 \shortlist{code/blackbox_anonymous.txt}
 
@@ -2262,7 +2264,7 @@ A try with the Chisel operator \code{:=}, as shown below,
 \noindent results in a runtime exception: \code{Cannot reassign to read-only}.
 
 Chisel also supports describing combinational circuits with conditional updates.
-Such a circuit is declared as a \code{Wire}. Then you uses conditional operations,
+Such a circuit is declared as a \code{Wire}. Then you use conditional operations,
 such as \code{when}, to describe the logic of the circuit.
 The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns a default
 value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassigns
@@ -2299,7 +2301,7 @@ Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code
 
 \noindent This chain of \code{when}, \code{.elsewhen}, and \code{.otherwise}
 construct a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
-That chain introduce a priority, i.e., when \code{cond} is true, the other conditions
+That chain introduces a priority, i.e., when \code{cond} is true, the other conditions
 are not evaluated.
 
 Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
@@ -2315,7 +2317,7 @@ declaration with \code{WireDefault}.
 \shortlist{code/comb_wiredefault.txt}
 
 One might question why using \code{when}, \code{.elsewhen}, and \code{.otherwise}
-when Scala has \code{if}, \code{else if}, and \code{else}? Those statements are for
+when Scala has \code{if}, \code{else if}, and \code{else}? Those Scala statements are for
 conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
 Those Scala conditionals have their use in Chisel when we write circuit generators,
 which take parameters to conditionally generate \emph{different} hardware instances.
