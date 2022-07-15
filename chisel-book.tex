@@ -2329,6 +2329,8 @@ which take parameters to conditionally generate \emph{different} hardware instan
 A \myref{https://en.wikipedia.org/wiki/Binary_decoder}{decoder}
 converts a binary number of $n$ bits to an $m$-bit signal, where $m \leq 2^n$.
 The output is one-hot encoded (where exactly one bit is one).
+Figure~\ref{fig:decoder} shows a 2-bit to 4-bit decoder. We can describe the function
+of the decoder with a truth table, such as Table~\ref{tab:decoder}.
 
 \begin{figure}
   \centering
@@ -2337,12 +2339,9 @@ The output is one-hot encoded (where exactly one bit is one).
   \label{fig:decoder}
 \end{figure}
 
-Figure~\ref{fig:decoder} shows a 2-bit to 4-bit decoder. We can describe the function
-of the decoder with a truth table, such as Table~\ref{tab:decoder}.
 
 \begin{table}
  \centering
- \label{tab:decoder}
   \begin{tabular}{rr}
     \toprule
     a & b \\
@@ -2354,10 +2353,11 @@ of the decoder with a truth table, such as Table~\ref{tab:decoder}.
     \bottomrule 
   \end{tabular} 
   \caption{Truth table for a 2 to 4 decoder.}
+ \label{tab:decoder}
 \end{table}
 
 A Chisel \code{switch} statement describes the logic as a truth table.
-To use the \code{switch} statement we need to include the the package \code{chisel.util}.
+To use the \code{switch} statement we need to include the package \code{chisel.util}.
 
 \shortlist{code/encdec_util.txt}
 
@@ -2369,15 +2369,15 @@ To use the \code{switch} statement we need to include the the package \code{chis
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
 and assigns the decoded value to the \code{result} signal.
-Note that even if we enumerate all possible input values, Chisel still needs us to assign a
-default value, as we do by assigning 0 to \code{result}.
+Note, that even if we enumerate all possible input values, Chisel still needs us to assign a
+default value, as we do by assigning an initial 0 to \code{result}.
 This assignment will never be active and therefore optimized away by the backend tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
 languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
 
 In the example before we used unsigned integers for the signals. Maybe a clearer representation
-of an encode circuit uses the binary notation:
+of an encode circuit uses binary notation:
 
 \shortlist{code/encdec_decbin.txt}
 
@@ -2393,8 +2393,9 @@ operation \code{<<}.
 Decoders are used as a building block for a multiplexer by using the output as an enable
 with an AND gate for the multiplexer data input. However, in Chisel, we do not need to construct
 a multiplexer, as a \code{Mux} is available in the core library.
-Decoders can also be used for address decoding, and then the outputs are used as
-select signals, e.g., different IO devices connected to a microprocessor. 
+Decoders can also be used for address decoding of some bits of an address bus of
+a microprocessor. The outputs are used as
+select signals for memories and different IO devices connected to the microprocessor. 
 
 
 \section{Encoder}
@@ -2414,7 +2415,6 @@ The encoder does the inverse operation of a decoder.
 
 \begin{table}
  \centering
- \label{tab:encoder}
   \begin{tabular}{rr}
     \toprule
     a & b \\
@@ -2427,6 +2427,7 @@ The encoder does the inverse operation of a decoder.
     \bottomrule 
   \end{tabular} 
   \caption{Truth table for a 4 to 2 encoder.}
+ \label{tab:encoder}
 \end{table}
 
 Figure~\ref{fig:encoder} shows a 4-bit one-hot input to a 2-bit binary output encoder, and
@@ -2435,12 +2436,12 @@ works only as expected when the input signal is one-hot coded. For all other inp
 is undefined. As we cannot describe a function with undefined outputs, we use a default
 assignment that catches all undefined input patterns.
 
-The following Chisel code assigns a default value of 00 and then uses the switch statement
+The following Chisel code assigns a default value of 0 and then uses the switch statement
 for the legal input values.
 
 \shortlist{code/encdec_enc.txt}
 
-For the encoder we found an elegant single line statement to express the logic.
+For the decoder we found an elegant single line statement to express the logic.
 This also enables to describe a wide decoder. However, we are not aware
 of such an expression for the encoder.
 
@@ -2464,12 +2465,12 @@ of the encoder table. The following code shows a 16-bit encoder, where the outpu
 \code{Vec} element \code{0} is the default case (\code{0}), and also represents the output
 value when the least significant bit (LSB) is set in \code{hotIn}.
 
-Each \code{Vec} elements 1 till 15 are connected to a multiplexer. if the bit at position \code{i}
+\code{Vec} elements 1 till 15 are connected to a multiplexer. If the bit at position \code{i}
 is set in \code{hotIn}, the multiplexer output is the index, otherwise it is 0. For the correct
 behavior of our encoder we assume that the input signal is one-hot encoded.
 Finally we need to merge all vector elements for a single output. As the vector elements
 are \code{0} when the corresponding bit in the input is \code{0}, we can simply combine
-all elements with an OR function. In the loop we or the current element with one vector
+all elements with an OR function. In the loop we OR the current element with one vector
 element before (\code{... | v(i-1)}). When several elements are combined with a function
 we call this operation also reduce. Therefore, here we perform an OR reduction.
 
