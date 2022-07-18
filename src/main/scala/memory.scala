@@ -1,5 +1,4 @@
 import chisel3._
-import chisel3.stage.ChiselStage
 import chisel3.util.experimental.loadMemoryFromFile
 import firrtl.annotations.MemoryLoadFileType
 
@@ -8,9 +7,9 @@ class Memory() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
     val rdData = Output(UInt(8.W))
-    val wrEna = Input(Bool())
-    val wrData = Input(UInt(8.W))
     val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
   })
 
   val mem = SyncReadMem(1024, UInt(8.W))
@@ -28,9 +27,9 @@ class ForwardingMemory() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
     val rdData = Output(UInt(8.W))
-    val wrEna = Input(Bool())
-    val wrData = Input(UInt(8.W))
     val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
   })
 
   val mem = SyncReadMem(1024, UInt(8.W))
@@ -89,9 +88,9 @@ class InitMemory() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
     val rdData = Output(UInt(8.W))
-    val wrEna = Input(Bool())
-    val wrData = Input(UInt(8.W))
     val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
   })
 
   //- start memory_init

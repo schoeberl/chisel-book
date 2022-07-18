@@ -2488,11 +2488,11 @@ An example would be several processor cores sharing a single serial port (UART).
   \label{fig:arbiter-box}
 \end{figure}
 
-Figure~\ref{fig:arbiter-box} shows the schematic symbol for a 4-bit arbiter.
+Figure~\ref{fig:arbiter-box} shows the schematic of a 4-bit arbiter.
 It consists of four request lines (\code{r0}--\code{r3}) and four grant lines
-(\code{g0}--\code{g3}). The arbiter grants only a single request, usually the
-lower bits first. For example, a request input of \code{0101} will result in
-a grant output of \code{0001}. Therefore, the arbiter prioritizes the lower
+(\code{g0}--\code{g3}). The arbiter grants only a single request.
+For example, a request input of \code{0101} will result in
+a grant output of \code{0001}. The arbiter prioritizes the lower
 inputs. Therefore, we call it a priority arbiter. The lower the bit number,
 the higher the priority.
 
@@ -2524,14 +2524,14 @@ We can see that \code{grant(0)} depends only on \code{request(0)}.
 \code{notGranted} is used to chain the information that no lower bit requests
 have been granted.
 
-Small arbiters an also be directly described with a logic table. Following code
+Small arbiters can also be directly described with a logic table. Following code
 shows the table for a 3-bit arbiter.
 
 \shortlist{code/arbiter3-direct.txt}
 
 \todo{Maybe also use the pattern matching with ??? in Chisel}
 
-However, for larger arbitration circuits we will use our newly learned trick of using
+However, for larger arbitration circuits we will use our newly learned trick of
 a \code{for} loop as a generator loop. The following code shows a parameterized
 arbiter for \code{n} requests and grants. Here we use again \code{Vec} of \code{Bool}.
 
@@ -2605,7 +2605,7 @@ Sequential circuits are circuits where the output depends on the input \emph{and
 previous values. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
-feedback, but this is a specific niche topic and cannot be expressed in Chisel.}
+feedback, but this is a specific niche topic and cannot be easily expressed in Chisel.}
 To build sequential circuits, we need elements that can store state:
 the so-called registers.
 
@@ -2659,20 +2659,12 @@ Variable names start with lowercase and classes start with upper case.
 
 \index{Reset}
 \index{Initialization}
-A register can also be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
-implicit in Chisel. We supply the reset value, e.g., zero, as a parameter to the register
+A register can be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
+implicit in Chisel. We supply the reset value, for example, zero, as a parameter to the register
 constructor \code{RegInit}. The input for the register is connected with a Chisel
 assignment statement.
 
 \shortlist{code/sequ_reg_init.txt}
-
-The default implementation of reset in Chisel is a synchronous
-reset.\footnote{Support for asynchronous reset is currently under development}
-For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
-needs to be added\footnote{Current FPGA flip-flops contain a synchronous reset input.
-Therefore, no additional resources are needed for the multiplexer.} to the input that
-selects between the initialization value under reset and the data value.
-
 
 \begin{figure}
   \centering
@@ -2681,10 +2673,16 @@ selects between the initialization value under reset and the data value.
   \label{fig:register-reset}
 \end{figure}
 
+
+The default implementation of reset in Chisel is a synchronous
+reset.\footnote{Support for asynchronous reset is available.}
+For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
+needs to be added to the input that
+selects between the initialization value under reset and the data value.
 Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
-where the reset drives the multiplexer. However, as synchronous reset is used quite often
-modern FPGAs flip-flops contain a synchronous reset (and set) input to not waste LUT
-resources for the multiplexer.
+where the reset drives the multiplexer. However, as synchronous reset is used quite often,
+modern FPGA flip-flops contain a synchronous reset (and set) input to the flip-flop to not waste
+LUT resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
 by a diagram showing the signals over time. Such a diagram is called a waveform or
@@ -2692,8 +2690,6 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 
 \index{Timing diagram}
 \index{Waveform diagram}
-
-\todo{from Luca: Do readers know about timing diagrams?}
 
 \begin{figure}
   \centering
@@ -2732,7 +2728,7 @@ output of the register.
   \label{fig:register-enable}
 \end{figure}
 
-Figure~\ref{fig:register-enable} shows the schematics of a register with enable.
+Figure~\ref{fig:register-enable} shows the schematic of a register with enable.
 As this is also a common design pattern, modern FPGA flip-flops contain a
 dedicated enable input, and no additional resources are needed.
 
@@ -2764,7 +2760,7 @@ with a conditional update:
 
 \noindent The functionality of enable and initialization at reset can be combined when
 using the three-parameter version of \code{RegEnable}. The first parameter is the input signal,
-the second parameter the initialization value, ad the third parameter the enable signal:
+the second parameter is the initialization value, and the third parameter is the enable signal:
 
 \shortlist{code/sequ_reg_init_ena2.txt}
 
@@ -2777,7 +2773,9 @@ value with the one from the last clock cycle.
 \shortlist{code/sequ_reg_rising.txt}
 
 Now that we have explored all basic uses of a register, we put those registers to
-good use and build more interesting sequential circuits.
+good use and build more interesting sequential circuits. For the next schematics we
+will further simplify the register symbol and omit the \code{D} for the input and the
+\code{Q} for the output. 
 
 \section{Counters}
 \label{sec:counter}
@@ -2814,7 +2812,7 @@ as shown in Figure~\ref{fig:event-counter} and in the following code.
 \subsection{Counting Up and Down}
 
 To count up to a value and then restart with \code{0}, we need to compare
-the counter value with a maximum constant, e.g., with a \code{when}
+the counter value with a maximum constant, for example, with a \code{when}
 conditional statement.
 
 \shortlist{code/when_counter.txt}
@@ -2851,7 +2849,7 @@ Besides counting events, counters are often used to generate a notion of time
 A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
 circuit other than counting clock ticks. If we know the clock frequency, we
-can generate circuits that generate timed events, such as blinking a LED
+can generate circuits that generate timed events, such as blinking an LED
 at some frequency as we have shown in the Chisel ``Hello World'' example.
 
 A common practice is to generate single-cycle \emph{ticks} with a frequency $f_{tick}$
@@ -2909,7 +2907,7 @@ results in a counter with a width of a single bit.
 
 \subsection{The Nerd Counter}
 
-Many of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
+Some of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
 For example, we want to design a highly optimized version of our counter/tick generation.
 A standard counter needs following resources: one register, one adder (or subtractor),
 and a comparator. We cannot do much about the register or the adder. If we count
@@ -2941,7 +2939,7 @@ Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be l
 the value of \code{din} by asserting \code{load}. When the \code{load} signal is de-asserted
 counting down is selected (by selecting \code{cntReg - 1} as the input for the register).
 When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
-counting by selecting input of the multiplexer that provides \code{0}.
+counting by selecting the \code{0} input of the multiplexer.
 
 \begin{figure}
   \centering
@@ -2950,13 +2948,13 @@ counting by selecting input of the multiplexer that provides \code{0}.
   \label{fig:timer}
 \end{figure}
 
-Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{reg},
-that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{reg}
+Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg},
+that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{cntReg}
 with \code{0}. For the input multiplexer we introduce the wire \code{next} with a default
 value of \code{0}. The \code{when/elsewhen} block introduces the other two inputs with
 the select function. Signal \code{load} has priority over the decrement selection.
 The last line connects the multiplexer, represented by \code{next}, to the input of the
-register \code{reg}.
+register \code{cntReg}.
 
 \longlist{code/timer.txt}{A one-shot timer}{lst:timer}
 
@@ -3005,7 +3003,7 @@ Chisel also has a function \code{signedBitLength} to provide the number of bits
 for a signed representation of a number.
 
 
-Another application is to use PWM to dim an LED. In that case the eye serves as low-pass
+Another application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
 The result is an LED with continuously changing intensity.
 
