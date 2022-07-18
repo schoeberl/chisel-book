@@ -15,11 +15,10 @@ class Debounce(fac: Int = 100000000/100) extends Module {
 
   /*
   //- start input_fac
-  val FAC = 100000000/100
+  val fac = 100000000/100
   //- end
   */
 
-  val FAC = fac
 
   //- start input_debounce
   val btnDebReg = Reg(Bool())

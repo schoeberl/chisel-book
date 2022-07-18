@@ -678,9 +678,9 @@ project containing small exercises with testers and solutions. However, it is a 
 
 \end{itemize}
 
-\section{Exercise}
+\section{Exercises}
 
-Each chapter ends with a hands-on exercise. For the introduction exercise, we will use an
+Each chapter ends with a hands-on exercises. For the introduction exercise, we will use an
 FPGA board to get one \myref{https://en.wikipedia.org/wiki/Light-emitting_diode}{LED}
 blinking.\footnote{If you at the moment have no FPGA board available, continue to read
 as we will show you a simulation version at the end of the exercise.}
@@ -1273,7 +1273,7 @@ create in hardware without needing to partition your application into threads
 and getting the locking correct for the communication.
 
 
-\section{Exercise}
+\section{Exercises}
 
 In the introduction you implemented a blinking LED on an FPGA board
 (from \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}), which is a reasonable
@@ -3195,7 +3195,7 @@ emission of a separate Verilog file and works in ChiselTest.
 %yet work in ChiselTest. Either way,
 Initializations are based around calls to \code{readmemb} or \code{readmemh}.
 
-\section{Exercise}
+\section{Exercises}
 
 Use the 7-segment encoder from the last exercise and add a 4-bit counter as input
 to switch the display from \code{0} to \code{F}. When you directly connect this
@@ -3255,6 +3255,13 @@ of the flip-flop. The Metastability may result in an output value between 0 and
 1 or it may result in oscillation. However, after some time the flip-flop will
 stabilize at 0 or 1.
 
+Another common issue with external asynchronous input signals is when
+that signal changes close to the clock rising endge and is used in more than one
+place of the circuit. Due to different delay times, those different usages of that
+input may be registered at different clock cycles, which might violate
+some assumptions.\footnote{I experienced this issue once and it took me
+quite some time to find the error.}
+
 We cannot avoid Metastability, but we can contain its effects.
 A classic solution is to use two flip-flops at the input. The assumption is:
 when the first flip-flop becomes metastable, it will resolve to a stable
@@ -3268,8 +3275,8 @@ second flip-flop will not be violated.
   \label{fig:synchronizer}
 \end{figure}
 
-Figure~\ref{fig:synchronizer} shows the border between the synchronous
-circuit and the external world. The input synchronizer consists of
+Figure~\ref{fig:synchronizer} shows the border between the external world
+and the synchronous circuit. The input synchronizer consists of
 two flip-flops. The Chisel code for the input synchronizer is a one-liner that
 instantiates two registers.
 
@@ -3317,9 +3324,9 @@ points. The distance between those sampling points needs to be longer
 than the maximum bouncing time. The first sample safely samples a 0, and the last
 sample in the figure samples a 1. The middle sample falls into the
 bouncing time. It may either be 0 or 1. The two possible outcomes are
-shown as \code{debounce A} and \code{debounce B}. 
+shown as \code{debounced A} and \code{debounced B}. 
 Both have a single transition from 0 to 1. The only difference between these
-two outcomes is that the transition in version B is one sample period later.
+two outcomes is that the transition in version A is one sample period later.
 However, this is usually a non-issue.
 
 The Chisel code for the debouncing is a little bit more evolved than the
@@ -3333,7 +3340,7 @@ cycle \code{tick} signal, as we have done in Section~\ref{sec:gen:timing}.
 First, we need to decide on the sampling frequency. The above example
 assumes a 100~MHz clock and results in a sampling frequency of 100~Hz
 (assuming that the bouncing time is below 10~ms). The maximum
-counter value is \code{FAC}, the division factor.
+counter value is \code{fac}, the division factor.
 We define a register \code{btnDebReg} for the debounced signal,
 without a reset value. The register \code{cntReg} serves
 as counter, and the \code{tick} signal is true when the counter has
@@ -3384,7 +3391,8 @@ Note, that a majority voting is very seldom needed.
 
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
-signal with the current value of \code{btnClean} to enable the counter to increment.
+signal with the current value of \code{btnClean}. In this example, we use
+hat single cycle rising edge signal to increment a counter. 
 
 \index{Edge detection}
 
@@ -3394,11 +3402,12 @@ signal with the current value of \code{btnClean} to enable the counter to increm
 
 To summarize the input processing, we show some more Chisel code.
 As the presented circuits might be tiny, but reusable building blocks, we encapsulate
-them in functions. Section~\ref{sec:functions} showed how we can abstract
+them in functions. Section~\ref{sec:functions} showes how we can abstract
 small building blocks in lightweight Chisel functions instead of full modules.
 Those Chisel functions create hardware instances, e.g., the function
 \code{sync} creates two flip-flops connected to the input and to each other.
 The function returns the output of the second flip-flop.
+Listing~\ref{lst:input:func} shows all input processing circuits as functions.
 If useful, those functions can be elevated to some utility class object.
 
 \longlist{code/input_func.txt}{Summarizing input processing with functions.}{lst:input:func}
@@ -3469,7 +3478,7 @@ state and the input, and (3) combinational logic that computes the output of the
 
 In principle, every digital circuit that contains a register or other memory elements
 to store state can be described as a single FSM. However, this might
-not be practical, e.g., try to describe your laptop as a single FSM.
+not be practical, for example, try to describe your laptop as a single FSM.
 In the next chapter, we describe how to build larger systems
 out of smaller FSMs by combining them into communicating FSMs.
 
@@ -3544,7 +3553,7 @@ green & 1 & - & orange & 0 \\
 orange & 0 & 0 & orange & 0 \\
 orange & 1 & - & red & 0 \\
 orange & 0 & 1 & green & 0 \\
-red & 0 & 0 & red & 1 \\
+red & - & 0 & red & 1 \\
 red & 0 & 1 & green & 1 \\
 \bottomrule
 \end{tabular}
@@ -3567,8 +3576,8 @@ The FSM has two input and a single output signal, captured in a Chisel \code{Bun
 \shortlist{code/simple_fsm_io.txt}
 
 
-\noindent Quite some work has been spent in optimal state encoding. Two common options
-are binary or one-hot encoding. However, we leave those low-level decisions to
+\noindent At this place we could spend some discussion on optimal state encoding. Two common options
+are binary or one-hot encoding. However, we leave those low-level optimization to
 the synthesize tool and aim for readable code.\footnote{In the current version
 of Chisel the \code{Enum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
@@ -3601,7 +3610,8 @@ Registers in Verilog and VHDL are described in a special syntax and cannot
 be assigned (and reassigned) within a combinational block.
 Therefore, the additional signal, computed in a combinational block, is
 introduced and connected to the register input.
-In Chisel a register is a base type and can be freely used within a combinational block.
+In Chisel a register is a base type and can be freely used and assigned
+within a combinational block.
 
 \section{Faster Output with a Mealy FSM}
 
@@ -3646,9 +3656,9 @@ the input of the FSM and the output, this is called a
 
 Figure~\ref{fig:mealy} shows the schematic of a Mealy type FSM.
 Similar to the Moore FSM, the register contains the current \code{state}, and
-the next state logic computes the next state value (\code{next\_state})
+the next state logic computes the next state value (\code{nextState})
 from the current \code{state} and the input (\code{in}).
-On the next clock tick, \code{state} becomes \code{next\_state}.
+On the next clock tick, \code{state} becomes \code{nextState}.
 The output logic computes the output (\code{out}) from the current state
 \emph{and} the input to the FSM.
 
@@ -3721,9 +3731,9 @@ FSM output within the state representing circles.
 \longlist{code/rising_moore_fsm.txt}{Rising edge detection with a Moore FSM.}{lst:fsm:rising:moore}
 
 Listing~\ref{lst:fsm:rising:moore} shows the Moore version of the rising edge detection
-circuit. It uses double the number of D flip-flops than the Mealy or direct
+circuit. It uses double the number of D flip-flops than the Mealy or directly
 coded version. The resulting next state logic is therefore also larger
-than the Mealy or direct coded version.
+than the Mealy or directly coded version.
 
 \begin{figure}
   \centering
@@ -3740,7 +3750,7 @@ output is usually less than a clock cycle.
 
 From the above example, one is tempted to find Mealy FSMs the \emph{better}
 FSMs as they need less state (and therefore logic) and react faster than a Moore FSM.
-However, the combinational path within a Mealy machine can cause trouble in
+However, the combinational path within a Mealy machine can cause troubles in
 larger designs. First, with a chain of communicating FSM (see next chapter), this
 combinational path can become lengthy. Second, if the communicating FSMs build
 a circle, the result is a combinational loop, which is an error in synchronous design.
