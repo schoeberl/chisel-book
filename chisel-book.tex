@@ -3790,7 +3790,7 @@ Martin: but this is shown at the Chisel homepage without an FSM.}
 A problem is often too complex to describe it with a single FSM.
 In that case, the problem can be divided into two or more smaller and simpler FSMs.
 Those FSMs then communicate with signals. One FSMs output is
-another FSMs input, and the FSM watches the output of the other FSM.
+another FSMs input; one FSM watches the output of the other FSM.
 When we split a large FSM into simpler ones, this is called factoring FSMs.
 Communicating FSMs are often directly designed from the specification
 of the design. A single FSM for the design would be too large in the first place.
@@ -3845,7 +3845,11 @@ and remains asserted;
 
 \shortlist{code/flasher_timer.txt}
 
-\noindent Listing~\ref{lst:flasher:master} shows the master FSM.
+\noindent Listing~\ref{lst:flasher:master} shows the master FSM. It has a starting
+state \code{off} and states for the complete blinking sequence. In each state it
+waits for the time being done. The timer is loaded whenever it is done and in the
+initial \code{off} state. Signal \code{timerSelect} selects the value for the \emph{next}
+state down counter.
 
 \longlist{code/flasher_fsm.txt}{Master FSM of the light flasher.}{lst:flasher:master}
 
@@ -3881,11 +3885,9 @@ Besides having a master FSM that is reduced to just three states, our current so
 is also better configurable. No FSM needs to be changed if we want to change
 the length of the \emph{on} or \emph{off} intervals or the number of flashes.
 
-In this section, we have explored communicating circuits, especially FSM, that
-only exchange control signals. However, circuits can also exchange data.
-For the coordinated exchange of data, we use handshake signals.
-The next section describes the ready-valid interface for flow control of
-unidirectional data exchange.
+In this section, we have explored communicating circuits, especially FSMs, that
+only exchange control signals. To perform computation we can combine a FSM with
+a datapath, as discussed in the next section.
 
 \section{State Machine with Datapath}
 \index{State machine with datapath}
@@ -3905,8 +3907,6 @@ of the combination of the FSM with the datapath.
   \caption{A state machine with a datapath.}
   \label{fig:popcnt-fsmd}
 \end{figure}
-
-\subsection{Popcount Example}
 
 The FSMD shown in Figure~\ref{fig:popcnt-fsmd} serves as an example that computes the
 popcount, also called the \myref{https://en.wikipedia.org/wiki/Hamming_weight}{Hamming weight}.
@@ -3928,22 +3928,6 @@ and with status signals from the datapath.
   \label{fig:popcnt-states}
 \end{figure}
 
-As a next step, we can design the FSM, starting with a state diagram, shown in
-Figure~\ref{fig:popcnt-states}. We start in state \code{Idle}, where the FSM waits
-for input. When data arrives, signaled with a valid signal, the FSM advances to state \code{Load}
-to load a shift register. The FSM proceeds to the next state \code{Count}, there the number
-of `1's is counted sequentially. We use a shift register, an adder, an accumulator
-register, and a down counter to perform the computation. When the down counter reaches
-zero, we are finished and the FSM moves to state \code{Done}. There the FSM signals with a valid
-signal that the popcount value is ready to be consumed. On a ready signal from the
-receiver, the FSM moves back to the \code{Idle} state, ready to compute the next popcount.
-
-The top level component, shown in Listing~\ref{lst:pop:top} instantiates the FSM and the datapath components and connects
-them with bulk connections.
-
-\longlist{code/popcnt_main.txt}{The top level of the popcount circuit.
-\todo{Bulk connection should be used here (and tested).}}{lst:pop:top}
-
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/popcnt-data}
@@ -3951,35 +3935,57 @@ them with bulk connections.
   \label{fig:popcnt-data}
 \end{figure}
 
+We will co-design the FSM and the datapath. 
+Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
+The FSM starts in state \code{Idle}, where the FSM waits for input.
+When data arrives, signaled with a asserted \code{dinValid}, the FSM loads the shift register
+and advances to state \code{Count}.
 The data is loaded into the \code{shf} register. On the load also the \code{cnt}
-register is reset to 0. To count the number of `1's, the \code{shf} register is shifted
+register is reset to 0. 
+
+
+In state \code{Count}, the number of `1's is counted sequentially.
+We use a shift register, an adder, an accumulator
+register, and a down counter (not shown in the datapath) to perform the computation.
+To count the number of `1's, the \code{shf} register is shifted
 right, and the least significant bit is added to \code{cnt} each clock cycle.
 A counter, not shown in the figure, counts down until all bits have been shifted
-through the least significant bit. When the counter reaches zero, the popcount
+through the least significant bit.
+When the counter reaches zero, the popcount
 has finished. The FSM switches to state \code{Done} and signals the result
 by asserting \code{popCntReady}. When the result is read, signaled by asserting
-\code{popCntValid} the FSW switches back to \code{Idle}.
+\code{popCntValid} the FSM switches back to \code{Idle},
+ready to compute the next popcount.
 
+The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
+components and connects them.
+
+\longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
+
+Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
+circuit.
 On a \code{load} signal, the \code{regData} register is loaded with the input,
 the \code{regPopCount} register reset to 0, and the counter register \code{regCount}
 set to the number of shifts to be performed.
-
-\longlist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
-\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
-
 Otherwise, the \code{regData} register is shifted to the right, the least significant bit
 of the \code{regData} register added to the \code{regPopCount} register, and the counter
 decremented until it is 0. When the counter is 0, the output contains the popcount.
-Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
-circuit.
 
+\longlist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
+
+Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it
 switches to the \code{count} state and waits till the datapath has finished counting.
-When the popcount is valid, the FSM switches to state \code{done} and waits till the
+When the popcount is \code{done}, the FSM switches to state \code{done} and waits till the
 popcount is read (signaled by \code{popCntReady}).
-Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 
+\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
+
+The popcount example consumed (a word) data and produced (the popcount) data.
+For the coordinated exchange of data, we use handshake signals.
+The next section describes the ready-valid interface for flow control of
+unidirectional data exchange.
 
 \section{Ready-Valid Interface}
 \index{Ready-valid interface}
@@ -3998,7 +4004,8 @@ using valid and ready signals.
 
 The ready-valid interface~\cite[p.~480]{dally:vhdl:2016} is a simple flow
 control interface consisting of \code{data} and a \code{valid} signal at the
-sender side (producer) and a \code{ready} signal at the receiver side (consumer).
+sender side (also called producer or source) and a \code{ready}
+signal at the receiver side (also called consumer or destination).
 Figure~\ref{fig:readyvalid} shows the ready-valid connection.
 The sender asserts \code{valid} when \code{data} is available,
 and the receiver asserts \code{ready} when it is ready to receive one word
@@ -4009,7 +4016,7 @@ no transfer takes place.
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/ready_valid1}
-  \caption{Data transfer with a ready-valid interface, early ready}
+  \caption{Data transfer with a ready-valid interface, early ready.}
   \label{fig:ready_valid1}
 \end{figure}
 
@@ -4024,7 +4031,7 @@ When the receiver can receive data in every clock cycle, it is called an
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/ready_valid2}
-  \caption{Data transfer with a ready-valid interface, late ready}
+  \caption{Data transfer with a ready-valid interface, late ready.}
   \label{fig:ready_valid2}
 \end{figure}
 
@@ -4040,7 +4047,7 @@ interface. However, in that case the data will probably not change on signaling
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/ready_valid3}
-  \caption{Single cycle ready/valid and back-to-back transfers}
+  \caption{Single cycle ready/valid and back-to-back transfers.}
   \label{fig:ready_valid3}
 \end{figure}
 
@@ -4063,7 +4070,7 @@ the \code{data}. The interface defined by Chisel uses the field \code{bits}
 for the data.
 
 One question remains if the \code{ready} or \code{valid} may be de-asserted
-after being active and \emph{no} data transfer has happened.
+after being asserted and \emph{no} data transfer has happened.
 For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
 The same can be envisioned with the sender, having data valid only some
@@ -4086,12 +4093,14 @@ Additionally, once \code{valid} is raised it will never be lowered until after
 \noindent Note that this is a convention that cannot be enforced by using the class
 \code{IrrevocableIO}.
 
-AXI uses one ready-valid interface for each of the following parts of the bus:
+The AXI  bus~\cite{axi4standard} uses one ready-valid interface for each of the following parts of the bus:
 read address, read data, write address, and write data. AXI restricts the interface
-that once \code{ready} or \code{valid} is asserted it is not allowed to get de-asserted
-until the data transfer happened.
-
-\todo{Read and cite AXI, and check if the above is true}
+that once the sender assets \code{valid} it is not allowed to deasserted it
+until the data transfer happened. Furthermore, the sender is not allowed to wait for a receivers
+\code{ready} the assert \code{valid}.
+The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to deassert it
+before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
+\code{valid} before asserting \code{ready}.
 
 \todo{Reconsider writing the testing chapter}
 
