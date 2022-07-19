@@ -132,6 +132,9 @@ class FunctionalMin(n: Int, w: Int) extends Module {
     .map((x) => MixedVecInit(x._1, x._2.U(8.W)))
   val resFun2 = VecInit(scalaVector)
     .reduceTree((x, y) => Mux(x(0) < y(0), x, y))
+
+  val minVal = resFun2(0)
+  val minIdx = resFun2(1)
   //- end
 
   io.min := min
@@ -142,8 +145,8 @@ class FunctionalMin(n: Int, w: Int) extends Module {
   io.resB := resFun._1
   io.idxB := resFun._2
 
-  io.resC := resFun2(0)
-  io.idxC := resFun2(1)
+  io.resC := minVal
+  io.idxC := minIdx
 }
 
 object ScalaFunctionalMin {

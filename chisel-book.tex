@@ -1966,7 +1966,7 @@ In this chapter, we will explain how components are described in Chisel and
 provide several simple examples of components.
 Note that the components in this section are very small (e.g., just an adder),
 just to show the principles: how to define, instantiate, and connect components.
-Real-world examples shall contain more ``meat'' then just a single line for
+Real-world examples shall contain more ``meat'' than just a single line for
 an adder.
 
 \section{Components in Chisel are Modules}
@@ -4102,7 +4102,7 @@ The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
 
-\longlist{code/ready_valid_buffer.txt}{A register as a buffer with a ready-valid interface.}{lst:rv:reg}
+\longlist{code/ready_valid_buffer.txt}{A register as a buffer with ready-valid interface.s}{lst:rv:reg}
 
 Listing~\ref{lst:rv:reg} shows an example of using the ready-valid interface.
 The circuit represents a buffer built out of a register.
@@ -4113,14 +4113,13 @@ the input of the buffer (\code{in}) needs to change the direction with \code{Fli
 The module contains a register for the data (\code{dataReg}) and a single bit
 register (\code{emptyReg}) signaling if the buffer is empty or full.
 This single bit represents a two state Moore FSM with states empty and full.
-
 The input \code{ready} signal and the output \code{valid} signal depend only
 on the state of \code{emptyReg}. There is no combinational path between the
 input and the output of the buffer.
 
-When the buffer is empty and there is a valid data at the input, the data is registered
+When the buffer is empty and there is valid data at the input, the data is registered
 and the state changed to full. When the buffer is full and the consumer side signals
-to be ready, the data is read and the buffer is empty again.
+to be ready, the data is considered read and the buffer is empty again.
 
 
 
@@ -4197,17 +4196,17 @@ to be ready, the data is read and the buffer is empty again.
 
 The strength of Chisel is that it allows us to write so-called hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
-we usually use another language, e.g., Java or Python, to generate hardware.
-The author has often written small Java programs to generate VHDL tables.
-In Chisel, the full power of Scala (and Java libraries) is available at hardware
-construction. Therefore, we can write our hardware generators in the same
-language and execute them as part of the Chisel circuit generation.
+we usually use another language, for example, Java or Python, to generate hardware.
+Before using Chisel I have often written small Java programs to generate VHDL tables.
+In Chisel, the full power of Scala and Java with its many open-source libraries
+are available at hardware construction time. Therefore, we can write our hardware
+generators in the same language and execute them as part of the Chisel circuit generation.
 
 \section{A Little Bit of Scala}
 \index{Scala}
 
 This subsection gives a very brief introduction into Scala. It should be enough
-to write hardware generators for Chisel.
+to write simple hardware generators for Chisel.
 For an in-depth introduction into Scala I recommend the textbook by Odersky et al.~\cite{Scala}.
 The \myref{https://www.scala-lang.org/}{Scala website} also contains an
 \myref{https://docs.scala-lang.org/overviews/scala-book/introduction.html}{online Scala book}.\footnote{The link
@@ -4215,21 +4214,21 @@ points to the Scala 2 version of the book, as Chisel is still based on Scala 2.}
 
 Scala has two types of variables: \code{val}s and \code{var}s. A \code{val} gives an expression
 a name and cannot be reassigned a value. This following snippet shows the definition of
-of an integer value called \code{zero}. If we try to reassign a value to \code{zero}, we get
+an integer value called \code{zero}. If we try to reassign a value to \code{zero}, we get
 a compile error.
 
 \shortlist{code/scala_val.txt}
 
-\noindent In Chisel we use \code{val}s only to name hardware components. Note that the \code{:=}
+\noindent In Chisel we use \code{val}s to name hardware components. Note that the \code{:=}
 operator is a Chisel operator and not a Scala operator.
 
-Scala also provides the more classic version of a variable as \code{var}. Following code defines
+Scala also provides the more classic version of a mutable variable as \code{var}. Following code defines
 an integer variable and reassigns it a new value:
 
 \shortlist{code/scala_var.txt}
 
 \noindent We will need Scala \code{var}s to write hardware \emph{generators}, but never need
-it to use it to name a hardware \emph{component}.
+\code{var}s to name a hardware \emph{component}.
 
 You may have wondered what type those variables have. As we assigned an integer constant
 in the above example, the type of the variable is \emph{inferred}; it is a Scala \code{Int} type.
@@ -4255,7 +4254,7 @@ for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
 is evaluated at Scala runtime during circuit generation. This construct does \emph{not}
-create a multiplexer, but allows to write configurable \emph{hardware generators}.
+create a multiplexer, but allows to write \emph{configurable} hardware generators.
 
 \shortlist{code/scala_condition.txt}
 
@@ -4294,7 +4293,10 @@ We can then create two adders by simply calling the function \code{adder}.
 
 \noindent Note that this is a \emph{hardware generator}. That code is not executing any add operation
 during elaboration, but creates two adders (hardware instances). Or in other words, it returns
-a wire to the output of the adder. The adder is an artificial example
+a wire to the output of the adder.
+We have written our first hardware generator!
+
+The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
 Functions, as lightweight hardware generators, can also contain state (including a register).
@@ -4338,7 +4340,7 @@ used in different modules are better placed into a Scala object that collects ut
 functions.
 
 
-\section{Configure with Parameters}
+\section{Configuration with Parameters}
 \index{Parameters}
 
 Chisel components and functions can be configured with parameters.
@@ -4384,7 +4386,7 @@ provided at function call. The function itself is straight forward:
 we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
-At the end of the function, we return the multiplexer hardware.
+At the end of the function, we return the multiplexer hardware (the output).
 
 We can use our multiplexer function with simple types such as
 \code{UInt}:
@@ -4396,7 +4398,7 @@ Following wrong usage of the multiplexer results in a runtime error:
 
 \shortlist{code/param_func_wrong.txt}
 
-\noindent We define our type as a \code{Bundle} with two fields:
+\noindent To show a more complex multiplexer, we define a new type as a \code{Bundle} with two fields:
 
 \shortlist{code/param_func_type.txt}
 
@@ -4472,6 +4474,8 @@ a \code{Payload} as a parameter:
 \index{Logic table generation}
 \label{sec:gen:comb:logic}
 
+
+
 In Chisel, we can easily generate logic by creating a logic table with
 a Chisel \code{Vec} from a Scala \code{Array}.
 We might have data in a file, that we can read in during hardware generation
@@ -4481,16 +4485,15 @@ class form the Scala standard library to read the file \code{data.txt}, which
 contains integer constants in a textual representation.
 
 \index{File reading}
-
 \longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
-
 
 A few words on the maybe a bit intimidating expression:
 \begin{chisel}
   val table = VecInit(array.map(_.U(8.W)))
 \end{chisel}
 
-\noindent A Scala \code{Array} can be implicitly converted to a sequence (\code{Seq}),
+
+\noindent A Scala \code{Array} can be implicitly converted to a Scala sequence (\code{Seq}),
 which supports the mapping function \code{map}.
 \code{map} invokes a function on each element of the sequence and returns
 a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
@@ -4499,7 +4502,7 @@ from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-
 The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
 of Chisel types.
 
-We can use this initialization of a Chisel \code{Vec} from a Scala sequence to represent
+We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
 a message that we may send out to a serial port. Following code converts the standard greeting
 from a Scala/Java \code{String} to a Chisel \code{Vec}:
 
@@ -4512,7 +4515,7 @@ message.
 
 
 We can use the full power of Scala to generate our logic (tables).
-E.g., generate a table of fixpoint constants to represent a trigonometric function,
+For example, generate a table of fixpoint constants to represent a trigonometric function,
 compute constants for digital filters, or writing a small assembler in Scala
 to generate code for a microprocessor written in Chisel. All those functions
 are in the same code base (same language) and can be executed during
@@ -4520,7 +4523,7 @@ hardware generation.
 
 \index{Binary-coded decimal}
 \index{BCD}
-A classic example is the conversion of a binary number
+A classic example for a table generation is the conversion of a binary number
 into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
 (BCD) representation. BCD is used to represent a number in a decimal
 format using 4 bits fo each decimal digit. For example, decimal \code{13} is in binary
@@ -4533,7 +4536,7 @@ we would use another script or programming language to generate such a table.
 We can write a Java program that computes the table to convert binary to BCD.
 That Java program prints out VHDL code that can be included in a project.
 The Java program is about 100 lines of code; most of the code generating
-VHDL strings. The key part of the conversion is just two lines.
+VHDL strings. However, the key part of the conversion is just two lines of code.
 
 With Chisel, we can compute this table directly as part of the hardware generation.
 Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
@@ -4552,7 +4555,7 @@ out into a parent class. We explore how to use inheritance with an example.
 
 In Section~\ref{sec:counter} we have explored different forms of counters,
 which may be used for a low-frequency tick generation. Let us assume we want to
-explore those different versions, e.g., to compare their resource requirement.
+explore those different versions, for example, to compare their resource requirement.
 We start with an abstract class to define the ticking interface:
 
 \shortlist{code/ticker.txt}
@@ -4603,7 +4606,7 @@ sbt "testOnly TickerTest"
 
 Scala supports functional programming, so does Chisel then.
 We can use functions to represent hardware and combine those hardware components
-with functional programming (by using a so-called ``higher-order function'').
+with functional programming by using a so-called ``higher-order function''.
 Let us start with a simple example, the sum of a vector:
 
 \shortlist{code/fun_first.txt}
@@ -4615,7 +4618,7 @@ The \code{reduce()} method reduces the sequence starting from the left.
 It takes the first two elements and performs the operation. The result is then combined
 with the next element, until a single result is left.
 
-The function to combine to elements is provided as parameter to \code{reduce}, in our case \code{add},
+The function to combine two elements is provided as parameter to \code{reduce}, in our case \code{add},
 which returns an adder. The resulting hardware is a chain of adders computing
 the sum of the elements of vector \code{vec}.
 
@@ -4632,7 +4635,7 @@ If we do not trust the synthesize tool to rearrange our adder chain, we can use 
 
 \shortlist{code/fun_reduce_tree.txt}
 
-As a more elaborate example we build a circuit to find the minimum value in \code{vec}. To express this circuit
+As a more elaborate example, we will build a circuit to find the minimum value in a \code{vec}. To express this circuit
 we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
 literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
 
@@ -4651,43 +4654,59 @@ position (index) in the \code{vec}. To return two values we define the Bundle \c
 hold the value and the index. We declare the \code{vecTwo} \code{Vec} that can hold these bundles
 and connect them in a loop to the original input and the index within the \code{Vec}.
 
-As before we use an function literal in the \code{reduceTree} method of the \code{vecTwo},
+As before we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
 comparing the value field within the bundle and returning the complete bundle from the multiplexer.
 Value \code{res} points to the bundle containing the minimum value and the position.
 
 \shortlist{code/fun_min2.txt}
 
-As a final variation we using more Scala features to avoid creating the bundle to return the value
+As a final variation of the minimum search circuit we will ues more Scala features
+to avoid creating the bundle to return the value
 and index. We will use a tuple to represent both values.
 The following code shows the application
 of a chain of functions to the original sequence. Chaining functions is a typical pattern in functional programming.
 This pattern can also be seen as a pipeline of operations.
 
+\shortlist{code/fun_min3.txt}
+
 The first function (\code{zipWithIndex})
-transforms the original sequence to a sequence of tuples, where the second element is the index
-value. In general a \code{zip} function merges two sequences (zips them) into a single one
-containing the two elements as tuples. The next function maps our duple of a Chisel \code{UInt}
+transforms the original sequence of \code{UInt}s to a sequence of tuples, where the first element is the
+unchanged \code{UInt} and the second element is the index value within the \code{vec} as Sala \code{Int}.
+In general a \code{zip} function merges two sequences (zips them) into a single one
+containing the two elements as tuples.
+
+The next function maps our duple of a Chisel \code{UInt}
 and a Scala \code{Int} to two Chisel \code{UInt}s. The \code{reduce} function provides the generation of
 the minimum finding. We compare the first element of the tuple in two multiplexers and returning
 a tuple containing the minimum value and the position as Chisel \code{UInt} types.
 
-\shortlist{code/fun_min3.txt}
 
 Note that the whole functional expression uses a Scala \code{Vector} to hold intermediate results,
 but returns hardware (connected multiplexers) consisting of Chisel types only.
 As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is available on Chisel's
 \code{Vec} only.
 
-\todo{Explain the following code}
+To keep using \code{reduceTree} the following solution uses a Chisel \code{MixedVec}.
 
 \shortlist{code/fun_min4.txt}
+
+A Chisel \code{MixedVec} is similar to a Scala tuple as it can have different types at different positions.
+Therefore, it cannot function has, for example, multiplexer. However, we can use it as an
+indexable collection during hardware generation.
+In the above example we create a Scala \code{Vector} of the values with their index, but now
+using Chisels ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
+Then we can again perform tree based reduction. Another benefit of this version is
+that we have only one multiplexer, which selects between two Chisel ``tuples'' as
+\code{MixedVec}.
+The result in \code{resFun2} is a \code{MixedVec} with two elements,
+accessed with an index, like a ``normal'' \code{Vec}.
 
 %Listing~\ref{lst:fun:arbiter} shows how to use \code{reduce} to generate an arbitration circuit.
 
 %\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
 
 
-\todo{explain the function, talk about reduceTree}
+\todo{do the arbitration circuit}
 
 \chapter{Example Designs}
 

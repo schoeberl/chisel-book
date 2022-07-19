@@ -16,11 +16,12 @@ class UpTicker(n: Int) extends Ticker(n) {
   val cntReg = RegInit(0.U(8.W))
 
   cntReg := cntReg + 1.U
-  when(cntReg === N) {
+  val tick = cntReg === N
+  when(tick) {
     cntReg := 0.U
   }
 
-  io.tick := cntReg === N
+  io.tick := tick
 }
 //- end
 
