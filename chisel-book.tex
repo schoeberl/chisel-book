@@ -758,7 +758,7 @@ These essential elements can be combined to build larger, more interesting circu
 
 Digital systems, in general, use binary signals, which means a single bit or signal
 can only have one of two possible values. These values are often called 0 and 1. However, we
-also use following terms: low/high, false/true, and de-asserted/asserted.
+also use following terms: low/high, false/true, and deasserted/asserted.
 These terms mean the same two possible values of a binary signal.
 
 \section{Chisel Types and Constants}
@@ -2511,7 +2511,7 @@ Figure~\ref{fig:arbiter} shows the schematic of a 4-bit arbiter.
 The individual grant requests need to check if a lower bit has already
 won the arbitration. For the first request the grant \code{g0} depends only on the
 request \code{r0}. The second grant can only win the arbitration when request \code{r1}
-is asserted and request \code{r0} is de-asserted. For the next requests these lookup
+is asserted and request \code{r0} is deasserted. For the next requests these lookup
 is further chained.
 
 Following code shows an arbiter for 3 clients.
@@ -2936,7 +2936,7 @@ The digital timer is loaded with the time in clock cycles.
 Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
 
 Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
-the value of \code{din} by asserting \code{load}. When the \code{load} signal is de-asserted
+the value of \code{din} by asserting \code{load}. When the \code{load} signal is deasserted
 counting down is selected (by selecting \code{cntReg - 1} as the input for the register).
 When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
 counting by selecting the \code{0} input of the multiplexer.
@@ -3289,7 +3289,7 @@ A classic example is the interfacing an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
-for other flip-flops in the circuit. Concrete, the de-assertion of the reset need
+for other flip-flops in the circuit. Concrete, the deassertion of the reset need
 to be synchronous to the clock.
 
 \section{Debouncing}
@@ -3973,6 +3973,7 @@ of the \code{regData} register added to the \code{regPopCount} register, and the
 decremented until it is 0. When the counter is 0, the output contains the popcount.
 
 \longlist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
+\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it
@@ -3980,7 +3981,6 @@ switches to the \code{count} state and waits till the datapath has finished coun
 When the popcount is \code{done}, the FSM switches to state \code{done} and waits till the
 popcount is read (signaled by \code{popCntReady}).
 
-\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 The popcount example consumed (a word) data and produced (the popcount) data.
 For the coordinated exchange of data, we use handshake signals.
@@ -4067,9 +4067,9 @@ bundle, similar to the following:
 
 \noindent The \code{DecoupledIO} bundle is parameterized with the type for
 the \code{data}. The interface defined by Chisel uses the field \code{bits}
-for the data.
+for the data. \code{DecoupledIO} is part of the package \code{chisel3.util}.
 
-One question remains if the \code{ready} or \code{valid} may be de-asserted
+One question remains if the \code{ready} or \code{valid} may be deasserted
 after being asserted and \emph{no} data transfer has happened.
 For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
@@ -4090,7 +4090,7 @@ Additionally, once \code{valid} is raised it will never be lowered until after
 \code{ready} has also been raised.
 \end{quote}
 
-\noindent Note that this is a convention that cannot be enforced by using the class
+\noindent Note that this is \emph{just} a convention that cannot be enforced by using the class
 \code{IrrevocableIO}.
 
 The AXI  bus~\cite{axi4standard} uses one ready-valid interface for each of the following parts of the bus:
@@ -4102,7 +4102,27 @@ The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
 
-\todo{Reconsider writing the testing chapter}
+\longlist{code/ready_valid_buffer.txt}{A register as a buffer with a ready-valid interface.}{lst:rv:reg}
+
+Listing~\ref{lst:rv:reg} shows an example of using the ready-valid interface.
+The circuit represents a buffer built out of a register.
+The buffer has a ready-valid interface (\code{DecoupledIO}) at the input and one at the output.
+The \code{DecoupledIO} bundle is defined from the sender's viewpoint. Therefore,
+the input of the buffer (\code{in}) needs to change the direction with \code{Flipped}.
+
+The module contains a register for the data (\code{dataReg}) and a single bit
+register (\code{emptyReg}) signaling if the buffer is empty or full.
+This single bit represents a two state Moore FSM with states empty and full.
+
+The input \code{ready} signal and the output \code{valid} signal depend only
+on the state of \code{emptyReg}. There is no combinational path between the
+input and the output of the buffer.
+
+When the buffer is empty and there is a valid data at the input, the data is registered
+and the state changed to full. When the buffer is full and the consumer side signals
+to be ready, the data is read and the buffer is empty again.
+
+
 
 %\chapter{Debugging, Testing, and Verification}
 %\label{chap:testing}
@@ -4843,7 +4863,7 @@ This very minimal transmitter has no additional buffer and can
 accept a new character only when the shift register is empty
 and at the clock cycle when \code{cntReg} is 0.
 Accepting new data only when \code{cntReg} is 0 also means
-that the ready flag is also de-asserted when there would be
+that the ready flag is also deasserted when there would be
 space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter but delegate it to a buffer.
 
@@ -4981,7 +5001,7 @@ One solution is stay \code{ready} even when the buffer register is full.
 To be able to accept a data word from the producer, when the consumer is not
 \code{ready} we need a second buffer, we call it the shadow register.
 When the the buffer is full, new data is stored in the shadow register and \code{ready}
-is de-asserted. When the consumer becomes \code{ready} again, data is transferred
+is deasserted. When the consumer becomes \code{ready} again, data is transferred
 from the data register to the consumer and from the shadow register into
 the data register.
 
@@ -4999,7 +5019,7 @@ or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
 
 If we run the FIFO at full speed and the consumer is always \code{ready}
 the steady state of the double buffers are \code{one}. Only when the consumer
-de-asserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
+deasserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
 However, compared to a single bubble FIFO, a restart of the queue takes
 only half the number of clock cycles for the same buffer capacity.
 Similar the fall through latency is half of the bubble FIFO.
@@ -5064,13 +5084,13 @@ When both pointer are equal, the buffer is either empty or full.
 We define two flags to for the notion of empty and full.
 
 When the producer asserts \code{valid} and the FIFO is not full we:
-(1) write into the buffer, (2) ensure \code{emptyReg} is de-asserted,
+(1) write into the buffer, (2) ensure \code{emptyReg} is deasserted,
 (3) mark the buffer full if the write pointer will catch up with the read pointer
 in the next clock cycle (compare the current read pointer with the next
 write pointer), and (4) signal the write counter to increment.
 
 When the consumer is \code{ready} and the FIFO is not empty we:
-(1) ensure that the \code{fullReg} is de-asserted, (2) mark the buffer
+(1) ensure that the \code{fullReg} is deasserted, (2) mark the buffer
 empty if the read pointer will catch up with the write pointer in
 the next clock cycle, and (3) signal the read counter to increment.
 
