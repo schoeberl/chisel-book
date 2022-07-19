@@ -2476,6 +2476,7 @@ we call this operation also reduce. Therefore, here we perform an OR reduction.
 
 \section{Arbiter}
 \index{Arbiter}
+\label{sec:arbiter}
 
 
 We use an arbiter to arbitrate requests from several clients to a single shared resource.
@@ -2496,9 +2497,9 @@ a grant output of \code{0001}. The arbiter prioritizes the lower
 inputs. Therefore, we call it a priority arbiter. The lower the bit number,
 the higher the priority.
 
-To build a fair arbiter we need to add
-state to remember the last arbitration. We will present a fair round-robin arbiter
-in the interconnect chapter.
+To build a fair arbiter we need to add state to remember the last arbitration.
+We will present a fair %round-robin
+arbiter a later chapter.
 
 \begin{figure}
   \centering
@@ -4635,6 +4636,8 @@ If we do not trust the synthesize tool to rearrange our adder chain, we can use 
 
 \shortlist{code/fun_reduce_tree.txt}
 
+\subsection{Minimum Search Example}
+
 As a more elaborate example, we will build a circuit to find the minimum value in a \code{vec}. To express this circuit
 we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
 literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
@@ -4701,12 +4704,28 @@ that we have only one multiplexer, which selects between two Chisel ``tuples'' a
 The result in \code{resFun2} is a \code{MixedVec} with two elements,
 accessed with an index, like a ``normal'' \code{Vec}.
 
-%Listing~\ref{lst:fun:arbiter} shows how to use \code{reduce} to generate an arbitration circuit.
+\subsection{A Fair Arbiter}
 
-%\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
+\index{Arbiter}
+
+In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
+The combinational version is a priority arbiter, which means one high priority requester can
+dominate the arbitration. To avoid this domination we need to introduce state to remember
+who won the arbitration last time. With our tree reduction function we can build an arbitration tree
+out of just 2:1 arbiters. Our assumption is that if the 2:1 arbiter is fair, this results in a fair
+arbitration on a balanced arbitration tree. We can generate the arbitration circuit as follows:
+
+\shortlist{code/fun_arbiter_head.txt}
+\shortlist{code/fun_arbiter_end.txt}
+
+\noindent The input is a \code{Vec} of ready/valid interfaces and the output a single ready/valid
+interface. We just need a function that provides fair arbitration between two requests.
+Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
+
+\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
 
 
-\todo{do the arbitration circuit}
+\todo{document the fair arbiter}
 
 \chapter{Example Designs}
 
