@@ -3915,7 +3915,7 @@ The Hamming weight is the number of symbols different from the zero symbol.
 For a binary string, this is the number of `1's.
 
 The popcount unit contains the data input \code{din} and the result output \code{popCount},
-both connected to the datapath. For the input and the output we use a ready-valid handshake.
+both connected to the datapath. For the input and the output we use a ready/valid handshake.
 When data is available, valid is asserted. When a receiver can accept data it asserts ready.
 When both signals are asserted the transfer takes place. The handshake signals are connected
 to the FSM. The FSM is connected with the datapath with control signals towards the datapath
@@ -3985,11 +3985,11 @@ popcount is read (signaled by \code{popCntReady}).
 
 The popcount example consumed (a word) data and produced (the popcount) data.
 For the coordinated exchange of data, we use handshake signals.
-The next section describes the ready-valid interface for flow control of
+The next section describes the ready/valid interface for flow control of
 unidirectional data exchange.
 
-\section{Ready-Valid Interface}
-\index{Ready-valid interface}
+\section{Ready/Valid Interface}
+\index{Ready/valid interface}
 
 Communication of subsystems can be generalized to the movement
 of data and handshaking for flow control. In the popcount example,
@@ -3999,15 +3999,15 @@ using valid and ready signals.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/readyvalid}
-  \caption{The ready-valid flow control.}
+  \caption{The ready/valid flow control.}
   \label{fig:readyvalid}
 \end{figure}
 
-The ready-valid interface~\cite[p.~480]{dally:vhdl:2016} is a simple flow
+The ready/valid interface~\cite[p.~480]{dally:vhdl:2016} is a simple flow
 control interface consisting of \code{data} and a \code{valid} signal at the
 sender side (also called producer or source) and a \code{ready}
 signal at the receiver side (also called consumer or destination).
-Figure~\ref{fig:readyvalid} shows the ready-valid connection.
+Figure~\ref{fig:readyvalid} shows the ready/valid connection.
 The sender asserts \code{valid} when \code{data} is available,
 and the receiver asserts \code{ready} when it is ready to receive one word
 of data. The transmission of the data happens when both signals, \code{valid}
@@ -4017,11 +4017,11 @@ no transfer takes place.
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/ready_valid1}
-  \caption{Data transfer with a ready-valid interface, early ready.}
+  \caption{Data transfer with a ready/valid interface, early ready.}
   \label{fig:ready_valid1}
 \end{figure}
 
-Figure~\ref{fig:ready_valid1} shows a timing diagram of the ready-valid
+Figure~\ref{fig:ready_valid1} shows a timing diagram of the ready/valid
 transaction where the receiver signals \code{ready} (from clock cycle 1 on)
 before the sender has data. The data transfer happens in clock cycle 3.
 From clock cycle 4 on neither the sender has data nor the receiver is ready
@@ -4032,11 +4032,11 @@ When the receiver can receive data in every clock cycle, it is called an
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/ready_valid2}
-  \caption{Data transfer with a ready-valid interface, late ready.}
+  \caption{Data transfer with a ready/valid interface, late ready.}
   \label{fig:ready_valid2}
 \end{figure}
 
-Figure~\ref{fig:ready_valid2} shows a timing diagram of the ready-valid
+Figure~\ref{fig:ready_valid2} shows a timing diagram of the ready/valid
 transaction where the sender signals \code{valid} (from clock cycle 1 on)
 before the receiver is ready. The data transfer happens in clock cycle 3.
 From clock cycle 4 on neither the sender has data nor the receiver is ready
@@ -4052,7 +4052,7 @@ interface. However, in that case the data will probably not change on signaling
   \label{fig:ready_valid3}
 \end{figure}
 
-Figure~\ref{fig:ready_valid3} shows further variations of the ready-valid
+Figure~\ref{fig:ready_valid3} shows further variations of the ready/valid
 interface. In clock cycle 1 both signals (\code{ready} and \code{valid}
 become asserted just for a single clock cycle and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
@@ -4076,7 +4076,7 @@ For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
 The same can be envisioned with the sender, having data valid only some
 clock cycles and becoming non-valid without a data transfer.
-If this behavior is allowed or not is not part of the ready-valid interface,
+If this behavior is allowed or not is not part of the ready/valid interface,
 but needs to be defined by the concrete usage of the interface.
 
 Chisel places no requirements on the signaling of \code{ready} and \code{valid}
@@ -4094,7 +4094,7 @@ Additionally, once \code{valid} is raised it will never be lowered until after
 \noindent Note that this is \emph{just} a convention that cannot be enforced by using the class
 \code{IrrevocableIO}.
 
-The AXI  bus~\cite{axi4standard} uses one ready-valid interface for each of the following parts of the bus:
+The AXI  bus~\cite{axi4standard} uses one ready/valid interface for each of the following parts of the bus:
 read address, read data, write address, and write data. AXI restricts the interface
 that once the sender assets \code{valid} it is not allowed to deasserted it
 until the data transfer happened. Furthermore, the sender is not allowed to wait for a receivers
@@ -4103,11 +4103,11 @@ The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
 
-\longlist{code/ready_valid_buffer.txt}{A register as a buffer with ready-valid interface.s}{lst:rv:reg}
+\longlist{code/ready_valid_buffer.txt}{A register as a buffer with ready/valid interface.s}{lst:rv:reg}
 
-Listing~\ref{lst:rv:reg} shows an example of using the ready-valid interface.
+Listing~\ref{lst:rv:reg} shows an example of using the ready/valid interface.
 The circuit represents a buffer built out of a register.
-The buffer has a ready-valid interface (\code{DecoupledIO}) at the input and one at the output.
+The buffer has a ready/valid interface (\code{DecoupledIO}) at the input and one at the output.
 The \code{DecoupledIO} bundle is defined from the sender's viewpoint. Therefore,
 the input of the buffer (\code{in}) needs to change the direction with \code{Flipped}.
 
@@ -4722,10 +4722,21 @@ arbitration on a balanced arbitration tree. We can generate the arbitration circ
 interface. We just need a function that provides fair arbitration between two requests.
 Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
 
+The arbiter contains one register for the data to store and one state register. To be fair, the arbiter
+switches between two idle states (\code{ildeA} and \code{idleB}) when there is no request.
+In each of the two idle states it accepts only one of the inputs. Note, that with just a single register for
+storage the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
+and switching priority we would need a second register to handle the case that both inputs
+are valid in the same clock cycle.
+
+
+When a request is accepted, it stores
+the data and switches to one of the full states. When the consumer of the output accepts the
+data, the arbiter switches back to an idle state. It switches to the idle state that accepts a
+pending requesting from the other input.
+
 \longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
 
-
-\todo{document the fair arbiter}
 
 \chapter{Example Designs}
 
@@ -4742,7 +4753,7 @@ which itself may use the FIFO buffer.
 \index{First-in, first-out buffer}
 
 
-We can decouple a write (sender) and a reader (receiver) by a buffer
+We can decouple a writer (sender) and a reader (receiver) by a buffer
 between the writer and reader.
 A common buffer is a first-in, first-out
 (\href{https://en.wikipedia.org/wiki/FIFO_%28computing_and_electronics%29}{FIFO})
@@ -4764,7 +4775,7 @@ read a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
 and the data are lost. In other words, the signals \code{empty} and \code{full}
 serve as handshake signals 
 
-Several different implementations of a FIFO are possible: E.g., using on-chip
+Several different implementations of a FIFO are possible: For example, using on-chip
 memory and read and write pointers or simply a chain of registers with a
 tiny state machine. For small buffers (up to tens of elements) a FIFO organized
 with individual registers connected into a chain of buffers is a simple
@@ -4792,7 +4803,7 @@ at the reader side.
 Listing~\ref{lst:fifo:stage} shows a single buffer. The buffer has a enqueueing port
 \code{enq} of type \code{WriterIO} and a dequeueing port \code{deq} of type
 \code{ReaderIO}. The state elements of the buffer is one register that holds the
-data (\code{dataReg} and one state register for the simple FSM (\code{stateReg}).
+data (\code{dataReg}) and one state register for the simple FSM (\code{stateReg}).
 The FSM has only two states: either the buffer is \code{empty} or \code{full}.
 If the buffer is \code{empty}, a write will register the input data and change
 to the \code{full} state.
@@ -4822,7 +4833,7 @@ dequeueing side of the complete FIFO.
 The presented idea of connecting individual buffers to implement a FIFO
 queue is called a bubble FIFO, as the data bubbles through the queue.
 This is simple, and a good solution when the data rate is considerable slower
-than the clock rate, e.g., as a decouple buffer for a serial port, which is presented
+than the clock rate, for example, as a decouple buffer for a serial port, which is presented
 in the next section.
 
 However, when the data rate approaches the clock frequency, the bubble FIFO
@@ -4858,30 +4869,30 @@ per module. We present a transmitter (TX), a receiver (RX),
 a buffer, and then usage of those base components.
 
 First, we need an interface, a port definition.
-For the UART design, we use a ready/valid handshake interface,
-with the direction as seen from the transmitter.
+For the UART design, we use a ready/valid handshake interface (extending \code{DecoupledIO}),
+with with a data size of 8 bits.
 \shortlist{code/uart_channel.txt}
-The convention of a ready/valid interface is that the data is transferred
+\noindent The convention of a ready/valid interface is that the data is transferred
 when both \code{ready} and \code{valid} are asserted.
 
 \longlist{code/uart_tx.txt}{A transmitter for a serial port.}{lst:uart:tx}
 
 Listing~\ref{lst:uart:tx} shows a bare-bone serial transmitter (\code{Tx}).
 The IO ports are the \code{txd} port, where the serial data is sent and
-a \code{Channel} where the transmitter can receive the characters to serialize
+a \code{channel} where the transmitter can receive the characters to serialize
 and send.
-To generate the correct timing, we compute a constant for by computing
+To generate the timing, we compute a constant for
 the time in clock cycles for one serial bit.
 
 We use three registers:
 (1) register to shift the data (serialize them) (\code{shiftReg}),
 (2) a counter to generate the correct baud rate (\code{cntReg}), and
-(3) a counter for the number of bits that still need to be shifted out.
+(3) a counter for the number of bits that still need to be shifted out (\code{bitsReg}).
 No additional state register of FSM is needed, all state is encoded in
 those three registers.
 
 Counter \code{cntReg} is continuously running (counting down to 0
-and reset to the start value when 0). All action is only done when
+and reloaded with the start value when 0). All action is only done when
 \code{cntReg} is 0. As we build a minimal transmitter, we have only
 the shift register to store the data. Therefore, the channel is only ready
 when \code{cntReg} is 0 and no bits are left to shift out.
@@ -4890,10 +4901,10 @@ The IO port \code{txd} is directly connected to the least significant bit
 of the shift register.
 
 When there are more bits to shift out (\code{bitsReg =/= 0.U}),
-we shift the bits to the right and fill with 1 from the top (the idle level
+we shift the bits to the right and fill with 1 (the idle level
 of a transmitter).
 If no more bits need to be shifted out, we check if the channel contains
-data (signaled with the \code{valid} port). If so, the bit string to
+data (signaled with the \code{io.channel.valid} input). If so, the bit string to
 be shifted out is constructed with one start bit (0), the 8-bit data, and
 two stop bits (1). Therefore, the bit count is set to 11.
 
@@ -4906,12 +4917,13 @@ space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter but delegate it to a buffer.
 
 \longlist{code/uart_buffer.txt}{A single-byte buffer with a ready/valid interface.}{lst:uart:buffer}
+
 Listing~\ref{lst:uart:buffer} shows a single byte buffer, similar to
-the FIFO register for the bubble FIFO. The input port is a \code{Channel}
-interface, and the output is the \code{Channel} interface with
-flipped directions. The buffer contains the minimal state machine
+the FIFO register for the bubble FIFO. The input and the output
+are \code{UartIO}s.
+The buffer contains the minimal state machine
 to indicate \code{empty} or \code{full}. The buffer driven handshake
-signals (\code{in.ready} and \code{out.valid}) depend on the state
+signals (\code{io.in.ready} and \code{io.out.valid}) depend on the state
 register.
 
 When the state is \code{empty}, and data on the input is \code{valid},
@@ -4921,6 +4933,7 @@ When the state is \code{full}, and the downstream receiver is
 back to state \code{empty}.
 
 \longlist{code/uart_buffered_tx.txt}{A transmitter with an additional buffer.}{lst:uart:buffered:tx}
+
 With that buffer we can extend our bare-bone transmitter.
 Listing~\ref{lst:uart:buffered:tx} shows the combination of the transmitter \code{Tx}
 with a single-buffer in front. This buffer now relaxes the issue that \code{Tx}
@@ -4930,23 +4943,25 @@ An extension of the single word buffer to a real FIFO can easily be done
 and needs no change in the transmitter or the single byte buffer.
 
 \longlist{code/uart_rx.txt}{A receiver for a serial port.}{lst:uart:rx}
+
 Listing~\ref{lst:uart:rx} shows the code for the receiver (\code{Rx}).
 A receiver is a little bit tricky, as it needs to reconstruct the timing of
 the serial data. The receiver waits for the falling edge of the start bit.
 From that event, the receiver waits 1.5 bit times to position itself into the middle
-of bit 0. Then it shifts in the bits every bit time. You can observe these
-two waiting times as \code{START\_CNT} and \code{BIT\_CNT}.
-For both times, the same counter (\code{cntReg}) is used.
-After 8 bits are shifted in, \code{valReg} signals an available byte
+of bit 0. Then it samples and shifts in the bits every bit time. You can observe these
+two waiting times as \code{BIT\_CNT} and \code{START\_CNT}.
+For both sample times, the same counter (\code{cntReg}) is used.
+After 8 bits are shifted in, \code{validReg} signals an available byte.
 
 \longlist{code/uart_sender.txt}{Sending ``Hello World!" via the serial port.}{lst:uart:sender}
+
 Listing~\ref{lst:uart:sender} shows the usage of the serial port transmitter
-by sending a friendly message out. We define the message in a Scala
+by sending out a friendly message. We define the message as a Scala
 string (\code{msg}) and converting it to a Chisel \code{Vec} of \code{UInt}.
 A Scala string is a sequence that supports the \code{map} method.
 The \code{map} method takes as argument a function literal, applies this function to
 each element, and builds a sequence of the function's return values.
-If the function literal shall have only one argument, as it is in this case, the
+If the function literal has only one argument, as it is in this case, the
 argument can be represented by \code{\_}. Our function literal calls
 the Chisel method \code{.U} to convert the Scala \code{Char} to a Chisel
 \code{UInt}. The sequence is then passed to \code{VecInit} to construct
@@ -4957,6 +4972,7 @@ is sent out. The sender keeps \code{valid} asserted until the last character
 has been sent out.
 
 \longlist{code/uart_echo.txt}{Echoing data on the serial port.}{lst:uart:echo}
+
 Listing~\ref{lst:uart:echo} shows the usage of the receiver and the transmitter
 by connecting them together. This connection generates an \code{Echo} circuit where each
 received character is sent back (echoed).
@@ -4964,11 +4980,13 @@ received character is sent back (echoed).
 \section{FIFO Design Variations}
 \label{sec:more:fifo}
 
-In this section we will implement different variations of a FIFO queue.
+At the beginning of this Chapter we introduced the design of a simple bubble FIFO.
+In this section we will generalize the FIRO and implement different variations of the queue.
 To make these implementations interchangeable we will use inheritance,
 as introduced in Section~\ref{sec:inheritance}.
 
 \subsection{Parameterizing FIFOs}
+\index{FIFO}
 
 We define an \code{abstract}
 FIFO class with a Chisel type as parameter to be able to buffer
@@ -4980,27 +4998,27 @@ parameter \code{depth} has a useful value.
 In Section~\ref{sec:fifo} we defined our own types for the interface with common
 names for signals, such as \code{write}, \code{full}, \code{din}, \code{read},
 \code{empty}, and \code{dout}. The input and the output of such a buffer consists
-of data and two signals for handshaking (e.g., we \code{write} into the FIFO when
-it is not \code{full}.
+of data and two signals for handshaking (for example, we \code{write} into the FIFO when
+it is not \code{full}).
 
-However, we can generalize this handshaking to the so called ready-valid interface.
-E.g, we can enqueue an element (write into the FIFO) when the FIFO is \code{ready}.
+Here we can generalize this handshaking to the so called ready/valid interface.
+We can enqueue an element (write into the FIFO) when the FIFO is \code{ready}.
 We signal this at the writer side with \code{valid}.
-As this ready-valid interface is so common, Chisel provides a definition
+As this ready/valid interface is so common, Chisel provides a definition
 of this interface in \code{DecoupledIO} as follows:\footnote{This is a simplification,
 as \codefoot{DecoupledIO} actually extends an abstract class.}
 
 \shortlist{code/fifo_decoupled.txt}
 
 \noindent With the \code{DecoupledIO} interface we define the interface for our FIFOs:
-a \code{FifoIO} with an \code{enq} enqueue and a \code{deq} dequeue port consisting
-of read-valid interfaces.
+a \code{FifoIO} with an enqueue (\code{enq}) and a dequeue (\code{deq} ) port consisting
+of read/valid interfaces.
  The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
-Therefore, enqueue port of the FIFO needs to flip the signal directions.
+Therefore, the enqueue port of the FIFO needs to flip the signal directions.
 
 \index{Flipped}
 \index{DecoupledIO}
-\index{Ready-valid interface}
+\index{Ready/valid interface}
 
 \shortlist{code/fifo_io.txt}
 
@@ -5011,25 +5029,25 @@ or just simplicity).
 \subsection{Redesigning the Bubble FIFO}
 
 We can redefine our bubble FIFO from Section~\ref{sec:fifo} using standard
-ready-valid interfaces and being parametrizable with a Chisel data type.
+ready/valid interfaces and being parametrizable with a Chisel data type.
 
-\longlist{code/fifo_bubble.txt}{A bubble FIFO with a ready-valid interface.}{lst:fifo:bubble}
+\longlist{code/fifo_bubble.txt}{A bubble FIFO with a ready/valid interface.}{lst:fifo:bubble}
 
-Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with ready-valid
-interface. Note what we put the \code{Buffer} component inside from \code{BubbleFifo}
+Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with a ready/valid
+interface. Note what we put the \code{Buffer} component inside \code{BubbleFifo}
 as private class. This helper class is only needed for this component and therefore
 we hide it and avoid polluting the name space. The buffer class has also been
-simplified. Instead of an FSM we use only a single bit, \code{fullReg}, to note
+simplified. Instead of an FSM we use only a single bit (\code{fullReg}) for
 the state of the buffer: full or empty.
 
-The bubble FIFO is simply, easy to understand, and uses minimal resources.
+The bubble FIFO is simple, easy to understand, and uses minimal resources.
 However, as each buffer stage has to toggle between empty and full, the maximum
 bandwidth of this FIFO is two clock cycles per word.
 
 One could consider to look at both interface sides in the buffer to be able to accept
 a new word when the producer \code{valid} and the consumer is \code{ready}.
 However, this introduces a combinational path from the consumer handshake
-to the producer handshake, which violates the semantics of the ready-valid protocol.
+to the producer handshake, which violates the semantics of the ready/valid protocol.
 
 \subsection{Double Buffer FIFO}
 
@@ -5046,11 +5064,11 @@ the data register.
 \verylonglist{code/fifo_double_buffer.txt}{A FIFO with double buffer elements.}{lst:fifo:double:buffer}
 
 
-Listing~\ref{lst:fifo:double:buffer} shows the double buffer. As each buffer element
+Listing~\ref{lst:fifo:double:buffer} shows the double buffer FIFO. As each buffer element
 can store two entries we need only half of the buffer elements (\code{depth/2}).
 The \code{DoubleBuffer} contains two registers,
 \code{dataReg} and \code{shadowReg}. The consumer is served always from
-\code{shadowReg}. The double buffer has three states: \code{empty}, \code{one},
+\code{dataReg}. The double buffer has three states: \code{empty}, \code{one},
 and \code{two}, which signal the fill level of the double buffer.
 The buffer is \code{ready} to accept new data when is it in state \code{empty}
 or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
@@ -5072,7 +5090,7 @@ elements. For small buffers this is probably the most efficient implementation.
 \index{Circular buffer}
 \index{Circular buffer!read pointer}
 \index{Circular buffer!write pointer}
-A queue in software is usually used by a sequential code in a single thread.
+A queue in software is usually used by sequential code in a single thread.
 We us a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
@@ -5093,7 +5111,7 @@ and read and write pointers.
 As there are two pointers that behave the same, being incremented on an
 action and wrap around at the end of the buffer, we define a function \code{counter}
 that implements those wrapping counters. With \code{log2Ceil(depth).W} we
-compute the bit length of the counter. The next value is either an increment by
+compute the bit length for the counter. The next value is either an increment by
 1 or a wrap around to 0.
 The counter is incremented only when the input \code{incr} is \code{true.B}.
 
@@ -5116,9 +5134,9 @@ val (x1, x2) = t
 \end{chisel}
 
 For the memory we us a register of a vector (\code{Reg(Vec(depth, gen))} of
-Chisel data type \code{gen}. We define two signal to increment the read and
+Chisel data type \code{gen}. We define two signals to increment the read and
 write pointer and create the read and write pointers with the function \code{counter}.
-When both pointer are equal, the buffer is either empty or full.
+When both pointers are equal, the buffer is either empty or full.
 We define two flags to for the notion of empty and full.
 
 When the producer asserts \code{valid} and the FIFO is not full we:
@@ -5151,7 +5169,7 @@ FIFO. However, a synchronous on-chip memory delivers the result of a read
 in the next clock cycle, where the read of the register file was available in the
 same clock cycle.
 
-Therefore, we need some additional FSM and a shadow register to handle
+Therefore, we need an additional FSM and a shadow register to handle
 this latency. We read the memory out and provide the value of the top of the queue
 to the output port. If that value is not consumed, we need to store it in the
 shadow register \code{shadowReg} while reading the next value from the memory.
@@ -5181,20 +5199,20 @@ Chisel supports multi-clock designs with the \code{withClock} and
 \code{withClock(clk)} block are clocked by \code{clk}. For multi-clock memories, 
 the memory module should be defined outside all \code{withClock} blocks, while 
 each port should have their own \code{withClock} block. A parameterized 
-multi-clock memory can look as follows:
+multi-clock memory is shown in Listing~\ref{lst:multiclockmem}.
 
 \verylonglist{code/multi_clock_memory.txt}{A multi-clock memory generator.}{lst:multiclockmem}
 
 Naturally, using these multi-clock memories introduces some constraints to the 
 operations that can be performed simultaneously. Two (or more) ports cannot 
 write to the same address at the same time as this may cause metastability. 
-Similarly, one must make sure to define the wanted read-under-write behavior.
+Similarly, one must make sure to define the wanted read-during-write behavior.
 The memory should be configured to either write first, in which the input data is 
 forwarded to the read port, or read first in which the \emph{old} memory value 
 is presented on the read port. 
 
 Beware, though, that multi-clock support in ChiselTest is still at a very early 
-stage. You will need to manually toggle clock signals to force transitions.
+stage. You need to manually toggle clock signals to force transitions.
 
 % Perhaps add chapter on adder design (Adders.scala defines a few designs)
 
@@ -5220,7 +5238,8 @@ just type:
 $ make fifo
 \end{verbatim}
 This make command will compile the FIFO, run the test, and starts GTKWave for waveform
-viewing. Explore the tester and the generated waveform.
+viewing.\footnote{Depending on your operating system you might need to start GKTWave
+manually} Explore the tester and the generated waveform.
 
 In the first cycles, the tester writes a single word. We can observe in
 the waveform how that word bubbles through the FIFO, therefore the
@@ -5247,10 +5266,9 @@ These drawbacks can be solved by a FIFO implementation with a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 The circular buffer can be implemented with a memory and
 read and write pointers.
-Implement a FIFO as a circular buffer with four elements, using the same
-interface, and explore the different behavior with the tester.
-For an initial implementation of the circular buffer use, as a shortcut,
-a vector of registers (\code{Reg(Vec(4, UInt(size.W)))}).
+Rerun/rewrite the test with the other FIFO implementation and compare
+the bandwidth and latency. Synthesize the different FIFO versions and compare
+the resource requirements.
 
 \subsection{The UART}
 

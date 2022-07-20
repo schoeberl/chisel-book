@@ -8,32 +8,25 @@
  */
 
 package uart
-// a copy from chisel-examples, improvements shall be done there
 
 import chisel3._
 import chisel3.util._
 
-/**
-  * This is a minimal data channel with a ready/valid handshake.
-  */
 //- start uart_channel
-class Channel extends Bundle {
-  val data = Input(Bits(8.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
+class UartIO extends DecoupledIO(UInt(8.W)) {
 }
 //- end
 
 /**
-  * Transmit part of the UART.
-  * A minimal version without any additional buffering.
-  * Use an AXI like valid/ready handshake.
-  */
+ * Transmit part of the UART.
+ * A minimal version without any additional buffering.
+ * Use a ready/valid handshaking.
+ */
 //- start uart_tx
 class Tx(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val txd = Output(Bits(1.W))
-    val channel = new Channel()
+    val txd = Output(UInt(1.W))
+    val channel = Flipped(new UartIO())
   })
 
   val BIT_CNT = ((frequency + baudRate / 2) / baudRate - 1).asUInt
@@ -50,84 +43,83 @@ class Tx(frequency: Int, baudRate: Int) extends Module {
     cntReg := BIT_CNT
     when(bitsReg =/= 0.U) {
       val shift = shiftReg >> 1
-      shiftReg := Cat(1.U, shift(9, 0))
+      shiftReg := 1.U ## shift(9, 0)
       bitsReg := bitsReg - 1.U
-    }.otherwise {
+    } .otherwise {
       when(io.channel.valid) {
         // two stop bits, data, one start bit
-        shiftReg := Cat(Cat(3.U, io.channel.data), 0.U)
+        shiftReg := 3.U ## io.channel.bits ## 0.U
         bitsReg := 11.U
-      }.otherwise {
+      } .otherwise {
         shiftReg := 0x7ff.U
       }
     }
 
-  }.otherwise {
+  } .otherwise {
     cntReg := cntReg - 1.U
   }
 }
 //- end
 
 /**
-  * Receive part of the UART.
-  * A minimal version without any additional buffering.
-  * Use an AXI like valid/ready handshake.
-  *
-  * The following code is inspired by Tommy's receive code at:
-  * https://github.com/tommythorn/yarvi
-  */
+ * Receive part of the UART.
+ * A minimal version without any additional buffering.
+ * Use a ready/valid handshaking.
+ *
+ * The following code is inspired by Tommy's receive code at:
+ * https://github.com/tommythorn/yarvi
+ */
 //- start uart_rx
 class Rx(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val rxd = Input(Bits(1.W))
-    val channel = Flipped(new Channel())
+    val rxd = Input(UInt(1.W))
+    val channel = new UartIO()
   })
 
   val BIT_CNT = ((frequency + baudRate / 2) / baudRate - 1).U
   val START_CNT = ((3 * frequency / 2 + baudRate / 2) / baudRate - 1).U
 
-  // Sync in the asynchronous RX data
-  // Reset to 1 to not start reading after a reset
+  // Sync in the asynchronous RX data, reset to 1 to not start reading after a reset
   val rxReg = RegNext(RegNext(io.rxd, 1.U), 1.U)
 
-  val shiftReg = RegInit('A'.U(8.W))
+  val shiftReg = RegInit(0.U(8.W))
   val cntReg = RegInit(0.U(20.W))
   val bitsReg = RegInit(0.U(4.W))
-  val valReg = RegInit(false.B)
+  val validReg = RegInit(false.B)
 
   when(cntReg =/= 0.U) {
     cntReg := cntReg - 1.U
-  }.elsewhen(bitsReg =/= 0.U) {
+  } .elsewhen(bitsReg =/= 0.U) {
     cntReg := BIT_CNT
-    shiftReg := Cat(rxReg, shiftReg >> 1)
+    shiftReg := rxReg ## (shiftReg >> 1)
     bitsReg := bitsReg - 1.U
-    // the last shifted in
+    // the last bit shifted in
     when(bitsReg === 1.U) {
-      valReg := true.B
+      validReg := true.B
     }
-  // wait 1.5 bits after falling edge of start
-  }.elsewhen(rxReg === 0.U) {
+  } .elsewhen(rxReg === 0.U) {
+    // wait 1.5 bits after falling edge of start
     cntReg := START_CNT
     bitsReg := 8.U
   }
 
-  when(valReg && io.channel.ready) {
-    valReg := false.B
+  when(validReg && io.channel.ready) {
+    validReg := false.B
   }
 
-  io.channel.data := shiftReg
-  io.channel.valid := valReg
+  io.channel.bits := shiftReg
+  io.channel.valid := validReg
 }
 //- end
 
 /**
-  * A single byte buffer with a ready/valid interface
-  */
+ * A single byte buffer with a ready/valid interface
+ */
 //- start uart_buffer
 class Buffer extends Module {
   val io = IO(new Bundle {
-    val in = new Channel()
-    val out = Flipped(new Channel())
+    val in = Flipped(new UartIO())
+    val out = new UartIO()
   })
 
   val empty :: full :: Nil = Enum(2)
@@ -139,26 +131,26 @@ class Buffer extends Module {
 
   when(stateReg === empty) {
     when(io.in.valid) {
-      dataReg := io.in.data
+      dataReg := io.in.bits
       stateReg := full
     }
-  }.otherwise { // full
+  } .otherwise { // full
     when(io.out.ready) {
       stateReg := empty
     }
   }
-  io.out.data := dataReg
+  io.out.bits := dataReg
 }
 //- end
 
 /**
-  * A transmitter with a single buffer.
-  */
+ * A transmitter with a single buffer.
+ */
 //- start uart_buffered_tx
 class BufferedTx(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val txd = Output(Bits(1.W))
-    val channel = new Channel()
+    val txd = Output(UInt(1.W))
+    val channel = Flipped(new UartIO())
   })
   val tx = Module(new Tx(frequency, baudRate))
   val buf = Module(new Buffer())
@@ -170,12 +162,12 @@ class BufferedTx(frequency: Int, baudRate: Int) extends Module {
 //- end
 
 /**
-  * Send a string.
-  */
+ * Send a string.
+ */
 //- start uart_sender
 class Sender(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val txd = Output(Bits(1.W))
+    val txd = Output(UInt(1.W))
   })
 
   val tx = Module(new BufferedTx(frequency, baudRate))
@@ -188,7 +180,7 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
 
   val cntReg = RegInit(0.U(8.W))
 
-  tx.io.channel.data := text(cntReg)
+  tx.io.channel.bits := text(cntReg)
   tx.io.channel.valid := cntReg =/= len
 
   when(tx.io.channel.ready && cntReg =/= len) {
@@ -200,10 +192,9 @@ class Sender(frequency: Int, baudRate: Int) extends Module {
 //- start uart_echo
 class Echo(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val txd = Output(Bits(1.W))
-    val rxd = Input(Bits(1.W))
+    val txd = Output(UInt(1.W))
+    val rxd = Input(UInt(1.W))
   })
-
   val tx = Module(new BufferedTx(frequency, baudRate))
   val rx = Module(new Rx(frequency, baudRate))
   io.txd := tx.io.txd
@@ -214,8 +205,8 @@ class Echo(frequency: Int, baudRate: Int) extends Module {
 
 class UartMain(frequency: Int, baudRate: Int) extends Module {
   val io = IO(new Bundle {
-    val rxd = Input(Bits(1.W))
-    val txd = Output(Bits(1.W))
+    val rxd = Input(UInt(1.W))
+    val txd = Output(UInt(1.W))
   })
 
   val doSender = true
@@ -234,4 +225,3 @@ class UartMain(frequency: Int, baudRate: Int) extends Module {
 object UartMain extends App {
   emitVerilog(new UartMain(50000000, 115200), Array("--target-dir", "generated"))
 }
-
