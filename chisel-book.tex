@@ -5425,6 +5425,8 @@ If we want to communicate with devices with different or even varying latency, w
 introduce handshaking. The processor signals with a read or write request the start of a
 transaction and the memory or peripheral device signals the end of a transaction. 
 
+\subsection{Combinational Handshake}
+
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/bus_ack}
@@ -5453,6 +5455,7 @@ That paper proposes SimpCon, a protocol that enables pipelined transactions and
 avoids the combinational path between the processor, address decoding, and the
 peripheral device.
 
+\subsection{Pipelined Handshake}
 
 \begin{figure}
   \centering
@@ -5474,6 +5477,27 @@ The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exact this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
 used OCP interface.
+
+\subsection{Example IO Device}
+
+\longlist{code/counter_device.txt}{An IO device consisting of four loadable counters.}{lst:cnt-device}
+
+Listing~\ref{lst:cnt-device} shows an IO device that implements the specification of the
+pipelined interconnect. The IO device contains four loadable counters. To address those four
+counters we need two address bits. We read the value from the counter with a read transaction
+(\code{rd} is asserted) and get the result in the next clock cycle (in \code{dout}). We write to a counter with
+\code{wr} asserted and the value set in \code{din}.
+
+To implement the delayed acknowledge, we use a single bi register (\code{ackReg}) and
+simple delaying any asserted \code{rd} or \code{wr}. As we provide the read result in
+the clock cycle that follows the read command and the address is only valid during this
+command cycle, we need to store the address in \code{addrReg}.
+
+The counters themself are a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
+The counters are initialized to zero by using a Scala \code{Seq}, created with \code{fill}
+containing the reset values as Chisel constants. That \code{Seq} is the input to the \code{VecInit}.
+The counter are freely running and increment by one each clock cycle, except when written
+a new value.
 
 The on-chip version of an interconnect definition can be generalized to a point-to-point
 connection. The processor and peripheral devices are connected with such a point-to-point

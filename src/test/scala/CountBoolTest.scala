@@ -3,7 +3,7 @@ import chiseltest._
 import org.scalatest.flatspec.AnyFlatSpec
 
 class CountBoolTest extends AnyFlatSpec with ChiselScalatestTester {
-  "CountBool" should "coutn them" in {
+  "CountBool" should "count them" in {
     test(new CountBool()) { dut =>
       for (i <- 0 to 8) {
         dut.io.in(i).poke(false.B)
