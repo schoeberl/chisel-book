@@ -1,0 +1,37 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=2.5ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+{clock}     & [L] 16{C} \\
+{address}   & .1U 2U 2D{A1} 4U 2D{A2} 2D{A3} 3.9U \\
+{rd} & .1L 2L 2H 4L 4H 3.9L \\
+{ack}   & .1U 4U 2L 2H 2L 4H 1.9L \\
+{data}   & .1U 6U 2D{D1} 2U 2D{D2} 2D{D3} 1.9U \\
+\extracode
+\vertlines[semitransparent,semithick]{2,4,6,8, 10, 12, 14}
+\node[font=\sf] at (2,-9)  {A};
+\node[font=\sf] at (4,-9)  {B};
+\node[font=\sf] at (6,-9)  {C};
+\node[font=\sf] at (8,-9)  {D};
+\node[font=\sf] at (10,-9)  {E};
+\node[font=\sf] at (12,-9)  {F};
+\node[font=\sf] at (14,-9)  {G};
+\endextracode
+\end{tikztimingtable}
+
+\end{document}

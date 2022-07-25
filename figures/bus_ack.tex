@@ -1,0 +1,34 @@
+\documentclass[multi=tikzpicture]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{pslatex}
+\renewcommand*\ttdefault{txtt}
+\usepackage{tikz-timing}
+\usetikztiminglibrary[rising arrows]{clockarrows}
+\usetikztiminglibrary{either}
+
+\begin{document}
+
+\begin{tikztimingtable}[
+font=\tt,
+timing/yunit=2.5ex,
+timing/xunit=3ex,
+timing/text format=\raisebox{.4ex}\strut\tt\Large,
+timing/u/background/.style={fill=lightgray},
+timing/e/background/.style={fill=lightgray}
+]
+{clock}     & [L] 10{C} \\
+{address}   & .1U 2U 6D{address} 1.9U \\
+{rd} & .1L 2L 6H 1.9L \\
+{ack}   & .1U 3U 3L 2H 1.9L \\
+{data}   & .1U 6U 2D{data} 1.9U \\
+\extracode
+\vertlines[semitransparent,semithick]{2,4,6,8}
+\node[font=\sf] at (2,-9)  {A};
+\node[font=\sf] at (4,-9)  {B};
+\node[font=\sf] at (6,-9)  {C};
+\node[font=\sf] at (8,-9)  {D};
+\endextracode
+\end{tikztimingtable}
+
+\end{document}
