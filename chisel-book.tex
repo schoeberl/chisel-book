@@ -4726,7 +4726,7 @@ The arbiter contains one register for the data to store and one state register. 
 switches between two idle states (\code{ildeA} and \code{idleB}) when there is no request.
 In each of the two idle states it accepts only one of the inputs. Note, that with just a single register for
 storage the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
-and switching priority we would need a second register to handle the case that both inputs
+and switching priority we would need a second register to handle the case when both inputs
 are valid in the same clock cycle.
 
 
@@ -4743,7 +4743,8 @@ pending requesting from the other input.
 In this section, we explore some small size digital designs, such as
 a FIFO buffer, which are used as building blocks for a larger design.
 As another example, we design a serial interface (also called UART),
-which itself may use the FIFO buffer.
+which itself may use the FIFO buffer. Furthermore, we will generalize
+the FIFO interface and show different possible implementations.
 
 \section{FIFO Buffer}
 \label{sec:fifo}
@@ -5330,7 +5331,7 @@ Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 \chapter{Interconnect}
 \index{Interconnect}
 
-We build larger systems often by combining different components.
+We combine different components to build larger systems.
 To simplify the composition of components, interconnect standards such as
 \myref{https://en.wikipedia.org/wiki/Wishbone_(computer_bus)}{Wishbone}
 or AXI exist. This chapter explores different forms of interconnect.
@@ -5373,7 +5374,8 @@ On a write command, the processor provides the data and the peripheral has to
 accept that data (often on a rising edge of a signal). The CPU drives the data bus.
 As the data bus is bi-directional and the data lines are shared between all devices,
 the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logic}{tri-state}
-driver.
+driver. In tri-state configuration, both output transistors are disabled and the output pin
+is practically disconnected from logic.
 
 Note, that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
@@ -5385,7 +5387,7 @@ are serial busses and use point-to-point connections.
 
 Nevertheless, the notion of the classic processor bus with an address bus, a data bus, and chip select signals
 is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
-on-chip interconnect in the next chapter.
+on-chip interconnect in the next section.
 
 \section{On-Chip Bus}
 
@@ -5399,7 +5401,7 @@ on-chip interconnect in the next chapter.
 We can translate the concept of such an external bus to an on-chip bus. However, we need to adapt some aspects.
 Shared busses with the need of tri-state drivers are not practical within a chip. Furthermore,
 wires in a chip are cheaper than wires on a PCB or at a connector. Therefore, we split the data bus
-into two collection of wires: one for the input and and one for the output signals.
+into two collection of wires: one for the read and and one for the write signals.
 Furthermore, on-chip connections use a clock to define the timing.
 
 Figure~\ref{fig:bus-on-chip} shows the implementation of the bus concept within a chip.
@@ -5415,6 +5417,7 @@ interface to a switching fabric. If the system contains more than one processor 
 we need arbitration within the switching fabric to decide which master is allowed to issue
 read and write commands.
 
+\todo{Next step timing, handshake}
 \todo{Next step to multiple masters and a generic interconnect (cloud)}
 
 
@@ -5555,7 +5558,7 @@ test Alu Success: 70567 tests passed in 70572 cycles taking
 
 \index{Processor!instruction decode}
 
-From the ALU, we work backward and implement the instruction decoder.
+From the ALU, we work backwards and implement the instruction decoder.
 However, first, we define the instruction encoding in its own Scala class and
 a \emph{shared} package. We want to share the encoding constants between
 the hardware implementation of Leros, an assembler for Leros, and an instruction
@@ -5630,7 +5633,7 @@ One option is to reread the chapter and read along with all the source code in t
 fiddle with the code by breaking it and see that tests fail.
 
 Another option is to write your own implementation of Leros.
-The implementation in the repository is just one possible organization of a pipeline.
+The implementation in the repository is just one possible organization.
 You could write a Chisel simulation version of Leros with just a single pipeline stage,
 or go crazy and superpipeline Leros for the highest possible clocking frequency.
 
@@ -5652,7 +5655,7 @@ to Chisel.
 
 \section{Publishing a Chisel Library}
 
-When you develop a circuit in open-source and share it on e.g., GitHub,
+When you develop a circuit in open-source and share it on, for example on GitHub,
 this a very educational act, as other can learn describing hardware in Chisel from your code example.
 However, sharing just the source code forces other to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
@@ -5667,7 +5670,7 @@ Compiled Chisel code are simply Java class files. And those class files are
 platform independent. Therefore, this is an ideal way to share Chisel libraries.
 Java (and Scala) have a long tradition and good infrastructure to support
 public sharing of libraries with unique group identifiers and version control.
-That is also the way Chisel itself, and some support libraries are published.
+That is also the way Chisel itself and some support libraries are published.
 
 This section describes the steps needed to publish a Chisel library. As the tools you
 use for publishing may change quickly, consider finding the latest information on the
@@ -5705,7 +5708,7 @@ Following initial steps are needed before publishing a library:
 \begin{enumerate}
 \item Create a Sonatype account, a \myref{https://issues.sonatype.org/secure/Signup!default.jspa}{JIRA account}
 \item You need a unique \code{groupId}, which is usually a domain name in reverse order, e.g., \code{edu.berkeley.cs}.
-You can also use your GitHub account as a groupId, e.g., mine is \code{io.github.schoeberl}. You register this groupId
+You can also use your GitHub account as a groupId, for example, mine is \code{io.github.schoeberl}. You register this groupId
 by opening an \myref{https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134}{issue}.
 This is a manual process where you get a request to prove that you \emph{own} the requested groupId.
 When using the GitHub domain name, you are requested to setup a repository to show your ownership.
@@ -5789,7 +5792,7 @@ gpg --detach-sign --armor --use-agent --output path-to.asc path-to-0.1.pom
 
 \noindent and repeat \code{sbt publishSigned}.
 
-You can already use that library from Sonatype, e.g., for an internal project.
+You can already use that library from Sonatype, for example, for an internal project.
 However, to release your library to Maven Central run:
 
 \begin{verbatim}
@@ -5806,13 +5809,14 @@ of the project issues on GitHub.
 
 \subsection{Setup the Development Environment}
 
-Chisel consists of several different repositories; all hosted at
+Chisel consists of several different repositories: the main repositories are hosted on
+\myref{https://github.com/chipsalliance/chisel3}{CHIPS Alliance} and others on
 the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
 
 Fork the repository, which you like to contribute, into your personal GitHub account.
 You can fork the repository by pressing the \code{Fork} button in the GitHub web interface.
 Then from that fork, clone your fork of the repository.\footnote{Note that on a breaking
-firrt/Chisel change you might need to also fork and clone firrtl}.
+firrt/Chisel change you might need to also fork and clone firrtl}
 In our example, we change \code{chisel3}, and the clone command for my local fork is:
 
 \begin{verbatim}
@@ -5833,10 +5837,11 @@ SNAPSHOT, fork and clone the \myref{https://github.com/freechipsproject/chisel-t
 repo as well and publish it locally.
 
 To test your changes in Chisel, you probably also want to set up a Chisel project,
-e.g., by forking/cloning an \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project},
+for example, by forking/cloning an \myref{https://github.com/schoeberl/chisel-empty}{empty Chisel project},
 renaming it, and removing the \code{.git} folder from it.
 
 Change the \code{build.sbt} to reference the locally published version of Chisel.
+\todo{Update to current version.}
 Furthermore, at the time of this writing, the head of Chisel source uses Scala 2.12, but Scala
 2.12 has troubles with
 \myref{https://github.com/freechipsproject/chisel-template/issues/35}{anonymous bundles}.
@@ -5860,7 +5865,7 @@ libraryDependencies +=
 \end{verbatim}
 
 Compile your Chisel test application and take a close look if it picks up the local published
-version of the Chisel library (there is also a SNAPSHOT version published, so if, e.g.,
+version of the Chisel library (there is also a SNAPSHOT version published, so if, for example,
 the Scala version is different between your Chisel library and your application code,
 it picks up the SNAPSHOT version from the server instead of your local published
 library.)
@@ -5897,7 +5902,7 @@ guidelines}.
 
 Invent a new operator for the \code{UInt} type, implement it in the Chisel library,
 and write some usage/test code to explore the operator. It does not need to be
-a useful operator; just anything will be good, e.g., a ? operator that delivers the lefthand side
+a useful operator; just anything will be good, for example, a ? operator that delivers the lefthand side
 if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
 How many lines of code did you need to add?\footnote{A quick and dirty implementation
 needs just two lines of Scala code.}
@@ -5908,7 +5913,7 @@ main developers.
 This exercise was just a simple exercise to get you started.
 
 If you are getting bold, you could pick one of the
-\myref{https://github.com/freechipsproject/chisel3/issues}{open issues} and try to solve it.
+\myref{https://github.com/chipsalliance/chisel3/issues}{open issues} and try to solve it.
 Then contribute with a pull request to Chisel.
 However, probably first watch the style of development in Chisel by watching the GitHub
 repositories.
@@ -5975,7 +5980,7 @@ Table~\ref{tab:reserved:scala} lists the reserved words from Scala.
 
 Table~\ref{tab:reserved:chisel} lists the reserved words added by the Chisel library.
 In contrast to the Scala reserved word listing, it also contains type/class names defined by Chisel.
-Although technically possible, you should also avoid to use Chisel (and Scala) operators, such as e.g.,
+Although technically possible, you should also avoid to use Chisel (and Scala) operators, such as for example,
 \code{+} or \code{<<}.
 
 \begin{table}[h]
@@ -6021,7 +6026,6 @@ processor optimized for real-time systems~\cite{patmos:rts2018}. The Patmos repo
 includes several multicore communication architectures, such as a time-predictable memory
 arbiter~\cite{t-crest:memnoc}, a network-on-chip~\cite{s4nocni:arcs2019}
 a shared scratchpad memory with an ownership~\cite{t-crest:ownspm}.
-At the time of this writing, Patmos is still described in Chisel 2.
 
 \item[\myref{https://github.com/pretis/flexpret}{FlexPRET}] is an implementation of a
 precision timed architecture~\cite{Zimmer:EECS-2015-181}. FlexPRET implements
@@ -6098,8 +6102,8 @@ not need yet. You can skip ahead to the exercise and return later if you find th
 
 ChiselTest has support for multithreaded testing through the use of \code{fork} and 
 \code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
-as its parameter, while \code{join} may be called on a tester thread variable (
-returned by a \code{fork} call) to wait for it to join the main thread. 
+as its parameter, while \code{join} may be called on a tester thread variable
+(returned by a \code{fork} call) to wait for it to join the main thread. 
 
 Running multiple threads does present some new limitations to \code{peek}s and 
 \code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
@@ -6120,7 +6124,7 @@ subsequent threads.
 \index{Verilator}
 
 Per default, tests written with ChiselTest are run by the Treadle simulation backend. However, 
-larger system tests may either require another backend to support, e.g., latches, or may 
+larger system tests may either require another backend to support, for example, latches, or may 
 benefit in terms of simulation time. To enable this, ChiselTest supports two other backends; 
 \myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
 \myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
@@ -6252,7 +6256,7 @@ Chisel 3:
 \end{itemize}
 
 However, you might get involved in a project that still uses Chisel 2,
-e.g., the \myref{http://www.opensocfabric.org/}{OpenSoC Fabric} project.
+for example, the \myref{http://www.opensocfabric.org/}{OpenSoC Fabric} project.
 Therefore, we provide here some information on Chisel 2 coding for those who
 have started with Chisel 3.
 
