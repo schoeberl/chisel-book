@@ -24,12 +24,16 @@ class BundleVec extends Module {
     val selMux = Input(UInt(2.W))
     val muxOut = Output(UInt(8.W))
 
-    val selVec = Input(UInt(3.W))
+    val selVec = Input(UInt(5.W))
     val selVecCond = Input(Bool())
     val defVecOut = Output(UInt(3.W))
 
     val defVecSigIn = Input(Vec(6, UInt(8.W)))
     val defVecSigOut = Output(UInt(8.W))
+
+    val regVecOut = Output(Vec(3,UInt(3.W)))
+
+    val resetRegFileOut = Output(UInt(32.W))
   })
 
   //- start bundle_use
@@ -164,4 +168,21 @@ class BundleVec extends Module {
   //- end
 
   io.defVecSigOut := vecOutSig
+
+  //- start reg_vec_init
+  val initReg = RegInit(VecInit(0.U(3.W), 1.U, 2.U))
+  val resetVal = initReg(sel)
+  initReg(0) := d
+  initReg(1) := e
+  initReg(2) := f
+  //- end
+
+  io.regVecOut := initReg
+
+  //- start reg_vec_reset
+  val resetRegFile = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))
+  val rdRegFile = resetRegFile(sel)
+  //- end
+
+  io.resetRegFileOut := rdRegFile
 }

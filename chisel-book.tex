@@ -1197,6 +1197,22 @@ processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-
 
 \shortlist{code/reg_file_access.txt}
 
+A register of a vector can also be initialized. This is then the value that the register is reset to.
+To initialize the register file, we use A \code{VecInit} with the constants for reset, wrapped
+into a \code{RegInit}. The input of the three registers are then connected to wires \code{a},
+\code{b}, and \code{c}.
+
+\shortlist{code/reg_vec_init.txt}
+
+If we want to reset all elements of a large register file to the same value (probably 0), we
+can use a Sala sequence \code{Seq}. \code{VecInit} can be constructed with a sequence
+containing Chisel types. \code{Seq} contains a creation function \code{fill} to initialize a sequence
+with identical values.
+The following code constructs a register file containing 32 registers, each 32-bit wide and reset to
+0:
+
+\shortlist{code/reg_vec_reset.txt}
+
 \subsubsection{Combining Bundle and Vec}
 
 We can freely mix bundles and vectors. When creating a vector with a bundle

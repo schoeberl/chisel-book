@@ -51,7 +51,10 @@ class BundleVecTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.muxOut.expect(11.U)
       dut.io.selMux.poke(2.U)
       dut.io.muxOut.expect(22.U)
-
+    }
+  }
+  it should "pass VecInit" in {
+    test(new BundleVec) { dut =>
       dut.io.selVecCond.poke(false.B)
       for (i <- 0 until 3) {
         dut.io.selVec.poke(i.U)
@@ -69,6 +72,20 @@ class BundleVecTest extends AnyFlatSpec with ChiselScalatestTester {
       for (i <- 0 until 3) {
         dut.io.selVec.poke(i.U)
         dut.io.defVecSigOut.expect((i*10).U)
+      }
+
+      for (i <- 0 until 3) {
+        dut.io.defVecSigIn(i).poke((i * 2).U)
+        dut.io.regVecOut(i).expect(i.U)
+      }
+      dut.clock.step()
+      for (i <- 0 until 3) {
+        dut.io.regVecOut(i).expect((i * 2).U)
+      }
+
+      for (i <- 0 until 32) {
+        dut.io.selVec.poke(i.U)
+        dut.io.resetRegFileOut.expect(0.U)
       }
     }
   }
