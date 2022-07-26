@@ -784,7 +784,7 @@ signed integer:
 
 \noindent The width of a vector of bits is defined by a Chisel width type (\code{Width}).
 The following expression casts the Scala integer \code{n} to a Chisel \code{width},
-which is used for the definition of the \code{Bits} vector:
+which we use for the definition of the \code{Bits} vector:
 
 \shortlist{code/n_w.txt}
 
@@ -1079,10 +1079,13 @@ till 9 and wraps around to 0 when reaching 9.
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} and (2) a \code{Vec}.
 A \code{Bundle} groups signals of different types as named fields.
 A \code{Vec} represents an indexable collection of signals (elements) of the same type.
-\code{Bundle}s and \code{Vec}s can be arbitrarily nested.
+\code{Bundle}s and \code{Vec}s create new, user defined Chisel types and can be arbitrarily nested.
+
+\subsection{Bundle}
 
 A Chisel \code{Bundle} groups several signals. The entire bundle can be referenced
 as a whole, or individual fields can be accessed by their name.
+A \code{Bundle} is similar to a \code{struct} in C and SystemVerilog or a \code{record} in VHDL.
 We can define a bundle (collection of signals) by defining a class that
 extends \code{Bundle} and list the fields as \code{val}s within the constructor block.
 
@@ -1096,15 +1099,20 @@ The fields are accessed with the dot notation:
 Dot notation is common in object-oriented languages, where \code{x.y} means
 \code{x} is a reference to an object and \code{y} is a field of that object.
 As Chisel is object-oriented, we use dot notation to access fields in a bundle.
-A \code{Bundle} is similar to a \code{struct} in C and SystemVerilog or a \code{record} in VHDL.
 A bundle can also be referenced as a whole:
 
 \shortlist{code/bundle_ref.txt}
 
-A Chisel \code{Vec} represents a collection of signals of the same type (a vector).
+\subsection{Vec}
+
+A Chisel \code{Vec} (a vector) represents a collection of Chisel types of the same type.
 Each element can be accessed by an index. A Chisel \code{Vec} is similar
 to array data structures in other programming languages.\footnote{The name \codefoot{Array}
 is already used in Scala.}
+
+\subsubsection{Combinational Vec}
+
+
 A \code{Vec} is created by calling the constructor with two parameters: the
 number of elements and the type of the elements. A combinational \code{Vec}
 needs to be wrapped into a \code{Wire}
@@ -1123,7 +1131,7 @@ connects it to \code{muxOut}.
 
 \shortlist{code/vec_mux.txt}
 
-Figure~\ref{fig:vec-mux} shows the resulting schematic of the above code snippet.
+\noindent Figure~\ref{fig:vec-mux} shows the resulting schematic of the above code snippet.
 
 \begin{figure}
   \centering
@@ -1131,6 +1139,28 @@ Figure~\ref{fig:vec-mux} shows the resulting schematic of the above code snippet
   \caption{A vector wrapped in a \code{Wire} is just a mulitplexer.}
   \label{fig:vec-mux}
 \end{figure}
+
+Similar to using a \code{WireDefault}, we can set default values of a \code{Vec} with \code{VecInit}.
+The following code represents  3:1 multiplexer with three constant defaults. Note, that we specify
+the size (3 bits) of the \code{UInt} data types with the first constant.
+With the condition (\code{cond}) we can overwrite those default values.
+This overwrite hardware itself consists of three 2:1 multiplexers. The last line selects
+one of the three inputs of the \code{defVec} multiplexer. Note, that \code{VecInit} already returns a
+Chisel hardware and we do not need to wrap it into a \code{Wire}.\footnote{This is different from
+an plain \codefoot{Vec} that needs to be wrapped into a \codefoot{Wire}. We could wrap the \codefoot{VecInit}
+into a \codefoot{WireDefault}, but this uncommon coding style.}
+
+\shortlist{code/vec_init.txt}
+
+It is not only possible to set initial constants (like in \code{WireDefault}) for the \code{Vec} input,
+but we can also connect signals (wires) with \code{VecInit} to the inputs of the \code{Vec}.
+The following example connects the wires \code{d}, \code{e}, and \code{f} to the three
+inputs of the \code{Vec}.
+
+\shortlist{code/vec_init_sig.txt}
+
+
+\subsubsection{Register Vec}
 
 We can also wrap a \code{Vec} into a register to define an array of registers.
 Following code shows a vector of three registers.
@@ -1166,6 +1196,8 @@ processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-
 \noindent An element of that register file is accessed with an index and used as a normal register.
 
 \shortlist{code/reg_file_access.txt}
+
+\subsubsection{Combining Bundle and Vec}
 
 We can freely mix bundles and vectors. When creating a vector with a bundle
 type, we need to pass a prototype for the vector fields. Using our
@@ -3584,7 +3616,7 @@ The FSM has two input and a single output signal, captured in a Chisel \code{Bun
 \noindent At this place we could spend some discussion on optimal state encoding. Two common options
 are binary or one-hot encoding. However, we leave those low-level optimization to
 the synthesize tool and aim for readable code.\footnote{In the current version
-of Chisel the \code{Enum} type represents states in binary encoding.
+of Chisel the \codefoot{Enum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
 constants for the state names.}
 Therefore, we use an enumeration type with symbolic names for the states:
@@ -4290,8 +4322,8 @@ As a simple example, we generate an adder:
 \shortlist{code/components_fn_def.txt}
 
 \noindent The return value of a function in Scala is the result of the last
-expression.\footnote{Scala also contains a \code{return} statement. The code could have been written
-a bit more verbose as \code{return x + y}.}
+expression.\footnote{Scala also contains a \codefoot{return} statement. The code could have been written
+a bit more verbose as \codefoot{return x + y}.}
 We can then create two adders by simply calling the function \code{adder}.
 
 \shortlist{code/components_fn_use.txt}

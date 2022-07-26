@@ -23,6 +23,13 @@ class BundleVec extends Module {
     val wrIdx = Input(UInt(2.W))
     val selMux = Input(UInt(2.W))
     val muxOut = Output(UInt(8.W))
+
+    val selVec = Input(UInt(3.W))
+    val selVecCond = Input(Bool())
+    val defVecOut = Output(UInt(3.W))
+
+    val defVecSigIn = Input(Vec(6, UInt(8.W)))
+    val defVecSigOut = Output(UInt(8.W))
   })
 
   //- start bundle_use
@@ -131,4 +138,30 @@ class BundleVec extends Module {
 
   io.chreg := channelReg
 
+  val sel = io.selVec
+  val cond = io.selVecCond
+
+  // this works also for the following VecInit example
+  // val defVec = WireDefault(VecInit(1.U(3.W), 2.U, 3.U))
+  //- start vec_init
+  val defVec = VecInit(1.U(3.W), 2.U, 3.U)
+  when (cond) {
+    defVec(0) := 4.U
+    defVec(1) := 5.U
+    defVec(2) := 6.U
+  }
+  val vecOut = defVec(sel)
+  //- end
+  io.defVecOut := vecOut
+
+  val d = io.defVecSigIn(0)
+  val e = io.defVecSigIn(1)
+  val f = io.defVecSigIn(2)
+
+  //- start vec_init_sig
+  val defVecSig = VecInit(d, e, f)
+  val vecOutSig = defVecSig(sel)
+  //- end
+
+  io.defVecSigOut := vecOutSig
 }
