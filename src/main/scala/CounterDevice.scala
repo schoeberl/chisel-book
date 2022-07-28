@@ -6,8 +6,8 @@ class CounterDevice extends Module {
     val addr = Input(UInt(2.W))
     val wr = Input(Bool())
     val rd = Input(Bool())
-    val din = Input(UInt(32.W))
-    val dout = Output(UInt(32.W))
+    val wrData = Input(UInt(32.W))
+    val rdData = Output(UInt(32.W))
     val ack = Output(Bool())
   })
 
@@ -19,13 +19,13 @@ class CounterDevice extends Module {
   when(io.rd) {
     addrReg := io.addr
   }
-  io.dout := cntRegs(addrReg)
+  io.rdData := cntRegs(addrReg)
 
-  for (i <- 0 until 3) {
+  for (i <- 0 until 4) {
     cntRegs(i) := cntRegs(i) + 1.U
   }
   when (io.wr) {
-    cntRegs(io.addr) := io.din
+    cntRegs(io.addr) := io.wrData
   }
 
   io.ack := ackReg

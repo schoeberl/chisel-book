@@ -324,7 +324,8 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 
 \todo{Look into the notes}
 
-Interconnect, arbitration circuit (combinational and functional programming), 
+Interconnect chapter, hardware generation extended: functional and arbitration circuit
+(combinational and functional programming), maybe new test chapter
 
 
 \section*{Translations}
@@ -1358,6 +1359,7 @@ explore a simple testing framework from Chisel, which allows you to test circuit
 without configuring an FPGA and toggle switches.
 
 \chapter{Build Process and Testing}
+\label{chap:build:test}
 
 To get started with more interesting Chisel code we first need to learn how to compile
 Chisel programs, how to generate Verilog code for execution in an FPGA,
@@ -1743,7 +1745,7 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 
 In this section, we described the basic testing facility with Chisel for simple tests.
 However, keep in mind that the full power of Scala is available to write testers.
-This includes, e.g., writing a reference model of your hardware in Scala to test against.
+This includes, for exmaple, writing a reference model of your hardware in Scala to test against.
 
 \subsection{Waveforms}
 
@@ -4176,73 +4178,6 @@ to be ready, the data is considered read and the buffer is empty again.
 
 
 
-%\chapter{Debugging, Testing, and Verification}
-%\label{chap:testing}
-%
-%
-%\index{Debugging}
-%\index{Testing}
-%\index{Verification}
-%
-%During your design and coding phase you often debug your design.
-%\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
-%finding defects in your code. Those defects are called
-%\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
-%Debugging is often performed in parallel with writing new code.
-%
-%Testing and verification have slightly different meaning in software development
-%and digital design.
-%
-%\section{Debugging}
-%
-%One can debug a program by using a debugger or simply by printing interesting
-%values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
-%In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
-%debugging is generating waveforms and watching how interesting signals evolve over time.
-%We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
-%we should create one.}
-%
-%A Chisel tester can generate waveforms, which can be viewed e.g., with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
-%However, for quick checks it is also possible to print signal values during simulation of the circuit.
-%Values are printed at the rising edge of the clock.
-%
-%
-%\section{Testing in Chisel}
-%
-%\subsection{Verilator}
-%
-%\section{ChiselTest}
-%
-%\noindent Although Chisel testing is more heavyweight than unit testing of Scala programs,
-%we can wrap a Chisel test into a ScalaTest class. The main benefit of this exercise is to 
-%be able to run all tests with a simple \code{sbt test} (instead of a running \code{main}). 
-%ScalaTest also supports multithreaded testing out of the box meaning that if you have more 
-%test classes in your project, they can run in parallel. Additionally, you can make use of 
-%the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
-%
-%\noindent You define Chisel tests as classes that extend \code{FlatSpec} with 
-%the \code{ChiselScalatestTester} trait. ChiselTest inverts the order of the \code{peek}, 
-%\code{poke}, \code{expect} and \code{step} methods to now operate on the DUT's IO ports, 
-%and where the iotesters methods operate on Scala type inputs (i.e., \code{BigInt}s and 
-%\code{Boolean}s), the ChiselTest methods operate on Chisel types (i.e., \code{UInt}s, 
-%\code{SInt}s, \code{Bool}s etc.). Similarly, to advance the simulation by one clock cycle, 
-%you should call \code{step} on the DUT's implicit clock.
-%
-%You can define individual tests within the \code{test} function which takes two parameter 
-%lists, one being the module to test and the other being the test description itself which 
-%is passed the DUT as parameter. As an example, the following tester tests a few inputs to 
-%a BCD table:
-%
-%\shortlist{code/basic_chiseltest.txt}
-%
-%\noindent Alternatively, you can use the \code{behavior of "module name"} syntax to easily 
-%refer to the module with \code{it}. This is useful when you have several tests for a 
-%single module.
-%
-%\shortlist{code/basic_chiseltest_it.txt}
-
-
-
 \chapter{Hardware Generators}
 \index{Hardware generators}
 \label{ch:gen}
@@ -5382,6 +5317,7 @@ Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 
 \chapter{Interconnect}
 \index{Interconnect}
+\label{chap:interconnect}
 
 We combine different components to build larger systems.
 To simplify the composition of components, interconnect standards such as
@@ -5478,7 +5414,7 @@ transaction and the memory or peripheral device signals the end of a transaction
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/bus_ack}
-  \caption{A read transaction with an acknowledge.}
+  \caption{A read transaction with a combinational acknowledge.}
   \label{fig:bus_ack}
 \end{figure}
 
@@ -5508,7 +5444,7 @@ peripheral device.
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/bus_pipe_ack}
-  \caption{Read transaction with a later acknowledgement.}
+  \caption{Read transaction with a pipelined acknowledgement.}
   \label{fig:bus_pipe_ack}
 \end{figure}
 
@@ -5524,7 +5460,7 @@ allowing a throughput of 1 data word per clock cycle.
 The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exact this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
-used OCP interface.
+used OCP interfaces.
 
 \subsection{Example IO Device}
 
@@ -5536,15 +5472,15 @@ counters we need two address bits. We read the value from the counter with a rea
 (\code{rd} is asserted) and get the result in the next clock cycle (in \code{dout}). We write to a counter with
 \code{wr} asserted and the value set in \code{din}.
 
-To implement the delayed acknowledge, we use a single bi register (\code{ackReg}) and
-simple delaying any asserted \code{rd} or \code{wr}. As we provide the read result in
+To implement the delayed acknowledge, we use a single bit register (\code{ackReg}) to
+delay any asserted \code{rd} or \code{wr}. As we provide the read result in
 the clock cycle that follows the read command and the address is only valid during this
 command cycle, we need to store the address in \code{addrReg}.
 
-The counters themself are a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
+The counters themself consists of a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
 The counters are initialized to zero by using a Scala \code{Seq}, created with \code{fill}
 containing the reset values as Chisel constants. That \code{Seq} is the input to the \code{VecInit}.
-The counter are freely running and increment by one each clock cycle, except when written
+The counters are freely running and increment by one each clock cycle, except when written
 a new value.
 
 The on-chip version of an interconnect definition can be generalized to a point-to-point
@@ -5571,7 +5507,7 @@ last years. The following sections give a brief overview of common
 SoC interconnection standards.
 
 \subsection{Wishbone}
-\index{Widhbone}
+\index{Wishbone}
 
 The Wishbone~\cite{soc:wishbone} specification is a definition of
 a point-to-point communication and not a bus in the classic sense.
@@ -5654,25 +5590,229 @@ and a network-on-chip with an OCP interface.
 \subsection{Further Bus Specifications}
 
 The Avalon \cite{soc:avalon} interface specification is provided by
-Altera for a system-on-a-programmable-chip (SOPC) interconnection.
+Intel for a system-on-a-programmable-chip (SOPC) interconnection.
 Avalon defines a great range of interconnection devices ranging from
 a simple asynchronous interface intended for direct static RAM
 connection up to sophisticated pipeline transfers with variable
 latencies. This great flexibility provides an easy path to connect a
 peripheral device to Avalon. How is this flexibility possible? The
 \emph{Avalon Switch Fabric} translates between all those different
-interconnection types. The switch fabric is generated by Altera's
+interconnection types. The switch fabric is generated by Intel's
 SOPC Builder tool. However, it seems that this switch fabric is
-Altera proprietary thus tying this specification to Altera FPGAs.
+Intel proprietary thus tying this specification to Intel FPGAs.
 
 The On-Chip Peripheral Bus (OPB) \cite{soc:opb} is an open standard
 provided by IBM and used by Xilinx. The OPB specifies a bus for
 multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
-suggested. Xilinx uses the AND/OR approach and all masters and
+suggested. Xilinx used the AND/OR approach and all masters and
 slaves must drive the data busses to zero when inactive.
 Xilinx switched to AXI for all their interconnect.
+
+
+\chapter{Debugging, Testing, and Verification}
+\label{chap:testing}
+
+
+\index{Debugging}
+\index{Testing}
+\index{Verification}
+
+In Chapter~\ref{chap:build:test} we gave a quick introduction how to test
+Chisel designs. In this Chapter we will dig deeper into the topic of testing and
+verification.
+
+Testing and verification have slightly different meaning in software development
+and digital design. In software development testing means running tests on components
+where verification usually is the short for formal verification (mathematical proofs or exhaustive testing
+with model checking). In digital design we used the term testing similar to software when writing
+\emph{test benches} that stimulate and check a \emph{device under test} (DUT). However, the term testing
+is also used in the actual test of the physical chip (on a tester using a built-in self test).
+Therefore, the digital design community slowly moves to use the term verification for
+testing the hardware description. If we want to apply formal methods to verify hardware
+components, we call it formal verification. In this book we will stick to the term \emph{testing}
+when we write tests for our hardware description.
+
+\section{Debugging}
+
+During your design and coding phase you often debug your design.
+\myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
+finding defects in your code. Those defects are called
+\myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
+Debugging is often performed in parallel with writing new code.
+
+One can debug a program by using a debugger or simply by printing interesting
+values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
+In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
+debugging is generating waveforms and watching how interesting signals evolve over time.
+We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
+we should create one.}
+
+A Chisel tester can generate waveforms, which can be viewed, for example, with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
+However, for quick checks it is also possible to print signal values during simulation of the circuit.
+Values are printed at the rising edge of the clock.
+
+
+\section{Testing in Chisel}
+
+ChiselTest is based on ScalaTest. Therefore, we can run all tests with a simple \code{sbt test}.
+ScalaTest also supports multithreaded testing out of the box meaning that if you have more 
+test classes in your project, they can run in parallel. Additionally, you can make use of 
+the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
+
+You define Chisel tests as classes that extend \code{FlatSpec} with 
+the \code{ChiselScalatestTester} trait. ChiselTest uses \code{peek}, 
+\code{poke}, \code{expect}, and \code{step} methods that operate on the DUT's IO ports.
+The ChiselTest methods operate on Chisel types (i.e., \code{UInt}s, 
+\code{SInt}s and \code{Bool}s). To advance the simulation by one clock cycle, 
+we call \code{step} on the DUT's implicit clock port.
+
+You can define individual tests within the \code{test} function which takes two parameter 
+lists, one being the module to test and the other being the test description itself which 
+is passed the DUT as parameter. As an example, the following tester tests a few inputs to 
+a BCD table:
+
+\shortlist{code/basic_chiseltest.txt}
+
+Alternatively, you can use the \code{behavior of "module name"} syntax to 
+refer to the module with \code{it}. This is useful when you have several tests for a 
+single module.
+
+\shortlist{code/basic_chiseltest_it.txt}
+
+Simple tests start by writing text vectors with \code{poke} to the DUT, advancing the
+clock, and testing the outputs with an \code{expect}. For debugging purposes we can also
+\code{peek} values and print them out for manual inspection. The code in Listing~\ref{lst:test:cnt} tests the
+counter device that we introduced in Chapter~\ref{chap:interconnect} as an example IO device.
+
+\longlist{code/test_counter.txt}{Testing the counter device.}{lst:test:cnt}
+
+As you can see, the test covers only a few cases, but is already very long to read.
+All those pokes and expects are cumbersome. As a first step we shall introduce
+functions to represent a read and a write request. Those functions abstract away the manual
+``bit banging'' at the interface pins in the tesing code.
+Listing~\ref{lst:test:cnt:fun} shows a test with those functions. For a shortcut we also define
+the function \code{step} to advance the clock. 
+
+\longlist{code/test_counter_fun.txt}{Testing the counter device with fuctions.}{lst:test:cnt:fun}
+
+The \code{read} function takes an address
+as parameter and returns the read value. After poking the address and the read signal the function
+advances the clock by one clock cycle and deasserts the read function. In our example device,
+the read value should be available after one clock cycle. However, we generalize the read function
+also for devices with longer latencies and the read function waits in an endless loop that \code{ack}
+will become true. Note, how we convert a Chisel \code{Bool} to a Scala \code{Boolean}.
+However, when a device has a fault to never assert \code{ack} after a request,
+the test will hang in an endless loop. A robuster read function will contain a timeout for the \code{ack}
+polling. Finally we read the data from \code{rdData} and convert it to a Scala integer (concrete
+a \code{BigInt} to express any sized integer).
+
+The \code{write} function takes an address and the data parameters as Scala \code{Int}.
+Similar to the read function, the values are poked into the device, the clock advanced one
+clock cycle and then the write signal deasserted. Also here we wait in an endless loop that
+\code{ack} becomes true.
+
+With those three functions available, we can write in less lines of code and better readable
+our tests. This testing code covers already way more cases than the original bit-banging
+tester.\footnote{It happened, that I had an off by one error (\code{until 3} instead of \code{until 4})
+in the counter device, that I found only with the second, more comprehensive test.}
+
+
+%\section{Advanced Testing}
+
+If you have a large test suite, you may wish to run only a subset of your tests 
+as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration} 
+run or similar. The easiest way to achieve this and still have to run only a single SBT command 
+is by tagging your tests.
+
+\shortlist{code/tag_test.txt}
+
+\noindent Per default, all tests can be run by using \code{sbt test} or \code{sbt testOnly *}. 
+To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
+
+\begin{verbatim}
+$ sbt "testOnly * -- -l Unnecessary"
+\end{verbatim}
+
+\noindent When you run the command, the test will show up as ignored in the terminal:
+
+\begin{verbatim}
+[info] TagTest:
+[info] Integers
+...
+[info] No tests were executed.
+\end{verbatim}
+
+If your tests (and tags) are part of a package, remember to provide the full 
+reference path to both. Next, we will look at a few useful debugging techniques.
+
+
+The following subsections present advanced testing techniques that you likely do 
+not need yet. You can skip ahead to the exercise and return later if you find the need.
+
+\section{Multithreaded Testing}
+
+ChiselTest has support for multithreaded testing through the use of \code{fork} and 
+\code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
+as its parameter, while \code{join} may be called on a tester thread variable
+(returned by a \code{fork} call) to wait for it to join the main thread. 
+
+Running multiple threads does present some new limitations to \code{peek}s and 
+\code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
+same signal at the same time. Similarly, to guarantee correct operation, the threads 
+are synchronized on calls to \code{step}.
+
+The following snippet is a small test of a FIFO that enqueues an element in one thread 
+and dequeues it in the main thread:
+
+\shortlist{code/fork_join_example.txt}
+
+Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads 
+represent a hierarchy in which the first thread should not finish before one of the 
+subsequent threads.
+
+\section{Simulator Backends}
+\index{Verilator}
+\index{VCS}
+
+Per default, tests written with ChiselTest are run by the Treadle simulation backend.
+The benefit of Treadle is the quick startup time and no additional tools need to be installed.
+
+However, 
+larger system tests may either require another backend to support, for example, latches, or may 
+benefit in terms of simulation time. To enable this, ChiselTest supports two other backends:
+\myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
+\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
+Verilator is open-source, we will use it for the examples presented in this section. Note 
+that in all cases, VCS can be directly substituted in instead of Verilator.
+
+Switching to a different backend is simply a matter of adding another annotation to the 
+\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add following
+annotation: 
+
+\shortlist{code/verilator_anno.txt}
+
+Additional flexibility arises from the ability to supply your own switches to the 
+simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
+to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
+switches to GCC. They should be in the list of annotations along with the backend 
+annotation. Alternatively, you can write your own custom test command by using 
+\code{TestCommandOverride}. Either way, you should refer to the tool's user manual 
+to find a detailed list of command line arguments.
+
+Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation. 
+To support this, make sure to install Verilator version 4.028 or newer.
+
+Also, beware that different simulators work in different ways. Verilator is a so-called 
+synchronous simulator, which means that it runs updates only at the rising edge of the 
+clock and thus does not support latches. It also does not officially support multiple 
+clocks. VCS, on the other hand, is an event-based simulator, which is significantly more 
+detailed in its simulations and supports all synthesizable Verilog constructs. 
+Generally, for single-clock circuits, Verilator is the fastest and 
+most widely available tool.
+
+
 
 
 
@@ -6306,101 +6446,6 @@ started to collect small Chisel components.
 
 If you know an open-source project that uses Chisel, please drop me a note
 so I can include it in a future edition of the book.
-
-\chapter{Advanced Testing}
-
-
-
-
-\noindent If you have a large test suite, you may wish to run only a subset of your tests 
-as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration} 
-run or similar. The easiest way to achieve this and still have to run only a single SBT command 
-is by tagging your tests.
-
-\shortlist{code/tag_test.txt}
-
-\noindent Per default, all tests can be run by using \code{sbt test} or \code{sbt testOnly *}. 
-To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
-
-\begin{verbatim}
-$ sbt "testOnly * -- -l Unnecessary"
-\end{verbatim}
-
-\noindent When you run the command, the test will show up as ignored in the terminal:
-
-\begin{verbatim}
-[info] TagTest:
-[info] Integers
-...
-[info] No tests were executed.
-\end{verbatim}
-
-\noindent If your tests (and tags) are part of a package, remember to provide the full 
-reference path to both. Next, we will look at a few useful debugging techniques.
-
-
-The following subsections present advanced testing techniques that you likely do 
-not need yet. You can skip ahead to the exercise and return later if you find the need.
-
-\section{Multithreaded Testing}
-
-ChiselTest has support for multithreaded testing through the use of \code{fork} and 
-\code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
-as its parameter, while \code{join} may be called on a tester thread variable
-(returned by a \code{fork} call) to wait for it to join the main thread. 
-
-Running multiple threads does present some new limitations to \code{peek}s and 
-\code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
-same signal at the same time. Similarly, to guarantee correct operation, the threads 
-are synchronized on calls to \code{step}.
-
-The following snippet is a small test of a FIFO that enqueues an element in one thread 
-and dequeues it in the main thread:
-
-\shortlist{code/fork_join_example.txt}
-
-Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads 
-represent a hierarchy in which the first thread should not finish before one of the 
-subsequent threads.
-
-\section{Simulator Backends}
-
-\index{Verilator}
-
-Per default, tests written with ChiselTest are run by the Treadle simulation backend. However, 
-larger system tests may either require another backend to support, for example, latches, or may 
-benefit in terms of simulation time. To enable this, ChiselTest supports two other backends; 
-\myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
-\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
-Verilator is open-source, we will use it for the examples presented in this section. Note 
-that in all cases, VCS can be directly substituted in instead of Verilator.
-
-Switching to a different backend is simply a matter of adding another annotation to the 
-\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add following
-annotation: 
-
-\shortlist{code/verilator_anno.txt}
-
-Additional flexibility arises from the ability to supply your own switches to the 
-simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
-to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
-switches to GCC. They should be in the list of annotations along with the backend 
-annotation. Alternatively, you can write your own custom test command by using 
-\code{TestCommandOverride}. Either way, you should refer to the tool's user manual 
-to find a detailed list of command line arguments.
-
-Note that ChiselTest 0.3.4 and on support code coverage measures directly in simulation. 
-To support this, make sure to install Verilator version 4.028 or newer.
-
-Also, beware that different simulators work in different ways. Verilator is a so-called 
-synchronous simulator, which means that it runs updates only at the rising edge of the 
-clock and thus does not support latches. It also does not officially support multiple 
-clocks. VCS, on the other hand, is an event-based simulator, which is significantly more 
-detailed in its simulations and supports all synthesizable Verilog constructs. 
-Generally, for single-clock circuits, Verilator is the fastest and 
-most widely available tool.
-
-
 
 
 \chapter{PeekPokeTester}
