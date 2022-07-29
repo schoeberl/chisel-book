@@ -73,7 +73,7 @@ class Arbiter3Loop extends Module {
 }
 
 /*
-This does not work with plain UInts, as Chisel has parital assignment issues
+This does not work with plain UInts, as Chisel has partial assignment issues
 
   val grant = WireDefault(0.U(3.W))
 

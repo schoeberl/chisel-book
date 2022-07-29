@@ -4460,13 +4460,47 @@ a \code{Payload} as a parameter:
 \section{Generate Combinational Logic}
 \index{Logic generation}
 \index{Logic table generation}
+\index{ROM}
 \label{sec:gen:comb:logic}
 
+A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
+as we can see the input to the table as an address into such a ROM.
+We generate a logic table with \code{VecInit}.  Following snippet of code creates
+a table to compute the square of a number \code{n}.
+
+\shortlist{code/gen_vec.txt}
+
+We can use the full power of Scala to generate our logic (tables).
+For example, generate a table of fixpoint constants to represent a trigonometric function,
+compute constants for digital filters, or writing an assembler in Scala
+to generate code for a microprocessor written in Chisel. All those functions
+are in the same code base (same language) and can be executed during
+hardware generation.
+
+\index{Binary-coded decimal}
+\index{BCD}
+A classic example for a table generation is the conversion of a binary number
+into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
+(BCD) representation. BCD is used to represent a number in a decimal
+format using 4 bits for each decimal digit. For example, decimal \code{13} is in binary
+\code{1101} and BCD encoded as 1 and 3 in binary: \code{00010011}.
+BCD allows displaying numbers in decimal, a more user-friendly number
+representation than hexadecimal.
+
+When using a classic hardware description language, such as Verilog or VHDL,
+we would use another script or programming language to generate such a table.
+We can write a Java program that computes the table to convert binary to BCD.
+That Java program prints out VHDL code that can be included in a project.
+The Java program is about 100 lines of code; most of the code generating
+VHDL strings. However, the key part of the conversion is just two lines of code.
+With Chisel, we can compute this table directly as part of the hardware generation.
+Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
+
+\longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
 
 
-In Chisel, we can easily generate logic by creating a logic table with
-a Chisel \code{Vec} from a Scala \code{Array}.
-We might have data in a file, that we can read in during hardware generation
+We can also generate a logic table from a Scala \code{Array}.
+We may have data in a file that we want to read in during hardware generation
 time for the logic table.
 Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
 class form the Scala standard library to read the file \code{data.txt}, which
@@ -4502,34 +4536,6 @@ This code is extracted from the serial port example, later in the text, to send 
 message. 
 
 
-We can use the full power of Scala to generate our logic (tables).
-For example, generate a table of fixpoint constants to represent a trigonometric function,
-compute constants for digital filters, or writing a small assembler in Scala
-to generate code for a microprocessor written in Chisel. All those functions
-are in the same code base (same language) and can be executed during
-hardware generation.
-
-\index{Binary-coded decimal}
-\index{BCD}
-A classic example for a table generation is the conversion of a binary number
-into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
-(BCD) representation. BCD is used to represent a number in a decimal
-format using 4 bits fo each decimal digit. For example, decimal \code{13} is in binary
-\code{1101} and BCD encoded as 1 and 3 in binary: \code{00010011}.
-BCD allows displaying numbers in decimal, a more user-friendly number
-representation than hexadecimal.
-
-When using a classic hardware description language, such as Verilog or VHDL,
-we would use another script or programming language to generate such a table.
-We can write a Java program that computes the table to convert binary to BCD.
-That Java program prints out VHDL code that can be included in a project.
-The Java program is about 100 lines of code; most of the code generating
-VHDL strings. However, the key part of the conversion is just two lines of code.
-
-With Chisel, we can compute this table directly as part of the hardware generation.
-Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
-
-\longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
 
 \section{Use Inheritance}
 \label{sec:inheritance}
