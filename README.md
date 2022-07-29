@@ -1,4 +1,4 @@
-![build states](https://github.com/shoeberl/chisel-book/actions/workflows/test.yml/badge.svg)
+![build status](https://github.com/schoeberl/chisel-book/actions/workflows/test.yml/badge.svg)
 
 # Digital Design with Chisel
 
