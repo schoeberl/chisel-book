@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/schoeberl/chisel-book.svg?branch=master)](https://travis-ci.com/schoeberl/chisel-book)
+![build states](https://github.com/shoeberl/chisel-book/actions/workflows/test.yml/badge.svg)
 
 # Digital Design with Chisel
 
