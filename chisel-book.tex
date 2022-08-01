@@ -1182,11 +1182,7 @@ enable signals of the registers.
 \end{figure}
 
 
-
-
-
-
-
+\index{Register file}
 Following example defines a register file for a processor; 32 registers
 each 32-bits wide, as for a classic 32-bit 
 \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{RISC}
@@ -5803,9 +5799,9 @@ Additional flexibility arises from the ability to supply your own switches to th
 simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
 to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
 switches to GCC. They should be in the list of annotations along with the backend 
-annotation. Alternatively, you can write your own custom test command by using 
-\code{TestCommandOverride}. Either way, you should refer to the tool's user manual 
-to find a detailed list of command line arguments.
+annotation. You need to refer to the tool's user manual  to find a detailed list of command line arguments.
+Note that \code{VerilatorFlags} and \code{VerilatorCFlags} annotations are advanced features
+that should generally not be needed. Furthermore, the flags are not guaranteed to remain stable.
 
 Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation. 
 To support this, make sure to install Verilator version 4.028 or newer.
