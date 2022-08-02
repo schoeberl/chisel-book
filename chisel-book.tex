@@ -4040,6 +4040,7 @@ unidirectional data exchange.
 
 \section{Ready/Valid Interface}
 \index{Ready/valid interface}
+\label{sec:ready:valid}
 
 Communication of subsystems can be generalized to the movement
 of data and handshaking for flow control. In the popcount example,
@@ -5493,6 +5494,7 @@ we need arbitration within the switching fabric to decide which master is allowe
 read and write commands.
 
 \subsection{Memory Mapped Devices}
+\index{Memory mapped IO}
 
 In our example system all devices, being it memory or IO devices, are connected to a shared
 address lines. Therefore, they appear in the shared address space. To select individual
@@ -5527,8 +5529,59 @@ we want to extend the memory. I this example we reserve 16 bytes of address for
 each IO device. Note, this is a made up example and we have all the flexibility when
 deciding on an address map.
 
+Some IO devices do not have memory mapped registers, as the counter example device,
+but a ready/valid interface, as explained in Section~\ref{sec:ready:valid}.
+The UART, as presented in Section~\ref{sec:uart}, for example, has such two
+ready/valid interfaces: one for writing and one for reading a value.
+A common solution is to map write and read channel to one address and drive
+the according signals on the write or read command. To signal if the write channel
+is ready to receive a new data word or the read channel has a valid data, we map
+those two signals into a status register at a different address.
 
-\todo{select code, but maybe in the Leros section when building a complete system.}
+Table~\ref{tab:addr:uart} shows an address mapping for our UART. At the base address (0xf000)
+we access a status register on a read and an optional control register on a write.
+At the next address (0xf001) we read from a possible read buffer and write into
+a transmit buffer. 
+
+\begin{table}
+\centering
+\begin{tabular}{llll}
+\toprule
+Address & I/O Device & read & write \\
+\midrule
+0xf000 & UART & status & control \\
+0xf001 & UART & receive buffer & transmit buffer \\
+\bottomrule
+\end{tabular}
+\caption{Address mapping for the UART.}
+\label{tab:addr:uart}
+\end{table}
+
+Table~\ref{tab:addr:uart:status} shows the mapping of two flags into the status register.
+Both bits signal a that we can perform a write or a read. When the transmit data register
+is empty (TDRE), we can write (send) new data to the transmitter (TX).
+When the receive data register is full, we can read data from the receiver (RX).
+The terminology might sound a bit like using old terms. And this is true for our
+interface. In fact, this is exactly the mapping of the first serial port for the IBM PC
+built with the \myref{https://en.wikipedia.org/wiki/8250_UART}{8250} chip.
+
+\begin{table}
+\centering
+\begin{tabular}{lll}
+\toprule
+Bit & Status & \\
+\midrule
+0 & TDRE & Transmit (TX) data register empty \\
+1 & RDRF & Receive (RX) data register full \\
+\bottomrule
+\end{tabular}
+\caption{Status flags.}
+\label{tab:addr:uart:status}
+\end{table}
+
+
+
+\todo{decoding Chisel code, but maybe in the Leros section when building a complete system.}
 
 \todo{Next step to multiple masters and a generic interconnect (cloud)}
 
