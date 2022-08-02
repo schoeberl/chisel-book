@@ -2752,11 +2752,11 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
 Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
-In the first clock cycle, before a reset, the register content is undefined. In the second clock cycle reset
-is asserted high, and on the rising edge of this clock cycle (labeled B) the register
+In the first clock cycle (0), before a reset, the register content is undefined.
+In the second clock cycle reset is asserted high, and on the rising edge of this clock cycle the register
 takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle
 \code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
-edge (labeled C). From then on \code{reset} stays \code{0}, as it should be, and the
+edge. From then on \code{reset} stays \code{0}, as it should be, and the
 register output follows the input signal with one clock cycle delay.
 
 Waveforms are an excellent tool to specify the behavior of a circuit graphically.
@@ -4072,9 +4072,9 @@ no transfer takes place.
 \end{figure}
 
 Figure~\ref{fig:ready_valid1} shows a timing diagram of the ready/valid
-transaction where the receiver signals \code{ready} (from clock cycle 1 on)
-before the sender has data. The data transfer happens in clock cycle 3.
-From clock cycle 4 on neither the sender has data nor the receiver is ready
+transaction where the receiver signals \code{ready} (from clock cycle 2 on)
+before the sender has data. The data transfer happens in clock cycle 4.
+From clock cycle 5 on neither the sender has data nor the receiver is ready
 for the next transfer.
 When the receiver can receive data in every clock cycle, it is called an
 ``always ready'' interface and \code{ready} can be hardcoded to \code{true}.
@@ -4087,9 +4087,9 @@ When the receiver can receive data in every clock cycle, it is called an
 \end{figure}
 
 Figure~\ref{fig:ready_valid2} shows a timing diagram of the ready/valid
-transaction where the sender signals \code{valid} (from clock cycle 1 on)
-before the receiver is ready. The data transfer happens in clock cycle 3.
-From clock cycle 4 on neither the sender has data nor the receiver is ready
+transaction where the sender signals \code{valid} (from clock cycle 2 on)
+before the receiver is ready. The data transfer happens in clock cycle 4.
+From clock cycle 5 on neither the sender has data nor the receiver is ready
 for the next transfer.
 Similar to the ``always ready'' interface we can envision and always valid
 interface. However, in that case the data will probably not change on signaling
@@ -4103,10 +4103,10 @@ interface. However, in that case the data will probably not change on signaling
 \end{figure}
 
 Figure~\ref{fig:ready_valid3} shows further variations of the ready/valid
-interface. In clock cycle 1 both signals (\code{ready} and \code{valid}
+interface. In clock cycle 2 both signals (\code{ready} and \code{valid}
 become asserted just for a single clock cycle and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
-clock cycle) as shown in clock cycles 4 and 5 with the transfer of
+clock cycle) as shown in clock cycles 5 and 6 with the transfer of
 \code{D2} and \code{D3}
 
 To make this interface composable neither \code{ready} nor \code{valid} is
@@ -5344,7 +5344,7 @@ The central processing unit (CPU) is connected via a
 \myref{https://en.wikipedia.org/wiki/System_bus}{system bus} to
 external memory and input/output (I/O) devices.
 This type of bus interconnection was common with early microprocessors,
-such as, \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} and
+such as, \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
 \myref{https://en.wikipedia.org/wiki/MOS_Technology_6502}{6502}.
 
 The bus is split into an address bus, a data bus, and control signals
@@ -5370,7 +5370,7 @@ is practically disconnected from logic.
 Note, that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
-Modern computers have different busses for different peripheral devices, e.g., a dedicated memory
+Modern computers have different busses for different peripheral devices, for example, a dedicated memory
 bus for external memory and I/O busses for peripheral devices.
 Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
 are serial busses and use point-to-point connections.
@@ -5422,9 +5422,9 @@ transaction and the memory or peripheral device signals the end of a transaction
 
 Figure~\ref{fig:bus_ack} shows a read request with an acknowledgment.
 The processor drives the address bus (\code{address}) and the read
-signal (\code{rd}) after clock tick \code{A}. Signal \code{ack} needs to react
+signal (\code{rd}) in clock cycle 3. Signal \code{ack} needs to react
 within that first clock cycle. In our example the read data is not available within
-one clock cycle, but two clock cycles later as seen after clock tick \code{C}.
+one clock cycle, but two clock cycles later as seen in clock cycle 4.
 Data and the acknowledgment are valid for a single clock cycle.
 The benefit of that protocol specification is, that it allows for a single cycle transaction.
 However, the price is that the handshake process, including decoding is a combinational
@@ -5454,8 +5454,9 @@ Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
 is only a single cycle long. The address bus and the read signal does not need to be driven
 till the acknowledgment. Compared to the former protocol, the \code{ack} signal must
-be valid after clock tick \code{B}. The first read sequence has the same latency the former
-example. However, as the request needs to be valid only one clock cycle, we can pipeline
+one clock cycle after the \code{rd} command, in clock cycle 3.
+The first read sequence has the same latency as the former example.
+However, as the request needs to be valid only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle. 
 
@@ -5490,6 +5491,44 @@ connection. The processor and peripheral devices are connected with such a point
 interface to a switching fabric. If the system contains more than one processor (or master)
 we need arbitration within the switching fabric to decide which master is allowed to issue
 read and write commands.
+
+\subsection{Memory Mapped Devices}
+
+In our example system all devices, being it memory or IO devices, are connected to a shared
+address lines. Therefore, they appear in the shared address space. To select individual
+devices we use address decoding of some upper bits. This is called memory mapped devices
+and as part of the system design we decide on an address mapping.
+
+\begin{table}
+\centering
+\begin{tabular}{ll}
+\toprule
+Address & Device \\
+\midrule
+0x0000--0x0fff & ROM \\
+0x1000--0x1fff & RAM \\
+0xf000 & UART \\
+0xf010 & LEDs \\
+0xf020 & Keys \\
+\bottomrule
+\end{tabular}
+\caption{An example address mapping.}
+\label{tab:addr:map}
+\end{table}
+
+Table~\ref{tab:addr:map} shows an example address map for a (16-bit) microcontroller.
+We assume 16-bit addresses, therefore the range of the addresses is between 0x0000 and
+0xffff.
+At the lowest address (the starting of program to be executed) we map a read-only
+memory (ROM) that contains the program. In the next memory area we map
+a writable memory (RAM) for the data. We decide to map all IO devices into the
+upper area of the address space (above 0xf000), so they are out of the way, in case
+we want to extend the memory. I this example we reserve 16 bytes of address for
+each IO device. Note, this is a made up example and we have all the flexibility when
+deciding on an address map.
+
+
+\todo{select code, but maybe in the Leros section when building a complete system.}
 
 \todo{Next step to multiple masters and a generic interconnect (cloud)}
 
