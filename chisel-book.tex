@@ -5538,9 +5538,9 @@ the according signals on the write or read command. To signal if the write chann
 is ready to receive a new data word or the read channel has a valid data, we map
 those two signals into a status register at a different address.
 
-Table~\ref{tab:addr:uart} shows an address mapping for our UART. At the base address (0xf000)
+Table~\ref{tab:addr:uart} shows an address mapping for the UART. At the base address (0xf000)
 we access a status register on a read and an optional control register on a write.
-At the next address (0xf001) we read from a possible read buffer and write into
+At the next address (0xf001) we read from a read buffer and write into
 a transmit buffer. 
 
 \begin{table}
@@ -5558,12 +5558,13 @@ Address & I/O Device & read & write \\
 \end{table}
 
 Table~\ref{tab:addr:uart:status} shows the mapping of two flags into the status register.
-Both bits signal a that we can perform a write or a read. When the transmit data register
+Both bits signal that we can perform a write or a read transaction. When the transmit data register
 is empty (TDRE), we can write (send) new data to the transmitter (TX).
 When the receive data register is full, we can read data from the receiver (RX).
 The terminology might sound a bit like using old terms. And this is true for our
 interface. In fact, this is exactly the mapping of the first serial port for the IBM PC
-built with the \myref{https://en.wikipedia.org/wiki/8250_UART}{8250} chip.
+built with the \myref{https://en.wikipedia.org/wiki/8250_UART}{8250} chip,
+and it is still valid.
 
 \begin{table}
 \centering
@@ -5579,25 +5580,37 @@ Bit & Status & \\
 \label{tab:addr:uart:status}
 \end{table}
 
+Note, to use ready and valid in a status register for polling, the ready signal from
+the transmitter and the valid signal from the receiver are not allowed to be deasserted
+once they have been asserted. If this cannot be guaranteed, two single word buffers,
+as shown in Listing~\ref{lst:rv:reg}, can be inserted between the IO interface and
+device with the read/valid interface.
+
+\todo{Talk on what happens when reading from an empty device or writing to a full device.}
+
+For our memory mapped devices we define a bundle:
+
+\shortlist{code/mem_io_bundle.txt}
+
+Listing~\ref{lst:rv-device} shows the 
+
+
+\longlist{code/mem_io_rv.txt}{An IO device for a ready/valid device.}{lst:rv-device}
+
+
+
+
+
 
 
 \todo{decoding Chisel code, but maybe in the Leros section when building a complete system.}
 
 \todo{Next step to multiple masters and a generic interconnect (cloud)}
 
-
-
-
-
-
-
-
-
-
 \section{Bus and Interface Standards}
 
 Several point-to-point and bus standards have been proposed over the
-last years. The following sections give a brief overview of common
+years. The following sections give a brief overview of common
 SoC interconnection standards.
 
 \subsection{Wishbone}

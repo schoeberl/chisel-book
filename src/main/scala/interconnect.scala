@@ -1,5 +1,6 @@
 import chisel3._
-import chisel3.util.Decoupled
+import chisel3.util._
+import fifo._
 
 //- start counter_device
 class CounterDevice extends Module {
@@ -38,40 +39,68 @@ object CounterDevice extends App {
   emitVerilog(new CounterDevice())
 }
 
+//- start mem_io_bundle
 class MemoryMappedIO extends Bundle {
-  val addr = Input(UInt())
+  val addr = Input(UInt(4.W))
   val wr = Input(Bool())
   val rd = Input(Bool())
-  val wrData = Input(UInt())
-  val rdData = Output(UInt())
+  val wrData = Input(UInt(32.W))
+  val rdData = Output(UInt(32.W))
   val ack = Output(Bool())
 }
+//- end
 
 // Mapping as in classic PC serial port
 // 0: status (control): bit 0 transmit ready, bit 1 rx data availabel
 // 1: txd and rxd
 // Question: is address a byte address or a word address?
 // Simplest is to using word addresses, it does not really care
+// non-blocking for now
 
+//- start mem_io_rv
 class MemMappedRV[T <: Data](gen: T, block: Boolean = false) extends Module {
   val io = IO(new Bundle() {
     val mem = new MemoryMappedIO()
-    val out = Decoupled(gen)
-    val in = Flipped(Decoupled(gen))
+    val tx = Decoupled(gen)
+    val rx = Flipped(Decoupled(gen))
   })
 
   val statusReg = RegInit(0.U(2.W))
   val ackReg = RegInit(false.B)
   val addrReg = RegInit(0.U(1.W))
+  val rdDlyReg = RegInit(false.B)
 
-  statusReg := io.in.valid ## io.out.ready
+  statusReg := io.rx.valid ## io.tx.ready
 
-  // non-blocking for now
+  // ack
   ackReg := io.mem.rd || io.mem.wr
   io.mem.ack := ackReg
 
-  io.mem.rdData := Mux(addrReg === 0.U, statusReg, io.in.bits)
-  io.out.bits := io.mem.wrData
+  // read from status or rx
+  when (io.mem.rd) {
+    addrReg := io.mem.addr
+  }
+  rdDlyReg := io.mem.rd
+  io.rx.ready := false.B
+  when (addrReg === 1.U && rdDlyReg) {
+    io.rx.ready := true.B
+  }
+  io.mem.rdData := Mux(addrReg === 0.U, statusReg, io.rx.bits)
 
+  // write to tx
+  io.tx.bits := io.mem.wrData
+  io.tx.valid := io.mem.wr
+}
+//- end
 
+class UseMemMappedRV[T <: Data](gen: T) extends Module {
+  val io = IO(new Bundle() {
+    val mem = new MemoryMappedIO()
+  })
+
+  val memDevice = Module(new MemMappedRV(gen))
+  val fifo = Module(new RegFifo(gen, 3))
+  memDevice.io.tx <> fifo.io.enq
+  memDevice.io.rx <> fifo.io.deq
+  io.mem <> memDevice.io.mem
 }
