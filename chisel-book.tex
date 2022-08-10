@@ -4694,38 +4694,80 @@ that we have only one multiplexer, which selects between two Chisel ``tuples'' a
 The result in \code{resFun2} is a \code{MixedVec} with two elements,
 accessed with an index, like a ``normal'' \code{Vec}.
 
-\subsection{A Fair Arbiter}
-
+\subsection{An Arbitration Tree}
 \index{Arbiter}
 
-In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
-The combinational version is a priority arbiter, which means one high priority requester can
-dominate the arbitration. To avoid this domination we need to introduce state to remember
-who won the arbitration last time. With our tree reduction function we can build an arbitration tree
-out of just 2:1 arbiters. Our assumption is that if the 2:1 arbiter is fair, this results in a fair
-arbitration on a balanced arbitration tree. We can generate the arbitration circuit as follows:
+With our tree reduction function we can build an arbitration tree out of just 2:1 arbiters.
+We can generate the arbitration circuit as follows:
 
 \shortlist{code/fun_arbiter_head.txt}
 \shortlist{code/fun_arbiter_end.txt}
 
 \noindent The input is a \code{Vec} of ready/valid interfaces and the output a single ready/valid
-interface. We just need a function that provides fair arbitration between two requests.
-Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
+interface. We just need a function that provides arbitration between two requests.
 
+
+
+\subsubsection{Simple Arbitration}
+
+As a first solution we will build a priority based arbitration, similar to the arbiter shown
+in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a pure combinational circuit
+resulting in a priority based arbitration.
+However, with the ready/valid interface we are not allowed to have a combinational
+flow between a ready and a valid signal. Therefore, we need to introduce state for those signals
+and also need to register the incoming data. 
+
+Listing~\ref{lst:fun:arbiter:simp} shows the 2 to 1 arbitration function. This function assumes
+that a requester who has asserted \code{valid} will only deassert it when it is read by the receiver
+(signaled with a \code{ready}). Furthermore, we are allowed to set \code{ready} in the next clock cycle
+depending on \code{valid} in the current clock cycle.
+This is one specific interpretation of the ready/valid protocol, which is also used in AXI. 
+
+\longlist{code/fun_arbiter_simple.txt}{A simple 2 to 1 arbiter.}{lst:fun:arbiter:simp}
+
+We need following register: \code{regData} to hold the data for the output, \code{regEmpty} as a  flag to
+signal that the data register is empty, and two flags for the \code{ready} signals of the two inputs
+(\code{regReadyA} and \code{regReadyB}).
+The return value of the function (\code{out}) is a wire of type \code{DecoupledIO}.
+
+When the data register is empty and one of the two inputs signals a \code{valid} input,
+we signal a \code{ready} in the next clock cycle (via the \code{ready} register).
+Note that we can only signal one of the two inputs that the arbiter is \code{ready},
+as we have only one data register.
+When we have a registered \code{ready}, we assume that the input is still \code{valid},
+register the data, deassert \code{regEmpty}, and reset the \code{ready} flag.
+
+The output is valid, when the data register is not empty. When the receiver is \code{ready},
+the data is transmitted and the data register is empty again.
+As the last statement, the function returns \code{out}, the reference to the \code{DecoupledIO}
+wire.
+
+
+\subsubsection{Fair Arbitration}
+
+In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
+The combinational version is a priority arbiter, which means one high priority requester can
+dominate the arbitration.
+To avoid this domination we need to introduce state to remember who won the arbitration last time.
+Our assumption is that if the 2:1 arbiter is fair, this results in a fair
+arbitration on a balanced arbitration tree. 
+
+\longlist{code/fun_arbiter.txt}{A fair 2 to 1 arbiter.}{lst:fun:arbiter}
+
+Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
 The arbiter contains one register for the data to store and one state register. To be fair, the arbiter
 switches between two idle states (\code{ildeA} and \code{idleB}) when there is no request.
 In each of the two idle states it accepts only one of the inputs. Note, that with just a single register for
 storage the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
-and switching priority we would need a second register to handle the case when both inputs
+and switching priority we would need a second data register to handle the case when both inputs
 are valid in the same clock cycle.
 
+When a request is accepted, it stores the data and switches to one of the full states (\code{hasA}
+or \code{hasB}).
+When the consumer of the output accepts the data, the arbiter switches back to an idle state.
+It switches to the idle state that will accepts a pending requesting from the other input
+in the next clock cycle.
 
-When a request is accepted, it stores
-the data and switches to one of the full states. When the consumer of the output accepts the
-data, the arbiter switches back to an idle state. It switches to the idle state that accepts a
-pending requesting from the other input.
-
-\longlist{code/fun_arbiter.txt}{Using functional programming to generate an arbiter.}{lst:fun:arbiter}
 
 
 \chapter{Example Designs}
@@ -6178,7 +6220,7 @@ A Chisel library can be used in your project by adding it to \code{build.sbt}. H
 example a collection of Chisel circuits in \myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}:
 
 \begin{verbatim}
-libraryDependencies += "edu.berkeley.cs" % "ip-contributions" % "0.4.0"
+libraryDependencies += "edu.berkeley.cs" % "ip-contributions" % "0.5.0"
 \end{verbatim}
 
 \noindent The \code{ip-contributions} library contains also the UART and the FIFOs, described in this book.
