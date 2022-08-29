@@ -1111,6 +1111,12 @@ Each element can be accessed by an index. A Chisel \code{Vec} is similar
 to array data structures in other programming languages.\footnote{The name \codefoot{Array}
 is already used in Scala.}
 
+A \code{Vec} is used for three different purposes: (1) dynamic addressing in hardware,
+which is a multiplexer; (2) a register file, which includes multiplexing the read and
+generating the enable signal for the write; (3) parametrization if the number of
+ports of a \code{Module}. For other collections of \emph{things}, being it hardware elements
+or other generator data, it is better to use the Scala collection \code{Seq}.
+
 \subsubsection{Combinational Vec}
 
 
@@ -4182,7 +4188,7 @@ to be ready, the data is considered read and the buffer is empty again.
 The strength of Chisel is that it allows us to write so-called hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
 we usually use another language, for example, Java or Python, to generate hardware.
-Before using Chisel I have often written small Java programs to generate VHDL tables.
+Before using Chisel, I have often written small Java programs to generate VHDL tables.
 In Chisel, the full power of Scala and Java with its many open-source libraries
 are available at hardware construction time. Therefore, we can write our hardware
 generators in the same language and execute them as part of the Chisel circuit generation.
@@ -4203,6 +4209,7 @@ an integer value called \code{zero}. If we try to reassign a value to \code{zero
 a compile error.
 
 \shortlist{code/scala_val.txt}
+\index{Scala!val}
 
 \noindent In Chisel we use \code{val}s to name hardware components. Note that the \code{:=}
 operator is a Chisel operator and not a Scala operator.
@@ -4225,6 +4232,7 @@ being more explicit, we can explicitly state the type as follows:
 Simple loops are written as follows:
 
 \shortlist{code/scala_loop.txt}
+\index{Scala!for loop}
 
 We use a loop for circuit generators. The following loop connects individual bits
 of a shift register.
@@ -4248,11 +4256,29 @@ A tuple can hold a sequence of different types. The tuple is built by placing th
 within parentheses. The fields are then accessed with \code{.\_n}, starting with 1 for the first field.
 Following code creates a tuple to represent a city with the zip code and the name.
 
+\index{Scala!tuple}
+
 \shortlist{code/scala_tuple.txt}
 
 \noindent Tuples are useful when we want to return more than one value from a function.
 Tuples allow us to represent Chisel components with more than one output as a lightweight
 function instead of a full blown module.
+
+Scala has a powerful \myref{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}.
+One of the simpler collection tpyes is \code{Seq}, an ordered collection of elements (also called a sequence).
+The default implementation is immutable. We index into a \code{Seq} with \code{()},
+with zero based indexing.
+\code{Seq} is a base class with several different implementations.
+However, for most Chisel hardware generators direct use of \code{Seq}
+is the preferred choice. Following code shows how to create a \code{Seq},
+which holds four Scala \code{Int} values. The second line accesses the
+second element, and \code{second} will be \code{15}.
+
+\index{Scala!Seq}
+
+
+\shortlist{code/scala_seq.txt}
+
 
 
 \section{Lightweight Components with Functions}

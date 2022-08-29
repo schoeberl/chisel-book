@@ -1,14 +1,14 @@
 % shared in slides and book
 
 \lstdefinelanguage{chisel}{
-  morekeywords={abstract,case,catch,class,def,%
-    do,else,extends,false,final,finally,%
-    for,if,implicit,import,match,mixin,%
-    new,null,object,override,package,%
-    private,protected,requires,return,sealed,%
-    super,this,throw,trait,true,try,%
-    type,val,var,while,with,yield},
-  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+%  morekeywords={abstract,case,catch,class,def,%
+%    do,else,extends,false,final,finally,%
+%    for,if,implicit,import,match,mixin,%
+%    new,null,object,override,package,%
+%    private,protected,requires,return,sealed,%
+%    super,this,throw,trait,true,try,%
+%    type,val,var,while,with,yield},
+%  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
   sensitive=true,
   morecomment=[l]{//},
   morecomment=[n]{/*}{*/},
@@ -23,7 +23,7 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 % Default settings for code listings
-\ifbook
+%\ifbook
 \lstset{%frame=lines,
   language=chisel,
   aboveskip=3mm,
@@ -41,28 +41,28 @@
   tabsize=2,
   float
 }
-\else
-\lstset{%frame=lines,
-  language=chisel,
-  aboveskip=3mm,
-  belowskip=3mm,
-  showstringspaces=false,
-  columns=fixed, % basewidth=\mybasewidth,
-  basicstyle={\small\ttfamily},
-  numbers=none,
-  numberstyle=\footnotesize\color{gray},
-  % identifierstyle=\color{red},
-  keywordstyle=\color{blue},
-  commentstyle=\color{dkgreen},
-  stringstyle=\color{mauve},
-  breaklines=true,
-  breakatwhitespace=true,
-  procnamekeys={def, val, var, class, trait, object, extends},
-  procnamestyle=\ttfamily\color{red},
-  tabsize=2,
-  float
-}
-\fi
+%\else
+%\lstset{%frame=lines,
+%  language=chisel,
+%  aboveskip=3mm,
+%  belowskip=3mm,
+%  showstringspaces=false,
+%  columns=fixed, % basewidth=\mybasewidth,
+%  basicstyle={\small\ttfamily},
+%  numbers=none,
+%  numberstyle=\footnotesize\color{gray},
+%  % identifierstyle=\color{red},
+%  keywordstyle=\color{blue},
+%  commentstyle=\color{dkgreen},
+%  stringstyle=\color{mauve},
+%  breaklines=true,
+%  breakatwhitespace=true,
+%  procnamekeys={def, val, var, class, trait, object, extends},
+%  procnamestyle=\ttfamily\color{red},
+%  tabsize=2,
+%  float
+%}
+%\fi
 
 \lstnewenvironment{chisel}[1][]
 {\lstset{language=chisel,#1}}

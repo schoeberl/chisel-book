@@ -59,4 +59,9 @@ class SimpleScala {
   val zipCode = city._1
   val name = city._2
   //- end
+
+  //- start scala_seq
+  val numbers = Seq(1, 15, -2, 0)
+  val second = numbers(1)
+  //- end
 }
