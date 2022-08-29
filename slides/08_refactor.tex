@@ -40,28 +40,20 @@ Embedded Systems Engineering}
 \item Each \emph{function call} generates hardware
 \item A function is defined with \code{def} \emph{name}
 \item Similar to methods in Java
-\item Simple functions can be a single line
 \end{itemize}
-\begin{chisel}
-  def adder(v1: UInt, v2: UInt) = v1 + v2
-  
-  val add1 = adder(a, b)
-  val add2 = adder(c, d)
-\end{chisel}
+\shortlist{../code/components_fn_def.txt}
+\shortlist{../code/components_fn_use.txt}
 \end{frame}
 
 \begin{frame}[fragile]{More Function Examples}
 \begin{itemize}
 \item Functions can also contain registers
+\item Simple functions can be a single line
 \end{itemize}
+\shortlist{../code/components_fn_delay.txt}
+
 \begin{chisel}
-  def addSub(add: Bool, a: UInt, b: UInt) =
-    Mux(add, a + b, a - b)
-
-  val res = addSub(cond, a, b)
-
   def rising(d: Bool) = d && !RegNext(d)
-
   val edge = rising(cond)
 \end{chisel}
 \end{frame}
