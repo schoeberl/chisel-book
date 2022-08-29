@@ -359,20 +359,7 @@ Embedded Systems Engineering}
 \item Longer functions in curly brackets
 \item Last value is the return value
 \end{itemize}
-\begin{chisel}
-def counter(n: UInt) = {
-  
-  val cntReg = RegInit(0.U(8.W))
-  
-  cntReg := cntReg + 1.U
-  when(cntReg === n) {
-    cntReg := 0.U
-  }
-  cntReg
-}
-
-val counter100 = counter(100.U)
-\end{chisel}
+\shortlist{../code/function_counter.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Functional Abstraction}
