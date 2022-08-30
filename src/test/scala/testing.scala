@@ -10,9 +10,11 @@ class DeviceUnderTest extends Module {
     val a = Input(UInt(2.W))
     val b = Input(UInt(2.W))
     val out = Output(UInt(2.W))
+    val equ = Output(Bool())
   })
 
   io.out := io.a & io.b
+  io.equ := io.a === io.b
 }
 //- end
 
@@ -58,6 +60,23 @@ class SimpleTestExpect extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.b.poke(2.U)
       dut.clock.step()
       dut.io.out.expect(2.U)
+    }
+  }
+}
+//- end
+
+//- start test_peek_scala
+class SimpleTestPeek extends AnyFlatSpec with ChiselScalatestTester {
+  "DUT" should "pass" in {
+    test(new DeviceUnderTest) { dut =>
+      dut.io.a.poke(0.U)
+      dut.io.b.poke(1.U)
+      dut.clock.step()
+      dut.io.out.expect(0.U)
+      val res = dut.io.out.peekInt()
+      assert(res == 0)
+      val equ = dut.io.equ.peekBoolean()
+      assert(!equ)
     }
   }
 }

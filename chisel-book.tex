@@ -1640,7 +1640,7 @@ and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
 \begin{chisel}
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.3"
 \end{chisel}
 
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
@@ -1654,8 +1654,9 @@ called DUT) and the testing logic, also called a test bench. Tests are started w
 No object with a \code{main} function is needed.
 
 The following code shows our simple design under test. It contains two input
-ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
-to its inputs \code{a} and \code{b} and outputs the result on \code{out}:
+ports (2-bit width) and two output ports, a 2-bit width and a \code{Bool}. The circuit does a bit-wise AND
+to its inputs \code{a} and \code{b} and outputs the result on \code{out} and tests the two signals for
+equality:
 
 \shortlist{code/test_dut.txt}
 
@@ -1745,9 +1746,25 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 [error] 	SimpleTestExpect
 \end{verbatim}
 
+The \code{peek()} function returns a Chisel type, which would need conversion to be used
+as Scala type. To simplify using test values in Scala land, ChiselTest supports \code{peekInt()}
+and \code{peekBoolean()}. The following test example reads the output with \code{peekInt()},
+which returns a Scala integer\footnote{To support arbitrary wide integer values the
+return value is a Scala \codefoot{BigInt} instead of a Scala \codefoot{Int}.}
+that is used in the \code{assert()} statement.
+Similar we can read the \code{equ} output into a Scala \code{Boolean}, directly
+used in the assert statement.
+
+\shortlist{code/test_peek_scala.txt}
+
+This example is a bit too simple to see the benefit of reading values from the DUT
+into Scala types. However, with more complex tests, e.g., looping till some value is true,
+these functions become useful.
+
 In this section, we described the basic testing facility with Chisel for simple tests.
 However, keep in mind that the full power of Scala is available to write testers.
-This includes, for exmaple, writing a reference model of your hardware in Scala to test against.
+This includes, for example, writing a reference model of your hardware in Scala to
+test the DUT against.
 
 \subsection{Waveforms}
 
