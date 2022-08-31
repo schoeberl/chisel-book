@@ -2301,8 +2301,8 @@ the same IO as the black box.
 
 Note that \code{HasBlackBoxInline}, \code{HasBlackBoxPath}, and \code{HasBlackBoxResource} 
 are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g., 
-\code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to 
-\code{class Example extends HasBlackBoxInline}.
+\code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to\\
+\code{class Example extends} \code{HasBlackBoxInline}.
 
 \chapter{Combinational Building Blocks}
 
@@ -3966,6 +3966,7 @@ a datapath, as discussed in the next section.
 \section{State Machine with Datapath}
 \index{State machine with datapath}
 \index{FSMD}
+\label{sec:fsmd}
 
 One typical example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite-state machine
@@ -6057,8 +6058,10 @@ jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
 loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
+loadindhu? \\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
 storeindb & mem[AR+i]$_{7-0}$ = A & Store a byte into memory \\
+storeindh ? \\
 br & PC = PC + o & Branch \\
 brz & if A == 0 PC = PC + o & Branch if A is zero \\
 brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
@@ -6070,6 +6073,18 @@ scall & scall A & System call (simulation hook) \\
 \caption{Leros instruction set.}
 \label{tab:leros:isa}
 \end{table}
+
+The definition of an instruction set is also called instruction set architecture (ISA).
+The ISA is the most important abstraction in computer architecture.
+The ISA is the contract between the compiler (or assembler programmer) and the
+concrete processor implementation.
+The ISA is independent of the actual implementation.
+Different implementations of a microprocessor can execute the same ISA.
+
+Section \ref{sec:fsmd} describes how to implement an algorithm in hardware with
+a state machine and datapath. We will use the same approach for an initial
+implementation of Leros.
+
 
 \section{Start with an ALU}
 
@@ -6088,6 +6103,15 @@ First, we define an \code{Enum} to represent the different operations of the ALU
 Listing~\ref{lst:leros-alu} shows the ALU.
 
 \todo{draw a nice ALU, see Wikipedia}
+
+\todo{draw the datapath}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/leros-datapath}
+  \caption{Leros.}
+  \label{fig:leros-datapath}
+\end{figure}
 
 We first define shorter names for the three inputs. The \code{switch} statement defines the
 logic for the computation of \code{res}. Therefore, it gets a default assignment of 0.
