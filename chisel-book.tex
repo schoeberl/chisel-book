@@ -322,10 +322,12 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 
 \section*{Foreword for the Fourth Edition}
 
-\todo{Look into the notes}
+\todo{Look into the notes, maybe also into git log/diff}
 
 Interconnect chapter, hardware generation extended: functional and arbitration circuit
 (combinational and functional programming), maybe new test chapter
+
+Extend the processor chapter with more details.
 
 
 \section*{Translations}
@@ -6024,12 +6026,15 @@ and is available in open source at \url{https://github.com/leros-dev/leros}.
 We would like to mention that this is an advanced example and some computer
 architecture knowledge is needed to follow the presented code examples.
 
-Leros is designed to be simple, but still a good target for a C compiler.
-The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
-In that table \code{A} represents the accumulator, \code{PC} is the program counter,
-\code{i} is an immediate value (0 to 255), \code{Rn} a register
-\code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
-and \code{AR} an address register for memory access.
+\section{The Instruction Set Architecture}
+
+The definition of an instruction set is also called instruction set architecture (ISA).
+The ISA is the most important abstraction in computer architecture.
+The ISA is the contract between the compiler (or assembler programmer) and the
+concrete processor implementation.
+The ISA is independent of the actual implementation.
+Different implementations of a microprocessor (also called microarchitecture)
+can execute the same ISA.
 
 \begin{table}
 \centering
@@ -6074,17 +6079,76 @@ scall & scall A & System call (simulation hook) \\
 \label{tab:leros:isa}
 \end{table}
 
-The definition of an instruction set is also called instruction set architecture (ISA).
-The ISA is the most important abstraction in computer architecture.
-The ISA is the contract between the compiler (or assembler programmer) and the
-concrete processor implementation.
-The ISA is independent of the actual implementation.
-Different implementations of a microprocessor can execute the same ISA.
+Leros is designed to be simple, but still a good target for a C compiler.
+The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
+
+Leros is a so called accumulator machine. This means that all operations
+have the accumulator as one of the source inputs and the result is usually
+written into the accumulator. The second operand of an arithmetic or logic
+operation can either be an immediate (a constant) or from one of the 256
+on-chip register. Access to memory (load or store) is also performed via
+the accumulator: on a load the value from memory is stored in the accumulator
+and for a store the value is taken from the accumulator. The address for the
+memory access is stored in an address register.
+
+The program counter (PC) is pointing to the current instruction in the
+instruction memory. The PC is usually incremented to the following instructions.
+To implement control flow, the PC can be manipulated by a branch
+or jump instruction.
+Leros has the unconditional and conditional branch instructions.
+Conditional branches depend on the content of the accumulator.
+E.g., \code{brz} branches only when the content of the accumulator is 0.
+Leros branches are relative to the current instruction and can branch forward
+and backward around 2000 instructions.
+For larger control flow changes and for function calls and returns,
+Leros has a jump-and-link (\code{jal}) instruction.
+That instructions jumps to the address that is in the accumulator and
+stores the address of the following instruction into a register.
+That value can then be used to return from a function with \code{jal}.
+
+Instructions are 16 bits wide. The higher byte is used to encode the instruction,
+the lower byte contains either an immediate value, a register number,
+or a branch offset (part of the branch offset uses also bits in the upper byte).
+For example \code{00001001.00000010} is an add immediate instruction
+that adds 2 to the accumulator, where \code{00001000.00000011} adds the
+content of R3 to the accumulator. For branches we use 3 of the instruction
+bits for larger offsets.
+
+The accumulator and the register file is in our current implementation
+32 bits wide.\footnote{We try to keep it configurable to be able to also
+implement 16-bit or 64-bit versions of Leros.}
+
+
+In Table~\ref{tab:leros:isa} \code{A} represents the accumulator, \code{PC} is the program counter,
+\code{i} is an immediate value (0 to 255), \code{Rn} a register
+\code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
+and \code{AR} an address register for memory access.
+
+\todo{Example assembler instructions}
+
+\todo{Maybe list the encoding.}
+
+\section{The Datapath}
 
 Section \ref{sec:fsmd} describes how to implement an algorithm in hardware with
 a state machine and datapath. We will use the same approach for an initial
 implementation of Leros.
 
+We need a datapath that allows the data flow for all instructions, possible in several
+clock cycles. We aim for a two clock cycles execution of each instruction.
+Therefore, the base state machine has just two states: \code{fetch} and \code{execute}.
+Figure~\ref{fig:leros-datapath} shows the datapath for our implementation of Leros.
+
+\todo{draw the datapath}
+
+\todo{the datapath showas a single memory for data and register, the Chisel code has two memories.}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{figures/leros-datapath}
+  \caption{Leros.}
+  \label{fig:leros-datapath}
+\end{figure}
 
 \section{Start with an ALU}
 
@@ -6104,14 +6168,7 @@ Listing~\ref{lst:leros-alu} shows the ALU.
 
 \todo{draw a nice ALU, see Wikipedia}
 
-\todo{draw the datapath}
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=\scale]{figures/leros-datapath}
-  \caption{Leros.}
-  \label{fig:leros-datapath}
-\end{figure}
 
 We first define shorter names for the three inputs. The \code{switch} statement defines the
 logic for the computation of \code{res}. Therefore, it gets a default assignment of 0.
@@ -6223,6 +6280,28 @@ A Scala \code{match} expression covers the core of the assembly function.
 
 
 \longlist{code/leros_asm_match.txt}{The main part of the Leros assembler.}{lst:leros-asm-match}
+
+\section{Implementation Variations}
+
+As stated in the beginning of the Chapter, the Leros ISA definition does not define a
+concrete implementation. Along the chapter we performed implicit design decisions.
+Here we will discuss different design options.
+
+In the presented implementation we share the data memory with the register file.
+The 256 registers are just an array in memory. A different implementation might
+have dedicated on-chip memories for data and the registers.
+
+We implemented Leros in the idea of a state machine with a datapath.
+This also means that each instruction takes more than one clock cycle.
+Actual processors perform
+\myref{https://en.wikipedia.org/wiki/Instruction_pipelining}{instruction pipelining}.
+In an instruction pipeline more than one instruction is on the fly. For example
+with Leros we could implement three pipeline stages: instruction fetch,
+instruction decode, and execute. In that case three instructions would
+be in the pipeline and we can execute one instruction each clock cycle.
+Compared to the presented implementation pipelining could about double
+the performance of Leros.
+
 
 \section{Exercise}
 
