@@ -6086,16 +6086,16 @@ Leros is a so called accumulator machine. This means that all operations
 have the accumulator as one of the source inputs and the result is usually
 written into the accumulator. The second operand of an arithmetic or logic
 operation can either be an immediate (a constant) or from one of the 256
-on-chip register. Access to memory (load or store) is also performed via
+on-chip registers. Access to memory (load or store) is also performed via
 the accumulator: on a load the value from memory is stored in the accumulator
 and for a store the value is taken from the accumulator. The address for the
-memory access is stored in an address register.
+memory access is stored in the address register (AR).
 
 The program counter (PC) is pointing to the current instruction in the
 instruction memory. The PC is usually incremented to the following instructions.
 To implement control flow, the PC can be manipulated by a branch
 or jump instruction.
-Leros has the unconditional and conditional branch instructions.
+Leros has unconditional and conditional branch instructions.
 Conditional branches depend on the content of the accumulator.
 E.g., \code{brz} branches only when the content of the accumulator is 0.
 Leros branches are relative to the current instruction and can branch forward
@@ -6105,14 +6105,6 @@ Leros has a jump-and-link (\code{jal}) instruction.
 That instructions jumps to the address that is in the accumulator and
 stores the address of the following instruction into a register.
 That value can then be used to return from a function with \code{jal}.
-
-Instructions are 16 bits wide. The higher byte is used to encode the instruction,
-the lower byte contains either an immediate value, a register number,
-or a branch offset (part of the branch offset uses also bits in the upper byte).
-For example \code{00001001.00000010} is an add immediate instruction
-that adds 2 to the accumulator, where \code{00001000.00000011} adds the
-content of R3 to the accumulator. For branches we use 3 of the instruction
-bits for larger offsets.
 
 The accumulator and the register file is in our current implementation
 32 bits wide.\footnote{We try to keep it configurable to be able to also
@@ -6124,9 +6116,83 @@ In Table~\ref{tab:leros:isa} \code{A} represents the accumulator, \code{PC} is t
 \code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
 and \code{AR} an address register for memory access.
 
-\todo{Example assembler instructions}
+Following code snippets shows examples of Leros instructions in assembly:
 
-\todo{Maybe list the encoding.}
+\begin{verbatim}
+	loadi 1
+	addi 2
+	ori 0x50
+	andi 0x1f
+	subi 0x13
+	loadi 0xab
+	addi 0x01
+	subi 0xac
+
+	scall 0
+\end{verbatim}
+
+\noindent We can see that each instruction consists for the instruction name (also call
+opcode mnemonic) and a constant. The constant can be written in decimal or
+hexadecimal notion. The code shows immediate versions of load, arithmetic,
+and logic instructions. the last instruction (\code{scall 0}) is a system call and
+ends the execution (or simulation).
+This short program is part of Leros test suit.
+The convention of the test is that at the end of the program the accumulator shall
+contain 0.
+
+Instructions are 16 bits wide. The higher byte is used to encode the instruction,
+the lower byte contains either an immediate value, a register number,
+or a branch offset (part of the branch offset uses also bits in the upper byte).
+For example \code{00001001.00000010} is an add immediate instruction
+that adds 2 to the accumulator, where \code{00001000.00000011} adds the
+content of R3 to the accumulator. For branches we use 3 of the instruction
+bits for larger offsets.
+
+Listing~\ref{lst:instr} shows the encoding of the instructions in the upper 8 bits of
+each instruction.
+Not all instruction bits are currently used (unused are marked with -)
+
+\begin{lstlisting}[float, caption=Leros instruction encoding., label=lst:instr, frame=tb, captionpos=b]
++--------+----------+
+|00000---| nop      |
+|000010-0| add      |
+|000010-1| addi     |
+|000011-0| sub      |
+|000011-1| subi     |
+|00010---| sra      |
+|00011---| -        |
+|00100000| load     |
+|00100001| loadi    |
+|00100010| and      |
+|00100011| andi     |
+|00100100| or       |
+|00100101| ori      |
+|00100110| xor      |
+|00100111| xori     |
+|00101001| loadhi   |
+|00101010| loadh2i  |
+|00101011| loadh3i  |
+|00110---| store    |
+|001110-?| out      |
+|000001-?| in       |
+|01000---| jal      |
+|01001---| -        |
+|01010---| ldaddr   |
+|01100-00| ldind    |
+|01100-01| ldindb   |
+|01100-10| ldindh   |
+|01110-00| stind    |
+|01110-01| stindb   |
+|01110-10| stindh   |
+|1000nnnn| br       |
+|1001nnnn| brz      |
+|1010nnnn| brnz     |
+|1011nnnn| brp      |
+|1100nnnn| brn      |
+|11111111| scall    |
++--------+----------+
+\end{lstlisting}
+
 
 \section{The Datapath}
 
