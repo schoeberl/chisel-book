@@ -6203,7 +6203,32 @@ implementation of Leros.
 We need a datapath that allows the data flow for all instructions, possible in several
 clock cycles. We aim for a two clock cycles execution of each instruction.
 Therefore, the base state machine has just two states: \code{fetch} and \code{execute}.
+
 Figure~\ref{fig:leros-datapath} shows the datapath for our implementation of Leros.
+The figure is slightly simplified.
+The data flows from left to right. The PC points to the instruction to be fetched.
+On-chip memories have usually input registers that cannot be read.\footnote{At least
+this is true for FPGA on-chip memories} Therefore, we feed to the PC and the input register
+of the instruction memory the same value of the next PC. The next PC is for non-branching
+instructions the PC plus 1.\footnote{We count in this simple organization in 16-bit instruction
+words and not in bytes} For a relative branch the decode component sign extends the immediate
+value and it is added to the PC. For the \code{jal} instruction the PC can also be loaded from \code{A}.
+
+In the first state an instruction is fetched from the instruction memory and decoded.
+The decode component decides what will happen in the next state, the execute state.
+It also includes the generation of an operand for instructions with an immediate operand
+(e.g., \code{addi}, or \code{loadhi}). As this operand is consumed in the execution state,
+we need to store it in a register.
+
+The second memory serves as general data memory, but also stores the values for the
+255 registers. For a read or write of one of the registers, the address is part of the instruction.
+For memory load or store instructions, we use the address register \code{AR}.
+\code{AR} itself is loaded from \code{A}. The result of a load is placed into \code{A}.
+On a store, \code{A} delivers the data to be written into memory.
+
+Finally, arithmetic and logic operations are performed with the ALU. One operand
+comes from \code{A} the other is either an immediate value (from the instruction)
+or a register value (from the memory).
 
 \begin{figure}
   \centering
