@@ -5541,12 +5541,24 @@ peripheral device.
   \label{fig:bus_pipe_ack}
 \end{figure}
 
+\todo{Don't formulate it just relative to the other. Formulate it as its own thing.
+Maybe then compare. This needs some better writing, also put it into the soc-comm README.}
+
+ A read or write command are signaled by an asserted \code{rd} or \code{wr}.
+The address and write data (if a write) need to be valid during
+the command. Commands are only valid a single cycle.
+Each command needs to be acknowledged by an active \code{ack},
+earliest one cycle after the command. It can also insert wait
+states by delaying \code{ack}. Read data is available with the \code{ack}
+signal for one clock cycle.
+
 Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
 is only a single cycle long. The address bus and the read signal does not need to be driven
-till the acknowledgment. Compared to the former protocol, the \code{ack} signal must
-one clock cycle after the \code{rd} command, in clock cycle 3.
-The first read sequence has the same latency as the former example.
+till the acknowledgment. Compared to the former protocol, the \code{ack} signal comes
+earliest one clock cycle after the \code{rd} command, in clock cycle 3.
+The first read sequence has one cycle latency in this example.
+It has the same latency as the former example.
 However, as the request needs to be valid only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle. 
