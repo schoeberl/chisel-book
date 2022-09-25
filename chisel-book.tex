@@ -123,8 +123,8 @@
 \fi
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -322,12 +322,18 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 
 \section*{Foreword for the Fourth Edition}
 
-\todo{Look into the notes, maybe also into git log/diff}
-
-Interconnect chapter, hardware generation extended: functional and arbitration circuit
-(combinational and functional programming), maybe new test chapter
-
-Extend the processor chapter with more details.
+For the fourth edition we have switched to the actual Chisel version 3.5.4.
+We have added arbiter, priority encoder, and comparator to the Chapter of 
+combinational building blocks.
+We have extended the hardware generation chapter with more functional
+examples, including building a fair arbitration tree out of a simple 2 to 1
+arbitration circuits.
+We have added a new chapter in interconnect, bus interfaces,
+and how to connect an IO device as a memory mapped device.
+We have started a new chapter on debugging, testing and verification.
+The plan is to extend the chapter on this important topic in the next edition.
+We have extended the processor chapter with a more gentle introduction
+of a microprocessor, including a figure of the datapath.
 
 
 \section*{Translations}
@@ -1928,10 +1934,10 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-// Chisel 3.5.3
-addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.3" cross CrossVersion.full)
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.3"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.3"
+// Chisel 3.5.4
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.4" cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.4"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.4"
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
@@ -5545,8 +5551,8 @@ peripheral device.
 Maybe then compare. This needs some better writing, also put it into the soc-comm README.}
 
  A read or write command are signaled by an asserted \code{rd} or \code{wr}.
-The address and write data (if a write) need to be valid during
-the command. Commands are only valid a single cycle.
+The address and write data (if it is a write) need to be valid during
+the command. Commands are only valid for a single cycle.
 Each command needs to be acknowledged by an active \code{ack},
 earliest one cycle after the command. It can also insert wait
 states by delaying \code{ack}. Read data is available with the \code{ack}
@@ -5567,6 +5573,8 @@ The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exact this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
 used OCP interfaces.
+
+\todo{Maybe mention the soc-comm project?}
 
 \subsection{Example IO Device}
 
@@ -6075,10 +6083,10 @@ jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
 loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
-loadindhu? \\
+% loadindhu? \\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
 storeindb & mem[AR+i]$_{7-0}$ = A & Store a byte into memory \\
-storeindh ? \\
+% storeindh ? \\
 br & PC = PC + o & Branch \\
 brz & if A == 0 PC = PC + o & Branch if A is zero \\
 brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
