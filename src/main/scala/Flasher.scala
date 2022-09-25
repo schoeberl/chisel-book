@@ -20,8 +20,8 @@ class Flasher extends FlasherBase {
   val light = WireDefault(false.B) // FSM output
 
   // Timer connection
-  val timerLoad = WireDefault(false.B) // start timer with a load
-  val timerSelect = WireDefault(true.B) // select 6 or 4 cycles
+  val timerLoad = WireDefault(false.B) // start timer
+  val timerSelect = WireDefault(true.B) // 6 or 4 cycles
   val timerDone = Wire(Bool())
 
   timerLoad := timerDone
