@@ -10,7 +10,7 @@ class InterconnectTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.clock.step(n)
       }
       def read(addr: Int) = {
-        dut.io.mem.addr.poke(addr.U)
+        dut.io.mem.address.poke(addr.U)
         dut.io.mem.rd.poke(true.B)
         step()
         dut.io.mem.rd.poke(false.B)
@@ -20,7 +20,7 @@ class InterconnectTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.io.mem.rdData.peek().litValue
       }
       def write(addr: Int, data: Int) = {
-        dut.io.mem.addr.poke(addr.U)
+        dut.io.mem.address.poke(addr.U)
         dut.io.mem.wrData.poke(data.U)
         dut.io.mem.wr.poke(true.B)
         step()
@@ -36,7 +36,6 @@ class InterconnectTest extends AnyFlatSpec with ChiselScalatestTester {
       step(10)
       assert(read(0) == 3, "TX and RX flag should be set")
       assert(read(1) == 123, "RX value should be correct")
-
     }
   }
 

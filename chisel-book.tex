@@ -123,8 +123,8 @@
 \fi
 
 % uncomment following for final submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -149,7 +149,7 @@
 {\usekomafont{title}\mdseries\huge Digital Design with Chisel}
 \ \\
 \vspace{1cm}
-{\usekomafont{title}\mdseries\Large Forth Edition}
+{\usekomafont{title}\mdseries\Large Fifth Edition}
 \cleardoublepage
 \end{flushleft}
 \newpage
@@ -161,7 +161,7 @@
 \vspace{1cm}
 {\usekomafont{title}\Huge Digital Design with Chisel\\
 \bigskip
-{\usekomafont{title}\huge Forth Edition}\\
+{\usekomafont{title}\huge Fifth Edition}\\
 \bigskip
 \bigskip
 \bigskip
@@ -323,7 +323,7 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 \section*{Foreword for the Fourth Edition}
 
 For the fourth edition we have switched to the actual Chisel version 3.5.4.
-We have added arbiter, priority encoder, and comparator to the Chapter of 
+We have added arbiter, priority encoder, and comparator to the chapter of 
 combinational building blocks.
 We have extended the hardware generation chapter with more functional
 examples, including building a fair arbitration tree out of a simple 2 to 1
@@ -334,6 +334,16 @@ We have started a new chapter on debugging, testing and verification.
 The plan is to extend the chapter on this important topic in the next edition.
 We have extended the processor chapter with a more gentle introduction
 of a microprocessor, including a figure of the datapath.
+
+\section*{Foreword for the Fifth Edition}
+
+To make room for more advanced topics, I have removed the two appendicitis on
+Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
+moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
+deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
+If needed, those two chapters are available in the older versions of the Chisel book,
+available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
+
 
 
 \section*{Translations}
@@ -368,7 +378,7 @@ pickup a modern programming language for hardware description.
 
 For the third edition, I would like to acknowledge Hans Jakob Damsgaard
 (\myref{https://github.com/hansemandse}{@hansemandse}) for rewriting
-all test code to ChiselTest, adding ChiselTest to the testing chapter, adding the black
+all test code of this book to ChiselTest, adding ChiselTest to the testing chapter, adding the black
 box description, and an example for a multi-clock memory.
 
 
@@ -423,7 +433,7 @@ As prerequisites for this book, we assume basic knowledge of
 Furthermore, some programming experience in any programming language
 is assumed. No knowledge of Verilog or VHDL is needed.
 Chisel can be your first programming language to describe digital hardware.
-As the build process in the examples is based on \code{sbt} and \code{make},
+As the build process of the examples is based on \code{sbt} and \code{make},
 basic knowledge of the command-line interface (CLI, also called terminal or
 Unix shell) will be helpful.
 
@@ -5702,7 +5712,7 @@ For our memory mapped devices we define a bundle:
 
 \shortlist{code/mem_io_bundle.txt}
 
-Listing~\ref{lst:rv-device} shows the 
+Listing~\ref{lst:rv-device} shows the \todo{continue here}
 
 
 \longlist{code/mem_io_rv.txt}{An IO device for a ready/valid device.}{lst:rv-device}
@@ -6851,165 +6861,6 @@ started to collect small Chisel components.
 If you know an open-source project that uses Chisel, please drop me a note
 so I can include it in a future edition of the book.
 
-
-\chapter{PeekPokeTester}
-\index{PeekPokeTester}
-\label{chap:peekpoke}
-
-Chisel before version 3.5 provides test benches in the form of a \code{PeekPokeTester}.
-From version 3.5 \code{PeekPokeTester} is deprecated and it is recommended to
-switch to ChiselTest. However, there are probably many projects still using
-the old \code{PeekPokeTester}. Therefore we give a short overview of it in this
-appendix. 
-
-To use the \code{PeekPokeTester}, following packages need to be imported:
-
-\shortlist{code/test_import_peek_poke.txt}
-
-\noindent Testing a circuit contains (at least) three components: (1) the device under test (often
-called DUT), (2) the testing logic, also called test bench, and (3) the tester objects
-that contains the \code{main} function to start the testing.
-
-The following code shows our simple design under test. It contains two input
-ports and one output port, all with a 2-bit width. The circuit does a bit-wise AND
-to it returns on the output:
-
-\shortlist{code/test_dut.txt}
-
-\noindent The test bench for this DUT extends \code{PeekPokeTester} and has
-the DUT as a parameter for the constructor:
-
-\shortlist{code/test_bench_simple_peek_poke.txt}
-
-\noindent A \code{PeekPokeTester} can set input values with \code{poke()} and
-read back output values with \code{peek()}. The tester advances the simulation by one
-step (= one clock cycle) with \code{step(1)}.
-We can print the values of the outputs with \code{println()}.
-
-The test is created and run with the following tester main:
-
-\shortlist{code/test_main_simple_peek_poke.txt}
-
-\noindent When you run the test, you will see the results printed to the terminal
-(besides other information):
-
-\begin{verbatim}
-[info] [0.004] SEED 1544207645120
-[info] [0.008] Result is: 0
-[info] [0.009] Result is: 2
-test DeviceUnderTest Success: 0 tests passed in 7 cycles
-taking 0.021820 seconds
-[info] [0.010] RAN 2 CYCLES PASSED
-\end{verbatim}
-
-\noindent We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
-Besides manually inspecting printouts, which is an excellent starting point, we can also
-express our expectations in the test bench itself with \code{expect()},
-having the output port and the expected value as parameters.
-The following example shows testing with \code{expect()}:
-
-\shortlist{code/test_bench_peek_poke.txt}
-
-\noindent Executing this test does not print out any values from the hardware,
-but that all tests passed as all expect values are correct.
-
-\begin{verbatim}
-[info] [0.001] SEED 1544208437832
-test DeviceUnderTest Success: 2 tests passed in 7 cycles
-taking 0.018000 seconds
-[info] [0.009] RAN 2 CYCLES PASSED
-\end{verbatim}
-
-\noindent A failed test, when either the DUT or the test bench contains an error,
-produces an error message describing the difference between the expected and actual
-value. In the following, we changed the test bench to expect a 4, which is an error:
-
-\begin{verbatim}
-[info] [0.002] SEED 1544208642263
-[info] [0.011] EXPECT AT 2   io_out got 0 expected 4 FAIL
-test DeviceUnderTest Success: 1 tests passed in 7 cycles
-taking 0.022101 seconds
-[info] [0.012] RAN 2 CYCLES FAILED FIRST AT CYCLE 2
-\end{verbatim}
-
-
-
-\chapter{Chisel 2}
-
-\index{Chisel 2}
-
-This book covers version 3 of Chisel. Moreover, Chisel 3 is recommended for new designs.
-However, there is still Chisel 2 code out in the wild, which has not yet been converted
-to Chisel 3. There is documentation available on how to convert a Chisel 2 project to
-Chisel 3:
-
-\begin{itemize}
-\item \myref{https://www.chisel-lang.org/chisel3/docs/appendix/chisel3-vs-chisel2.html}{Chisel2 vs. Chisel3} and
-\item \myref{https://github.com/schoeberl/chisel-examples/blob/master/TowardsChisel3.md}{Towards Chisel 3}
-\end{itemize}
-
-However, you might get involved in a project that still uses Chisel 2,
-for example, the \myref{http://www.opensocfabric.org/}{OpenSoC Fabric} project.
-Therefore, we provide here some information on Chisel 2 coding for those who
-have started with Chisel 3.
-
-First, all documentation on Chisel 2 has been removed from the web sites
-belonging to Chisel. We have rescued those PDF documents and put them
-on GitHub at \url{https://github.com/schoeberl/chisel2-doc}.
-You can use the Chisel 2 tutorial by switching to the Chisel 2 branch:
-
-\begin{chisel}
-$ git clone https://github.com/ucb-bar/chisel-tutorial.git
-$ cd chisel-tutorial
-$ git checkout chisel2
-\end{chisel}
-
-The main visible difference between Chisel 3 and 2 are the definitions of
-constants, bundles for IO, wires, memories, and probably older forms of register
-definitions.
-
-Chisel 2 constructs can be used, to some extent, in a Chisel 3 project by
-using the compatibility layer using as package \code{Chisel} instead of \code{chisel3}.
-However, using this compatibility layer should only be used in a transition phase.
-Therefore, we do not cover it here.
-
-Here are two examples of basic components, the same that have been presented
-for Chisel 3. A module containing combinational logic:
-
-\shortlist{chisel2/src/main/scala/Logic.scala}
-
-Note that the \code{Bundle} for the IO definition is \emph{not} wrapped into
-an \code{IO()} class.  Furthermore, the direction of the different IO ports is defined
-as part of the type definition, in this example as \code{INPUT} and \code{OUTPUT}
-as part of \code{UInt}. The width is given as the second parameter.
-
-\begin{minipage}{\linewidth}
-The 8-bit register example in Chisel 2:
-
-\shortlist{chisel2/src/main/scala/Register.scala}
-\end{minipage}
-
-Here you see a typical register definition with a reset value passed in as
-a \code{UInt} to the named parameter \code{init}. This form is still valid in Chisel 3,
-but the usage of \code{RegInit} and \code{RegNext} is recommended for new Chisel 3 designs.
-Note also here the constant definition of an 8-bit wide 0 as \code{UInt(0, 8)}.
-
-Chisel based testing C++ code and Verilog code are generated by calling\\ \code{chiselMainTest}
-and \code{chiselMain}. Both ``main'' functions take a \code{String} array for further parameters.
-
-\shortlist{chisel2/src/main/scala/LogicTester.scala}
-
-\shortlist{chisel2/src/main/scala/LogicHardware.scala}
-
-A memory with sequential registered read and write ports is defined in Chisel 2 as:
-
-\begin{chisel}
-  val mem = Mem(UInt(width = 8), 256, seqRead = true)
-  val rdData = mem(Reg(next = rdAddr))
-  when(wrEna) {
-    mem(wrAddr) := wrData
-  }
-\end{chisel}
 
 \chapter{Acronyms}
 

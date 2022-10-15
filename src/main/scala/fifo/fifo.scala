@@ -93,7 +93,6 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
           dataReg := shadowReg
           stateReg := one
         }
-
       }
     }
 
@@ -249,9 +248,9 @@ class CombFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 //- end
 
 //- start fifo_decoupled
-  class DecoupledIO[T <: Data](gen: T) extends Bundle {
-    val ready = Input(Bool())
-    val valid = Output(Bool())
-    val bits  = Output(gen)
-  }
+class DecoupledIO[T <: Data](gen: T) extends Bundle {
+  val ready = Input(Bool())
+  val valid = Output(Bool())
+  val bits  = Output(gen)
+}
 //- end

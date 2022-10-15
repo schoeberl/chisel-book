@@ -41,17 +41,17 @@ object CounterDevice extends App {
 
 //- start mem_io_bundle
 class MemoryMappedIO extends Bundle {
-  val addr = Input(UInt(4.W))
-  val wr = Input(Bool())
+  val address = Input(UInt(4.W))
   val rd = Input(Bool())
-  val wrData = Input(UInt(32.W))
+  val wr = Input(Bool())
   val rdData = Output(UInt(32.W))
+  val wrData = Input(UInt(32.W))
   val ack = Output(Bool())
 }
 //- end
 
 // Mapping as in classic PC serial port
-// 0: status (control): bit 0 transmit ready, bit 1 rx data availabel
+// 0: status (control): bit 0 transmit ready, bit 1 rx data available
 // 1: txd and rxd
 // Question: is address a byte address or a word address?
 // Simplest is to using word addresses, it does not really care
@@ -78,7 +78,7 @@ class MemMappedRV[T <: Data](gen: T, block: Boolean = false) extends Module {
 
   // read from status or rx
   when (io.mem.rd) {
-    addrReg := io.mem.addr
+    addrReg := io.mem.address
   }
   rdDlyReg := io.mem.rd
   io.rx.ready := false.B
