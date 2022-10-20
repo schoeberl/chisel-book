@@ -12,12 +12,12 @@ class FormalSimpleTest(width: Int) extends Module {
   m.io.a := a
   m.io.b := b
 
-  assert(m.io.y === (m.io.a & m.io.b))
+  assert(m.io.y === (a & b))
 }
 
 class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {
 
   "FormalSimple" should "pass" in {
-    verify(new FormalSimpleTest(8), Seq(BoundedCheck(10)))
+    verify(new FormalSimpleTest(16), Seq(BoundedCheck(10)))
   }
 }
