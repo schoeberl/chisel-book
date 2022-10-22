@@ -12,12 +12,21 @@ class FormalSimpleTest(width: Int) extends Module {
   m.io.a := a
   m.io.b := b
 
-  assert(m.io.y === (a & b))
+  val result = VecInit(Seq.fill(width)(false.B))
+  for (i <- 0 until width) {
+    when (a(i) && b(i)) {
+      result(i) := true.B
+    }
+  }
+
+  val resUInt = result.asUInt
+
+  assert(m.io.y === resUInt)
 }
 
 class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {
 
   "FormalSimple" should "pass" in {
-    verify(new FormalSimpleTest(16), Seq(BoundedCheck(10)))
+    verify(new FormalSimpleTest(8), Seq(BoundedCheck(1)))
   }
 }
