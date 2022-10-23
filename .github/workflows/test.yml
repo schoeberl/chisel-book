@@ -21,6 +21,8 @@ jobs:
     - name: Setup Verilator
       # should include texlive-full for Latex test
       run: sudo apt-get install verilator
+    - name: Setup z3
+      run: sudo apt-get install z3
     - name: Run tests
       # should run make for the test including Latex
       run: sbt test
