@@ -116,8 +116,8 @@ class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
   def counter(depth: Int, incr: Bool): (UInt, UInt) = {
     val cntReg = RegInit(0.U(log2Ceil(depth).W))
-    val nextVal = Mux(cntReg === (depth-1).U, 0.U, cntReg + 1.U)
-    when (incr) {
+    val nextVal = Mux(cntReg === (depth - 1).U, 0.U, cntReg + 1.U)
+    when(incr) {
       cntReg := nextVal
     }
     (cntReg, nextVal)
@@ -134,17 +134,51 @@ class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
   val emptyReg = RegInit(true.B)
   val fullReg = RegInit(false.B)
 
-  when (io.enq.valid && !fullReg) {
-    memReg(writePtr) := io.enq.bits
-    emptyReg := false.B
-    fullReg := nextWrite === readPtr
-    incrWrite := true.B
+  val op = io.enq.valid ## io.deq.ready
+  val doWrite = WireDefault(false.B)
+
+  switch(op) {
+    is("b00".U) {}
+    is("b01".U) { // read
+      when(!emptyReg) {
+        fullReg := false.B
+        emptyReg := nextRead === writePtr
+        incrRead := true.B
+      }
+    }
+    is("b10".U) { // write
+      when(!fullReg) {
+        doWrite := true.B
+        emptyReg := false.B
+        fullReg := nextWrite === readPtr
+        incrWrite := true.B
+      }
+    }
+    is("b11".U) { // write and read
+      when(!fullReg) {
+        doWrite := true.B
+        emptyReg := false.B
+        when(emptyReg) {
+          fullReg := false.B
+        }.otherwise {
+          fullReg := nextWrite === nextRead
+        }
+        incrWrite := true.B
+      }
+      when(!emptyReg) {
+        fullReg := false.B
+        when(fullReg) {
+          emptyReg := false.B
+        }.otherwise {
+          emptyReg := nextRead === nextWrite
+        }
+        incrRead := true.B
+      }
+    }
   }
 
-  when (io.deq.ready && !emptyReg) {
-    fullReg := false.B
-    emptyReg := nextRead === writePtr
-    incrRead := true.B
+  when(doWrite) {
+    memReg(writePtr) := io.enq.bits
   }
 
   io.deq.bits := memReg(readPtr)
@@ -158,8 +192,8 @@ class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
   def counter(depth: Int, incr: Bool): (UInt, UInt) = {
     val cntReg = RegInit(0.U(log2Ceil(depth).W))
-    val nextVal = Mux(cntReg === (depth-1).U, 0.U, cntReg + 1.U)
-    when (incr) {
+    val nextVal = Mux(cntReg === (depth - 1).U, 0.U, cntReg + 1.U)
+    when(incr) {
       cntReg := nextVal
     }
     (cntReg, nextVal)
@@ -167,73 +201,52 @@ class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 
   val mem = SyncReadMem(depth, gen)
 
-  val incrRead = WireDefault(false.B)
-  val incrWrite = WireDefault(false.B)
+  val incrRead = WireInit(false.B)
+  val incrWrite = WireInit(false.B)
   val (readPtr, nextRead) = counter(depth, incrRead)
   val (writePtr, nextWrite) = counter(depth, incrWrite)
 
   val emptyReg = RegInit(true.B)
   val fullReg = RegInit(false.B)
 
-  val idle :: valid :: full :: Nil = Enum(3)
-  val stateReg = RegInit(idle)
-  val shadowReg = Reg(gen)
+  val outputReg = Reg(gen)
+  val outputValidReg = RegInit(false.B)
+  val read = WireDefault(false.B)
 
-  when (io.enq.valid && !fullReg) {
-    mem.write(writePtr, io.enq.bits)
-    emptyReg := false.B
-    fullReg := nextWrite === readPtr
-    incrWrite := true.B
-  }
-
-  val data = mem.read(readPtr)
-
-  // Handling of the one cycle memory latency
-  // with an additional output register
-  switch(stateReg) {
-    is(idle) {
-      when(!emptyReg) {
-        stateReg := valid
-        fullReg := false.B
-        emptyReg := nextRead === writePtr
-        incrRead := true.B
-      }
-    }
-    is(valid) {
-      when(io.deq.ready) {
-        when(!emptyReg) {
-          stateReg := valid
-          fullReg := false.B
-          emptyReg := nextRead === writePtr
-          incrRead := true.B
-        } otherwise {
-          stateReg := idle
-        }
-      } otherwise {
-        shadowReg := data
-        stateReg := full
-      }
-
-    }
-    is(full) {
-      when(io.deq.ready) {
-        when(!emptyReg) {
-          stateReg := valid
-          fullReg := false.B
-          emptyReg := nextRead === writePtr
-          incrRead := true.B
-        } otherwise {
-          stateReg := idle
-        }
-
-      }
-    }
-  }
-
-  io.deq.bits :=  Mux(stateReg === valid, data, shadowReg)
+  io.deq.valid := outputValidReg
   io.enq.ready := !fullReg
-  io.deq.valid := stateReg === valid || stateReg === full
+
+  val doWrite = WireDefault(false.B)
+  val data = Wire(gen)
+  data := mem.read(readPtr)
+  io.deq.bits := data
+  when(doWrite) {
+    mem.write(writePtr, io.enq.bits)
+  }
+
+  val readCond =
+    !outputValidReg && ((readPtr =/= writePtr) || fullReg)
+  when(readCond) {
+    read := true.B
+    incrRead := true.B
+    outputReg := data
+    outputValidReg := true.B
+    emptyReg := nextRead === writePtr
+    fullReg := false.B
+  }
+  when(io.deq.ready && io.deq.valid) {
+    outputValidReg := false.B
+  }
+  io.deq.bits := outputReg
+
+  when(io.enq.ready && io.enq.valid) {
+    emptyReg := false.B
+    fullReg := (nextWrite === readPtr) & !read
+    incrWrite := true.B
+    doWrite := true.B
+  }
 }
+
 //- end
 
 //- start fifo_comb
