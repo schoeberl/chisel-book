@@ -5158,6 +5158,7 @@ is deasserted. When the consumer becomes \code{ready} again, data is transferred
 from the data register to the consumer and from the shadow register into
 the data register.
 
+\newpage
 \verylonglist{code/fifo_double_buffer.txt}{A FIFO with double buffer elements.}{lst:fifo:double:buffer}
 
 
@@ -5170,7 +5171,7 @@ and \code{two}, which signal the fill level of the double buffer.
 The buffer is \code{ready} to accept new data when is it in state \code{empty}
 or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
 
-If we run the FIFO at full speed and the consumer is always \code{ready}
+If we run the FIFO at full speed, and the consumer is always \code{ready},
 the steady state of the double buffers are \code{one}. Only when the consumer
 deasserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
 However, compared to a single bubble FIFO, a restart of the queue takes
@@ -5205,6 +5206,7 @@ well. For small queues, we can use a register file (i.e., a \code{Reg(Vec())}).
 Listing~\ref{lst:fifo:reg:mem} shows a FIFO queue implemented with  memory
 and read and write pointers.
 
+\newpage
 \verylonglist{code/fifo_reg_mem.txt}{A FIFO with a register based memory.}{lst:fifo:reg:mem}
 
 As there are two pointers that behave the same, being incremented on an
@@ -5261,21 +5263,25 @@ use on-chip memory.
 Listing~\ref{lst:fifo:mem} shows a FIFO using a synchronous memory for
 storage.
 
+\newpage
 \verylonglist{code/fifo_mem.txt}{A FIFO with a on-chip memory.}{lst:fifo:mem}
 
 The handling of read and write pointer is identical to the register memory
 FIFO. However, a synchronous on-chip memory delivers the result of a read
 in the next clock cycle, where the read of the register file was available in the
 same clock cycle.
+Therefore, we need an additional register to handle this latency.
 
-Therefore, we need an additional FSM and a shadow register to handle
-this latency. We read the memory out and provide the value of the top of the queue
-to the output port. If that value is not consumed, we need to store it in the
-shadow register \code{shadowReg} while reading the next value from the memory.
-The state machine consists of three states to represent: (1) an empty FIFO, (2) a valid
-data read out from the memory, and (3) head of the queue in the shadow register and
-valid data (the next element) from the memory.
+\todo{Maybe redo the FIFO again as described below (in the comment).}
+% TODO: this would probably be a better solution.
+%We read the memory out and provide the value of the top of the queue
+%to the output port. If that value is not consumed, we need to store it in the
+%shadow register \code{shadowReg} while reading the next value from the memory.
+%The state machine consists of three states to represent: (1) an empty FIFO, (2) a valid
+%data read out from the memory, and (3) head of the queue in the shadow register and
+%valid data (the next element) from the memory.
 
+<<<<<<< HEAD
 The memory based FIFO can efficiently hold larger amounts of data in the queue
 and has a short fall through latency. In the last design, the output of the FIFO may
 come directly from the memory read. If this data path is in the critical path of the design,
@@ -5285,6 +5291,17 @@ stage double buffer FIFO to decouple the memory read path from the output.
 
 \verylonglist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
 stage.}{lst:fifo:comb}
+=======
+%The memory based FIFO can efficiently hold larger amounts of data in the queue
+%and has a short fall through latency. In the last design, the output of the FIFO may
+%come directly from the memory read. If this data path is in the critical path of the design,
+%we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
+%shows such a combination. On the output of the memory based FIFO we add a single
+%stage double buffer FIFO to decouple the memory read path from the output.
+%
+%\longlist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
+%stage.}{lst:fifo:comb}
+>>>>>>> 20560fba01559452d063e73ab03a476043e57366
 
 \section{A Multi-clock Memory}
 
@@ -6857,13 +6874,15 @@ of the POWER Open ISA. It includes instructions to run Micropython.
 machine learning for the Apache TVM machine learning compiler framework.
 
 \item[\myref{https://github.com/freechipsproject/ip-contributions}{Chisel IP Contributions}]
-started to collect small Chisel components, including the presented FIFO buffers and the serial
-port.
+started to collect small Chisel components. It includes the source of the
+UART and FIFOs presented in this book.
 
-\item[\myref{https://github.com/ucb-bar/constellation}{Constellation}] is a NoC generator~\cite{Constellation:2022}
-for irregular NoC structures that supports wormhole routing, virtual channels, and credit-based flow control.
-It uses AXI-4 or TileLink as the interface and translates a master/slave bus protocol into NoC messages.
-
+\item[\myref{https://github.com/ucb-bar/constellation}{Constellation}] is a NoC Generator
+developed at UC Berkeley~\cite{Constellation:2022}.
+Constellation generates packet-switched NoCs with wormhole routing,
+virtual channels, and credit-based flow control. The interface to the NoC
+can use AXI-4 or TileLink. Compared to other NoCs and NoC generators,
+Constellation can generate any topology with application specific routes.
 
 \end{description}
 

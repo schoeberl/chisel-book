@@ -42,6 +42,6 @@ make
 The book also contains slides for a one semester course on digital electronics
 with Chisel. The slides are [here](slides). You can see a
 [lecture plan](http://www2.imm.dtu.dk/courses/02139/) for a course
-given at DTU and the corresponding
+given at DTU that includes PDFs of the slides and the corresponding
 [lab material](https://github.com/schoeberl/chisel-lab).
 

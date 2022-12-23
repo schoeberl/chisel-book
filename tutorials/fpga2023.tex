@@ -1,0 +1,92 @@
+\documentclass{article}
+
+\usepackage{pslatex} % -- times instead of computer modern, especially for the plain article class
+\usepackage[colorlinks=true,bookmarks=false]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\begin{document}
+
+\title{Software-Defined Hardware:\\ Digital Design in the 21st Century with Chisel}
+
+\author{Martin Schoeberl\\
+\texttt{masca@dtu.dk}}
+
+
+\maketitle \thispagestyle{empty}
+
+This is a proposal for a tutorial at FPGA 2023 on \href{https://chisel.eecs.berkeley.edu/}{Chisel}.
+It will include hands-on lab exercises in simulation and on FPGA boards.
+
+
+\paragraph{Title:} Software-Defined Hardware: Digital Design in the 21st Century with Chisel
+\paragraph{Organizers and Speakers:} Martin Schoeberl, Technical University of Denmark, masca@dtu.dk, and
+Jack Koenig, SiFive, koenig@sifive.com
+
+\paragraph{Motivation:}
+
+To develop future more complex digital circuits in less time we need a better hardware description
+language than VHDL or Verilog. Chisel is a hardware construction language intended to
+speed up the development of digital hardware and hardware generators.
+
+The intended audience are chip designers designers with a background on VHDL or Verilog,
+but also software developers interested to learn hardware design with an object-oriented language.
+ 
+\paragraph{Duration:} Full day
+
+\paragraph{Topics Covered}
+
+\begin{itemize}
+\item Hardware design in a modern hardware construction language
+\item Object oriented and functional description of hardware
+\item Learn to describe simple circuits in Chisel
+\item Test circuits with Scala test benches in the Chisel simulation
+\item Implement circuits in an FPGA
+\item Circuit generators
+\item Chisel internals
+\end{itemize}
+
+\paragraph{Abstract:}
+
+Chisel is a hardware construction language implemented as a domain specific language in Scala. Therefore, the full power of a modern programming language is available to describe hardware and, more important, hardware generators. Chisel has been developed at UC Berkeley and successfully used for several tape outs of RISC-V. Google has developed a tensor processing unit for edge devices in Chisel. Here at the Technical University of Denmark we use Chisel in the T-CREST project and in teaching digital electronics and advanced computer architecture.
+
+In this tutorial we will give an overview of Chisel to describe circuits at the RTL level, how to use the Chisel tester functionality to test and simulate digital circuits, present how to synthesize circuits for an FPGA, and present advanced functionality of Chisel for the description of circuit generators.
+
+ \paragraph{Necessary background:}
+
+Knowledge of a hardware description language like VHDL of Verilog is beneficial, but Chisel is also
+approachable by software engineers with knowledge of an object-oriented language such as Java or C\#.
+
+
+ \paragraph{Hands-on session:}
+ The tutorial will be a mix of lectures and hands-on labs. Participants shall have a laptop and we will provide
+instructions for software installation beforehand.
+Besides using simulation, we will also bring a few FPGA boards for
+real hands-on.
+ The hands-on session will enable the participants to get the design
+ flow and testing in Chisel going with small example designs.
+ Prerequisites: Java JDK (8 or 11) and the Scala build tool (sbt) installed on the participants laptop.
+ IntelliJ as IDE is optional. Installation instructions can be found
+at: \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md} (Vivado or Quartus
+will be needed for FPGA based lab work).
+I also provide a Ubuntu VM with all tools installed.
+
+ \paragraph{Tutorial material:}
+The book ``Digital Design with Chisel'' accompanies the tutorial.
+It is available in open access.\footnote{\url{http://www.imm.dtu.dk/~masca/chisel-book.html}, source at \url{https://github.com/schoeberl/chisel-book}}
+Further material: slides as PDF and the Chisel lab on GitHub at: \url{https://github.com/schoeberl/chisel-lab}
+
+
+\paragraph{Short CV of speakers:}
+Martin Schoeberl is Professor at the Technical University of Denmark.
+He has more than 100 publications in peer reviewed journals, conferences, and books.
+Martin has been four times at UC Berkeley on three months research stays, where he has picked up Chisel
+and is in close contact with the developers of Chisel.
+He lead the research project T-CREST where most of the components have been written in Chisel.
+
+Jack is a senior staff engineer at SiFive and an open-source maintainer of the Chisel 3
+and FIRRTL projects. He has been involved in the development of Chisel 3 since its inception at UC Berkeley.
+
+
+\end{document}

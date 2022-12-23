@@ -82,4 +82,16 @@ class FifoTest extends AnyFlatSpec with ChiselScalatestTester {
       testFn(dut)
     }
   }
+
+  "MemFifo" should "pass" in {
+    test(new MemFifo(UInt(16.W), 4)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      testFn(dut)
+    }
+  }
+
+  "RegFifo" should "pass" in {
+    test(new RegFifo(UInt(16.W), 4)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      testFn(dut)
+    }
+  }
 }
