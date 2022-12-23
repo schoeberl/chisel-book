@@ -24,7 +24,7 @@
 
 
 \newif\ifbook
-% \booktrue % comment out for the print book version
+%\booktrue % comment out for the print book version
 
 \ifbook
 \else
@@ -4196,7 +4196,7 @@ The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
 
-\longlist{code/ready_valid_buffer.txt}{A register as a buffer with ready/valid interface.s}{lst:rv:reg}
+\longlist{code/ready_valid_buffer.txt}{A register as a buffer with a ready/valid interface}{lst:rv:reg}
 
 Listing~\ref{lst:rv:reg} shows an example of using the ready/valid interface.
 The circuit represents a buffer built out of a register.
@@ -5179,6 +5179,8 @@ Similar the fall through latency is half of the bubble FIFO.
 
 \subsection{FIFO with Register Memory}
 
+\todo{Fix issue and update text}
+
 When you come with a software engineering background you may have been
 wondering that we built hardware queues out of many small individual small buffer
 elements, all executing in parallel and handshaking with upstream and downstream
@@ -5281,7 +5283,7 @@ we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:
 shows such a combination. On the output of the memory based FIFO we add a single
 stage double buffer FIFO to decouple the memory read path from the output.
 
-\longlist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
+\verylonglist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
 stage.}{lst:fifo:comb}
 
 \section{A Multi-clock Memory}
@@ -5290,6 +5292,7 @@ In large designs with multiple clock domains, you may need a way to safely
 pass data from one domain to another. We have previously seen synchronization as 
 one solution to this issue. An alternative is to use a multi-clock memory as 
 a buffer between the two (or more) domains. 
+
 
 Chisel supports multi-clock designs with the \code{withClock} and 
 \code{withClockAndReset} constructs. All storage elements defined within a 
@@ -6854,7 +6857,13 @@ of the POWER Open ISA. It includes instructions to run Micropython.
 machine learning for the Apache TVM machine learning compiler framework.
 
 \item[\myref{https://github.com/freechipsproject/ip-contributions}{Chisel IP Contributions}]
-started to collect small Chisel components.
+started to collect small Chisel components, including the presented FIFO buffers and the serial
+port.
+
+\item[\myref{https://github.com/ucb-bar/constellation}{Constellation}] is a NoC generator~\cite{Constellation:2022}
+for irregular NoC structures that supports wormhole routing, virtual channels, and credit-based flow control.
+It uses AXI-4 or TileLink as the interface and translates a master/slave bus protocol into NoC messages.
+
 
 \end{description}
 
