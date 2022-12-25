@@ -6184,7 +6184,7 @@ Following code snippets shows examples of Leros instructions in assembly:
 \noindent We can see that each instruction consists for the instruction name (also call
 opcode mnemonic) and a constant. The constant can be written in decimal or
 hexadecimal notion. The code shows immediate versions of load, arithmetic,
-and logic instructions. the last instruction (\code{scall 0}) is a system call and
+and logic instructions. The last instruction (\code{scall 0}) is a system call and
 ends the execution (or simulation).
 This short program is part of Leros test suit.
 The convention of the test is that at the end of the program the accumulator shall
@@ -6261,12 +6261,12 @@ On-chip memories have usually input registers that cannot be read.\footnote{At l
 this is true for FPGA on-chip memories} Therefore, we feed to the PC and the input register
 of the instruction memory the same value of the next PC. The next PC is for non-branching
 instructions the PC plus 1.\footnote{We count in this simple organization in 16-bit instruction
-words and not in bytes} For a relative branch the decode component sign extends the immediate
-value and it is added to the PC. For the \code{jal} instruction the PC can also be loaded from \code{A}.
+words and not in bytes} For a relative branch, the decode component sign extends the immediate
+value and adds it to the PC. For the \code{jal} instruction the PC can also be loaded from \code{A}.
 
 In the first state an instruction is fetched from the instruction memory and decoded.
 The decode component decides what will happen in the next state, the execute state.
-It also includes the generation of an operand for instructions with an immediate operand
+The decode also includes the generation of an operand for instructions with an immediate operand
 (e.g., \code{addi}, or \code{loadhi}). As this operand is consumed in the execution state,
 we need to store it in a register.
 
@@ -6338,16 +6338,20 @@ to test against random inputs:
 \noindent You can run the tests within the Leros project with
 
 \begin{verbatim}
-$ sbt "test:runMain leros.AluTester"
+$ sbt "testOnly leros.AluAccuTest"
 \end{verbatim}
 
 and shall produce a success message similar to:
 
 \begin{verbatim}
-[info] [0.001] SEED 1544507337402
-test Alu Success: 70567 tests passed in 70572 cycles taking
-3.845715 seconds
-[info] [3.825] RAN 70567 CYCLES PASSED
+[info] AluAccuTest:
+[info] AluAccu
+[info] - should pass
+[info] Run completed in 1 second, 568 milliseconds.
+[info] Total number of tests run: 1
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
 \end{verbatim}
 
 \section{Decoding Instructions}
@@ -6401,9 +6405,7 @@ Therefore, we call \code{assemble} twice with a parameter to indicate which pass
 
 \shortlist{code/leros_asm_call.txt}
 
-The \code{assemble} function starts with reading in the source
-file\footnote{This function does not actually read the source file, but for this
-discussion we can consider it as the reading function.}
+The \code{assemble} function starts with opening the source file
 and defining two helper functions to parse the two possible operands: (1) an
 integer constant (allowing decimal or hexadecimal notation) and (2) to read
 a register number.
@@ -6436,7 +6438,7 @@ In an instruction pipeline more than one instruction is on the fly. For example
 with Leros we could implement three pipeline stages: instruction fetch,
 instruction decode, and execute. In that case three instructions would
 be in the pipeline and we can execute one instruction each clock cycle.
-Compared to the presented implementation pipelining could about double
+Compared to the presented implementation, pipelining could about double
 the performance of Leros.
 
 
@@ -6474,7 +6476,7 @@ to Chisel.
 \section{Publishing a Chisel Library}
 
 When you develop a circuit in open-source and share it on, for example on GitHub,
-this a very educational act, as other can learn describing hardware in Chisel from your code example.
+this a very educational act, as others can learn describing hardware in Chisel from your code example.
 However, sharing just the source code forces other to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
 same}.\footnote{I learned this phrase from Doug Locke during discussion sessions
@@ -6551,7 +6553,7 @@ gpg --keyserver keyserver.ubuntu.com --send-keys keyID
 
 \subsection{Library Setup}
 
-Per library you need to setup following once:
+Per library you need to setup following:
 
 \begin{enumerate}
 \item Install sbt plugins in \code{project/plugins.sbt}:
@@ -6559,7 +6561,7 @@ Per library you need to setup following once:
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.2")
 \end{verbatim}
-\item Add information of the library into \code{build.sbt}. Here as an example
+\item Add information about the library into \code{build.sbt}. Here as an example
 the relevant section of \myref{https://github.com/freechipsproject/ip-contributions/blob/master/build.sbt}{build.sbt}
 in \code{ip-contributions}:
 \end{enumerate}
@@ -6622,8 +6624,8 @@ Repository Search}.
 
 \section{Contributing to Chisel}
 
-The following is an advanced topic and I propose you first start following the discussion
-of the project issues on GitHub.
+The following is an advanced topic and I propose you first start following the discussions
+of the Chisel project issues on GitHub, before creating your first pull request (PR).
 
 \subsection{Setup the Development Environment}
 
@@ -6659,29 +6661,6 @@ for example, by forking/cloning an \myref{https://github.com/schoeberl/chisel-em
 renaming it, and removing the \code{.git} folder from it.
 
 Change the \code{build.sbt} to reference the locally published version of Chisel.
-\todo{Update to current version.}
-Furthermore, at the time of this writing, the head of Chisel source uses Scala 2.12, but Scala
-2.12 has troubles with
-\myref{https://github.com/freechipsproject/chisel-template/issues/35}{anonymous bundles}.
-Therefore, you need to add the following Scala option: \code{"-Xsource:2.11"}.
-The \code{build.sbt} should look similar to:
-
-\begin{verbatim}
-scalaVersion := "2.12.6"
-
-scalacOptions := Seq("-Xsource:2.11")
-
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
-  Resolver.sonatypeRepo("releases")
-)
-
-libraryDependencies +=
-  "edu.berkeley.cs" %% "chisel3" % "3.2-SNAPSHOT"
-libraryDependencies +=
-  "edu.berkeley.cs" %% "chisel-iotesters" % "1.3-SNAPSHOT"
-\end{verbatim}
-
 Compile your Chisel test application and take a close look if it picks up the local published
 version of the Chisel library (there is also a SNAPSHOT version published, so if, for example,
 the Scala version is different between your Chisel library and your application code,
