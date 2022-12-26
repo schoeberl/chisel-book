@@ -71,14 +71,14 @@ class BubbleFifoTest extends AnyFlatSpec with ChiselScalatestTester {
   it should "work with multiple threads" in {
     test(new BubbleFifo(8, 4)) { dut =>
       val enq = fork {
-        while (dut.io.enq.full.peek.litToBoolean)
+        while (dut.io.enq.full.peekBoolean())
           dut.clock.step()
         dut.io.enq.din.poke(42.U)
         dut.io.enq.write.poke(true.B)
         dut.clock.step()
         dut.io.enq.write.poke(false.B)
       }
-      while (dut.io.deq.empty.peek.litToBoolean)
+      while (dut.io.deq.empty.peekBoolean())
         dut.clock.step()
       dut.io.deq.dout.expect(42.U)
       dut.io.deq.read.poke(true.B)

@@ -18,7 +18,7 @@ class CounterDeviceTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.rd.poke(true.B)
       dut.io.addr.poke(1.U)
       dut.clock.step()
-      assert(dut.io.rdData.peek().litValue > 100)
+      assert(dut.io.rdData.peekInt() > 100)
       dut.io.wr.poke(true.B)
       dut.io.wrData.poke(0.U)
       dut.clock.step()
@@ -28,7 +28,7 @@ class CounterDeviceTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.rdData.expect(1.U)
       dut.io.addr.poke(0.U)
       dut.clock.step()
-      assert(dut.io.rdData.peek().litValue > 100)
+      assert(dut.io.rdData.peekInt() > 100)
     }
   }
   //- end
@@ -45,10 +45,10 @@ class CounterDeviceTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.io.rd.poke(true.B)
         step()
         dut.io.rd.poke(false.B)
-        while (!dut.io.ack.peek().litToBoolean) {
+        while (!dut.io.ack.peekBoolean()) {
           step()
         }
-        dut.io.rdData.peek().litValue
+        dut.io.rdData.peekInt()
       }
       def write(addr: Int, data: Int) = {
         dut.io.addr.poke(addr.U)
@@ -56,7 +56,7 @@ class CounterDeviceTest extends AnyFlatSpec with ChiselScalatestTester {
         dut.io.wr.poke(true.B)
         step()
         dut.io.wr.poke(false.B)
-        while (!dut.io.ack.peek().litToBoolean) {
+        while (!dut.io.ack.peekBoolean()) {
           step()
         }
       }
