@@ -6124,17 +6124,17 @@ store & Rn = A & Store A into register Rn \\
 jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
-loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
-% loadindhu? \\
+loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
+loadindh & A = mem[AR+(i $<<$ 1)]$_{15-0}$  &  Load a half word unsigned from memory into A\\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
-storeindb & mem[AR+i]$_{7-0}$ = A & Store a byte into memory \\
-% storeindh ? \\
+storeindb & mem[AR+i] = A$_{7-0}$ & Store a byte into memory \\
+storeindh & mem[AR+(i $<<$ 1] = A$_{15-0}$ & Store a half word into memory \\
 br & PC = PC + o & Branch \\
 brz & if A == 0 PC = PC + o & Branch if A is zero \\
 brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
 brp & if A $>=$ 0 PC = PC + o & Branch if A is positive \\
 brn & if A $<$ 0 PC = PC + o & Branch if A is negative \\
-scall & scall A & System call (simulation hook) \\
+scall &  & System call (simulation hook) \\
 \bottomrule
 \end{tabular}
 \caption{Leros instruction set.}
