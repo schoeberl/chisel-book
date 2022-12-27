@@ -2365,7 +2365,7 @@ value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassign
 \shortlist{code/comb_wire.txt}
 
 \noindent The logic of the circuit is a multiplexer, where the two inputs are the constants
-\code{0} and \code{3} and the condition \code{cond} the select signal.
+\code{0} and \code{3} and the condition \code{cond} serves as the select signal.
 Keep in mind that we describe hardware circuits and not a software program with conditional
 execution.
 
@@ -2392,23 +2392,23 @@ Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code
 \shortlist{code/comb_elsewhen.txt}
 
 \noindent This chain of \code{when}, \code{.elsewhen}, and \code{.otherwise}
-construct a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
+constructs a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
 That chain introduces a priority, i.e., when \code{cond} is true, the other conditions
 are not evaluated.
 
 Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
-Those \code{.elsewhen} branches can be arbitrary long.
+Those \code{.elsewhen} branches can be arbitrarily long.
 However, if the chain of conditions depends on a single signal, it is better
 to use the \code{switch} statement, which is introduced in the following
 subsection with a decoder circuit.
 
-For more complex combinational circuits it might be practical to assign
+For more complex combinational circuits, it might be practical to assign
 a default value to a \code{Wire}. A default assignment can be combined with the wire
 declaration with \code{WireDefault}.
 
 \shortlist{code/comb_wiredefault.txt}
 
-One might question why using \code{when}, \code{.elsewhen}, and \code{.otherwise}
+One might ask, why do we use \code{when}, \code{.elsewhen}, and \code{.otherwise}
 when Scala has \code{if}, \code{else if}, and \code{else}? Those Scala statements are for
 conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
 Those Scala conditionals have their use in Chisel when we write circuit generators,
@@ -2461,7 +2461,7 @@ To use the \code{switch} statement we need to include the package \code{chisel.u
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
 and assigns the decoded value to the \code{result} signal.
-Note, that even if we enumerate all possible input values, Chisel still needs us to assign a
+Note that even if we enumerate all possible input values, Chisel still needs us to assign a
 default value, as we do by assigning an initial 0 to \code{result}.
 This assignment will never be active and therefore optimized away by the backend tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
@@ -2484,7 +2484,7 @@ operation \code{<<}.
 
 Decoders are used as a building block for a multiplexer by using the output as an enable
 with an AND gate for the multiplexer data input. However, in Chisel, we do not need to construct
-a multiplexer, as a \code{Mux} is available in the core library.
+a multiplexer because a \code{Mux} is available in the core library.
 Decoders can also be used for address decoding of some bits of an address bus of
 a microprocessor. The outputs are used as
 select signals for memories and different IO devices connected to the microprocessor.
@@ -2533,12 +2533,12 @@ for the legal input values.
 
 \shortlist{code/encdec_enc.txt}
 
-For the decoder we found an elegant single line statement to express the logic.
-This also enables to describe a wide decoder. However, we are not aware
+For the decoder, we found an elegant single line statement to express the logic.
+This also enables us to describe a wide decoder. However, we are not aware
 of such an expression for the encoder.
 
 To express larger encoders, we need to write a (simple) hardware generator.
-Therefore, we need to introduce the Scala loop construct. Following two lines
+Therefore, we need to introduce the Scala loop construct. The following two lines
 of Scala code express a loop, counting from \code{0} to \code{9}.
 
 \shortlist{code/scala_loop_comment.txt}
@@ -2589,7 +2589,7 @@ a grant output of \code{0001}. The arbiter prioritizes the lower
 inputs. Therefore, we call it a priority arbiter. The lower the bit number,
 the higher the priority.
 
-To build a fair arbiter we need to add state to remember the last arbitration.
+To build a fair arbiter, we need to add state to remember the last arbitration.
 We will present a fair %round-robin
 arbiter a later chapter.
 
@@ -2604,10 +2604,10 @@ Figure~\ref{fig:arbiter} shows the schematic of a 4-bit arbiter.
 The individual grant requests need to check if a lower bit has already
 won the arbitration. For the first request the grant \code{g0} depends only on the
 request \code{r0}. The second grant can only win the arbitration when request \code{r1}
-is asserted and request \code{r0} is deasserted. For the next requests these lookup
+is asserted and request \code{r0} is deasserted. For the next requests, the lookup
 is further chained.
 
-Following code shows an arbiter for 3 clients.
+The following code shows an arbiter for 3 clients.
 
 \shortlist{code/arbiter3.txt}
 
@@ -2617,7 +2617,7 @@ We can see that \code{grant(0)} depends only on \code{request(0)}.
 \code{notGranted} is used to chain the information that no lower bit requests
 have been granted.
 
-Small arbiters can also be directly described with a logic table. Following code
+Small arbiters can also be directly described with a logic table. The following code
 shows the table for a 3-bit arbiter.
 
 \shortlist{code/arbiter3-direct.txt}
@@ -2649,10 +2649,10 @@ last request (\code{n - 1}). That wire is not used and the synthesize tools will
 \end{figure}
 
 With our original encoder design we had to assume that the input is one-hot
-encoded, meaning maximal one bit is allowed to be \code{1}. Inputs with several
+encoded, meaning only one bit is allowed to be \code{1}. Inputs with several
 bits set are illegal and lead to undefined behavior.
 
-We can solve this problem by combining an arbitration circuit, which selects only
+We can solve this problem by combining the encoder with an arbitration circuit, which selects only
 the highest-priority bit set. When we feed the output of the arbiter into an encoder
 we create a priority encoder.
 Figure~\ref{fig:priority-encoder} shows the schematic.
@@ -2668,14 +2668,14 @@ Figure~\ref{fig:priority-encoder} shows the schematic.
   \label{fig:comparator}
 \end{figure}
 
-As the last circuit for the chapter of combinational building blocks we present the comparator.
+As the last circuit for the chapter of combinational building blocks, we present the comparator.
 Figure~\ref{fig:comparator} shows the schematic of a comparator. It has two multi-bit inputs and
 compares those two values. It has two outputs: (1) signaling that \code{a} and \code{b} are equal (\code{equ})
 and (2) that \code{a} is greater than \code{b}. These two outputs are enough for all possible
 comparisons. For example, the if \code{equ} or \code{gt} are asserted we know that the condition
 $a >= b$ is true. For the condition $a <= b$ we test for not \code{gt}.
 
-Following code snippet shows the comparator. As you can see, these are just two lines of
+The following code snippet shows the comparator. As you can see, these are just two lines of
 Chisel code. Therefore, compare functions are usually just directly used in other components and
 not wrapped into a module.
 
@@ -2686,7 +2686,7 @@ not wrapped into a module.
 Describe a combinational circuit to convert a 4-bit binary input to the encoding of a
 \myref{https://en.wikipedia.org/wiki/Seven-segment_display}{7-segment display}.
 You can either define the codes for the decimal digits, which was the initial
-usage of a 7-segment display or additionally, define encodings for the remaining bit pattern
+usage of a 7-segment display, or additionally, define encodings for the remaining bit pattern
 to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
 When you have an FPGA board with a 7-segment display, connect 4 switches or
@@ -2698,7 +2698,7 @@ Sequential circuits are circuits where the output depends on the input \emph{and
 previous values. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
-feedback, but this is a specific niche topic and cannot be easily expressed in Chisel.}
+feedback, but this is a niche topic and cannot be easily expressed in Chisel.}
 To build sequential circuits, we need elements that can store state:
 the so-called registers.
 
@@ -2717,7 +2717,7 @@ the so-called registers.
 The fundamental elements for building sequential circuits are registers. A register is a collection
 of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
 A D flip-flop captures the value of its input at the rising edge of the clock and stores
-it at its output. Alternatively, in other words: the register updates its output with the value of the input on the rising edge of the clock.
+it at its output. In other words, the register updates its output with the value of the input on the rising edge of the clock. % These two sentences are similar and they explain the same thing. Probably only one is needed
 
 \index{Clock}
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
@@ -2733,8 +2733,8 @@ In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \shortlist{code/sequ_reg.txt}
 
-\noindent Note that we do not need to connect a clock to the register, Chisel implicitly does this.
-A register's input and output can be arbitrary complex types
+\noindent Note that we do not need to connect a clock to the register; Chisel implicitly does this.
+A register's input and output can be arbitrarily complex types
 made out of a combination of vectors and bundles.
 
 A register can also be defined and used in two steps:
@@ -2745,14 +2745,14 @@ First, we define the register and give it a name. Second, we connect the signal
 \code{delayIn} to the input of the register. Note also that the name of the register
 contains the string \code{Reg}. To easily distinguish between combinational
 circuits and sequential circuits, it is common practice to have the marker
-\code{Reg} as part of to the name. Also, note that names in Scala (and therefore
+\code{Reg} as part of the name. Also, note that names in Scala (and therefore
 also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
 Variable names start with lowercase and classes start with upper case.
 
 \index{Reset}
 \index{Initialization}
-A register can be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
+A register can be initialized on reset. The \code{reset} signal is, like the \code{clock} signal,
 implicit in Chisel. We supply the reset value, for example, zero, as a parameter to the register
 constructor \code{RegInit}. The input for the register is connected with a Chisel
 assignment statement.
@@ -2769,12 +2769,12 @@ assignment statement.
 
 The default implementation of reset in Chisel is a synchronous
 reset.\footnote{Support for asynchronous reset is available.}
-For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
+For a synchronous reset, no change is needed in the D flip-flop itself; instead, a multiplexer just
 needs to be added to the input that
 selects between the initialization value under reset and the data value.
-Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
-where the reset drives the multiplexer. However, as synchronous reset is used quite often,
-modern FPGA flip-flops contain a synchronous reset (and set) input to the flip-flop to not waste
+Figure~\ref{fig:register-reset} shows the schematic of a register with a synchronous reset
+where the reset drives the multiplexer. However, because synchronous reset is used quite often,
+modern FPGA flip-flops contain a synchronous reset (and set) input to the flip-flop to avoid wasting
 LUT resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
@@ -2943,7 +2943,7 @@ A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
 circuit other than counting clock ticks. If we know the clock frequency, we
 can generate circuits that generate timed events, such as blinking an LED
-at some frequency as we have shown in the Chisel ``Hello World'' example.
+at some frequency, as we have shown in the Chisel ``Hello World'' example.
 
 A common practice is to generate single-cycle \emph{ticks} with a frequency $f_{tick}$
 that we need in our circuit. That tick occurs every $n$ clock cycles,
@@ -3041,11 +3041,11 @@ counting by selecting the \code{0} input of the multiplexer.
   \label{fig:timer}
 \end{figure}
 
-Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg},
+Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg}
 that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{cntReg}
 with \code{0}. For the input multiplexer we introduce the wire \code{next} with a default
 value of \code{0}. The \code{when/elsewhen} block introduces the other two inputs with
-the select function. Signal \code{load} has priority over the decrement selection.
+the select function. The signal \code{load} has priority over the decrement selection.
 The last line connects the multiplexer, represented by \code{next}, to the input of the
 register \code{cntReg}.
 
@@ -3068,7 +3068,7 @@ within that period.
 \end{figure}
 
 Figure~\ref{fig:pwm} shows a PWM signal. The arrows point to the start of the periods
-of the signal. The percentage of time the signal is high, is also called the duty cycle.
+of the signal. The percentage of time the signal is high is called the duty cycle.
 In the first two periods the duty cycle is 25\,\%, in the next two 50\,\%, and in the last
 two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
 
@@ -3077,13 +3077,13 @@ signal results in a simple
 \myref{https://en.wikipedia.org/wiki/Digital-to-analog_converter}{digital-to-analog converter}.
 The low-pass filter can be as simple as a resistor and a capacitor.
 
-The following code example will generate a waveform of 3 clock cycles high every 10 clock cycles.
+The following code example will generate a waveform with 3 clock cycles high every 10 clock cycles.
 
 \shortlist{code/pwm.txt}
 
 \noindent We use a function for the PWM generator to provide a reusable, lightweight component.
 The function has two parameters: a Scala integer configuring the PWM with the number of
-clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulswidth) for the
+clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulse width) for the
 PWM output signal. We use a multiplexer in this
 example to express the counter. The last line of the function compares the counter value
 with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
@@ -3130,8 +3130,8 @@ next register. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
 circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
-The Chisel code for this simple shift register does: (1) create a 4-bit register \code{shiftReg},
-(2) concatenate the lower 3 bits of the shift register with the input \code{din} for the next
+The Chisel code for this simple shift register (1) creates a 4-bit register \code{shiftReg},
+(2) concatenates the lower 3 bits of the shift register with the input \code{din} for the next
 input to the register, and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
 
 \shortlist{code/shift_register.txt}
@@ -3300,8 +3300,8 @@ Use that signal as enable signal for the 4-bit counter.
 
 Construct a PWM waveform with a generator function and set the threshold with a
 function (triangular or a sine function).
-A triangular function can be created by counting up and down. A sinus function with the
-use of a lookup table that you can generate with a few lines of Scala code
+A triangular function can be created by counting up and down. A sine function can be created with
+a lookup table that you can generate with a few lines of Scala code
 (see Section~\ref{sec:gen:comb:logic}).
 Drive a LED on an FPGA board with that modulated PWM function. What frequency shall your
 PWM signal be? What frequency is the driver running?
@@ -3313,7 +3313,7 @@ Sketch the block diagram for the following circuits:
 
 \shortlist{code/draw_mux6.txt}
 
-\noindent Here a little bit more complex circuit, containing a register:
+\noindent Here is a slightly more complex circuit, containing a register:
 
 \shortlist{code/draw_acc.txt}
 
