@@ -24,5 +24,10 @@ jobs:
     - name: Setup z3
       run: sudo apt-get install z3
     - name: Run tests
-      # should run make for the test including Latex
       run: sbt test
+    # should run make for the test including Latex
+    # - name: Build book
+    #   run: |
+    #     make gencode
+    #     make fig
+    #     make book
