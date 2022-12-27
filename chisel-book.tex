@@ -5506,7 +5506,7 @@ Nevertheless, the notion of the classic processor bus with an address bus, a dat
 is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
 on-chip interconnect in the next section.
 
-\section{On-Chip Bus}
+\section{An On-Chip Bus}
 
 \begin{figure}
   \centering
@@ -5532,11 +5532,12 @@ a single clock cycle. This is only possible for very small systems. We can exten
 that we expect the read result in the next clock cycle, following the read request. This fits
 well for on-chip memories with usually synchronous reads that have one clock cycle latency.
 For IO devices this additional clock cycle latency relaxes the timing constraints as well.
-We still assume that write is performed in one clock cycle.
+We still assume that a write is performed in one clock cycle.
 
 If we want to communicate with devices with different or even varying latency, we need to
 introduce handshaking. The processor signals with a read or write request the start of a
-transaction and the memory or peripheral device signals the end of a transaction. 
+transaction and the memory or peripheral device signals the end of a transaction with
+an acknowledgment signal.
 
 \subsection{Combinational Handshake}
 
@@ -5549,7 +5550,7 @@ transaction and the memory or peripheral device signals the end of a transaction
 
 Figure~\ref{fig:bus_ack} shows a read request with an acknowledgment.
 The processor drives the address bus (\code{address}) and the read
-signal (\code{rd}) in clock cycle 3. Signal \code{ack} needs to react
+signal (\code{rd}) in clock cycle 2. Signal \code{ack} needs to react
 within that first clock cycle. In our example the read data is not available within
 one clock cycle, but two clock cycles later as seen in clock cycle 4.
 Data and the acknowledgment are valid for a single clock cycle.
@@ -5578,9 +5579,14 @@ peripheral device.
 \end{figure}
 
 \todo{Don't formulate it just relative to the other. Formulate it as its own thing.
-Maybe then compare. This needs some better writing, also put it into the soc-comm README.}
+Maybe then compare. This needs some better writing, also put it into the soc-comm README.
+Also have a write timing diagram. And find a better font for the diagram to have nicer
+rendering in the SVG.}
 
- A read or write command are signaled by an asserted \code{rd} or \code{wr}.
+Here we define a simple pipelined handshake bus protocol that avoids the single
+cycle combinational loop and fits better for modern SoC designs.
+ A read or write command are signaled by an assertion of \code{rd} or \code{wr}
+ for a single clock cycle.
 The address and write data (if it is a write) need to be valid during
 the command. Commands are only valid for a single cycle.
 Each command needs to be acknowledged by an active \code{ack},
@@ -5590,11 +5596,12 @@ signal for one clock cycle.
 
 Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
-is only a single cycle long. The address bus and the read signal does not need to be driven
-till the acknowledgment. Compared to the former protocol, the \code{ack} signal comes
+is only a single clock cycle long. The address bus and the read signal does not need to be driven
+till the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
+be valid (low or high)
 earliest one clock cycle after the \code{rd} command, in clock cycle 3.
-The first read sequence has one cycle latency in this example.
-It has the same latency as the former example.
+The first read sequence has two clock cycles latency in this example.
+It has the same latency as in the former example.
 However, as the request needs to be valid only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle. 
@@ -5603,8 +5610,15 @@ The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exact this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
 used OCP interfaces.
+Furthermore, we have started a
+\myref{https://github.com/t-crest/soc-comm}{Chisel repository} with multicore devices, such as
+a network-on-chip, that implement the described pipelined interface.
 
-\todo{Maybe mention the soc-comm project?}
+The on-chip version of an interconnect definition can be generalized to a point-to-point
+connection. The processor and peripheral devices are connected with such a point-to-point
+interface to a switching fabric. If the system contains more than one processor (or master)
+we need arbitration within the switching fabric to decide which master is allowed to issue
+read and write commands.
 
 \subsection{Example IO Device}
 
@@ -5626,12 +5640,6 @@ The counters are initialized to zero by using a Scala \code{Seq}, created with \
 containing the reset values as Chisel constants. That \code{Seq} is the input to the \code{VecInit}.
 The counters are freely running and increment by one each clock cycle, except when written
 a new value.
-
-The on-chip version of an interconnect definition can be generalized to a point-to-point
-connection. The processor and peripheral devices are connected with such a point-to-point
-interface to a switching fabric. If the system contains more than one processor (or master)
-we need arbitration within the switching fabric to decide which master is allowed to issue
-read and write commands.
 
 \subsection{Memory Mapped Devices}
 \index{Memory mapped IO}
@@ -5732,7 +5740,10 @@ For our memory mapped devices we define a bundle:
 
 \shortlist{code/mem_io_bundle.txt}
 
-Listing~\ref{lst:rv-device} shows the \todo{continue here}
+Listing~\ref{lst:rv-device} shows the memory mapped interface to a streaming
+device, like a serial port.
+
+\todo{continue here}
 
 
 \longlist{code/mem_io_rv.txt}{An IO device for a ready/valid device.}{lst:rv-device}
@@ -5781,8 +5792,9 @@ the Wishbone strobe signal (\emph{wb.stb}) is not assigned anymore.
 Holding the data in the slave is usually \emph{for free} from the
 hardware complexity---it is \emph{just} a specification issue. In
 the classic Wishbone specification there is no way to perform pipelined read
-or write. However, for blocked memory transfers (e.g. cache load)
-this is the usual way to achieve good performance.
+or write. However, the latest Wishbone specification (B4) contains
+also a pipelined definition. Note, that the specification now contains two
+different, not necessarily compatible, specifications.
 
 \todo{Sample code for a peripheral, how to test?}
 
@@ -5790,7 +5802,7 @@ this is the usual way to achieve good performance.
 \index{AXI}
 
 The Advanced Microcontroller Bus Architecture (AMBA) \cite{soc:amba}
-is the interconnection definition from ARM. The specification
+is an interconnection definition from ARM. The specification
 defines three different busses: Advanced High-performance Bus (AHB),
 Advanced System Bus (ASB), and Advanced Peripheral Bus (APB). The
 AHB is used to connect on-chip memory, cache, and external memory to
@@ -5815,7 +5827,7 @@ address phase from the original AHB specification.
 The AXI bus uses ready/valid handshaking for all signals (read address,
 read data, write address, write data, and write response).
 The decoupling of the write address and the write data needs a more complex
-slave that can accept the any order of arriving address and data.
+slave that can accept any order of arriving address and data.
 
 
 \todo{Sample code for a servant, how to test? Probably with Xilinx stuff and maybe
@@ -5838,7 +5850,7 @@ and a network-on-chip with an OCP interface.
 
 The Avalon \cite{soc:avalon} interface specification is provided by
 Intel for a system-on-a-\\programmable-chip interconnection.
-Avalon defines a great range of interconnection devices ranging from
+Avalon defines a large range of interconnection devices ranging from
 a simple asynchronous interface intended for direct static RAM
 connection up to sophisticated pipeline transfers with variable
 latencies. This great flexibility provides an easy path to connect a
@@ -5849,7 +5861,8 @@ SOPC Builder tool. However, it seems that this switch fabric is
 Intel proprietary thus tying this specification to Intel FPGAs.
 
 The On-Chip Peripheral Bus (OPB) \cite{soc:opb} is an open standard
-provided by IBM and used by Xilinx. The OPB specifies a bus for
+provided by IBM and has been used by Xilinx several years ago.
+The OPB specifies a bus for
 multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
