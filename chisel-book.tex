@@ -3343,20 +3343,20 @@ to deal with those issues in the digital domain.
 Input signals that are not synchronous to the system clock are called
 asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
-\myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{Metastability}
-of the flip-flop. The Metastability may result in an output value between 0 and
-1 or it may result in oscillation. However, after some time the flip-flop will
+\myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{metastability}
+of the flip-flop. The metastability may result in an output value between 0 and
+1, or it may result in oscillation. However, after some time the flip-flop will
 stabilize at 0 or 1.
 
 Another common issue with external asynchronous input signals is when
-that signal changes close to the clock rising endge and is used in more than one
+that signal changes close to the clock rising edge and is used in more than one
 place of the circuit. Due to different delay times, those different usages of that
 input may be registered at different clock cycles, which might violate
 some assumptions.\footnote{I experienced this issue once and it took me
 quite some time to find the error.}
 
-We cannot avoid Metastability, but we can contain its effects.
-A classic solution is to use two flip-flops at the input. The assumption is:
+We cannot avoid metastability, but we can contain its effects.
+A classic solution is to use two flip-flops at the input. The assumption is that
 when the first flip-flop becomes metastable, it will resolve to a stable
 state within the clock period so that the setup and hold times of the
 second flip-flop will not be violated.
@@ -3382,7 +3382,7 @@ A classic example is the interfacing an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
-for other flip-flops in the circuit. Concrete, the deassertion of the reset need
+for other flip-flops in the circuit. Concretely, the deassertion of the reset needs
 to be synchronous to the clock.
 
 \section{Debouncing}
@@ -3469,7 +3469,7 @@ Majority voting ensures that the signal is stable for longer than the sampling p
   \label{fig:majority}
 \end{figure}
 
-Figure~\ref{fig:majority} shows the circuit of the majority voter.
+Figure~\ref{fig:majority} shows the majority voting circuit.
 It consists of a 3-bit shift register enabled by the \code{tick} signal
 we used for the debouncing sampling. The output of the three registers
 is fed into the majority voting circuit. The majority voting function filters
@@ -3478,14 +3478,14 @@ any signal change shorter than the sample period.
 The following Chisel code shows the 3-bit shift register, enabled by the
 \code{tick} signal and the voting function, resulting in the signal \code{btnClean}.
 
-Note, that a majority voting is very seldom needed.
+Note that majority voting is very seldom needed.
 
 \shortlist{code/input_majority.txt}
 
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean}. In this example, we use
-hat single cycle rising edge signal to increment a counter.
+that single cycle rising edge signal to increment a counter.
 
 \index{Edge detection}
 
@@ -3494,8 +3494,8 @@ hat single cycle rising edge signal to increment a counter.
 \section{Combining the Input Processing with Functions}
 
 To summarize the input processing, we show some more Chisel code.
-As the presented circuits might be tiny, but reusable building blocks, we encapsulate
-them in functions. Section~\ref{sec:functions} showes how we can abstract
+Because the presented circuits are tiny but reusable building blocks, we encapsulate
+them in functions. Section~\ref{sec:functions} shows how we can abstract
 small building blocks in lightweight Chisel functions instead of full modules.
 Those Chisel functions create hardware instances, e.g., the function
 \code{sync} creates two flip-flops connected to the input and to each other.
@@ -3511,8 +3511,8 @@ Any digital circuit needs a reset signal to reset registers to a defined state. 
 set in Chisel with the \code{RegInit} constructor. A reset signal is usually an asynchronous
 input to the circuit. That means when directly connected to the reset of a flip-flop it may
 violate timing constraints. In case of a synchronous reset it may violate setup and hold times
-of the flip-flop. Also when used as an asynchronous reset input, it still need to be synchronized
-to the clock. Concrete, the \emph{release} of the reset signal needs to be synchronized to the clock.
+of the flip-flop. Also when used as an asynchronous reset input, it still needs to be synchronized
+to the clock. Specifically, the \emph{release} of the reset signal needs to be synchronized to the clock.
 Another failure with an asynchronous reset can be that different parts of the circuit may be
 reset in two different clock cycles and therefore be inconsistent.
 
@@ -3542,7 +3542,7 @@ Build the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
-As there is no guarantee that modern button will always bounce, you can
+As there is no guarantee that a modern button will always bounce, you can
 simulate the bouncing and the spikes by pressing the button manually in a fast succession
 and using a low sample frequency. Select, e.g., one second as sample frequency,
 i.e., if the input clock runs at 100~MHz, divide it by 100,000,000.
@@ -3571,7 +3571,7 @@ state and the input, and (3) combinational logic that computes the output of the
 
 In principle, every digital circuit that contains a register or other memory elements
 to store state can be described as a single FSM. However, this might
-not be practical, for example, try to describe your laptop as a single FSM.
+not be practical. For example, try to describe your laptop as a single FSM.
 In the next chapter, we describe how to build larger systems
 out of smaller FSMs by combining them into communicating FSMs.
 
@@ -3579,7 +3579,7 @@ out of smaller FSMs by combining them into communicating FSMs.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=\scale]{figures/fsm}
+  \includegraphics[scale=\scale]{figures/fsm} % FIXME: typo in "Ouput"
   \caption{A finite-state machine (Moore type).}
   \label{fig:fsm}
 \end{figure}
@@ -3655,7 +3655,7 @@ red & 0 & 1 & green & 1 \\
 
 Finally, after all the design of our warning level FSM, we shall code it in Chisel.
 Listing~\ref{lst:fsm:alarm} shows the Chisel code for the alarm FSM.
-Note, that we use the Chisel type \code{Bool} for the inputs and the
+Note that we use the Chisel type \code{Bool} for the inputs and the
 output of the FSM.
 To use \code{Enum} and the \code{switch} control instruction, we need to
 import \code{chisel3.util.\_}.
@@ -3670,9 +3670,9 @@ The FSM has two input and a single output signal, captured in a Chisel \code{Bun
 
 
 \noindent At this place we could spend some discussion on optimal state encoding. Two common options
-are binary or one-hot encoding. However, we leave those low-level optimization to
+are binary or one-hot encoding. However, we leave those low-level optimizations to
 the synthesize tool and aim for readable code.\footnote{In the current version
-of Chisel the \codefoot{Enum} type represents states in binary encoding.
+of Chisel, the \codefoot{Enum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
 constants for the state names.}
 Therefore, we use an enumeration type with symbolic names for the states:
@@ -3710,7 +3710,7 @@ within a combinational block.
 
 On a Moore FSM, the output depends only on the current state.
 That means that a change of an input can be seen as a change of the
-output \emph{earliest} in the next clock cycle.
+output no earlier than in the next clock cycle.
 If we want to observe an immediate change, we need a combinational
 path from the input to the output.
 Let us consider a minimal example, an edge detection circuit.
@@ -3776,7 +3776,7 @@ the input is \code{0} the FSM stays in state \code{zero}, and the output is {0}.
 The rising edge FSM generates the \code{1} output only on the transition
 from state \code{zero} to state \code{one}. In state \code{one}, which represents
 that the input is now \code{1}, the output is \code{0}. We only want a single (cycle)
-puls for each rising edge of the input.
+pulse for each rising edge of the input.
 
 \longlist{code/rising_fsm.txt}{Rising edge detection with a Mealy FSM.}{lst:fsm:rising}
 
@@ -3790,14 +3790,14 @@ the default assignment to the output (\code{false.B}) counts.
 
 One can ask if a full-blown FSM is the best solution for the edge detection circuit,
 especially, as we have seen a Chisel one-liner for the same functionality.
-The hardware consumptions is similar. Both solutions need a single D flip-flop
+The hardware consumptions are similar. Both solutions need a single D flip-flop
 for the state. The combinational logic for the FSM is probably a bit more complicated, as
 the state change depends on the current state and the input value.
 For this function, the one-liner is easier to write and easier to read,
 which is more important. Therefore, the one-liner is the preferred solution.
 
 We have used this example to show one of the smallest possible Mealy FSMs.
-FSMs shall be used for more complex circuits with three and more states.
+FSMs shall be used for more complex circuits with three or more states.
 
 \section{Moore versus Mealy}
 
@@ -3814,7 +3814,7 @@ detection with a Moore FSM.
 Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
 edge detection with a Moore FSM. The first thing to notice is that the Moore FSM
 needs three states, compared to two states in the Mealy version.
-The state \code{puls} is needed to produce the single-cycle puls.
+The state \code{puls} is needed to produce the single-cycle pulse.
 The FSM stays in state \code{puls} just one clock cycle and then
 proceeds either back to the start state \code{zero} or to the \code{one}
 state, waiting for the input to become 0 again.
@@ -3882,8 +3882,8 @@ Martin: but this is shown at the Chisel homepage without an FSM.}
 
 A problem is often too complex to describe it with a single FSM.
 In that case, the problem can be divided into two or more smaller and simpler FSMs.
-Those FSMs then communicate with signals. One FSMs output is
-another FSMs input; one FSM watches the output of the other FSM.
+Those FSMs then communicate with signals. One FSM's output is
+another FSM's input; one FSM watches the output of the other FSM.
 When we split a large FSM into simpler ones, this is called factoring FSMs.
 Communicating FSMs are often directly designed from the specification
 of the design. A single FSM for the design would be too large in the first place.
@@ -3934,7 +3934,7 @@ and remains asserted;
 \item otherwise, the timer counts down.
 \end{itemize}
 
-\noindent Following code shows the timer FSM of the light flasher:
+\noindent The following code shows the timer FSM of the light flasher:
 
 \shortlist{code/flasher_timer.txt}
 
@@ -3968,7 +3968,7 @@ Following code shows the down counter FSM:
 
 \shortlist{code/flasher2_counter.txt}
 
-\noindent Note, that the counter is loaded with 2 for 3 flashes, as it counts the
+\noindent Note that the counter is loaded with 2 for 3 flashes, as it counts the
 \emph{remaining} flashes and is decremented in state \code{space} when the timer
 is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double refactored flasher.
 
@@ -4033,7 +4033,7 @@ We will co-design the FSM and the datapath.
 Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
 The FSM starts in state \code{Idle}, where the FSM waits for input.
-When data arrives, signaled with a asserted \code{dinValid}, the FSM loads the shift register
+When data arrives, signaled with an asserted \code{dinValid}, the FSM loads the shift register
 and advances to state \code{Count}.
 The data is loaded into the \code{shf} register. On the load also the \code{cnt}
 register is reset to 0.
@@ -4153,8 +4153,8 @@ of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 5 and 6 with the transfer of
 \code{D2} and \code{D3}
 
-To make this interface composable neither \code{ready} nor \code{valid} is
-allowed to depend combinational on the other signal.
+To make this interface composable, neither \code{ready} nor \code{valid} is
+allowed to depend combinationally on the other signal.
 As this interface is so common, Chisel defines the \code{DecoupledIO}
 bundle, similar to the following:
 
@@ -4251,7 +4251,7 @@ a compile error.
 \noindent In Chisel we use \code{val}s to name hardware components. Note that the \code{:=}
 operator is a Chisel operator and not a Scala operator.
 
-Scala also provides the more classic version of a mutable variable as \code{var}. Following code defines
+Scala also provides the more classic version of a mutable variable as \code{var}. The following code defines
 an integer variable and reassigns it a new value:
 
 \shortlist{code/scala_var.txt}
@@ -4277,9 +4277,9 @@ of a shift register.
 \shortlist{code/scala_loop_gen.txt}
 
 \noindent Note that this is not the most concise expression of a shift register.
-Better use a plain \code{UInt} with the right size and assign the new value for the
+It is better to use a plain \code{UInt} with the right size and assign the new value for the
 register with an expression using the \code{\#\#} operator
-and proper indexing. This code snipped is just to show how a Scala for loop can be used
+and proper indexing. This code snippet is just to show how a Scala for loop can be used
 for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
@@ -4299,15 +4299,15 @@ Following code creates a tuple to represent a city with the zip code and the nam
 
 \noindent Tuples are useful when we want to return more than one value from a function.
 Tuples allow us to represent Chisel components with more than one output as a lightweight
-function instead of a full blown module.
+function instead of a full-blown module.
 
 Scala has a powerful \myref{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}.
-One of the simpler collection tpyes is \code{Seq}, an ordered collection of elements (also called a sequence).
+One of the simpler collection types is \code{Seq}, an ordered collection of elements (also called a sequence).
 The default implementation is immutable. We index into a \code{Seq} with \code{()},
-with zero based indexing.
+with zero-based indexing.
 \code{Seq} is a base class with several different implementations.
 However, for most Chisel hardware generators direct use of \code{Seq}
-is the preferred choice. Following code shows how to create a \code{Seq},
+is the preferred choice. The following code shows how to create a \code{Seq},
 which holds four Scala \code{Int} values. The second line accesses the
 second element, and \code{second} will be \code{15}.
 
@@ -4348,7 +4348,7 @@ The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
 Functions, as lightweight hardware generators, can also contain state (including a register).
-Following example returns a one clock cycle delay element (a register).
+The following example returns a one clock cycle delay element (a register).
 If a function has just a single statement, we can write it in one line and omit the curly
 braces (\{\}).
 
@@ -4359,19 +4359,19 @@ clock cycle delay.
 
 \shortlist{code/components_fn_2delay.txt}
 
-\noindent Again, this is a too short example to be useful, as \code{RegNext()}
+\noindent Again, this is a too short an example to be useful, as \code{RegNext()}
 is already that function that creates the register for the delay.
 
 
 
 Functions return only one value. In order to provide more than one output, we
-can wrap several output wires into a Scala tuple. Following code generates hardware that
+can wrap several output wires into a Scala tuple. The following code generates hardware that
 compares two inputs and has two outputs.
 
 \shortlist{code/fun_comp.txt}
 
-\noindent With the parenthesis we wrap the two wires that are connected to the outputs of
-the equal and the greater circuit into a Scala tuple.
+\noindent With the parenthesis, we wrap the two wires that are connected to the outputs of
+the comparator circuit into a Scala tuple.
 
 When creating a comparator component
 with the \code{compare} function, it returns a tuple of two wires. We can access the two
@@ -6636,7 +6636,7 @@ the \myref{https://github.com/freechipsproject}{freechips organization at GitHub
 Fork the repository, which you like to contribute, into your personal GitHub account.
 You can fork the repository by pressing the \code{Fork} button in the GitHub web interface.
 Then from that fork, clone your fork of the repository.\footnote{Note that on a breaking
-firrt/Chisel change you might need to also fork and clone firrtl}
+FIRRTL/Chisel change, you might need to also fork and clone \code{firrtl}.}
 In our example, we change \code{chisel3}, and the clone command for my local fork is:
 
 \begin{verbatim}
