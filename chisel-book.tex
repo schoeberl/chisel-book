@@ -443,8 +443,8 @@ and can be learned within a few days.
 Therefore, this book is not a big book, as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry many legacies.
 The power of Chisel comes from the embedding of Chisel within
-\myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
-Chisel inherits the feature from Scala being ``a language that grows on you''~\cite{Scala}.
+\myref{https://www.scala-lang.org/}{Scala}, which itself is an expressive language.
+Chisel inherits the feature from Scala of being ``a language that grows on you''~\cite{Scala}.
 However, Scala is not the topic of this book.
 We provide a short section on Scala for hardware designers.
 The textbook by Odersky et al.~\cite{Scala} provides a general introduction
@@ -4582,20 +4582,19 @@ which supports the mapping function \code{map}.
 \code{map} invokes a function on each element of the sequence and returns
 a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
 each \code{Int} value from the Scala array as a \code{\_} and performs the conversion
-from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-bits.
+from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8 bits.
 The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
 of Chisel types.
 
 We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
-a message that we may send out to a serial port. Following code converts the standard greeting
+a message that we may send out to a serial port. The following code converts the standard greeting
 from a Scala/Java \code{String} to a Chisel \code{Vec}:
 
 \shortlist{code/hello_table.txt}
 
 \noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
 function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
-This code is extracted from the serial port example, later in the text, to send a welcome
-message.
+This code is extracted from the serial port example, which is used later in this text to send a welcome message.
 
 
 
@@ -4605,7 +4604,7 @@ message.
 \index{Inheritance}
 \index{Object-oriented}
 
-Chisel is an object-oriented language. A hardware component, the Chisel \code{Module}
+Chisel is an object-oriented language. A hardware component, the Chisel \code{Module},
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
 out into a parent class. We explore how to use inheritance with an example.
 
@@ -4660,7 +4659,7 @@ sbt "testOnly TickerTest"
 
 \index{Functional programming}
 
-Scala supports functional programming, so does Chisel then.
+Scala supports functional programming, so Chisel does as well.
 We can use functions to represent hardware and combine those hardware components
 with functional programming by using a so-called ``higher-order function''.
 Let us start with a simple example, the sum of a vector:
@@ -4684,8 +4683,8 @@ two operands.
 
 \shortlist{code/fun_func_lit.txt}
 
-\noindent With this one liner we have generated the chain of adders. For the sum function
-a chain is not the ideal configuration, a tree will have a shorter combinational delay.
+\noindent With this one-liner we have generated the chain of adders. For the sum function
+a chain is not the ideal configuration; a tree will have a shorter combinational delay.
 If we do not trust the synthesize tool to rearrange our adder chain, we can use Chisel's
 \code{reduceTree} method to generated a tree of adders:
 
@@ -4693,7 +4692,7 @@ If we do not trust the synthesize tool to rearrange our adder chain, we can use 
 
 \subsection{Minimum Search Example}
 
-As a more elaborate example, we will build a circuit to find the minimum value in a \code{vec}. To express this circuit
+As a more elaborate example, we will build a circuit to find the minimum value in a \code{Vec}. To express this circuit
 we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
 literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
 
@@ -4712,13 +4711,13 @@ position (index) in the \code{vec}. To return two values we define the Bundle \c
 hold the value and the index. We declare the \code{vecTwo} \code{Vec} that can hold these bundles
 and connect them in a loop to the original input and the index within the \code{Vec}.
 
-As before we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
+As before, we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
 comparing the value field within the bundle and returning the complete bundle from the multiplexer.
-Value \code{res} points to the bundle containing the minimum value and the position.
+The value \code{res} points to the bundle containing the minimum value and the position.
 
 \shortlist{code/fun_min2.txt}
 
-As a final variation of the minimum search circuit we will ues more Scala features
+As a final variation of the minimum search circuit, we will use more Scala features
 to avoid creating the bundle to return the value
 and index. We will use a tuple to represent both values.
 The following code shows the application
@@ -4733,9 +4732,11 @@ unchanged \code{UInt} and the second element is the index value within the \code
 In general a \code{zip} function merges two sequences (zips them) into a single one
 containing the two elements as tuples.
 
-The next function maps our duple of a Chisel \code{UInt}
+% fixme: the following two sentences are unclear.
+% "provides the generation of the minimum finding" in particular is cryptic.
+The next function maps our tuple of a Chisel \code{UInt}
 and a Scala \code{Int} to two Chisel \code{UInt}s. The \code{reduce} function provides the generation of
-the minimum finding. We compare the first element of the tuple in two multiplexers and returning
+the minimum finding. We compare the first element of the tuple in two multiplexers and return
 a tuple containing the minimum value and the position as Chisel \code{UInt} types.
 
 
@@ -4749,13 +4750,13 @@ To keep using \code{reduceTree} the following solution uses a Chisel \code{Mixed
 \shortlist{code/fun_min4.txt}
 
 A Chisel \code{MixedVec} is similar to a Scala tuple as it can have different types at different positions.
-Therefore, it cannot function has, for example, multiplexer. However, we can use it as an
+Therefore, it cannot function as, for example, a multiplexer. However, we can use it as an
 indexable collection during hardware generation.
 In the above example we create a Scala \code{Vector} of the values with their index, but now
-using Chisels ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
-Then we can again perform tree based reduction. Another benefit of this version is
-that we have only one multiplexer, which selects between two Chisel ``tuples'' as
-\code{MixedVec}.
+using Chisel's ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
+Then we can again perform a tree-based reduction. Another benefit of this version is
+that we have only one multiplexer, which selects between two Chisel ``tuples'' that are actually
+\code{MixedVec}s.
 The result in \code{resFun2} is a \code{MixedVec} with two elements,
 accessed with an index, like a ``normal'' \code{Vec}.
 
@@ -4775,14 +4776,13 @@ interface. We just need a function that provides arbitration between two request
 
 \subsubsection{Simple Arbitration}
 
-As a first solution we will build a priority based arbitration, similar to the arbiter shown
-in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a pure combinational circuit
-resulting in a priority based arbitration.
+As a first solution, we will build a priority-based arbitration, similar to the arbiter shown
+in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a purely combinational circuit.
 However, with the ready/valid interface we are not allowed to have a combinational
 flow between a ready and a valid signal. Therefore, we need to introduce state for those signals
 and also need to register the incoming data.
 
-Listing~\ref{lst:fun:arbiter:simp} shows the 2 to 1 arbitration function. This function assumes
+Listing~\ref{lst:fun:arbiter:simp} shows the 2-to-1 arbitration function. This function assumes
 that a requester who has asserted \code{valid} will only deassert it when it is read by the receiver
 (signaled with a \code{ready}). Furthermore, we are allowed to set \code{ready} in the next clock cycle
 depending on \code{valid} in the current clock cycle.
@@ -4790,7 +4790,7 @@ This is one specific interpretation of the ready/valid protocol, which is also u
 
 \longlist{code/fun_arbiter_simple.txt}{A simple 2 to 1 arbiter.}{lst:fun:arbiter:simp}
 
-We need following register: \code{regData} to hold the data for the output, \code{regEmpty} as a  flag to
+We need the following registers: \code{regData} to hold the data for the output, \code{regEmpty} as a  flag to
 signal that the data register is empty, and two flags for the \code{ready} signals of the two inputs
 (\code{regReadyA} and \code{regReadyB}).
 The return value of the function (\code{out}) is a wire of type \code{DecoupledIO}.
@@ -4811,33 +4811,33 @@ wire.
 \subsubsection{Fair Arbitration}
 
 In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
-The combinational version is a priority arbiter, which means one high priority requester can
+The combinational version is a priority arbiter, so one high-priority requester can
 dominate the arbitration.
-To avoid this domination we need to introduce state to remember who won the arbitration last time.
+To avoid this domination, we need to introduce state to remember who won the arbitration last time.
 Our assumption is that if the 2:1 arbiter is fair, this results in a fair
 arbitration on a balanced arbitration tree.
 
-\longlist{code/fun_arbiter.txt}{A fair 2 to 1 arbiter.}{lst:fun:arbiter}
+\longlist{code/fun_arbiter.txt}{A fair 2-to-1 arbiter.}{lst:fun:arbiter}
 
 Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
 The arbiter contains one register for the data to store and one state register. To be fair, the arbiter
-switches between two idle states (\code{ildeA} and \code{idleB}) when there is no request.
-In each of the two idle states it accepts only one of the inputs. Note, that with just a single register for
-storage the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
+switches between two idle states (\code{idleA} and \code{idleB}) when there is no request.
+In each of the two idle states it accepts only one of the inputs. Note that with just a single register for
+storage, the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
 and switching priority we would need a second data register to handle the case when both inputs
 are valid in the same clock cycle.
 
 When a request is accepted, it stores the data and switches to one of the full states (\code{hasA}
 or \code{hasB}).
 When the consumer of the output accepts the data, the arbiter switches back to an idle state.
-It switches to the idle state that will accepts a pending requesting from the other input
+It switches to the idle state that will accept a pending request from the other input
 in the next clock cycle.
 
 
 
 \chapter{Example Designs}
 
-In this section, we explore some small size digital designs, such as
+In this section, we explore some small digital designs, such as
 a FIFO buffer, which are used as building blocks for a larger design.
 As another example, we design a serial interface (also called UART),
 which itself may use the FIFO buffer. Furthermore, we will generalize
