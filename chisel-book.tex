@@ -5463,7 +5463,7 @@ then called a system-on-chip (SoC).
   \centering
   \includegraphics[scale=\scale]{figures/bus}
   \caption{A classic computer consisting of a processor (CPU), memory, and I/O;
-  connected via address, data, and control busses.}
+  connected via address, data, and control buses.}
   \label{fig:bus}
 \end{figure}
 
@@ -5471,8 +5471,8 @@ Figure~\ref{fig:bus} shows the schematic of a simple, classic computer.
 The central processing unit (CPU) is connected via a
 \myref{https://en.wikipedia.org/wiki/System_bus}{system bus} to
 external memory and input/output (I/O) devices.
-This type of bus interconnection was common with early microprocessors,
-such as, \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
+This type of bus interconnection was common with early microprocessors
+such as \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
 \myref{https://en.wikipedia.org/wiki/MOS_Technology_6502}{6502}.
 
 The bus is split into an address bus, a data bus, and control signals
@@ -5498,10 +5498,10 @@ is practically disconnected from logic.
 Note, that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
-Modern computers have different busses for different peripheral devices, for example, a dedicated memory
-bus for external memory and I/O busses for peripheral devices.
-Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
-are serial busses and use point-to-point connections.
+Modern computers have different buses for different peripheral devices, for example, a dedicated memory
+bus for external memory and I/O buses for peripheral devices.
+Furthermore, modern I/O buses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
+are serial buses and use point-to-point connections.
 
 Nevertheless, the notion of the classic processor bus with an address bus, a data bus, and chip select signals
 is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
@@ -5517,7 +5517,7 @@ on-chip interconnect in the next section.
 \end{figure}
 
 We can translate the concept of such an external bus to an on-chip bus. However, we need to adapt some aspects.
-Shared busses with the need of tri-state drivers are not practical within a chip. Furthermore,
+Shared buses with the need of tri-state drivers are not practical within a chip. Furthermore,
 wires in a chip are cheaper than wires on a PCB or at a connector. Therefore, we split the data bus
 into two collection of wires: one for the read and and one for the write signals.
 Furthermore, on-chip connections use a clock to define the timing.
@@ -5761,9 +5761,9 @@ The Wishbone~\cite{soc:wishbone} specification is a definition of
 a point-to-point communication and not a bus in the classic sense.
 Wishbone is a public domain standard used by
 several open-source IP cores. The Wishbone interface specification
-is still in the tradition of microcomputer or backplane busses.
+is still in the tradition of microcomputer or backplane buses.
 However, for a SoC interconnect, which is usually
-point-to-point\footnote{Multiplexers are used instead of busses to
+point-to-point\footnote{Multiplexers are used instead of buses to
 connect several slaves and masters.}, this is not the best approach.
 The master is requested to hold the address and data valid through
 the whole read or write cycle. This complicates the connection to a
@@ -5792,7 +5792,7 @@ this is the usual way to achieve good performance.
 
 The Advanced Microcontroller Bus Architecture (AMBA) \cite{soc:amba}
 is the interconnection definition from ARM. The specification
-defines three different busses: Advanced High-performance Bus (AHB),
+defines three different buses: Advanced High-performance Bus (AHB),
 Advanced System Bus (ASB), and Advanced Peripheral Bus (APB). The
 AHB is used to connect on-chip memory, cache, and external memory to
 the processor. Peripheral devices are connected to the APB. A bridge
@@ -5855,7 +5855,7 @@ multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
 suggested. Xilinx used the AND/OR approach and all masters and
-slaves must drive the data busses to zero when inactive.
+slaves must drive the data buses to zero when inactive.
 Xilinx switched to AXI for all their interconnect.
 
 
@@ -6475,9 +6475,9 @@ to Chisel.
 
 \section{Publishing a Chisel Library}
 
-When you develop a circuit in open-source and share it on, for example on GitHub,
-this a very educational act, as others can learn describing hardware in Chisel from your code example.
-However, sharing just the source code forces other to copy your code into their
+When you develop a circuit in open-source and share it, for example on GitHub,
+this a very educational act, as others can learn to describe hardware in Chisel from your code example.
+However, sharing just the source code forces others to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
 same}.\footnote{I learned this phrase from Doug Locke during discussion sessions
 developing the safety-critical specification for Java} This means that changes will
