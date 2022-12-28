@@ -4918,7 +4918,7 @@ the same IO interface as the individual FIFO buffers.
 word and \code{depth} for the number of buffer stages.
 We can build a \code{depth} stages bubble FIFO out of \code{depth}
 \code{FifoRegister}s. We create the stages by filling them into a Scala \code{Array}.
-The Scala array has no hardware meaning, it \emph{just} provides us with
+The Scala array has no hardware meaning, it \emph{just} serves as
 a container to have references to the created buffers.
 In a Scala \code{for} loop we connect the individual buffers.
 The first buffer's enqueueing side is connected to the enqueueing IO of
@@ -4967,7 +4967,7 @@ a buffer, and then usage of those base components.
 
 First, we need an interface, a port definition.
 For the UART design, we use a ready/valid handshake interface (extending \code{DecoupledIO}),
-with with a data size of 8 bits.
+with a data size of 8 bits.
 \shortlist{code/uart_channel.txt}
 \noindent The convention of a ready/valid interface is that the data is transferred
 when both \code{ready} and \code{valid} are asserted.
@@ -4985,7 +4985,7 @@ We use three registers:
 (1) register to shift the data (serialize them) (\code{shiftReg}),
 (2) a counter to generate the correct baud rate (\code{cntReg}), and
 (3) a counter for the number of bits that still need to be shifted out (\code{bitsReg}).
-No additional state register of FSM is needed, all state is encoded in
+No additional state register or FSM is needed, all state is encoded in
 those three registers.
 
 Counter \code{cntReg} is continuously running (counting down to 0
@@ -4993,7 +4993,6 @@ and reloaded with the start value when 0). All action is only done when
 \code{cntReg} is 0. As we build a minimal transmitter, we have only
 the shift register to store the data. Therefore, the channel is only ready
 when \code{cntReg} is 0 and no bits are left to shift out.
-
 The IO port \code{txd} is directly connected to the least significant bit
 of the shift register.
 
@@ -5008,7 +5007,7 @@ two stop bits (1). Therefore, the bit count is set to 11.
 This very minimal transmitter has no additional buffer and can
 accept a new character only when the shift register is empty
 and at the clock cycle when \code{cntReg} is 0.
-Accepting new data only when \code{cntReg} is 0 also means
+Accepting new data only when \code{cntReg} is 0 means
 that the ready flag is also deasserted when there would be
 space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter but delegate it to a buffer.
