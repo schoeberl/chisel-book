@@ -61,7 +61,7 @@ class ParamFunc extends Module {
   fVal.b := false.B
   fVal.d := 13.U
 
-  // The mulitplexer with a complex type
+  // The multiplexer with a complex type
   val resB = myMux(selB, tVal, fVal)
   //- end
 

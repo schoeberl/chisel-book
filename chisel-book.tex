@@ -1161,7 +1161,7 @@ connects it to \code{muxOut}.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/vec-mux}
-  \caption{A vector wrapped in a \code{Wire} is just a mulitplexer.}
+  \caption{A vector wrapped in a \code{Wire} is just a multiplexer.}
   \label{fig:vec-mux}
 \end{figure}
 
@@ -4401,7 +4401,7 @@ hardware type.
 
 The basic way to parameterize a circuit is to define a bit width as a parameter.
 Parameters can be passed as arguments to
-the constructor of the Chisel module. Following example is a toy example of
+the constructor of the Chisel module. The following example is a toy example of
 a module that implements an adder with a configurable bit width.
 The bit width \code{n} is a parameter (of Scala type \code{Int}) of the component
 passed into the constructor that can be used in the IO bundle.
@@ -4420,7 +4420,7 @@ hardware generators. A very flexible configuration is the usage of types.
 That feature allows for Chisel to provide a multiplexer (\code{Mux}) that
 can accept any types for the multiplexing.
 To show how to use types for the configuration, we build a multiplexer
-that accepts arbitrary types. Following function defines the multiplexer:
+that accepts arbitrary types. The following function defines the multiplexer:
 
 \shortlist{code/param_func.txt}
 
@@ -4431,8 +4431,8 @@ a type parameter \code{T} set is \code{Data} or a subclass of \code{Data}.
 
 Our multiplexer function has three parameters: the boolean condition,
 one parameter for the true path, and one parameter for the false path.
-Both path parameters are of type \code{T}, an information that is
-provided at function call. The function itself is straight forward:
+Both path parameters are of type \code{T}, which is
+provided at function call. The function itself is straightforward:
 we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
@@ -4444,7 +4444,7 @@ We can use our multiplexer function with simple types such as
 \shortlist{code/param_func_simple.txt}
 
 \noindent The types of the two multiplexer paths need to be the same.
-Following wrong usage of the multiplexer results in a runtime error:
+The following wrong usage of the multiplexer results in a runtime error:
 
 \shortlist{code/param_func_wrong.txt}
 
@@ -4462,7 +4462,7 @@ In our initial design of the function, we used \code{WireDefault}
 to create a wire with the type \code{T} with a default value.
 If we need to create a wire just of the Chisel type without using a default
 value, we can use \code{fPath.cloneType} to get the Chisel type.
-Following function shows the alternative way to code the multiplexer.
+The following function shows the alternative way to code the multiplexer.
 
 \shortlist{code/param_func_alt.txt}
 
@@ -4527,14 +4527,14 @@ a \code{Payload} as a parameter:
 
 A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
 as we can see the input to the table as an address into such a ROM.
-We generate a logic table with \code{VecInit}.  Following snippet of code creates
+We generate a logic table with \code{VecInit}.  The following snippet of code creates
 a table to compute the square of a number \code{n}.
 
 \shortlist{code/gen_vec.txt}
 
 We can use the full power of Scala to generate our logic (tables).
-For example, generate a table of fixpoint constants to represent a trigonometric function,
-compute constants for digital filters, or writing an assembler in Scala
+For example, we can generate a table of fixpoint constants to represent a trigonometric function,
+compute constants for digital filters, or write an assembler in Scala
 to generate code for a microprocessor written in Chisel. All those functions
 are in the same code base (same language) and can be executed during
 hardware generation.

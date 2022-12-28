@@ -77,16 +77,16 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{One Possible Solution for Last Lab}
 \begin{chisel}
   val MAX_CNT = 50000000.U // use a smaller value for waveform viewing
-  
+
   val tickCntReg = RegInit(0.U(32.W))
   val cntReg = RegInit(0.U(4.W))
-  
+
   val tick = tickCntReg === MAX_CNT
   tickCntReg := Mux(tick, 0.U, tickCntReg + 1.U)
   when (tick) {
     cntReg := cntReg + 1.U
   }
-  
+
   val m = Module(new SevenSegDec())
   m.io.in := cntReg
   sevSeg := m.io.out
@@ -218,7 +218,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{itemize}
 \item We did refactor a large FSM into smaller ones last week
 \item FSMs \emph{communicate}
-\item Simple communication is: 
+\item Simple communication is:
 \begin{itemize}
 \item Input processing to the FSM
 \item FSM with the datapath
@@ -300,7 +300,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{Binary-Coded Decimal (BCD)}
 \begin{itemize}
-\item Your current display shows numbers in hexadecimal 
+\item Your current display shows numbers in hexadecimal
 \begin{itemize}
 \item $15_{10}$ is displayed as $0F_{16}$
 \item Which is in binary: 00001111
@@ -473,12 +473,12 @@ println(listenum)
 class Example {
   // A field, initialized in the constructor
   var n = 0
-  
+
   // A setter method
   def set(v: Int) = {
     n = v
   }
-  
+
   // Another method
   def print() = {
     println(n)
@@ -505,10 +505,10 @@ object Example {}
 \begin{chisel}
 // A singleton object
 object Example {
-  
+
   // The start of a Scala program
   def main(args: Array[String]): Unit = {
-    
+
     val e = new Example()
     e.print()
     e.set(42)
@@ -556,7 +556,7 @@ val m = if (useA) Module(new VariantA())
 \begin{itemize}
 \item A Chisel \code{Vec} is a collection of signals or registers
 \item Similar to an Array in other languages
-\item \code{Vec} in a \code{Wire} is a combinational table (mulitplexer)
+\item \code{Vec} in a \code{Wire} is a combinational table (multiplexer)
 \item \code{Vec} in a \code{Reg} is a collection of registers
 \item Create with number of elements and hardware type
 \end{itemize}
