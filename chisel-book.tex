@@ -916,7 +916,7 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
-\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note, that there is a \codefoot{Cat} function available that performs the same
+\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note that there is a \codefoot{Cat} function available that performs the same
 operation with \codefoot{Cat(highByte, lowByte)}.}
 
 \shortlist{code/concat.txt}
@@ -1265,7 +1265,7 @@ an error during circuit elaboration:
 One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
 from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
 to a \code{UInt}, and assigne this value to the target \code{UInt}.
-Note, that we define here a \code{Bundle} as a local data structure as we need it only
+Note that we define here a \code{Bundle} as a local data structure as we need it only
 locally.
 
 \shortlist{code/partial_assign_solution.txt}
@@ -2927,7 +2927,7 @@ define a function with a parameter to generate a counter for us.
 \noindent The last statement of the function \code{genCounter} is the return
 value of the function, in this example, the counting register \code{cntReg}.
 
-Note, that in all the examples our counter had values between \code{0} and
+Note that in all the examples our counter had values between \code{0} and
 \code{N}, including \code{N}. If we want to count 10 clock cycles we need
 to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \myref{https://en.wikipedia.org/wiki/Off-by-one_error}{off-by-one error}.
@@ -5495,7 +5495,7 @@ the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logi
 driver. In tri-state configuration, both output transistors are disabled and the output pin
 is practically disconnected from logic.
 
-Note, that in the simplest form the bus does not contain a clock. The timing is defined by
+Note that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
 Modern computers have different buses for different peripheral devices, for example, a dedicated memory
@@ -5667,7 +5667,7 @@ memory (ROM) that contains the program. In the next memory area we map
 a writable memory (RAM) for the data. We decide to map all IO devices into the
 upper area of the address space (above 0xf000), so they are out of the way, in case
 we want to extend the memory. I this example we reserve 16 bytes of address for
-each IO device. Note, this is a made up example and we have all the flexibility when
+each IO device. Note that this is a made-up example and we have all the flexibility when
 deciding on an address map.
 
 Some IO devices do not have memory mapped registers, as the counter example device,
@@ -5721,7 +5721,7 @@ Bit & Status & \\
 \label{tab:addr:uart:status}
 \end{table}
 
-Note, to use ready and valid in a status register for polling, the ready signal from
+Note that to use ready and valid in a status register for polling, the ready signal from
 the transmitter and the valid signal from the receiver are not allowed to be deasserted
 once they have been asserted. If this cannot be guaranteed, two single word buffers,
 as shown in Listing~\ref{lst:rv:reg}, can be inserted between the IO interface and
@@ -5952,7 +5952,7 @@ as parameter and returns the read value. After poking the address and the read s
 advances the clock by one clock cycle and deasserts the read function. In our example device,
 the read value should be available after one clock cycle. However, we generalize the read function
 also for devices with longer latencies and the read function waits in an endless loop that \code{ack}
-will become true. Note, that we use \code{peekBoolean} to read a Scala \code{Boolean}.
+will become true. Note that we use \code{peekBoolean} to read a Scala \code{Boolean}.
 However, when a device has a fault to never assert \code{ack} after a request,
 the test will hang in an endless loop. A robuster read function shall contain a timeout for the \code{ack}
 polling. Finally, we read the data from \code{rdData} with \code{peekInt()} to read a Scala integer
