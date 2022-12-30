@@ -5077,7 +5077,7 @@ received character is sent back (echoed).
 \label{sec:more:fifo}
 
 At the beginning of this Chapter we introduced the design of a simple bubble FIFO.
-In this section we will generalize the FIRO and implement different variations of the queue.
+In this section we will generalize the FIFO and implement different variations of the queue.
 To make these implementations interchangeable we will use inheritance,
 as introduced in Section~\ref{sec:inheritance}.
 
@@ -5085,7 +5085,8 @@ as introduced in Section~\ref{sec:inheritance}.
 \index{FIFO}
 
 We define an \code{abstract}
-FIFO class with a Chisel type as parameter to be able to buffer
+FIFO class as a \myref{https://docs.scala-lang.org/tour/generic-classes.html}{generic class}
+with a Chisel type \code{T} as parameter to be able to buffer
 any Chisel data type. In the abstract class we also test that the
 parameter \code{depth} has a useful value.
 
@@ -5127,7 +5128,7 @@ or just simplicity).
 We can redefine our bubble FIFO from Section~\ref{sec:fifo} using standard
 ready/valid interfaces and being parametrizable with a Chisel data type.
 
-\longlist{code/fifo_bubble.txt}{A bubble FIFO with a ready/valid interface.}{lst:fifo:bubble}
+\verylonglist{code/fifo_bubble.txt}{A bubble FIFO with a ready/valid interface.}{lst:fifo:bubble}
 
 Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with a ready/valid
 interface. Note what we put the \code{Buffer} component inside \code{BubbleFifo}
@@ -5138,7 +5139,7 @@ the state of the buffer: full or empty.
 
 The bubble FIFO is simple, easy to understand, and uses minimal resources.
 However, as each buffer stage has to toggle between empty and full, the maximum
-bandwidth of this FIFO is two clock cycles per word.
+bandwidth of this FIFO is one word every two clock cycles.
 
 One could consider to look at both interface sides in the buffer to be able to accept
 a new word when the producer \code{valid} and the consumer is \code{ready}.
@@ -5168,7 +5169,7 @@ The \code{DoubleBuffer} contains two registers,
 \code{dataReg}. The double buffer has three states: \code{empty}, \code{one},
 and \code{two}, which signal the fill level of the double buffer.
 The buffer is \code{ready} to accept new data when is it in state \code{empty}
-or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
+or \code{one}. The buffer has valid data when it is in state \code{one} or \code{two}.
 
 If we run the FIFO at full speed, and the consumer is always \code{ready},
 the steady state of the double buffers are \code{one}. Only when the consumer
@@ -5179,7 +5180,7 @@ Similar the fall through latency is half of the bubble FIFO.
 
 \subsection{FIFO with Register Memory}
 
-\todo{Fix issue and update text}
+\todo{update text for new versions}
 
 When you come with a software engineering background you may have been
 wondering that we built hardware queues out of many small individual small buffer
