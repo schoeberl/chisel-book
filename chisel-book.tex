@@ -5180,8 +5180,6 @@ Similar the fall through latency is half of the bubble FIFO.
 
 \subsection{FIFO with Register Memory}
 
-\todo{update text for new versions}
-
 When you come with a software engineering background you may have been
 wondering that we built hardware queues out of many small individual small buffer
 elements, all executing in parallel and handshaking with upstream and downstream
@@ -5190,7 +5188,7 @@ elements. For small buffers this is probably the most efficient implementation.
 \index{Circular buffer}
 \index{Circular buffer!read pointer}
 \index{Circular buffer!write pointer}
-A queue in software is usually used by sequential code in a single thread.
+A queue in software is usually used by sequential code in two threads.
 We us a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
@@ -5209,8 +5207,8 @@ and read and write pointers.
 \newpage
 \verylonglist{code/fifo_reg_mem.txt}{A FIFO with a register based memory.}{lst:fifo:reg:mem}
 
-As there are two pointers that behave the same, being incremented on an
-action and wrap around at the end of the buffer, we define a function \code{counter}
+As there are two pointers that are incremented on an
+action and wrap around at the end of the buffer, we define a function \code{counter()}
 that implements those wrapping counters. With \code{log2Ceil(depth).W} we
 compute the bit length for the counter. The next value is either an increment by
 1 or a wrap around to 0.
@@ -5251,6 +5249,10 @@ When the consumer is \code{ready} and the FIFO is not empty we:
 empty if the read pointer will catch up with the write pointer in
 the next clock cycle, and (3) signal the read counter to increment.
 
+A concurrent read and write is also possible. This case summarizes
+the two former cases. \todo{I am not sure if the edge cases are correct.
+A read and write to on a full buffer should work, shouldn't it?}
+
 The output of the FIFO is the memory element at the read pointer address.
 The ready and valid flags are simply derived from the full and empty
 flags.
@@ -5281,27 +5283,16 @@ Therefore, we need an additional register to handle this latency.
 %data read out from the memory, and (3) head of the queue in the shadow register and
 %valid data (the next element) from the memory.
 
-<<<<<<< HEAD
+\todo{
 The memory based FIFO can efficiently hold larger amounts of data in the queue
 and has a short fall through latency. In the last design, the output of the FIFO may
 come directly from the memory read. If this data path is in the critical path of the design,
 we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
 shows such a combination. On the output of the memory based FIFO we add a single
-stage double buffer FIFO to decouple the memory read path from the output.
+stage double buffer FIFO to decouple the memory read path from the output.}
 
 \verylonglist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
 stage.}{lst:fifo:comb}
-=======
-%The memory based FIFO can efficiently hold larger amounts of data in the queue
-%and has a short fall through latency. In the last design, the output of the FIFO may
-%come directly from the memory read. If this data path is in the critical path of the design,
-%we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
-%shows such a combination. On the output of the memory based FIFO we add a single
-%stage double buffer FIFO to decouple the memory read path from the output.
-%
-%\longlist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
-%stage.}{lst:fifo:comb}
->>>>>>> 20560fba01559452d063e73ab03a476043e57366
 
 \section{A Multi-clock Memory}
 
@@ -5441,7 +5432,8 @@ relative to following properties: (1) maximum throughput,
 (2) fall through latency, (3) resource requirement, and (4)
 maximum clock frequency. Explore all FIFO variations in different sizes by
 synthesizing them for an FPGA; the source is available at
-\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+\myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}.
+%\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
 Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 
 \chapter{Interconnect}
