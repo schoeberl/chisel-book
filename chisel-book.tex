@@ -4278,7 +4278,7 @@ of a shift register.
 \noindent Note that this is not the most concise expression of a shift register.
 Better use a plain \code{UInt} with the right size and assign the new value for the
 register with an expression using the \code{\#\#} operator
-and proper indexing. This code snipped is just to show how a Scala for loop can be used
+and proper indexing. This code snipped is just to show how a Scala \code{for} loop can be used
 for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
@@ -4306,8 +4306,8 @@ The default implementation is immutable. We index into a \code{Seq} with \code{(
 with zero based indexing.
 \code{Seq} is a base class with several different implementations.
 However, for most Chisel hardware generators direct use of \code{Seq}
-is the preferred choice. Following code shows how to create a \code{Seq},
-which holds four Scala \code{Int} values. The second line accesses the
+is the preferred choice. Following code shows how to create a \code{Seq}
+that holds four Scala \code{Int} values. The second line accesses the
 second element, and \code{second} will be \code{15}.
 
 \index{Scala!Seq}
@@ -4322,7 +4322,7 @@ second element, and \code{second} will be \code{15}.
 
 \index{Function components}
 
-Modules are the general way to structure your hardware description.
+Modules are the standard way to structure your hardware description.
 However, there is some boilerplate code when declaring a module and when instantiating and
 connecting it.
 A lightweight way to structure your hardware is to use functions.
@@ -4346,7 +4346,7 @@ We have written our first hardware generator!
 The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
-Functions, as lightweight hardware generators, can also contain state (including a register).
+Functions, as lightweight hardware generators, can also contain state (using a register).
 Following example returns a one clock cycle delay element (a register).
 If a function has just a single statement, we can write it in one line and omit the curly
 braces (\{\}).
@@ -4371,7 +4371,6 @@ compares two inputs and has two outputs.
 
 \noindent With the parenthesis we wrap the two wires that are connected to the outputs of
 the equal and the greater circuit into a Scala tuple.
-
 When creating a comparator component
 with the \code{compare} function, it returns a tuple of two wires. We can access the two
 wires with the \code{.\_n} syntax.
@@ -4384,7 +4383,7 @@ and \code{gt}, with following syntax.
 \shortlist{code/fun_comp_use2.txt}
 
 
-Functions can be declared as part of a \code{Module}. However, functions that shall be
+Functions can be declared as part of a \code{Module}. However, functions that will be
 used in different modules are better placed into a Scala object that collects utility
 functions.
 
@@ -4398,7 +4397,7 @@ hardware type.
 
 \subsection{Simple Parameters}
 
-The basic way to parameterize a circuit is to define a bit width as a parameter.
+The simplest way to parameterize a circuit is to define a bit width as a parameter.
 Parameters can be passed as arguments to
 the constructor of the Chisel module. Following example is a toy example of
 a module that implements an adder with a configurable bit width.
@@ -4415,17 +4414,17 @@ passed into the constructor that can be used in the IO bundle.
 \index{Type parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
-hardware generators. A very flexible configuration is the usage of types.
+hardware generators. Chisel type parameters enable very flexible configurations.
 That feature allows for Chisel to provide a multiplexer (\code{Mux}) that
 can accept any types for the multiplexing.
-To show how to use types for the configuration, we build a multiplexer
+To show how to use Chisel types for the configuration, we build a multiplexer
 that accepts arbitrary types. Following function defines the multiplexer:
 
 \shortlist{code/param_func.txt}
 
 Chisel allows parameterizing functions with types, in our case with Chisel
 types. The expression in the square brackets \code{[T <: Data]} defines
-a type parameter \code{T} set is \code{Data} or a subclass of \code{Data}.
+a type parameter \code{T} that is \code{Data} or a subclass of \code{Data}.
 \code{Data} is the root of the Chisel type system.
 
 Our multiplexer function has three parameters: the boolean condition,
@@ -4436,7 +4435,6 @@ we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
 At the end of the function, we return the multiplexer hardware (the output).
-
 We can use our multiplexer function with simple types such as
 \code{UInt}:
 
@@ -4452,7 +4450,7 @@ Following wrong usage of the multiplexer results in a runtime error:
 \shortlist{code/param_func_type.txt}
 
 \noindent We can define \code{Bundle} constants by first creating
-a \code{Wire} and then setting the subfields.
+a \code{Wire} of the \code{Bundle} and then setting the subfields.
 Then we can use our parameterized multiplexer with this complex type.
 
 \shortlist{code/param_func_complex.txt}
@@ -4549,7 +4547,7 @@ BCD allows displaying numbers in decimal, a more user-friendly number
 representation than hexadecimal.
 
 When using a classic hardware description language, such as Verilog or VHDL,
-we would use another script or programming language to generate such a table.
+we would use another scripting or programming language to generate such a table.
 We can write a Java program that computes the table to convert binary to BCD.
 That Java program prints out VHDL code that can be included in a project.
 The Java program is about 100 lines of code; most of the code generating
@@ -4611,9 +4609,9 @@ out into a parent class. We explore how to use inheritance with an example.
 In Section~\ref{sec:counter} we have explored different forms of counters,
 which may be used for a low-frequency tick generation. Let us assume we want to
 explore those different versions, for example, to compare their resource requirement.
-We start with an abstract class to define the ticking interface:
+We start with an abstract class to define the ticking interface, shown in Listing~\ref{lst:ticker:base}.
 
-\shortlist{code/ticker.txt}
+\longlist{code/ticker.txt}{Base class for our ticker implementations.}{lst:ticker:base}
 
 \noindent Listing~\ref{lst:ticker:up} shows a first implementation of that abstract class
 with a counter, counting up, for the tick generation.
