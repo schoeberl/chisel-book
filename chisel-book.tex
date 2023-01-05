@@ -3962,7 +3962,6 @@ and \code{space}.
 Figure~\ref{fig:flasher2} shows the design with a master FSM and two FSMs
 that count: one FSM to count clock cycles for the interval length of \emph{on}
 and \emph{off}; the second FSM to count the remaining flashes.
-
 Following code shows the down counter FSM:
 
 \shortlist{code/flasher2_counter.txt}
@@ -3989,10 +3988,10 @@ a datapath, as discussed in the next section.
 One typical example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite-state machine
 with datapath (FSMD). The state machine controls the datapath, and the datapath
-performs the computation. The FSM input is the input from the environment and the input
-from the datapath. The data from the environment is fed into the datapath, and the
+performs the computation. The FSM input are the inputs from the environment and the outputs
+from the datapath. Some data from the environment is also fed into the datapath, and the
 data output comes from the datapath. Figure~\ref{fig:popcnt-fsmd} shows an example
-of the combination of the FSM with the datapath.
+of the combination of the FSM with a datapath.
 
 \begin{figure}
   \centering
