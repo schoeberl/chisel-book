@@ -4028,7 +4028,7 @@ and with status signals from the datapath.
 \end{figure}
 
 We will co-design the FSM and the datapath. 
-Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM
+Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM and
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
 The FSM starts in state \code{Idle}, where the FSM waits for input.
 When data arrives, signaled with a asserted \code{dinValid}, the FSM loads the shift register
@@ -4047,14 +4047,13 @@ through the least significant bit.
 When the counter reaches zero, the popcount
 has finished. The FSM switches to state \code{Done} and signals the result
 by asserting \code{popCntReady}. When the result is read, signaled by asserting
-\code{popCntValid} the FSM switches back to \code{Idle},
+\code{popCntValid}, the FSM switches back to \code{Idle},
 ready to compute the next popcount.
-
-The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
-components and connects them.
 
 \longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
 
+The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
+components and connects them.
 Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
 circuit.
 On a \code{load} signal, the \code{regData} register is loaded with the input,
@@ -4074,7 +4073,7 @@ When the popcount is \code{done}, the FSM switches to state \code{done} and wait
 popcount is read (signaled by \code{popCntReady}).
 
 
-The popcount example consumed (a word) data and produced (the popcount) data.
+The popcount example consumed data (a word) and produced data (the popcount).
 For the coordinated exchange of data, we use handshake signals.
 The next section describes the ready/valid interface for flow control of
 unidirectional data exchange.
@@ -4085,7 +4084,7 @@ unidirectional data exchange.
 
 Communication of subsystems can be generalized to the movement
 of data and handshaking for flow control. In the popcount example,
-we have seen a handshaking interface for the input and the output data
+we have seen a handshaking interface for the input and for the output data
 using valid and ready signals.
 
 \begin{figure}
@@ -4144,8 +4143,8 @@ interface. However, in that case the data will probably not change on signaling
   \label{fig:ready_valid3}
 \end{figure}
 
-Figure~\ref{fig:ready_valid3} shows further variations of the ready/valid
-interface. In clock cycle 2 both signals (\code{ready} and \code{valid}
+Figure~\ref{fig:ready_valid3} shows further variations of using the the ready/valid
+interface. In clock cycle 2 it happens that both signals (\code{ready} and \code{valid})
 become asserted just for a single clock cycle and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 5 and 6 with the transfer of
@@ -4167,7 +4166,7 @@ after being asserted and \emph{no} data transfer has happened.
 For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
 The same can be envisioned with the sender, having data valid only some
-clock cycles and becoming non-valid without a data transfer.
+clock cycles and becoming non-valid without a data transfer happened.
 If this behavior is allowed or not is not part of the ready/valid interface,
 but needs to be defined by the concrete usage of the interface.
 
@@ -4189,8 +4188,10 @@ by using the class \code{IrrevocableIO}.
 The AXI  bus~\cite{axi4standard} uses one ready/valid interface for each of the following parts of the bus:
 read address, read data, write address, and write data. AXI restricts the interface
 that once the sender assets \code{valid} it is not allowed to deasserted it
-until the data transfer happened. Furthermore, the sender is not allowed to wait for a receivers
-\code{ready} the assert \code{valid}.
+until the data transfer happened. This is the same restriction as just described
+in the comment of the \code{IrrevocableIO} interface.
+Furthermore, the sender is not allowed to wait for a receivers
+\code{ready} to assert \code{valid}.
 The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to deassert it
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
