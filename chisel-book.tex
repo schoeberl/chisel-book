@@ -3663,7 +3663,7 @@ import \code{chisel3.util.\_}.
 
 The complete Chisel code for this simple FSM fits into one page.
 Let us step through the individual parts.
-The FSM has two input and a single output signal, captured in a Chisel \code{Bundle}:
+The FSM has two input signals and a single output signal, captured in a Chisel \code{Bundle}:
 %
 \shortlist{code/simple_fsm_io.txt}
 
@@ -3687,7 +3687,7 @@ The register holding the state is defined with the \emph{green} state as the res
 
 \noindent The meat of the FSM is in the next state logic. We use a Chisel switch on the
 state register to cover all states. Within each \code{is} branch we code the next state
-logic, which depends on the inputs, by assigning a new value for our state register:
+logic, which depends on the inputs, by assigning a new value to the state register:
 
 \shortlist{code/simple_fsm_next.txt}
 
@@ -3696,7 +3696,7 @@ the state is \emph{red}.
 
 \shortlist{code/simple_fsm_output.txt}
 
-Note that we did \emph{not} introduce a \code{next\_state} signal for the register input,
+Note that we did \emph{not} introduce a \code{nextState} signal for the register input,
 as it is common practice in Verilog or VHDL.
 Registers in Verilog and VHDL are described in a special syntax and cannot
 be assigned (and reassigned) within a combinational block.
@@ -3770,7 +3770,7 @@ As the output of a Mealy FSM does not only depend on the state, but also
 on the input, we cannot describe the output as part of the state circle.
 Instead, the transitions between the states are labeled with the input
 value (condition) \emph{and} the output (after the slash).
-Note also that we draw self transitions, e.g., in state \code{zero} when
+Note also that we now need to draw self transitions, e.g., in state \code{zero} when
 the input is \code{0} the FSM stays in state \code{zero}, and the output is {0}.
 The rising edge FSM generates the \code{1} output only on the transition
 from state \code{zero} to state \code{one}. In state \code{one}, which represents
@@ -3851,7 +3851,7 @@ all the above issues do not exist for communicating Moore FSMs.
 
 In summary, Moore FSMs combine better for communicating state machines; they
 are \emph{more robust} than Mealy FSMs. Use Mealy FSMs only when the reaction within the same
-cycle is of utmost importance. Small circuits such as the rising edge detection,
+clock cycle is of utmost importance. Small circuits such as the rising edge detection,
 which are practically Mealy machines, are fine as well.
 
 \section{Exercise}
