@@ -3336,9 +3336,6 @@ to deal with those issues in the digital domain.
 \index{Asynchronous Input}
 \index{Metastability}
 
-
-\todo{read Dally on this topic to check for correct wording and facts.}
-
 Input signals that are not synchronous to the system clock are called
 asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
@@ -3347,8 +3344,8 @@ of the flip-flop. The Metastability may result in an output value between 0 and
 1 or it may result in oscillation. However, after some time the flip-flop will
 stabilize at 0 or 1.
 
-Another common issue with external asynchronous input signals is when
-that signal changes close to the clock rising endge and is used in more than one
+Another common issue with external, asynchronous input signals is when
+that signal changes close to the clock rising edge and is used in more than one
 place of the circuit. Due to different delay times, those different usages of that
 input may be registered at different clock cycles, which might violate
 some assumptions.\footnote{I experienced this issue once and it took me
@@ -3377,7 +3374,7 @@ instantiates two registers.
 All asynchronous external signals need an input
 synchronizer.\footnote{The exception is when the input signal is dependent
 on a synchronous output signal, and we know the maximum propagation delay.
-A classic example is the interfacing an asynchronous SRAM
+A classic example is the interfacing of an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
@@ -3484,7 +3481,7 @@ Note, that a majority voting is very seldom needed.
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean}. In this example, we use
-hat single cycle rising edge signal to increment a counter. 
+hat single cycle \code{risingEdge} signal to increment a counter. 
 
 \index{Edge detection}
 
@@ -3537,7 +3534,9 @@ of the counter (\code{cnt.reset := syncReset}).
 
 Build a counter that is incremented by an input button.
 Display the counter value in binary with the LEDs on an FPGA board.
-Build the complete input processing chain with: (1) an input synchronizer,
+First observe if there are issues with a bouncing input button.
+Then resolve that issue by building
+the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
