@@ -2727,7 +2727,6 @@ clock input and tells us that this is a register. We omit the clock signal in th
 schematics.
 The omission of the global clock signal is also reflected by Chisel where no explicit
 connection of a signal to the register's clock input is needed.
-
 In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \shortlist{code/sequ_reg.txt}
@@ -2747,7 +2746,7 @@ circuits and sequential circuits, it is common practice to have the marker
 \code{Reg} as part of to the name. Also, note that names in Scala (and therefore
 also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
-Variable names start with lowercase and classes start with upper case.
+Variable names start with lowercase letter and class names start with an upper case letter.
 
 \index{Reset}
 \index{Initialization}
@@ -2773,7 +2772,7 @@ needs to be added to the input that
 selects between the initialization value under reset and the data value.
 Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
 where the reset drives the multiplexer. However, as synchronous reset is used quite often,
-modern FPGA flip-flops contain a synchronous reset (and set) input to the flip-flop to not waste
+modern FPGA flip-flops contain a synchronous reset (and set) input to the D flip-flop to not waste
 LUT resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
@@ -2793,7 +2792,7 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
 Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
-In the first clock cycle (0), before a reset, the register content is undefined.
+In the first clock cycle (1), before a reset, the register content is undefined.
 In the second clock cycle reset is asserted high, and on the rising edge of this clock cycle the register
 takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle
 \code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
@@ -2820,7 +2819,7 @@ output of the register.
   \label{fig:register-enable}
 \end{figure}
 
-Figure~\ref{fig:register-enable} shows the schematic of a register with enable.
+Figure~\ref{fig:register-enable} shows the schematic of a register with an enable signal.
 As this is also a common design pattern, modern FPGA flip-flops contain a
 dedicated enable input, and no additional resources are needed.
 
@@ -2834,7 +2833,7 @@ dedicated enable input, and no additional resources are needed.
 Figure~\ref{fig:register-en-wave} shows an example waveform for a register
 with enable. Most of the time, \code{enable} is high (\code{true}) and the register
 follows the input with one clock cycle delay. Only in the fourth clock cycle
-\code{enable} is low, and the register keeps its value (5) at rising edge D.
+\code{enable} is low, and the register keeps its value (5) in clock cycle 5.
 
 A register with an enable can be described in a few lines of Chisel code
 with a conditional update:
@@ -2860,7 +2859,7 @@ the second parameter is the initialization value, and the third parameter is the
 
 A register can also be part of an expression, without giving it a name.
 The following circuit detects the rising edge of a signal by comparing its current
-value with the one from the last clock cycle.
+value with the one from the last clock cycle (the delayed value).
 
 \shortlist{code/sequ_reg_rising.txt}
 
@@ -2904,8 +2903,8 @@ as shown in Figure~\ref{fig:event-counter} and in the following code.
 \subsection{Counting Up and Down}
 
 To count up to a value and then restart with \code{0}, we need to compare
-the counter value with a maximum constant, for example, with a \code{when}
-conditional statement.
+the counter value with a maximum constant (\code{N} in the following examples),
+for example, with a \code{when} conditional statement.
 
 \shortlist{code/when_counter.txt}
 
@@ -2924,7 +2923,8 @@ define a function with a parameter to generate a counter for us.
 \shortlist{code/function_counter.txt}
 
 \noindent The last statement of the function \code{genCounter} is the return
-value of the function, in this example, the counting register \code{cntReg}.
+value of the function, in this example, the output of
+the counting register \code{cntReg}.
 
 Note, that in all the examples our counter had values between \code{0} and
 \code{N}, including \code{N}. If we want to count 10 clock cycles we need
@@ -3095,7 +3095,7 @@ Chisel also has a function \code{signedBitLength} to provide the number of bits
 for a signed representation of a number.
 
 
-Another application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
+One application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
 The result is an LED with continuously changing intensity.
 
@@ -3124,8 +3124,8 @@ with a function call. Wire \code{sig} represents the modulated PWM signal.
 
 
 A \myref{https://en.wikipedia.org/wiki/Shift_register}{shift register} is a collection of flip-flops
-connected in a sequence. Each output of a register (flip-flop) is connected to the input of the
-next register. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
+connected in a sequence. Each output of a flip-flop is connected to the input of the
+next flip-flop. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
 circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
@@ -3317,6 +3317,7 @@ Sketch the block diagram for the following circuits:
 \shortlist{code/draw_acc.txt}
 
 \todo{Luca: More exercises would be nice. Maybe in the future?}
+
 
 \chapter{Input Processing}
 
