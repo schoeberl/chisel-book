@@ -2357,7 +2357,7 @@ A try with the Chisel operator \code{:=}, as shown below,
 Chisel also supports describing combinational circuits with conditional updates.
 Such a circuit is declared as a \code{Wire}. Then you use conditional operations,
 such as \code{when}, to describe the logic of the circuit.
-The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns a default
+The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns it a default
 value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassigns
 \code{3} to \code{w} if \code{cond} is \code{true.B}.
 
@@ -2386,7 +2386,7 @@ value assignment:
   \label{fig:mux-chain}
 \end{figure}
 
-Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code{.elsewhen}:
+Chisel also supports a chain of conditionals (like a if/elseif/else chain) with \code{.elsewhen}:
 
 \shortlist{code/comb_elsewhen.txt}
 
@@ -2462,7 +2462,7 @@ To use the \code{switch} statement we need to include the package \code{chisel.u
 and assigns the decoded value to the \code{result} signal.
 Note, that even if we enumerate all possible input values, Chisel still needs us to assign a
 default value, as we do by assigning an initial 0 to \code{result}.
-This assignment will never be active and therefore optimized away by the backend tool.
+This assignment will never be active and therefore optimized away by the synthesize tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
 languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
@@ -2486,7 +2486,8 @@ with an AND gate for the multiplexer data input. However, in Chisel, we do not n
 a multiplexer, as a \code{Mux} is available in the core library.
 Decoders can also be used for address decoding of some bits of an address bus of
 a microprocessor. The outputs are used as
-select signals for memories and different IO devices connected to the microprocessor. 
+select signals for memories and different IO devices connected to the microprocessor
+(see Section~\ref{sect:bus}). 
 
 
 \section{Encoder}
@@ -2548,7 +2549,7 @@ a hardware generator. Chapter~\ref{ch:gen} describes how to write hardware gener
 Note that the loop is executed at circuit generation time. This is not a hardware counter.
 
 For the encoder generator we will use a \code{Vec}, where each element represents one column
-of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits:
+of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits wide:
 
 \shortlist{code/encdec_large.txt}
 
@@ -2590,7 +2591,7 @@ the higher the priority.
 
 To build a fair arbiter we need to add state to remember the last arbitration.
 We will present a fair %round-robin
-arbiter a later chapter.
+arbiter in Section~\ref{sec:arbiter}.
 
 \begin{figure}
   \centering
@@ -2610,7 +2611,8 @@ Following code shows an arbiter for 3 clients.
 
 \shortlist{code/arbiter3.txt}
 
-\noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}.
+\noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}
+(except we showed the code only for a 3-bit arbiter).
 We use vectors of \code{Bool} to represent the request, grant, and not-granted chain.
 We can see that \code{grant(0)} depends only on \code{request(0)}.
 \code{notGranted} is used to chain the information that no lower bit requests
@@ -2632,7 +2634,7 @@ arbiter for \code{n} requests and grants. Here we use again \code{Vec} of \code{
 \noindent The code shown above is the loop version of the initial arbiter version.
 It generates the arbitration circuit for \code{n} requests. The small difference to the
 manual version (unrolled loop) is that we generate a \code{notGranted} wire also for the
-last request (\code{n - 1}). That wire is not used and the synthesize tools will optimize it away.
+last request (\code{n - 1}). That wire is not used and the synthesize tool will optimize it away.
 
 
 
@@ -2651,7 +2653,7 @@ With our original encoder design we had to assume that the input is one-hot
 encoded, meaning maximal one bit is allowed to be \code{1}. Inputs with several
 bits set are illegal and lead to undefined behavior.
 
-We can solve this problem by combining an arbitration circuit, which selects only
+We can solve this problem by combining the encoder with an arbitration circuit, which selects only
 the highest-priority bit set. When we feed the output of the arbiter into an encoder
 we create a priority encoder.
 Figure~\ref{fig:priority-encoder} shows the schematic.
@@ -4762,6 +4764,7 @@ accessed with an index, like a ``normal'' \code{Vec}.
 
 \subsection{An Arbitration Tree}
 \index{Arbiter}
+\label{sec:arbiter}
 
 With our tree reduction function we can build an arbitration tree out of just 2:1 arbiters.
 We can generate the arbitration circuit as follows:
@@ -5451,6 +5454,7 @@ Interconnects can be used between chips (external) or within a chip, often
 then called a system-on-chip (SoC).
 
 \section{A Classic Microprocessor Bus}
+\label{sect:bus}
 
 \begin{figure}
   \centering
