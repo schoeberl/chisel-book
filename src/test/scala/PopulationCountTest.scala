@@ -3,9 +3,9 @@ import chiseltest._
 import org.scalatest._
 import org.scalatest.flatspec.AnyFlatSpec
 
-class PopCountTest extends AnyFlatSpec with ChiselScalatestTester {
+class PopulationCountTest extends AnyFlatSpec with ChiselScalatestTester {
   "PopCount" should "pass" in {
-    test(new PopCount) { dut =>
+    test(new PopulationCount) { dut =>
       dut.io.din.poke(0xac.U)
       dut.io.dinValid.poke(true.B)
       dut.clock.step(12)

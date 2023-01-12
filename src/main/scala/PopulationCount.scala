@@ -79,7 +79,7 @@ class PopCountDataPath extends Module {
 //- end
 
 //- start popcnt_main
-class PopCount extends Module {
+class PopulationCount extends Module {
   val io = IO(new Bundle {
     val dinValid = Input(Bool())
     val dinReady = Output(Bool())

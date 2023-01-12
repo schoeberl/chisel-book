@@ -29,12 +29,12 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
     val fullReg = RegInit(false.B)
     val dataReg = Reg(gen)
 
-    when (fullReg) {
-      when (io.deq.ready) {
+    when(fullReg) {
+      when(io.deq.ready) {
         fullReg := false.B
       }
-    } .otherwise {
-      when (io.enq.valid) {
+    }.otherwise {
+      when(io.enq.valid) {
         fullReg := true.B
         dataReg := io.enq.bits
       }
@@ -53,7 +53,7 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
   io.enq <> buffers(0).io.enq
   io.deq <> buffers(depth - 1).io.deq
 }
-  //- end
+//- end
 
 
 
@@ -69,27 +69,27 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
     val shadowReg = Reg(gen)
 
     switch(stateReg) {
-      is (empty) {
-        when (io.enq.valid) {
+      is(empty) {
+        when(io.enq.valid) {
           stateReg := one
           dataReg := io.enq.bits
         }
       }
-      is (one) {
-        when (io.deq.ready && !io.enq.valid) {
+      is(one) {
+        when(io.deq.ready && !io.enq.valid) {
           stateReg := empty
         }
-        when (io.deq.ready && io.enq.valid) {
+        when(io.deq.ready && io.enq.valid) {
           stateReg := one
           dataReg := io.enq.bits
         }
-        when (!io.deq.ready && io.enq.valid) {
+        when(!io.deq.ready && io.enq.valid) {
           stateReg := two
           shadowReg := io.enq.bits
         }
       }
-      is (two) {
-        when (io.deq.ready) {
+      is(two) {
+        when(io.deq.ready) {
           dataReg := shadowReg
           stateReg := one
         }
@@ -101,13 +101,13 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
     io.deq.bits := dataReg
   }
 
-  private val buffers = Array.fill((depth+1)/2) { Module(new DoubleBuffer(gen)) }
+  private val buffers = Array.fill((depth + 1) / 2) { Module(new DoubleBuffer(gen)) }
 
-  for (i <- 0 until (depth+1)/2 - 1) {
+  for (i <- 0 until (depth + 1) / 2 - 1) {
     buffers(i + 1).io.enq <> buffers(i).io.deq
   }
   io.enq <> buffers(0).io.enq
-  io.deq <> buffers((depth+1)/2 - 1).io.deq
+  io.deq <> buffers((depth + 1) / 2 - 1).io.deq
 }
 //- end
 
@@ -199,7 +199,7 @@ class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
     (cntReg, nextVal)
   }
 
-  val mem = SyncReadMem(depth, gen)
+  val mem = SyncReadMem(depth, gen, SyncReadMem.WriteFirst)
 
   val incrRead = WireInit(false.B)
   val incrWrite = WireInit(false.B)
@@ -225,28 +225,27 @@ class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
   }
 
   val readCond =
-    !outputValidReg && ((readPtr =/= writePtr) || fullReg)
+    !outputValidReg && ((readPtr =/= writePtr) || fullReg) // should add optimization when downstream is ready for pipielining
   when(readCond) {
     read := true.B
     incrRead := true.B
     outputReg := data
     outputValidReg := true.B
     emptyReg := nextRead === writePtr
-    fullReg := false.B
+    fullReg := false.B // no concurrent read when full (at the moment)
   }
-  when(io.deq.ready && io.deq.valid) {
+  when(io.deq.fire) {
     outputValidReg := false.B
   }
   io.deq.bits := outputReg
 
-  when(io.enq.ready && io.enq.valid) {
+  when(io.enq.fire) {
     emptyReg := false.B
     fullReg := (nextWrite === readPtr) & !read
     incrWrite := true.B
     doWrite := true.B
   }
 }
-
 //- end
 
 //- start fifo_comb
@@ -260,6 +259,7 @@ class CombFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
 }
 //- end
 
+/*
 //- start fifo_decoupled
 class DecoupledIO[T <: Data](gen: T) extends Bundle {
   val ready = Input(Bool())
@@ -267,3 +267,4 @@ class DecoupledIO[T <: Data](gen: T) extends Bundle {
   val bits  = Output(gen)
 }
 //- end
+*/

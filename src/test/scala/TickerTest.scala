@@ -15,7 +15,7 @@ trait TickerTestFunc {
         dut.io.tick.expect(true.B)
       
       // Reset the counter on a tick
-      if (dut.io.tick.peek.litToBoolean)
+      if (dut.io.tick.peekBoolean)
         count = n-1
       else
         count -= 1

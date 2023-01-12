@@ -2358,7 +2358,7 @@ A try with the Chisel operator \code{:=}, as shown below,
 Chisel also supports describing combinational circuits with conditional updates.
 Such a circuit is declared as a \code{Wire}. Then you use conditional operations,
 such as \code{when}, to describe the logic of the circuit.
-The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns a default
+The following code declares a \code{Wire} \code{w} of type \code{UInt} and assigns it a default
 value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassigns
 \code{3} to \code{w} if \code{cond} is \code{true.B}.
 
@@ -2387,7 +2387,7 @@ value assignment:
   \label{fig:mux-chain}
 \end{figure}
 
-Chisel also supports a chain of conditionals (a if/elseif/else chain) with \code{.elsewhen}:
+Chisel also supports a chain of conditionals (like a if/elseif/else chain) with \code{.elsewhen}:
 
 \shortlist{code/comb_elsewhen.txt}
 
@@ -2463,7 +2463,7 @@ To use the \code{switch} statement we need to include the package \code{chisel.u
 and assigns the decoded value to the \code{result} signal.
 Note that even if we enumerate all possible input values, Chisel still needs us to assign a
 default value, as we do by assigning an initial 0 to \code{result}.
-This assignment will never be active and therefore optimized away by the backend tool.
+This assignment will never be active and therefore optimized away by the synthesize tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
 languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
@@ -2487,7 +2487,8 @@ with an AND gate for the multiplexer data input. However, in Chisel, we do not n
 a multiplexer because a \code{Mux} is available in the core library.
 Decoders can also be used for address decoding of some bits of an address bus of
 a microprocessor. The outputs are used as
-select signals for memories and different IO devices connected to the microprocessor.
+select signals for memories and different IO devices connected to the microprocessor
+(see Section~\ref{sect:bus}).
 
 
 \section{Encoder}
@@ -2549,7 +2550,7 @@ a hardware generator. Chapter~\ref{ch:gen} describes how to write hardware gener
 Note that the loop is executed at circuit generation time. This is not a hardware counter.
 
 For the encoder generator we will use a \code{Vec}, where each element represents one column
-of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits:
+of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits wide:
 
 \shortlist{code/encdec_large.txt}
 
@@ -2591,7 +2592,7 @@ the higher the priority.
 
 To build a fair arbiter, we need to add state to remember the last arbitration.
 We will present a fair %round-robin
-arbiter a later chapter.
+arbiter in Section~\ref{sec:arbiter}.
 
 \begin{figure}
   \centering
@@ -2611,7 +2612,8 @@ The following code shows an arbiter for 3 clients.
 
 \shortlist{code/arbiter3.txt}
 
-\noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}.
+\noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}
+(except we showed the code only for a 3-bit arbiter).
 We use vectors of \code{Bool} to represent the request, grant, and not-granted chain.
 We can see that \code{grant(0)} depends only on \code{request(0)}.
 \code{notGranted} is used to chain the information that no lower bit requests
@@ -2633,7 +2635,7 @@ arbiter for \code{n} requests and grants. Here we use again \code{Vec} of \code{
 \noindent The code shown above is the loop version of the initial arbiter version.
 It generates the arbitration circuit for \code{n} requests. The small difference to the
 manual version (unrolled loop) is that we generate a \code{notGranted} wire also for the
-last request (\code{n - 1}). That wire is not used and the synthesize tools will optimize it away.
+last request (\code{n - 1}). That wire is not used and the synthesize tool will optimize it away.
 
 
 
@@ -2728,7 +2730,6 @@ clock input and tells us that this is a register. We omit the clock signal in th
 schematics.
 The omission of the global clock signal is also reflected by Chisel where no explicit
 connection of a signal to the register's clock input is needed.
-
 In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \shortlist{code/sequ_reg.txt}
@@ -2748,7 +2749,7 @@ circuits and sequential circuits, it is common practice to have the marker
 \code{Reg} as part of the name. Also, note that names in Scala (and therefore
 also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
-Variable names start with lowercase and classes start with upper case.
+Variable names start with lowercase letter and class names start with an upper case letter.
 
 \index{Reset}
 \index{Initialization}
@@ -2794,7 +2795,7 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
 Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
-In the first clock cycle (0), before a reset, the register content is undefined.
+In the first clock cycle (1), before a reset, the register content is undefined.
 In the second clock cycle reset is asserted high, and on the rising edge of this clock cycle the register
 takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle
 \code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
@@ -2821,7 +2822,7 @@ output of the register.
   \label{fig:register-enable}
 \end{figure}
 
-Figure~\ref{fig:register-enable} shows the schematic of a register with enable.
+Figure~\ref{fig:register-enable} shows the schematic of a register with an enable signal.
 As this is also a common design pattern, modern FPGA flip-flops contain a
 dedicated enable input, and no additional resources are needed.
 
@@ -2835,7 +2836,7 @@ dedicated enable input, and no additional resources are needed.
 Figure~\ref{fig:register-en-wave} shows an example waveform for a register
 with enable. Most of the time, \code{enable} is high (\code{true}) and the register
 follows the input with one clock cycle delay. Only in the fourth clock cycle
-\code{enable} is low, and the register keeps its value (5) at rising edge D.
+\code{enable} is low, and the register keeps its value (5) in clock cycle 5.
 
 A register with an enable can be described in a few lines of Chisel code
 with a conditional update:
@@ -2861,7 +2862,7 @@ the second parameter is the initialization value, and the third parameter is the
 
 A register can also be part of an expression, without giving it a name.
 The following circuit detects the rising edge of a signal by comparing its current
-value with the one from the last clock cycle.
+value with the one from the last clock cycle (the delayed value).
 
 \shortlist{code/sequ_reg_rising.txt}
 
@@ -2905,8 +2906,8 @@ as shown in Figure~\ref{fig:event-counter} and in the following code.
 \subsection{Counting Up and Down}
 
 To count up to a value and then restart with \code{0}, we need to compare
-the counter value with a maximum constant, for example, with a \code{when}
-conditional statement.
+the counter value with a maximum constant (\code{N} in the following examples),
+for example, with a \code{when} conditional statement.
 
 \shortlist{code/when_counter.txt}
 
@@ -2925,7 +2926,8 @@ define a function with a parameter to generate a counter for us.
 \shortlist{code/function_counter.txt}
 
 \noindent The last statement of the function \code{genCounter} is the return
-value of the function, in this example, the counting register \code{cntReg}.
+value of the function, in this example, the output of
+the counting register \code{cntReg}.
 
 Note that in all the examples our counter had values between \code{0} and
 \code{N}, including \code{N}. If we want to count 10 clock cycles we need
@@ -3096,7 +3098,7 @@ Chisel also has a function \code{signedBitLength} to provide the number of bits
 for a signed representation of a number.
 
 
-Another application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
+One application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
 The result is an LED with continuously changing intensity.
 
@@ -3125,8 +3127,8 @@ with a function call. Wire \code{sig} represents the modulated PWM signal.
 
 
 A \myref{https://en.wikipedia.org/wiki/Shift_register}{shift register} is a collection of flip-flops
-connected in a sequence. Each output of a register (flip-flop) is connected to the input of the
-next register. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
+connected in a sequence. Each output of a flip-flop is connected to the input of the
+next flip-flop. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
 circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
@@ -3319,6 +3321,7 @@ Sketch the block diagram for the following circuits:
 
 \todo{Luca: More exercises would be nice. Maybe in the future?}
 
+
 \chapter{Input Processing}
 
 Input signals from the external world into our synchronous circuit are usually
@@ -3337,9 +3340,6 @@ to deal with those issues in the digital domain.
 \index{Asynchronous Input}
 \index{Metastability}
 
-
-\todo{read Dally on this topic to check for correct wording and facts.}
-
 Input signals that are not synchronous to the system clock are called
 asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
@@ -3348,7 +3348,7 @@ of the flip-flop. The metastability may result in an output value between 0 and
 1, or it may result in oscillation. However, after some time the flip-flop will
 stabilize at 0 or 1.
 
-Another common issue with external asynchronous input signals is when
+Another common issue with external, asynchronous input signals is when
 that signal changes close to the clock rising edge and is used in more than one
 place of the circuit. Due to different delay times, those different usages of that
 input may be registered at different clock cycles, which might violate
@@ -3378,7 +3378,7 @@ instantiates two registers.
 All asynchronous external signals need an input
 synchronizer.\footnote{The exception is when the input signal is dependent
 on a synchronous output signal, and we know the maximum propagation delay.
-A classic example is the interfacing an asynchronous SRAM
+A classic example is the interfacing of an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
@@ -3485,7 +3485,7 @@ Note that majority voting is very seldom needed.
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean}. In this example, we use
-that single cycle rising edge signal to increment a counter.
+that single cycle \code{risingEdge} signal to increment a counter.
 
 \index{Edge detection}
 
@@ -3538,7 +3538,9 @@ of the counter (\code{cnt.reset := syncReset}).
 
 Build a counter that is incremented by an input button.
 Display the counter value in binary with the LEDs on an FPGA board.
-Build the complete input processing chain with: (1) an input synchronizer,
+First observe if there are issues with a bouncing input button.
+Then resolve that issue by building
+the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
@@ -3664,7 +3666,7 @@ import \code{chisel3.util.\_}.
 
 The complete Chisel code for this simple FSM fits into one page.
 Let us step through the individual parts.
-The FSM has two input and a single output signal, captured in a Chisel \code{Bundle}:
+The FSM has two input signals and a single output signal, captured in a Chisel \code{Bundle}:
 %
 \shortlist{code/simple_fsm_io.txt}
 
@@ -3688,7 +3690,7 @@ The register holding the state is defined with the \emph{green} state as the res
 
 \noindent The meat of the FSM is in the next state logic. We use a Chisel switch on the
 state register to cover all states. Within each \code{is} branch we code the next state
-logic, which depends on the inputs, by assigning a new value for our state register:
+logic, which depends on the inputs, by assigning a new value to the state register:
 
 \shortlist{code/simple_fsm_next.txt}
 
@@ -3697,7 +3699,7 @@ the state is \emph{red}.
 
 \shortlist{code/simple_fsm_output.txt}
 
-Note that we did \emph{not} introduce a \code{next\_state} signal for the register input,
+Note that we did \emph{not} introduce a \code{nextState} signal for the register input,
 as it is common practice in Verilog or VHDL.
 Registers in Verilog and VHDL are described in a special syntax and cannot
 be assigned (and reassigned) within a combinational block.
@@ -3771,7 +3773,7 @@ As the output of a Mealy FSM does not only depend on the state, but also
 on the input, we cannot describe the output as part of the state circle.
 Instead, the transitions between the states are labeled with the input
 value (condition) \emph{and} the output (after the slash).
-Note also that we draw self transitions, e.g., in state \code{zero} when
+Note also that we now need to draw self transitions, e.g., in state \code{zero} when
 the input is \code{0} the FSM stays in state \code{zero}, and the output is {0}.
 The rising edge FSM generates the \code{1} output only on the transition
 from state \code{zero} to state \code{one}. In state \code{one}, which represents
@@ -3852,7 +3854,7 @@ all the above issues do not exist for communicating Moore FSMs.
 
 In summary, Moore FSMs combine better for communicating state machines; they
 are \emph{more robust} than Mealy FSMs. Use Mealy FSMs only when the reaction within the same
-cycle is of utmost importance. Small circuits such as the rising edge detection,
+clock cycle is of utmost importance. Small circuits such as the rising edge detection,
 which are practically Mealy machines, are fine as well.
 
 \section{Exercise}
@@ -3963,7 +3965,6 @@ and \code{space}.
 Figure~\ref{fig:flasher2} shows the design with a master FSM and two FSMs
 that count: one FSM to count clock cycles for the interval length of \emph{on}
 and \emph{off}; the second FSM to count the remaining flashes.
-
 Following code shows the down counter FSM:
 
 \shortlist{code/flasher2_counter.txt}
@@ -3990,10 +3991,10 @@ a datapath, as discussed in the next section.
 One typical example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite-state machine
 with datapath (FSMD). The state machine controls the datapath, and the datapath
-performs the computation. The FSM input is the input from the environment and the input
-from the datapath. The data from the environment is fed into the datapath, and the
+performs the computation. The FSM input are the inputs from the environment and the outputs
+from the datapath. Some data from the environment is also fed into the datapath, and the
 data output comes from the datapath. Figure~\ref{fig:popcnt-fsmd} shows an example
-of the combination of the FSM with the datapath.
+of the combination of the FSM with a datapath.
 
 \begin{figure}
   \centering
@@ -4030,7 +4031,7 @@ and with status signals from the datapath.
 \end{figure}
 
 We will co-design the FSM and the datapath.
-Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM
+Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM and
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
 The FSM starts in state \code{Idle}, where the FSM waits for input.
 When data arrives, signaled with an asserted \code{dinValid}, the FSM loads the shift register
@@ -4049,14 +4050,13 @@ through the least significant bit.
 When the counter reaches zero, the popcount
 has finished. The FSM switches to state \code{Done} and signals the result
 by asserting \code{popCntReady}. When the result is read, signaled by asserting
-\code{popCntValid} the FSM switches back to \code{Idle},
+\code{popCntValid}, the FSM switches back to \code{Idle},
 ready to compute the next popcount.
-
-The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
-components and connects them.
 
 \longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
 
+The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
+components and connects them.
 Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
 circuit.
 On a \code{load} signal, the \code{regData} register is loaded with the input,
@@ -4076,7 +4076,7 @@ When the popcount is \code{done}, the FSM switches to state \code{done} and wait
 popcount is read (signaled by \code{popCntReady}).
 
 
-The popcount example consumed (a word) data and produced (the popcount) data.
+The popcount example consumed data (a word) and produced data (the popcount).
 For the coordinated exchange of data, we use handshake signals.
 The next section describes the ready/valid interface for flow control of
 unidirectional data exchange.
@@ -4087,7 +4087,7 @@ unidirectional data exchange.
 
 Communication of subsystems can be generalized to the movement
 of data and handshaking for flow control. In the popcount example,
-we have seen a handshaking interface for the input and the output data
+we have seen a handshaking interface for the input and for the output data
 using valid and ready signals.
 
 \begin{figure}
@@ -4146,8 +4146,8 @@ interface. However, in that case the data will probably not change on signaling
   \label{fig:ready_valid3}
 \end{figure}
 
-Figure~\ref{fig:ready_valid3} shows further variations of the ready/valid
-interface. In clock cycle 2 both signals (\code{ready} and \code{valid}
+Figure~\ref{fig:ready_valid3} shows further variations of using the the ready/valid
+interface. In clock cycle 2 it happens that both signals (\code{ready} and \code{valid})
 become asserted just for a single clock cycle and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 5 and 6 with the transfer of
@@ -4169,7 +4169,7 @@ after being asserted and \emph{no} data transfer has happened.
 For example a receiver might be ready for some time and not receiving data, but
 due to some other events may become not ready.
 The same can be envisioned with the sender, having data valid only some
-clock cycles and becoming non-valid without a data transfer.
+clock cycles and becoming non-valid without a data transfer happened.
 If this behavior is allowed or not is not part of the ready/valid interface,
 but needs to be defined by the concrete usage of the interface.
 
@@ -4191,8 +4191,10 @@ by using the class \code{IrrevocableIO}.
 The AXI  bus~\cite{axi4standard} uses one ready/valid interface for each of the following parts of the bus:
 read address, read data, write address, and write data. AXI restricts the interface
 that once the sender assets \code{valid} it is not allowed to deasserted it
-until the data transfer happened. Furthermore, the sender is not allowed to wait for a receivers
-\code{ready} the assert \code{valid}.
+until the data transfer happened. This is the same restriction as just described
+in the comment of the \code{IrrevocableIO} interface.
+Furthermore, the sender is not allowed to wait for a receivers
+\code{ready} to assert \code{valid}.
 The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to deassert it
 before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
 \code{valid} before asserting \code{ready}.
@@ -4279,7 +4281,7 @@ of a shift register.
 \noindent Note that this is not the most concise expression of a shift register.
 It is better to use a plain \code{UInt} with the right size and assign the new value for the
 register with an expression using the \code{\#\#} operator
-and proper indexing. This code snippet is just to show how a Scala for loop can be used
+and proper indexing. This code snippet is just to show how a Scala \code{for} loop can be used
 for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
@@ -4307,8 +4309,8 @@ The default implementation is immutable. We index into a \code{Seq} with \code{(
 with zero-based indexing.
 \code{Seq} is a base class with several different implementations.
 However, for most Chisel hardware generators direct use of \code{Seq}
-is the preferred choice. The following code shows how to create a \code{Seq},
-which holds four Scala \code{Int} values. The second line accesses the
+is the preferred choice. The following code shows how to create a \code{Seq}
+that holds four Scala \code{Int} values. The second line accesses the
 second element, and \code{second} will be \code{15}.
 
 \index{Scala!Seq}
@@ -4323,7 +4325,7 @@ second element, and \code{second} will be \code{15}.
 
 \index{Function components}
 
-Modules are the general way to structure your hardware description.
+Modules are the standard way to structure your hardware description.
 However, there is some boilerplate code when declaring a module and when instantiating and
 connecting it.
 A lightweight way to structure your hardware is to use functions.
@@ -4347,7 +4349,7 @@ We have written our first hardware generator!
 The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
-Functions, as lightweight hardware generators, can also contain state (including a register).
+Functions, as lightweight hardware generators, can also contain state (using a register).
 The following example returns a one clock cycle delay element (a register).
 If a function has just a single statement, we can write it in one line and omit the curly
 braces (\{\}).
@@ -4385,7 +4387,7 @@ and \code{gt}, with following syntax.
 \shortlist{code/fun_comp_use2.txt}
 
 
-Functions can be declared as part of a \code{Module}. However, functions that shall be
+Functions can be declared as part of a \code{Module}. However, functions that will be
 used in different modules are better placed into a Scala object that collects utility
 functions.
 
@@ -4399,7 +4401,7 @@ hardware type.
 
 \subsection{Simple Parameters}
 
-The basic way to parameterize a circuit is to define a bit width as a parameter.
+The simplest way to parameterize a circuit is to define a bit width as a parameter.
 Parameters can be passed as arguments to
 the constructor of the Chisel module. The following example is a toy example of
 a module that implements an adder with a configurable bit width.
@@ -4416,17 +4418,17 @@ passed into the constructor that can be used in the IO bundle.
 \index{Type parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
-hardware generators. A very flexible configuration is the usage of types.
+hardware generators. Chisel type parameters enable very flexible configurations.
 That feature allows for Chisel to provide a multiplexer (\code{Mux}) that
 can accept any types for the multiplexing.
-To show how to use types for the configuration, we build a multiplexer
+To show how to use Chisel types for the configuration, we build a multiplexer
 that accepts arbitrary types. The following function defines the multiplexer:
 
 \shortlist{code/param_func.txt}
 
 Chisel allows parameterizing functions with types, in our case with Chisel
 types. The expression in the square brackets \code{[T <: Data]} defines
-a type parameter \code{T} set is \code{Data} or a subclass of \code{Data}.
+a type parameter \code{T} that is \code{Data} or a subclass of \code{Data}.
 \code{Data} is the root of the Chisel type system.
 
 Our multiplexer function has three parameters: the boolean condition,
@@ -4437,7 +4439,6 @@ we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
 At the end of the function, we return the multiplexer hardware (the output).
-
 We can use our multiplexer function with simple types such as
 \code{UInt}:
 
@@ -4453,7 +4454,7 @@ The following wrong usage of the multiplexer results in a runtime error:
 \shortlist{code/param_func_type.txt}
 
 \noindent We can define \code{Bundle} constants by first creating
-a \code{Wire} and then setting the subfields.
+a \code{Wire} of the \code{Bundle} and then setting the subfields.
 Then we can use our parameterized multiplexer with this complex type.
 
 \shortlist{code/param_func_complex.txt}
@@ -4550,7 +4551,7 @@ BCD allows displaying numbers in decimal, a more user-friendly number
 representation than hexadecimal.
 
 When using a classic hardware description language, such as Verilog or VHDL,
-we would use another script or programming language to generate such a table.
+we would use another scripting or programming language to generate such a table.
 We can write a Java program that computes the table to convert binary to BCD.
 That Java program prints out VHDL code that can be included in a project.
 The Java program is about 100 lines of code; most of the code generating
@@ -4611,9 +4612,9 @@ out into a parent class. We explore how to use inheritance with an example.
 In Section~\ref{sec:counter} we have explored different forms of counters,
 which may be used for a low-frequency tick generation. Let us assume we want to
 explore those different versions, for example, to compare their resource requirement.
-We start with an abstract class to define the ticking interface:
+We start with an abstract class to define the ticking interface, shown in Listing~\ref{lst:ticker:base}.
 
-\shortlist{code/ticker.txt}
+\longlist{code/ticker.txt}{Base class for our ticker implementations.}{lst:ticker:base}
 
 \noindent Listing~\ref{lst:ticker:up} shows a first implementation of that abstract class
 with a counter, counting up, for the tick generation.
@@ -4661,22 +4662,21 @@ sbt "testOnly TickerTest"
 
 Scala supports functional programming, so Chisel does as well.
 We can use functions to represent hardware and combine those hardware components
-with functional programming by using a so-called ``higher-order function''.
+with functional programming by using a so-called ``higher-order functions''.
 Let us start with a simple example, the sum of a vector:
 
 \shortlist{code/fun_first.txt}
 
-\noindent First we define the hardware for the adder in function \code{add}.
+First we define the hardware for the adder in function \code{add}.
 The vector (Chisel type \code{Vec}) is located in \code{vec}. The Scala method \code{reduce()} combines
 all elements of a collection with a binary operation, producing a single value.
-The \code{reduce()} method reduces the sequence starting from the left.
+The \code{reduce()} method reduces the sequence starting from the first element.
 It takes the first two elements and performs the operation. The result is then combined
 with the next element, until a single result is left.
 
 The function to combine two elements is provided as parameter to \code{reduce}, in our case \code{add},
 which returns an adder. The resulting hardware is a chain of adders computing
 the sum of the elements of vector \code{vec}.
-
 Instead of defining the (simple) \code{add} function, we can provide the addition
 as anonymous function and use the Scala wildcard ``\code{\_}'' to represent the
 two operands.
@@ -4700,24 +4700,27 @@ literal is parameters in parentheses, followed by a \code{=>}, followed by the f
   (param) => function body
 \end{chisel}
 
-\noindent The function literal for the minimum function uses two parameters \code{x} and \code{y}
+The function literal for the minimum function uses two parameters \code{x} and \code{y}
 and returns a multiplexer (\code{Mux}) that compares the two parameters and returns the smaller
 value.
 
 \shortlist{code/fun_min.txt}
 
 Let us extend this circuit to return not only the minimal value from the \code{vec}, but also the
-position (index) in the \code{vec}. To return two values we define the Bundle \code{Two} to
+position (index) of that minimal value in the \code{vec}. To return two values we define the Bundle \code{Two} to
 hold the value and the index. We declare the \code{vecTwo} \code{Vec} that can hold these bundles
-and connect them in a loop to the original input and the index within the \code{Vec}.
+and connect them in a loop to the original input and the index within the \code{Vec}, as shown
+in Listing~\ref{lst:min:pos}.
 
 As before, we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
-comparing the value field within the bundle and returning the complete bundle from the multiplexer.
-The value \code{res} points to the bundle containing the minimum value and the position.
+comparing the value field within the bundle and returning the multiplexer for the
+complete bundle.
+Value \code{res} points to the bundle containing the minimum value and the position.
 
-\shortlist{code/fun_min2.txt}
+\longlist{code/fun_min2.txt}{Minimum search including the index.}{lst:min:pos}
 
-As a final variation of the minimum search circuit, we will use more Scala features
+
+As a more advanced variation of the minimum search circuit, we will use more Scala features
 to avoid creating the bundle to return the value
 and index. We will use a tuple to represent both values.
 The following code shows the application
@@ -4745,13 +4748,15 @@ but returns hardware (connected multiplexers) consisting of Chisel types only.
 As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is available on Chisel's
 \code{Vec} only.
 
-To keep using \code{reduceTree} the following solution uses a Chisel \code{MixedVec}.
+To keep using \code{reduceTree} the following solution uses a Chisel \code{MixedVec}
+instead of a Scala tuple.
+A Chisel \code{MixedVec} is similar to a Scala tuple as it can have different types at different positions.
+Therefore, it cannot function as, for example, multiplexer. However, we can use it as an
+indexable collection during hardware generation.
 
 \shortlist{code/fun_min4.txt}
 
-A Chisel \code{MixedVec} is similar to a Scala tuple as it can have different types at different positions.
-Therefore, it cannot function as, for example, a multiplexer. However, we can use it as an
-indexable collection during hardware generation.
+
 In the above example we create a Scala \code{Vector} of the values with their index, but now
 using Chisel's ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
 Then we can again perform a tree-based reduction. Another benefit of this version is
@@ -4762,6 +4767,7 @@ accessed with an index, like a ``normal'' \code{Vec}.
 
 \subsection{An Arbitration Tree}
 \index{Arbiter}
+\label{sec:arbiter}
 
 With our tree reduction function we can build an arbitration tree out of just 2:1 arbiters.
 We can generate the arbitration circuit as follows:
@@ -4770,7 +4776,7 @@ We can generate the arbitration circuit as follows:
 \shortlist{code/fun_arbiter_end.txt}
 
 \noindent The input is a \code{Vec} of ready/valid interfaces and the output a single ready/valid
-interface. We just need a function that provides arbitration between two requests.
+interface. We \emph{just} need a function that provides arbitration between two requests.
 
 
 
@@ -4797,7 +4803,7 @@ The return value of the function (\code{out}) is a wire of type \code{DecoupledI
 
 When the data register is empty and one of the two inputs signals a \code{valid} input,
 we signal a \code{ready} in the next clock cycle (via the \code{ready} register).
-Note that we can only signal one of the two inputs that the arbiter is \code{ready},
+Note that we can signal only one of the two inputs that the arbiter is \code{ready},
 as we have only one data register.
 When we have a registered \code{ready}, we assume that the input is still \code{valid},
 register the data, deassert \code{regEmpty}, and reset the \code{ready} flag.
@@ -4919,7 +4925,7 @@ the same IO interface as the individual FIFO buffers.
 word and \code{depth} for the number of buffer stages.
 We can build a \code{depth} stages bubble FIFO out of \code{depth}
 \code{FifoRegister}s. We create the stages by filling them into a Scala \code{Array}.
-The Scala array has no hardware meaning, it \emph{just} provides us with
+The Scala array has no hardware meaning, it \emph{just} serves as
 a container to have references to the created buffers.
 In a Scala \code{for} loop we connect the individual buffers.
 The first buffer's enqueueing side is connected to the enqueueing IO of
@@ -4968,7 +4974,7 @@ a buffer, and then usage of those base components.
 
 First, we need an interface, a port definition.
 For the UART design, we use a ready/valid handshake interface (extending \code{DecoupledIO}),
-with with a data size of 8 bits.
+with a data size of 8 bits.
 \shortlist{code/uart_channel.txt}
 \noindent The convention of a ready/valid interface is that the data is transferred
 when both \code{ready} and \code{valid} are asserted.
@@ -4986,7 +4992,7 @@ We use three registers:
 (1) register to shift the data (serialize them) (\code{shiftReg}),
 (2) a counter to generate the correct baud rate (\code{cntReg}), and
 (3) a counter for the number of bits that still need to be shifted out (\code{bitsReg}).
-No additional state register of FSM is needed, all state is encoded in
+No additional state register or FSM is needed, all state is encoded in
 those three registers.
 
 Counter \code{cntReg} is continuously running (counting down to 0
@@ -4994,7 +5000,6 @@ and reloaded with the start value when 0). All action is only done when
 \code{cntReg} is 0. As we build a minimal transmitter, we have only
 the shift register to store the data. Therefore, the channel is only ready
 when \code{cntReg} is 0 and no bits are left to shift out.
-
 The IO port \code{txd} is directly connected to the least significant bit
 of the shift register.
 
@@ -5009,7 +5014,7 @@ two stop bits (1). Therefore, the bit count is set to 11.
 This very minimal transmitter has no additional buffer and can
 accept a new character only when the shift register is empty
 and at the clock cycle when \code{cntReg} is 0.
-Accepting new data only when \code{cntReg} is 0 also means
+Accepting new data only when \code{cntReg} is 0 means
 that the ready flag is also deasserted when there would be
 space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter but delegate it to a buffer.
@@ -5079,7 +5084,7 @@ received character is sent back (echoed).
 \label{sec:more:fifo}
 
 At the beginning of this Chapter we introduced the design of a simple bubble FIFO.
-In this section we will generalize the FIRO and implement different variations of the queue.
+In this section we will generalize the FIFO and implement different variations of the queue.
 To make these implementations interchangeable we will use inheritance,
 as introduced in Section~\ref{sec:inheritance}.
 
@@ -5087,7 +5092,8 @@ as introduced in Section~\ref{sec:inheritance}.
 \index{FIFO}
 
 We define an \code{abstract}
-FIFO class with a Chisel type as parameter to be able to buffer
+FIFO class as a \myref{https://docs.scala-lang.org/tour/generic-classes.html}{generic class}
+with a Chisel type \code{T} as parameter to be able to buffer
 any Chisel data type. In the abstract class we also test that the
 parameter \code{depth} has a useful value.
 
@@ -5129,7 +5135,7 @@ or just simplicity).
 We can redefine our bubble FIFO from Section~\ref{sec:fifo} using standard
 ready/valid interfaces and being parametrizable with a Chisel data type.
 
-\longlist{code/fifo_bubble.txt}{A bubble FIFO with a ready/valid interface.}{lst:fifo:bubble}
+\verylonglist{code/fifo_bubble.txt}{A bubble FIFO with a ready/valid interface.}{lst:fifo:bubble}
 
 Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with a ready/valid
 interface. Note what we put the \code{Buffer} component inside \code{BubbleFifo}
@@ -5140,7 +5146,7 @@ the state of the buffer: full or empty.
 
 The bubble FIFO is simple, easy to understand, and uses minimal resources.
 However, as each buffer stage has to toggle between empty and full, the maximum
-bandwidth of this FIFO is two clock cycles per word.
+bandwidth of this FIFO is one word every two clock cycles.
 
 One could consider to look at both interface sides in the buffer to be able to accept
 a new word when the producer \code{valid} and the consumer is \code{ready}.
@@ -5170,7 +5176,7 @@ The \code{DoubleBuffer} contains two registers,
 \code{dataReg}. The double buffer has three states: \code{empty}, \code{one},
 and \code{two}, which signal the fill level of the double buffer.
 The buffer is \code{ready} to accept new data when is it in state \code{empty}
-or \code{one}. The has valid data when it is in state \code{one} or \code{two}.
+or \code{one}. The buffer has valid data when it is in state \code{one} or \code{two}.
 
 If we run the FIFO at full speed, and the consumer is always \code{ready},
 the steady state of the double buffers are \code{one}. Only when the consumer
@@ -5181,8 +5187,6 @@ Similar the fall through latency is half of the bubble FIFO.
 
 \subsection{FIFO with Register Memory}
 
-\todo{Fix issue and update text}
-
 When you come with a software engineering background you may have been
 wondering that we built hardware queues out of many small individual small buffer
 elements, all executing in parallel and handshaking with upstream and downstream
@@ -5191,7 +5195,7 @@ elements. For small buffers this is probably the most efficient implementation.
 \index{Circular buffer}
 \index{Circular buffer!read pointer}
 \index{Circular buffer!write pointer}
-A queue in software is usually used by sequential code in a single thread.
+A queue in software is usually used by sequential code in two threads.
 We us a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
@@ -5210,8 +5214,8 @@ and read and write pointers.
 \newpage
 \verylonglist{code/fifo_reg_mem.txt}{A FIFO with a register based memory.}{lst:fifo:reg:mem}
 
-As there are two pointers that behave the same, being incremented on an
-action and wrap around at the end of the buffer, we define a function \code{counter}
+As there are two pointers that are incremented on an
+action and wrap around at the end of the buffer, we define a function \code{counter()}
 that implements those wrapping counters. With \code{log2Ceil(depth).W} we
 compute the bit length for the counter. The next value is either an increment by
 1 or a wrap around to 0.
@@ -5252,6 +5256,10 @@ When the consumer is \code{ready} and the FIFO is not empty we:
 empty if the read pointer will catch up with the write pointer in
 the next clock cycle, and (3) signal the read counter to increment.
 
+A concurrent read and write is also possible. This case summarizes
+the two former cases. \todo{I am not sure if the edge cases are correct.
+A read and write to on a full buffer should work, shouldn't it?}
+
 The output of the FIFO is the memory element at the read pointer address.
 The ready and valid flags are simply derived from the full and empty
 flags.
@@ -5282,27 +5290,16 @@ Therefore, we need an additional register to handle this latency.
 %data read out from the memory, and (3) head of the queue in the shadow register and
 %valid data (the next element) from the memory.
 
-<<<<<<< HEAD
+\todo{
 The memory based FIFO can efficiently hold larger amounts of data in the queue
 and has a short fall through latency. In the last design, the output of the FIFO may
 come directly from the memory read. If this data path is in the critical path of the design,
 we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
 shows such a combination. On the output of the memory based FIFO we add a single
-stage double buffer FIFO to decouple the memory read path from the output.
+stage double buffer FIFO to decouple the memory read path from the output.}
 
 \verylonglist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
 stage.}{lst:fifo:comb}
-=======
-%The memory based FIFO can efficiently hold larger amounts of data in the queue
-%and has a short fall through latency. In the last design, the output of the FIFO may
-%come directly from the memory read. If this data path is in the critical path of the design,
-%we can easily pipeline our design by combining two FIFOs. Listing~\ref{lst:fifo:comb}
-%shows such a combination. On the output of the memory based FIFO we add a single
-%stage double buffer FIFO to decouple the memory read path from the output.
-%
-%\longlist{code/fifo_comb.txt}{Combining a memory based FIFO with double-buffer
-%stage.}{lst:fifo:comb}
->>>>>>> 20560fba01559452d063e73ab03a476043e57366
 
 \section{A Multi-clock Memory}
 
@@ -5442,7 +5439,8 @@ relative to following properties: (1) maximum throughput,
 (2) fall through latency, (3) resource requirement, and (4)
 maximum clock frequency. Explore all FIFO variations in different sizes by
 synthesizing them for an FPGA; the source is available at
-\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
+\myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}.
+%\myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}.
 Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 
 \chapter{Interconnect}
@@ -5458,6 +5456,7 @@ Interconnects can be used between chips (external) or within a chip, often
 then called a system-on-chip (SoC).
 
 \section{A Classic Microprocessor Bus}
+\label{sect:bus}
 
 \begin{figure}
   \centering
@@ -5507,7 +5506,7 @@ Nevertheless, the notion of the classic processor bus with an address bus, a dat
 is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
 on-chip interconnect in the next section.
 
-\section{On-Chip Bus}
+\section{An On-Chip Bus}
 
 \begin{figure}
   \centering
@@ -5533,11 +5532,12 @@ a single clock cycle. This is only possible for very small systems. We can exten
 that we expect the read result in the next clock cycle, following the read request. This fits
 well for on-chip memories with usually synchronous reads that have one clock cycle latency.
 For IO devices this additional clock cycle latency relaxes the timing constraints as well.
-We still assume that write is performed in one clock cycle.
+We still assume that a write is performed in one clock cycle.
 
 If we want to communicate with devices with different or even varying latency, we need to
-introduce handshaking. The processor signals with a read or write request the start of a
-transaction and the memory or peripheral device signals the end of a transaction.
+introduce handshaking. The processor signals the start of a
+transaction with a read or write request, and the memory or peripheral device signals the end of a transaction with
+an acknowledgment signal.
 
 \subsection{Combinational Handshake}
 
@@ -5550,7 +5550,7 @@ transaction and the memory or peripheral device signals the end of a transaction
 
 Figure~\ref{fig:bus_ack} shows a read request with an acknowledgment.
 The processor drives the address bus (\code{address}) and the read
-signal (\code{rd}) in clock cycle 3. The signal \code{ack} needs to react
+signal (\code{rd}) in clock cycle 2. The signal \code{ack} needs to react
 within that first clock cycle. In our example the read data is not available within
 one clock cycle, but two clock cycles later as seen in clock cycle 4.
 Data and the acknowledgment are valid for a single clock cycle.
@@ -5579,9 +5579,13 @@ peripheral device.
 \end{figure}
 
 \todo{Don't formulate it just relative to the other. Formulate it as its own thing.
-Maybe then compare. This needs some better writing, also put it into the soc-comm README.}
+Maybe then compare. This needs some better writing, also put it into the soc-comm README.
+Also have a write timing diagram. And find a better font for the diagram to have nicer
+rendering in the SVG.}
 
- A read or write command is signaled by an asserted \code{rd} or \code{wr}.
+Here we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and fits better for modern SoC designs.
+ A read or write command is signaled by an assertion of \code{rd} or \code{wr}
+ for a single clock cycle.
 The address and write data (if it is a write) need to be valid during
 the command. Commands are only valid for a single cycle.
 Each command needs to be acknowledged by an active \code{ack},
@@ -5591,11 +5595,12 @@ signal for one clock cycle.
 
 Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
-is only a single cycle long. The address bus and the read signal do not need to be driven
-till the acknowledgment. Compared to the former protocol, the \code{ack} signal comes
+is only a single clock cycle long. The address bus and the read signal do not need to be driven
+until the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
+be valid (low or high)
 earliest one clock cycle after the \code{rd} command, in clock cycle 3.
-The first read sequence has one cycle latency in this example.
-It has the same latency as the former example.
+The first read sequence has two clock cycles latency in this example.
+It has the same latency as in the former example.
 However, as the request needs to be valid only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle.
@@ -5604,8 +5609,15 @@ The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exactly this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
 used OCP interfaces.
+Furthermore, we have started a
+\myref{https://github.com/t-crest/soc-comm}{Chisel repository} with multicore devices, such as
+a network-on-chip, that implement the described pipelined interface.
 
-\todo{Maybe mention the soc-comm project?}
+The on-chip version of an interconnect definition can be generalized to a point-to-point
+connection. The processor and peripheral devices are connected with such a point-to-point
+interface to a switching fabric. If the system contains more than one processor (or master)
+we need arbitration within the switching fabric to decide which master is allowed to issue
+read and write commands.
 
 \subsection{Example IO Device}
 
@@ -5628,14 +5640,8 @@ containing the reset values as Chisel constants. That \code{Seq} is the input to
 The counters are freely running and increment by one each clock cycle, except when written
 a new value.
 
-The on-chip version of an interconnect definition can be generalized to a point-to-point
-connection. The processor and peripheral devices are connected with such a point-to-point
-interface to a switching fabric. If the system contains more than one processor (or master)
-we need arbitration within the switching fabric to decide which master is allowed to issue
-read and write commands.
-
-\subsection{Memory-Mapped Devices}
-\index{Memory-mapped IO}
+\subsection{Memory Mapped Devices}
+\index{Memory mapped IO}
 
 In our example system all devices, being it memory or IO devices, are connected to shared
 address lines. Therefore, they appear in the shared address space. To select individual
@@ -5733,7 +5739,10 @@ For our memory-mapped devices we define a bundle:
 
 \shortlist{code/mem_io_bundle.txt}
 
-Listing~\ref{lst:rv-device} shows the \todo{continue here}
+Listing~\ref{lst:rv-device} shows the memory mapped interface to a streaming
+device, like a serial port.
+
+\todo{continue here}
 
 
 \longlist{code/mem_io_rv.txt}{An IO device for a ready/valid device.}{lst:rv-device}
@@ -5782,8 +5791,9 @@ the Wishbone strobe signal (\emph{wb.stb}) is not assigned anymore.
 Holding the data in the slave is usually \emph{free} with respect to
 hardware complexity---it is \emph{just} a specification issue. In
 the classic Wishbone specification there is no way to perform a pipelined read
-or write. However, for blocked memory transfers (e.g. cache load),
-this is the usual way to achieve good performance.
+or write. However, the latest Wishbone specification (B4) contains
+also a pipelined definition. Note that the specification now contains two
+different, not necessarily compatible, specifications.
 
 \todo{Sample code for a peripheral, how to test?}
 
@@ -5791,7 +5801,7 @@ this is the usual way to achieve good performance.
 \index{AXI}
 
 The Advanced Microcontroller Bus Architecture (AMBA) \cite{soc:amba}
-is the interconnection definition from ARM. The specification
+is an interconnection definition from ARM. The specification
 defines three different buses: Advanced High-performance Bus (AHB),
 Advanced System Bus (ASB), and Advanced Peripheral Bus (APB). The
 AHB is used to connect on-chip memory, cache, and external memory to
@@ -5816,7 +5826,7 @@ address phase from the original AHB specification.
 The AXI bus uses ready/valid handshaking for all signals (read address,
 read data, write address, write data, and write response).
 The decoupling of the write address and the write data needs a more complex
-slave that can accept the any order of arriving address and data.
+slave that can accept any order of arriving address and data.
 
 
 \todo{Sample code for a servant, how to test? Probably with Xilinx stuff and maybe
@@ -5839,7 +5849,7 @@ and a network-on-chip with an OCP interface.
 
 The Avalon \cite{soc:avalon} interface specification is provided by
 Intel for a system-on-a-\\programmable-chip interconnection.
-Avalon defines a great range of interconnection devices ranging from
+Avalon defines a large range of interconnection devices ranging from
 a simple asynchronous interface intended for direct static RAM
 connection up to sophisticated pipeline transfers with variable
 latencies. This great flexibility provides an easy path to connect a
@@ -5850,7 +5860,8 @@ SOPC Builder tool. However, it seems that this switch fabric is
 Intel proprietary thus tying this specification to Intel FPGAs.
 
 The On-Chip Peripheral Bus (OPB) \cite{soc:opb} is an open standard
-provided by IBM and used by Xilinx. The OPB specifies a bus for
+provided by IBM and has been used by Xilinx several years ago.
+The OPB specifies a bus for
 multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
@@ -6112,17 +6123,17 @@ store & Rn = A & Store A into register Rn \\
 jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
-loadindbu & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
-% loadindhu? \\
+loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
+loadindh & A = mem[AR+(i $<<$ 1)]$_{15-0}$  &  Load a half word unsigned from memory into A\\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
-storeindb & mem[AR+i]$_{7-0}$ = A & Store a byte into memory \\
-% storeindh ? \\
+storeindb & mem[AR+i] = A$_{7-0}$ & Store a byte into memory \\
+storeindh & mem[AR+(i $<<$ 1] = A$_{15-0}$ & Store a half word into memory \\
 br & PC = PC + o & Branch \\
 brz & if A == 0 PC = PC + o & Branch if A is zero \\
 brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
 brp & if A $>=$ 0 PC = PC + o & Branch if A is positive \\
 brn & if A $<$ 0 PC = PC + o & Branch if A is negative \\
-scall & scall A & System call (simulation hook) \\
+scall &  & System call (simulation hook) \\
 \bottomrule
 \end{tabular}
 \caption{Leros instruction set.}
