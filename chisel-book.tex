@@ -2068,11 +2068,9 @@ Hardware components are called modules in Chisel. Each module extends
 the class \code{Module} and contains a field \code{io} for the interface.
 The interface is defined by a \code{Bundle} that is wrapped into a call to \code{IO()}.
 The \code{Bundle} contains fields to represent input and output ports of
-the module. The direction is given by wrapping a field into either a call to \code{Input()}
-or \code{Output()}. The direction is from the view of the component itself.
+the module. The direction is given by wrapping a field into either an \code{Input()}
+or an \code{Output()}. The direction is from the view of the component itself.
 
-We show an example design where we build a counter out of two components:
-an adder and a register.
 
 \begin{figure}
   \centering
@@ -2083,6 +2081,8 @@ an adder and a register.
 
 \longlist{code/components_add.txt}{The adder component in Chisel.}{lst:comp:add}
 
+We show an example design where we build a counter out of two components:
+an adder and a register.
 Figure~\ref{fig:components-adder} shows the schematic of the adder component.
 It has two inputs (\code{a} and \code{b}) and one output (\code{y}).
 Listing~\ref{lst:comp:add} shows the Chisel definition of the adder.
@@ -2114,19 +2114,19 @@ The Chisel code for this component is shown in Listing~\ref{lst:comp:reg}.
 
 Now we build a counter with those two components that counts from 0 to 9 and repeats.
 Figure~\ref{fig:components-counter} shows the schematic of the counter. We use an adder
-to add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
+to add 1 to the value of \code{count}. A multiplexer selects between this sum and 0.
 That result, called \code{next} is the input for the register component. The output of the
 register is the \code{count} value and also the output of the \code{Count10} component (\code{dout}).
 
 Listing~\ref{lst:comp:cnt} shows the Chisel code for the \code{Count10} component.
 The two components are instantiated by creating them with \code{new}, wrapping them
-into a \code{Module()} call, and assigning it a name. In our example \code{add} and \code{reg}.
-In this example we give the output of the register (\code{reg.io.q}) the name \code{count}.
+into a \code{Module()}, and assigning it a name. In our example \code{add} and \code{reg}.
+In this example we give the output of the register component (\code{reg.io.q}) the name \code{count}.
 We connect \code{1.U} and \code{count} to the two inputs of the adder component.
-We give the output of the adder the name \code{result}.
-The multiplexer selects between \code{0.U} and \code{result} depending on the counter
+We give the output of the adder component the name \code{result}.
+The multiplexer selects between \code{0.U} and \code{result} depending on the current counter
 value \code{count}. We name the output of the multiplexer \code{next} and connect it
-to the input of the register. Finally, we connect the counter value \code{count}
+to the input of the register components. Finally, we connect the counter value \code{count}
 to the single output of the \code{Count10} component, \code{io.dout}.
 
 
@@ -2137,7 +2137,7 @@ A medium to high complex hardware design is built out of a hierarchy of
 nested components.
 Figure~\ref{fig:components} shows the structure of such an example design. Component C has
 three input ports and two output ports. The component itself is assembled out
-of two subcomponents: B and C, which are connected to the inputs and
+of two subcomponents: A and B, which are connected to the inputs and
 outputs of C. One output of A is connected to an input of B.
 Component D is at the same hierarchy level as component C and connected
 to it.
@@ -2173,15 +2173,15 @@ input port of B.
 \longlist{code/components_c.txt}{Component C}{lst:comp:c}
 
 Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
-into a call to \code{Module()}. The reference to that module is stored in a local variable,
+into a \code{Module()}. The reference to that module is stored in a local variable,
 in this example \code{val compA = Module(new CompA())}.
 
 With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
-and the individual fields of the IO \code{Bundle}.
+and then the individual fields of the IO \code{Bundle}.
 
 \longlist{code/components_d.txt}{Component D}{lst:comp:d}
 
-The simplest component in our design, shown in Listing~\ref{lst:comp:d},
+The simplest component (D) in our design, shown in Listing~\ref{lst:comp:d},
 has just an input port, named \code{in}, and
 an output port named \code{out}.
 The final missing piece of our example design is the top-level component, which itself
@@ -2196,8 +2196,8 @@ components, such an adder, and huge components, such as a full microprocessor,
 
 Beginners in hardware design often start with tiny components.
 The problem is that digital design books use tiny components to show the principles.
-But the sizes of the examples (in those books, and also in this book) are small
-to fit onto a page and to not distract by too many details.
+The sizes of the examples (in those books, and also in this book) are small
+to fit onto a page (or slide) and to not distract by too many details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
 IO construction). As a rule of thumb, I propose that the core of the component,
@@ -2223,8 +2223,8 @@ or ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 \end{figure}
 
 The ALU has two data inputs, labeled \code{a} and \code{b} in the figure, one function input \code{fn},
-and an output, labeled {y}. The ALU operates on \code{a} and \code{b} and provides the result
-at the output. The input \code{fn} selects the operation on \code{a} and \code{b}.
+and an output, labeled \code{y}. The ALU operates on \code{a} and \code{b} and provides the result
+at the output \code{y}. The input \code{fn} selects the operation on \code{a} and \code{b}.
 The operations are usually some arithmetic, such as addition and subtraction, and some logical
 functions such as and, or, xor. That's why it is called ALU.
 
