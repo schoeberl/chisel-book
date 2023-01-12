@@ -612,7 +612,7 @@ and import that project into Eclipse.\footnote{This function needs the Eclipse p
 The \myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals}{Scala Metals}
 extension provides Scala support.
 On the left bar select \emph{Extensions} and search for \emph{Metals} and install \emph{Scala (Metals)}.
-To import an \code{sbt} based project open the folder with \emph{File - Open}.
+To import an \code{sbt}-based project, open the folder with \emph{File - Open}.
 
 %Open the project folder, e.g., t-crest/patmos/hardware, by selecting File/Open Folder. Make sure the sbt project uses at least Scala version 2.11.12
 %On the left bar select "Metals" and then select "Import build" - This may take a while
@@ -1768,7 +1768,7 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 The \code{peek()} function returns a Chisel type, which would need conversion to be used
 as Scala type. To simplify using test values in Scala land, ChiselTest supports \code{peekInt()}
 and \code{peekBoolean()}. The following test example reads the output with \code{peekInt()},
-which returns a Scala integer\footnote{To support arbitrarily wide integer values the
+which returns a Scala integer\footnote{To support arbitrarily wide integer values, the
 return value is a Scala \codefoot{BigInt} instead of a Scala \codefoot{Int}.}
 that is used in the \code{assert()} statement.
 Similar we can read the \code{equ} output into a Scala \code{Boolean}, directly
@@ -1800,7 +1800,7 @@ once. A classic approach to debug digital designs is displaying the signals in a
 waveform. In a waveform the signals are displayed over time.
 
 \noindent Chisel testers can generate a waveform that includes all registers and all
-IO signals. In the following examples we show waveform testers for the
+IO signals. In the following examples, we show waveform testers for the
 \code{DeviceUnderTest} from the former example (the 2-bit AND function).
 To generate a waveform for a test pass a definition of \code{writeVcd=1} to
 the test, as shown in the following \code{sbt} command:
@@ -2291,7 +2291,7 @@ declared in three different ways with their source either inlined or available i
 separate file. As an example, consider a 32-bit adder with the following IO.
 \shortlist{code/blackbox_adder_io.txt}
 
-\noindent The inlined version is declared as follows.
+\noindent The inlined version is declared as follows:
 \shortlist{code/blackbox_adder_inline.txt}
 
 Providing the source code within a string literal (denoted by an \code{s} or an \code{f}
@@ -2365,7 +2365,7 @@ value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassign
 \shortlist{code/comb_wire.txt}
 
 \noindent The logic of the circuit is a multiplexer, where the two inputs are the constants
-\code{0} and \code{3} and the condition \code{cond} serves as the select signal.
+\code{0} and \code{3} and the select signal is the condition \code{cond}.
 Keep in mind that we describe hardware circuits and not a software program with conditional
 execution.
 
@@ -2534,7 +2534,7 @@ for the legal input values.
 
 \shortlist{code/encdec_enc.txt}
 
-For the decoder, we found an elegant single line statement to express the logic.
+For the decoder, we found an elegant single-line statement to express the logic.
 This also enables us to describe a wide decoder. However, we are not aware
 of such an expression for the encoder.
 
@@ -3132,9 +3132,9 @@ next flip-flop. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
 circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
-The Chisel code for this simple shift register (1) creates a 4-bit register \code{shiftReg},
+The Chisel code for this simple shift register (1) creates a 4-bit register \code{shiftReg};
 (2) concatenates the lower 3 bits of the shift register with the input \code{din} for the next
-input to the register, and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
+input to the register; and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
 
 \shortlist{code/shift_register.txt}
 
@@ -3485,7 +3485,7 @@ Note that majority voting is very seldom needed.
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean}. In this example, we use
-that single cycle \code{risingEdge} signal to increment a counter.
+the single-cycle \code{risingEdge} signal to increment a counter.
 
 \index{Edge detection}
 
@@ -4034,7 +4034,7 @@ We will co-design the FSM and the datapath.
 Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM and
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
 The FSM starts in state \code{Idle}, where the FSM waits for input.
-When data arrives, signaled with an asserted \code{dinValid}, the FSM loads the shift register
+When data arrives, as signaled with an asserted \code{dinValid}, the FSM loads the shift register
 and advances to state \code{Count}.
 The data is loaded into the \code{shf} register. On the load also the \code{cnt}
 register is reset to 0.
@@ -4361,7 +4361,7 @@ clock cycle delay.
 
 \shortlist{code/components_fn_2delay.txt}
 
-\noindent Again, this is a too short an example to be useful, as \code{RegNext()}
+\noindent Again, this is too short an example to be useful, as \code{RegNext()}
 is already that function that creates the register for the delay.
 
 
@@ -5583,7 +5583,7 @@ Maybe then compare. This needs some better writing, also put it into the soc-com
 Also have a write timing diagram. And find a better font for the diagram to have nicer
 rendering in the SVG.}
 
-Here we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and fits better for modern SoC designs.
+Here we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and fits better with modern SoC designs.
  A read or write command is signaled by an assertion of \code{rd} or \code{wr}
  for a single clock cycle.
 The address and write data (if it is a write) need to be valid during
@@ -5598,7 +5598,7 @@ a combinational reaction of the peripheral device. The request from the processo
 is only a single clock cycle long. The address bus and the read signal do not need to be driven
 until the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
 be valid (low or high)
-earliest one clock cycle after the \code{rd} command, in clock cycle 3.
+no earlier than one clock cycle after the \code{rd} command, in clock cycle 3.
 The first read sequence has two clock cycles latency in this example.
 It has the same latency as in the former example.
 However, as the request needs to be valid only one clock cycle, we can pipeline
@@ -5643,7 +5643,7 @@ a new value.
 \subsection{Memory Mapped Devices}
 \index{Memory mapped IO}
 
-In our example system all devices, being it memory or IO devices, are connected to shared
+In our example system all devices, whether they be memory or IO devices, are connected to shared
 address lines. Therefore, they appear in the shared address space. To select individual
 devices, we use address decoding of some upper bits. This is called memory-mapped devices,
 and as part of the system design we decide on an address mapping.
@@ -5788,7 +5788,7 @@ it is only valid for a single cycle the data has to be registered by
 the master when the master is not reading it immediately. Therefore,
 the slave should keep the last valid data at its output even when
 the Wishbone strobe signal (\emph{wb.stb}) is not assigned anymore.
-Holding the data in the slave is usually \emph{free} with respect to
+Holding the data in the slave is usually \emph{free} in terms of
 hardware complexity---it is \emph{just} a specification issue. In
 the classic Wishbone specification there is no way to perform a pipelined read
 or write. However, the latest Wishbone specification (B4) contains
@@ -5916,7 +5916,7 @@ Values are printed at the rising edge of the clock.
 \section{Testing in Chisel}
 
 ChiselTest is based on ScalaTest. Therefore, we can run all tests with a simple \code{sbt test}.
-ScalaTest also supports multithreaded testing out of the box meaning that if you have more
+ScalaTest also supports multithreaded testing out of the box, so if you have multiple
 test classes in your project, they can run in parallel. Additionally, you can make use of
 the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
 
@@ -5936,7 +5936,7 @@ parameter. As an example, the following tester tests a few inputs to  a BCD tabl
 
 \shortlist{code/basic_chiseltest.txt}
 
-Alternatively, you can use the \code{behavior of "module name"} syntax to
+Alternatively, you can use the \code{behavior of ``module name''} syntax to
 refer to the module with \code{it}. This is useful when you have several tests for a
 single module.
 
@@ -5971,10 +5971,10 @@ value (concrete a \code{BigInt} to express integers of any size).
 
 The \code{write} function takes an address and the data parameters as Scala \code{Int}.
 Similar to the read function, the values are poked into the device, the clock is advanced by one
-clock cycle, and then the write signal deasserted. Also here we wait in an endless loop for
+clock cycle, and then the write signal deasserted. Here we also wait in an endless loop for
 \code{ack} to become true.
 
-With those three functions available, we can write more readable tests in fewer lines of code.
+With those three functions available, we can write more readable tests with fewer lines of code.
 This testing code already covers more cases than the original bit-banging
 tester.\footnote{It happened that I had an off-by-one error (\code{until 3} instead of \code{until 4})
 in the counter device that I found only with the second, more comprehensive test.}
@@ -5989,7 +5989,7 @@ is by tagging your tests.
 
 \shortlist{code/tag_test.txt}
 
-\noindent Per default, all tests are run by using \code{sbt test} or \code{sbt testOnly *}.
+\noindent By default, all tests are run using \code{sbt test} or \code{sbt testOnly *}.
 To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
 
 \begin{verbatim}
@@ -6035,7 +6035,7 @@ subsequent threads.
 \index{VCS}
 
 By default, tests written with ChiselTest are run by the Treadle simulation backend.
-The benefit of Treadle is the quick startup time and the fact that no additional tools need to be installed.
+The benefits of Treadle are its quick startup time and the fact that it does not require any additional tools to be installed.
 
 However,
 larger system tests may either require another backend to support, for example, latches, or may
@@ -6046,7 +6046,7 @@ Verilator is open-source, we will use it for the examples presented in this sect
 that in all cases, VCS can be be used as an alternative to Verilator.
 
 Switching to a different backend is simply a matter of adding another annotation to the
-\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add following
+\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add the following
 annotation:
 
 \shortlist{code/verilator_anno.txt}
@@ -6635,8 +6635,8 @@ Repository Search}.
 
 \section{Contributing to Chisel}
 
-The following is an advanced topic, and I propose you first start following the discussions
-of the Chisel project issues on GitHub before creating your first pull request (PR).
+The following is an advanced topic, and I propose that you first start following the discussions
+of the Chisel project issues on GitHub before you create your first pull request (PR).
 
 \subsection{Setup the Development Environment}
 
@@ -6654,7 +6654,7 @@ In our example, we change \code{chisel3}, and the clone command for my local for
 $ git clone git@github.com:schoeberl/chisel3.git
 \end{verbatim}
 
-To compile Chisel 3 and publish it as a local library execute:
+To compile Chisel 3 and publish it as a local library, execute:
 \begin{verbatim}
 $ cd chisel3
 $ sbt compile
