@@ -13,11 +13,11 @@ scalacOptions ++= Seq(
   // "-P:chiselplugin:useBundlePlugin" // not for 3.5, but for 3.4
 )
 
-val chiselVersion = "3.5.4"
+val chiselVersion = "3.5.6"
 addCompilerPlugin("edu.berkeley.cs" %% "chisel3-plugin" % chiselVersion cross CrossVersion.full)
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % chiselVersion
-libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "2.5.4"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.4"
+libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "2.5.6"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
 
 // addCompilerPlugin("edu.berkeley.cs" %% "chisel3-plugin" % "3.5-SNAPSHOT" cross CrossVersion.full)
 // libraryDependencies += "edu.berkeley.cs" %% "chisel-iotesters" % "2.5-SNAPSHOT"

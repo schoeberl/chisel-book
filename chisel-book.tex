@@ -1397,7 +1397,7 @@ version of Scala and the Chisel libraries.
 
 \index{sbt}
 
-The Scala library that represents Chisel and the Chisel testers are automatically
+The Scala library that represents Chisel and the Chisel tester are automatically
 downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
 with \code{latest.release} to always use the most actual version of Chisel.
@@ -1439,6 +1439,9 @@ The root of the project is the project home, which contains \code{build.sbt}.
 It may also include a \code{Makefile} for the build process, a README, and a LICENSE file.
 Folder \code{src} contains all source code. From there it is split between \code{main},
 containing the hardware sources and \code{test} containing testers.
+The next folder in both cases is \code{scala}, as Chisel is based on Scala.
+If you want to include Java code, which may be useful for hardware generators,
+you would add a \code{java} folder.
 Chisel inherits from Scala, which itself inherits from Java, the organization of source
 in \myref{https://en.wikipedia.org/wiki/Java_package}{packages}.
 Packages organize your Chisel code into namespaces. Packages can also contain
@@ -1494,7 +1497,7 @@ $ sbt "runMain mypacket.MyObject"
 Per default \code{sbt} searches only the \code{main} part of the source tree and not
 the \code{test} part.\footnote{This is a convention form Java/Scala that the test folder contains
 unit tests and not objects with a \codefoot{main}.}
-To execute tests based in ChiselTest and ScalaTest you can simply run them with
+To execute tests based on ChiselTest you can simply run them with
 \begin{verbatim}
 $ sbt test
 \end{verbatim}
@@ -1519,8 +1522,8 @@ With Chisel we can generate a synthesizable Verilog description of the circuit.
 
 To generate the Verilog description, we need an application. A Scala object that \code{extends App}
 is an application that implicitly generates the main function where the application starts.
-The only action of this application is to create a new \code{Hello} object and pass it
-to the Chisel \code{emitVerilog()} function.
+The only action of this application is to create a new Chisel module, in that example \code{Hello},
+and pass it to the Chisel function \code{emitVerilog()}.
 The following code will generate the Verilog file \code{Hello.v}.
 
 \shortlist{code/generate.txt}
@@ -1529,7 +1532,7 @@ Using the default version of \code{emitVerilog()} will put the generated files
 into the root folder of our project (where we run the \code{sbt} command).
 To put the generated files into a subfolder, we need to specify options to \code{emitVerilog()}.
 I recommend to specify a folder \code{generated}, as shown in Figure~\ref{fig:folders}.
-The build options can be set as a second argument, which is an array of Strings,
+The build options can be set as a second argument, which is an array of Strings.
 The following code will generate the Verilog file \code{Hello.v} in the subfolder \code{generated}. 
 
 \shortlist{code/generate_options.txt}
@@ -1556,7 +1559,7 @@ See as an example of the
 
 Figure~\ref{fig:flow} shows the tool flow of Chisel. The digital circuit is described in a Chisel class
 shown as \code{Hello.scala}. The Scala compiler compiles this class, together with the Chisel and Scala
-libraries, and generates the Java class \code{Hello.class} that can be executed by a standard
+libraries, and generates the Java class file \code{Hello.class} that can be executed by a standard
 \myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
 Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
 RTL (FIRRTL), an intermediate representation of digital circuits. In our example the file is \code{Hello.fir}.
@@ -1582,11 +1585,8 @@ with \code{sbt}, we can continue with a simple testing framework.
 Tests of hardware designs are usually called \myref{https://en.wikipedia.org/wiki/Test_bench}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
-Chisel provides two testing methods, the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
-in package \code{chiseltest} and the older \code{PeekPokeTester} in package
-\code{iotesters}.\footnote{\codefoot{iotesters} is deprecated since Chisel 3.5.
-A description how to use the \codefoot{PeekPokeTester} can be found in Appendix~\ref{chap:peekpoke}}
-Here we describe the ChiselTest method.
+Chisel provides the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
+in package \code{chiseltest}.
 
 One strength of Chisel is that it can use the full power of Scala to write those
 test benches. One can, for example, code the expected functionality of the hardware
