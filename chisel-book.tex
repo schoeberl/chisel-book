@@ -1638,7 +1638,7 @@ and show that both tests passed:
 
 \code{sbt test} executes all available tests, which is useful for regression
 test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
-will see more than 80 tests passing.}
+will see more than 90 tests passing.}
 However, if you want to run just a single test (suite) you can do this with:
 
 \begin{verbatim}
@@ -1658,7 +1658,7 @@ and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
 \begin{chisel}
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.3"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
 \end{chisel}
 
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
@@ -1688,9 +1688,8 @@ The method \code{test()} is invoked with the DUT as parameter and the test code 
 The input and output ports of the DUT are accessed with \code{dut.io}.
 You can set values via a \code{poke} on a port, which takes the value as a Chisel type of the
 input port as parameter.
-An output port can be read by invoking \code{peek()} on the port, which will return
-the value as a Chisel type. The method \code{toString} converts that value to a
-string.
+An output port can be read by invoking \code{peekInt()} or \code{peekBoolean()} on the port,
+which will return the value as a Scala type.
 The tester advances the simulation by one clock cycle with \code{dut.clock.step()}.
 For advancing the simulation by several clock cycles, we can provide a parameter to
 \code{step()}.
@@ -1709,17 +1708,15 @@ $ sbt "testOnly SimpleTest"
 
 \begin{verbatim}
 ...
-Result is: UInt<2>(0)
-Result is: UInt<2>(2)
+Result is: 0
+Result is: 2
 [info] SimpleTest:
 [info] DUT
 [info] - should pass
-[info] ScalaTest
 ...
 \end{verbatim}
 
 We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
-The \code{toString} method also tells us the Chisel type of a 2-bit \code{UInt}.
 Besides manually inspecting printouts, which is a good starting point, we can also
 express our expectations in the test bench itself by invoking
 \code{expect(value)} on the output port and the expected value as parameter.
@@ -1792,7 +1789,7 @@ test the DUT against.
 
 Testers, as described above, work well for small designs and for 
 \myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
-software development. A collection of unit tests can also serve
+software development. A collection of unit tests can also used for
 \myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
 for debugging more complex designs, one would like to investigate several signals at 
 once. A classic approach to debug digital designs is displaying the signals in a 
@@ -1819,11 +1816,11 @@ If you want to save a configuration of signals you can do so with \emph{File -- 
 and load it later with \emph{File -- Read Save File}. 
 
 The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
-annotation to the \code{test()} function.
+annotation to the \code{test()} function.\footnote{This is an alternative to
+using the command line options.}
 We start with a simple tester that pokes values to the inputs and advances
 the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-Instead, we will inspect the generated waveform in the \code{.vcd} file.\footnote{This is an alternative to
-use the command line options.}
+Instead, we will inspect the generated waveform in the \code{.vcd} file.
 
 
 \shortlist{code/test_bench_wave.txt}
@@ -1944,16 +1941,17 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-// Chisel 3.5.4
-addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.4" cross CrossVersion.full)
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.4"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.4"
+val chiselVersion = "3.5.6"
+addCompilerPlugin("edu.berkeley.cs" %% "chisel3-plugin" % chiselVersion cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % chiselVersion
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
+
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
 each run for a new version (which will fail if we are not connected to the Internet,
 e.g., when doing hardware design during a flight). Additionally, we have added the Chisel3 compiler
-plugin which is recommended for easier support of future features.
+plugin which is needed since Chisel 3.5.
 Change the \code{build.sbt} configuration to use the latest Chisel version by changing the
 library dependency to
 
