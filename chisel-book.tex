@@ -880,7 +880,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates and name
 \end{figure}
 
 
-Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
+\noindent Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
 Note that this circuit may be for a vector of bits and not only single wires
 that are combined with the AND and OR circuits.
 
@@ -1011,7 +1011,7 @@ type.
 With logical and arithmetical operations and a multiplexer, every combinational
 circuit can be described. However, Chisel provides further components and control abstractions
 for a more elegant description of a combinational circuit, which are described in
-a later chapter.
+Chapter~\ref{chap:comb}.
 
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
@@ -1080,8 +1080,8 @@ However, more often counting is used to define a time interval. Counting the
 clock cycles and triggering an action when the time interval has expired.
 
 A simple approach is counting up to a value. However, in computer science,
-and digital design, counting starts at 0. Therefore, if we want to count till
-10, we count from 0 to 9. The following code shows such a counter that counts
+and digital design, counting starts at 0. Therefore, if we want to count
+10 clock cycles, we count from 0 to 9. The following code shows such a counter that counts
 till 9 and wraps around to 0 when reaching 9.
 
 \shortlist{code/counter.txt}
@@ -1220,8 +1220,8 @@ processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-
 
 A register of a vector can also be initialized. This is then the value that the register is reset to.
 To initialize the register file, we use A \code{VecInit} with the constants for reset, wrapped
-into a \code{RegInit}. The input of the three registers are then connected to wires \code{a},
-\code{b}, and \code{c}.
+into a \code{RegInit}. The input of the three registers are then connected to wires \code{d},
+\code{e}, and \code{f}.
 
 \shortlist{code/reg_vec_init.txt}
 
@@ -1291,7 +1291,7 @@ a \code{Bundle} or a \code{Vec}.
 
 You give a hardware component a name by assigning it to a Scala immutable
 variable:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are of no use
-when describing hardware in Chisel}
+when describing hardware in Chisel.}
 
 \shortlist{code/wire_reg.txt}
 
@@ -1305,7 +1305,7 @@ and the Chisel operator ``\code{:=}''. You use Scala's ``\code{=}'' operator whe
 object (and giving it a name) but you use Chisel's ``\code{:=}'' operator when assigning or reassigning a value to
 an \emph{existing} hardware object.
 
-Combinational values can be conditionally assigned, but need to be assigned in every branch
+Combinational values can be conditionally assigned, but need to assign a value in every branch
 of the condition. Otherwise, one would describe a latch, which the Chisel compiler will reject.
 Best practice is to already define a default value at the creation of the \code{Wire}.
 Therefore, the former code is better rewritten as follows.
@@ -2321,6 +2321,7 @@ are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
 \code{class Example extends} \code{HasBlackBoxInline}.
 
 \chapter{Combinational Building Blocks}
+\label{chap:comb}
 
 In this chapter, we explore various combinational circuits, basic building blocks that we can
 use to construct more complex systems.
