@@ -42,8 +42,7 @@ First part is usually lectures and second part is reserved for project work.
 Students will work in groups of two or three on small lab exercises
 and as a final project on a vending machine.
 
-The course is lectured B308-A012 and the labs are in B308-IT127, B308-IT017.
-For those being ill I will also keep Zoom running. Link is in DTU Learn.
+The course is lectured B308-A013 and the labs are in B308-IT127, B308-IT017.
 
 ### Pensum List
 

@@ -328,8 +328,8 @@ combinational building blocks.
 We have extended the hardware generation chapter with more functional
 examples, including building a fair arbitration tree out of a simple 2 to 1
 arbitration circuits.
-We have added a new chapter in interconnect, bus interfaces,
-and how to connect an IO device as a memory-mapped device.
+We have added a new chapter on interconnect, bus interfaces,
+and how to connect an IO device as a memory mapped device.
 We have started a new chapter on debugging, testing and verification.
 The plan is to extend the chapter on this important topic in the next edition.
 We have extended the processor chapter with a more gentle introduction
@@ -337,12 +337,15 @@ of a microprocessor, including a figure of the datapath.
 
 \section*{Foreword for the Fifth Edition}
 
+For the fifth edition we have upgraded to the actual Chisel version 3.5.6.
 To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
 deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
 If needed, those two chapters are available in the older versions of the Chisel book,
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
+
+\todo{What else has been changed.}
 
 
 
@@ -402,9 +405,9 @@ e.g., as future chips from Intel will include programmable hardware to speed up 
 It is perfectly fine to use Chisel as your first hardware description language.
 
 Chisel brings advances in software engineering, such as object-orientated
-and functional programming, into digital design.
+and functional programming, into the digital design domain.
 Chisel does not only allow to express hardware at the register-transfer level
-but allows you to write hardware generators.
+but allows you to write hardware \emph{generators}.
 
 Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is
@@ -461,7 +464,7 @@ of this book.
 Besides showing Chisel code, we have also tried to show useful designs and
 principles of good hardware description style.
 
-This book is optimized for reading on a laptop or tablet (e.g., an iPad).
+This book is optimized for reading on a tablet (e.g., an iPad) or a laptop.
 We include links to further reading in the running text, mostly to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
@@ -571,7 +574,7 @@ solve bigger problems!
 Listing~\ref{lst:chisel:hello} shows a blinking LED, described in Chisel.
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
-usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
+usually clocked with a high frequency, e.g., 50~MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
 example, we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
@@ -880,7 +883,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates and name
 \end{figure}
 
 
-Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
+\noindent Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
 Note that this circuit may be for a vector of bits and not only single wires
 that are combined with the AND and OR circuits.
 
@@ -1011,7 +1014,7 @@ type.
 With logical and arithmetical operations and a multiplexer, every combinational
 circuit can be described. However, Chisel provides further components and control abstractions
 for a more elegant description of a combinational circuit, which are described in
-a later chapter.
+Chapter~\ref{chap:comb}.
 
 The second basic component needed to describe a digital circuit is a state element,
 also called register, which is described next.
@@ -1080,8 +1083,8 @@ However, more often counting is used to define a time interval. Counting the
 clock cycles and triggering an action when the time interval has expired.
 
 A simple approach is counting up to a value. However, in computer science,
-and digital design, counting starts at 0. Therefore, if we want to count till
-10, we count from 0 to 9. The following code shows such a counter that counts
+and digital design, counting starts at 0. Therefore, if we want to count
+10 clock cycles, we count from 0 to 9. The following code shows such a counter that counts
 till 9 and wraps around to 0 when reaching 9.
 
 \shortlist{code/counter.txt}
@@ -1220,8 +1223,8 @@ processor such as the 32-bit version of \myref{https://en.wikipedia.org/wiki/RIS
 
 A register of a vector can also be initialized. This is then the value that the register is reset to.
 To initialize the register file, we use A \code{VecInit} with the constants for reset, wrapped
-into a \code{RegInit}. The input of the three registers are then connected to wires \code{a},
-\code{b}, and \code{c}.
+into a \code{RegInit}. The input of the three registers are then connected to wires \code{d},
+\code{e}, and \code{f}.
 
 \shortlist{code/reg_vec_init.txt}
 
@@ -1396,7 +1399,7 @@ version of Scala and the Chisel libraries.
 
 \index{sbt}
 
-The Scala library that represents Chisel and the Chisel testers are automatically
+The Scala library that represents Chisel and the Chisel tester are automatically
 downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
 with \code{latest.release} to always use the most recent version of Chisel.
@@ -1437,8 +1440,11 @@ Figure~\ref{fig:folders} shows the organization of the source tree of a typical 
 The root of the project is the project home, which contains \code{build.sbt}.
 It may also include a \code{Makefile} for the build process, a README, and a LICENSE file.
 Folder \code{src} contains all source code. From there it is split between \code{main},
-which contains the hardware sources, and \code{test}, which contains tests.
-Chisel inherits from Scala, which itself inherits from Java, the organization of source files
+which contains containing the hardware sources and \code{test} containing testers.
+The next folder in both cases is \code{scala}, as Chisel is based on Scala.
+If you want to include Java code, which may be useful for hardware generators,
+you would add a \code{java} folder.
+Chisel inherits from Scala, which itself inherits from Java, the organization of source
 in \myref{https://en.wikipedia.org/wiki/Java_package}{packages}.
 Packages organize your Chisel code into namespaces. Packages can also contain
 sub-packages.
@@ -1493,7 +1499,8 @@ $ sbt "runMain mypacket.MyObject"
 By default, \code{sbt} searches only the \code{main} part of the source tree and not
 the \code{test} part.\footnote{It is a convention from Java/Scala that the test folder contains
 unit tests and not objects with a \codefoot{main}.}
-To execute tests based on ChiselTest and ScalaTest you can simply run them with
+To execute tests based on ChiselTest you can simply run them with
+
 \begin{verbatim}
 $ sbt test
 \end{verbatim}
@@ -1518,8 +1525,8 @@ With Chisel, we can generate a synthesizable Verilog description of the circuit.
 
 To generate the Verilog description, we need an application. A Scala object that \code{extends App}
 is an application that implicitly generates the main function where the application starts.
-The only action of this application is to create a new \code{Hello} object and pass it
-to the Chisel \code{emitVerilog()} function.
+The only action of this application is to create a new Chisel module, in that example \code{Hello},
+and pass it to the Chisel function \code{emitVerilog()}.
 The following code will generate the Verilog file \code{Hello.v}.
 
 \shortlist{code/generate.txt}
@@ -1556,7 +1563,7 @@ for an example.
 
 Figure~\ref{fig:flow} shows the tool flow of Chisel. The digital circuit is described in a Chisel class
 shown as \code{Hello.scala}. The Scala compiler compiles this class, together with the Chisel and Scala
-libraries, and generates the Java class \code{Hello.class} that can be executed by a standard
+libraries, and generates the Java class file \code{Hello.class} that can be executed by a standard
 \myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
 Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
 RTL (FIRRTL), an intermediate representation of digital circuits. In our example, the file is \code{Hello.fir}.
@@ -1582,12 +1589,8 @@ with \code{sbt}, we can continue with a simple testing framework.
 Tests of hardware designs are usually called \myref{https://en.wikipedia.org/wiki/Test_bench}{test benches}.
 The test bench instantiates the design under test (DUT), drives input ports, observes output ports,
 and compares them with expected values.
-Chisel provides two testing methods: \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
-in package \code{chiseltest} and the older \code{PeekPokeTester} in package
-\code{iotesters}.\footnote{\codefoot{iotesters} has been deprecated since Chisel 3.5.
-% FIXME: The referenced appendix does not exist.
-A description of how to use the \codefoot{PeekPokeTester} can be found in Appendix~\ref{chap:peekpoke}}
-Here we describe the ChiselTest method.
+Chisel provides the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
+in package \code{chiseltest}.
 
 One strength of Chisel is that it can use the full power of Scala to write
 test benches. One can, for example, code the expected functionality of the hardware
@@ -1639,7 +1642,7 @@ and show that both tests passed:
 
 \code{sbt test} executes all available tests, which is useful for regression
 tests.\footnote{Try \codefoot{sbt test} in the repository of this book and you
-will see more than 80 tests passing.}
+will see more than 90 tests passing.}
 However, if you want to run just a single test (suite) you can do this with:
 
 \begin{verbatim}
@@ -1659,7 +1662,7 @@ and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
 \begin{chisel}
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.3"
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
 \end{chisel}
 
 \noindent Including ChiselTest this way automatically includes the necessary version of ScalaTest.
@@ -1689,9 +1692,8 @@ The method \code{test()} is invoked with the DUT as parameter and the test code 
 The input and output ports of the DUT are accessed with \code{dut.io}.
 You can set values via a \code{poke} on a port, which takes the value as a Chisel type of the
 input port as parameter.
-An output port can be read by invoking \code{peek()} on the port, which will return
-the value as a Chisel type. The method \code{toString} converts that value to a
-string.
+An output port can be read by invoking \code{peekInt()} or \code{peekBoolean()} on the port,
+which will return the value as a Scala type.
 The tester advances the simulation by one clock cycle with \code{dut.clock.step()}.
 For advancing the simulation by several clock cycles, we can provide a parameter to
 \code{step()}.
@@ -1710,17 +1712,15 @@ $ sbt "testOnly SimpleTest"
 
 \begin{verbatim}
 ...
-Result is: UInt<2>(0)
-Result is: UInt<2>(2)
+Result is: 0
+Result is: 2
 [info] SimpleTest:
 [info] DUT
 [info] - should pass
-[info] ScalaTest
 ...
 \end{verbatim}
 
 We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
-The \code{toString} method also tells us the Chisel type of a 2-bit \code{UInt}.
 Besides manually inspecting printouts, which is a good starting point, we can also
 express our expectations in the test bench itself by invoking
 \code{expect(value)} on the output port and the expected value as parameter.
@@ -1794,9 +1794,9 @@ test the DUT against.
 Testers, as described above, work well for small designs and for
 \myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
 software development. A collection of unit tests can also serve
-\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However,
-for debugging more complex designs, one would like to investigate several signals at
-once. A classic approach to debug digital designs is displaying the signals in a
+\myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
+for debugging more complex designs, one would like to investigate several signals at 
+once. A classic approach to debug digital designs is displaying the signals in a 
 waveform. In a waveform the signals are displayed over time.
 
 \noindent Chisel testers can generate a waveform that includes all registers and all
@@ -1820,11 +1820,11 @@ If you want to save a configuration of signals you can do so with \emph{File -- 
 and load it later with \emph{File -- Read Save File}.
 
 The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
-annotation to the \code{test()} function.
+annotation to the \code{test()} function.\footnote{This is an alternative to
+using the command line options.}
 We start with a simple tester that pokes values to the inputs and advances
 the clock with \code{step}. We do not read any output or compare it with \code{expect}.
-Instead, we will inspect the generated waveform in the \code{.vcd} file.\footnote{This is an alternative to
-use the command line options.} % It is not clear what this means. How is the ability to use a waveform viewer an alternative to command line options?
+Instead, we will inspect the generated waveform in the \code{.vcd} file.
 
 
 \shortlist{code/test_bench_wave.txt}
@@ -1945,16 +1945,17 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 
-// Chisel 3.5.4
-addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % "3.5.4" cross CrossVersion.full)
-libraryDependencies += "edu.berkeley.cs" %% "chisel3" % "3.5.4"
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.4"
+val chiselVersion = "3.5.6"
+addCompilerPlugin("edu.berkeley.cs" %% "chisel3-plugin" % chiselVersion cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % chiselVersion
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
+
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
 each run for a new version (which will fail if we are not connected to the Internet,
 e.g., when doing hardware design during a flight). Additionally, we have added the Chisel3 compiler
-plugin which is recommended for easier support of future features.
+plugin which is needed since Chisel 3.5.
 Change the \code{build.sbt} configuration to use the latest Chisel version by changing the
 library dependency to
 
@@ -2069,11 +2070,9 @@ Hardware components are called modules in Chisel. Each module extends
 the class \code{Module} and contains a field \code{io} for the interface.
 The interface is defined by a \code{Bundle} that is wrapped into a call to \code{IO()}.
 The \code{Bundle} contains fields to represent input and output ports of
-the module. The direction is given by wrapping a field into either a call to \code{Input()}
-or \code{Output()}. The direction is from the view of the component itself.
+the module. The direction is given by wrapping a field into either an \code{Input()}
+or an \code{Output()}. The direction is from the view of the component itself.
 
-We show an example design where we build a counter out of two components:
-an adder and a register.
 
 \begin{figure}
   \centering
@@ -2084,6 +2083,8 @@ an adder and a register.
 
 \longlist{code/components_add.txt}{The adder component in Chisel.}{lst:comp:add}
 
+We show an example design where we build a counter out of two components:
+an adder and a register.
 Figure~\ref{fig:components-adder} shows the schematic of the adder component.
 It has two inputs (\code{a} and \code{b}) and one output (\code{y}).
 Listing~\ref{lst:comp:add} shows the Chisel definition of the adder.
@@ -2115,19 +2116,20 @@ The Chisel code for this component is shown in Listing~\ref{lst:comp:reg}.
 
 Now we build a counter with those two components that counts from 0 to 9 and repeats.
 Figure~\ref{fig:components-counter} shows the schematic of the counter. We use an adder
-to add 1 to the value of \code{count}. A multiplexer selects between this sum and a 0.
+to add 1 to the value of \code{count}. A multiplexer selects between this sum and 0.
 That result, called \code{next} is the input for the register component. The output of the
 register is the \code{count} value and also the output of the \code{Count10} component (\code{dout}).
 
 Listing~\ref{lst:comp:cnt} shows the Chisel code for the \code{Count10} component.
 The two components are instantiated by creating them with \code{new}, wrapping them
-into a \code{Module()} call, and assigning them the names \code{add} and \code{reg}.
+into a \code{Module()}, and assigning them the names \code{add} and \code{reg}.
 In this example, we give the output of the register (\code{reg.io.q}) the name \code{count}.
+
 We connect \code{1.U} and \code{count} to the two inputs of the adder component.
-We give the output of the adder the name \code{result}.
-The multiplexer selects between \code{0.U} and \code{result} depending on the counter
+We give the output of the adder component the name \code{result}.
+The multiplexer selects between \code{0.U} and \code{result} depending on the current counter
 value \code{count}. We name the output of the multiplexer \code{next} and connect it
-to the input of the register. Finally, we connect the counter value \code{count}
+to the input of the register components. Finally, we connect the counter value \code{count}
 to the single output of the \code{Count10} component, \code{io.dout}.
 
 
@@ -2138,7 +2140,7 @@ A medium- to high-complexity hardware design is built out of a hierarchy of
 nested components.
 Figure~\ref{fig:components} shows the structure of such an example design. Component C has
 three input ports and two output ports. The component itself is assembled out
-of two subcomponents: B and C, which are connected to the inputs and
+of two subcomponents: A and B, which are connected to the inputs and
 outputs of C. One output of A is connected to an input of B.
 Component D is at the same hierarchy level as component C and connected
 to it.
@@ -2174,15 +2176,15 @@ input port of B.
 \longlist{code/components_c.txt}{Component C}{lst:comp:c}
 
 Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
-into a call to \code{Module()}. The reference to that module is stored in a local variable,
+into a \code{Module()}. The reference to that module is stored in a local variable,
 in this example \code{val compA = Module(new CompA())}.
 
 With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
-and the individual fields of the IO \code{Bundle}.
+and then the individual fields of the IO \code{Bundle}.
 
 \longlist{code/components_d.txt}{Component D}{lst:comp:d}
 
-The simplest component in our design, shown in Listing~\ref{lst:comp:d},
+The simplest component (D) in our design, shown in Listing~\ref{lst:comp:d},
 has just an input port, named \code{in}, and
 an output port named \code{out}.
 The final missing piece of our example design is the top-level component, which itself
@@ -2197,7 +2199,7 @@ components, such an adder, and huge components, such as a full microprocessor,
 
 Beginners in hardware design often start with tiny components.
 The problem is that digital design books use tiny components to show the principles.
-But the sizes of the examples (in those books, and also in this book) are small
+The sizes of the examples (in those books, and also in this book) are small
 to fit onto a page and to avoid distracting details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
@@ -2224,8 +2226,8 @@ or ALU for short. Figure~\ref{fig:alu} shows the symbol of an ALU.
 \end{figure}
 
 The ALU has two data inputs, labeled \code{a} and \code{b} in the figure, one function input \code{fn},
-and an output, labeled {y}. The ALU operates on \code{a} and \code{b} and provides the result
-at the output. The input \code{fn} selects the operation on \code{a} and \code{b}.
+and an output, labeled \code{y}. The ALU operates on \code{a} and \code{b} and provides the result
+at the output \code{y}. The input \code{fn} selects the operation on \code{a} and \code{b}.
 The operations are usually some arithmetic, such as addition and subtraction, and some logical
 functions such as and, or, xor. That's why it is called an ALU.
 
@@ -2324,6 +2326,7 @@ are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
 \code{class Example extends} \code{HasBlackBoxInline}.
 
 \chapter{Combinational Building Blocks}
+\label{chap:comb}
 
 In this chapter, we explore various combinational circuits, basic building blocks that we can
 use to construct more complex systems.
