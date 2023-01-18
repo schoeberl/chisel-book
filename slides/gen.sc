@@ -5,8 +5,8 @@
 import $ivy.`org.jbibtex:jbibtex:1.0.17`, org.jbibtex._
 
 
-import $ivy.`org.planet42::laika-core:0.12.0`
-import $ivy.`org.planet42::laika-io:0.12.0`
+import $ivy.`org.planet42::laika-core:0.19.0`
+import $ivy.`org.planet42::laika-io:0.19.0`
 import laika.api._
 import laika.format._
 import laika.io.implicits._

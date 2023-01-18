@@ -328,7 +328,7 @@ combinational building blocks.
 We have extended the hardware generation chapter with more functional
 examples, including building a fair arbitration tree out of a simple 2 to 1
 arbitration circuits.
-We have added a new chapter in interconnect, bus interfaces,
+We have added a new chapter on interconnect, bus interfaces,
 and how to connect an IO device as a memory mapped device.
 We have started a new chapter on debugging, testing and verification.
 The plan is to extend the chapter on this important topic in the next edition.
@@ -337,12 +337,15 @@ of a microprocessor, including a figure of the datapath.
 
 \section*{Foreword for the Fifth Edition}
 
+For the fifth edition we have upgraded to the actual Chisel version 3.5.6.
 To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
 deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
 If needed, those two chapters are available in the older versions of the Chisel book,
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
+
+\todo{What else has been changed.}
 
 
 
@@ -402,9 +405,9 @@ e.g., as future chips from Intel will include programmable hardware to speed up 
 It is perfectly fine to use Chisel as your first hardware description language.
 
 Chisel brings advances in software engineering, such as object-orientated
-and functional programming, into digital design.
+and functional programming, into the digital design domain.
 Chisel does not only allow to express hardware at the register-transfer level
-but allows you to write hardware generators.
+but allows you to write hardware \emph{generators}.
 
 Hardware is now commonly described with a hardware description language.
 The time of drawing hardware components, even with CAD tools, is
@@ -461,7 +464,7 @@ of this book.
 Besides showing Chisel code, we have also tried to show useful designs and
 principles of good hardware description style.
 
-This book is optimized for reading on a laptop or tablet (e.g., an iPad).
+This book is optimized for reading on a tablet (e.g., an iPad) or a laptop.
 We include links to further reading in the running text, mostly to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
@@ -571,7 +574,7 @@ solve bigger problems!
 Listing~\ref{lst:chisel:hello} shows a blinking LED, described in Chisel.
 It is not important that you understand the details of this code example.
 We will cover those in the following chapters. Just note that the circuit is
-usually clocked with a high frequency, e.g., 50 MHz, and we need a counter
+usually clocked with a high frequency, e.g., 50~MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
 example, we count from 0 up to 25000000-1 and then toggle the blinking signal
 (\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
