@@ -285,7 +285,7 @@ The testing section has been extended. The sequential building blocks chapter co
 more example circuits. A new chapter on input processing explains input synchronization,
 shows how to design a debouncing circuit, and how to filter a noisy input signal.
 The example designs chapter has been extended to show different implementations of a FIFO.
-The FIFO variations also show how to use type parameters and inheritance in digital design. 
+The FIFO variations also show how to use type parameters and inheritance in digital design.
 
 \section*{Foreword for the Third Edition}
 
@@ -323,7 +323,7 @@ so called \emph{black boxes}, and how to use memories for clock domain crossing
 \section*{Foreword for the Fourth Edition}
 
 For the fourth edition we have switched to the actual Chisel version 3.5.4.
-We have added arbiter, priority encoder, and comparator to the chapter of 
+We have added arbiter, priority encoder, and comparator to the chapter of
 combinational building blocks.
 We have extended the hardware generation chapter with more functional
 examples, including building a fair arbitration tree out of a simple 2 to 1
@@ -446,8 +446,8 @@ and can be learned within a few days.
 Therefore, this book is not a big book, as well.
 Chisel is for sure smaller than VHDL and Verilog, which carry many legacies.
 The power of Chisel comes from the embedding of Chisel within
-\myref{https://www.scala-lang.org/}{Scala}, which itself in an expressive language.
-Chisel inherits the feature from Scala being ``a language that grows on you''~\cite{Scala}.
+\myref{https://www.scala-lang.org/}{Scala}, which itself is an expressive language.
+Chisel inherits the feature from Scala of being ``a language that grows on you''~\cite{Scala}.
 However, Scala is not the topic of this book.
 We provide a short section on Scala for hardware designers.
 The textbook by Odersky et al.~\cite{Scala} provides a general introduction
@@ -611,11 +611,11 @@ $ sbt eclipse
 \end{verbatim}
 and import that project into Eclipse.\footnote{This function needs the Eclipse plugin for sbt.}
 
-\myref{https://code.visualstudio.com/}{Visual Studio Code} is another option for a Chisel IDE. 
+\myref{https://code.visualstudio.com/}{Visual Studio Code} is another option for a Chisel IDE.
 The \myref{https://marketplace.visualstudio.com/items?itemName=scalameta.metals}{Scala Metals}
 extension provides Scala support.
 On the left bar select \emph{Extensions} and search for \emph{Metals} and install \emph{Scala (Metals)}.
-To import an \code{sbt} based project open the folder with \emph{File - Open}. 
+To import an \code{sbt}-based project, open the folder with \emph{File - Open}.
 
 %Open the project folder, e.g., t-crest/patmos/hardware, by selecting File/Open Folder. Make sure the sbt project uses at least Scala version 2.11.12
 %On the left bar select "Metals" and then select "Import build" - This may take a while
@@ -919,7 +919,7 @@ A single bit can be extracted as follows:
 \noindent A subfield can be extracted from end to start position:
 \shortlist{code/sub_field.txt}
 
-\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note, that there is a \codefoot{Cat} function available that performs the same
+\noindent Bit fields are concatenated with the \code{\#\#} operator.\footnote{Note that there is a \codefoot{Cat} function available that performs the same
 operation with \codefoot{Cat(highByte, lowByte)}.}
 
 \shortlist{code/concat.txt}
@@ -953,8 +953,8 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \code{\& | \^} & AND, OR, XOR & UInt, SInt, Bool \\
     \code{!} & logical NOT & Bool \\
     \code{\&\& ||} & logical AND, OR & Bool \\
-    \bottomrule 
-  \end{tabular} 
+    \bottomrule
+  \end{tabular}
   \caption{Chisel defined hardware operators.}
  \label{tab:operators}
 \end{table}
@@ -973,8 +973,8 @@ Table~\ref{tab:functions} shows various functions defined on and for Chisel data
     \code{Fill(n, v)} & bitstring replication, n times & UInt, SInt \\
     \code{a \#\# b} & bitfield concatenation & UInt, SInt \\
     \code{Cat(a, b, ...)} & bitfield concatenation & UInt, SInt \\
-    \bottomrule 
-  \end{tabular} 
+    \bottomrule
+  \end{tabular}
   \caption{Chisel defined hardware functions, invoked on \code{v}.}
    \label{tab:functions}
 \end{table}
@@ -1164,18 +1164,18 @@ connects it to \code{muxOut}.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/vec-mux}
-  \caption{A vector wrapped in a \code{Wire} is just a mulitplexer.}
+  \caption{A vector wrapped in a \code{Wire} is just a multiplexer.}
   \label{fig:vec-mux}
 \end{figure}
 
 Similar to using a \code{WireDefault}, we can set default values of a \code{Vec} with \code{VecInit}.
-The following code represents  3:1 multiplexer with three constant defaults. Note, that we specify
+The following code represents a 3:1 multiplexer with three constant defaults. Note that we specify
 the size (3 bits) of the \code{UInt} data types with the first constant.
 With the condition (\code{cond}) we can overwrite those default values.
 This overwrite hardware itself consists of three 2:1 multiplexers. The last line selects
-one of the three inputs of the \code{defVec} multiplexer. Note, that \code{VecInit} already returns a
-Chisel hardware and we do not need to wrap it into a \code{Wire}.\footnote{This is different from
-an plain \codefoot{Vec} that needs to be wrapped into a \codefoot{Wire}. We could wrap the \codefoot{VecInit}
+one of the three inputs of the \code{defVec} multiplexer. Note that \code{VecInit} already returns
+Chisel hardware, so we do not need to wrap it in a \code{Wire}.\footnote{This is different from
+a plain \codefoot{Vec} that needs to be wrapped into a \codefoot{Wire}. We could wrap the \codefoot{VecInit}
 into a \codefoot{WireDefault}, but this uncommon coding style.}
 
 \shortlist{code/vec_init.txt}
@@ -1191,7 +1191,7 @@ inputs of the \code{Vec}.
 \subsubsection{Register Vec}
 
 We can also wrap a \code{Vec} into a register to define an array of registers.
-Following code shows a vector of three registers.
+The following code shows a vector of three registers.
 \shortlist{code/vec_reg.txt}
 
 Figure~\ref{fig:vec-reg} shows the schematic of that circuit. It contains three registers.
@@ -1211,9 +1211,9 @@ enable signals of the registers.
 
 \index{Register file}
 Following example defines a register file for a processor; 32 registers
-each 32-bits wide, as for a classic 32-bit 
+each 32-bits wide, as used in a classic 32-bit
 \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{RISC}
-processor, like the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}.
+processor such as the 32-bit version of \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}.
 
 \shortlist{code/reg_file.txt}
 
@@ -1229,7 +1229,7 @@ into a \code{RegInit}. The input of the three registers are then connected to wi
 \shortlist{code/reg_vec_init.txt}
 
 If we want to reset all elements of a large register file to the same value (probably 0), we
-can use a Sala sequence \code{Seq}. \code{VecInit} can be constructed with a sequence
+can use a Scala sequence \code{Seq}. \code{VecInit} can be constructed with a sequence
 containing Chisel types. \code{Seq} contains a creation function \code{fill} to initialize a sequence
 with identical values.
 The following code constructs a register file containing 32 registers, each 32-bit wide and reset to
@@ -1251,15 +1251,15 @@ type, we need to pass a prototype for the vector fields. Using our
 
 When we want a register of a bundle type that needs a reset value,
 we first create a \code{Wire} of that bundle, set the individual fields
-as needed, and then passing this bundle to a \code{RegInit}:
+as needed, and then pass this bundle to a \code{RegInit}:
 
 \shortlist{code/bundle_reg_init.txt}
 
 With combinations of \code{Bundle}s and \code{Vec}s we can define our own data
 structures, which are powerful abstractions.
 
-{\bf Possible pitfall:} In Chisel partial assignments are not allowed, although they have been
-allowed in Chisel 2 and are possible in Verilog and VHDL. Following code will generate
+{\bf Possible pitfall:} In Chisel 3, partial assignments are not allowed, although they have been
+allowed in Chisel 2 and are possible in Verilog and VHDL. The following code will generate
 an error during circuit elaboration:
 
 \shortlist{code/no_partial_assign.txt}
@@ -1268,13 +1268,13 @@ an error during circuit elaboration:
 One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
 from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
 to a \code{UInt}, and assigne this value to the target \code{UInt}.
-Note, that we define here a \code{Bundle} as a local data structure as we need it only
+Note that we define here a \code{Bundle} as a local data structure as we need it only
 locally.
 
 \shortlist{code/partial_assign_solution.txt}
 
 \noindent The small drawback of this solution is that one needs to know in which orders
-bundle fields are merged to a singe bit vector. Another option is to use a vector of \code{Bool}
+bundle fields are merged to a single bit vector. Another option is to use a vector of \code{Bool}
 to individually assign values and then convert it to a \code{UInt}.
 
 \shortlist{code/partial_vec_bool.txt}
@@ -1284,13 +1284,12 @@ to individually assign values and then convert it to a \code{UInt}.
 \index{Reg}
 \index{IO}
 
-\code{UInt}, \code{SInt}, and \code{Bits} are Chisel types, which themself do not
+\code{UInt}, \code{SInt}, and \code{Bits} are Chisel types which by themselves do not
 represent hardware. Only wrapping them into a \code{Wire}, \code{Reg}, or \code{IO}
 generates hardware. A \code{Wire} represents combinational logic, a \code{Reg}
 represents a register (collection of D flip-flops), and an \code{IO} represents a
 connection of a module (like pins of a concrete integrated circuit (IC)).
-\code{Wire}, \code{Reg}, or \code{IO} can be wrapped over any Chisel type, also
-a \code{Bundle} or a \code{Vec}.
+Any Chisel type can be wrapped in a \code{Wire}, \code{Reg}, or \code{IO}.
 
 You give a hardware component a name by assigning it to a Scala immutable
 variable:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are of no use
@@ -1308,9 +1307,9 @@ and the Chisel operator ``\code{:=}''. You use Scala's ``\code{=}'' operator whe
 object (and giving it a name) but you use Chisel's ``\code{:=}'' operator when assigning or reassigning a value to
 an \emph{existing} hardware object.
 
-Combinational values can be conditionally assigned, but need to assign a value in every branch
+Combinational values can be conditionally assigned, but they need to be assigned in every branch
 of the condition. Otherwise, one would describe a latch, which the Chisel compiler will reject.
-Best practice is to already define a default value at the creation of the \code{Wire}.
+The best practice is to define a default value at the creation of the \code{Wire}.
 Therefore, the former code is better rewritten as follows.
 
 \shortlist{code/wire_reg_default.txt}
@@ -1331,7 +1330,7 @@ language) does define hardware components. While in a software program one
 line of code after the other is executed, in hardware all lines of code
 \emph{execute in parallel}.
 
-It is essential to keep in mind that Chisel code does generate hardware.
+It is essential to keep in mind that Chisel code generates hardware.
 Try to imagine, or draw on a sheet of paper, the individual blocks that
 are generated by your Chisel circuit description.
 Each creation of a component adds hardware; each assignment statement
@@ -1342,11 +1341,11 @@ by executing the Chisel statements, it \emph{collects} the hardware components
 and connects those nodes. This network of hardware nodes is the hardware,
 which Chisel can spill out as Verilog code for ASIC or FPGA synthesis or can be
 tested with a Chisel tester.
-The network of hardware nodes is what is executed fully parallel.
+The network of hardware nodes is what is executed fully in parallel.
 
-For a software engineer imagine this immense parallelism that you can
+For a software engineer, imagine this immense parallelism that you can
 create in hardware without needing to partition your application into threads
-and getting the locking correct for the communication.
+and get the locking correct for the communication.
 
 
 \section{Exercises}
@@ -1403,18 +1402,18 @@ version of Scala and the Chisel libraries.
 The Scala library that represents Chisel and the Chisel tester are automatically
 downloaded during the build process from a Maven repository.
 The libraries are referenced by \code{build.sbt}. It is possible to configure \code{build.sbt}
-with \code{latest.release} to always use the most actual version of Chisel.
-However, this means on each build the version is looked up from the Maven
+with \code{latest.release} to always use the most recent version of Chisel.
+However, this means that on each build, the version is looked up from the Maven
 repository. This lookup needs an Internet connection for the build to succeed.
-Better use a dedicated version of Chisel and all other Scala libraries in your \code{build.sbt}.
-Maybe sometimes it is also good to be able to write hardware code and test it without an Internet connection.
+It is better to use a dedicated version of Chisel and all other Scala libraries in your \code{build.sbt}.
+Sometimes, it is good to be able to write hardware code and test it without an Internet connection.
 For example, it is cool to do hardware design on a plane.
 
 \subsection{Source Organization}
 
 \index{Source organization}
 
-\code{sbt} inherits the source convention from the \myref{https://maven.apache.org/}{Maven}
+\code{sbt} inherits source conventions from the \myref{https://maven.apache.org/}{Maven}
 build automation tool. Maven also organizes repositories of open-source Java libraries.\footnote{That is
 also the place where you downloaded the Chisel library on your first build:
 \url{https://mvnrepository.com/artifact/edu.berkeley.cs/chisel3}.}
@@ -1441,7 +1440,7 @@ Figure~\ref{fig:folders} shows the organization of the source tree of a typical 
 The root of the project is the project home, which contains \code{build.sbt}.
 It may also include a \code{Makefile} for the build process, a README, and a LICENSE file.
 Folder \code{src} contains all source code. From there it is split between \code{main},
-containing the hardware sources and \code{test} containing testers.
+which contains containing the hardware sources and \code{test} containing testers.
 The next folder in both cases is \code{scala}, as Chisel is based on Scala.
 If you want to include Java code, which may be useful for hardware generators,
 you would add a \code{java} folder.
@@ -1470,7 +1469,7 @@ the components of packet \code{mypack} need to be imported. The underscore
 
 \noindent It is also possible to not import all types from \code{mypack},
 but use the fully qualified name \code{mypack.Abc} to refer to the module
-\code{Abc} in package \code{mypack}.
+\code{Abc} in the package \code{mypack}.
 
 \shortlist{code/usemypack2.txt}
 
@@ -1487,9 +1486,9 @@ A Chisel project can be compiled and executed with a simple \code{sbt} command:
 $ sbt run
 \end{verbatim}
 
-This command will compile all your Chisel code from the source tree and searches
-for classes that contain an \code{object} that includes a \code{main} method, or simpler
-that extends \code{App}. If there is more than one such object, all objects are listed and
+This command will compile all your Chisel code from the source tree and search
+for classes that contain an \code{object} that either has a \code{main} method or
+extends \code{App}. If there is more than one such object, all objects are listed and
 one can be selected.
 You can also directly specify the object that shall be executed as a parameter to \code{sbt}:
 
@@ -1497,10 +1496,11 @@ You can also directly specify the object that shall be executed as a parameter t
 $ sbt "runMain mypacket.MyObject"
 \end{verbatim}
 
-Per default \code{sbt} searches only the \code{main} part of the source tree and not
-the \code{test} part.\footnote{This is a convention form Java/Scala that the test folder contains
+By default, \code{sbt} searches only the \code{main} part of the source tree and not
+the \code{test} part.\footnote{It is a convention from Java/Scala that the test folder contains
 unit tests and not objects with a \codefoot{main}.}
 To execute tests based on ChiselTest you can simply run them with
+
 \begin{verbatim}
 $ sbt test
 \end{verbatim}
@@ -1519,9 +1519,9 @@ $ sbt "test:runMain mypacket.MyMainTest"
 \index{generate Verilog}
 \index{emit Verilog}
 
-To synthesize the Chisel code for an FPGA or ASIC we need to translate Chisel into
+To synthesize Chisel code for an FPGA or ASIC we need to translate Chisel into
 a hardware description language that a synthesize tool understands.
-With Chisel we can generate a synthesizable Verilog description of the circuit.
+With Chisel, we can generate a synthesizable Verilog description of the circuit.
 
 To generate the Verilog description, we need an application. A Scala object that \code{extends App}
 is an application that implicitly generates the main function where the application starts.
@@ -1536,7 +1536,7 @@ into the root folder of our project (where we run the \code{sbt} command).
 To put the generated files into a subfolder, we need to specify options to \code{emitVerilog()}.
 I recommend to specify a folder \code{generated}, as shown in Figure~\ref{fig:folders}.
 The build options can be set as a second argument, which is an array of Strings.
-The following code will generate the Verilog file \code{Hello.v} in the subfolder \code{generated}. 
+The following code will generate the Verilog file \code{Hello.v} in the subfolder \code{generated}.
 
 \shortlist{code/generate_options.txt}
 
@@ -1546,9 +1546,10 @@ You can simply print out the string for testing.
 \shortlist{code/generate_string.txt}
 
 \noindent This form of output is popular when showing small Chisel examples in
-\myref{https://scastie.scala-lang.org/}{Scastie}, a web based Scala compiler and runtime.
-See as an example of the
-\myref{https://scastie.scala-lang.org/schoeberl/SN7rDb9iS027ORiWqXMGsQ/6}{Hello World on Scastie}.
+\myref{https://scastie.scala-lang.org/}{Scastie}, a web-based Scala compiler and runtime.
+See
+\myref{https://scastie.scala-lang.org/schoeberl/SN7rDb9iS027ORiWqXMGsQ/6}{Hello World on Scastie}
+for an example.
 
 
 \subsection{Tool Flow}
@@ -1565,11 +1566,11 @@ shown as \code{Hello.scala}. The Scala compiler compiles this class, together wi
 libraries, and generates the Java class file \code{Hello.class} that can be executed by a standard
 \myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
 Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
-RTL (FIRRTL), an intermediate representation of digital circuits. In our example the file is \code{Hello.fir}.
+RTL (FIRRTL), an intermediate representation of digital circuits. In our example, the file is \code{Hello.fir}.
 The FIRRTL compiler performs transformations on the circuit.
 
-Treadle is a FIRRTL interpreter to simulate the circuit. Together with the Chisel tester it can be
-used to debug and test Chisel circuits. With assertions we can provide test results.
+Treadle is a FIRRTL interpreter that can simulate the circuit. Together with the Chisel tester, it can be
+used to debug and test Chisel circuits. With assertions, we can provide test results.
 Treadle can also generate waveform files (\code{Hello.vcd}) that can be viewed with
 a waveform viewer (e.g., the free viewer GTKWave or Modelsim).
 
@@ -1591,7 +1592,7 @@ and compares them with expected values.
 Chisel provides the \myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest}
 in package \code{chiseltest}.
 
-One strength of Chisel is that it can use the full power of Scala to write those
+One strength of Chisel is that it can use the full power of Scala to write
 test benches. One can, for example, code the expected functionality of the hardware
 in a software simulator and compare the simulation of the hardware with the
 software simulation. This method is very efficient when testing an implementation
@@ -1600,7 +1601,7 @@ of a processor~\cite{lipsi:arcs2018}.
 \subsection{ScalaTest}
 \index{ScalaTest}
 
-\myref{http://www.scalatest.org/}{ScalaTest} is  testing tool for Scala (and Java). ChiselTest is an extension
+\myref{http://www.scalatest.org/}{ScalaTest} is a testing tool for Scala (and Java). ChiselTest is an extension
 of ScalaTest. Therefore, we first explore a simple ScalaTest example. To use it, include the library
 in your \code{build.sbt} with following line:
 
@@ -1640,7 +1641,7 @@ and show that both tests passed:
 
 
 \code{sbt test} executes all available tests, which is useful for regression
-test.\footnote{Try \codefoot{sbt test} in the repository of this book and you
+tests.\footnote{Try \codefoot{sbt test} in the repository of this book and you
 will see more than 90 tests passing.}
 However, if you want to run just a single test (suite) you can do this with:
 
@@ -1655,8 +1656,8 @@ there will be a relatively silent error message: \code{No tests were executed}.
 \index{ChiselTest}
 
 
-\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the standard testing tool 
-for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala 
+\myref{https://www.chisel-lang.org/chiseltest/}{ChiselTest} is the standard testing tool
+for Chisel modules based on the \myref{http://www.scalatest.org/}{ScalaTest} tool for Scala
 and Java, which we can use to run Chisel tests.
 To use it, include the \code{chiseltest} library in your \code{build.sbt} with the following line:
 
@@ -1751,7 +1752,7 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 [info] SimpleTestExpect:
 [info] DUT
 [info] - should pass *** FAILED ***
-[info]   io_out=2 (0x2) did not equal expected=4 (0x4) 
+[info]   io_out=2 (0x2) did not equal expected=4 (0x4)
                    (lines in testing.scala: 27) (testing.scala:35)
 [info] ScalaTest
 [info] Run completed in 1 second, 214 milliseconds.
@@ -1767,7 +1768,7 @@ value. In the following, we changed the test bench to expect a 4, which is an er
 The \code{peek()} function returns a Chisel type, which would need conversion to be used
 as Scala type. To simplify using test values in Scala land, ChiselTest supports \code{peekInt()}
 and \code{peekBoolean()}. The following test example reads the output with \code{peekInt()},
-which returns a Scala integer\footnote{To support arbitrary wide integer values the
+which returns a Scala integer\footnote{To support arbitrarily wide integer values, the
 return value is a Scala \codefoot{BigInt} instead of a Scala \codefoot{Int}.}
 that is used in the \code{assert()} statement.
 Similar we can read the \code{equ} output into a Scala \code{Boolean}, directly
@@ -1790,16 +1791,16 @@ test the DUT against.
 \index{Vcd}
 
 
-Testers, as described above, work well for small designs and for 
+Testers, as described above, work well for small designs and for
 \myref{https://en.wikipedia.org/wiki/Unit_testing}{unit testing}, as it is common in
-software development. A collection of unit tests can also used for
+software development. A collection of unit tests can also serve
 \myref{https://en.wikipedia.org/wiki/Regression_testing}{regression testing}. However, 
 for debugging more complex designs, one would like to investigate several signals at 
 once. A classic approach to debug digital designs is displaying the signals in a 
 waveform. In a waveform the signals are displayed over time.
 
-\noindent Chisel testers can generate a waveform that includes all registers and all 
-IO signals. In the following examples we show waveform testers for the 
+\noindent Chisel testers can generate a waveform that includes all registers and all
+IO signals. In the following examples, we show waveform testers for the
 \code{DeviceUnderTest} from the former example (the 2-bit AND function).
 To generate a waveform for a test pass a definition of \code{writeVcd=1} to
 the test, as shown in the following \code{sbt} command:
@@ -1811,12 +1812,12 @@ sbt "testOnly SimpleTest -- -DwriteVcd=1"
 You can view the waveform with the free viewer
 \myref{http://gtkwave.sourceforge.net/}{GTKWave} or with ModelSim.
 Start GTKWave and select \emph{File -- Open New Window} and navigate to the
-folder where the Chisel tester put the \code{.vcd} file. Per default the generated files
-are in \code{test\_run\_dir} then the description of the test.
-Within this folder you should be able to find \code{DeviceUnderTest.vcd}.
+folder where the Chisel tester put the \code{.vcd} file. By default, the generated files
+are in \code{test\_run\_dir} then the description of the test. % this sentence is unclear
+Within this folder, you should be able to find \code{DeviceUnderTest.vcd}.
 You can select the signals from the left side and drag them into the main window.
 If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
-and load it later with \emph{File -- Read Save File}. 
+and load it later with \emph{File -- Read Save File}.
 
 The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
 annotation to the \code{test()} function.\footnote{This is an alternative to
@@ -1877,7 +1878,7 @@ dut:  3  1  1
 dut:  3  2  2
 dut:  3  3  3
 dut:  0  0  0
-test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles 
+test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
 in 0,031521 seconds 571,04 Hz
 \end{verbatim}
 
@@ -1905,7 +1906,7 @@ Each file starts with the import of Chisel and related packages:
 \shortlist{code/import.txt}
 
 \noindent Then follows the hardware description, as shown in Listing~\ref{lst:chisel:hello}.
-To generate the Verilog description, we need an application. 
+To generate the Verilog description, we need an application.
 The only action of this application is to create a new \code{Hello} object and pass it
 to the \code{emitVerilog()} function.
 
@@ -1926,7 +1927,7 @@ Those two signals are added automatically by Chisel.
 
 Furthermore, we can identify the definition of our two registers \code{cntReg} and \code{blkReg}.
 We may also find the reset and update of those registers at the end of the module definition.
-Note, that Chisel generates a synchronous reset.
+Note that Chisel generates a synchronous reset.
 
 For \code{sbt} to be able to fetch the correct Scala compiler and the Chisel library,
 we need a \code{build.sbt}:
@@ -1979,7 +1980,7 @@ make
 %This works for our example in an FPGA, as registers usually power up 0.
 Besides a \code{README} file, the example project also contains project
 files for different FPGA boards. E.g., in
-\myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world/quartus/altde2-115}{quartus/altde2-115} 
+\myref{https://github.com/schoeberl/chisel-examples/tree/master/hello-world/quartus/altde2-115}{quartus/altde2-115}
 you can find the two project files to define a Quartus project for the DE2-115 board.
 The main definitions (source files, device, pin assignments) can be found in a plain text file
 \myref{https://github.com/schoeberl/chisel-examples/blob/master/hello-world/quartus/altde2-115/hello.qsf}{hello.qsf}.
@@ -2121,8 +2122,9 @@ register is the \code{count} value and also the output of the \code{Count10} com
 
 Listing~\ref{lst:comp:cnt} shows the Chisel code for the \code{Count10} component.
 The two components are instantiated by creating them with \code{new}, wrapping them
-into a \code{Module()}, and assigning it a name. In our example \code{add} and \code{reg}.
-In this example we give the output of the register component (\code{reg.io.q}) the name \code{count}.
+into a \code{Module()}, and assigning them the names \code{add} and \code{reg}.
+In this example, we give the output of the register (\code{reg.io.q}) the name \code{count}.
+
 We connect \code{1.U} and \code{count} to the two inputs of the adder component.
 We give the output of the adder component the name \code{result}.
 The multiplexer selects between \code{0.U} and \code{result} depending on the current counter
@@ -2134,7 +2136,7 @@ to the single output of the \code{Count10} component, \code{io.dout}.
 
 \section{Nested Components}
 
-A medium to high complex hardware design is built out of a hierarchy of
+A medium- to high-complexity hardware design is built out of a hierarchy of
 nested components.
 Figure~\ref{fig:components} shows the structure of such an example design. Component C has
 three input ports and two output ports. The component itself is assembled out
@@ -2163,8 +2165,8 @@ hierarchy, we do not show any implementation within the components.
 The implementation of the component is written at the place where
 the comments states ``function of X''.
 As we have no function associated with those example components,
-we used generic port names. For a real design use descriptive
-port names, such as \code{data}, \code{valid}, or \code{ready}.
+we used generic port names. For a real design, use descriptive
+port names such as \code{data}, \code{valid}, or \code{ready}.
 
 Component C, shown in Listing~\ref{lst:comp:c}, has three input and two output ports. It is built out of
 components A and B. We show how A and B are connected to the ports
@@ -2198,7 +2200,7 @@ components, such an adder, and huge components, such as a full microprocessor,
 Beginners in hardware design often start with tiny components.
 The problem is that digital design books use tiny components to show the principles.
 The sizes of the examples (in those books, and also in this book) are small
-to fit onto a page (or slide) and to not distract by too many details.
+to fit onto a page and to avoid distracting details.
 
 The interface to a component is a little bit verbose (with types, names, directions,
 IO construction). As a rule of thumb, I propose that the core of the component,
@@ -2227,13 +2229,13 @@ The ALU has two data inputs, labeled \code{a} and \code{b} in the figure, one fu
 and an output, labeled \code{y}. The ALU operates on \code{a} and \code{b} and provides the result
 at the output \code{y}. The input \code{fn} selects the operation on \code{a} and \code{b}.
 The operations are usually some arithmetic, such as addition and subtraction, and some logical
-functions such as and, or, xor. That's why it is called ALU.
+functions such as and, or, xor. That's why it is called an ALU.
 
 The ALU is usually a combinational circuit without any state elements.
 An ALU might also have additional outputs to signal properties
 of the result, such as zero or the sign.
 
-The following code shows an ALU with 16-bit inputs and outputs that supports: addition, subtraction, or, and and
+The following code shows an ALU with 16-bit inputs and outputs that supports addition, subtraction, or, and an and
 operation, selected by a 2-bit \code{fn} signal.
 
 \shortlist{code/components_alu.txt}
@@ -2272,54 +2274,54 @@ We can also connect the port of a submodule with the parent module.
 \section{External Modules}
 \index{Blackbox}
 
-Sometimes you might wish to include a component whose description is 
-written in Verilog, or you might wish to ensure the emitted Verilog of a component 
-has a very specific structure that your synthesis tool can recognize and map to an 
-available primitive. Chisel provides support for this through its \code{BlackBox} and 
-\code{ExtModule} classes, which allow you to define components with Verilog sources. 
-Both are parameterized with a \code{Map[String, Param]} which is translated to module 
-parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog 
-files, while \code{ExtModule}s act as placeholders and are emitted as source-less module 
-instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g., 
+Sometimes you might wish to include a component whose description is
+written in Verilog, or you might wish to ensure the emitted Verilog of a component
+has a very specific structure that your synthesis tool can recognize and map to an
+available primitive. Chisel provides support for this through its \code{BlackBox} and
+\code{ExtModule} classes, which allow you to define components with Verilog sources.
+Both are parameterized with a \code{Map[String, Param]} which is translated to module
+parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog
+files, while \code{ExtModule}s act as placeholders and are emitted as source-less module
+instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g.,
 Xilinx or Intel device primitives such as clock or input buffers.
 
 \shortlist{code/xilinx_bufgce.txt}
 \shortlist{code/altera_alt_inbuf.txt}
 
-\noindent Blackboxes, on the other hand, can represent any component. They can be 
-declared in three different ways with their source either inlined or available in a 
+\noindent Blackboxes, on the other hand, can represent any component. They can be
+declared in three different ways with their source either inlined or available in a
 separate file. As an example, consider a 32-bit adder with the following IO.
 \shortlist{code/blackbox_adder_io.txt}
 
-\noindent The inlined version is declared as follows. 
+\noindent The inlined version is declared as follows:
 \shortlist{code/blackbox_adder_inline.txt}
 
-Providing the source code within a string literal (denoted by an \code{s} or an \code{f} 
-before the double quotes) and using pipes allows including nicely formatted Verilog code. 
-Additionally, it enables support for parameterization because Scala variables can be 
-inserted using the \code{\$} or \code{\$\{\}} escape characters. The \code{stripMargin} 
+Providing the source code within a string literal (denoted by an \code{s} or an \code{f}
+before the double quotes) and using pipes allows including nicely formatted Verilog code.
+Additionally, it enables support for parameterization because Scala variables can be
+inserted using the \code{\$} or \code{\$\{\}} escape characters. The \code{stripMargin}
 method removes the pipes and tabs when emitting the code.
 
-There are two alternatives to inlined blackboxes, both expecting the Verilog source in 
+There are two alternatives to inlined blackboxes, both expecting the Verilog source in
 a separate file. They are declared as follows.
 \shortlist{code/blackbox_adder_resource.txt}
 \shortlist{code/blackbox_adder_path.txt}
 
-The \code{HasBlackBoxResource} version expects to find its Verilog source 
+The \code{HasBlackBoxResource} version expects to find its Verilog source
 in the\\
 \code{./src/main/resource} folder.
-The \code{HasBlackBoxPath} version can be provided with any relative path from the project 
+The \code{HasBlackBoxPath} version can be provided with any relative path from the project
 folder.
 
-Blackboxes are instantiated the same way as other modules by wrapping them as 
-\code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped 
-either in a named class or in an anonymous class in the tester. Both are allowed to have 
-the same IO as the black box.
+Blackboxes are instantiated the same way as other modules by wrapping them as
+\code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped
+either in a named class or in an anonymous class in the tester. Both are allowed to have
+the same IO as the blackbox.
 \shortlist{code/blackbox_named.txt}
 \shortlist{code/blackbox_anonymous.txt}
 
-Note that \code{HasBlackBoxInline}, \code{HasBlackBoxPath}, and \code{HasBlackBoxResource} 
-are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g., 
+Note that \code{HasBlackBoxInline}, \code{HasBlackBoxPath}, and \code{HasBlackBoxResource}
+are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
 \code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to\\
 \code{class Example extends} \code{HasBlackBoxInline}.
 
@@ -2366,7 +2368,7 @@ value of \code{0}. The \code{when} block takes a Chisel \code{Bool} and reassign
 \shortlist{code/comb_wire.txt}
 
 \noindent The logic of the circuit is a multiplexer, where the two inputs are the constants
-\code{0} and \code{3} and the condition \code{cond} the select signal.
+\code{0} and \code{3} and the select signal is the condition \code{cond}.
 Keep in mind that we describe hardware circuits and not a software program with conditional
 execution.
 
@@ -2393,23 +2395,23 @@ Chisel also supports a chain of conditionals (like a if/elseif/else chain) with 
 \shortlist{code/comb_elsewhen.txt}
 
 \noindent This chain of \code{when}, \code{.elsewhen}, and \code{.otherwise}
-construct a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
+constructs a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain of multiplexers.
 That chain introduces a priority, i.e., when \code{cond} is true, the other conditions
 are not evaluated.
 
 Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
-Those \code{.elsewhen} branches can be arbitrary long.
+Those \code{.elsewhen} branches can be arbitrarily long.
 However, if the chain of conditions depends on a single signal, it is better
 to use the \code{switch} statement, which is introduced in the following
 subsection with a decoder circuit.
 
-For more complex combinational circuits it might be practical to assign
+For more complex combinational circuits, it might be practical to assign
 a default value to a \code{Wire}. A default assignment can be combined with the wire
 declaration with \code{WireDefault}.
 
 \shortlist{code/comb_wiredefault.txt}
 
-One might question why using \code{when}, \code{.elsewhen}, and \code{.otherwise}
+One might ask, why do we use \code{when}, \code{.elsewhen}, and \code{.otherwise}
 when Scala has \code{if}, \code{else if}, and \code{else}? Those Scala statements are for
 conditional execution of Scala code, not generating Chisel (multiplexer) hardware.
 Those Scala conditionals have their use in Chisel when we write circuit generators,
@@ -2443,8 +2445,8 @@ of the decoder with a truth table, such as Table~\ref{tab:decoder}.
     01 & 0010 \\
     10 & 0100 \\
     11 & 1000 \\
-    \bottomrule 
-  \end{tabular} 
+    \bottomrule
+  \end{tabular}
   \caption{Truth table for a 2 to 4 decoder.}
  \label{tab:decoder}
 \end{table}
@@ -2462,7 +2464,7 @@ To use the \code{switch} statement we need to include the package \code{chisel.u
 
 \noindent The above \code{switch} statement lists all possible values of the \code{sel} signal
 and assigns the decoded value to the \code{result} signal.
-Note, that even if we enumerate all possible input values, Chisel still needs us to assign a
+Note that even if we enumerate all possible input values, Chisel still needs us to assign a
 default value, as we do by assigning an initial 0 to \code{result}.
 This assignment will never be active and therefore optimized away by the synthesize tool.
 It is intended to avoid situations with incomplete assignments for combinational circuits
@@ -2485,11 +2487,11 @@ operation \code{<<}.
 
 Decoders are used as a building block for a multiplexer by using the output as an enable
 with an AND gate for the multiplexer data input. However, in Chisel, we do not need to construct
-a multiplexer, as a \code{Mux} is available in the core library.
+a multiplexer because a \code{Mux} is available in the core library.
 Decoders can also be used for address decoding of some bits of an address bus of
 a microprocessor. The outputs are used as
 select signals for memories and different IO devices connected to the microprocessor
-(see Section~\ref{sect:bus}). 
+(see Section~\ref{sect:bus}).
 
 
 \section{Encoder}
@@ -2518,8 +2520,8 @@ The encoder does the inverse operation of a decoder.
     0100 & 10 \\
     1000 & 11 \\
     ???? & ?? \\
-    \bottomrule 
-  \end{tabular} 
+    \bottomrule
+  \end{tabular}
   \caption{Truth table for a 4 to 2 encoder.}
  \label{tab:encoder}
 \end{table}
@@ -2535,12 +2537,12 @@ for the legal input values.
 
 \shortlist{code/encdec_enc.txt}
 
-For the decoder we found an elegant single line statement to express the logic.
-This also enables to describe a wide decoder. However, we are not aware
+For the decoder, we found an elegant single-line statement to express the logic.
+This also enables us to describe a wide decoder. However, we are not aware
 of such an expression for the encoder.
 
 To express larger encoders, we need to write a (simple) hardware generator.
-Therefore, we need to introduce the Scala loop construct. Following two lines
+Therefore, we need to introduce the Scala loop construct. The following two lines
 of Scala code express a loop, counting from \code{0} to \code{9}.
 
 \shortlist{code/scala_loop_comment.txt}
@@ -2591,7 +2593,7 @@ a grant output of \code{0001}. The arbiter prioritizes the lower
 inputs. Therefore, we call it a priority arbiter. The lower the bit number,
 the higher the priority.
 
-To build a fair arbiter we need to add state to remember the last arbitration.
+To build a fair arbiter, we need to add state to remember the last arbitration.
 We will present a fair %round-robin
 arbiter in Section~\ref{sec:arbiter}.
 
@@ -2606,10 +2608,10 @@ Figure~\ref{fig:arbiter} shows the schematic of a 4-bit arbiter.
 The individual grant requests need to check if a lower bit has already
 won the arbitration. For the first request the grant \code{g0} depends only on the
 request \code{r0}. The second grant can only win the arbitration when request \code{r1}
-is asserted and request \code{r0} is deasserted. For the next requests these lookup
+is asserted and request \code{r0} is deasserted. For the next requests, the lookup
 is further chained.
 
-Following code shows an arbiter for 3 clients.
+The following code shows an arbiter for 3 clients.
 
 \shortlist{code/arbiter3.txt}
 
@@ -2620,7 +2622,7 @@ We can see that \code{grant(0)} depends only on \code{request(0)}.
 \code{notGranted} is used to chain the information that no lower bit requests
 have been granted.
 
-Small arbiters can also be directly described with a logic table. Following code
+Small arbiters can also be directly described with a logic table. The following code
 shows the table for a 3-bit arbiter.
 
 \shortlist{code/arbiter3-direct.txt}
@@ -2652,7 +2654,7 @@ last request (\code{n - 1}). That wire is not used and the synthesize tool will 
 \end{figure}
 
 With our original encoder design we had to assume that the input is one-hot
-encoded, meaning maximal one bit is allowed to be \code{1}. Inputs with several
+encoded, meaning only one bit is allowed to be \code{1}. Inputs with several
 bits set are illegal and lead to undefined behavior.
 
 We can solve this problem by combining the encoder with an arbitration circuit, which selects only
@@ -2671,14 +2673,14 @@ Figure~\ref{fig:priority-encoder} shows the schematic.
   \label{fig:comparator}
 \end{figure}
 
-As the last circuit for the chapter of combinational building blocks we present the comparator.
+As the last circuit for the chapter of combinational building blocks, we present the comparator.
 Figure~\ref{fig:comparator} shows the schematic of a comparator. It has two multi-bit inputs and
 compares those two values. It has two outputs: (1) signaling that \code{a} and \code{b} are equal (\code{equ})
 and (2) that \code{a} is greater than \code{b}. These two outputs are enough for all possible
 comparisons. For example, the if \code{equ} or \code{gt} are asserted we know that the condition
 $a >= b$ is true. For the condition $a <= b$ we test for not \code{gt}.
 
-Following code snippet shows the comparator. As you can see, these are just two lines of
+The following code snippet shows the comparator. As you can see, these are just two lines of
 Chisel code. Therefore, compare functions are usually just directly used in other components and
 not wrapped into a module.
 
@@ -2689,7 +2691,7 @@ not wrapped into a module.
 Describe a combinational circuit to convert a 4-bit binary input to the encoding of a
 \myref{https://en.wikipedia.org/wiki/Seven-segment_display}{7-segment display}.
 You can either define the codes for the decimal digits, which was the initial
-usage of a 7-segment display or additionally, define encodings for the remaining bit pattern
+usage of a 7-segment display, or additionally, define encodings for the remaining bit pattern
 to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
 When you have an FPGA board with a 7-segment display, connect 4 switches or
@@ -2701,7 +2703,7 @@ Sequential circuits are circuits where the output depends on the input \emph{and
 previous values. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
-feedback, but this is a specific niche topic and cannot be easily expressed in Chisel.}
+feedback, but this is a niche topic and cannot be easily expressed in Chisel.}
 To build sequential circuits, we need elements that can store state:
 the so-called registers.
 
@@ -2720,7 +2722,7 @@ the so-called registers.
 The fundamental elements for building sequential circuits are registers. A register is a collection
 of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
 A D flip-flop captures the value of its input at the rising edge of the clock and stores
-it at its output. Alternatively, in other words: the register updates its output with the value of the input on the rising edge of the clock.
+it at its output. In other words, the register updates its output with the value of the input on the rising edge of the clock. % These two sentences are similar and they explain the same thing. Probably only one is needed
 
 \index{Clock}
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
@@ -2735,8 +2737,8 @@ In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \shortlist{code/sequ_reg.txt}
 
-\noindent Note that we do not need to connect a clock to the register, Chisel implicitly does this.
-A register's input and output can be arbitrary complex types
+\noindent Note that we do not need to connect a clock to the register; Chisel implicitly does this.
+A register's input and output can be arbitrarily complex types
 made out of a combination of vectors and bundles.
 
 A register can also be defined and used in two steps:
@@ -2747,14 +2749,14 @@ First, we define the register and give it a name. Second, we connect the signal
 \code{delayIn} to the input of the register. Note also that the name of the register
 contains the string \code{Reg}. To easily distinguish between combinational
 circuits and sequential circuits, it is common practice to have the marker
-\code{Reg} as part of to the name. Also, note that names in Scala (and therefore
+\code{Reg} as part of the name. Also, note that names in Scala (and therefore
 also in Chisel) are usually in
 \myref{https://en.wikipedia.org/wiki/Camel_case}{CamelCase}.
 Variable names start with lowercase letter and class names start with an upper case letter.
 
 \index{Reset}
 \index{Initialization}
-A register can be initialized on reset. The \code{reset} signal is, as the \code{clock} signal,
+A register can be initialized on reset. The \code{reset} signal is, like the \code{clock} signal,
 implicit in Chisel. We supply the reset value, for example, zero, as a parameter to the register
 constructor \code{RegInit}. The input for the register is connected with a Chisel
 assignment statement.
@@ -2771,12 +2773,12 @@ assignment statement.
 
 The default implementation of reset in Chisel is a synchronous
 reset.\footnote{Support for asynchronous reset is available.}
-For a synchronous reset no change is needed on a D flip-flop, just a multiplexer
+For a synchronous reset, no change is needed in the D flip-flop itself; instead, a multiplexer just
 needs to be added to the input that
 selects between the initialization value under reset and the data value.
-Figure~\ref{fig:register-reset} shows the schematics of a register with a synchronous reset
-where the reset drives the multiplexer. However, as synchronous reset is used quite often,
-modern FPGA flip-flops contain a synchronous reset (and set) input to the D flip-flop to not waste
+Figure~\ref{fig:register-reset} shows the schematic of a register with a synchronous reset
+where the reset drives the multiplexer. However, because synchronous reset is used quite often,
+modern FPGA flip-flops contain a synchronous reset (and set) input to the flip-flop to avoid wasting
 LUT resources for the multiplexer.
 
 Sequential circuits change their value over time. Therefore, their behavior can be described
@@ -2870,7 +2872,7 @@ value with the one from the last clock cycle (the delayed value).
 Now that we have explored all basic uses of a register, we put those registers to
 good use and build more interesting sequential circuits. For the next schematics we
 will further simplify the register symbol and omit the \code{D} for the input and the
-\code{Q} for the output. 
+\code{Q} for the output.
 
 \section{Counters}
 \label{sec:counter}
@@ -2930,7 +2932,7 @@ define a function with a parameter to generate a counter for us.
 value of the function, in this example, the output of
 the counting register \code{cntReg}.
 
-Note, that in all the examples our counter had values between \code{0} and
+Note that in all the examples our counter had values between \code{0} and
 \code{N}, including \code{N}. If we want to count 10 clock cycles we need
 to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \myref{https://en.wikipedia.org/wiki/Off-by-one_error}{off-by-one error}.
@@ -2946,7 +2948,7 @@ A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
 circuit other than counting clock ticks. If we know the clock frequency, we
 can generate circuits that generate timed events, such as blinking an LED
-at some frequency as we have shown in the Chisel ``Hello World'' example.
+at some frequency, as we have shown in the Chisel ``Hello World'' example.
 
 A common practice is to generate single-cycle \emph{ticks} with a frequency $f_{tick}$
 that we need in our circuit. That tick occurs every $n$ clock cycles,
@@ -2994,7 +2996,7 @@ slow counter that increments every tick ($n$ clock cycles).
 Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
 generating the baud rate for a serial bus, generating signals for 7-segment
 display multiplexing, and subsampling input values for debouncing of buttons
-and switches. 
+and switches.
 
 Although width inference should size the registers, it is better to explicitly
 specify the width with the type at register definition or with the
@@ -3044,11 +3046,11 @@ counting by selecting the \code{0} input of the multiplexer.
   \label{fig:timer}
 \end{figure}
 
-Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg},
+Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg}
 that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{cntReg}
 with \code{0}. For the input multiplexer we introduce the wire \code{next} with a default
 value of \code{0}. The \code{when/elsewhen} block introduces the other two inputs with
-the select function. Signal \code{load} has priority over the decrement selection.
+the select function. The signal \code{load} has priority over the decrement selection.
 The last line connects the multiplexer, represented by \code{next}, to the input of the
 register \code{cntReg}.
 
@@ -3071,7 +3073,7 @@ within that period.
 \end{figure}
 
 Figure~\ref{fig:pwm} shows a PWM signal. The arrows point to the start of the periods
-of the signal. The percentage of time the signal is high, is also called the duty cycle.
+of the signal. The percentage of time the signal is high is called the duty cycle.
 In the first two periods the duty cycle is 25\,\%, in the next two 50\,\%, and in the last
 two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
 
@@ -3080,13 +3082,13 @@ signal results in a simple
 \myref{https://en.wikipedia.org/wiki/Digital-to-analog_converter}{digital-to-analog converter}.
 The low-pass filter can be as simple as a resistor and a capacitor.
 
-The following code example will generate a waveform of 3 clock cycles high every 10 clock cycles.
+The following code example will generate a waveform with 3 clock cycles high every 10 clock cycles.
 
 \shortlist{code/pwm.txt}
 
 \noindent We use a function for the PWM generator to provide a reusable, lightweight component.
 The function has two parameters: a Scala integer configuring the PWM with the number of
-clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulswidth) for the
+clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulse width) for the
 PWM output signal. We use a multiplexer in this
 example to express the counter. The last line of the function compares the counter value
 with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
@@ -3133,9 +3135,9 @@ next flip-flop. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
 circuit implements a 4-tap delay from \code{din} to \code{dout}.
 
-The Chisel code for this simple shift register does: (1) create a 4-bit register \code{shiftReg},
-(2) concatenate the lower 3 bits of the shift register with the input \code{din} for the next
-input to the register, and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
+The Chisel code for this simple shift register (1) creates a 4-bit register \code{shiftReg};
+(2) concatenates the lower 3 bits of the shift register with the input \code{din} for the next
+input to the register; and (3) uses the most significant bit (MSB) of the register as the output \code{dout}.
 
 \shortlist{code/shift_register.txt}
 
@@ -3226,10 +3228,10 @@ synchronous behavior.
 
 To support on-chip memory, Chisel provides the memory constructor \code{SyncReadMem}.
 Listing~\ref{lst:memory} shows a component \code{Memory} that implements
-1~KiB of memory with byte-wide input and output data and a write enable. 
-%Note that reads are performed either by using the \code{read} method or through 
-%simple indexing when the memory is on the right-hand side of an assignment. 
-%Similarly, writes are performed either by using the \code{write} method or by 
+1~KiB of memory with byte-wide input and output data and a write enable.
+%Note that reads are performed either by using the \code{read} method or through
+%simple indexing when the memory is on the right-hand side of an assignment.
+%Similarly, writes are performed either by using the \code{write} method or by
 %rewriting the statement into an assignment such as \code{mem(address) := data}.
 
 \longlist{code/memory.txt}{1\,KiB of synchronous memory.}{lst:memory}
@@ -3280,14 +3282,14 @@ FPGAs), you can manually implement this as a \code{BlackBox}. Vendors typically 
 code templates that can be used directly for this.
 
 
-Memories in FPGAs can be initialized with either binary or hexadecimal initialization files. 
-The files are simple ASCII text files with the same number of lines as there are 
-entries in the corresponding memory. Each character represents either a single bit 
-or four bits. Traditionally, binary files use the \code{.bin} file extension, while 
-hexadecimal files use \code{.hex}. Using \code{loadMemoryFromFile} will result in 
+Memories in FPGAs can be initialized with either binary or hexadecimal initialization files.
+The files are simple ASCII text files with the same number of lines as there are
+entries in the corresponding memory. Each character represents either a single bit
+or four bits. Traditionally, binary files use the \code{.bin} file extension, while
+hexadecimal files use \code{.hex}. Using \code{loadMemoryFromFile} will result in
 emission of a separate Verilog file and works in ChiselTest.
-%Using instead 
-%\code{loadMemoryFromFileInline} results in an inlined initialization and does not 
+%Using instead
+%\code{loadMemoryFromFileInline} results in an inlined initialization and does not
 %yet work in ChiselTest. Either way,
 Initializations are based around calls to \code{readmemb} or \code{readmemh}.
 
@@ -3303,8 +3305,8 @@ Use that signal as enable signal for the 4-bit counter.
 
 Construct a PWM waveform with a generator function and set the threshold with a
 function (triangular or a sine function).
-A triangular function can be created by counting up and down. A sinus function with the
-use of a lookup table that you can generate with a few lines of Scala code
+A triangular function can be created by counting up and down. A sine function can be created with
+a lookup table that you can generate with a few lines of Scala code
 (see Section~\ref{sec:gen:comb:logic}).
 Drive a LED on an FPGA board with that modulated PWM function. What frequency shall your
 PWM signal be? What frequency is the driver running?
@@ -3316,7 +3318,7 @@ Sketch the block diagram for the following circuits:
 
 \shortlist{code/draw_mux6.txt}
 
-\noindent Here a little bit more complex circuit, containing a register:
+\noindent Here is a slightly more complex circuit, containing a register:
 
 \shortlist{code/draw_acc.txt}
 
@@ -3344,9 +3346,9 @@ to deal with those issues in the digital domain.
 Input signals that are not synchronous to the system clock are called
 asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
-\myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{Metastability}
-of the flip-flop. The Metastability may result in an output value between 0 and
-1 or it may result in oscillation. However, after some time the flip-flop will
+\myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{metastability}
+of the flip-flop. The metastability may result in an output value between 0 and
+1, or it may result in oscillation. However, after some time the flip-flop will
 stabilize at 0 or 1.
 
 Another common issue with external, asynchronous input signals is when
@@ -3356,8 +3358,8 @@ input may be registered at different clock cycles, which might violate
 some assumptions.\footnote{I experienced this issue once and it took me
 quite some time to find the error.}
 
-We cannot avoid Metastability, but we can contain its effects.
-A classic solution is to use two flip-flops at the input. The assumption is:
+We cannot avoid metastability, but we can contain its effects.
+A classic solution is to use two flip-flops at the input. The assumption is that
 when the first flip-flop becomes metastable, it will resolve to a stable
 state within the clock period so that the setup and hold times of the
 second flip-flop will not be violated.
@@ -3383,7 +3385,7 @@ A classic example is the interfacing of an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
 We also need to synchronize an external reset signal. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
-for other flip-flops in the circuit. Concrete, the deassertion of the reset need
+for other flip-flops in the circuit. Concretely, the deassertion of the reset needs
 to be synchronous to the clock.
 
 \section{Debouncing}
@@ -3418,7 +3420,7 @@ points. The distance between those sampling points needs to be longer
 than the maximum bouncing time. The first sample safely samples a 0, and the last
 sample in the figure samples a 1. The middle sample falls into the
 bouncing time. It may either be 0 or 1. The two possible outcomes are
-shown as \code{debounced A} and \code{debounced B}. 
+shown as \code{debounced A} and \code{debounced B}.
 Both have a single transition from 0 to 1. The only difference between these
 two outcomes is that the transition in version A is one sample period later.
 However, this is usually a non-issue.
@@ -3470,23 +3472,23 @@ Majority voting ensures that the signal is stable for longer than the sampling p
   \label{fig:majority}
 \end{figure}
 
-Figure~\ref{fig:majority} shows the circuit of the majority voter.
+Figure~\ref{fig:majority} shows the majority voting circuit.
 It consists of a 3-bit shift register enabled by the \code{tick} signal
 we used for the debouncing sampling. The output of the three registers
 is fed into the majority voting circuit. The majority voting function filters
-any signal change shorter than the sample period. 
+any signal change shorter than the sample period.
 
 The following Chisel code shows the 3-bit shift register, enabled by the
 \code{tick} signal and the voting function, resulting in the signal \code{btnClean}.
 
-Note, that a majority voting is very seldom needed.
+Note that majority voting is very seldom needed.
 
 \shortlist{code/input_majority.txt}
 
 To use the output of our carefully processed input signal, we first detect
 the rising edge with a \code{RegNext} delay element and then compare this
 signal with the current value of \code{btnClean}. In this example, we use
-hat single cycle \code{risingEdge} signal to increment a counter. 
+the single-cycle \code{risingEdge} signal to increment a counter.
 
 \index{Edge detection}
 
@@ -3495,8 +3497,8 @@ hat single cycle \code{risingEdge} signal to increment a counter.
 \section{Combining the Input Processing with Functions}
 
 To summarize the input processing, we show some more Chisel code.
-As the presented circuits might be tiny, but reusable building blocks, we encapsulate
-them in functions. Section~\ref{sec:functions} showes how we can abstract
+Because the presented circuits are tiny but reusable building blocks, we encapsulate
+them in functions. Section~\ref{sec:functions} shows how we can abstract
 small building blocks in lightweight Chisel functions instead of full modules.
 Those Chisel functions create hardware instances, e.g., the function
 \code{sync} creates two flip-flops connected to the input and to each other.
@@ -3512,8 +3514,8 @@ Any digital circuit needs a reset signal to reset registers to a defined state. 
 set in Chisel with the \code{RegInit} constructor. A reset signal is usually an asynchronous
 input to the circuit. That means when directly connected to the reset of a flip-flop it may
 violate timing constraints. In case of a synchronous reset it may violate setup and hold times
-of the flip-flop. Also when used as an asynchronous reset input, it still need to be synchronized
-to the clock. Concrete, the \emph{release} of the reset signal needs to be synchronized to the clock.
+of the flip-flop. Also when used as an asynchronous reset input, it still needs to be synchronized
+to the clock. Specifically, the \emph{release} of the reset signal needs to be synchronized to the clock.
 Another failure with an asynchronous reset can be that different parts of the circuit may be
 reset in two different clock cycles and therefore be inconsistent.
 
@@ -3545,7 +3547,7 @@ the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
-As there is no guarantee that modern button will always bounce, you can
+As there is no guarantee that a modern button will always bounce, you can
 simulate the bouncing and the spikes by pressing the button manually in a fast succession
 and using a low sample frequency. Select, e.g., one second as sample frequency,
 i.e., if the input clock runs at 100~MHz, divide it by 100,000,000.
@@ -3564,7 +3566,7 @@ longer than 1--2 seconds.
 
 A finite-state machine (FSM) is a basic building block in digital design.
 An FSM can be described as a set of \emph{states} and conditional (guarded)
-\emph{state transitions} between states. 
+\emph{state transitions} between states.
 An FSM has an initial state, which is set on reset.
 FSMs are also called synchronous sequential circuits.
 
@@ -3573,8 +3575,8 @@ An implementation of an FSM consists of three parts: (1) a register that holds t
 state and the input, and (3) combinational logic that computes the output of the FSM.
 
 In principle, every digital circuit that contains a register or other memory elements
-to store state can be described as a single FSM. However, it might
-not be practical, for example, to try to describe your laptop as a single FSM.
+to store state can be described as a single FSM. However, this might
+not be practical. For example, try to describe your laptop as a single FSM.
 In the next chapter, we describe how to build larger systems
 out of smaller FSMs by combining them into communicating FSMs.
 
@@ -3582,7 +3584,7 @@ out of smaller FSMs by combining them into communicating FSMs.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=\scale]{figures/fsm}
+  \includegraphics[scale=\scale]{figures/fsm} % FIXME: typo in "Ouput"
   \caption{A finite-state machine (Moore type).}
   \label{fig:fsm}
 \end{figure}
@@ -3658,7 +3660,7 @@ red & 0 & 1 & green & 1 \\
 
 Finally, after all the design of our warning level FSM, we shall code it in Chisel.
 Listing~\ref{lst:fsm:alarm} shows the Chisel code for the alarm FSM.
-Note, that we use the Chisel type \code{Bool} for the inputs and the
+Note that we use the Chisel type \code{Bool} for the inputs and the
 output of the FSM.
 To use \code{Enum} and the \code{switch} control instruction, we need to
 import \code{chisel3.util.\_}.
@@ -3673,9 +3675,9 @@ The FSM has two input signals and a single output signal, captured in a Chisel \
 
 
 \noindent At this place we could spend some discussion on optimal state encoding. Two common options
-are binary or one-hot encoding. However, we leave those low-level optimization to
+are binary or one-hot encoding. However, we leave those low-level optimizations to
 the synthesize tool and aim for readable code.\footnote{In the current version
-of Chisel the \codefoot{Enum} type represents states in binary encoding.
+of Chisel, the \codefoot{Enum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
 constants for the state names.}
 Therefore, we use an enumeration type with symbolic names for the states:
@@ -3713,7 +3715,7 @@ within a combinational block.
 
 On a Moore FSM, the output depends only on the current state.
 That means that a change of an input can be seen as a change of the
-output \emph{earliest} in the next clock cycle.
+output no earlier than in the next clock cycle.
 If we want to observe an immediate change, we need a combinational
 path from the input to the output.
 Let us consider a minimal example, an edge detection circuit.
@@ -3779,7 +3781,7 @@ the input is \code{0} the FSM stays in state \code{zero}, and the output is {0}.
 The rising edge FSM generates the \code{1} output only on the transition
 from state \code{zero} to state \code{one}. In state \code{one}, which represents
 that the input is now \code{1}, the output is \code{0}. We only want a single (cycle)
-puls for each rising edge of the input.
+pulse for each rising edge of the input.
 
 \longlist{code/rising_fsm.txt}{Rising edge detection with a Mealy FSM.}{lst:fsm:rising}
 
@@ -3793,19 +3795,19 @@ the default assignment to the output (\code{false.B}) counts.
 
 One can ask if a full-blown FSM is the best solution for the edge detection circuit,
 especially, as we have seen a Chisel one-liner for the same functionality.
-The hardware consumptions is similar. Both solutions need a single D flip-flop
+The hardware consumptions are similar. Both solutions need a single D flip-flop
 for the state. The combinational logic for the FSM is probably a bit more complicated, as
 the state change depends on the current state and the input value.
 For this function, the one-liner is easier to write and easier to read,
 which is more important. Therefore, the one-liner is the preferred solution.
 
 We have used this example to show one of the smallest possible Mealy FSMs.
-FSMs shall be used for more complex circuits with three and more states.
+FSMs shall be used for more complex circuits with three or more states.
 
 \section{Moore versus Mealy}
 
 To show the difference between a Moore and Mealy FSM, we redo the edge
-detection with a Moore FSM. 
+detection with a Moore FSM.
 
 \begin{figure}
   \centering
@@ -3817,7 +3819,7 @@ detection with a Moore FSM.
 Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
 edge detection with a Moore FSM. The first thing to notice is that the Moore FSM
 needs three states, compared to two states in the Mealy version.
-The state \code{puls} is needed to produce the single-cycle puls.
+The state \code{puls} is needed to produce the single-cycle pulse.
 The FSM stays in state \code{puls} just one clock cycle and then
 proceeds either back to the start state \code{zero} or to the \code{one}
 state, waiting for the input to become 0 again.
@@ -3885,8 +3887,8 @@ Martin: but this is shown at the Chisel homepage without an FSM.}
 
 A problem is often too complex to describe it with a single FSM.
 In that case, the problem can be divided into two or more smaller and simpler FSMs.
-Those FSMs then communicate with signals. One FSMs output is
-another FSMs input; one FSM watches the output of the other FSM.
+Those FSMs then communicate with signals. One FSM's output is
+another FSM's input; one FSM watches the output of the other FSM.
 When we split a large FSM into simpler ones, this is called factoring FSMs.
 Communicating FSMs are often directly designed from the specification
 of the design. A single FSM for the design would be too large in the first place.
@@ -3937,7 +3939,7 @@ and remains asserted;
 \item otherwise, the timer counts down.
 \end{itemize}
 
-\noindent Following code shows the timer FSM of the light flasher:
+\noindent The following code shows the timer FSM of the light flasher:
 
 \shortlist{code/flasher_timer.txt}
 
@@ -3970,7 +3972,7 @@ Following code shows the down counter FSM:
 
 \shortlist{code/flasher2_counter.txt}
 
-\noindent Note, that the counter is loaded with 2 for 3 flashes, as it counts the
+\noindent Note that the counter is loaded with 2 for 3 flashes, as it counts the
 \emph{remaining} flashes and is decremented in state \code{space} when the timer
 is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double refactored flasher.
 
@@ -4031,14 +4033,14 @@ and with status signals from the datapath.
   \label{fig:popcnt-data}
 \end{figure}
 
-We will co-design the FSM and the datapath. 
+We will co-design the FSM and the datapath.
 Figure~\ref{fig:popcnt-states} shows the state diagram of the FSM and
 Figure~\ref{fig:popcnt-data} shows the datapath for the popcount circuit.
 The FSM starts in state \code{Idle}, where the FSM waits for input.
-When data arrives, signaled with a asserted \code{dinValid}, the FSM loads the shift register
+When data arrives, as signaled with an asserted \code{dinValid}, the FSM loads the shift register
 and advances to state \code{Count}.
 The data is loaded into the \code{shf} register. On the load also the \code{cnt}
-register is reset to 0. 
+register is reset to 0.
 
 
 In state \code{Count}, the number of `1's is counted sequentially.
@@ -4154,8 +4156,8 @@ of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 5 and 6 with the transfer of
 \code{D2} and \code{D3}
 
-To make this interface composable neither \code{ready} nor \code{valid} is
-allowed to depend combinational on the other signal.
+To make this interface composable, neither \code{ready} nor \code{valid} is
+allowed to depend combinationally on the other signal.
 As this interface is so common, Chisel defines the \code{DecoupledIO}
 bundle, similar to the following:
 
@@ -4254,7 +4256,7 @@ a compile error.
 \noindent In Chisel we use \code{val}s to name hardware components. Note that the \code{:=}
 operator is a Chisel operator and not a Scala operator.
 
-Scala also provides the more classic version of a mutable variable as \code{var}. Following code defines
+Scala also provides the more classic version of a mutable variable as \code{var}. The following code defines
 an integer variable and reassigns it a new value:
 
 \shortlist{code/scala_var.txt}
@@ -4280,9 +4282,9 @@ of a shift register.
 \shortlist{code/scala_loop_gen.txt}
 
 \noindent Note that this is not the most concise expression of a shift register.
-Better use a plain \code{UInt} with the right size and assign the new value for the
+It is better to use a plain \code{UInt} with the right size and assign the new value for the
 register with an expression using the \code{\#\#} operator
-and proper indexing. This code snipped is just to show how a Scala \code{for} loop can be used
+and proper indexing. This code snippet is just to show how a Scala \code{for} loop can be used
 for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
@@ -4302,15 +4304,15 @@ Following code creates a tuple to represent a city with the zip code and the nam
 
 \noindent Tuples are useful when we want to return more than one value from a function.
 Tuples allow us to represent Chisel components with more than one output as a lightweight
-function instead of a full blown module.
+function instead of a full-blown module.
 
 Scala has a powerful \myref{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}.
-One of the simpler collection tpyes is \code{Seq}, an ordered collection of elements (also called a sequence).
+One of the simpler collection types is \code{Seq}, an ordered collection of elements (also called a sequence).
 The default implementation is immutable. We index into a \code{Seq} with \code{()},
-with zero based indexing.
+with zero-based indexing.
 \code{Seq} is a base class with several different implementations.
 However, for most Chisel hardware generators direct use of \code{Seq}
-is the preferred choice. Following code shows how to create a \code{Seq}
+is the preferred choice. The following code shows how to create a \code{Seq}
 that holds four Scala \code{Int} values. The second line accesses the
 second element, and \code{second} will be \code{15}.
 
@@ -4351,7 +4353,7 @@ The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
 Functions, as lightweight hardware generators, can also contain state (using a register).
-Following example returns a one clock cycle delay element (a register).
+The following example returns a one clock cycle delay element (a register).
 If a function has just a single statement, we can write it in one line and omit the curly
 braces (\{\}).
 
@@ -4362,19 +4364,20 @@ clock cycle delay.
 
 \shortlist{code/components_fn_2delay.txt}
 
-\noindent Again, this is a too short example to be useful, as \code{RegNext()}
+\noindent Again, this is too short an example to be useful, as \code{RegNext()}
 is already that function that creates the register for the delay.
 
 
 
 Functions return only one value. In order to provide more than one output, we
-can wrap several output wires into a Scala tuple. Following code generates hardware that
+can wrap several output wires into a Scala tuple. The following code generates hardware that
 compares two inputs and has two outputs.
 
 \shortlist{code/fun_comp.txt}
 
-\noindent With the parenthesis we wrap the two wires that are connected to the outputs of
-the equal and the greater circuit into a Scala tuple.
+\noindent With the parenthesis, we wrap the two wires that are connected to the outputs of
+the comparator circuit into a Scala tuple.
+
 When creating a comparator component
 with the \code{compare} function, it returns a tuple of two wires. We can access the two
 wires with the \code{.\_n} syntax.
@@ -4403,7 +4406,7 @@ hardware type.
 
 The simplest way to parameterize a circuit is to define a bit width as a parameter.
 Parameters can be passed as arguments to
-the constructor of the Chisel module. Following example is a toy example of
+the constructor of the Chisel module. The following example is a toy example of
 a module that implements an adder with a configurable bit width.
 The bit width \code{n} is a parameter (of Scala type \code{Int}) of the component
 passed into the constructor that can be used in the IO bundle.
@@ -4422,7 +4425,7 @@ hardware generators. Chisel type parameters enable very flexible configurations.
 That feature allows for Chisel to provide a multiplexer (\code{Mux}) that
 can accept any types for the multiplexing.
 To show how to use Chisel types for the configuration, we build a multiplexer
-that accepts arbitrary types. Following function defines the multiplexer:
+that accepts arbitrary types. The following function defines the multiplexer:
 
 \shortlist{code/param_func.txt}
 
@@ -4433,8 +4436,8 @@ a type parameter \code{T} that is \code{Data} or a subclass of \code{Data}.
 
 Our multiplexer function has three parameters: the boolean condition,
 one parameter for the true path, and one parameter for the false path.
-Both path parameters are of type \code{T}, an information that is
-provided at function call. The function itself is straight forward:
+Both path parameters are of type \code{T}, which is
+provided at function call. The function itself is straightforward:
 we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
@@ -4445,7 +4448,7 @@ We can use our multiplexer function with simple types such as
 \shortlist{code/param_func_simple.txt}
 
 \noindent The types of the two multiplexer paths need to be the same.
-Following wrong usage of the multiplexer results in a runtime error:
+The following wrong usage of the multiplexer results in a runtime error:
 
 \shortlist{code/param_func_wrong.txt}
 
@@ -4463,7 +4466,7 @@ In our initial design of the function, we used \code{WireDefault}
 to create a wire with the type \code{T} with a default value.
 If we need to create a wire just of the Chisel type without using a default
 value, we can use \code{fPath.cloneType} to get the Chisel type.
-Following function shows the alternative way to code the multiplexer.
+The following function shows the alternative way to code the multiplexer.
 
 \shortlist{code/param_func_alt.txt}
 
@@ -4528,14 +4531,14 @@ a \code{Payload} as a parameter:
 
 A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
 as we can see the input to the table as an address into such a ROM.
-We generate a logic table with \code{VecInit}.  Following snippet of code creates
+We generate a logic table with \code{VecInit}.  The following snippet of code creates
 a table to compute the square of a number \code{n}.
 
 \shortlist{code/gen_vec.txt}
 
 We can use the full power of Scala to generate our logic (tables).
-For example, generate a table of fixpoint constants to represent a trigonometric function,
-compute constants for digital filters, or writing an assembler in Scala
+For example, we can generate a table of fixpoint constants to represent a trigonometric function,
+compute constants for digital filters, or write an assembler in Scala
 to generate code for a microprocessor written in Chisel. All those functions
 are in the same code base (same language) and can be executed during
 hardware generation.
@@ -4583,20 +4586,19 @@ which supports the mapping function \code{map}.
 \code{map} invokes a function on each element of the sequence and returns
 a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
 each \code{Int} value from the Scala array as a \code{\_} and performs the conversion
-from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8-bits.
+from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8 bits.
 The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
 of Chisel types.
 
 We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
-a message that we may send out to a serial port. Following code converts the standard greeting
+a message that we may send out to a serial port. The following code converts the standard greeting
 from a Scala/Java \code{String} to a Chisel \code{Vec}:
 
 \shortlist{code/hello_table.txt}
 
 \noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
 function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
-This code is extracted from the serial port example, later in the text, to send a welcome
-message. 
+This code is extracted from the serial port example, which is used later in this text to send a welcome message.
 
 
 
@@ -4606,7 +4608,7 @@ message.
 \index{Inheritance}
 \index{Object-oriented}
 
-Chisel is an object-oriented language. A hardware component, the Chisel \code{Module}
+Chisel is an object-oriented language. A hardware component, the Chisel \code{Module},
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
 out into a parent class. We explore how to use inheritance with an example.
 
@@ -4661,7 +4663,7 @@ sbt "testOnly TickerTest"
 
 \index{Functional programming}
 
-Scala supports functional programming, so does Chisel then.
+Scala supports functional programming, so Chisel does as well.
 We can use functions to represent hardware and combine those hardware components
 with functional programming by using a so-called ``higher-order functions''.
 Let us start with a simple example, the sum of a vector:
@@ -4684,8 +4686,8 @@ two operands.
 
 \shortlist{code/fun_func_lit.txt}
 
-\noindent With this one liner we have generated the chain of adders. For the sum function
-a chain is not the ideal configuration, a tree will have a shorter combinational delay.
+\noindent With this one-liner we have generated the chain of adders. For the sum function
+a chain is not the ideal configuration; a tree will have a shorter combinational delay.
 If we do not trust the synthesize tool to rearrange our adder chain, we can use Chisel's
 \code{reduceTree} method to generated a tree of adders:
 
@@ -4693,7 +4695,7 @@ If we do not trust the synthesize tool to rearrange our adder chain, we can use 
 
 \subsection{Minimum Search Example}
 
-As a more elaborate example, we will build a circuit to find the minimum value in a \code{vec}. To express this circuit
+As a more elaborate example, we will build a circuit to find the minimum value in a \code{Vec}. To express this circuit
 we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
 literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
 
@@ -4713,7 +4715,7 @@ hold the value and the index. We declare the \code{vecTwo} \code{Vec} that can h
 and connect them in a loop to the original input and the index within the \code{Vec}, as shown
 in Listing~\ref{lst:min:pos}.
 
-As before we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
+As before, we use a function literal in the \code{reduceTree} method of the \code{vecTwo},
 comparing the value field within the bundle and returning the multiplexer for the
 complete bundle.
 Value \code{res} points to the bundle containing the minimum value and the position.
@@ -4721,7 +4723,7 @@ Value \code{res} points to the bundle containing the minimum value and the posit
 \longlist{code/fun_min2.txt}{Minimum search including the index.}{lst:min:pos}
 
 
-As a more advanced variation of the minimum search circuit we will use more Scala features
+As a more advanced variation of the minimum search circuit, we will use more Scala features
 to avoid creating the bundle to return the value
 and index. We will use a tuple to represent both values.
 The following code shows the application
@@ -4732,13 +4734,15 @@ This pattern can also be seen as a pipeline of operations.
 
 The first function (\code{zipWithIndex})
 transforms the original sequence of \code{UInt}s to a sequence of tuples, where the first element is the
-unchanged \code{UInt} and the second element is the index value within the \code{vec} as Sala \code{Int}.
+unchanged \code{UInt} and the second element is the index value within the \code{vec} as Scala \code{Int}.
 In general a \code{zip} function merges two sequences (zips them) into a single one
 containing the two elements as tuples.
 
-The next function (\code{map}) converts (maps) our duple of a Chisel \code{UInt}
-and a Scala \code{Int} to a tuple of two Chisel \code{UInt}s. The \code{reduce} function provides the generation of
-the minimum finding. We compare the first element of the tuple in two multiplexers and returning
+% fixme: the following two sentences are unclear.
+% "provides the generation of the minimum finding" in particular is cryptic.
+The next function maps our tuple of a Chisel \code{UInt}
+and a Scala \code{Int} to two Chisel \code{UInt}s. The \code{reduce} function provides the generation of
+the minimum finding. We compare the first element of the tuple in two multiplexers and return
 a tuple containing the minimum value and the position as Chisel \code{UInt} types.
 
 
@@ -4757,10 +4761,10 @@ indexable collection during hardware generation.
 
 
 In the above example we create a Scala \code{Vector} of the values with their index, but now
-using Chisels ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
-Then we can again perform a tree based reduction. Another benefit of this version is
-that we have only one multiplexer, which selects between two Chisel ``tuples'' as
-\code{MixedVec}.
+using Chisel's ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
+Then we can again perform a tree-based reduction. Another benefit of this version is
+that we have only one multiplexer, which selects between two Chisel ``tuples'' that are actually
+\code{MixedVec}s.
 The result in \code{resFun2} is a \code{MixedVec} with two elements,
 accessed with an index, like a ``normal'' \code{Vec}.
 
@@ -4781,22 +4785,21 @@ interface. We \emph{just} need a function that provides arbitration between two 
 
 \subsubsection{Simple Arbitration}
 
-As a first solution we will build a priority based arbitration, similar to the arbiter shown
-in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a pure combinational circuit
-resulting in a priority based arbitration.
+As a first solution, we will build a priority-based arbitration, similar to the arbiter shown
+in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a purely combinational circuit.
 However, with the ready/valid interface we are not allowed to have a combinational
 flow between a ready and a valid signal. Therefore, we need to introduce state for those signals
-and also need to register the incoming data. 
+and also need to register the incoming data.
 
-Listing~\ref{lst:fun:arbiter:simp} shows the 2 to 1 arbitration function. This function assumes
+Listing~\ref{lst:fun:arbiter:simp} shows the 2-to-1 arbitration function. This function assumes
 that a requester who has asserted \code{valid} will only deassert it when it is read by the receiver
 (signaled with a \code{ready}). Furthermore, we are allowed to set \code{ready} in the next clock cycle
 depending on \code{valid} in the current clock cycle.
-This is one specific interpretation of the ready/valid protocol, which is also used in AXI. 
+This is one specific interpretation of the ready/valid protocol, which is also used in AXI.
 
 \longlist{code/fun_arbiter_simple.txt}{A simple 2 to 1 arbiter.}{lst:fun:arbiter:simp}
 
-We need following register: \code{regData} to hold the data for the output, \code{regEmpty} as a  flag to
+We need the following registers: \code{regData} to hold the data for the output, \code{regEmpty} as a  flag to
 signal that the data register is empty, and two flags for the \code{ready} signals of the two inputs
 (\code{regReadyA} and \code{regReadyB}).
 The return value of the function (\code{out}) is a wire of type \code{DecoupledIO}.
@@ -4817,33 +4820,33 @@ wire.
 \subsubsection{Fair Arbitration}
 
 In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
-The combinational version is a priority arbiter, which means one high priority requester can
+The combinational version is a priority arbiter, so one high-priority requester can
 dominate the arbitration.
-To avoid this domination we need to introduce state to remember who won the arbitration last time.
-Our assumption is, that if the 2:1 arbiter is fair, this results in a fair
-arbitration on a balanced arbitration tree. 
+To avoid this domination, we need to introduce state to remember who won the arbitration last time.
+Our assumption is that if the 2:1 arbiter is fair, this results in a fair
+arbitration on a balanced arbitration tree.
 
-\longlist{code/fun_arbiter.txt}{A fair 2 to 1 arbiter.}{lst:fun:arbiter}
+\longlist{code/fun_arbiter.txt}{A fair 2-to-1 arbiter.}{lst:fun:arbiter}
 
 Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
 The arbiter contains one register for the data to store and one state register. To be fair, the arbiter
-switches between two idle states (\code{ildeA} and \code{idleB}) when there is no request.
-In each of the two idle states it accepts only one of the inputs. Note, that with just a single register for
-storage the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
+switches between two idle states (\code{idleA} and \code{idleB}) when there is no request.
+In each of the two idle states it accepts only one of the inputs. Note that with just a single register for
+storage, the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
 and switching priority we would need a second data register to handle the case when both inputs
 are valid in the same clock cycle.
 
 When a request is accepted, it stores the data and switches to one of the full states (\code{hasA}
 or \code{hasB}).
 When the consumer of the output accepts the data, the arbiter switches back to an idle state.
-It switches to the idle state that will accepts a pending requesting from the other input
+It switches to the idle state that will accept a pending request from the other input
 in the next clock cycle.
 
 
 
 \chapter{Example Designs}
 
-In this section, we explore some small size digital designs, such as
+In this section, we explore some small digital designs, such as
 a FIFO buffer, which are used as building blocks for a larger design.
 As another example, we design a serial interface (also called UART),
 which itself may use the FIFO buffer. Furthermore, we will generalize
@@ -4877,7 +4880,7 @@ A FIFO is initially empty, singled by the \code{empty} signal. Reading
 from an empty FIFO is usually undefined. When data is written and never
 read a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
 and the data are lost. In other words, the signals \code{empty} and \code{full}
-serve as handshake signals 
+serve as handshake signals
 
 Several different implementations of a FIFO are possible: For example, using on-chip
 memory and read and write pointers or simply a chain of registers with a
@@ -5303,30 +5306,30 @@ stage.}{lst:fifo:comb}
 
 \section{A Multi-clock Memory}
 
-In large designs with multiple clock domains, you may need a way to safely 
-pass data from one domain to another. We have previously seen synchronization as 
-one solution to this issue. An alternative is to use a multi-clock memory as 
-a buffer between the two (or more) domains. 
+In large designs with multiple clock domains, you may need a way to safely
+pass data from one domain to another. We have previously seen synchronization as
+one solution to this issue. An alternative is to use a multi-clock memory as
+a buffer between the two (or more) domains.
 
 
-Chisel supports multi-clock designs with the \code{withClock} and 
-\code{withClockAndReset} constructs. All storage elements defined within a 
-\code{withClock(clk)} block are clocked by \code{clk}. For multi-clock memories, 
-the memory module should be defined outside all \code{withClock} blocks, while 
-each port should have their own \code{withClock} block. A parameterized 
+Chisel supports multi-clock designs with the \code{withClock} and
+\code{withClockAndReset} constructs. All storage elements defined within a
+\code{withClock(clk)} block are clocked by \code{clk}. For multi-clock memories,
+the memory module should be defined outside all \code{withClock} blocks, while
+each port should have their own \code{withClock} block. A parameterized
 multi-clock memory is shown in Listing~\ref{lst:multiclockmem}.
 
 \verylonglist{code/multi_clock_memory.txt}{A multi-clock memory generator.}{lst:multiclockmem}
 
-Naturally, using these multi-clock memories introduces some constraints to the 
-operations that can be performed simultaneously. Two (or more) ports cannot 
-write to the same address at the same time as this may cause metastability. 
+Naturally, using these multi-clock memories introduces some constraints to the
+operations that can be performed simultaneously. Two (or more) ports cannot
+write to the same address at the same time as this may cause metastability.
 Similarly, one must make sure to define the wanted read-during-write behavior.
-The memory should be configured to either write first, in which the input data is 
-forwarded to the read port, or read first in which the \emph{old} memory value 
-is presented on the read port. 
+The memory should be configured to either write first, in which the input data is
+forwarded to the read port, or read first in which the \emph{old} memory value
+is presented on the read port.
 
-Beware, though, that multi-clock support in ChiselTest is still at a very early 
+Beware, though, that multi-clock support in ChiselTest is still at a very early
 stage. You need to manually toggle clock signals to force transitions.
 
 % Perhaps add chapter on adder design (Adders.scala defines a few designs)
@@ -5341,7 +5344,7 @@ Source code for both exercises is included in the
 
 \subsection{Explore the Bubble FIFO}
 
-The FIFO source also includes a tester that provokes different read and write behavior and generates a waveform in the 
+The FIFO source also includes a tester that provokes different read and write behavior and generates a waveform in the
 \myref{https://en.wikipedia.org/wiki/Value_change_dump}{value change dump (VCD)} format.
 The VCD file can be viewed with a waveform viewer, such as
 \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
@@ -5364,7 +5367,7 @@ latency of a data word through the FIFO is equal to the depth of the FIFO.
 The next test fills the FIFO until it is full. A single read follows.
 Notice how the empty word bubbles from the reader side of the FIFO
 to the writer side. When a bubble FIFO is full, it takes
-a latency of the buffer depth for a read to affect the writer side. 
+a latency of the buffer depth for a read to affect the writer side.
 
 The end of the test contains a loop that tries to write and read at maximum speed.
 We can see the bubble FIFO running at maximum bandwidth, which is two
@@ -5462,7 +5465,7 @@ then called a system-on-chip (SoC).
   \centering
   \includegraphics[scale=\scale]{figures/bus}
   \caption{A classic computer consisting of a processor (CPU), memory, and I/O;
-  connected via address, data, and control busses.}
+  connected via address, data, and control buses.}
   \label{fig:bus}
 \end{figure}
 
@@ -5470,8 +5473,8 @@ Figure~\ref{fig:bus} shows the schematic of a simple, classic computer.
 The central processing unit (CPU) is connected via a
 \myref{https://en.wikipedia.org/wiki/System_bus}{system bus} to
 external memory and input/output (I/O) devices.
-This type of bus interconnection was common with early microprocessors,
-such as, \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
+This type of bus interconnection was common with early microprocessors
+such as \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
 \myref{https://en.wikipedia.org/wiki/MOS_Technology_6502}{6502}.
 
 The bus is split into an address bus, a data bus, and control signals
@@ -5494,13 +5497,13 @@ the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logi
 driver. In tri-state configuration, both output transistors are disabled and the output pin
 is practically disconnected from logic.
 
-Note, that in the simplest form the bus does not contain a clock. The timing is defined by
+Note that in the simplest form the bus does not contain a clock. The timing is defined by
 read and write access times of the peripheral devices.
 
-Modern computers have different busses for different peripheral devices, for example, a dedicated memory
-bus for external memory and I/O busses for peripheral devices.
-Furthermore, modern I/O busses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
-are serial busses and use point-to-point connections.
+Modern computers have different buses for different peripheral devices, for example, a dedicated memory
+bus for external memory and I/O buses for peripheral devices.
+Furthermore, modern I/O buses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
+are serial buses and use point-to-point connections.
 
 Nevertheless, the notion of the classic processor bus with an address bus, a data bus, and chip select signals
 is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
@@ -5516,9 +5519,9 @@ on-chip interconnect in the next section.
 \end{figure}
 
 We can translate the concept of such an external bus to an on-chip bus. However, we need to adapt some aspects.
-Shared busses with the need of tri-state drivers are not practical within a chip. Furthermore,
+Shared buses with the need of tri-state drivers are not practical within a chip. Furthermore,
 wires in a chip are cheaper than wires on a PCB or at a connector. Therefore, we split the data bus
-into two collection of wires: one for the read and and one for the write signals.
+into two collections of wires: one for the read and and one for the write signals.
 Furthermore, on-chip connections use a clock to define the timing.
 
 Figure~\ref{fig:bus-on-chip} shows the implementation of the bus concept within a chip.
@@ -5535,8 +5538,8 @@ For IO devices this additional clock cycle latency relaxes the timing constraint
 We still assume that a write is performed in one clock cycle.
 
 If we want to communicate with devices with different or even varying latency, we need to
-introduce handshaking. The processor signals with a read or write request the start of a
-transaction and the memory or peripheral device signals the end of a transaction with
+introduce handshaking. The processor signals the start of a
+transaction with a read or write request, and the memory or peripheral device signals the end of a transaction with
 an acknowledgment signal.
 
 \subsection{Combinational Handshake}
@@ -5550,23 +5553,23 @@ an acknowledgment signal.
 
 Figure~\ref{fig:bus_ack} shows a read request with an acknowledgment.
 The processor drives the address bus (\code{address}) and the read
-signal (\code{rd}) in clock cycle 2. Signal \code{ack} needs to react
+signal (\code{rd}) in clock cycle 2. The signal \code{ack} needs to react
 within that first clock cycle. In our example the read data is not available within
 one clock cycle, but two clock cycles later as seen in clock cycle 4.
 Data and the acknowledgment are valid for a single clock cycle.
-The benefit of that protocol specification is, that it allows for a single cycle transaction.
+The benefit of that protocol specification is that it allows for a single-cycle transaction.
 However, the price is that the handshake process, including decoding is a combinational
 circuit, which can lead to issues with the maximum frequency.
-The standard Wishbone~\cite{soc:wishbone} protocol uses the same cycle
+The standard Wishbone~\cite{soc:wishbone} protocol uses same-cycle
 acknowledgement. The newer version of Wishbone added a pipelined
 protocol.
 
-The same cycle acknowledgement (or ready signal) has been criticized in~\cite{simpcon}.
-A single cycle transaction is usually not realistic in a larger system. Therefore,
+Same-cycle acknowledgement (or ready signal) has been criticized in~\cite{simpcon}.
+A single-cycle transaction is usually not realistic in a larger system. Therefore,
 we can define a specification where the acknowledge (or busy or ready) signal
 does not need to be valid in the request cycle.
 That paper proposes SimpCon, a protocol that enables pipelined transactions and
-avoids the combinational path between the processor, address decoding, and the
+avoids the combinational path between the processor, the address decoding, and the
 peripheral device.
 
 \subsection{Pipelined Handshake}
@@ -5583,9 +5586,8 @@ Maybe then compare. This needs some better writing, also put it into the soc-com
 Also have a write timing diagram. And find a better font for the diagram to have nicer
 rendering in the SVG.}
 
-Here we define a simple pipelined handshake bus protocol that avoids the single
-cycle combinational loop and fits better for modern SoC designs.
- A read or write command are signaled by an assertion of \code{rd} or \code{wr}
+Here we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and fits better with modern SoC designs.
+ A read or write command is signaled by an assertion of \code{rd} or \code{wr}
  for a single clock cycle.
 The address and write data (if it is a write) need to be valid during
 the command. Commands are only valid for a single cycle.
@@ -5596,17 +5598,17 @@ signal for one clock cycle.
 
 Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
-is only a single clock cycle long. The address bus and the read signal does not need to be driven
-till the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
+is only a single clock cycle long. The address bus and the read signal do not need to be driven
+until the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
 be valid (low or high)
-earliest one clock cycle after the \code{rd} command, in clock cycle 3.
+no earlier than one clock cycle after the \code{rd} command, in clock cycle 3.
 The first read sequence has two clock cycles latency in this example.
 It has the same latency as in the former example.
 However, as the request needs to be valid only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
-allowing a throughput of 1 data word per clock cycle. 
+allowing a throughput of 1 data word per clock cycle.
 
-The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exact this
+The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exactly this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
 used OCP interfaces.
@@ -5635,7 +5637,7 @@ delay any asserted \code{rd} or \code{wr}. As we provide the read result in
 the clock cycle that follows the read command and the address is only valid during this
 command cycle, we need to store the address in \code{addrReg}.
 
-The counters themself consists of a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
+The counters themselves consist of a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
 The counters are initialized to zero by using a Scala \code{Seq}, created with \code{fill}
 containing the reset values as Chisel constants. That \code{Seq} is the input to the \code{VecInit}.
 The counters are freely running and increment by one each clock cycle, except when written
@@ -5644,9 +5646,9 @@ a new value.
 \subsection{Memory Mapped Devices}
 \index{Memory mapped IO}
 
-In our example system all devices, being it memory or IO devices, are connected to a shared
+In our example system all devices, whether they be memory or IO devices, are connected to shared
 address lines. Therefore, they appear in the shared address space. To select individual
-devices we use address decoding of some upper bits. This is called memory mapped devices
+devices, we use address decoding of some upper bits. This is called memory-mapped devices,
 and as part of the system design we decide on an address mapping.
 
 \begin{table}
@@ -5673,11 +5675,11 @@ At the lowest address (the starting of program to be executed) we map a read-onl
 memory (ROM) that contains the program. In the next memory area we map
 a writable memory (RAM) for the data. We decide to map all IO devices into the
 upper area of the address space (above 0xf000), so they are out of the way, in case
-we want to extend the memory. I this example we reserve 16 bytes of address for
-each IO device. Note, this is a made up example and we have all the flexibility when
+we want to extend the memory. In this example we reserve 16 bytes of address for
+each IO device. Note that this is a made-up example and that we have all the flexibility when
 deciding on an address map.
 
-Some IO devices do not have memory mapped registers, as the counter example device,
+Some IO devices do not have memory-mapped registers, as the counter example device,
 but a ready/valid interface, as explained in Section~\ref{sec:ready:valid}.
 The UART, as presented in Section~\ref{sec:uart}, for example, has such two
 ready/valid interfaces: one for writing and one for reading a value.
@@ -5689,7 +5691,7 @@ those two signals into a status register at a different address.
 Table~\ref{tab:addr:uart} shows an address mapping for the UART. At the base address (0xf000)
 we access a status register on a read and an optional control register on a write.
 At the next address (0xf001) we read from a read buffer and write into
-a transmit buffer. 
+a transmit buffer.
 
 \begin{table}
 \centering
@@ -5728,15 +5730,15 @@ Bit & Status & \\
 \label{tab:addr:uart:status}
 \end{table}
 
-Note, to use ready and valid in a status register for polling, the ready signal from
+Note that to use ready and valid in a status register for polling, the ready signal from
 the transmitter and the valid signal from the receiver are not allowed to be deasserted
-once they have been asserted. If this cannot be guaranteed, two single word buffers,
+once they have been asserted. If this cannot be guaranteed, two single-word buffers,
 as shown in Listing~\ref{lst:rv:reg}, can be inserted between the IO interface and
 device with the read/valid interface.
 
 \todo{Talk on what happens when reading from an empty device or writing to a full device.}
 
-For our memory mapped devices we define a bundle:
+For our memory-mapped devices we define a bundle:
 
 \shortlist{code/mem_io_bundle.txt}
 
@@ -5771,29 +5773,29 @@ The Wishbone~\cite{soc:wishbone} specification is a definition of
 a point-to-point communication and not a bus in the classic sense.
 Wishbone is a public domain standard used by
 several open-source IP cores. The Wishbone interface specification
-is still in the tradition of microcomputer or backplane busses.
-However, for a SoC interconnect, which is usually
-point-to-point\footnote{Multiplexers are used instead of busses to
+is still in the tradition of microcomputer or backplane buses.
+However, for an SoC interconnect, which is usually
+point-to-point\footnote{Multiplexers are used instead of buses to
 connect several slaves and masters.}, this is not the best approach.
 The master is requested to hold the address and data valid through
 the whole read or write cycle. This complicates the connection to a
 master that has the data valid only for one cycle. In this case the
 address and data have to be registered \emph{before} the Wishbone
-connect or an expensive (time and resources) multiplexer has to be
-used. A register results in one additional cycle latency. A better
+connect, or an expensive (in terms of time and resources) multiplexer has to be
+used. A register results in one additional cycle of latency. A better
 approach would be to register the address and data in the slave. In
 that case the address decoding in the slave can be performed in the
-same cycle as the address is registered. A similar issue, with
+same cycle as when the address is registered. A similar issue, with
 respect to the master, exists for the output data from the slave: As
 it is only valid for a single cycle the data has to be registered by
 the master when the master is not reading it immediately. Therefore,
 the slave should keep the last valid data at its output even when
 the Wishbone strobe signal (\emph{wb.stb}) is not assigned anymore.
-Holding the data in the slave is usually \emph{for free} from the
+Holding the data in the slave is usually \emph{free} in terms of
 hardware complexity---it is \emph{just} a specification issue. In
-the classic Wishbone specification there is no way to perform pipelined read
+the classic Wishbone specification there is no way to perform a pipelined read
 or write. However, the latest Wishbone specification (B4) contains
-also a pipelined definition. Note, that the specification now contains two
+also a pipelined definition. Note that the specification now contains two
 different, not necessarily compatible, specifications.
 
 \todo{Sample code for a peripheral, how to test?}
@@ -5803,11 +5805,11 @@ different, not necessarily compatible, specifications.
 
 The Advanced Microcontroller Bus Architecture (AMBA) \cite{soc:amba}
 is an interconnection definition from ARM. The specification
-defines three different busses: Advanced High-performance Bus (AHB),
+defines three different buses: Advanced High-performance Bus (AHB),
 Advanced System Bus (ASB), and Advanced Peripheral Bus (APB). The
 AHB is used to connect on-chip memory, cache, and external memory to
 the processor. Peripheral devices are connected to the APB. A bridge
-connects the AHB to the lower bandwidth APB. An AHB bus transfer can
+connects the AHB to the lower-bandwidth APB. An AHB bus transfer can
 be one cycle with burst operation. With the APB a bus transfer
 requires two cycles and no burst mode is available. Peripheral bus
 cycles with wait states are added in the version 3 of the APB
@@ -5815,13 +5817,13 @@ specification. ASB is the predecessor of AHB and is not recommended
 for new designs (ASB uses both clock phases for the bus signals --
 very uncommon for today's synchronous designs).
 
-Amba AXI (Advanced eXtensible Interface) and ACE 
-version 4~\cite{axi4standard}  is the latest 
+Amba AXI (Advanced eXtensible Interface) and ACE
+version 4~\cite{axi4standard}  is the latest
 extension to AMBA. AXI introduces out-of-order transaction
-completion with the help of a 4 bit transaction id tag. A ready
+completion with the help of a 4-bit transaction ID tag. A ready
 signal acknowledges the transaction start. The master has to hold
 the transaction information (e.g.\ address) till the interconnect
-signals ready. This enhancement ruins the elegant single cycle
+signals ready. This enhancement ruins the elegant single-cycle
 address phase from the original AHB specification.
 
 The AXI bus uses ready/valid handshaking for all signals (read address,
@@ -5867,8 +5869,8 @@ multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
 suggested. Xilinx used the AND/OR approach and all masters and
-slaves must drive the data busses to zero when inactive.
-Xilinx switched to AXI for all their interconnect.
+slaves must drive the data buses to zero when inactive.
+Xilinx switched to AXI for all their interconnects.
 
 
 \chapter{Debugging, Testing, and Verification}
@@ -5879,17 +5881,17 @@ Xilinx switched to AXI for all their interconnect.
 \index{Testing}
 \index{Verification}
 
-In Chapter~\ref{chap:build:test} we gave a quick introduction how to test
-Chisel designs. In this Chapter we will dig deeper into the topic of testing and
+In Chapter~\ref{chap:build:test} we gave a quick introduction on how to test
+Chisel designs. In this chapter we will dig deeper into the topic of testing and
 verification.
 
-Testing and verification have slightly different meaning in software development
-and digital design. In software development testing means running tests on components
-where verification usually is the short for formal verification (mathematical proofs or exhaustive testing
-with model checking). In digital design we used the term testing similar to software when writing
+Testing and verification have slightly different meanings in software development
+than in digital design. In software development, testing means running tests on components
+whereas verification usually is short for formal verification (mathematical proofs or exhaustive testing
+with model checking). In digital design we use the term testing similar to software when writing
 \emph{test benches} that stimulate and check a \emph{device under test} (DUT). However, the term testing
 is also used in the actual test of the physical chip (on a tester using a built-in self test).
-Therefore, the digital design community slowly moves to use the term verification for
+Therefore, the digital design community slowly moves toward using the term verification for
 testing the hardware description. If we want to apply formal methods to verify hardware
 components, we call it formal verification. In this book we will stick to the term \emph{testing}
 when we write tests for our hardware description.
@@ -5906,7 +5908,7 @@ One can debug a program by using a debugger or simply by printing interesting
 values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
 In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
 debugging is generating waveforms and watching how signals of interest evolve over time.
-We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this,
+We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this;
 we should create one.}
 
 A Chisel tester can generate waveforms, which can be viewed, for example, with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
@@ -5917,19 +5919,19 @@ Values are printed at the rising edge of the clock.
 \section{Testing in Chisel}
 
 ChiselTest is based on ScalaTest. Therefore, we can run all tests with a simple \code{sbt test}.
-ScalaTest also supports multithreaded testing out of the box meaning that if you have more 
-test classes in your project, they can run in parallel. Additionally, you can make use of 
+ScalaTest also supports multithreaded testing out of the box, so if you have multiple
+test classes in your project, they can run in parallel. Additionally, you can make use of
 the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
 
-You define Chisel tests as classes that extend \code{AnyFlatSpec} with 
-the\\ \code{ChiselScalatestTester} trait. ChiselTest uses \code{peek}, 
+You define Chisel tests as classes that extend \code{AnyFlatSpec} with
+the\\ \code{ChiselScalatestTester} trait. ChiselTest uses \code{peek},
 \code{poke}, \code{expect}, and \code{step} methods that operate on the DUT's IO ports.
-The ChiselTest methods operate on Chisel types (i.e., \code{UInt}s, 
+The ChiselTest methods operate on Chisel types (i.e., \code{UInt}s,
 \code{SInt}s and \code{Bool}s). However, when peeking a value we
 usually would like to have Scala types for the test written in Scala.
 Therefore, two additional methods exist: (1) \code{peekInt()} returns a
 Scala \code{Int} and (2) \code{peekBoolean()} returns a Scala \code{Boolean}.
-To advance the simulation by one clock cycle, 
+To advance the simulation by one clock cycle,
 we call \code{step()} on the DUT's implicit clock port.
 
 You can define a test within the \code{test()} function which takes the module to test as
@@ -5937,8 +5939,8 @@ parameter. As an example, the following tester tests a few inputs to  a BCD tabl
 
 \shortlist{code/basic_chiseltest.txt}
 
-Alternatively, you can use the \code{behavior of "module name"} syntax to 
-refer to the module with \code{it}. This is useful when you have several tests for a 
+Alternatively, you can use the \code{behavior of ``module name''} syntax to
+refer to the module with \code{it}. This is useful when you have several tests for a
 single module.
 
 \shortlist{code/basic_chiseltest_it.txt}
@@ -5951,11 +5953,11 @@ counter device that we introduced in Chapter~\ref{chap:interconnect} as an examp
 \longlist{code/test_counter.txt}{Testing the counter device.}{lst:test:cnt}
 
 As you can see, the test covers only a few cases, but is already very long to read.
-All those pokes and expects are cumbersome. As a first step we shall introduce
+All those pokes and expects are cumbersome. As a first step, we shall introduce
 functions to represent a read and a write request. Those functions abstract away the manual
 ``bit banging'' at the interface pins in the testing code.
 Listing~\ref{lst:test:cnt:fun} shows a test with those functions. For a shortcut we also define
-the function \code{step} to advance the clock. 
+the function \code{step} to advance the clock.
 
 \longlist{code/test_counter_fun.txt}{Testing the counter device with fuctions.}{lst:test:cnt:fun}
 
@@ -5964,33 +5966,33 @@ as parameter and returns the read value. After poking the address and the read s
 advances the clock by one clock cycle and deasserts the read function. In our example device,
 the read value should be available after one clock cycle. However, we generalize the read function
 also for devices with longer latencies and the read function waits in an endless loop that \code{ack}
-will become true. Note, that we use \code{peekBoolean} to read a Scala \code{Boolean}.
-However, when a device has a fault to never assert \code{ack} after a request,
+will become true. Note that we use \code{peekBoolean} to read a Scala \code{Boolean}.
+However, if a device has the fault of never asserting \code{ack} after a request,
 the test will hang in an endless loop. A robuster read function shall contain a timeout for the \code{ack}
 polling. Finally, we read the data from \code{rdData} with \code{peekInt()} to read a Scala integer
 value (concrete a \code{BigInt} to express integers of any size).
 
 The \code{write} function takes an address and the data parameters as Scala \code{Int}.
-Similar to the read function, the values are poked into the device, the clock advanced one
-clock cycle and then the write signal deasserted. Also here we wait in an endless loop that
-\code{ack} becomes true.
+Similar to the read function, the values are poked into the device, the clock is advanced by one
+clock cycle, and then the write signal deasserted. Here we also wait in an endless loop for
+\code{ack} to become true.
 
-With those three functions available, we can write better readable tests in less lines of code.
-This testing code covers already more cases than the original bit-banging
-tester.\footnote{It happened that I had an off by one error (\code{until 3} instead of \code{until 4})
-in the counter device, that I found only with the second, more comprehensive test.}
+With those three functions available, we can write more readable tests with fewer lines of code.
+This testing code already covers more cases than the original bit-banging
+tester.\footnote{It happened that I had an off-by-one error (\code{until 3} instead of \code{until 4})
+in the counter device that I found only with the second, more comprehensive test.}
 
 
 %\section{Advanced Testing}
 
-If you have a large test suite, you may wish to run only a subset of your tests 
-as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration} 
-run. The easiest way to achieve this and still have to run only a single SBT command 
+If you have a large test suite, you may wish to run only a subset of your tests
+as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration}
+run. The easiest way to achieve this and still have to run only a single SBT command
 is by tagging your tests.
 
 \shortlist{code/tag_test.txt}
 
-\noindent Per default, all tests are run by using \code{sbt test} or \code{sbt testOnly *}. 
+\noindent By default, all tests are run using \code{sbt test} or \code{sbt testOnly *}.
 To leave out tests tagged with, for example, \code{Unnecessary}, you can run:
 
 \begin{verbatim}
@@ -6006,69 +6008,69 @@ $ sbt "testOnly * -- -l Unnecessary"
 [info] No tests were executed.
 \end{verbatim}
 
-If your tests (and tags) are part of a package, remember to provide the full 
+If your tests (and tags) are part of a package, remember to provide the full
 reference path to both.
-The following subsections present advanced testing techniques that you likely do 
+The following subsections present advanced testing techniques that you likely do
 not need yet. You can skip ahead to the exercise and return later if you find the need.
 
 \section{Multithreaded Testing}
 
-ChiselTest has support for multithreaded testing through the use of \code{fork} and 
-\code{join} calls. \code{fork} spawns a new tester thread with a block of test code 
+ChiselTest has support for multithreaded testing through the use of \code{fork} and
+\code{join} calls. \code{fork} spawns a new tester thread with a block of test code
 as its parameter, while \code{join} may be called on a tester thread variable
-(returned by a \code{fork} call) to wait for it to join the main thread. 
+(returned by a \code{fork} call) to wait for it to join the main thread.
 
-Running multiple threads does present some new limitations to \code{peek}s and 
-\code{poke}s in that no two threads can \code{peek} respectively \code{poke} the 
-same signal at the same time. Similarly, to guarantee correct operation, the threads 
+Running multiple threads does present some new limitations to \code{peek}s and
+\code{poke}s in that no two threads can \code{peek} (respectively, \code{poke}) the
+same signal at the same time. Similarly, to guarantee correct operation, the threads
 are synchronized on calls to \code{step}.
-The following snippet is a small test of a FIFO that enqueues an element in one thread 
+The following snippet is a small test of a FIFO that enqueues an element in one thread
 and dequeues it in the main thread:
 
 \shortlist{code/fork_join_example.txt}
 
-Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads 
-represent a hierarchy in which the first thread should not finish before one of the 
+Multiple threads are spawned with stacked calls to \code{fork}. The spawned threads
+represent a hierarchy in which the first thread should not finish before any of the
 subsequent threads.
 
 \section{Simulator Backends}
 \index{Verilator}
 \index{VCS}
 
-Per default, tests written with ChiselTest are run by the Treadle simulation backend.
-The benefit of Treadle is the quick startup time and no additional tools need to be installed.
+By default, tests written with ChiselTest are run by the Treadle simulation backend.
+The benefits of Treadle are its quick startup time and the fact that it does not require any additional tools to be installed.
 
-However, 
-larger system tests may either require another backend to support, for example, latches, or may 
+However,
+larger system tests may either require another backend to support, for example, latches, or may
 benefit in terms of simulation time. To enable this, ChiselTest supports two other backends:
-\myref{https://www.veripool.org/wiki/verilator}{Verilator} and 
-\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because 
-Verilator is open-source, we will use it for the examples presented in this section. Note 
-that in all cases, VCS can be be used as a an alternative to Verilator.
+\myref{https://www.veripool.org/wiki/verilator}{Verilator} and
+\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because
+Verilator is open-source, we will use it for the examples presented in this section. Note
+that in all cases, VCS can be be used as an alternative to Verilator.
 
-Switching to a different backend is simply a matter of adding another annotation to the 
-\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add following
-annotation: 
+Switching to a different backend is simply a matter of adding another annotation to the
+\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add the following
+annotation:
 
 \shortlist{code/verilator_anno.txt}
 
-Additional flexibility arises from the ability to supply your own switches to the 
-simulator command that starts the backend. This is done by using \code{VerilatorFlags} 
-to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add 
-switches to GCC. They should be in the list of annotations along with the backend 
+Additional flexibility arises from the ability to supply your own switches to the
+simulator command that starts the backend. This is done by using \code{VerilatorFlags}
+to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add
+switches to GCC. They should be in the list of annotations along with the backend
 annotation. You need to refer to the tool's user manual  to find a detailed list of command line arguments.
 Note that \code{VerilatorFlags} and \code{VerilatorCFlags} annotations are advanced features
 that should generally not be needed. Furthermore, the flags are not guaranteed to remain stable.
 
-Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation. 
+Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation.
 To support this, make sure to install Verilator version 4.028 or newer.
 
-Also, beware that different simulators work in different ways. Verilator is a so-called 
-synchronous simulator, which means that it runs updates only at the rising edge of the 
-clock and thus does not support latches. It also does not officially support multiple 
-clocks. VCS, on the other hand, is an event-based simulator, which is significantly more 
-detailed in its simulations and supports all synthesizable Verilog constructs. 
-Generally, for single-clock circuits, Verilator is the fastest and 
+Also, beware that different simulators work in different ways. Verilator is a so-called
+synchronous simulator, which means that it runs updates only at the rising edge of the
+clock and thus does not support latches. It also does not officially support multiple
+clocks. VCS, on the other hand, is an event-based simulator, which is significantly more
+detailed in its simulations and supports all synthesizable Verilog constructs.
+Generally, for single-clock circuits, Verilator is the fastest and
 most widely available tool.
 
 
@@ -6487,9 +6489,9 @@ to Chisel.
 
 \section{Publishing a Chisel Library}
 
-When you develop a circuit in open-source and share it on, for example on GitHub,
-this a very educational act, as others can learn describing hardware in Chisel from your code example.
-However, sharing just the source code forces other to copy your code into their
+When you develop a circuit in open-source and share it, for example on GitHub,
+this a very educational act, as others can learn to describe hardware in Chisel from your code example.
+However, sharing just the source code forces others to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
 same}.\footnote{I learned this phrase from Doug Locke during discussion sessions
 developing the safety-critical specification for Java} This means that changes will
@@ -6531,19 +6533,19 @@ Contribution starts with a git pull request of your addition. This will start a 
 
 \subsection{Prerequisite}
 
-\myref{https://mvnrepository.com/repos/central}{Maven Central} is one of the largest repository
+\myref{https://mvnrepository.com/repos/central}{Maven Central} is one of the largest repositories for
 hosting software libraries. Publishing to Maven Central is easiest via
 \myref{https://www.sonatype.com/}{Sonatype}. Sonatype offers free hosting of open-source
 projects via the \myref{https://central.sonatype.org/pages/ossrh-guide.html}{Sonatype Repository}.
 Following initial steps are needed before publishing a library:
 
 \begin{enumerate}
-\item Create a Sonatype account, a \myref{https://issues.sonatype.org/secure/Signup!default.jspa}{JIRA account}
+\item Create a \myref{https://issues.sonatype.org/secure/Signup!default.jspa}{Sonatype JIRA account}
 \item You need a unique \code{groupId}, which is usually a domain name in reverse order, e.g., \code{edu.berkeley.cs}.
 You can also use your GitHub account as a groupId, for example, mine is \code{io.github.schoeberl}. You register this groupId
 by opening an \myref{https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134}{issue}.
 This is a manual process where you get a request to prove that you \emph{own} the requested groupId.
-When using the GitHub domain name, you are requested to setup a repository to show your ownership.
+When using the GitHub domain name, you are requested to set up a repository to show your ownership.
 \item Create \code{sonatype.sbt} in \code{\$HOME/.sbt/1.0} with your Sonatype login information:
 \begin{verbatim}
 credentials += Credentials(
@@ -6565,7 +6567,7 @@ gpg --keyserver keyserver.ubuntu.com --send-keys keyID
 
 \subsection{Library Setup}
 
-Per library you need to setup following:
+For each library you need to set up the following:
 
 \begin{enumerate}
 \item Install sbt plugins in \code{project/plugins.sbt}:
@@ -6609,7 +6611,7 @@ publishTo := Some(
 
 \subsection{Regular Publishing}
 
-All is now setup to sign and publish the library to Sonatype with:
+All is now set up to sign and publish the library to Sonatype with:
 
 \begin{verbatim}
 sbt publishSigned
@@ -6636,8 +6638,8 @@ Repository Search}.
 
 \section{Contributing to Chisel}
 
-The following is an advanced topic and I propose you first start following the discussions
-of the Chisel project issues on GitHub, before creating your first pull request (PR).
+The following is an advanced topic, and I propose that you first start following the discussions
+of the Chisel project issues on GitHub before you create your first pull request (PR).
 
 \subsection{Setup the Development Environment}
 
@@ -6645,17 +6647,17 @@ Chisel consists of several different repositories: the main repositories are hos
 \myref{https://github.com/chipsalliance/chisel3}{CHIPS Alliance} and others on
 the \myref{https://github.com/freechipsproject}{freechips organization at GitHub}.
 
-Fork the repository, which you like to contribute, into your personal GitHub account.
+Fork the repository to which you would like to contribute into your personal GitHub account.
 You can fork the repository by pressing the \code{Fork} button in the GitHub web interface.
 Then from that fork, clone your fork of the repository.\footnote{Note that on a breaking
-firrt/Chisel change you might need to also fork and clone firrtl}
+FIRRTL/Chisel change, you might need to also fork and clone \code{firrtl}.}
 In our example, we change \code{chisel3}, and the clone command for my local fork is:
 
 \begin{verbatim}
 $ git clone git@github.com:schoeberl/chisel3.git
 \end{verbatim}
 
-To compile Chisel 3 and publish as a local library execute:
+To compile Chisel 3 and publish it as a local library, execute:
 \begin{verbatim}
 $ cd chisel3
 $ sbt compile
@@ -6673,7 +6675,7 @@ for example, by forking/cloning an \myref{https://github.com/schoeberl/chisel-em
 renaming it, and removing the \code{.git} folder from it.
 
 Change the \code{build.sbt} to reference the locally published version of Chisel.
-Compile your Chisel test application and take a close look if it picks up the local published
+Compile your Chisel test application and take a close look to ensure that it picks up the local published
 version of the Chisel library (there is also a SNAPSHOT version published, so if, for example,
 the Scala version is different between your Chisel library and your application code,
 it picks up the SNAPSHOT version from the server instead of your local published
@@ -6685,7 +6687,7 @@ at the Chisel repo}.
 \subsection{Testing}
 
 When you change the Chisel library, you should run the Chisel tests.
-In an \code{sbt} based project, this is usually run with:
+In an \code{sbt}-based project, they are usually run with:
 
 \begin{verbatim}
 $ sbt test
@@ -6712,12 +6714,12 @@ guidelines}.
 Invent a new operator for the \code{UInt} type, implement it in the Chisel library,
 and write some usage/test code to explore the operator. It does not need to be
 a useful operator; just anything will be good, for example, a ? operator that delivers the lefthand side
-if it is different from 0 otherwise the righthand side. Sounds like a multiplexer, right?
+if it is different from 0 and the righthand side otherwise. Sounds like a multiplexer, right?
 How many lines of code did you need to add?\footnote{A quick and dirty implementation
 needs just two lines of Scala code.}
 
-As simple as this was, please be not tempted to fork the Chisel project and
-add your little extensions. Changes and extension shall be coordinated with the
+As simple as this was, please do not be tempted to fork the Chisel project and
+add your little extensions. Changes and extensions shall be coordinated with the
 main developers.
 This exercise was just a simple exercise to get you started.
 
@@ -6755,7 +6757,7 @@ This book is available in open source.
 The repository also contains slides for a digital design course with Chisel and
 all Chisel examples: \url{https://github.com/schoeberl/chisel-book}
 
-A collection of medium-sized examples, which most are referenced
+A collection of medium-sized examples, most of which are referenced
 in the book, is also available in open source. This collection
 also contains projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
@@ -6766,7 +6768,7 @@ also contains projects for various popular FPGA boards:
 \index{Reserved keywords}
 \label{sec:reserved}
 
-Several keywords are reserved in Chisel (and Scala), and cannot be used as identifiers
+Several keywords are reserved in Chisel (and Scala) and cannot be used as identifiers
 for your hardware design.
 Table~\ref{tab:reserved:scala} lists the reserved words from Scala.
 
@@ -6789,8 +6791,8 @@ Table~\ref{tab:reserved:scala} lists the reserved words from Scala.
 
 Table~\ref{tab:reserved:chisel} lists the reserved words added by the Chisel library.
 In contrast to the Scala reserved word listing, it also contains type/class names defined by Chisel.
-Although technically possible, you should also avoid to use Chisel (and Scala) operators, such as for example,
-\code{+} or \code{<<}.
+Although technically possible, you should also avoid using Chisel (and Scala) operators, such as
+\code{+} or \code{<<}, for example. % fixme: Where it says "using", does it more specifically mean "redefining"?
 
 \begin{table}[h]
 \centering
@@ -6833,7 +6835,7 @@ be used in simulation.
 \item[\myref{https://github.com/t-crest/patmos}{Patmos}] is an implementation of a
 processor optimized for real-time systems~\cite{patmos:rts2018}. The Patmos repository
 includes several multicore communication architectures, such as a time-predictable memory
-arbiter~\cite{t-crest:memnoc}, a network-on-chip~\cite{s4nocni:arcs2019}
+arbiter~\cite{t-crest:memnoc}, a network-on-chip~\cite{s4nocni:arcs2019}, and
 a shared scratchpad memory with an ownership~\cite{t-crest:ownspm}.
 
 \item[\myref{https://github.com/pretis/flexpret}{FlexPRET}] is an implementation of a
@@ -6873,7 +6875,7 @@ developed at UC Berkeley~\cite{Constellation:2022}.
 Constellation generates packet-switched NoCs with wormhole routing,
 virtual channels, and credit-based flow control. The interface to the NoC
 can use AXI-4 or TileLink. Compared to other NoCs and NoC generators,
-Constellation can generate any topology with application specific routes.
+Constellation can generate any topology with application-specific routes.
 
 \end{description}
 
@@ -6884,7 +6886,7 @@ so I can include it in a future edition of the book.
 \chapter{Acronyms}
 
 Hardware designers and computer engineers like to use acronyms.
-However, it needs time to get used to them. Here is a list of common terms
+However, it takes time to get used to them. Here is a list of common terms
 related to digital design and computer architecture.
 
 
@@ -6917,7 +6919,7 @@ related to digital design and computer architecture.
 \item [IO] input/output
 \item [ISA] instruction set architecture
 \item [JDK] Java development kit
-\item [JIT] just-Iin-time
+\item [JIT] just-in-time
 \item [JVM] Java virtual machine
 \item [LC] logic cell
 \item [LRU] least-recently used
@@ -6926,7 +6928,7 @@ related to digital design and computer architecture.
 \item [MSB] most significant bit
 \item [MUX] multiplexer
 \item [OO] object oriented
-\item [OOO] out-of order
+\item [OOO] out-of-order
 \item [OS] operating system
 \item [RAM] random access memory
 \item [RISC] reduced instruction set computer
@@ -6934,7 +6936,7 @@ related to digital design and computer architecture.
 %\item [RTOS] Real-Time Operating System
 \item [SDRAM] synchronous DRAM
 \item [SRAM] static random access memory
-\item [TOS] top-of stack
+\item [TOS] top of stack
 \item [UART] universal asynchronous receiver/transmitter
 \item [VHDL] VHSIC hardware description language
 \item [VHSIC] very high speed integrated circuit
@@ -7025,18 +7027,18 @@ Stuff that saves a little hardware, but might not worse the less readable code
  * Simple Scala (for, if else)
  * functions for hardware generation
  * Classes and constructor
- 
+
  \section{More Complex Testing}
- 
+
   * As we know now sone Scala it is time to use the power of Scala for better testing
 
 \section{Hardware Generation}
 
  * More advanced stuff
  * Table generation (sinus, assembler)
- 
+
  \section{Leros}
- 
+
   * as a more complex design
   4. full design(s): processor
 
@@ -7044,9 +7046,9 @@ Stuff that saves a little hardware, but might not worse the less readable code
 
  * Some notes for reading Chisel 2 code
  * Update Lipsi to Chisel 3 to work on the 2 to 3 documentation
- 
+
  \section{Chisel Projects}
- 
+
   * Projects written in Chisel, as paper reference, some words and a URL.
 
 \section{Appendix}
