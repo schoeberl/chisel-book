@@ -122,7 +122,11 @@ class Buffer extends Module {
     val out = new UartIO()
   })
 
-  val empty :: full :: Nil = Enum(2)
+  object State extends ChiselEnum {
+    val empty, full = Value
+  }
+  import State._
+
   val stateReg = RegInit(empty)
   val dataReg = RegInit(0.U(8.W))
 

@@ -12,11 +12,12 @@ class PopCountFSM extends Module {
     val done = Input(Bool())
   })
 
-  val idle :: count :: done :: Nil = Enum(3)
+  object State extends ChiselEnum {
+    val idle, count, done = Value
+  }
+  import State._
   val stateReg = RegInit(idle)
-
   io.load := false.B
-
   io.dinReady := false.B
   io.popCntValid := false.B
 
@@ -38,9 +39,7 @@ class PopCountFSM extends Module {
       when(io.popCntReady) {
         stateReg := idle
       }
-    }
-  }
-}
+    } } }
 //- end
 
 //- start popcnt_data

@@ -54,7 +54,11 @@ class FifoRegister(size: Int) extends Module {
     val deq = new ReaderIO(size)
   })
 
-  val empty :: full :: Nil = Enum(2)
+  object State extends ChiselEnum {
+    val empty, full = Value
+  }
+  import State._
+
   val stateReg = RegInit(empty)
   val dataReg = RegInit(0.U(size.W))
 

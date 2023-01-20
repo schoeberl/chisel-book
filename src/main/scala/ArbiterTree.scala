@@ -19,15 +19,16 @@ class ArbiterTree[T <: Data: Manifest](n: Int, private val gen: T) extends Arbit
 
   //- start fun_arbiter
   def arbitrateFair(a: DecoupledIO[T], b: DecoupledIO[T]) = {
-
-    val idleA :: idleB :: hasA :: hasB :: Nil = Enum(4)
+    object State extends ChiselEnum {
+      val idleA, idleB, hasA, hasB = Value
+    }
+    import State._
     val regData = Reg(gen)
     val regState = RegInit(idleA)
     val out = Wire(new DecoupledIO(gen))
     a.ready := regState === idleA
     b.ready := regState === idleB
     out.valid := (regState === hasA || regState === hasB)
-
     switch(regState) {
       is (idleA) {
         when (a.valid) {
@@ -60,7 +61,6 @@ class ArbiterTree[T <: Data: Manifest](n: Int, private val gen: T) extends Arbit
     out
   }
   //- end
-
   io.out <> io.in.reduceTree((a, b) => arbitrateFair(a, b))
 }
 

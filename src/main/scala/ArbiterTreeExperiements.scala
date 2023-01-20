@@ -99,7 +99,11 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
 
   def arbitrateTwo(a: DecoupledIO[T], b: DecoupledIO[T]) = {
 
-    val idleA :: idleB :: hasA :: hasB :: Nil = Enum(4)
+    object State extends ChiselEnum {
+      val idleA, idleB, hasA, hasB = Value
+    }
+    import State._
+
     val regData = Reg(gen)
     val regState = RegInit(idleA)
     val out = Wire(new DecoupledIO(gen))

@@ -63,7 +63,11 @@ class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth
   private class DoubleBuffer[T <: Data](gen: T) extends Module {
     val io = IO(new FifoIO(gen))
 
-    val empty :: one :: two :: Nil = Enum(3)
+    object State extends ChiselEnum {
+      val empty, one, two = Value
+    }
+    import State._
+
     val stateReg = RegInit(empty)
     val dataReg = Reg(gen)
     val shadowReg = Reg(gen)

@@ -9,7 +9,10 @@ class RisingFsm extends Module {
   })
 
   // The two states
-  val zero :: one :: Nil = Enum(2)
+  object State extends ChiselEnum {
+    val zero, one = Value
+  }
+  import State._
 
   // The state register
   val stateReg = RegInit(zero)

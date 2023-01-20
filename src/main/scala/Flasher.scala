@@ -14,7 +14,11 @@ class Flasher extends FlasherBase {
 
   // Maybe signals should be Bool?
   //- start flasher_fsm
-  val off :: flash1 :: space1 :: flash2 :: space2 :: flash3 :: Nil = Enum(6)
+  object State extends ChiselEnum {
+    val off, flash1, space1, flash2, space2, flash3 = Value
+  }
+  import State._
+
   val stateReg = RegInit(off)
 
   val light = WireDefault(false.B) // FSM output
@@ -82,7 +86,11 @@ class Flasher2 extends FlasherBase {
   val start = io.start.asBool
 
   //- start flasher2_fsm
-  val off :: flash :: space :: Nil = Enum(3)
+  object State extends ChiselEnum {
+    val off, flash, space = Value
+  }
+  import State._
+
   val stateReg = RegInit(off)
 
   val light = WireDefault(false.B) // FSM output

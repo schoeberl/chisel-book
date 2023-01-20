@@ -345,6 +345,12 @@ deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
 If needed, those two chapters are available in the older versions of the Chisel book,
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
 
+The fifth edition does not include major changes, but is a consolidation version.
+We did a considerable proofreading for more clarity in writing. Chisel has added small convenience
+features that we cover in this edition. These are peeking a Scala integer directly without a conversion, or putting the class
+\code{ChiselEnum} into the main package.
+
+
 \todo{What else has been changed.}
 
 
@@ -3662,7 +3668,7 @@ Finally, after all the design of our warning level FSM, we shall code it in Chis
 Listing~\ref{lst:fsm:alarm} shows the Chisel code for the alarm FSM.
 Note that we use the Chisel type \code{Bool} for the inputs and the
 output of the FSM.
-To use \code{Enum} and the \code{switch} control instruction, we need to
+To use the \code{switch} control instruction, we need to
 import \code{chisel3.util.\_}.
 
 \longlist{code/simple_fsm.txt}{The Chisel code for the alarm FSM.}{lst:fsm:alarm}
@@ -3677,16 +3683,15 @@ The FSM has two input signals and a single output signal, captured in a Chisel \
 \noindent At this place we could spend some discussion on optimal state encoding. Two common options
 are binary or one-hot encoding. However, we leave those low-level optimizations to
 the synthesize tool and aim for readable code.\footnote{In the current version
-of Chisel, the \codefoot{Enum} type represents states in binary encoding.
+of Chisel, the \codefoot{ChiselEnum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
 constants for the state names.}
 Therefore, we use an enumeration type with symbolic names for the states:
 
 \shortlist{code/simple_fsm_states.txt}
 
-\noindent The individual state values are described as a list where the individual
-elements are concatenated with the \code{::} operator; \code{Nil} represents
-the end of the list. An \code{Enum} instance is \emph{assigned} to the list of states.
+\noindent The individual state values are enumerated in a comma separated list,
+followed by an assignment of \code{Value}.
 The register holding the state is defined with the \emph{green} state as the reset value:
 
 \shortlist{code/simple_fsm_register.txt}
@@ -3949,7 +3954,7 @@ waits for the time being done. The timer is loaded whenever it is done and in th
 initial \code{off} state. Signal \code{timerSelect} selects the value for the \emph{next}
 state down counter.
 
-\longlist{code/flasher_fsm.txt}{Master FSM of the light flasher.}{lst:flasher:master}
+\verylonglist{code/flasher_fsm.txt}{Master FSM of the light flasher.}{lst:flasher:master}
 
 \begin{figure}
   \centering
@@ -3968,15 +3973,16 @@ and \code{space}.
 Figure~\ref{fig:flasher2} shows the design with a master FSM and two FSMs
 that count: one FSM to count clock cycles for the interval length of \emph{on}
 and \emph{off}; the second FSM to count the remaining flashes.
-Following code shows the down counter FSM:
+Listing~\ref{lst:counter:fsm} code shows the down counter FSM:
 
-\shortlist{code/flasher2_counter.txt}
+\verylonglist{code/flasher2_counter.txt}{The down counter FAM.}{lst:counter:fsm}
+
 
 \noindent Note that the counter is loaded with 2 for 3 flashes, as it counts the
 \emph{remaining} flashes and is decremented in state \code{space} when the timer
 is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double refactored flasher.
 
-\longlist{code/flasher2_fsm.txt}{Master FSM of the double refactored light flasher.}{lst:flasher2:master}
+\verylonglist{code/flasher2_fsm.txt}{The master FSM of the double refactored light flasher.}{lst:flasher2:master}
 
 Besides having a master FSM that is reduced to just three states, our current solution
 is also better configurable. No FSM needs to be changed if we want to change
@@ -4069,8 +4075,9 @@ Otherwise, the \code{regData} register is shifted to the right, the least signif
 of the \code{regData} register added to the \code{regPopCount} register, and the counter
 decremented until it is 0. When the counter is 0, the output contains the popcount.
 
-\longlist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
-\longlist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
+\verylonglist{code/popcnt_data.txt}{Datapath of the popcount circuit.}{lst:pop:data}
+\newpage
+\verylonglist{code/popcnt_fsm.txt}{The FSM of the popcount circuit.}{lst:pop:fsm}
 
 Listing~\ref{lst:pop:fsm} shows the code of the FSM.
 The FSM starts in state \code{idle}. On a valid signal for the input data (\code{dinValid}) it

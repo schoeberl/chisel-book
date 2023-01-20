@@ -10,8 +10,10 @@ class SimpleFsm extends Module {
   })
 
   // The three states
-  val green :: orange :: red :: Nil = Enum(3)
-
+  object State extends ChiselEnum {
+    val green, orange, red = Value
+  }
+  import State._
   // The state register
   val stateReg = RegInit(green)
 
@@ -35,7 +37,6 @@ class SimpleFsm extends Module {
       }
     }
   }
-
   // Output logic
   io.ringBell := stateReg === red
 }
@@ -51,7 +52,10 @@ class SimpleFsmCopy extends Module {
   //- end
 
   //- start simple_fsm_states
-  val green :: orange :: red :: Nil = Enum(3)
+  object State extends ChiselEnum {
+    val green, orange, red = Value
+  }
+  import State._
   //- end
 
   //- start simple_fsm_register
