@@ -2424,7 +2424,6 @@ Those Scala conditionals have their use in Chisel when we write circuit generato
 which take parameters to conditionally generate \emph{different} hardware instances.
 
 \section{Decoder}
-
 \index{Decoder}
 
 A \myref{https://en.wikipedia.org/wiki/Binary_decoder}{decoder}
@@ -2670,7 +2669,7 @@ Figure~\ref{fig:priority-encoder} shows the schematic.
 
 
 \section{Comparator}
-
+\index{Comparator}
 
 \begin{figure}
   \centering
@@ -4423,6 +4422,32 @@ passed into the constructor that can be used in the IO bundle.
 \noindent Parameterized versions of the adder can be created as follows:
 
 \shortlist{code/use_param_adder.txt}
+
+\subsection{Case Classes}
+\index{Case classes}
+
+If we need more parameters, we can simply add additional parameters to the constructor
+of the Chisel module. However, is we pass those parameters through several constructors
+it might become tedious to use them. Furthermore, when changing the number or type of
+parameters, we need to edit several places.
+
+Scala has a very light-weight construct to package several fields into a class:
+a \myref{https://docs.scala-lang.org/tour/case-classes.html}{case classes}.
+Case classes are like regular Scala classes, but with a very light-weight definition.
+Following code defines a case class to represent three parameters. It might be used for
+a device with a transmit (tx) buffer and a receive buffer(rx) of a certain width.
+
+\shortlist{code/case_class.txt}
+
+\noindent An object of that case class is created by simply calling the constructor.
+The fields are immutable and can be read by accessing them:
+
+\shortlist{code/case_class_use.txt}
+
+\noindent We can also add code to the case class to check that the parameters
+are valid.
+
+\shortlist{code/case_class_save.txt}
 
 \subsection{Functions with Type Parameters}
 \index{Type parameters}
