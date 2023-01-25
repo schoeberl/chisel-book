@@ -18,7 +18,7 @@ trait AbstractAdderTest {
     val rng = new scala.util.Random(42)
     val aOps = Array.fill(128) { BigInt(w, rng) }
     val bOps = Array.fill(128) { BigInt(w, rng) }
-    val cins = Array.fill(128) { rng.nextBoolean }
+    val cins = Array.fill(128) { rng.nextBoolean() }
     val ress = aOps.zip(bOps).zip(cins).map(
       e => (e._1._1 + e._1._2 + e._2) & ((BigInt(1) << w) - 1)
     )

@@ -48,7 +48,7 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
         if (l % 2 == 1) {
           ns(l / 2) = s(l - 1)
         }
-        myUnfairTree(ns, op)
+        myUnfairTree(ns.toIndexedSeq, op)
       }
     }
   }
@@ -72,7 +72,7 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
         for (i <- 0 until k by 2) {
           ns(p + i/2) = op(s(p+i), s(p+i+1))
         }
-        myTree(ns, op)
+        myTree(ns.toIndexedSeq, op)
     }
   }
 

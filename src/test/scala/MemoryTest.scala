@@ -29,7 +29,7 @@ class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.wrEna.poke(true.B)
       dut.io.rdAddr.poke(20.U)
       dut.clock.step()
-      println(s"Memory data: ${dut.io.rdData.peek.litValue}")
+      println(s"Memory data: ${dut.io.rdData.peekInt()}")
     }
   }
 
@@ -43,7 +43,7 @@ class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
 
       // Check all the initialization values are as expected
       val lines = scala.io.Source.fromFile("./src/main/resources/init.hex")
-        .getLines.map { Integer.parseInt(_, 16) }.toSeq
+        .getLines().map { Integer.parseInt(_, 16) }.toSeq
       for (i <- 0 until 1024) {
         dut.io.rdAddr.poke(i.U)
         dut.clock.step()
@@ -78,7 +78,7 @@ class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.rdAddr.poke(20.U)
       dut.clock.step()
       dut.io.rdData.expect(123.U)
-      println(s"Memory data: ${dut.io.rdData.peek.litValue}")
+      println(s"Memory data: ${dut.io.rdData.peekInt()}")
     }
   }
 }

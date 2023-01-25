@@ -26,7 +26,7 @@ class BlackBoxesTest extends AnyFlatSpec with ChiselScalatestTester {
     implicit def boolean2BigInt(b: Boolean) = if (b) BigInt(1) else BigInt(0)
     val as = Array.fill(128) { BigInt(32, rng) }
     val bs = Array.fill(128) { BigInt(32, rng) }
-    val cins = Array.fill(128) { rng.nextBoolean }
+    val cins = Array.fill(128) { rng.nextBoolean() }
     val cs = as.zip(bs).zip(cins).map(
       e => (e._1._1 + e._1._2 + e._2) & ((BigInt(1) << 32) - 1)
     )

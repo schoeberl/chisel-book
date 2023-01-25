@@ -46,10 +46,11 @@ class SimpleScala {
 
   //- start scala_condition
   for (i <- 0 until 10) {
+    print(i)
     if (i%2 == 0) {
-      println(i + " is even")
+      println(" is even")
     } else {
-      println(i + " is odd")
+      println(" is odd")
     }
   }
   //- end

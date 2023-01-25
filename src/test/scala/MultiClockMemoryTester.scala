@@ -53,7 +53,7 @@ class MultiClockMemoryTester extends AnyFlatSpec with ChiselScalatestTester {
         p3.addr.poke(0.U)
         p3.clk.poke(true.B)
         p3.datao.expect(42.U)
-      }.join
+      }.join()
     }
   }
 }

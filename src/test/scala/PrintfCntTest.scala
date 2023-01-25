@@ -7,7 +7,7 @@ class PrintfCntTest extends AnyFlatSpec with ChiselScalatestTester {
   "Printf" should "print" in {
     test(new PrintfCnt) { dut =>
       for (i <- 0 until 8) {
-        println(s"From tester: ${dut.io.out.peek.litValue}")
+        println(s"From tester: ${dut.io.out.peekInt()}")
         dut.clock.step()
       }
     }

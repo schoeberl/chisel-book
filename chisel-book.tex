@@ -337,7 +337,7 @@ of a microprocessor, including a figure of the datapath.
 
 \section*{Foreword for the Fifth Edition}
 
-For the fifth edition we have upgraded to the actual Chisel version 3.5.6.
+For the fifth edition we have upgraded to the actual Chisel version 3.5.6 and Scala 2.13.
 To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
@@ -1940,15 +1940,11 @@ we need a \code{build.sbt}:
 \index{build.sbt}
 
 \begin{chisel}
-scalaVersion := "2.12.13"
+scalaVersion := "2.13.8"
 
 scalacOptions ++= Seq(
   "-feature",
   "-language:reflectiveCalls",
-)
-
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
 )
 
 val chiselVersion = "3.5.6"
@@ -2703,6 +2699,7 @@ When you have an FPGA board with a 7-segment display, connect 4 switches or
 buttons to the input of your circuit and the output to the 7-segment display.
 
 \chapter{Sequential Building Blocks}
+\label{sec:sequential}
 
 Sequential circuits are circuits where the output depends on the input \emph{and}
 previous values. As we are interested in synchronous design (clocked designs),
@@ -2733,7 +2730,7 @@ it at its output. In other words, the register updates its output with the value
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
 \code{D} and an output \code{Q}. Each register also contains an input for a \code{clock} signal.
 As this global clock signal is connected to all registers in a synchronous circuit, it is usually
-not drawn in our schematics. The little triangle on the bottom of the box symbolizes the
+not drawn in the schematics. The little triangle on the bottom of the box symbolizes the
 clock input and tells us that this is a register. We omit the clock signal in the following
 schematics.
 The omission of the global clock signal is also reflected by Chisel where no explicit
@@ -2832,7 +2829,8 @@ output of the register.
 
 Figure~\ref{fig:register-enable} shows the schematic of a register with an enable signal.
 As this is also a common design pattern, modern FPGA flip-flops contain a
-dedicated enable input, and no additional resources are needed.
+dedicated enable input, and no additional (LUT) resources are needed to implement
+the register enable ibt.
 
 \begin{figure}
   \centering
@@ -2860,7 +2858,7 @@ with a conditional update:
 
 \shortlist{code/sequ_reg_init_ena.txt}
 
-\noindent The functionality of enable and initialization at reset can be combined when
+\noindent The functionality of register enable  and initialization at reset can be combined when
 using the three-parameter version of \code{RegEnable}. The first parameter is the input signal,
 the second parameter is the initialization value, and the third parameter is the enable signal:
 
@@ -3331,6 +3329,7 @@ Sketch the block diagram for the following circuits:
 
 
 \chapter{Input Processing}
+\label{sec:input}
 
 Input signals from the external world into our synchronous circuit are usually
 not synchronous to the clock; they are asynchronous.
@@ -6107,7 +6106,28 @@ most widely available tool.
 
 
 
+\section{Exercise}
 
+\href{https://en.wikipedia.org/wiki/Extreme_programming}{Extreme programming} is an agile
+software development style, focusing on quick turnaround times and a strong dependency on unit
+tests. In its pure form one writes the tests first, before implementing a feature. This style is not used
+so often in real live. However, exploring it may help to focus on testing as an important part of
+developing artifacts.
+
+Therefore, the proposed exercise is to write test benches for designs that you have not yet implemented.
+Pick one of the small projects from Chapter~\ref{sec:input}, e.g., the debouncing circuit or
+the majority based filtering design, and write tests for it. Then implement the hardware design
+itself.
+
+Explore the experience of this little experiment. Did you implement tests that found errors in your design?
+If all tests pass, are you sure you have tests that cover a reasonable design space? How do you test
+your tests? Add a fault into your DUT and see if your tests will catch it.
+
+As you work through this exercise you may experience an unpleasant feel that testing is hard and
+it is probably impossible to catch all errors.\footnote{A famous quote by Dijkstra is ``Program testing can
+be used to show the presence of bugs, but never to show their absence!''}
+However, there is hope in recent development in formal verification to complement testing.
+The topic of formal verification with Chisel will be covered in a future edition of this book.
 
 \chapter{Design of a Processor}
 

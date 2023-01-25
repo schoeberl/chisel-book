@@ -12,7 +12,7 @@ trait CountTest {
       if (count == 0)
         c.io.tick.expect(true.B)
     
-      if (c.io.tick.peek.litToBoolean)
+      if (c.io.tick.peekBoolean())
         count = n-1
       else
         count -= 1
