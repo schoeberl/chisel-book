@@ -347,11 +347,10 @@ available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{w
 
 The fifth edition does not include major changes, but is a consolidation version.
 We did a considerable proofreading for more clarity in writing. Chisel has added small convenience
-features that we cover in this edition. These are peeking a Scala integer directly without a conversion, or putting the class
-\code{ChiselEnum} into the main package.
+features (e.g., \code{ChiselEnum}) that we cover in this edition.
 
 
-\todo{What else has been changed.}
+\todo{What else has been changed. There should be some new Leros stuff.}
 
 
 
@@ -6182,7 +6181,7 @@ loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
 loadindh & A = mem[AR+(i $<<$ 1)]$_{15-0}$  &  Load a half word unsigned from memory into A\\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
 storeindb & mem[AR+i] = A$_{7-0}$ & Store a byte into memory \\
-storeindh & mem[AR+(i $<<$ 1] = A$_{15-0}$ & Store a half word into memory \\
+storeindh & mem[AR+(i $<<$ 1)] = A$_{15-0}$ & Store a half word into memory \\
 br & PC = PC + o & Branch \\
 brz & if A == 0 PC = PC + o & Branch if A is zero \\
 brnz & if A != 0 PC = PC + o  & Branch if A is not zero \\
@@ -6227,7 +6226,8 @@ The accumulator and the register file is in our current implementation
 implement 16-bit or 64-bit versions of Leros.}
 
 
-In Table~\ref{tab:leros:isa} \code{A} represents the accumulator, \code{PC} is the program counter,
+In Table~\ref{tab:leros:isa} shows the instruction set of Leros.
+\code{A} represents the accumulator, \code{PC} is the program counter,
 \code{i} is an immediate value (0 to 255), \code{Rn} a register
 \code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
 and \code{AR} an address register for memory access.
@@ -6361,7 +6361,7 @@ or a register value (from the memory).
 A central component of a processor is the
 \myref{https://en.wikipedia.org/wiki/Arithmetic_logic_unit}{arithmetic logic unit}, or ALU for short.
 Therefore, we start with the coding of the ALU and a test bench.
-First, we define an \code{Enum} to represent the different operations of the ALU:
+First, we define constants to represent the different operations of the ALU:
 
 \shortlist{code/leros_types.txt}
 
@@ -6379,7 +6379,7 @@ The switch statement enumerates all operations and assigns the expression accord
 All operations map directly to a Chisel expression.
 In the end, we assign the result \code{res} to the ALU output \code{y}
 
-\longlist{code/leros_alu.txt}{The Leros ALU.}{lst:leros-alu}
+\verylonglist{code/leros_alu.txt}{The Leros ALU.}{lst:leros-alu}
 
 For the testing, we write the ALU function in plain Scala, as shown in Listing~\ref{lst:leros-alu-scala}.
 
@@ -6389,6 +6389,7 @@ For the testing, we write the ALU function in plain Scala, as shown in Listing~\
 detect errors in the specification; it is at least some sanity check.
 We use some corner case values as the test vector:
 
+\newpage
 \shortlist{code/leros_alu_testvec.txt}
 
 \noindent We test all functions with those values on both inputs:

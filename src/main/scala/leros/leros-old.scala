@@ -5,15 +5,9 @@ import chisel3._
 import chisel3.util._
 import leros.shared.Constants._
 
-//- start leros_types
-object Types {
-  val nop :: add :: sub :: and :: or :: xor :: ld :: shr :: Nil = Enum(8)
-}
-//- end
+/*
 
-import Types._
 
-//- start leros_alu
 class Alu(size: Int) extends Module {
   val io = IO(new Bundle {
     val op = Input(UInt(3.W))
@@ -56,7 +50,7 @@ class Alu(size: Int) extends Module {
 
   io.y := res
 }
-//- end
+
 
 /*
 class AluTester(dut: Alu) extends PeekPokeTester(dut) {
@@ -229,4 +223,6 @@ class Decode() extends Module {
   io.dout.func := f
 }
 
+
+ */
 

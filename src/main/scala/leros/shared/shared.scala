@@ -27,7 +27,7 @@ object Constants {
   val JAL = 0x40
   val LDADDR = 0x50
   val LDIND = 0x60
-  val LDINDBU = 0x61
+  val LDINDB = 0x61
   val STIND = 0x70
   val STINDB = 0x71
   val BR = 0x80
@@ -36,4 +36,18 @@ object Constants {
   val BRP = 0xb0
   val BRN = 0xc0
   val SCALL = 0xff // 0 is simulator exit
+
+  val BRANCH_MASK = 0xf0
+
+  //- start leros_types
+  // Alu ops
+  val nop = 0
+  val add = 1
+  val sub = 2
+  val and = 3
+  val or = 4
+  val xor = 5
+  val ld = 6
+  val shr = 7
+  //- end
 } // end package
