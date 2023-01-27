@@ -348,6 +348,8 @@ available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{w
 The fifth edition does not include major changes, but is a consolidation version.
 We did a considerable proofreading for more clarity in writing. Chisel has added small convenience
 features (e.g., \code{ChiselEnum}) that we cover in this edition.
+We updated the Leros code snippets in the processor chapter to the actual version.
+\todo{We should also show more Leros code.}
 
 
 \todo{What else has been changed. There should be some new Leros stuff.}
@@ -6392,7 +6394,10 @@ We use some corner case values as the test vector:
 \newpage
 \shortlist{code/leros_alu_testvec.txt}
 
-\noindent We test all functions with those values on both inputs:
+\noindent We define a function (\code{testOne()}) to test one pair of inputs.
+\shortlist{code/leros_alu_test_one.txt}
+
+\noindent Then we test all functions with those values on both inputs:
 
 \shortlist{code/leros_alu_test.txt}
 
@@ -6414,7 +6419,7 @@ and shall produce a success message similar to:
 [info] AluAccuTest:
 [info] AluAccu
 [info] - should pass
-[info] Run completed in 1 second, 568 milliseconds.
+[info] Run completed in 1 second, 794 milliseconds.
 [info] Total number of tests run: 1
 [info] Suites: completed 1, aborted 0
 [info] Tests: succeeded 1, failed 0, canceled 0, ignored 0, pending 0
@@ -6436,12 +6441,20 @@ set simulator of Leros.
 \todo{Update code when Leros is more complete, as stuff is missing.}
 
 \noindent For the decode component, we define a \code{Bundle} for the output,
-which is later fed partially into the ALU.
+which is later fed partially into the ALU. The \code{DecodeOut Bundle} contains more fields,
+not showing here. See the original Leros code base for the details.
 
 \shortlist{code/leros_decode_bundle.txt}
 
+\noindent We also define a companion object for the \code{Decode} class that includes a
+function \code{default()} to create a \code{DecodeOut} object and sets all fields to
+default values.
+ 
+\shortlist{code/leros_decode_bundle_init.txt}
+
 \noindent Decode takes as input an 8-bit opcode and delivers the decoded signals
-as output. Those driving signals are assigned a default value with \code{WireDefault}.
+as output. Those driving signals are assigned a default value by using the \code{default}
+function to create that object.
 
 \shortlist{code/leros_decode_init.txt}
 
@@ -6450,6 +6463,13 @@ instruction that represents the opcode (in Leros for most instructions the upper
 8 bits.)
 
 \shortlist{code/leros_decode.txt}
+
+Additionally, the decode module also generates sign extended version of the
+constant in the instruction and computes the offset for the indirect load and
+store instructions.
+
+\todo{there is more on decoding}
+\todo{and the whole execution is missing}
 
 \section{Assembling Instructions}
 

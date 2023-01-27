@@ -4,6 +4,7 @@ import chisel3._
 import chisel3.util._
 import leros.shared.Constants._
 
+//- start leros_decode_bundle
 class DecodeOut extends Bundle {
   val operand = UInt(32.W)
   val enaMask = UInt(4.W)
@@ -12,6 +13,8 @@ class DecodeOut extends Bundle {
   val isRegOpd = Bool()
   val useDecOpd = Bool()
   val isStore = Bool()
+  // ... and more fields
+  //- end
   val isStoreInd = Bool()
   val isStoreIndB = Bool()
   val isStoreIndH = Bool()
@@ -25,6 +28,7 @@ class DecodeOut extends Bundle {
   val exit = Bool()
 }
 
+//- start leros_decode_bundle_init
 object DecodeOut {
 
   val MaskNone = "b0000".U
@@ -39,6 +43,8 @@ object DecodeOut {
     v.isRegOpd := false.B
     v.useDecOpd := false.B
     v.isStore := false.B
+    // ... and more fields
+    //- end
     v.isStoreInd := false.B
     v.isStoreIndB := false.B
     v.isStoreIndH := false.B
@@ -54,6 +60,7 @@ object DecodeOut {
   }
 }
 
+//- start leros_decode_init
 class Decode() extends Module {
   val io = IO(new Bundle {
     val din = Input(UInt(16.W))
@@ -63,6 +70,7 @@ class Decode() extends Module {
   import DecodeOut._
 
   val d = DecodeOut.default
+  //- end
 
   // Branch uses only 4 bits for decode
   val isBranch = WireDefault(false.B)
@@ -92,6 +100,7 @@ class Decode() extends Module {
   d.operand := sigExt.asUInt
   when (noSext) { d.operand := instr(7, 0) }
 
+  //- start leros_decode
   switch(instr(15, 8)) {
     is(ADD.U) {
       d.op := add.U
@@ -117,6 +126,8 @@ class Decode() extends Module {
       d.op := shr.U
       d.enaMask := MaskAll
     }
+    // ...
+    //- end
     is(LD.U) {
       d.op := ld.U
       d.enaMask := MaskAll
