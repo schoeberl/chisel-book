@@ -345,10 +345,11 @@ deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
 If needed, those two chapters are available in the older versions of the Chisel book,
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
 
-The fifth edition does not include major changes, but is a consolidation version.
+The fifth edition does not include major changes; it is a consolidation version.
 We did a considerable proofreading for more clarity in writing. Chisel has added small convenience
 features (e.g., \code{ChiselEnum}) that we cover in this edition.
-We updated the Leros code snippets in the processor chapter to the actual version.
+We extended the processor chapter and updated the Leros code snippets
+to the actual version of Leros.
 \todo{We should also show more Leros code.}
 
 
@@ -3685,7 +3686,8 @@ the synthesize tool and aim for readable code.\footnote{In the current version
 of Chisel, the \codefoot{ChiselEnum} type represents states in binary encoding.
 If we want a different encoding, e.g., one-hot encoding, we can define Chisel
 constants for the state names.}
-Therefore, we use an enumeration type with symbolic names for the states:
+Therefore, we use the enumeration type \code{ChiselEnum} with symbolic names for the states:
+\index{ChiselEnum}
 
 \shortlist{code/simple_fsm_states.txt}
 
@@ -6381,7 +6383,7 @@ The switch statement enumerates all operations and assigns the expression accord
 All operations map directly to a Chisel expression.
 In the end, we assign the result \code{res} to the ALU output \code{y}
 
-\verylonglist{code/leros_alu.txt}{The Leros ALU.}{lst:leros-alu}
+\verylonglist{code/leros_alu.txt}{The Leros ALU with the accumulator register.}{lst:leros-alu}
 
 For the testing, we write the ALU function in plain Scala, as shown in Listing~\ref{lst:leros-alu-scala}.
 
@@ -6431,6 +6433,8 @@ and shall produce a success message similar to:
 \index{Processor!instruction decode}
 
 From the ALU, we work backwards and implement the instruction decoder.
+Instruction decoding is basically generating the signals to drive the multiplexers
+and the ALU in the next stage/state.
 However, first, we define the instruction encoding in its own Scala class and
 a \emph{shared} package. We want to share the encoding constants between
 the hardware implementation of Leros, an assembler for Leros, and an instruction
@@ -6503,15 +6507,39 @@ Listing~\ref{lst:leros-asm-match} shows the core of the assembler for Leros.
 A Scala \code{match} expression covers the core of the assembly function.
 \todo{Some more words on the code.}
 
-
-
 \longlist{code/leros_asm_match.txt}{The main part of the Leros assembler.}{lst:leros-asm-match}
 
-\section{Implementation Variations}
+
+
+\section{The Instruction Memory}
+
+Listing~\ref{lst:leros-instr-mem} shows the instruction memory module for Leros.
+The memory is configured with the size as the number of address bits (\code{memAddrWidth}) and
+a path to the program (\code{prog}). The constructor of the instruction memory calls the
+assembler, shown in the previous section, to assemble the program.
+This is an example of a hardware generator that assembles code for an
+embedded processor during hardware generation.
+The Scala array that contains the Leros program is converted to a Scala
+\code{Seq} and than mapped to a Chisel \code{Vec} with the anonymous
+function \code{\_.asUInt(16.W)}.
+The instruction memory contains a register for the address (\code{memReg})
+to enable the implementation of the instruction memory as an on-chip memory
+in a FPGA.\footnote{In the current version of Chisel the generated code
+contains a large priority Mux that the FPGA synthesize tools cannot map to
+an on-chip memory. Using the MLIR backend shall fix this issue.
+Another workaround for this issue, as done in the Patmos project for the
+bootloader, is to generate Verilog code that fits the synthesize tools
+and include it as a black box.}
+
+
+\longlist{code/leros_instruction_memory.txt}{The instruction memory of Leros.}{lst:leros-instr-mem}
+
+
+\section{A State Machine with Data Path Implementation}
 
 As stated in the beginning of the Chapter, the Leros ISA definition does not define a
 concrete implementation. Along the chapter we performed implicit design decisions.
-Here we will discuss different design options.
+Here we will discuss one design option.
 
 In the presented implementation we share the data memory with the register file.
 The 256 registers are just an array in memory. A different implementation might
@@ -6519,6 +6547,57 @@ have dedicated on-chip memories for data and the registers.
 
 We implemented Leros in the idea of a state machine with a datapath.
 This also means that each instruction takes more than one clock cycle.
+We use two states: \code{fetch} and \code{execute}.
+
+\shortlist{code/leros_states.txt}
+
+
+
+\noindent The state machine just switches between the two states.
+In the \code{fetch} state we fetch an instruction from the instruction
+memory and also decode that instruction. We also start a read operation
+from the data memory in the \code{fetch} state, as the data memory
+is synchronous and needs one clock cycle to deliver the read result.
+
+In the execute state we compute a new value for the accumulator
+or store the read result form the data memory into the accumulator.
+We also preform a write in the \code{execute} state.
+
+The following code shows the instantiation of the ALU including the
+accumulator and two main state registers: the program counter (\code{pcReg})
+and the address register (\code{addrReg}).
+
+\shortlist{code/leros_main_state.txt}
+
+The following code shows the instantiation of the instruction memory.
+Note that the instruction memory has as parameter the program as
+a Scala array.
+
+\shortlist{code/leros_fetch.txt}
+
+The following code shows the instantiation of the decode module.
+The input of the decode module is the instruction from the fetch
+module and the outputs are the decode signals. As we need those signals
+in the \code{execute} state, they are registered in \code{decReg}.
+
+
+\shortlist{code/leros_decode_inst.txt}
+
+
+Listing~\ref{lst:data:mem} shows the data memory of Leros.
+The memory is organized in 32-bit words. To enable byte access to those
+32-bit words, the word is split into a \code{Vec} of four 8-bit bytes.
+A \code{read()} operation returns a vector of four bytes that we
+concatenate to a 32-bit word with the \code{\#\#} operator.
+For the write, we split the write word into those four bytes and
+use the write mask (\code{wrMask}) to select which bytes are written.
+The \code{SyncReadMem} components contains a \code{write()} function
+that takes a vector and a write mask as parameters.
+
+\longlist{code/leros_data_memory.txt}{The data memory module of Leros.}{lst:data:mem}
+
+\section{Implementation Variations}
+
 Actual processors perform
 \myref{https://en.wikipedia.org/wiki/Instruction_pipelining}{instruction pipelining}.
 In an instruction pipeline more than one instruction is on the fly. For example

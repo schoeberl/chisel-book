@@ -4,6 +4,7 @@ import chisel3._
 import leros.util.Assembler
 
 
+
 /**
  * Instruction memory.
  * Contains the register for using the on-chip ROM.
@@ -11,6 +12,7 @@ import leros.util.Assembler
  *
  * FIXME: Verilog generation from Chisel results in logic, not in a ROM.
  */
+//- start leros_instruction_memory
 class InstrMem(memAddrWidth: Int, prog: String) extends Module {
   val io = IO(new Bundle {
     val addr = Input(UInt(memAddrWidth.W))
@@ -23,3 +25,4 @@ class InstrMem(memAddrWidth: Int, prog: String) extends Module {
   memReg := io.addr
   io.instr := progMem(memReg)
 }
+//- end
