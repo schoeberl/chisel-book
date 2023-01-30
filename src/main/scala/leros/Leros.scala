@@ -46,7 +46,7 @@ class Leros(size: Int, memAddrWidth: Int, prog: String, fmaxReg: Boolean) extend
   //- end
 
   // Decode
-  //- start leros_decod_inst
+  //- start leros_decode_inst
   val dec = Module(new Decode())
   dec.io.din := instr
   val decout = dec.io.dout
@@ -69,7 +69,7 @@ class Leros(size: Int, memAddrWidth: Int, prog: String, fmaxReg: Boolean) extend
 
   // Data memory, including the register memory
   // read in feDec, write in exe
-  //- start leros_decode_inst
+  //- start leros_dmem_inst
   val dataMem = Module(new DataMem((memAddrWidth)))
 
   val memAddr = Mux(decout.isDataAccess, effAddrWord, instr(7, 0))

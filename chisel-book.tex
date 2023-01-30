@@ -123,8 +123,8 @@
 \fi
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -383,7 +383,8 @@ learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
 It was a pleasure to use Chisel in the last three years of teaching a digital electronics
-course. I know it is a challenge to pickup Chisel and Java in parallel in the second
+course at the Technical University of Denmark.
+I know it is a challenge to pickup Chisel and Java in parallel in the second
 semester. Thank you to all students from this course, who had on open mind to
 pickup a modern programming language for hardware description.
 
@@ -6181,8 +6182,8 @@ store & Rn = A & Store A into register Rn \\
 jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
-loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte unsigned from memory into A\\
-loadindh & A = mem[AR+(i $<<$ 1)]$_{15-0}$  &  Load a half word unsigned from memory into A\\
+loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte from memory into A\\
+loadindh & A = mem[AR+(i $<<$ 1)]$_{15-0}$  &  Load a half word from memory into A\\
 storeind & mem[AR+(i $<<$ 2)] = A & Store A into memory \\
 storeindb & mem[AR+i] = A$_{7-0}$ & Store a byte into memory \\
 storeindh & mem[AR+(i $<<$ 1)] = A$_{15-0}$ & Store a half word into memory \\
@@ -6415,7 +6416,7 @@ to test against random inputs:
 $ sbt "testOnly leros.AluAccuTest"
 \end{verbatim}
 
-and shall produce a success message similar to:
+The test shall produce a success message similar to:
 
 \begin{verbatim}
 [info] AluAccuTest:
@@ -6445,12 +6446,13 @@ set simulator of Leros.
 \todo{Update code when Leros is more complete, as stuff is missing.}
 
 \noindent For the decode component, we define a \code{Bundle} for the output,
-which is later fed partially into the ALU. The \code{DecodeOut Bundle} contains more fields,
+which is later used in the execution state and fed partially into the ALU.
+The \code{DecodeOut Bundle} contains more fields,
 not showing here. See the original Leros code base for the details.
 
 \shortlist{code/leros_decode_bundle.txt}
 
-\noindent We also define a companion object for the \code{Decode} class that includes a
+\noindent We also define a companion object for the \code{DecodeOut} class that includes a
 function \code{default()} to create a \code{DecodeOut} object and sets all fields to
 default values.
  
@@ -6542,7 +6544,7 @@ concrete implementation. Along the chapter we performed implicit design decision
 Here we will discuss one design option.
 
 In the presented implementation we share the data memory with the register file.
-The 256 registers are just an array in memory. A different implementation might
+The 256 registers are just an array in the data memory. A different implementation might
 have dedicated on-chip memories for data and the registers.
 
 We implemented Leros in the idea of a state machine with a datapath.
@@ -6564,14 +6566,14 @@ or store the read result form the data memory into the accumulator.
 We also preform a write in the \code{execute} state.
 
 The following code shows the instantiation of the ALU including the
-accumulator and two main state registers: the program counter (\code{pcReg})
+accumulator and the two main state registers: the program counter (\code{pcReg})
 and the address register (\code{addrReg}).
 
 \shortlist{code/leros_main_state.txt}
 
 The following code shows the instantiation of the instruction memory.
-Note that the instruction memory has as parameter the program as
-a Scala array.
+Note that the instruction memory has as parameter the file name
+of the program.
 
 \shortlist{code/leros_fetch.txt}
 
@@ -6595,6 +6597,12 @@ The \code{SyncReadMem} components contains a \code{write()} function
 that takes a vector and a write mask as parameters.
 
 \longlist{code/leros_data_memory.txt}{The data memory module of Leros.}{lst:data:mem}
+
+The following code shows the instantiation of the data memory and the connections
+of the ports. 
+
+\shortlist{code/leros_dmem_inst.txt}
+
 
 \section{Implementation Variations}
 
