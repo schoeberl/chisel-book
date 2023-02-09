@@ -35,6 +35,7 @@ genslides:
 
 veryclean:
 	git clean -fd
+	rm -rf ./idea
 
 clean:
 	rm -fr *.aux *.bbl *.blg *.log *.lof *.lot *.toc *.gz *.lol # *.pdf
