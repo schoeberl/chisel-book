@@ -125,7 +125,7 @@ class ExplainWireAndCo extends Module {
   val reg = Reg(SInt())
   //- end
 
-  val value = WireInit(1.U)
+  val value = WireDefault(1.U)
 
   //- start wire_reg_reassign
   number := 10.U
