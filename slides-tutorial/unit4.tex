@@ -205,114 +205,90 @@ object Adder {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Testing and Debugging}
+\begin{frame}[fragile]{More on Testing}
 \begin{itemize}
-\item Nobody writes perfect code ;-)
-\item We need a method to improve the code
-\item In Java we can simply print the result:
-\begin{itemize}
-\item \code{println("42");}
-\end{itemize}
-\item What can we do in hardware?
-\begin{itemize}
-\item Describe the whole circuit and hope it works?
-\item We can switch an LED on or off
-\end{itemize}
-\item We need some tools for \href{https://en.wikipedia.org/wiki/Debugging#/media/File:H96566k.jpg}{debugging}
-\item Writing testers in Chisel
+\item Using test vectors and \code{expect()} does not scale
+\item Better have co-simulation against a \emph{golden model}
+\item Then we can compare
+\item Which input values to use?
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{ScalaTest}
-\begin{itemize}
-\item Testing framework for Scala and Java
-\item \code{sbt} understands ScalaTest
-\item Add library to \code{build.sbt}
+\begin{frame}[fragile]{A Tiny ALU: IO Connection}
 \begin{chisel}
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.4" % "test"
+class Alu extends Module {
+  val io = IO(new Bundle {
+    val fn = Input(UInt(2.W))
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
+
+  // Use shorter variable names
+  val fn = io.fn
+  val a = io.a
+  val b = io.b
 \end{chisel}
-\item Run all tests with:
+\end{frame}
+
+\begin{frame}[fragile]{A Tiny ALU: The Function}
 \begin{chisel}
-sbt test
+  val result = Wire(UInt(4.W))
+  // some default value is needed
+  result := 0.U
+
+  // The ALU selection
+  switch(fn) {
+    is(0.U) { result := a + b }
+    is(1.U) { result := a - b }
+    is(2.U) { result := a | b }
+    is(3.U) { result := a & b }
+  }
+
+  // Output on the LEDs
+  io.result := result
+}
 \end{chisel}
-\item When all (unit) tests are ok, the test passes
-\item A little bit funny syntax
-\item ChiselTest is based on ScalaTest
-\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{ScalaTest Hello World}
-\shortlist{../code/scalatest_hello_world.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Testing with Chisel}
+\begin{frame}[fragile]{Testing the ALU}
 \begin{itemize}
-\item A test contains:
-\begin{itemize}
-\item a device under test (DUT) and
-\item the testing logic
+\item Compute the expected result in Scala
 \end{itemize}
-\item Set input values with \code{poke}
-\item Advance the simulation with \code{step}
-\item Read the output values with \code{peek}
-\item Compare the values with \code{expect}
-\item Import following packages:
-\shortlist{../code/test_import.txt}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{An Example DUT}
-\begin{itemize}
-\item A device-under test (DUT)
-\item Just 2-bit AND logic
-\shortlist{../code/test_dut.txt}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A ChiselTest}
-\begin{itemize}
-\item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
-\item Has the device-under test (DUT) as parameter of the \code{test} function
-\item Test function contains the test code
-\item Testing code can use all features of Scala
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Simple Tester}
-\begin{itemize}
-\item Just using \code{println} for manual inspection
-\shortlist{../code/test_bench_simple.txt}
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{A Real Tester}
-\begin{itemize}
-\item Poke values and \code{expect} some output
-\shortlist{../code/test_bench.txt}
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Generating Waveforms}
-\begin{itemize}
-\item Waveforms are timing diagrams
-\item Good to see many parallel signals and registers
-\begin{verbatim}
-sbt "testOnly SimpleTest -- -DwriteVcd=1"
-\end{verbatim}
-\item Or as additional parameters to test:
 \begin{chisel}
-test(new DeviceUnderTest)
-.withAnnotations(Seq(WriteVcdAnnotation))
+  // This is exhaustive testing,
+  // which usually is impossible
+  for (a <- 0 to 15) {
+    for (b <- 0 to 15) {
+      for (op <- 0 to 3) {
+        val result =
+          op match {
+            case 0 => a + b
+            case 1 => a - b
+            case 2 => a | b
+            case 3 => a & b
+          }
+        val resMask = result & 0x0f
 \end{chisel}
-\item IO signals and registers are dumped
-\item Option \code{--debug} puts all wires into the dump
-\item Generates a .vcd file
-\item Viewing with GTKWave or ModelSim
-\end{itemize}
+
 \end{frame}
+
+\begin{frame}[fragile]{Testing the ALU}
+\begin{itemize}
+\item Compare the Scala computed result with the hardware result
+\end{itemize}
+\begin{chisel}
+        poke(dut.io.fn, op)
+        poke(dut.io.a, a)
+        poke(dut.io.b, b)
+        step(1)
+        expect(dut.io.result, resMask)
+      }
+    }
+  }
+\end{chisel}
+\end{frame}
+
 
 \begin{frame}[fragile]{Printf Debugging}
 \begin{itemize}
@@ -349,7 +325,7 @@ test(new DeviceUnderTest)
 \begin{itemize}
 \item Run your tests on each change
 \item Do it also when using source control
-\item GitHub Actions (or Trevis)
+\item GitHub Actions
 \item I am doing it even for the Chisel book
 \end{itemize}
 \end{frame}
