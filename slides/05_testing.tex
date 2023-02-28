@@ -15,9 +15,20 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{TODO}
+\begin{itemize}
+\item Talk about directions and what is left and what is right
+\item Maybe Chisel/VHDL comparison
+\item comp c has an error in the slides. Maybe also in the book?
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Thomas Aakjer presents digital design at Microchip
+\item Today is Open House
+\begin{itemize}
+\item They will visit our lecture and the lab
+\end{itemize}
 \item Review components
 \item Debugging and testing
 \item Digital designers (sometimes) call testing verification
@@ -29,7 +40,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{DTU Chip Day}
 \begin{itemize}
-\item Note the date: Tu 19 April afternoon
+\item Note the date: Tu 18 April afternoon
 \item Start with sandwiches and finish with beer
 \item Presentation of chip design and verification work/companies in Denmark
 \item The first open-source chip from DTU
@@ -58,6 +69,21 @@ Embedded Systems Engineering}
 %\end{itemize}
 %\end{itemize}
 %\end{frame}
+
+\begin{frame}[fragile]{Directions of Connections}
+\begin{itemize}
+\item The flow on a \code{Wire} has a direction
+\item One end is the output/driver/source and the other end is the input/sink
+\item Or producer and consumer
+\item An expression has also a direction:
+\begin{itemize}
+\item The right hand site produces a value
+\item The left hand site consumes the value
+\end{itemize}
+\item \code{sink := source1 + source2}
+\item Like in Java and other programming languages
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Last Chisel Lab (week 3)}
 \begin{itemize}
@@ -177,7 +203,7 @@ Embedded Systems Engineering}
 \item \code{val mc = Module(new MyComponent())}
 \end{itemize}
 \item and pins need to be connected with \code{:=}
-\item One module is special, as it is the top model
+\item One module is special, as it is the top module
 \end{itemize}
 \end{frame}
 
@@ -415,7 +441,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Show about this on the Chisel book
 \begin{itemize}
 \item Show \code{sbt test}
-\item Live demo on GitHub (I moved from Travis yesterday)
+\item Live demo on GitHub
 \item Mail from GitHub when it fails
 \end{itemize}
 \item \url{https://github.com/schoeberl/chisel-book/actions}
@@ -484,7 +510,8 @@ libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.0"
 \item Use ChiselTest (the description has been updated)
 \item You have to start from scratch with the tester
 \item Show and discuss your testing code with a TA (or me)
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab4}{Lab 4}
+\item And an additional challenge brought to you by Tjark
 \end{itemize}
 \end{frame}
 
