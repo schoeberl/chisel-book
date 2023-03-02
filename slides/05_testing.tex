@@ -15,14 +15,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Talk about directions and what is left and what is right
-\item Maybe Chisel/VHDL comparison
-\item comp c has an error in the slides. Maybe also in the book?
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Today is Open House
@@ -43,8 +35,7 @@ Embedded Systems Engineering}
 \item Note the date: Tu 18 April afternoon
 \item Start with sandwiches and finish with beer
 \item Presentation of chip design and verification work/companies in Denmark
-\item The first open-source chip from DTU
-\item Several chip companies will present and are prticipating
+\item Several chip companies will present and are participating
 \item Opportunity to network for: theses with companies, internship, student jobs
 \end{itemize}
 \end{frame}
@@ -70,7 +61,7 @@ Embedded Systems Engineering}
 %\end{itemize}
 %\end{frame}
 
-\begin{frame}[fragile]{Directions of Connections}
+\begin{frame}[fragile]{Direction of a Connection}
 \begin{itemize}
 \item The flow on a \code{Wire} has a direction
 \item One end is the output/driver/source and the other end is the input/sink
@@ -82,6 +73,7 @@ Embedded Systems Engineering}
 \end{itemize}
 \item \code{sink := source1 + source2}
 \item Like in Java and other programming languages
+\item Draw a figure
 \end{itemize}
 \end{frame}
 
@@ -285,7 +277,7 @@ sbt test
 \begin{frame}[fragile]{An Example DUT}
 \begin{itemize}
 \item A device-under test (DUT)
-\item Just 2-bit AND logic
+\item Just 2-bit AND logic and equvicalence
 \shortlist{../code/test_dut.txt}
 \end{itemize}
 \end{frame}
@@ -328,11 +320,14 @@ sbt "testOnly SimpleTest -- -DwriteVcd=1"
 \item Or setting an attribute for the \code{test()} function
 \begin{chisel}
 test(new DeviceUnderTest)
-.withAnnotations(Seq(WriteVcdAnnotation))
+    .withAnnotations(Seq(WriteVcdAnnotation))
 \end{chisel}
 \item IO signals and registers are dumped
 \item Option \code{--debug} puts all wires into the dump
-\item Generates a .vcd file
+\item Generates a .vcd file in
+\begin{chisel}
+    test_run_dir/test-name
+\end{chisel}
 \item Viewing with GTKWave or ModelSim
 \end{itemize}
 \end{frame}

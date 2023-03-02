@@ -40,16 +40,13 @@ class Count10 extends Module {
 
   // the register output
   val count = reg.io.q
-
   // connect the adder
   add.io.a := 1.U
   add.io.b := count
   val result = add.io.y
-
   // connect the Mux and the register input
   val next = Mux(count === 9.U, 0.U, result)
   reg.io.d := next
-
   io.dout := count
 }
 //- end
@@ -93,7 +90,7 @@ class CompC extends Module {
 
   // connect A
   compA.io.a := io.inA
-  compA.io.b := io.inA
+  compA.io.b := io.inB
   io.outX := compA.io.x
   // connect B
   compB.io.in1 := compA.io.y
