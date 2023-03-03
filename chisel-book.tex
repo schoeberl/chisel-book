@@ -3977,7 +3977,7 @@ that count: one FSM to count clock cycles for the interval length of \emph{on}
 and \emph{off}; the second FSM to count the remaining flashes.
 Listing~\ref{lst:counter:fsm} code shows the down counter FSM:
 
-\verylonglist{code/flasher2_counter.txt}{The down counter FAM.}{lst:counter:fsm}
+\verylonglist{code/flasher2_counter.txt}{The down counter FSM.}{lst:counter:fsm}
 
 
 \noindent Note that the counter is loaded with 2 for 3 flashes, as it counts the
@@ -6081,7 +6081,7 @@ benefit in terms of simulation time. To enable this, ChiselTest supports two oth
 \myref{https://www.veripool.org/wiki/verilator}{Verilator} and
 \myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because
 Verilator is open-source, we will use it for the examples presented in this section. Note
-that in all cases, VCS can be be used as an alternative to Verilator.
+that in all cases, VCS can be used as an alternative to Verilator.
 
 Switching to a different backend is simply a matter of adding another annotation to the
 \code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add the following
@@ -6923,6 +6923,10 @@ also contains projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
 
 \appendix
+
+\chapter{SystemVerilog and VHDL}
+
+\longlist{code/sv_first.txt}{First SystemVerilog example in the Chisel book}{lst:sv:first}
 
 \chapter{Reserved Keywords}
 \index{Reserved keywords}
