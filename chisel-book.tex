@@ -123,8 +123,8 @@
 \fi
 
 % uncomment following for final submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -350,10 +350,14 @@ We did a considerable proofreading for more clarity in writing. Chisel has added
 features (e.g., \code{ChiselEnum}) that we cover in this edition.
 We extended the processor chapter and updated the Leros code snippets
 to the actual version of Leros.
+
+
+\section*{Foreword for the Sixth Edition}
+
 \todo{We should also show more Leros code.}
 
+\todo{VHDL and SV}
 
-\todo{What else has been changed. There should be some new Leros stuff.}
 
 
 
@@ -6926,7 +6930,19 @@ also contains projects for various popular FPGA boards:
 
 \chapter{SystemVerilog and VHDL}
 
-\longlist{code/sv_first.txt}{First SystemVerilog example in the Chisel book}{lst:sv:first}
+This book teaches digital design with Chisel. However, Chisel is not yet a main stream
+language for digital design. The still dominating hardware description languages are
+VHDL and Verilog, with an update to SystemVerilog (SV). Therefore, we will present code
+examples in VHDL and SV for basic hardware constructs in this appendix.
+The VHDL and SystemVerilog examples will be presented together with the Chisel version
+of the code.
+
+Components are organized as entities in VHDL and as modules in SV.
+Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
+output. The main body of the module uses the SV construct \code{always\_comb}
+to declare that this code block describes combinational logic.
+
+\longlist{code/sv_adder.txt}{A simple module in SystemVerilog.}{lst:sv:adder}
 
 \chapter{Reserved Keywords}
 \index{Reserved keywords}
