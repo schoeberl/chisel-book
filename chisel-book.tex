@@ -3036,6 +3036,7 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 
 
 \subsection{A Timer}
+\index{Timer}
 
 Another form of timer we can create, is a one-shot timer. A one-shot timer is like a
 kitchen timer: you set the number of minutes and press start. When the specified amount
@@ -6934,6 +6935,11 @@ This book teaches digital design with Chisel. However, Chisel is not yet a main 
 language for digital design. The still dominating hardware description languages are
 VHDL and Verilog, with an update to SystemVerilog (SV). Therefore, we will present code
 examples in VHDL and SV for basic hardware constructs in this appendix.
+Furthermore, we will show how legacy code in Verilog and VHDL can be integrated
+in a Chisel design.
+
+\section{Comparison -- not a good title}
+
 The VHDL and SystemVerilog examples will be presented together with the Chisel version
 of the code.
 
@@ -6942,7 +6948,13 @@ Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
 output. The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
 
+\todo{use logic in the parameters and explain that this is the new way in SV.}
+
 \longlist{code/sv_adder.txt}{A simple module in SystemVerilog.}{lst:sv:adder}
+
+\section{Integrating Legacy Code with Chisel}
+
+\todo{describe Verilog and VHDL (with GHDL)}
 
 \chapter{Reserved Keywords}
 \index{Reserved keywords}

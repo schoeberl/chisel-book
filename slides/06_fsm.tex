@@ -15,19 +15,10 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Prepare for the 7-seg decoder counting lab
-\item Cut down the testing, as we did this last week
-\item Update to ChiselEnum
-\item About showing the TAs (this and next week 100\%, one week later just 50\%)
-\item Have the group list ready
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Debugging with waveforms
+\item A bit of testing (repetition)
 \item Fun with counters
 \item Finite-state machines
 \item Collection with \code{Vec}
@@ -36,12 +27,14 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Organization and Lab Work}
 \begin{itemize}
-\item Labs are in B308-IT127, B308-IT017
-\item Use both rooms, you have more space in two rooms
 \item How did the testing lab work? Did you find both bugs?
-\item This week the 7-segment decoder
-\item A lot can be done with simulation and testing
-\item But, at the end of the day I want to see a vending machine in an FPGA
+\item This week is the 7-segment decoder
+\item This is part of the lab grade -- show it a TA
+\begin{itemize}
+\item Deadline is next week (100 \%)
+\item In two weeks (23/3) only 50 \%
+\end{itemize}
+\item Register your group to get a number!
 \end{itemize}
 \end{frame}
 
@@ -80,51 +73,12 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Simple Tester}
-\begin{itemize}
-\item Just using \code{println} for manual inspection
-\shortlist{../code/test_bench_simple.txt}
-\end{itemize}
-\end{frame}
 
-
-\begin{frame}[fragile]{A Real Tester}
+\begin{frame}[fragile]{Testing with \code{expect()}}
 \begin{itemize}
 \item Poke values and \code{expect} some output
 \shortlist{../code/test_bench.txt}
 \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Generating Waveforms}
-\begin{itemize}
-\item Waveforms are timing diagrams
-\item Good to see many parallel signals and registers
-\begin{verbatim}
-sbt "testOnly SimpleTest -- -DwriteVcd=1"
-\end{verbatim}
-\item Or setting an attribute for the \code{test()} function
-\begin{chisel}
-test(new DeviceUnderTest)
-.withAnnotations(Seq(WriteVcdAnnotation))
-\end{chisel}
-\item IO signals and registers are dumped
-\item Option \code{--debug} puts all wires into the dump
-\item Generates a .vcd file
-\item Viewing with GTKWave or ModelSim
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Self-Running Circuit}
-\begin{itemize}
-\item \code{Count6} is a self-running circuit
-\item Needs no stimuli (\code{poke})
-\item Just run for a few cycles
-\end{itemize}
-\begin{chisel}
-    test(new Count6) { dut =>
-      dut.clock.step(20)
-    }
-\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Call the Tester for Waveform Generation}
@@ -183,6 +137,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{itemize}
 \item Generate a \code{tick} at a lower frequency
 \item We used it in Lab 1 for the blinking LED
+\item Use it today for the lab exercise
 \item Use it for driving the display multiplexing at 1~kHz
 \end{itemize}
 \begin{figure}
@@ -265,6 +220,32 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{Before the Break}
+\begin{itemize}
+\item Let us talk about ChatGPT
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{ChatGPT}
+\begin{itemize}
+\item Maybe useful to learn a language
+\item Sometimes ChatGPT uses old Chisel constructs
+\item Sometimes it is even plain wrong
+\item DTU does not allow the usage for exam
+\begin{itemize}
+\item Read this as not allowed for the project report
+\item There is software that can detect usage
+\end{itemize}
+\item It writes sometimes nonsense
+\item My personal opinion:
+\begin{itemize}
+\item It is just a new tool
+\item We cannot really (and shall not) disallow tools (grammar check, calculator, programming,...)
+\item We will need to learn how to deal with it
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Finite-State Machine (FSM)}
 \begin{itemize}
 \item Has a register that contains the state
@@ -339,9 +320,7 @@ red & 0 & 1 & green & 1 \\
 \item We can optimize state encoding
 \item Two common encodings are: binary and one-hot
 \item We leave it to the synthesize tool
-\item Use symbolic names with an \code{Enum}
-\item Note the number of states in the \code{Enum} construct
-\item We use a Scala list with the \code{::} operator
+\item Use symbolic names with \code{ChiselEnum}
 \end{itemize}
 \shortlist{../code/simple_fsm_states.txt}
 \end{frame}
@@ -362,7 +341,7 @@ red & 0 & 1 & green & 1 \\
 \shortlist{../code/simple_fsm_output.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Summary on the Alarm Example}
+\begin{frame}[fragile]{Summary of the Alarm Example}
 \begin{itemize}
 \item Three elements:
 \begin{enumerate}
@@ -379,7 +358,7 @@ red & 0 & 1 & green & 1 \\
 \begin{itemize}
 \item Similar to the former FSM
 \item Output also depends in the input
-\item It is \emph{faster}
+\item It can react \emph{faster}
 \item Less composable (draw it)
 \end{itemize}
 \begin{figure}
@@ -399,7 +378,7 @@ red & 0 & 1 & green & 1 \\
 
 \begin{frame}[fragile]{The Mealy Solution}
 \begin{itemize}
-\item Show code from the book as it is too long for slides
+\item Show code in IntelliJ as it is too long for slides
 \end{itemize}
 \end{frame}
 
@@ -438,23 +417,29 @@ red & 0 & 1 & green & 1 \\
 \item Just two symbols for the state machine
 \end{itemize}
 \begin{chisel}
-  val empty :: full :: Nil = Enum(2)
+  object State extends ChiselEnum {
+    val empty, full = Value
+  }
 \end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Finite State Machine for a Buffer}
 \begin{chisel}
-  val empty :: full :: Nil = Enum(2)
+  object State extends ChiselEnum {
+    val empty, full = Value
+  }
+  import State._
+
   val stateReg = RegInit(empty)
-  val dataReg = RegInit(0.U(size.W))
+  val dataReg = RegInit(0.U(8.W))
 
   when(stateReg === empty) {
-    when(io.enq.write) {
+    when(io.in.valid) {
+      dataReg := io.in.bits
       stateReg := full
-      dataReg := io.enq.din
     }
-  }.elsewhen(stateReg === full) {
-    when(io.deq.read) {
+  } .otherwise { // full
+    when(io.out.ready) {
       stateReg := empty
     }
   }
@@ -462,6 +447,17 @@ red & 0 & 1 & green & 1 \\
 \begin{itemize}
 \item A simple buffer for a bubble FIFO
 \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Group Signals with a \code{Bundle}}
+\begin{itemize}
+\item Group signals that belong to each other
+\item Reference as a whole
+\item Individual fields accessed by their name
+\item E.g., \code{ref.field}
+\end{itemize}
+\shortlist{../code/bundle.txt}
 \end{frame}
 
 \begin{frame}[fragile]{A Collection of Signals with \code{Vec}}
@@ -504,9 +500,10 @@ type, we need to pass a prototype for the vector fields. Using our
 
 \begin{frame}[fragile]{Today's Lab}
 \begin{itemize}
-\item This is the start of group work
+\item This is the start of the graded group work
 \begin{itemize}
-\item Please register your group \href{https://dtudk-my.sharepoint.com/:x:/g/personal/s186083_dtu_dk/EWnmIP9K1MFFuwsZbfDRyXEBGnkA68SSFuksje2LRVZQFQ?e=ZRHVdP}{here}
+\item Part of your grade
+\item Please register your group in DTU Learn
 \end{itemize}
 \item Binary to 7-segment decoder
 \item First part of your vending machine
@@ -514,8 +511,9 @@ type, we need to pass a prototype for the vector fields. Using our
 \item Use the nice tester provided to develop the circuit
 \item Then synthesize it for the FPGA
 \item Test with switches
+\item Then add a counter running at 2 Hz
 \item Show a TA your working design
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab6}{Lab 6}
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
 \end{itemize}
 \end{frame}
 

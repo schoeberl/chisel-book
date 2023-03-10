@@ -340,6 +340,20 @@ test(new DeviceUnderTest)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Display Waveform with GTKWave}
+\begin{itemize}
+\item Run the tester: \code{sbt test}
+\item Locate the .vcd file in test\_run\_dir/...
+\item Start GTKWave
+\item Open the .vcd file with
+\begin{itemize}
+\item File -- Open New Tab
+\end{itemize}
+\item Select the circuit
+\item Drag and drop the interesting signals
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Waveform Testing Demo}
 \begin{itemize}
 \item Counter with a limit from last Chisel lab (\code{Count6})
@@ -377,6 +391,20 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
   }
 }
 \end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Display Waveform with GTKWave}
+\begin{itemize}
+\item Run the tester: \code{sbt test}
+\item Locate the .vcd file in test\_run\_dir/...
+\item Start GTKWave
+\item Open the .vcd file with
+\begin{itemize}
+\item File -- Open New Tab
+\end{itemize}
+\item Select the circuit
+\item Drag and drop the interesting signals
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Vending Machine Testing}
