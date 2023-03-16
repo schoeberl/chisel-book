@@ -186,7 +186,7 @@ waveform viewing
 
 **Reading:** Dally: 17, Chisel: 7, 9.1
 
-**Lab:** [7-segment display with a counter](https://github.com/schoeberl/chisel-lab)
+**Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 9 Communications State Machines (1 hour, maybe)
@@ -197,7 +197,7 @@ waveform viewing
 
 **Reading:** Dally: 22, Chisel: 9.3
 
-**Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
+**Lab:** [Using a UART Component](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 10 Vending Machine Specification (1/2 hour)
