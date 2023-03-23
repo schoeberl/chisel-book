@@ -15,169 +15,15 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Maybe too much repetition?
-\item Get new stuff in
-\item Maybe about the UART and how to use components?
-\item When are we doing the UART lab? Week 7 or 8?
-\item Add at some time asserts
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
-\item Repeat functions and parameters
+\item Invited talk by Martine
 \item Repeat finite-state machine with datapath
 \item Factoring of finite-state machines
-\item Input processing
+\item Functions and parameters
 \item Reset input
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Midterm Evaluation}
-\begin{itemize}
-\item Do we need this?
-\item An anonymous Google form (no login required)
-\item 15 minutes time during the break
-\item We will look into it after the break
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Functions}
-\begin{itemize}
-\item Circuits can be encapsulated in functions
-\item Each \emph{function call} generates hardware
-\item A function is defined with \code{def} \emph{name}
-\item Similar to methods in Java
-\end{itemize}
-\shortlist{../code/components_fn_def.txt}
-\shortlist{../code/components_fn_use.txt}
-\end{frame}
-
-\begin{frame}[fragile]{More Function Examples}
-\begin{itemize}
-\item Functions can also contain registers
-\item Simple functions can be a single line
-\end{itemize}
-\shortlist{../code/components_fn_delay.txt}
-
-\begin{chisel}
-  def rising(d: Bool) = d && !RegNext(d)
-  val edge = rising(cond)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{The Counter as a Function}
-\begin{itemize}
-\item Longer functions in curly brackets
-\item Last value is the return value
-\end{itemize}
-\shortlist{../code/function_counter.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Functional Abstraction}
-\begin{itemize}
-\item Functions for repeated pieces of logic
-\item May contain state
-\item Functions may return \emph{hardware}
-\item More lightweight than a \code{Module}
-\end{itemize}
-\end{frame}
-
-%\begin{frame}[fragile]{Functions}
-%\begin{itemize}
-%\item Example from Patmos execute stage
-%\end{itemize}
-%\begin{chisel}
-%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
-%  val result = UInt(width = DATA_WIDTH)
-%  // some more lines...
-%  switch(func) {
-%    is(FUNC_ADD) { result := sum }
-%    is(FUNC_SUB) { result := op1 - op2 }
-%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
-%    // some more lines
-%  }
-%  result
-%}
-%\end{chisel}
-%\end{frame}
-
-\begin{frame}[fragile]{Parameterization}
-\begin{chisel}
-class ParamChannel(n: Int) extends Bundle {
-  val data = Input(UInt(n.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-val ch32 = new ParamChannel(32)
-\end{chisel}
-\begin{itemize}
-\item Bundles and modules can be parametrized
-\item Pass a parameter in the constructor
-\end{itemize}
-
-\end{frame}
-\begin{frame}[fragile]{A Module with a Parameter}
-\shortlist{../code/param_adder.txt}
-\begin{itemize}
-\item Parameter can also be a Chisel type
-%\item Can also be a generic type:
-%\item \code{class Mod[T <: Bits](param: T) extends...}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Use the Parameter}
-\shortlist{../code/use_param_adder.txt}
-\begin{itemize}
-\item Can be used for the display multiplexing configuration
-\item Different maximum value for the counter for the simulation and for the FPGA
-\end{itemize}
-\end{frame}
-
-
-
-%\begin{frame}[fragile]{Show Example on ``Whiteboard''}
-%\end{frame}
-
-\begin{frame}[fragile]{FSM with Datapath}
-\begin{itemize}
-\item A type of computing machine
-\item Consists of a finite-state machine (FSM) and a datapath
-\item The FSM is the master (the controller) of the datapath
-\item The datapath has computing elements
-\begin{itemize}
-\item E.g., adder, incrementer, constants, multiplexers, ...
-\end{itemize}
-\item The datapath has storage elements (registers)
-\begin{itemize}
-\item E.g., sum of money payed, count of something, ...
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{FSM-Datapath Interaction}
-\begin{itemize}
-\item The FSM controls the datapath
-\begin{itemize}
-\item For example, add 2 to the sum
-\end{itemize}
-\item By controlling multiplexers
-\begin{itemize}
-\item For example, select how much to add
-\item Not adding means selecting 0 to add
-\end{itemize}
-\item Which value goes where
-\item The FSM logic also depends on datapath output
-\begin{itemize}
-\item Is there enough money payed to release a can of soda?
-\end{itemize}
-\item FSM and datapath interact
-\end{itemize}
-\end{frame}
-
 
 \begin{frame}[fragile]{Popcount Example}
 \begin{itemize}
@@ -259,6 +105,51 @@ val ch32 = new ParamChannel(32)
 \item Maybe the main part your vending machine is an FSMD?
 \end{itemize}
 \end{frame}
+
+
+
+
+
+%\begin{frame}[fragile]{Show Example on ``Whiteboard''}
+%\end{frame}
+
+\begin{frame}[fragile]{FSM with Datapath}
+\begin{itemize}
+\item A type of computing machine
+\item Consists of a finite-state machine (FSM) and a datapath
+\item The FSM is the master (the controller) of the datapath
+\item The datapath has computing elements
+\begin{itemize}
+\item E.g., adder, incrementer, constants, multiplexers, ...
+\end{itemize}
+\item The datapath has storage elements (registers)
+\begin{itemize}
+\item E.g., sum of money payed, count of something, ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FSM-Datapath Interaction}
+\begin{itemize}
+\item The FSM controls the datapath
+\begin{itemize}
+\item For example, add 2 to the sum
+\end{itemize}
+\item By controlling multiplexers
+\begin{itemize}
+\item For example, select how much to add
+\item Not adding means selecting 0 to add
+\end{itemize}
+\item Which value goes where
+\item The FSM logic also depends on datapath output
+\begin{itemize}
+\item Is there enough money payed to release a can of soda?
+\end{itemize}
+\item FSM and datapath interact
+\end{itemize}
+\end{frame}
+
+
 
 
 
@@ -420,11 +311,9 @@ val ch32 = new ParamChannel(32)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{20' Break}
+\begin{frame}[fragile]{10' Break}
 \begin{itemize}
-\item Mid-term evaluation
-\item Will send the link per email and Slack (now)
-\item We talk about the results after the break
+\item Maybe?
 \end{itemize}
 \end{frame}
 
@@ -494,12 +383,8 @@ and \code{space}
 \item Can lead to metastability
 \item Signals need to be \emph{synchronized}
 \item Using two flip-flops
-\item Metastability cannot be avoided
-\item Assumption is:
-\begin{itemize}
-\item First flip-flop may become metastable
-\item But will resolve within the clock period
-\end{itemize}
+\item Debouncing the input with subsampling
+\item Input signal may be noisy (spikes)
 \end{itemize}
 \end{frame}
 
@@ -510,39 +395,12 @@ and \code{space}
 \shortlist{../code/input_sync.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Bouncing Buttons}
-\begin{itemize}
-\item Buttons and switches need some time to transition between on and off
-\item May bounce between the two values
-\item Without processing we detect more than one event
-\item Solution is to filter out bouncing
-\begin{itemize}
-\item Can be done electrically (R + C + Schmitt trigger)
-\item That is why you have the extra PCB with the buttons
-\item But we can also do this digitally
-\end{itemize}
-\item Assume  bouncing time $t_{bounce}$
-\item Sample at a period $T > t_{bounce}$
-\item Only use sampled signal
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}[fragile]{Sampling for Debouncing}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/debounce}
 \end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{Sampling for Debouncing}
-\shortlist{../code/input_fac.txt}
-\shortlist{../code/input_debounce.txt}
-\begin{itemize}
-\item We already know how to do this!
-\item Just generate timing with a counter
-\item We sample at 100 Hz (bouncing below 10 ms)
-\end{itemize}
 \end{frame}
 
 
@@ -578,6 +436,112 @@ and \code{space}
 \shortlist{../code/input_usage.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Display Multiplexing}
+\begin{itemize}
+\item Saving of pins in the FPGA
+\item Switch between the four digits at around 1 kHz
+\item Switch \emph{faster} in simulation
+\item Show \href{https://digilent.com/reference/basys3/refmanual#basic_io}{schematics}
+\item Also includes a display simulation for those without an FPGA
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab6}{Lab 6}
+\item Sketch needed hardware on black board
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item A function is defined with \code{def} \emph{name}
+\item Similar to methods in Java
+\end{itemize}
+\shortlist{../code/components_fn_def.txt}
+\shortlist{../code/components_fn_use.txt}
+\end{frame}
+
+\begin{frame}[fragile]{More Function Examples}
+\begin{itemize}
+\item Functions can also contain registers
+\item Simple functions can be a single line
+\end{itemize}
+\shortlist{../code/components_fn_delay.txt}
+
+\begin{chisel}
+  def rising(d: Bool) = d && !RegNext(d)
+  val edge = rising(cond)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{The Counter as a Function}
+\begin{itemize}
+\item Longer functions in curly brackets
+\item Last value is the return value
+\end{itemize}
+\shortlist{../code/function_counter.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Abstraction}
+\begin{itemize}
+\item Functions for repeated pieces of logic
+\item May contain state
+\item Functions may return \emph{hardware}
+\item More lightweight than a \code{Module}
+\end{itemize}
+\end{frame}
+
+%\begin{frame}[fragile]{Functions}
+%\begin{itemize}
+%\item Example from Patmos execute stage
+%\end{itemize}
+%\begin{chisel}
+%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+%  val result = UInt(width = DATA_WIDTH)
+%  // some more lines...
+%  switch(func) {
+%    is(FUNC_ADD) { result := sum }
+%    is(FUNC_SUB) { result := op1 - op2 }
+%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+%    // some more lines
+%  }
+%  result
+%}
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
+\begin{itemize}
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\shortlist{../code/param_adder.txt}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+%\item Can also be a generic type:
+%\item \code{class Mod[T <: Bits](param: T) extends...}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Use the Parameter}
+\shortlist{../code/use_param_adder.txt}
+\begin{itemize}
+\item Can be used for the display multiplexing configuration
+\item Different maximum value for the counter for the simulation and for the FPGA
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}[fragile]{Combine Input Processing with Functions}
 \begin{itemize}
 \item Using small functions to abstract the processing
@@ -594,24 +558,13 @@ and \code{space}
 \shortlist{../code/sync_reset.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Today's Lab}
+\begin{frame}[fragile]{DTU Chip Day}
 \begin{itemize}
-\item Driving your 7-segment decoder
-\item Use a counter to count from 0 to 15, driving your display
-\item Use another counter to generate your timing
-\begin{itemize}
-\item We talked about this today
-\end{itemize}
-\item You clock on the board is 100 MHz
-\item The given tester does only generate a waveform, no testing
-\item Use a different maximum count value for waveform debugging
-\item Then synthesize it for the FPGA
-\item Show a TA your working design
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab8}{Lab 8}
+\item Program is online
+\item Register \href{https://www.compute.dtu.dk/kalender/arrangement?id=2b594c2f-b55c-4906-9c5e-70e38671bf32}{here}
+\item Free sandwiches and free beer ;-)
 \end{itemize}
 \end{frame}
-
-
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}

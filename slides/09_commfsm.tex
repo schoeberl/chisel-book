@@ -15,9 +15,19 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
+\begin{frame}[fragile]{TODO}
+\begin{itemize}
+\item Maybe too much repetition?
+\item Get new stuff in
+\item About the UART and how to use components?
+\item When are we doing the UART lab this week
+\item Add at some time asserts
+\item FPGAs and resource requirements
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Input processing
 \item Ready/valid interface
 \item Display multiplexing
 \item A little bit of Scala
@@ -124,26 +134,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{frame}
 
 
-\begin{frame}[fragile]{Today's Lab}
-\begin{itemize}
-\item Display multiplexer
-\begin{itemize}
-\item Input are 16 switches for 4 hexadecimal digits
-\end{itemize}
-\item Please show it a TA when finished for a ``tick''
-\item There is a simulation available, show it
-\item Maybe extend it with binary to BCD conversion
-\begin{itemize}
-\item This is optional/advanced material
-\end{itemize}
-\item You can also start to work on the full Vending Machine
-\begin{itemize}
-\item Top-level, pin definition, and a simple tester are in:
-\item \url{https://github.com/schoeberl/chisel-lab/tree/master/vending}
-\end{itemize}
-\item Update your copy. I have updated the description yesterday
-\end{itemize}
-\end{frame}
+
 
 
 \begin{frame}[fragile]{Next Labs}
@@ -153,65 +144,6 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{itemize}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Input Processing}
-\begin{itemize}
-\item Input signals are not synchronous to the clock
-\item May violate setup and hold time of a flip-flop
-\item Can lead to metastability
-\item Signals need to be \emph{synchronized}
-\item Using two flip-flops
-\item Metastability cannot be avoided
-\item Assumption is:
-\begin{itemize}
-\item First flip-flop may become metastable
-\item But will resolve within the clock period
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Input Synchronizer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/synchronizer}
-\end{figure}
-\shortlist{../code/input_sync.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Bouncing Buttons}
-\begin{itemize}
-\item Buttons and switches need some time to transition between on and off
-\item May bounce between the two values
-\item Without processing we detect more than one event
-\item Solution is to filter out bouncing
-\begin{itemize}
-\item Can be done electrically (R + C + Schmitt trigger)
-\item That is why you have the extra PCB with the buttons
-\item But we can also do this digitally
-\end{itemize}
-\item Assume  bouncing time $t_{bounce}$
-\item Sample at a period $T > t_{bounce}$
-\item Only use sampled signal
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[fragile]{Sampling for Debouncing}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/debounce}
-\end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{Sampling for Debouncing}
-\shortlist{../code/input_fac.txt}
-\shortlist{../code/input_debounce.txt}
-\begin{itemize}
-\item We already know how to do this!
-\item Just generate timing with a counter
-\item We sample at 100 Hz (bouncing below 10 ms)
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}[fragile]{Communicating State Machines}
@@ -271,17 +203,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \shortlist{../code/fifo_decoupled.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Display Multiplexing}
-\begin{itemize}
-\item Saving of pins in the FPGA
-\item Switch between the four digits at around 1 kHz
-\item Switch \emph{faster} in simulation
-\item Show \href{https://digilent.com/reference/basys3/refmanual#basic_io}{schematics}
-\item Also includes a display simulation for those without an FPGA
-\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab9}{Lab 9}
-\item Sketch needed hardware on black board
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{First Summary and a Break}
 \begin{itemize}

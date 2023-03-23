@@ -92,7 +92,7 @@ The Schoeberl book is open access and freely available.
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
 
-## Lecture Plan (2022)
+## Lecture Plan (2023)
 
 *This lecture plan may change during the semester, adapting to the current teaching situation.*
 
@@ -189,7 +189,7 @@ waveform viewing
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 9 Communications State Machines (1 hour, maybe)
+### Week 9 Communications State Machines
 
 **Topics:** Ready/valid interface, and hardware generators
 
@@ -200,14 +200,14 @@ waveform viewing
 **Lab:** [Using a UART Component](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 10 Vending Machine Specification (1/2 hour)
+### Easter Week
+
+
+### Week 10 Vending Machine Specification (1/2 hour) (TBD)
 
 **Slides:** [10_vending.pdf](10_vending.pdf)
 
 **Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
-
-
-### Easter Week
 
 
 ### Week 11 Interfacing and Memory, and some Testing
