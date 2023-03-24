@@ -68,10 +68,10 @@ class BundleVec extends Module {
   val rdIdx = io.rdIdx
   val wrIdx = io.wrIdx
   //- start vec_reg
-  val regVec = Reg(Vec(3, UInt(8.W)))
+  val vReg = Reg(Vec(3, UInt(8.W)))
 
-  val dout = regVec(rdIdx)
-  regVec(wrIdx) := din
+  val dout = vReg(rdIdx)
+  vReg(wrIdx) := din
   //- end
   io.dout := dout
 
@@ -81,11 +81,11 @@ class BundleVec extends Module {
   val z = 22.U
   val select = io.selMux
   //- start vec_mux
-  val vec = Wire(Vec(3, UInt(8.W)))
-  vec(0) := x
-  vec(1) := y
-  vec(2) := z
-  val muxOut = vec(select)
+  val m = Wire(Vec(3, UInt(8.W)))
+  m(0) := x
+  m(1) := y
+  m(2) := z
+  val muxOut = m(select)
   //- end
   io.muxOut := muxOut
 
