@@ -15,21 +15,12 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Maybe too much repetition?
-\item Get new stuff in
-\item About the UART and how to use components?
-\item When are we doing the UART lab this week
-\item Add at some time asserts
-\item FPGAs and resource requirements
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
+\item Display multiplexing solution
 \item Ready/valid interface
-\item Display multiplexing
+\item Serial interface (RS 232)
 \item A little bit of Scala
 \item Hardware generators
 \end{itemize}
@@ -37,9 +28,6 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Exam Info}
 \begin{itemize}
-\item \emph{I would like to hear about the exam}
-\item \emph{... nice if we could get the exams from earlier years...}
-\item \emph{Old examsets to get a better understing of what the level is...}
 \item Exam will be online
 \item All aids allowed, except Internet
 \item PDF with exam questions
@@ -49,22 +37,22 @@ Embedded Systems Engineering}
 \item Train to do a drawing and integrate it into a PDF
 \end{itemize}
 \item Timing exercise, some coding, understanding questions, drawing circuits
-\item I uploaded an older exam at DTU Learn and solutions
+\item I uploaded older exams at DTU Learn and (partially) solutions
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A (Minimal) Project from Scratch}
-\begin{itemize}
-\item \emph{How do we make a new project ourselves without editing the provided build.sbt files?}
-\item Just two files: \code{build.sbt} and a \code{.scala} file
-\item Create the folder/directory structure
-\item Copy a \code{build.sbt}
-\item Import in InteliJ
-\item Create a \code{.scala} class
-\item Show it now (in explorer or in terminal?)
-\item Do this exercise today!
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{A (Minimal) Project from Scratch}
+%\begin{itemize}
+%\item \emph{How do we make a new project ourselves without editing the provided build.sbt files?}
+%\item Just two files: \code{build.sbt} and a \code{.scala} file
+%\item Create the folder/directory structure
+%\item Copy a \code{build.sbt}
+%\item Import in InteliJ
+%\item Create a \code{.scala} class
+%\item Show it now (in explorer or in terminal?)
+%\item Do this exercise today!
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Group Workflow Suggestions}
 \begin{itemize}
@@ -73,7 +61,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item You can take over a screen to type
 \item You can draw on it
-\item Besides ad-hoc meetings, have a regular project meeting
+\item Besides ad-hoc meetings, have regular project meetings
 \end{itemize}
 \item Use Slack for quick notes and quick sharing of files
 \item Maybe also try to share the \code{.bit} file for the FPGA board
@@ -86,7 +74,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{One Possible Solution for Last Lab}
 \begin{chisel}
-  val MAX_CNT = 50000000.U // use a smaller value for waveform viewing
+  val MAX_CNT = 100000.U // use a smaller value for waveform viewing
 
   val tickCntReg = RegInit(0.U(32.W))
   val cntReg = RegInit(0.U(4.W))
@@ -105,19 +93,19 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{A Self-Running Tester}
 \begin{itemize}
-\item \code{SevenSegCountSpec} is a self-running circuit
+\item \code{DisplaySpec} is a self-running circuit
 \item Has no input
-\item Needs no stimuli (\code{poke})
+\item Needs (almost) no stimuli (\code{poke})
 \item Just run for a few cycles
 \end{itemize}
 \begin{chisel}
-class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
-    "SevenSegTest " should "pass" in {
-      test(new CountSevenSeg)
-      .withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
-        dut.clock.step(100)
-      }
-   }
+class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
+  "DisplayTest " should "pass" in {
+    test(new Display(20)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+      dut.io.sw.poke(0x1234.U)
+      dut.clock.step(200)
+    }
+  }
 }
 \end{chisel}
 \end{frame}
@@ -127,7 +115,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{itemize}
 \item Does not really do any testing
 \item Just generated the waveform for debugging
-\item Just running 100 cycles does not show much
+\item Just running 200 cycles does not show much
 \item Increase the number of running cycles to 100000000?
 \item Or use a different constant for testing?
 \end{itemize}
@@ -139,7 +127,7 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{Next Labs}
 \begin{itemize}
-\item Next week: test a given Vending Machine
+\item Next week: test a given Vending Machine (optional)
 \item The remaining weeks: work on the full Vending Machine
 \end{itemize}
 \end{frame}
@@ -196,6 +184,17 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{Some Rules and Usage}
+\begin{itemize}
+\item There shall be no combinational dependencies between ready and valid
+\item AXI uses ready/valid for all bus connections
+\item AXI restricts that \code{valid} asserted cannot be deasserted without a transaction
+\item AXI sender is not allowed to wait for \code{ready} before asserting \code{valid}
+\item AXI receivers do not have this restriction
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}[fragile]{Common Interface}
 \begin{itemize}
 \item So common interface that Chisel defines a \code{DecoupledIO}
@@ -203,6 +202,90 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \shortlist{../code/fifo_decoupled.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Serial I/O Interface}
+\begin{itemize}
+\item Use only one wire for data transfer
+\begin{itemize}
+\item Bits are serialized
+\item That is where you need your shift register
+\end{itemize}
+\item Shared wire or dedicated wires for transmit and receive
+\item Self timed
+\begin{itemize}
+\item Serial UART (RS 232)
+\item Ethernet
+\item USB
+\end{itemize}
+\item With a clock signal
+\begin{itemize}
+\item SPI, I2C, ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{RS 232}
+\begin{itemize}
+\item Old, but still common interface standard
+\begin{itemize}
+\item Was common in 90' in PCs
+\item Now substituted by USB
+\item Still common in embedded systems
+\item Your Basys 3 board has a RS 232 interface
+\end{itemize}
+\item Standard defines
+\begin{itemize}
+\item Electrical characteristics
+\item '1' is negative voltage (-15 to -3 V)
+\item '0' is positive voltage (+3 to +15 V)
+\item Converted by a RS 232 driver to \emph{normal} logic voltage levels
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Serial Transmission}
+\begin{itemize}
+\item Transmission consists of
+\begin{itemize}
+\item Start bit (low)
+\item 8 data bits
+\item Stop bit(s) (high)
+\end{itemize}
+\item Common baud rate is 115200 bits/s
+\end{itemize}
+\begin{figure}
+  \includegraphics[scale=0.8]{../figures/uart_wave}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{RS 232 on the Basys 3}
+\begin{itemize}
+\item Basys 3 has an FTDI chip for the USB interface
+\item USB interface for FPAG programming
+\item But also provides a RS 232 to the FPGA
+\item You can talk with your laptop
+\item Your VM could write out some text
+\item Open a terminal to watch (show it)
+\item Use Putty as terminal program
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{RS 232 from ip-contributions}
+\begin{itemize}
+\item A collection of Chisel hardware components
+\item Contains the RS232/UART interface
+\item Uses the Decoupled interface
+\item Distributed as library from Maven Central
+\item No need to copy source around
+\item Just include it in your \code{build.sbt}
+\item Very easy distribution of open-source components
+\item You can contribute!
+\item \href{https://github.com/freechipsproject/ip-contributions}{ip-contributions}
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{First Summary and a Break}
@@ -213,9 +296,6 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item How to write hardware generators
 \item Maybe extend your display to show decimal number
 \item But first 10 minutes BREAK
-\begin{itemize}
-\item You wrote: \emph{More breaks. A lot of people lose focus after around 30 - 45 min. }
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -270,6 +350,8 @@ class SevenSegCountSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Let's write a program for this
 \begin{itemize}
 \item We could use Java, Python, TCL,...
+\item With DE2 in VHDL I provided a Java program
+\item Now we can do this directly in Chisel/Scala
 \end{itemize}
 \item We will write our first \emph{hardware generator}
 \item First we need a little bit of Scala
@@ -476,7 +558,7 @@ val m = if (useA) Module(new VariantA())
 
 \begin{frame}[fragile]{A Table with a Chisel \code{Vec}}
 \begin{itemize}
-\item A Chisel \code{Vec} is a collection of signals or registers
+\item A Chisel \code{Vec} is a collection of signals/wires or registers
 \item Similar to an Array in other languages
 \item \code{Vec} in a \code{Wire} is a combinational table (multiplexer)
 \item \code{Vec} in a \code{Reg} is a collection of registers
@@ -507,17 +589,18 @@ val m = if (useA) Module(new VariantA())
 
 \begin{frame}[fragile]{Today Lab}
 \begin{itemize}
-\item Do a project from scratch
-\item Display multiplexing
-\item Can also be developed in simulation
+\item Use of a UART
+\item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab7}{lab7}
+\item Is a communicating FSM problem, uses ready/valid handshake
+\item You can discuss your solution with a TA
+\item Could be used for extended functions in the Vending Machine
+\item You can now talk with your laptop :-)
 \end{itemize}
 \end{frame}
 
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item External inputs need processing
-\item Minimum is a input synchronizer
 \item Communicating circuits/FSMs need handshaking
 \item Ready-valid interface
 \item Scala can be used to write circuit \emph{generators}
