@@ -15,19 +15,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Check for overlap with UART in 09 (remove)
-\item Add microprocessor bus figures
-\item Some words on AXI
-\item Also how to map IO devices into a memory space (maybe this is too early, topic of agile HW design, or HW/SW codesign.)
-\item Maybe too much repetition?
-\item Get new stuff in
-\item Add asserts
-\item FPGAs and resource requirements
-\end{itemize}
-\end{frame}
-
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
@@ -43,15 +30,13 @@ Embedded Systems Engineering}
 \item Quick reminder on FSMD
 \item Interfaces
 \item Memory (intern and extern)
+\item Busses
 \item The course evaluation should be open for feedback
 \item Lab is the vending machine
-\begin{itemize}
-\item What is your lab status? Display multiplexing working?
-\end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{I have seen similar code}
+\begin{frame}[fragile]{I have seen similar code (not this year)}
 \begin{chisel}
   when(io.coin2) {
     sum := sum + 2.U
@@ -142,7 +127,6 @@ Embedded Systems Engineering}
 \item Extend the test along the development
 \begin{itemize}
 \item Remember test driven development?
-\item Maybe write the test before the implementation
 \item Maybe test developer and FSMD developer are not always the same person
 \end{itemize}
 \end{itemize}
@@ -260,7 +244,7 @@ Embedded Systems Engineering}
 \item No clock, just the correct timing
 \item Apply the address and after some time the data is valid
 \item But one can add input registers, which makes it a synchronous SRAM
-\item Current FPGAs have only synchronous memories
+\item Current FPGAs have synchronous memories only
 \item This means the result of a read is available one clock cycle after the address is given
 \begin{itemize}
 \item This is different from the use of flip-flops (\code{Reg(Vec(..))})
@@ -464,8 +448,31 @@ our synchronous design
 \begin{itemize}
 \item Arbitration for multiple master
 \end{itemize}
-\item Sketch a small microprocessor system
+%\item Sketch a small microprocessor system
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Classic Microprocessor Bus}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/bus}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Does This Work On-Chip?}
+\begin{itemize}
+\item Just mapping that bus on-chip?
+\item Tri-state not so easy
+\item Wires are cheap
+\item Use dedicated connections and a Mux
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An On-Chip Bus}
+\begin{figure}
+  \includegraphics[scale=0.6]{../figures/bus-on-chip}
+\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Serial I/O Interface}
@@ -574,22 +581,7 @@ our synchronous design
 \item USB interface for FPAG programming
 \item But also provides a RS 232 to the FPGA
 \item You can talk with your laptop
-\item Your VM could write out some text
-\item Use the Chisel code I showed you
-\item Open a terminal to watch % (show it)
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{RS 232 from ip-contributions}
-\begin{itemize}
-\item A collection of Chisel hardware components
-\item Contains the RS232 interface
-\item Distributed as library from Maven Central
-\item No need to copy source around
-\item Just include it in your \code{build.sbt}
-\item Very easy distribution of open-source components
-\item You can contribute!
-\item \href{https://github.com/freechipsproject/ip-contributions}{ip-contributions}
+\item You have used it two weeks ago
 \end{itemize}
 \end{frame}
 
@@ -601,7 +593,7 @@ our synchronous design
 \item As usual, show and discuss with a TA
 \item Get a tick from a TA when done. This is VERY important!
 \item Add features and show again to the TA
-\item Next week: no lecture, just development in the lab
+\item Next week: short lecture, mostly development in the lab
 \end{itemize}
 \end{frame}
 

@@ -1,10 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity adder is
   port (
-    a, b : in std_logic_vector(7 downto 0);
-    sum : out std_logic_vector(7 downto 0)
+    a, b : in unsigned(7 downto 0);
+    sum : out unsigned(7 downto 0)
   );
 end entity;
 
@@ -14,16 +15,19 @@ begin
 end architecture;
 
 -- the following code was all written by Copilot!
+-- but contained errors (missing process in the TB,
+-- missing library input,...)
 
 -- adder_tb.vhd
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity adder_tb is
 end entity;
 
 architecture behavioral of adder_tb is
-  signal a, b, sum : std_logic_vector(7 downto 0);
+  signal a, b, sum : unsigned(7 downto 0);
 begin
     uut : entity work.adder
         port map (
@@ -32,6 +36,8 @@ begin
         sum => sum
         );
 
+process
+begin
     a <= "00000000";
     b <= "00000000";
     wait for 10 ns;
@@ -66,4 +72,5 @@ begin
     b <= "11111111";
     wait for 10 ns;
     assert sum = "11111111" report "255 + 255 = 510" severity note;
-    end architecture;
+end process;
+end architecture;
