@@ -15,7 +15,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Evaluation
@@ -23,7 +22,7 @@ Embedded Systems Engineering}
 \item Who is Alan Turing?
 \item Lipsi, a simple processor
 \item Show vending machine today
-\item Report hand-in at DTU Learn (18 May)
+\item Report hand-in at DTU Learn (21 May)
 %\item We have well known guest lectures today
 %\begin{itemize}
 %\item Tjark and Kasper will present today
@@ -48,10 +47,13 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Evaluation}
 \begin{itemize}
 %\item Thank you!
-\item In general, it looks like you enjoyed DE2 and Chisel :-)
-\item Some found it too easy, some found it hard
-\item Confusing on learning Java and Chisel in the same semester
-\item Let us look into it
+\item In general, it looks like most enjoyed DE2 :-)
+\item Some complained it was only Chisel and nothing new
+\begin{itemize}
+\item I disagree
+\item e.g., did you already know: tick generation, FSMD, input synchronization, timing, verification, memory, UART,...
+\end{itemize}
+\item We can take a quick look
 \end{itemize}
 \end{frame}
 
@@ -265,7 +267,7 @@ Encoding & Name & Operation \\
 \item Code memory for instructions
 \item Data memory for data
 \item Merge those two
-\item Instruction memory filled by a program
+\item Instruction memory filled with a program
 \item That program is an assembler written in Scala
 \end{itemize}
 \end{frame}
@@ -336,7 +338,7 @@ This is done at hardware generation
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{A Processor Summary}
+\begin{frame}[fragile]{Processor Summary}
 \begin{itemize}
 \item This is a tiny processor as an example
 \item Chisel is productive: this was all done in 14 hours!
@@ -365,13 +367,14 @@ This is done at hardware generation
 \item May even be a full implementation in an FPGA
 \end{itemize}
 \item You can also do a complete RISC-V in an FPGA in a Fagproject
+or 3 weeks course
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Future with Digital Design Education}
 \begin{itemize}
 \item There are many companies in DK doing chip design
-\item See \href{https://www.dtu.dk/english/news/all-news/nyhed?id=07dcbdbb-b948-425a-8568-7331bb271414}{DTU Chip Day}
+\item See \href{https://www.compute.dtu.dk/english/news/nyhed?id=3a19bb25-a375-4537-9ac2-0311ede54ca9}{DTU Chip Day}
 \item FPGAs are available in the cloud
 \begin{itemize}
 \item To speedup computing
@@ -379,10 +382,6 @@ This is done at hardware generation
 \end{itemize}
 \item FPGAs are also used in embedded systems
 \item Digital design is only part of a computer engineering education
-\item But DTU does not have a clear path to a computer engineering education
-\begin{itemize}
-\item We are working on a Computer Engineering BSc
-\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -392,13 +391,11 @@ This is done at hardware generation
 \begin{itemize}
 \item On the interaction between hardware and software
 \item Very well payed jobs :-)
-\item Not an easy choice at DTU
+\item DTU has now a clear path to a computer engineering education
 \begin{itemize}
-\item No BSc available
-\item Between EE and CS
+\item We start with the Computer Engineering BSc in fall 2023
 \end{itemize}
-\item Start with Bsc. in EE
-\item Specialization in Indlejrede systemer og programmering
+\item With a Bsc. in EE: specialization in Indlejrede systemer og programmering
 \begin{itemize}
 \item 02155: Computer Architecture and Engineering
 \item 02105: Algoritmer og datastrukturer
@@ -419,6 +416,7 @@ This is done at hardware generation
 \item Select some of the following courses
 \begin{itemize}
 \item 02155: Computer Architecture and Engineering
+\item 02114: Design of a RISC-V Microprocessor (new, 3 weeks)
 \item 02105: Algorithms and Data Structures 1
 \item 02161: Software Engineering 1
 \item 02159: Operating Systems
@@ -426,23 +424,29 @@ This is done at hardware generation
 \item 02141: Computer Science Modelling
 \item 02110: Algorithms and Data Structures 2
 \end{itemize}
-\item See also \href{https://www.dtu.dk/da/english/Education/msc/Programmes/computer_science_and_engineering/Prerequisites}{Prerequisites for EE Bsc}
+\item See also \href{https://www.dtu.dk/da/english/Education/msc/Programmes/computer_science_and_engineering/Prerequisites}{Prerequisites for the CSE master}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Digital Design within an EE Master}
+\begin{frame}[fragile]{Digital Design within a CSE or EE Master}
 \begin{itemize}
-\item Not an obvious choice, as there is no specialization in digital systems
 \item Select some of the following courses
 \begin{itemize}
-\item 02155: Computer Architecture and Engineering
+\item 02201: Agile Hardware Design 
 \item 02203: Design of Digital Systems
 \item 02211: Advanced Computer Architecture
 \item 02205: VLSI Design
-\item 02217: Design of Arithmetic Processors
-\item 02204: Design of Asynchronous Circuits
+\item (02217: Design of Arithmetic Processors)
+\item (02204: Design of Asynchronous Circuits)
 \item 02209: Test of Digital Systems
+\item more to come...
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Reading Recommondation}
+\begin{itemize}
+\item \href{https://www.amazon.com/Chip-War-Worlds-Critical-Technology/dp/1982172002}{Chip War}
 \end{itemize}
 \end{frame}
 

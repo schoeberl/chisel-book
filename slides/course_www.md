@@ -221,7 +221,7 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 12 No lecture
+### Week 12 Verification (guest lecture)
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
