@@ -11,6 +11,10 @@ class BasicTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.b.poke(3.U)
       dut.clock.step()
       dut.io.sum.expect(4.U)
+      dut.io.c.poke(1.U)
+      dut.io.d.poke(3.U)
+      dut.clock.step()
+      dut.io.s.expect(4.U)
     }
   }
 }

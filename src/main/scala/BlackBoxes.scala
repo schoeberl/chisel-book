@@ -20,20 +20,20 @@ import chisel3.experimental.ExtModule
 //- start xilinx_bufgce
 class BUFGCE extends BlackBox(Map("SIM_DEVICE" -> "7SERIES")) {
   val io = IO(new Bundle {
-    val I  = Input(Clock())
+    val I = Input(Clock())
     val CE = Input(Bool())
-    val O  = Output(Clock())
+    val O = Output(Clock())
   })
 }
 //- end
 
 //- start altera_alt_inbuf
-class alt_inbuf extends ExtModule(Map("io_standard" -> "1.0 V",
-                                      "location" -> "IOBANK_1",
-                                      "enable_bus_hold" -> "on",
-                                      "weak_pull_up_resistor" -> "off",
-                                      "termination" -> "parallel 50 ohms")
-                                      ) {
+class alt_inbuf extends ExtModule(
+  Map("io_standard" -> "1.0 V",
+    "location" -> "IOBANK_1",
+    "enable_bus_hold" -> "on",
+    "weak_pull_up_resistor" -> "off",
+    "termination" -> "parallel 50 ohms")) {
   val io = IO(new Bundle {
     val i = Input(Bool())
     val o = Output(Bool())
@@ -70,19 +70,19 @@ class BlackBoxAdderIO extends Bundle {
 class InlineBlackBoxAdder extends HasBlackBoxInline {
   val io = IO(new BlackBoxAdderIO)
   setInline("InlineBlackBoxAdder.v",
-  s"""
-  |module InlineBlackBoxAdder(a, b, cin, c, cout);
-  |input  [31:0] a, b;
-  |input  cin;
-  |output [31:0] c;
-  |output cout;
-  |wire   [32:0] sum;
-  |
-  |assign sum  = a + b + cin;
-  |assign c    = sum[31:0];
-  |assign cout = sum[32];
-  |
-  |endmodule
+    s"""
+       |module InlineBlackBoxAdder(a, b, cin, c, cout);
+       |input  [31:0] a, b;
+       |input  cin;
+       |output [31:0] c;
+       |output cout;
+       |wire   [32:0] sum;
+       |
+       |assign sum  = a + b + cin;
+       |assign c    = sum[31:0];
+       |assign cout = sum[32];
+       |
+       |endmodule
   """.stripMargin)
 }
 //- end

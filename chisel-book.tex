@@ -2279,61 +2279,6 @@ We can also connect the port of a submodule with the parent module.
 \shortlist{code/bundle_connect.txt}
 
 
-
-\section{External Modules}
-\index{Blackbox}
-
-Sometimes you might wish to include a component whose description is
-written in Verilog, or you might wish to ensure the emitted Verilog of a component
-has a very specific structure that your synthesis tool can recognize and map to an
-available primitive. Chisel provides support for this through its \code{BlackBox} and
-\code{ExtModule} classes, which allow you to define components with Verilog sources.
-Both are parameterized with a \code{Map[String, Param]} which is translated to module
-parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog
-files, while \code{ExtModule}s act as placeholders and are emitted as source-less module
-instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g.,
-Xilinx or Intel device primitives such as clock or input buffers.
-
-\shortlist{code/xilinx_bufgce.txt}
-\shortlist{code/altera_alt_inbuf.txt}
-
-\noindent Blackboxes, on the other hand, can represent any component. They can be
-declared in three different ways with their source either inlined or available in a
-separate file. As an example, consider a 32-bit adder with the following IO.
-\shortlist{code/blackbox_adder_io.txt}
-
-\noindent The inlined version is declared as follows:
-\shortlist{code/blackbox_adder_inline.txt}
-
-Providing the source code within a string literal (denoted by an \code{s} or an \code{f}
-before the double quotes) and using pipes allows including nicely formatted Verilog code.
-Additionally, it enables support for parameterization because Scala variables can be
-inserted using the \code{\$} or \code{\$\{\}} escape characters. The \code{stripMargin}
-method removes the pipes and tabs when emitting the code.
-
-There are two alternatives to inlined blackboxes, both expecting the Verilog source in
-a separate file. They are declared as follows.
-\shortlist{code/blackbox_adder_resource.txt}
-\shortlist{code/blackbox_adder_path.txt}
-
-The \code{HasBlackBoxResource} version expects to find its Verilog source
-in the\\
-\code{./src/main/resource} folder.
-The \code{HasBlackBoxPath} version can be provided with any relative path from the project
-folder.
-
-Blackboxes are instantiated the same way as other modules by wrapping them as
-\code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped
-either in a named class or in an anonymous class in the tester. Both are allowed to have
-the same IO as the blackbox.
-\shortlist{code/blackbox_named.txt}
-\shortlist{code/blackbox_anonymous.txt}
-
-Note that \code{HasBlackBoxInline}, \code{HasBlackBoxPath}, and \code{HasBlackBoxResource}
-are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
-\code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to\\
-\code{class Example extends} \code{HasBlackBoxInline}.
-
 \chapter{Combinational Building Blocks}
 \label{chap:comb}
 
@@ -6741,6 +6686,9 @@ gpg --keyserver keyserver.ubuntu.com --send-keys keyID
 \end{verbatim}
 \end{enumerate}
 
+Note that the \code{keyID} is the long hexadecimal string that you find in your list of keys.
+If that step fails, one can upload the public key manually to a key server.
+
 \subsection{Library Setup}
 
 For each library you need to set up the following:
@@ -6940,32 +6888,98 @@ also contains projects for various popular FPGA boards:
 
 \appendix
 
-\chapter{SystemVerilog and VHDL}
+\chapter{SystemVerilog}
 
-This book teaches digital design with Chisel. However, Chisel is not yet a main stream
-language for digital design. The still dominating hardware description languages are
-VHDL and Verilog, with an update to SystemVerilog (SV). Therefore, we will present code
-examples in VHDL and SV for basic hardware constructs in this appendix.
-Furthermore, we will show how legacy code in Verilog and VHDL can be integrated
+\index{SystemVerilog}
+
+\todo{VHDL?}
+
+This book teaches digital design with Chisel. However, in your professional carrier you
+might be confronted with other hardware description languages. However, when you
+understand the basic concepts of digital design and how to describe them in Chisel,
+switching to another language is a matter of days.
+
+The two dominating hardware description languages are
+VHDL and Verilog, with an update to SystemVerilog (SV). Recent movement
+in hardware development and testing is from VHDL to SV. Therefore, we will present code
+examples in SV for basic hardware constructs in this appendix.
+Furthermore, we will show how legacy code in Verilog can be integrated
 in a Chisel design.
 
-\section{Comparison -- not a good title}
+\section{Code Examples}
 
-The VHDL and SystemVerilog examples will be presented together with the Chisel version
+The SystemVerilog examples will be presented together with the Chisel version
 of the code.
-
-Components are organized as entities in VHDL and as modules in SV.
-Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
-output. The main body of the module uses the SV construct \code{always\_comb}
-to declare that this code block describes combinational logic.
-
-\todo{use logic in the parameters and explain that this is the new way in SV.}
 
 \longlist{code/sv_adder.txt}{A simple module in SystemVerilog.}{lst:sv:adder}
 
-\section{Integrating Legacy Code with Chisel}
+\longlist{code/sv_ch_adder.txt}{A simple module in Chisel.}{lst:sv:ch:adder}
+
+Components are organized as modules in SV.
+Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
+output. The main body of the module uses the SV construct \code{always\_comb}
+to declare that this code block describes combinational logic.
+Listing~\ref{lst:sv:ch:adder} shows the some component in Chisel.
+For such a simple component the difference between SV and Chisel is minimal.
+
+\todo{use logic in the parameters and explain that this is the new way in SV.}
+
+\section{External Modules and Integration of Legacy Code}
+\index{Blackbox}
 
 \todo{describe Verilog and VHDL (with GHDL)}
+
+Sometimes you might wish to include a component whose description is
+written in Verilog, e.g., legacy code, or you might wish to ensure the emitted Verilog of a component
+has a very specific structure that your synthesis tool can recognize and map to an
+available primitive. Chisel provides support for this through its \code{BlackBox} and
+\code{ExtModule} classes, which allow you to define components with Verilog sources.
+Both are parameterized with a \code{Map[String, Param]} which is translated to module
+parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog
+files, while \code{ExtModule}s act as placeholders and are emitted as source-less module
+instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g.,
+Xilinx or Intel device primitives such as clock or input buffers.
+
+\shortlist{code/xilinx_bufgce.txt}
+\shortlist{code/altera_alt_inbuf.txt}
+
+\noindent Blackboxes, on the other hand, can represent any component. They can be
+declared in three different ways with their source either inlined or available in a
+separate file. As an example, consider a 32-bit adder with the following IO.
+\shortlist{code/blackbox_adder_io.txt}
+
+\noindent The inlined version is declared as follows:
+\shortlist{code/blackbox_adder_inline.txt}
+
+Providing the source code within a string literal (denoted by an \code{s} or an \code{f}
+before the double quotes) and using pipes allows including nicely formatted Verilog code.
+Additionally, it enables support for parameterization because Scala variables can be
+inserted using the \code{\$} or \code{\$\{\}} escape characters. The \code{stripMargin}
+method removes the pipes and tabs when emitting the code.
+
+There are two alternatives to inlined blackboxes, both expecting the Verilog source in
+a separate file. They are declared as follows.
+\shortlist{code/blackbox_adder_resource.txt}
+\shortlist{code/blackbox_adder_path.txt}
+
+The \code{HasBlackBoxResource} version expects to find its Verilog source
+in the\\
+\code{./src/main/resource} folder.
+The \code{HasBlackBoxPath} version can be provided with any relative path from the project
+folder.
+
+Blackboxes are instantiated the same way as other modules by wrapping them as
+\code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped
+either in a named class or in an anonymous class in the tester. Both are allowed to have
+the same IO as the blackbox.
+\shortlist{code/blackbox_named.txt}
+\shortlist{code/blackbox_anonymous.txt}
+
+Note that \code{HasBlackBoxInline}, \code{HasBlackBoxPath}, and \code{HasBlackBoxResource}
+are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
+\code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to\\
+\code{class Example extends} \code{HasBlackBoxInline}.
+
 
 \chapter{Reserved Keywords}
 \index{Reserved keywords}
