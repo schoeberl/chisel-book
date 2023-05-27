@@ -6915,12 +6915,34 @@ of the code.
 
 \longlist{code/sv_ch_adder.txt}{A simple module in Chisel.}{lst:sv:ch:adder}
 
+
 Components are organized as modules in SV.
 Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
 output. The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
 Listing~\ref{lst:sv:ch:adder} shows the some component in Chisel.
 For such a simple component the difference between SV and Chisel is minimal.
+
+\longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
+
+Listing~\ref{lst:sv:register} shows a module that contains the definition of a
+register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
+The SV \code{reg} keywords declares a variable. This does not necessarily mean
+that the variable represents a register. It can also represent combinational logic,
+when used in an \code{always\_comb} block.
+
+The \code{always \@} statement with a clock implies that the code within that block
+represents a register. Registers are defined implicitly by a code pattern in Verilog
+and VHDL. Whereas, in Chisel the registers are defined explicitly.
+
+The \code{assign} statement is a concurrent statement that continuously
+assigns the value of the register to the output port \code{out}.
+
+\longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
+
+Listing~\ref{lst:sv:ch:register} show the register with reset and enable in Chisel, using
+the three-parameter version of \code{RegEnable}.
+
 
 \todo{use logic in the parameters and explain that this is the new way in SV.}
 
