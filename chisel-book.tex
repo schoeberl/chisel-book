@@ -2765,7 +2765,7 @@ and data moves pipelined through the circuit, timing diagrams are convenient.
 Chisel testers can also produce waveforms during testing that can be displayed
 with a waveform viewer and used for debugging.
 
-A typical design pattern is a register with an enable signal. Only when the enable signal
+A common design pattern is a register with an enable signal. Only when the enable signal
 is \code{true} (high), the register captures the input; otherwise, it keeps its old value.
 The enable can be implemented, similar to the synchronous reset, with
 a multiplexer at the input of the register. One input to the multiplexer is the feedback of the
@@ -2810,7 +2810,7 @@ with a conditional update:
 
 \shortlist{code/sequ_reg_init_ena.txt}
 
-\noindent The functionality of register enable  and initialization at reset can be combined when
+\noindent The functionality of register initialization at reset and enable can be combined when
 using the three-parameter version of \code{RegEnable}. The first parameter is the input signal,
 the second parameter is the initialization value, and the third parameter is the enable signal:
 
@@ -5883,14 +5883,12 @@ when we write tests for our hardware description.
 
 \section{Assertions}
 
-\todo{rewrite}
-
-An assertion statement in a programming language enables you to test your assumptions
-about your program. For example, if 
-
-In computer programming, specifically when using the imperative programming paradigm, an assertion is a predicate (a Boolean-valued function over the state space, usually expressed as a logical proposition using the variables of a program) connected to a point in the program, that always should evaluate to true at that point in code execution. Assertions can help a programmer read the code, help a compiler compile it, or help the program detect its own defects.
-
-
+An assertion statement in a programming language allows to state assumptions about a program.
+If the assertion condition evaluates to \code{false}, the program is usually stopped with an exception.
+Chisel also supports assertions to state assumptions in the hardware. Those assertions are tested
+when simulating the digital design. If the condition evaluates to \code{false}, the simulation stops
+with an error message. Assertions are ignored when generating hardware, as there is no (easy) way that
+hardware can communicate a failing assertion.
 
 \section{Debugging}
 
