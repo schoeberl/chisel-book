@@ -5890,6 +5890,21 @@ when simulating the digital design. If the condition evaluates to \code{false}, 
 with an error message. Assertions are ignored when generating hardware, as there is no (easy) way that
 hardware can communicate a failing assertion.
 
+\longlist{code/assert.txt}{Using assertions in Chisel.}{lst:assert}
+
+Listing~\ref{lst:assert} shows an example of using assertions. These are trivial assertions
+to show how to use them. If we would make an error and use subtraction instead off addition
+or reassigning \code{sum} later a different value,
+we would catch that error during testing and get a similar error message as below:
+
+\begin{verbatim}
+Assertion failed
+    at Assert.scala:20 assert(sum <= a + b)
+\end{verbatim}
+
+I would propose to place all assertions at the end of a module,
+so they do not clutter reading of the intended design.
+
 \section{Debugging}
 
 During your design and coding phase you often debug your design.
