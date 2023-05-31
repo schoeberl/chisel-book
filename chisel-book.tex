@@ -5882,8 +5882,9 @@ components, we call it formal verification. In this book we will stick to the te
 when we write tests for our hardware description.
 
 \section{Assertions}
+\index{Assertion}
 
-An assertion statement in a programming language allows to state assumptions about a program.
+An assertion statement in a programming language allows one to state assumptions about a program.
 If the assertion condition evaluates to \code{false}, the program is usually stopped with an exception.
 Chisel also supports assertions to state assumptions in the hardware. Those assertions are tested
 when simulating the digital design. If the condition evaluates to \code{false}, the simulation stops
@@ -6907,21 +6908,22 @@ also contains projects for various popular FPGA boards:
 
 \todo{VHDL?}
 
-This book teaches digital design with Chisel. However, in your professional carrier you
-might be confronted with other hardware description languages. However, when you
-understand the basic concepts of digital design and how to describe them in Chisel,
-switching to another language is a matter of days.
+This book teaches digital design with Chisel.
+However, you might be confronted with other hardware
+description languages in your professional carrier.
+When you understand the basic concepts of digital design
+and how to describe them in Chisel,
+switching to another language takes a few days.
 
 The two dominating hardware description languages are
-VHDL and Verilog, with an update to SystemVerilog (SV). Recent movement
+VHDL and Verilog, with an update to SystemVerilog (SV). The recent movement
 in hardware development and testing is from VHDL to SV. Therefore, we will present code
 examples in SV for basic hardware constructs in this appendix.
-Furthermore, we will show how legacy code in Verilog can be integrated
-in a Chisel design.
+Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
 
 \section{Code Examples}
 
-The SystemVerilog examples will be presented together with the Chisel version
+We will present the SystemVerilog examples together with the Chisel version
 of the code.
 
 \longlist{code/sv_adder.txt}{A simple module in SystemVerilog.}{lst:sv:adder}
@@ -6930,18 +6932,18 @@ of the code.
 
 
 Components are organized as modules in SV.
-Listing~\ref{lst:sv:adder} shows a SV module with two 8-bit inputs and one 8-bit
+Listing~\ref{lst:sv:adder} shows an SV module with two 8-bit inputs and one 8-bit
 output. The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
-Listing~\ref{lst:sv:ch:adder} shows the some component in Chisel.
-For such a simple component the difference between SV and Chisel is minimal.
+Listing~\ref{lst:sv:ch:adder} shows the same component in Chisel.
+The difference between SV and Chisel is minimal for such a simple component.
 
 \longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
 
 Listing~\ref{lst:sv:register} shows a module that contains the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
-The SV \code{reg} keywords declares a variable. This does not necessarily mean
-that the variable represents a register. It can also represent combinational logic,
+The SV \code{reg} keyword declares a variable. This does not necessarily mean
+that the variable represents a register. It can also represent combinational logic
 when used in an \code{always\_comb} block.
 
 The \code{always \@} statement with a clock implies that the code within that block
