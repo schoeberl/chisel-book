@@ -5881,30 +5881,6 @@ testing the hardware description. If we want to apply formal methods to verify h
 components, we call it formal verification. In this book we will stick to the term \emph{testing}
 when we write tests for our hardware description.
 
-\section{Assertions}
-\index{Assertion}
-
-An assertion statement in a programming language allows one to state assumptions about a program.
-If the assertion condition evaluates to \code{false}, the program is usually stopped with an exception.
-Chisel also supports assertions to state assumptions in the hardware. Those assertions are tested
-when simulating the digital design. If the condition evaluates to \code{false}, the simulation stops
-with an error message. Assertions are ignored when generating hardware, as there is no (easy) way that
-hardware can communicate a failing assertion.
-
-\longlist{code/assert.txt}{Using assertions in Chisel.}{lst:assert}
-
-Listing~\ref{lst:assert} shows an example of using assertions. These are trivial assertions
-to show how to use them. If we would make an error and use subtraction instead off addition
-or reassigning \code{sum} later a different value,
-we would catch that error during testing and get a similar error message as below:
-
-\begin{verbatim}
-Assertion failed
-    at Assert.scala:20 assert(sum <= a + b)
-\end{verbatim}
-
-I would propose to place all assertions at the end of a module,
-so they do not clutter reading of the intended design.
 
 \section{Debugging}
 
@@ -6025,6 +6001,14 @@ not need yet. You can skip ahead to the exercise and return later if you find th
 
 \section{Multithreaded Testing}
 
+Digital hardware is inherently parallel.
+It is also helpful to represent parallelism in the testing code to test such a parallel circuit.
+E.g., one thread fills data into a circuit while another thread checks the outputs from that circuit.
+We could do this in a single thread, but then we need to mix code for different tasks
+into one function that shares the advancement of the clock.
+With multithreaded tests, each thread can independently advance the clock.
+The threads are synchronized internally at the call of \code{clock()}.
+
 ChiselTest has support for multithreaded testing through the use of \code{fork} and
 \code{join} calls. \code{fork} spawns a new tester thread with a block of test code
 as its parameter, while \code{join} may be called on a tester thread variable
@@ -6083,6 +6067,45 @@ detailed in its simulations and supports all synthesizable Verilog constructs.
 Generally, for single-clock circuits, Verilator is the fastest and
 most widely available tool.
 
+\section{Assertions and Formal Verification}
+\index{Assertion}
+
+An assertion statement in a programming language allows one to state assumptions about a program.
+If the assertion condition evaluates to \code{false}, the program is usually stopped with an exception.
+Chisel also supports assertions to state assumptions in the hardware. Those assertions are tested
+when simulating the digital design. If the condition evaluates to \code{false}, the simulation stops
+with an error message. Assertions are ignored when generating hardware, as there is no (easy) way that
+hardware can communicate a failing assertion.
+
+\longlist{code/assert.txt}{Using assertions in Chisel.}{lst:assert}
+
+Listing~\ref{lst:assert} shows an example of using assertions. These are trivial assertions
+to show how to use them. If we would make an error and use subtraction instead off addition
+or reassigning \code{sum} later a different value,
+we would catch that error during testing and get a similar error message as below:
+
+\begin{verbatim}
+Assertion failed
+    at Assert.scala:20 assert(sum <= a + b)
+\end{verbatim}
+
+I would propose to place all assertions at the end of a module,
+so they do not clutter reading of the intended design.
+
+The assertions are executed during simulation and we need to write the test cases
+for them. However, it is hard (impossible) to write tests to trigger all possibilities.
+To catch errors in overlooked corner cases, we can use formal verification.
+Kevin Laeufer has added formal verification to ChiselTest~\cite{kevin:formal:woset2021}.
+the very same assertions are used for formal verification.
+
+To explore formal verification with Chisel you need to install
+the open \myref{https://github.com/Z3Prover/z3}{Z3} theorem prover.
+To use formal verification you substitute \code{test(..)} by \code{verify(..)}.
+
+\todo{read on \url{https://github.com/tdb-alcorn/chisel-formal}.
+How is this related to Kevin's work?}.
+
+\todo{What are the limitations?}
 
 
 \section{Exercise}
@@ -6107,6 +6130,7 @@ it is probably impossible to catch all errors.\footnote{A famous quote by Dijkst
 be used to show the presence of bugs, but never to show their absence!''}
 However, there is hope in recent development in formal verification to complement testing.
 The topic of formal verification with Chisel will be covered in a future edition of this book.
+\todo{remove this when the verification section is written.}
 
 \chapter{Design of a Processor}
 
