@@ -6089,6 +6089,10 @@ Assertion failed
     at Assert.scala:20 assert(sum <= a + b)
 \end{verbatim}
 
+However, as you can read in the comments, the first two assertions
+are not always true, so we cannot use them. We found this out by
+using formal verification.
+
 I would propose to place all assertions at the end of a module,
 so they do not clutter reading of the intended design.
 
@@ -6101,11 +6105,33 @@ the very same assertions are used for formal verification.
 To explore formal verification with Chisel you need to install
 the open \myref{https://github.com/Z3Prover/z3}{Z3} theorem prover.
 To use formal verification you substitute \code{test(..)} by \code{verify(..)}.
+Listing~\ref{lst:formal:assert} shows how to run formal verification on our
+simple adder circuit with the (naive) assertions. It might come as a surprise that
+Chisel formal immediately found an error in the circuit or the assertions.
+To investigate the issue we can look into the waveform to find the input data
+that lead to an assertion violation. It use 0xdb and 0x65 as inputs, which result in
+a sum of 0x40. The input values simply led to an overflow of the 8-bit addition.
+With our simple test case we missed to test overflowing values.
+
+\longlist{code/formal_assert.txt}{Formally verifying the circuit.}{lst:formal:assert}
 
 \todo{read on \url{https://github.com/tdb-alcorn/chisel-formal}.
 How is this related to Kevin's work?}.
 
 \todo{What are the limitations?}
+
+\begin{verbatim}
+Delays a signal for verification purposes. Any stop, assert, assign or cover statement that the result is used in will be automatically guarded by the time necessary for all past values to become available. E.g.:
+Example:
+assert(past(out) === past(past(in)))
+is equivalent to:
+Example:
+when(cyclesSinceReset >= 2.U) {
+  assert(RegNext(out) === RegNext(RegNext(in)))
+}
+\end{verbatim}
+
+
 
 
 \section{Exercise}

@@ -10,7 +10,9 @@ class AssertTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.b.poke(2.U)
       dut.clock.step()
       // dut.io.sum.expect(1.U)
-
+      dut.io.a.poke(100.U)
+      dut.io.b.poke(200.U)
+      dut.clock.step()
     }
   }
 }
