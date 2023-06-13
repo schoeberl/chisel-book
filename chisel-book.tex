@@ -4353,6 +4353,82 @@ Functions can be declared as part of a \code{Module}. However, functions that wi
 used in different modules are better placed into a Scala object that collects utility
 functions.
 
+\section{Generate Combinational Logic}
+\index{Logic generation}
+\index{Logic table generation}
+\index{ROM}
+\label{sec:gen:comb:logic}
+
+A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
+as we can see the input to the table as an address into such a ROM.
+We generate a logic table with \code{VecInit}.  The following snippet of code creates
+a table to compute the square of a number \code{n}.
+
+\shortlist{code/gen_vec.txt}
+
+We can use the full power of Scala to generate our logic (tables).
+For example, we can generate a table of fixpoint constants to represent a trigonometric function,
+compute constants for digital filters, or write an assembler in Scala
+to generate code for a microprocessor written in Chisel. All those functions
+are in the same code base (same language) and can be executed during
+hardware generation.
+
+\index{Binary-coded decimal}
+\index{BCD}
+A classic example for a table generation is the conversion of a binary number
+into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
+(BCD) representation. BCD is used to represent a number in a decimal
+format using 4 bits for each decimal digit. For example, decimal \code{13} is in binary
+\code{1101} and BCD encoded as 1 and 3 in binary: \code{00010011}.
+BCD allows displaying numbers in decimal, a more user-friendly number
+representation than hexadecimal.
+
+When using a classic hardware description language, such as Verilog or VHDL,
+we would use another scripting or programming language to generate such a table.
+We can write a Java program that computes the table to convert binary to BCD.
+That Java program prints out VHDL code that can be included in a project.
+The Java program is about 100 lines of code; most of the code generating
+VHDL strings. However, the key part of the conversion is just two lines of code.
+With Chisel, we can compute this table directly as part of the hardware generation.
+Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
+
+\longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
+
+
+We can also generate a logic table from a Scala \code{Array}.
+We may have data in a file that we want to read in during hardware generation
+time for the logic table.
+Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
+class form the Scala standard library to read the file \code{data.txt}, which
+contains integer constants in a textual representation.
+
+\index{File reading}
+\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
+
+A few words on the maybe a bit intimidating expression:
+\begin{chisel}
+  val table = VecInit(array.map(_.U(8.W)))
+\end{chisel}
+
+
+\noindent A Scala \code{Array} can be implicitly converted to a Scala sequence (\code{Seq}),
+which supports the mapping function \code{map}.
+\code{map} invokes a function on each element of the sequence and returns
+a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
+each \code{Int} value from the Scala array as a \code{\_} and performs the conversion
+from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8 bits.
+The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
+of Chisel types.
+
+We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
+a message that we may send out to a serial port. The following code converts the standard greeting
+from a Scala/Java \code{String} to a Chisel \code{Vec}:
+
+\shortlist{code/hello_table.txt}
+
+\noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
+function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
+This code is extracted from the serial port example, which is used later in this text to send a welcome message.
 
 \section{Configuration with Parameters}
 \index{Parameters}
@@ -4507,84 +4583,27 @@ a \code{Payload} as a parameter:
 
 \shortlist{code/param_mod_use2.txt}
 
+\subsection{Optional Ports}
 
-\section{Generate Combinational Logic}
-\index{Logic generation}
-\index{Logic table generation}
-\index{ROM}
-\label{sec:gen:comb:logic}
+Some hardware generator might have IO ports that are dependent on a configuration.
+As an example we implement a register file for typical 32-bit RISC processor. For debugging
+we want to be able to access all register. Therefore, we want to have an additional
+port where we can read all registers in the tester. However, at Verilog generation
+we do not want this expensive extra port.
 
-A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
-as we can see the input to the table as an address into such a ROM.
-We generate a logic table with \code{VecInit}.  The following snippet of code creates
-a table to compute the square of a number \code{n}.
+Listing~\ref{lst:reg:file} shows such a register file. It has as parameter \code{debug}
+as a Scala \code{Boolean}. In the definition of the IO bundle we use that parameter
+to either generate that port or not. In Scala this is represented as a so called \code{Option}.
+An option can return a value wrapped into \code{Some} or represent the missing value
+as a \code{None}. In the main body of the module we extract the value of the option
+with \code{get}.
 
-\shortlist{code/gen_vec.txt}
+\longlist{code/register_file.txt}{A register file with an optional debug port.}{lst:reg:file}
 
-We can use the full power of Scala to generate our logic (tables).
-For example, we can generate a table of fixpoint constants to represent a trigonometric function,
-compute constants for digital filters, or write an assembler in Scala
-to generate code for a microprocessor written in Chisel. All those functions
-are in the same code base (same language) and can be executed during
-hardware generation.
+Similar in the tester we need to  use options \code{get} method to get a reference
+of that IO port:
 
-\index{Binary-coded decimal}
-\index{BCD}
-A classic example for a table generation is the conversion of a binary number
-into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
-(BCD) representation. BCD is used to represent a number in a decimal
-format using 4 bits for each decimal digit. For example, decimal \code{13} is in binary
-\code{1101} and BCD encoded as 1 and 3 in binary: \code{00010011}.
-BCD allows displaying numbers in decimal, a more user-friendly number
-representation than hexadecimal.
-
-When using a classic hardware description language, such as Verilog or VHDL,
-we would use another scripting or programming language to generate such a table.
-We can write a Java program that computes the table to convert binary to BCD.
-That Java program prints out VHDL code that can be included in a project.
-The Java program is about 100 lines of code; most of the code generating
-VHDL strings. However, the key part of the conversion is just two lines of code.
-With Chisel, we can compute this table directly as part of the hardware generation.
-Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversion.
-
-\longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
-
-
-We can also generate a logic table from a Scala \code{Array}.
-We may have data in a file that we want to read in during hardware generation
-time for the logic table.
-Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
-class form the Scala standard library to read the file \code{data.txt}, which
-contains integer constants in a textual representation.
-
-\index{File reading}
-\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
-
-A few words on the maybe a bit intimidating expression:
-\begin{chisel}
-  val table = VecInit(array.map(_.U(8.W)))
-\end{chisel}
-
-
-\noindent A Scala \code{Array} can be implicitly converted to a Scala sequence (\code{Seq}),
-which supports the mapping function \code{map}.
-\code{map} invokes a function on each element of the sequence and returns
-a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
-each \code{Int} value from the Scala array as a \code{\_} and performs the conversion
-from a Scala \code{Int} value to a Chisel \code{UInt} literal, with a size of 8 bits.
-The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \code{Seq}
-of Chisel types.
-
-We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
-a message that we may send out to a serial port. The following code converts the standard greeting
-from a Scala/Java \code{String} to a Chisel \code{Vec}:
-
-\shortlist{code/hello_table.txt}
-
-\noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
-function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
-This code is extracted from the serial port example, which is used later in this text to send a welcome message.
-
+\shortlist{code/register_file_test.txt}
 
 
 \section{Use Inheritance}
@@ -6095,6 +6114,9 @@ using formal verification.
 
 I would propose to place all assertions at the end of a module,
 so they do not clutter reading of the intended design.
+
+\todo{Write on overlooking edge cases, just use too small numbers and not
+test the overflow.}
 
 The assertions are executed during simulation and we need to write the test cases
 for them. However, it is hard (impossible) to write tests to trigger all possibilities.
