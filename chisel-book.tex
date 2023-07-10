@@ -6111,7 +6111,6 @@ Assertion failed
 However, as you can read in the comments, the first two assertions
 are not always true, so we cannot use them. We found this out by
 using formal verification.
-
 I would propose to place all assertions at the end of a module,
 so they do not clutter reading of the intended design.
 
@@ -6122,18 +6121,21 @@ The assertions are executed during simulation and we need to write the test case
 for them. However, it is hard (impossible) to write tests to trigger all possibilities.
 To catch errors in overlooked corner cases, we can use formal verification.
 Kevin Laeufer has added formal verification to ChiselTest~\cite{kevin:formal:woset2021}.
-the very same assertions are used for formal verification.
+The very same assertions are used for formal verification.
 
 To explore formal verification with Chisel you need to install
 the open \myref{https://github.com/Z3Prover/z3}{Z3} theorem prover.
 To use formal verification you substitute \code{test(..)} by \code{verify(..)}.
 Listing~\ref{lst:formal:assert} shows how to run formal verification on our
-simple adder circuit with the (naive) assertions. It might come as a surprise that
-Chisel formal immediately found an error in the circuit or the assertions.
+simple adder circuit with the (naive) assertions.
+
+It surprised the author thatChisel formal immediately found an error in the circuit or the assertions.
 To investigate the issue we can look into the waveform to find the input data
 that lead to an assertion violation. It use 0xdb and 0x65 as inputs, which result in
 a sum of 0x40. The input values simply led to an overflow of the 8-bit addition.
 With our simple test case we missed to test overflowing values.
+This verification showed that the assertions that the sum is larger or equal then
+the inputs is wrong due to possible overflow.
 
 \longlist{code/formal_assert.txt}{Formally verifying the circuit.}{lst:formal:assert}
 
