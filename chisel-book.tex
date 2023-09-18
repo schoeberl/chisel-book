@@ -53,8 +53,6 @@
 \usepackage{dcolumn}
 \newcommand{\cc}[1]{\multicolumn{1}{c}{#1}}
 
-\newcommand{\code}[1]{{\small{\texttt{#1}}}}
-\newcommand{\codefoot}[1]{{\footnotesize{\texttt{#1}}}}
 
 % fatter TT font
 \renewcommand*\ttdefault{txtt}
@@ -113,6 +111,9 @@
 \newcommand{\scale}{0.7}
 
 \input{shared/chisel.tex}
+
+\newcommand{\code}[1]{{\lstinline[basicstyle=\small\ttfamily]{#1}}}
+\newcommand{\codefoot}[1]{{\lstinline[basicstyle=\footnotesize\ttfamily]{#1}}}
 
 \newcommand{\todo}[1]{{\emph{TODO: #1}}}
 \newcommand{\martin}[1]{{\color{blue} Martin: #1}}
@@ -553,7 +554,7 @@ Each book on a programming language shall start with a minimal example,
 called the \emph{Hello World} example. Following code is the first approach:
 
 
-\shortlist{src/main/scala/HelloScala.scala}
+\shortlist{code/hello_scala.txt}
 
 
 \noindent Compiling and executing this short program with \code{sbt}
@@ -590,7 +591,7 @@ We will cover those in the following chapters. Just note that the circuit is
 usually clocked with a high frequency, e.g., 50~MHz, and we need a counter
 to derive timing in the Hz range to achieve a visible blinking. In the above
 example, we count from 0 up to 25000000-1 and then toggle the blinking signal
-(\code{blkReg := \textasciitilde blkReg}) and restart the counter (\code{cntReg := 0.U}).
+(\code{blkReg := ~blkReg}) and restart the counter (\code{cntReg := 0.U}).
 That hardware then blinks the LED at 1~Hz.
 
 \section{An IDE for Chisel}
@@ -7042,6 +7043,8 @@ The difference between SV and Chisel is minimal for such a simple component.
 
 \subsection{Register}
 
+\todo{always\_reg}
+
 Listing~\ref{lst:sv:register} shows a module that contains the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
 The SV \code{reg} keyword declares a variable. This does not necessarily mean
@@ -7062,6 +7065,10 @@ the three-parameter version of \code{RegEnable}.
 
 
 \todo{use logic in the parameters and explain that this is the new way in SV.}
+
+\subsection{Advanced Chisel Features}
+
+\todo{Write about missing in V*: OO, FP, bundles with directions, flip, }
 
 \section{External Modules and Integration of Legacy Code}
 \index{Blackbox}
