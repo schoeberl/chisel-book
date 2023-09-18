@@ -1,7 +1,17 @@
 package verilog
 
+//- start sv_ch_adder
 import chisel3._
 import chisel3.util._
+
+class ChiselAdder extends Module {
+  val io = IO(new Bundle() {
+    val a, b = Input(UInt(8.W))
+    val sum = Output(UInt(8.W))
+  })
+  io.sum := io.a + io.b
+}
+//- end
 class Adder extends BlackBox with HasBlackBoxInline {
   val io = IO(new Bundle() {
     val a, b = Input(UInt(8.W))
@@ -25,15 +35,7 @@ endmodule
   """)
 }
 
-//- start sv_ch_adder
-class ChiselAdder extends Module {
-  val io = IO(new Bundle() {
-    val a, b = Input(UInt(8.W))
-    val sum = Output(UInt(8.W))
-  })
-  io.sum := io.a + io.b
-}
-//- end
+
 
 class AdderTop extends Module {
   val io = IO(new Bundle() {

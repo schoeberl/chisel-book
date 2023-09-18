@@ -1,3 +1,4 @@
+--/ start vhdl_adder
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -9,10 +10,12 @@ entity adder is
   );
 end entity;
 
-architecture behavioral of adder is
+architecture rtl of adder is
 begin
   sum <= a + b;
 end architecture;
+--/ end
+
 
 -- the following code was all written by Copilot!
 -- but contained errors (missing process in the TB,

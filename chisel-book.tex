@@ -6976,43 +6976,71 @@ also contains projects for various popular FPGA boards:
 
 \appendix
 
-\chapter{SystemVerilog}
+\chapter{VHDL and SystemVerilog}
 
 \index{SystemVerilog}
-
-\todo{VHDL?}
+\index{VHDL}
 
 This book teaches digital design with Chisel.
 However, you might be confronted with other hardware
 description languages in your professional carrier.
 When you understand the basic concepts of digital design
-and how to describe them in Chisel,
-switching to another language takes a few days.
+and how to describe digital circuits in Chisel,
+switching to another language will take just a few days.
 
 The two dominating hardware description languages are
 VHDL and Verilog, with an update to SystemVerilog (SV). The recent movement
-in hardware development and testing is from VHDL to SV. Therefore, we will present code
-examples in SV for basic hardware constructs in this appendix.
+in hardware development and testing is from VHDL to SV.
+
+We will show you code examples in Chisel, VHDL, and SV.
+Note that this appendix is not a complete introduction into VHDL or SV.
+It shall just get you started to translate hardware constructs from Chisel to VHDL and SV.
 Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
 
 \section{Code Examples}
 
-We will present the SystemVerilog examples together with the Chisel version
+
+We will present the VHDL and SV examples together with the Chisel version
 of the code.
 
-\longlist{code/sv_adder.txt}{A simple module in SystemVerilog.}{lst:sv:adder}
+\subsection{Components}
 
-\longlist{code/sv_ch_adder.txt}{A simple module in Chisel.}{lst:sv:ch:adder}
+\longlist{code/sv_ch_adder.txt}{A simple component in Chisel.}{lst:sv:ch:adder}
 
+\longlist{code/vhdl_adder.txt}{A simple component in VHDL.}{lst:vhdl:adder}
 
-Components are organized as modules in SV.
+Listing~\ref{lst:sv:ch:adder} shows a simple adder~\footnote{We should never use
+such small components in real designs, when the code that defines the function is just a few lines.
+In this example just one line. However, we keep it short for the presentation
+of the concept of a component.}
+as our example component in Chisel.
+The listing also includes the \code{import} statements to make this a complete example.
+
+Listing~\ref{lst:vhdl:adder} shows the adder component in VHLD. Similar to Chisel,
+the file starts with import statements to include some standard functions.
+In VHDL a component needs a declaration of an \code{entity} and the definition
+of an \code{architecture}. The \code{entity} declares the ports for the component.
+The \code{architecture} defines the function of the component.
+The \code{architecture} needs to be named, in our example that name is \code{rtl}.
+However, today that naming has lost a practical meaning.
+VHDL is case insensitive, the means \code{Adder} and \code{adder} are treated
+equally. Therefore, current practice is to stick to lower case for identifiers.
+
+\longlist{code/sv_adder.txt}{A simple component in SystemVerilog.}{lst:sv:adder}
+
+Listing~\ref{lst:sv:adder} shows the adder component in SV. Similar to Chisel,
+a component is also called a module.~\footnote{In fact, the naming in Chisel
+was inspired by Verilog.}
 Listing~\ref{lst:sv:adder} shows an SV module with two 8-bit inputs and one 8-bit
 output. The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
-Listing~\ref{lst:sv:ch:adder} shows the same component in Chisel.
 The difference between SV and Chisel is minimal for such a simple component.
 
 \longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
+
+\subsection{Using a Component}
+
+\subsection{Register}
 
 Listing~\ref{lst:sv:register} shows a module that contains the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
