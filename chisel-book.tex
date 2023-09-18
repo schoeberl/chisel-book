@@ -263,9 +263,9 @@ Staff Engineer, SiFive
 \chapter{Preface}
 
 % This text goes on the backside of the book, and in Amazon description
-This book is an introduction to digital design with the focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
+This book is an introduction to digital design with a focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
 
-This book addresses hardware designers and software engineers. Hardware designers, with knowledge of Verilog or VHDL, can upgrade their productivity with a modern language for their next ASIC or FPGA design. Software engineers, with knowledge of object-oriented and functional programming, can leverage their knowledge to program hardware, for example, FPGA accelerators executing in the cloud.
+This book addresses hardware designers and software engineers. Hardware designers with knowledge of Verilog or VHDL can upgrade their productivity with a modern language for their next ASIC or FPGA design. Software engineers with knowledge of object-oriented and functional programming can leverage their knowledge to program hardware, for example, FPGA accelerators executing in the cloud.
 
 The approach of this book is to present small to medium-sized typical hardware components to explore digital design with Chisel.
 
@@ -291,7 +291,7 @@ The FIFO variations also show how to use type parameters and inheritance in digi
 \section*{Foreword for the Third Edition}
 
 Chisel has been moving forward in the last year, so it is time for a new edition of the Chisel book.
-We changed all examples to the latest version of Chisel (3.5.3) and the recommended
+We changed all examples to the latest version of Chisel (3.5.3), and the recommended
 Scala version (2.12.13).
 
 With Chisel 3.5 the testing environment \code{PeekPokeTester} as part of the \code{iotesters}
@@ -312,33 +312,33 @@ We have improved the explanation of components with a simpler example.
 
 Hardware \emph{generators} are written in Scala. Therefore, we have added a short
 section on Scala. We have extended the hardware generator chapter with a section
-on using functional programing to write generators.
+on using functional programming to write generators.
 
 The appendix has been extended with a list of reserved keywords and a list
 of acronyms.
 
-Hans Jakob Damsgaard has contributed the description on how to use external components, as
-so called \emph{black boxes}, and how to use memories for clock domain crossing
+Hans Jakob Damsgaard has contributed the description of how to use external components, as
+so-called \emph{black boxes}, and how to use memories for clock domain crossing
 (multi-clock memories).
 
 \section*{Foreword for the Fourth Edition}
 
-For the fourth edition we have switched to the actual Chisel version 3.5.4.
+For the fourth edition, we have switched to the actual Chisel version 3.5.4.
 We have added arbiter, priority encoder, and comparator to the chapter of
 combinational building blocks.
 We have extended the hardware generation chapter with more functional
 examples, including building a fair arbitration tree out of a simple 2 to 1
 arbitration circuits.
 We have added a new chapter on interconnect, bus interfaces,
-and how to connect an IO device as a memory mapped device.
-We have started a new chapter on debugging, testing and verification.
+and how to connect an IO device as a memory-mapped device.
+We have started a new chapter on debugging, testing, and verification.
 The plan is to extend the chapter on this important topic in the next edition.
 We have extended the processor chapter with a more gentle introduction
-of a microprocessor, including a figure of the datapath.
+to a microprocessor, including a figure of the datapath.
 
 \section*{Foreword for the Fifth Edition}
 
-For the fifth edition we have upgraded to the actual Chisel version 3.5.6 and Scala 2.13.
+For the fifth edition, we have upgraded to the actual Chisel version 3.5.6 and Scala 2.13.
 To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
@@ -347,7 +347,7 @@ If needed, those two chapters are available in the older versions of the Chisel 
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
 
 The fifth edition does not include major changes; it is a consolidation version.
-We did a considerable proofreading for more clarity in writing. Chisel has added small convenience
+We did considerable proofreading for more clarity in writing. Chisel has added small convenience
 features (e.g., \code{ChiselEnum}) that we cover in this edition.
 We extended the processor chapter and updated the Leros code snippets
 to the actual version of Leros.
