@@ -68,9 +68,6 @@ begin
     wait for 10 ns;
     assert sum = "11111110" report "255 + 255 = 510" severity note;
 
-    a <= "11111111";
-    b <= "11111111";
-    wait for 10 ns;
-    assert sum = "11111111" report "255 + 255 = 510" severity note;
+    wait;
 end process;
 end architecture;

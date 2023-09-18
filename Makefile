@@ -8,6 +8,9 @@ all: test gencode fig book genslides
 test:
 	sbt test
 
+vhdl:
+	make -C src/main/vhdl
+
 gencode:
 	-mkdir code
 	sbt -Dsbt.main.class=sbt.ScriptMain scripts/gencode.scala
@@ -43,12 +46,6 @@ clean:
 	rm -rf test_run_dir
 	rm -rf target
 	rm -rf generated
-
-chisel:
-	sbt "runMain Snippets"
-	sbt "runMain Counter"
-	sbt "test:runMain RegisterTester"
-	sbt "test:runMain LogicTester"
 
 # test only one
 flasher:
