@@ -359,6 +359,11 @@ to the actual version of Leros.
 
 \todo{VHDL and SV}
 
+Chisel formal (if finished).
+
+We extended the testing chapter with a description how to access internal signals. \todo{That is too
+little to be mentioned here. More is needed.}
+
 
 
 
@@ -387,8 +392,8 @@ Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
-It was a pleasure to use Chisel in the last three years of teaching a digital electronics
-course at the Technical University of Denmark.
+It was a pleasure to use Chisel in teaching a digital electronics
+course at the Technical University of Denmark since 2020.
 I know it is a challenge to pickup Chisel and Java in parallel in the second
 semester. Thank you to all students from this course, who had on open mind to
 pickup a modern programming language for hardware description.
@@ -5958,6 +5963,8 @@ counter device that we introduced in Chapter~\ref{chap:interconnect} as an examp
 
 \longlist{code/test_counter.txt}{Testing the counter device.}{lst:test:cnt}
 
+\subsection{Use Functions}
+
 As you can see, the test covers only a few cases, but is already very long to read.
 All those pokes and expects are cumbersome. As a first step, we shall introduce
 functions to represent a read and a write request. Those functions abstract away the manual
@@ -6019,6 +6026,65 @@ reference path to both.
 The following subsections present advanced testing techniques that you likely do
 not need yet. You can skip ahead to the exercise and return later if you find the need.
 
+\subsection{Accessing Internal Signals}
+
+When testing a circuit, the test code usually has access to the ports of the DTU only.
+This abstraction is generally good practice, as access to internal signals and state is considered
+bad practice (in hardware and software testing).
+
+However, it is sometimes beneficial to access the internal state. For example,
+testing a microprocessor with small assembler test programs.
+In that case, one would usually compare the state of the hardware implementation of
+the processor against a software-based simulator of the same processor.
+For a RISC-style processor comparing the content of the register file of the two implementations
+would be enough for this kind of testing, as all data that is computed, loaded,
+or stored passes the register file at some time.
+Another use case is to explore and test a state machine (with or without datapath)
+with access to the internal state.
+
+
+\todo{Explain and explore the co-simulation in the Leros chapter.}
+
+
+\longlist{code/boring_tickgen.txt}{The tick generater as DUT.}{lst:boring:tickgen}
+
+To show the access to internal signals in action, we use a very minimal example:
+a tick generator with an internal counter. Listing~\ref{lst:boring:tickgen} shows the code.
+Only the really necessary signal \code{tick} is connected to an output port.
+The counter is not exposed, which is good design practice.
+For example, we want to access this internal counter in our test code.
+We could add a port to expose the counter. We could even use a Scala \code{Boolean}
+flag to conditionally have this port when we are debugging and disable it
+when generating hardware.
+However, mixing debugging code into the hardware description is not good practice.
+
+
+To get access to internal signals, we can use the \code{BoringUtils}. 
+\code{BoringUtils} allows us to \emph{bore} a connection through a module hierarchy.
+Behind the scenes, it adds the additional needed ports throughout the hierarchy.
+It does exactly what we could do manually, but avoids cluttering the original code.
+
+At the time of this writing, \code{BoringUtils} is still considered experimental.
+Therefore, we need to include the following package when using it:
+
+\shortlist{code/boring_import.txt}
+
+\longlist{code/boring_tickgen_test_top.txt}{A top-level wrapper for our DUT.}{lst:boring:tickgen:top}
+
+To support additional ports, we wrap our DUT into another top-level module for testing.
+Listing~\ref{lst:boring:tickgen:top} shows that top-level module with the additional port
+counter. Within the \code{TickGenTestTop}, we instantiate our original DUT and connect
+the \code{tick} port. For the \code{counter} output, first, we must assign a value to
+make the Chisel compiler happy. As we connect it later anyway to the inner module,
+we connect it to \code{DontCare}.
+The next line connects the \code{io.counter} to the count register in \code{tickGen}.
+We need to wrap \code{io.counter} into a Scala \code{Seq}, as \code{boring()} supports
+connecting to several signals.
+
+\longlist{code/boring_tickgen_test.txt}{A top-level wrapper for our DUT.}{lst:boring:tickgen:test}
+
+Finally, Listing~\ref{lst:boring:tickgen:test} shows the testing code for our DUT.
+Note that we instantiate the top-level wrapper to use the additional output port.
 \section{Multithreaded Testing}
 
 Digital hardware is inherently parallel.
@@ -6181,7 +6247,7 @@ it is probably impossible to catch all errors.\footnote{A famous quote by Dijkst
 be used to show the presence of bugs, but never to show their absence!''}
 However, there is hope in recent development in formal verification to complement testing.
 The topic of formal verification with Chisel will be covered in a future edition of this book.
-\todo{remove this when the verification section is written.}
+\todo{move this into the verification section when it is better written.}
 
 \chapter{Design of a Processor}
 
@@ -7032,18 +7098,23 @@ equally. Therefore, current practice is to stick to lower case for identifiers.
 Listing~\ref{lst:sv:adder} shows the adder component in SV. Similar to Chisel,
 a component is also called a module.~\footnote{In fact, the naming in Chisel
 was inspired by Verilog.}
-Listing~\ref{lst:sv:adder} shows an SV module with two 8-bit inputs and one 8-bit
+The adder has two 8-bit inputs and one 8-bit
 output. The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
 The difference between SV and Chisel is minimal for such a simple component.
 
-\longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
 
 \subsection{Using a Component}
 
 \subsection{Register}
 
+\longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
+
+Listing~\ref{lst:sv:ch:register} show a register with reset and enable in Chisel, using
+the three-parameter version of \code{RegEnable}.
 \todo{always\_reg}
+
+\longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
 
 Listing~\ref{lst:sv:register} shows a module that contains the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
@@ -7058,10 +7129,7 @@ and VHDL. Whereas, in Chisel the registers are defined explicitly.
 The \code{assign} statement is a concurrent statement that continuously
 assigns the value of the register to the output port \code{out}.
 
-\longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
 
-Listing~\ref{lst:sv:ch:register} show the register with reset and enable in Chisel, using
-the three-parameter version of \code{RegEnable}.
 
 
 \todo{use logic in the parameters and explain that this is the new way in SV.}
