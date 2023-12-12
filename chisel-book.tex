@@ -364,6 +364,11 @@ Chisel formal (if finished).
 We extended the testing chapter with a description how to access internal signals. \todo{That is too
 little to be mentioned here. More is needed.}
 
+We tested the book with following Chisel Versions: 3.5, 3.6, and 5.
+
+3.6 is the last that uses the Scala based backend to produce Verilog files.
+5 is is using CIRCT and needs firtool installed. Testing is still supported by chiseltest 5.0.2
+
 
 
 
@@ -1153,7 +1158,7 @@ is already used in Scala.}
 
 A \code{Vec} is used for three different purposes: (1) dynamic addressing in hardware,
 which is a multiplexer; (2) a register file, which includes multiplexing the read and
-generating the enable signal for the write; (3) parametrization if the number of
+generating the enable signal for the write; (3) parametrization of the number of
 ports of a \code{Module}. For other collections of \emph{things}, being it hardware elements
 or other generator data, it is better to use the Scala collection \code{Seq}.
 
@@ -6028,7 +6033,7 @@ not need yet. You can skip ahead to the exercise and return later if you find th
 
 \subsection{Accessing Internal Signals}
 
-When testing a circuit, the test code usually has access to the ports of the DTU only.
+When testing a circuit, the test code usually has access to the ports of the DUT only.
 This abstraction is generally good practice, as access to internal signals and state is considered
 bad practice (in hardware and software testing).
 
@@ -6081,7 +6086,7 @@ The next line connects the \code{io.counter} to the count register in \code{tick
 We need to wrap \code{io.counter} into a Scala \code{Seq}, as \code{boring()} supports
 connecting to several signals.
 
-\longlist{code/boring_tickgen_test.txt}{A top-level wrapper for our DUT.}{lst:boring:tickgen:test}
+\longlist{code/boring_tickgen_test.txt}{Testing the DUT with access to internal signals.}{lst:boring:tickgen:test}
 
 Finally, Listing~\ref{lst:boring:tickgen:test} shows the testing code for our DUT.
 Note that we instantiate the top-level wrapper to use the additional output port.
