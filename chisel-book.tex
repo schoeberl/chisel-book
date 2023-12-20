@@ -3100,7 +3100,7 @@ A \myref{https://en.wikipedia.org/wiki/Shift_register}{shift register} is a coll
 connected in a sequence. Each output of a flip-flop is connected to the input of the
 next flip-flop. Figure~\ref{fig:shiftregister} shows a 4-stage shift register.
 The circuit \emph{shifts} the data from left to right on each clock tick. In this simple form the
-circuit implements a 4-tap delay from \code{din} to \code{dout}.
+circuit implements a 4 cycle delay from \code{din} to \code{dout}.
 
 The Chisel code for this simple shift register (1) creates a 4-bit register \code{shiftReg};
 (2) concatenates the lower 3 bits of the shift register with the input \code{din} for the next
