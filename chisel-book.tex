@@ -3499,7 +3499,7 @@ of the contained module.
 \shortlist{code/sync_reset.txt}
 
 In the above example \code{SyncReset} is the top level module that contains a
-counter (\code{WhenCounter}). The reset signal of the top-level module is called
+counter (\code{cnt}). The reset signal of the top-level module is called
 \code{reset} and is connected to the input synchronizer (\code{RegNext(RegNext(reset))}).
 The output of that input synchronizer (\code{syncReset}) is connected to the reset \emph{input}
 of the counter (\code{cnt.reset := syncReset}).
