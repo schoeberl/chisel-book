@@ -3162,7 +3162,7 @@ Note that we are now shifting to the right, filling in zeros at the MSB.
 \index{RAM}
 \index{SRAM}
 
-A memory can be built out of a collection of registers, in Chisel a \code{Reg} of a \code{Vec}.
+A memory can be built out of a collection of registers; in Chisel, a \code{Vec} of \code{Reg}s.
 However, this is expensive in hardware, and larger memory structures are built
 as \myref{https://en.wikipedia.org/wiki/Static_random-access_memory}{SRAM}.
 For an ASIC, a memory compiler constructs memories.
