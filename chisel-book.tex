@@ -317,8 +317,7 @@ on using functional programming to write generators.
 The appendix has been extended with a list of reserved keywords and a list
 of acronyms.
 
-Hans Jakob Damsgaard has contributed the description of how to use external components, as
-so-called \emph{black boxes}, and how to use memories for clock domain crossing
+Hans Jakob Damsgaard has contributed the description of how to use external components, through Chisel's \code{BlackBox}, and how to use memories for clock domain crossing
 (multi-clock memories).
 
 \section*{Foreword for the Fourth Edition}
@@ -1589,7 +1588,7 @@ Figure~\ref{fig:flow} shows the tool flow of Chisel. The digital circuit is desc
 shown as \code{Hello.scala}. The Scala compiler compiles this class, together with the Chisel and Scala
 libraries, and generates the Java class file \code{Hello.class} that can be executed by a standard
 \myref{https://en.wikipedia.org/wiki/Java_virtual_machine}{Java virtual machine (JVM)}.
-Executing this class with a Chisel driver generates the so-called flexible intermediate representation for
+Executing this class with a Chisel driver generates the flexible intermediate representation for
 RTL (FIRRTL), an intermediate representation of digital circuits. In our example, the file is \code{Hello.fir}.
 The FIRRTL compiler performs transformations on the circuit.
 
@@ -1870,7 +1869,7 @@ $ sbt "testOnly WaveformCounterTest"
 
 \subsection{printf Debugging}
 
-Another form of debugging is the so-called ``printf debugging''. The name of this debugging method comes from
+Another form of debugging is ``printf debugging''. The name of this debugging method comes from
 simply putting \code{printf} statements in C code to print variables of interest during
 the execution of the program. This printf debugging is also available during testing
 of Chisel circuits. The printing happens at the rising edge of the clock.
@@ -2669,8 +2668,6 @@ previous values. As we are interested in synchronous design (clocked designs),
 we mean synchronous sequential circuits when we talk about sequential
 circuits.\footnote{We can also build sequential circuits with asynchronous logic and
 feedback, but this is a niche topic and cannot be easily expressed in Chisel.}
-To build sequential circuits, we need elements that can store state:
-the so-called registers.
 
 \section{Registers}
 
@@ -4197,7 +4194,7 @@ to be ready, the data is considered read and the buffer is empty again.
 \index{Hardware generators}
 \label{ch:gen}
 
-The strength of Chisel is that it allows us to write so-called hardware generators.
+The strength of Chisel is that it allows us to write hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
 we usually use another language, for example, Java or Python, to generate hardware.
 Before using Chisel, I have often written small Java programs to generate VHDL tables.
@@ -4604,7 +4601,7 @@ we do not want this expensive extra port.
 
 Listing~\ref{lst:reg:file} shows such a register file. It has as parameter \code{debug}
 as a Scala \code{Boolean}. In the definition of the IO bundle we use that parameter
-to either generate that port or not. In Scala this is represented as a so called \code{Option}.
+to either generate that port or not. In Scala this is represented as an \code{Option}.
 An option can return a value wrapped into \code{Some} or represent the missing value
 as a \code{None}. In the main body of the module we extract the value of the option
 with \code{get}.
@@ -4680,7 +4677,7 @@ sbt "testOnly TickerTest"
 
 Scala supports functional programming, so Chisel does as well.
 We can use functions to represent hardware and combine those hardware components
-with functional programming by using a so-called ``higher-order functions''.
+with functional programming by using a ``higher-order function''.
 Let us start with a simple example, the sum of a vector:
 
 \shortlist{code/fun_first.txt}
@@ -5123,7 +5120,7 @@ names for signals, such as \code{write}, \code{full}, \code{din}, \code{read},
 of data and two signals for handshaking (for example, we \code{write} into the FIFO when
 it is not \code{full}).
 
-Here we can generalize this handshaking to the so called ready/valid interface.
+Here we can generalize this handshaking to the ready/valid interface.
 We can enqueue an element (write into the FIFO) when the FIFO is \code{ready}.
 We signal this at the writer side with \code{valid}.
 As this ready/valid interface is so common, Chisel provides a definition
@@ -5241,7 +5238,7 @@ The counter is incremented only when the input \code{incr} is \code{true.B}.
 
 Furthermore, as we need also the
 possible next value (increment or 0 on wrap around), we return this value from
-the \code{counter} function as well. In Scala we can return a so called \emph{tuple},
+the \code{counter} function as well. In Scala we can return a \emph{tuple},
 which is simply a container to hold more than one value. The syntax to create
 such a duple is simply wrapping the comma separated values in parentheses:
 \index{tuple}
@@ -6150,7 +6147,7 @@ that should generally not be needed. Furthermore, the flags are not guaranteed t
 Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation.
 To support this, make sure to install Verilator version 4.028 or newer.
 
-Also, beware that different simulators work in different ways. Verilator is a so-called
+Also, beware that different simulators work in different ways. Verilator is a
 synchronous simulator, which means that it runs updates only at the rising edge of the
 clock and thus does not support latches. It also does not officially support multiple
 clocks. VCS, on the other hand, is an event-based simulator, which is significantly more
@@ -6323,7 +6320,7 @@ scall &  & System call (simulation hook) \\
 Leros is designed to be simple, but still a good target for a C compiler.
 The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
 
-Leros is a so called accumulator machine. This means that all operations
+Leros is an accumulator machine. This means that all operations
 have the accumulator as one of the source inputs and the result is usually
 written into the accumulator. The second operand of an arithmetic or logic
 operation can either be an immediate (a constant) or from one of the 256
