@@ -5218,7 +5218,7 @@ We us a queue to decouple a producer and consumer thread.
 In this setting a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 Two pointers point into read and write positions in a memory set aside
-for the queue. When the pointers reach the end of the memory, the
+for the queue. When the pointers reach the end of the memory, they
 are set back to the begin of that memory. The difference between the two
 pointers is the number of elements in the queue. When the two pointers
 point to the same address, the queue is either empty or full.
