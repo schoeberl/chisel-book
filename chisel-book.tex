@@ -3782,24 +3782,31 @@ detection with a Moore FSM.
 
 \begin{figure}
   \centering
-  \begin{tikzpicture}[auto,node distance=3cm,
-    thick,main node/.style={circle,draw, minimum size=18pt}, loop/.style={min distance=7mm},>=latex,thick]
-    \coordinate (a);
-    \node [main node, align=center] (b) [right=1.5cm of a,minimum size=1.3cm]{zero\\0};
-    \node [main node, align=center] (c) [right=1.9cm of b,minimum size=1.3cm]{pulse\\1};
-    \node [main node, align=center] (d) [right=1.9cm of c,minimum size=1.3cm]{one\\0};
-
-    \path[->, thick]
-      (a) edge node {reset} (b)
-      (b) edge [bend left] node {1} (c)
-      (c) edge [bend left, above] node {0} (b)
-      (c) edge [bend left] node {1} (d)
-      (d) edge [bend left=45, above] node {0} (b)
-      ;
-  \end{tikzpicture}
+  \includegraphics[scale=\scale]{figures/state-diag-rising-moore}
   \caption{The state diagram of the rising edge detector as Moore FSM.}
   \label{fig:diag:rising:moore}
 \end{figure}
+
+%\begin{figure}
+%  \centering
+%  \begin{tikzpicture}[auto,node distance=3cm,
+%    thick,main node/.style={circle,draw, minimum size=18pt}, loop/.style={min distance=7mm},>=latex,thick]
+%    \coordinate (a);
+%    \node [main node, align=center] (b) [right=1.5cm of a,minimum size=1.3cm]{zero\\0};
+%    \node [main node, align=center] (c) [right=1.9cm of b,minimum size=1.3cm]{pulse\\1};
+%    \node [main node, align=center] (d) [right=1.9cm of c,minimum size=1.3cm]{one\\0};
+%
+%    \path[->, thick]
+%      (a) edge node {reset} (b)
+%      (b) edge [bend left] node {1} (c)
+%      (c) edge [bend left, above] node {0} (b)
+%      (c) edge [bend left] node {1} (d)
+%      (d) edge [bend left=45, above] node {0} (b)
+%      ;
+%  \end{tikzpicture}
+%  \caption{The state diagram of the rising edge detector as Moore FSM.}
+%  \label{fig:diag:rising:moore}
+%\end{figure}
 
 Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
 edge detection with a Moore FSM. The first thing to notice is that the Moore FSM
