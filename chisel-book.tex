@@ -3351,7 +3351,7 @@ synchronizer.\footnote{The exception is when the input signal is dependent
 on a synchronous output signal, and we know the maximum propagation delay.
 A classic example is the interfacing of an asynchronous SRAM
 to a synchronous circuit, e.g., by a microprocessor.}
-We also need to synchronize an external reset signal. The reset signal
+We also need to synchronize an external reset signal, also called the global reset. The reset signal
 shall pass through the two flip-flops before it is used as the reset signal
 for other flip-flops in the circuit. Concretely, the deassertion of the reset needs
 to be synchronous to the clock.
