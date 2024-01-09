@@ -20,16 +20,7 @@ class MultiClockMemory(ports: Int, n: Int = 1024, w: Int = 32) extends Module {
 
   for (i <- 0 until ports) {
     val p = io.ps(i)
-    withClock(p.clk.asClock) {
-      val datao = WireDefault(0.U(w.W))
-      when(p.en) {
-        datao := ram(p.addr)
-        when(p.we) {
-          ram(p.addr) := p.datai
-        }
-      }
-      p.datao := datao
-    }
+    p.datao := ram.readWrite(p.addr, p.datai, p.en, p.we, p.clk.asClock)
   }
 }
 //- end
