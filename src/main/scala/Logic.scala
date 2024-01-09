@@ -131,7 +131,7 @@ class Logic extends Module {
   split.low := lowByte
   split.high := highByte
 
-  assignWord := split.asUInt()
+  assignWord := split.asUInt
   //- end
   io.word := assignWord
 

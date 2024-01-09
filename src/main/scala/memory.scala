@@ -1,6 +1,5 @@
 import chisel3._
 import chisel3.util.experimental.loadMemoryFromFile
-import firrtl.annotations.MemoryLoadFileType
 
 //- start memory
 class Memory() extends Module {
@@ -96,7 +95,7 @@ class InitMemory() extends Module {
   //- start memory_init
   val mem = SyncReadMem(1024, UInt(8.W))
   loadMemoryFromFile(
-    mem, "./src/main/resources/init.hex", MemoryLoadFileType.Hex
+    mem, "./src/main/resources/init.hex", firrtl.annotations.MemoryLoadFileType.Hex
   )
 
   io.rdData := mem.read(io.rdAddr)

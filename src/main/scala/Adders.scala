@@ -42,8 +42,8 @@ class CarrySelectAdder(w: Int = 32) extends AbstractAdder(w) {
     couts(i+1) := Mux(cin, c1Sum(4), c0Sum(4))
   }
 
-  io.c := res.asUInt()(w-1, 0)
-  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt()(w)
+  io.c := res.asUInt(w-1, 0)
+  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt(w)
 }
 
 object CarrySelectAdder extends App {
@@ -58,10 +58,10 @@ class CarrySkipAdder(w: Int = 32) extends AbstractAdder(w) {
     val (a, b, cin) = (aOp(i), bOp(i), couts(i))
     val sum = a +& b + cin.asUInt
     res(i) := sum(3, 0)
-    couts(i+1) := Mux((a ^ b).andR(), cin, sum(4))
+    couts(i+1) := Mux((a ^ b).andR, cin, sum(4))
   }
-  io.c := res.asUInt()(w-1, 0)
-  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt()(w)
+  io.c := res.asUInt(w-1, 0)
+  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt(w)
 }
 
 object CarrySkipAdder extends App {
@@ -78,11 +78,11 @@ class CarryLookaheadAdder(w: Int = 32) extends AbstractAdder(w) {
     val cs = Wire(Vec(5, Bool()))
     cs(0) := cin
     (0 until 4).foreach { i => cs(i+1) := g(i) | (p(i) & cs(i)) }
-    res(i) := p ^ cs.asUInt()(3, 0)
+    res(i) := p ^ cs.asUInt(3, 0)
     couts(i+1) := cs(4)
   }
-  io.c := res.asUInt()(w-1, 0)
-  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt()(w)
+  io.c := res.asUInt(w-1, 0)
+  if (isFacOf4) io.cout := couts(stages) else io.cout := res.asUInt(w)
 }
 
 object CarryLookaheadAdder extends App {

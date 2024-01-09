@@ -1307,8 +1307,8 @@ an error during circuit elaboration:
 
 \noindent The argument is that it would be better to use bundles for this use case.
 One possible workaround for this issue is to create a (local) bundle, create a \code{Wire}
-from that bundle, assign the individual fields, casting that bundle with \code{asUInt()}
-to a \code{UInt}, and assigne this value to the target \code{UInt}.
+from that bundle, assign the individual fields, casting that bundle with \code{asUInt}
+to a \code{UInt}, and assign this value to the target \code{UInt}.
 Note that we define here a \code{Bundle} as a local data structure as we need it only
 locally.
 

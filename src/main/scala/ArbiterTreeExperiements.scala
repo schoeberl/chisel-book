@@ -147,7 +147,7 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
 
   def add(a: DecoupledIO[T], b: DecoupledIO[T]) = {
     val out = Wire(new DecoupledIO(gen))
-    out.bits := a.bits.asUInt() + b.bits.asUInt()
+    out.bits := a.bits.asUInt + b.bits.asUInt
     a.ready := true.B
     b.ready := true.B
     out.valid := true.B
