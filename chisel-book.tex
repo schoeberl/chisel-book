@@ -366,10 +366,25 @@ Chisel formal (if finished).
 We extended the testing chapter with a description how to access internal signals. \todo{That is too
 little to be mentioned here. More is needed.}
 
-We tested the book with following Chisel Versions: 3.5, 3.6, and 5.
+We tested the book with following Chisel Versions: 3.5, 3.6, and 5. (and 6?)
 
 3.6 is the last that uses the Scala based backend to produce Verilog files.
 5 is is using CIRCT and needs firtool installed. Testing is still supported by chiseltest 5.0.2
+\todo{Is ChiselTest still supprting non-Verilator flow, right?}
+Chisel 6 might not be supported by chiseltest.
+
+Chisel is recently going through some major changes. Up to Chisel 3.x, Chisel is mainly
+based on Scala, which means it runs on the Java virtual machine and is platform independent.
+After 3.x Chisel the architecture of the Chisel compile pipeline has changed. To indicate that change,
+the version numbering system has change to increment that major version number more often.
+Version 4.0 is skipped and the next Chisel version is 5.0.
+From 5.0 the compiler backend is based on \myref{https://circt.llvm.org/}{CIRCT},
+a circuit compiler, which is part of the \myref{https://llvm.org/}{LLVM} project.
+The main difference for the Chisel user is that CIRCT (and LLVM) are written in C++
+and therefore need a different executable for each operating system (processor
+architecture).
+
+\todo{This might go into getting started.}
 
 
 
