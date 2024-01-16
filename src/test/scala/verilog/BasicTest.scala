@@ -18,6 +18,19 @@ class BasicTest extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
 
+  "Use Adder" should "pass" in {
+    test(new AdderTop()).withAnnotations(Seq(VerilatorBackendAnnotation)) { dut =>
+      dut.io.a.poke(1.U)
+      dut.io.b.poke(3.U)
+      dut.clock.step()
+      dut.io.sum.expect(4.U)
+      dut.io.c.poke(1.U)
+      dut.io.d.poke(3.U)
+      dut.clock.step()
+      dut.io.s.expect(4.U)
+    }
+  }
+
   "Register" should "pass" in {
     test(new RegisterTop()).withAnnotations(Seq(VerilatorBackendAnnotation))  { dut =>
       dut.io.en.poke(1.U)

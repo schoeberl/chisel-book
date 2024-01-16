@@ -12,6 +12,28 @@ class ChiselAdder extends Module {
   io.sum := io.a + io.b
 }
 //- end
+
+class UseChiselAdder extends Module {
+  val io = IO(new Bundle() {
+    val a, b = Input(UInt(8.W))
+    val sum = Output(UInt(8.W))
+  })
+
+  //- start sv_use_chisel_adder
+  val in1 = Wire(UInt(8.W))
+  val in2 = Wire(UInt(8.W))
+  val result = Wire(UInt(8.W))
+
+  val m = Module(new Adder)
+  m.io.a := in1
+  m.io.b := in2
+  result := m.io.sum
+  //- end
+
+  in1 := io.a
+  in2 := io.b
+  io.sum := result
+}
 class Adder extends BlackBox with HasBlackBoxInline {
   val io = IO(new Bundle() {
     val a, b = Input(UInt(8.W))
@@ -21,7 +43,7 @@ class Adder extends BlackBox with HasBlackBoxInline {
   setInline("Adder.sv",
     """
 //- start sv_adder
-module Adder(
+module AdderX(
   input  [7:0] a,
   input  [7:0] b,
   output reg [7:0] sum
@@ -35,7 +57,48 @@ endmodule
   """)
 }
 
+class UseAdder extends BlackBox with HasBlackBoxInline {
+  val io = IO(new Bundle() {
+    val a, b = Input(UInt(8.W))
+    val sum = Output(UInt(8.W))
+  })
 
+  setInline("UseAdder.sv",
+    """
+//- start sv_adder
+module Adder(
+  input  [7:0] a,
+  input  [7:0] b,
+  output reg [7:0] sum
+);
+
+  always_comb begin
+    sum = a + b;
+  end
+endmodule
+//- end
+
+module UseAdder(
+      input  [7:0] a,
+      input  [7:0] b,
+      output reg [7:0] sum
+    );
+
+//- start sv_use_adder
+    wire [7:0] in1;
+    wire [7:0] in2;
+    wire [7:0] result;
+
+    Adder m(.a(in1), .b(in2), .sum(result));
+//- end
+
+    assign in1 = a;
+    assign in2 = b;
+
+    assign sum = result;
+endmodule
+""")
+}
 
 class AdderTop extends Module {
   val io = IO(new Bundle() {
@@ -45,11 +108,11 @@ class AdderTop extends Module {
     val s = Output(UInt(8.W))
   })
 
-  val m = Module(new Adder)
+  val m = Module(new UseAdder)
   m.io.a := io.a
   m.io.b := io.b
   io.sum := m.io.sum
-  val ch = Module(new ChiselAdder)
+  val ch = Module(new UseChiselAdder)
   ch.io.a := io.c
   ch.io.b := io.d
   io.s := ch.io.sum

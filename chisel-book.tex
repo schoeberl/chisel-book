@@ -372,8 +372,11 @@ Chisel version 6.0.0-RC1 is not supported by the latest ChiselTest version.
 
 3.6 is the last that uses the Scala based backend to produce Verilog files.
 5 is is using CIRCT and needs firtool installed. Testing is still supported by chiseltest 5.0.2
-\todo{Is ChiselTest still supprting non-Verilator flow, right?}
-Chisel 6 might not be supported by chiseltest.
+\todo{Is ChiselTest still supporting non-Verilator flow, right?}
+Chisel 6 might not be supported by ChiselTest \todo{Kevin said he will.}
+
+We use Scala 2.13 and tested with Java 17. Note that Java 21 is currently not supported
+by \code{sbt}.
 
 Chisel is recently going through some major changes. Up to Chisel 3.x, Chisel is mainly
 based on Scala, which means it runs on the Java virtual machine and is platform independent.
@@ -7134,7 +7137,7 @@ The \code{architecture} defines the function of the component.
 The \code{architecture} needs to be named, in our example that name is \code{rtl}.
 However, today that naming has lost a practical meaning.
 VHDL is case insensitive, the means \code{Adder} and \code{adder} are treated
-equally. Therefore, current practice is to stick to lower case for identifiers.
+equally. However, current practice is to stick to lower case for identifiers.
 
 \longlist{code/sv_adder.txt}{A simple component in SystemVerilog.}{lst:sv:adder}
 
@@ -7149,11 +7152,36 @@ The difference between SV and Chisel is minimal for such a simple component.
 
 \subsection{Using a Component}
 
+\longlist{code/sv_use_chisel_adder.txt}{Using the \code{Adder} component in Chisel.}{lst:ch:use}
+
+\longlist{code/vhdl_use_adder.txt}{Using the \code{adder} component in VHDL.}{lst:vhdl:use}
+
+\longlist{code/sv_use_adder.txt}{Using the \code{Adder} component in SV.}{lst:sv:use}
+
+
+Listing~\ref{lst:ch:use} shows how to create a component in Chisel and connect to the input
+and output ports.
+
+Listing~\ref{lst:vhdl:use} shows how to declare and use the \code{adder} in VHDL.
+As VHDL is strongly typed, a component needs to be declared before used.
+The component declaration is very similar to the entity declaration of the adder itself.
+
+Listing~\ref{lst:sv:use} shows how to create and use a component (module)
+in SystemVerilog.
+
+Note \code{.a}, \code{.b}, and \code{.sum} represent the ports of the adder;
+\code{in1}, \code{in2}, and \code{result} are the wires/signals connected to those ports.
+The instances of the adders in all three examples where named \code{m}.
+
+
+
+
+
 \subsection{Register}
 
 \longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
 
-Listing~\ref{lst:sv:ch:register} show a register with reset and enable in Chisel, using
+Listing~\ref{lst:sv:ch:register} shows a register with reset and enable in Chisel, using
 the three-parameter version of \code{RegEnable}.
 \todo{always\_reg}
 
