@@ -128,7 +128,6 @@ class Register extends BlackBox with HasBlackBoxInline {
 
   setInline("Register.sv",
     """
-//- start sv_register
 module Register(
       input wire clk,
       input wire reset,
@@ -137,21 +136,21 @@ module Register(
       output wire [7:0] out
     );
 
+//- start sv_register
   reg [7:0] reg_data;
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (reset)
       reg_data <= 0;
     else if (enable)
       reg_data <= data;
   end
+//- end
 
   assign out = reg_data;
 endmodule
-//- end
 """)}
 
-//- start sv_ch_register
 class ChiselRegister extends Module {
   val io = IO(new Bundle{
     val enable = Input(Bool())
@@ -159,9 +158,13 @@ class ChiselRegister extends Module {
     val out = Output(UInt(8.W))
   })
 
-  io.out := RegEnable(io.data, 0.U(8.W), io.enable)
+  val data = io.data
+  val enable = io.enable
+  //- start sv_ch_register
+  val reg = RegEnable(data, 0.U(8.W), enable)
+  //- end
+  io.out := reg
 }
-//- end
 
 class RegisterTop extends Module {
   val io = IO(new Bundle() {

@@ -7108,6 +7108,7 @@ in hardware development and testing is from VHDL to SV.
 We will show you code examples in Chisel, VHDL, and SV.
 Note that this appendix is not a complete introduction into VHDL or SV.
 It shall just get you started to translate hardware constructs from Chisel to VHDL and SV.
+A nice side-by-side introduction of VHDL and SystemVerilog can be found in~\cite{harris2021digital}.
 Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
 
 \section{Code Examples}
@@ -7144,8 +7145,8 @@ equally. However, current practice is to stick to lower case for identifiers.
 Listing~\ref{lst:sv:adder} shows the adder component in SV. Similar to Chisel,
 a component is also called a module.~\footnote{In fact, the naming in Chisel
 was inspired by Verilog.}
-The adder has two 8-bit inputs and one 8-bit
-output. The main body of the module uses the SV construct \code{always\_comb}
+The adder has two 8-bit inputs and one 8-bit output.
+The main body of the module uses the SV construct \code{always\_comb}
 to declare that this code block describes combinational logic.
 The difference between SV and Chisel is minimal for such a simple component.
 
@@ -7159,55 +7160,76 @@ The difference between SV and Chisel is minimal for such a simple component.
 \longlist{code/sv_use_adder.txt}{Using the \code{Adder} component in SV.}{lst:sv:use}
 
 
-Listing~\ref{lst:ch:use} shows how to create a component in Chisel and connect to the input
-and output ports.
+Listing~\ref{lst:ch:use} shows how to create a component with \code{new} in Chisel,
+give it a name (\code{m}), and connect to the input and output ports to wires.
 
-Listing~\ref{lst:vhdl:use} shows how to declare and use the \code{adder} in VHDL.
-As VHDL is strongly typed, a component needs to be declared before used.
+Listing~\ref{lst:vhdl:use} shows how to declare and use the \code{adder} component in VHDL.
+As VHDL is strongly typed, a component needs to be declared before instantiated.
 The component declaration is very similar to the entity declaration of the adder itself.
+The component is instantiated by calling it, prepending it with a name (\code{m})
+and connecting the input and output ports with a \code{port map} to signals.
 
 Listing~\ref{lst:sv:use} shows how to create and use a component (module)
-in SystemVerilog.
+in SystemVerilog. Here it is created by calling it, followed by a name (\code{m}),
+and connecting the wires to the ports.
 
-Note \code{.a}, \code{.b}, and \code{.sum} represent the ports of the adder;
+Note \code{a}, \code{b}, and \code{sum} represent the ports of the adder;
 \code{in1}, \code{in2}, and \code{result} are the wires/signals connected to those ports.
 The instances of the adders in all three examples where named \code{m}.
-
-
-
-
+In VHDL and SV, the name of the component is not used so often, in Chisel we need
+the name to access the IO ports.
 
 \subsection{Register}
 
 \longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
 
-Listing~\ref{lst:sv:ch:register} shows a register with reset and enable in Chisel, using
-the three-parameter version of \code{RegEnable}.
-\todo{always\_reg}
+Listing~\ref{lst:sv:ch:register} shows an 8-bit register with reset (to 0) and an enable input in Chisel,
+using the three-parameter version of \code{RegEnable}. The inputs are connected at the creation
+and the output is available the the returned value of \code{RegEnable}.
+Note that the \code{clock} and \code{reset} signals are implicit in Chisel.
+
+\longlist{code/vhdl_register.txt}{A register with reset and enable in VHDL.}{lst:vhdl:register}
+
+Listing~\ref{lst:vhdl:register} shows VHDL code for a
+register (\code{reg}) with a synchronous reset and an enable input.
+Note that the VHDL \code{process} includes the \code{clock}
+signals in the sensitivity list. The register is inferred by using
+clocked process and \code{rising\_edge(clock)}.
+In contrast to Chisel both, \code{clock} and \code{reset}, need to
+be explicitly used.
+
 
 \longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
 
-Listing~\ref{lst:sv:register} shows a module that contains the definition of a
+
+Listing~\ref{lst:sv:register} shows the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
 The SV \code{reg} keyword declares a variable. This does not necessarily mean
 that the variable represents a register. It can also represent combinational logic
 when used in an \code{always\_comb} block.
+The \code{always_ff \@} statement with a clock implies that the code within that block
+represents a register.
+%The \code{assign} statement is a concurrent statement that continuously
+%assigns the value of the register to the output port \code{out}.
 
-The \code{always \@} statement with a clock implies that the code within that block
-represents a register. Registers are defined implicitly by a code pattern in Verilog
+Registers are defined implicitly by a code pattern in SV
 and VHDL. Whereas, in Chisel the registers are defined explicitly.
-
-The \code{assign} statement is a concurrent statement that continuously
-assigns the value of the register to the output port \code{out}.
-
-
-
-
-\todo{use logic in the parameters and explain that this is the new way in SV.}
 
 \subsection{Advanced Chisel Features}
 
-\todo{Write about missing in V*: OO, FP, bundles with directions, flip, }
+The basic elements look similar in Chisel, SV, and VHDL, and the verbosity
+is also in the same range (although VHDL is a bit chattery).
+However, neither VHDL nor SV contain object-oriented features for hardware
+description. SV include object-oriented programming only for writing test benches.
+Both languages are missing functional programing, which is important to
+write hardware generators.
+
+Furthermore, \code{Bundle}s with directions and the possibility to flip the direction
+are also missing.
+
+Although any hardware can be equally described in Chisel, VHDL, and SV,
+the modern features in Chisel allow the programming of at a higher abstraction
+writing hardware generators.
 
 \section{External Modules and Integration of Legacy Code}
 \index{Blackbox}
@@ -7378,6 +7400,10 @@ Constellation generates packet-switched NoCs with wormhole routing,
 virtual channels, and credit-based flow control. The interface to the NoC
 can use AXI-4 or TileLink. Compared to other NoCs and NoC generators,
 Constellation can generate any topology with application-specific routes.
+
+\item[\myref{https://github.com/OpenXiangShan/XiangShan}{XiangShan}] is an open-source,
+out-of-order RISC-V processor~\cite{micro2022xiangshan}.
+XiangShan promotes Chisel for agile hardware design.
 
 \end{description}
 
