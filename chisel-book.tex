@@ -1333,8 +1333,8 @@ to individually assign values and then convert it to a \code{UInt}.
 \code{UInt}, \code{SInt}, and \code{Bits} are Chisel types which by themselves do not
 represent hardware. Only wrapping them into a \code{Wire}, \code{Reg}, or \code{IO}
 generates hardware. A \code{Wire} represents combinational logic, a \code{Reg}
-represents a register (collection of D flip-flops), and an \code{IO} represents a
-connection of a module (like pins of a concrete integrated circuit (IC)).
+represents a register (collection of D flip-flops), and an \code{IO} represents ports
+for the connection of a module (like pins of a concrete integrated circuit (IC)).
 Any Chisel type can be wrapped in a \code{Wire}, \code{Reg}, or \code{IO}.
 
 You give a hardware component a name by assigning it to a Scala immutable
@@ -1891,6 +1891,8 @@ $ sbt "testOnly WaveformCounterTest"
 \end{verbatim}
 
 \subsection{printf Debugging}
+
+\index{printf}
 
 Another form of debugging is ``printf debugging''. The name of this debugging method comes from
 simply putting \code{printf} statements in C code to print variables of interest during
@@ -4446,16 +4448,19 @@ Listing~\ref{lst:bcd} shows the table generation for the binary to BCD conversio
 
 \longlist{code/bcd_table.txt}{Binary to binary-coded decimal conversion.}{lst:bcd}
 
+\subsection{File Reading}
+\index{File reading}
+
+\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
 
 We can also generate a logic table from a Scala \code{Array}.
 We may have data in a file that we want to read in during hardware generation
 time for the logic table.
 Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
 class form the Scala standard library to read the file \code{data.txt}, which
-contains integer constants in a textual representation.
-
-\index{File reading}
-\longlist{code/file_reader.txt}{Reading a text file to generate a logic table.}{lst:file:reader}
+contains integer constants in a textual representation.\footnote{Scala is
+based on Java and therefore all Java file reading and writing libraries can
+be used, e.g., to read binary files.}
 
 A few words on the maybe a bit intimidating expression:
 \begin{chisel}
@@ -4481,6 +4486,39 @@ from a Scala/Java \code{String} to a Chisel \code{Vec}:
 \noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
 function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
 This code is extracted from the serial port example, which is used later in this text to send a welcome message.
+
+\subsection{Type Conversion}
+\index{Type!conversion}
+
+Sometimes it is convenient to convert from one Chisel type to a different type.
+All types basically represents a collection of bits. Therefore, we can easily preform this mapping.
+As a first example let us assume we receive bytes of data and would like to repackage
+4 bytes into a 32-bit \code{UInt}. Following code maps the vector of bytes to an \code{UInt}.
+The bytes are mapped in following order to the \code{UInt}: the first byte into the lower 8 bits,
+the next byte into the next and so on.
+
+\shortlist{code/convert_vec2uint.txt}
+
+\noindent Given a \code{UInt} \code{word}, we can convert it back to a vector
+of four bytes.
+
+\shortlist{code/convert_uint2vec.txt}
+
+We can also convert a \code{Bundle} to a \code{UInt}. The bundle fields are ordered
+that the last field (in this example field \code{b}) is in the lower bits of the \code{UInt}
+(here 15 to 0), folloed by the second last, and so on. Note, that this order is opposite to
+the order of mapping a \code{Vec}.
+
+\shortlist{code/convert_bundle2uint.txt}
+
+\noindent A \code{UInt} can be converted (back) to a bundle as follows:
+
+\shortlist{code/convert_uint2bundle.txt}
+
+\noindent That conversion can also be used to initialize all fields of a bundle to 0.
+
+\shortlist{code/convert_zero2bundle.txt}
+
 
 \section{Configuration with Parameters}
 \index{Parameters}
@@ -4531,7 +4569,7 @@ are valid.
 \shortlist{code/case_class_save.txt}
 
 \subsection{Functions with Type Parameters}
-\index{Type parameters}
+\index{Type!parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
 hardware generators. Chisel type parameters enable very flexible configurations.
@@ -6073,6 +6111,8 @@ The following subsections present advanced testing techniques that you likely do
 not need yet. You can skip ahead to the exercise and return later if you find the need.
 
 \subsection{Accessing Internal Signals}
+
+\index{BoringUtils}
 
 When testing a circuit, the test code usually has access to the ports of the DUT only.
 This abstraction is generally good practice, as access to internal signals and state is considered

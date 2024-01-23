@@ -19,7 +19,7 @@ class FileReader extends Module {
   }
 
   // convert the Scala integer array to a Seq
-  // and into a vector of Chisel UInt
+  // and then into a vector of Chisel UInt
   val table = VecInit(array.toIndexedSeq.map(_.U(8.W)))
 
   // use the table
