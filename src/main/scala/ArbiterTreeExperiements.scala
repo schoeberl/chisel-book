@@ -117,7 +117,7 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
         when (a.valid) {
           regData := a.bits
           regState := hasA
-        } otherwise {
+        } .otherwise {
           regState := idleB
         }
       }
@@ -125,7 +125,7 @@ class ArbiterTreeExperiments[T <: Data: Manifest](n: Int, private val gen: T) ex
         when (b.valid) {
           regData := b.bits
           regState := hasB
-        } otherwise {
+        } .otherwise {
           regState := idleA
         }
       }

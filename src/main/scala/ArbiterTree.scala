@@ -34,7 +34,7 @@ class ArbiterTree[T <: Data: Manifest](n: Int, private val gen: T) extends Arbit
         when (a.valid) {
           regData := a.bits
           regState := hasA
-        } otherwise {
+        } .otherwise {
           regState := idleB
         }
       }
@@ -42,7 +42,7 @@ class ArbiterTree[T <: Data: Manifest](n: Int, private val gen: T) extends Arbit
         when (b.valid) {
           regData := b.bits
           regState := hasB
-        } otherwise {
+        } .otherwise {
           regState := idleA
         }
       }

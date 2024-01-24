@@ -36,7 +36,7 @@ class ShiftRegister extends Module {
   val loadReg = RegInit(0.U(4.W))
   when (load) {
     loadReg := d
-  } otherwise  {
+  } .otherwise  {
     loadReg := 0.U ## loadReg(3, 1)
   }
   val serOut = loadReg(0)
