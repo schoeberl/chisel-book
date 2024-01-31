@@ -165,7 +165,7 @@
 \vspace{1cm}
 {\usekomafont{title}\Huge Digital Design with Chisel\\
 \bigskip
-{\usekomafont{title}\huge Fifth Edition}\\
+{\usekomafont{title}\huge Sixth Edition}\\
 \bigskip
 \bigskip
 \bigskip
@@ -187,7 +187,7 @@
 {\small
 
 %\lowertitleback{
-Copyright \copyright{} 2016--2023 Martin Schoeberl
+Copyright \copyright{} 2016--2024 Martin Schoeberl
   \medskip\\
   \begin{tabular}{lp{.8\textwidth}}
     \raisebox{-12pt}{\includegraphics[height=18pt]{figures/cc_by_sa}} &
@@ -203,7 +203,7 @@ Email: \url{martin@jopdesign.com}\\
 Visit the source at \url{https://github.com/schoeberl/chisel-book}
 \medskip
 
-Published 2019 by Kindle Direct Publishing,\\
+First edition published 2019 by Kindle Direct Publishing,\\
 \url{https://kdp.amazon.com/}
 \medskip
 \medskip
@@ -3550,6 +3550,39 @@ for a reliable increment of the counter. Also, the release of the button is
 majority voted. Therefore, the circuit only recognizes the release when it is
 longer than 1--2 seconds.
 
+\chapter{Timing}
+
+Up to now we have abstracted away timing. Timing constraints and requirements are
+usually not expressed in hardware description languages.\footnote{VHDL and Verilog
+contain timing delay statements, however, they are not used for synthesis.
+The are used for simulation only.}
+Timing properties emerge after synthesizing a circuit. Timing constraints, such as
+period of the clock, can be set in a constraint file to guide the synthesis and optimization
+process. The constraint file is usually in the industry-standard Synopsys Design Constraints format (SDC).
+The constraints are described in \myref{https://www.tcl.tk/about/language.html}{TCL},
+a scripting language popular in digital design tools.
+The following example is from Quartus, synthesizing for an FPGA.
+The clock period is given in nanoseconds. Furthermore, it instructs Quartus to
+derive timing constraints for PLLs.
+
+\begin{verbatim}
+# Clock in input pin (50 MHz)
+create_clock -period 20 [get_ports clock]
+
+# Create generated clocks based on PLLs
+derive_pll_clocks -use_tan_name
+\end{verbatim}
+
+That constraints are also checked by the timing analysis tool after synthesis and final
+place and route to check if they can be matched. A timing violation is usually reported as
+an error.
+
+\section{Propagation Delay}
+
+\section{Setup and Hold Time}
+
+
+
 \chapter{Finite-State Machines}
 \index{Finite-state machine}
 \index{FSM}
@@ -4546,7 +4579,7 @@ passed into the constructor that can be used in the IO bundle.
 \index{Case classes}
 
 If we need more parameters, we can simply add additional parameters to the constructor
-of the Chisel module. However, is we pass those parameters through several constructors
+of the Chisel module. However, if we pass those parameters through several constructors
 it might become tedious to use them. Furthermore, when changing the number or type of
 parameters, we need to edit several places.
 
