@@ -16,12 +16,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Add new circuits from forth edition (arbiter, ...)
-\end{itemize}
-\end{frame}
-
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
@@ -494,6 +488,55 @@ the output of the register can be used just with the name in an expression:
 \end{itemize}
 \shortlist{../code/encdec_enc.txt}
 
+\end{frame}
+
+\begin{frame}[fragile]{An Arbiter for Decisions}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/arbiter-box}
+\end{figure}
+\begin{itemize}
+\item Selects one \emph{winner} for the request of a shared resource
+\item Here: 4 request lines, 4 grant lines
+\item The arbiter grants only a single request
+\item E.g., a request input of \code{0101} will result in
+a grant output of \code{0001}
+\item This is a priority arbiter (unfair)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The Arbiter Schematic}
+\begin{figure}
+  \includegraphics[scale=0.5]{../figures/arbiter}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{The Arbiter in Chisel}
+\begin{itemize}
+\item Example for a 3-bit aribter
+\end{itemize}
+\shortlist{../code/arbiter3.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Priority Encoder}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/priority-encoder}
+\end{figure}
+\begin{itemize}
+\item Combining the arbiter with the encoder
+\item Solves the problem with multiple bits set for the encoder
+\item The highest-priority bit from the input is used for the encoding
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Comperator}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/comparator}
+\end{figure}
+\begin{itemize}
+\item Needed as component on its own?
+\item It is just two lines of Chisel code
+\end{itemize}
+\shortlist{../code/comparator.txt}
 \end{frame}
 
 \begin{frame}[fragile]{Register (Again)}

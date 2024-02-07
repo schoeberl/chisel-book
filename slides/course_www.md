@@ -92,7 +92,7 @@ The Schoeberl book is open access and freely available.
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
 
-## Lecture Plan (2023)
+## Lecture Plan (2024)
 
 *This lecture plan may change during the semester, adapting to the current teaching situation.*
 

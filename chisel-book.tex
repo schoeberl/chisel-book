@@ -1214,6 +1214,7 @@ connects it to \code{muxOut}.
   \label{fig:vec-mux}
 \end{figure}
 
+\index{VecInit}
 Similar to using a \code{WireDefault}, we can set default values of a \code{Vec} with \code{VecInit}.
 The following code represents a 3:1 multiplexer with three constant defaults. Note that we specify
 the size (3 bits) of the \code{UInt} data types with the first constant.
@@ -4494,14 +4495,16 @@ class form the Scala standard library to read the file \code{data.txt}, which
 contains integer constants in a textual representation.\footnote{Scala is
 based on Java and therefore all Java file reading and writing libraries can
 be used, e.g., to read binary files.}
+\index{VecInit}
 
 A few words on the maybe a bit intimidating expression:
 \begin{chisel}
-  val table = VecInit(array.map(_.U(8.W)))
+  val table = VecInit(array.toIndexedSeq.map(_.U(8.W)))
 \end{chisel}
 
 
-\noindent A Scala \code{Array} can be implicitly converted to a Scala sequence (\code{Seq}),
+\noindent The method \code{toIndexedSeq} converts a Scala \code{Array}
+to a Scala sequence (\code{Seq}),
 which supports the mapping function \code{map}.
 \code{map} invokes a function on each element of the sequence and returns
 a sequence of the return value of the function. Our function \code{\_.U(8.W)} represents
@@ -4511,20 +4514,22 @@ The Chisel object \code{VecInit} creates a Chisel \code{Vec} from a sequence \co
 of Chisel types.
 
 We can use the initialization of a Chisel \code{Vec} from a Scala sequence to represent
-a message that we may send out to a serial port. The following code converts the standard greeting
-from a Scala/Java \code{String} to a Chisel \code{Vec}:
+a message that we may send out to a serial port.
+A Scala/Java \code{String} is a Scala \code{Seq}.
+Therefore, the \code{map}
+method is available to map each Scala \code{Char} to a Chisel \code{UInt}.
+The following code converts the standard greeting
+from the \code{msg} string to a Chisel \code{Vec}:
 
 \shortlist{code/hello_table.txt}
 
-\noindent The Scala string \code{msg} can be used as a sequence and therefore, the \code{map}
-function is available to map each Scala \code{Char} to a Chisel \code{UInt}.
-This code is extracted from the serial port example, which is used later in this text to send a welcome message.
+\noindent This code is extracted from the serial port example, which is used later in this text to send a welcome message.
 
 \subsection{Type Conversion}
 \index{Type!conversion}
 
 Sometimes it is convenient to convert from one Chisel type to a different type.
-All types basically represents a collection of bits. Therefore, we can easily preform this mapping.
+All types basically represent a collection of bits. Therefore, we can easily preform this mapping.
 As a first example let us assume we receive bytes of data and would like to repackage
 4 bytes into a 32-bit \code{UInt}. Following code maps the vector of bytes to an \code{UInt}.
 The bytes are mapped in following order to the \code{UInt}: the first byte into the lower 8 bits,
