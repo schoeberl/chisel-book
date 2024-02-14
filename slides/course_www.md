@@ -152,7 +152,7 @@ waveform viewing
 
 **Reading:** Dally: 15.1-15.6, and 28.1-28.4
 
-**Optional reading:** Dally: 5.1-5.4 (and slides)
+**Optional reading:** (Slides in DTU Learn)
 
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 

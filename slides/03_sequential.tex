@@ -16,11 +16,12 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO 2024}
+\begin{frame}[fragile]{No Lecture in Week 5}
 \begin{itemize}
-\item Talk about directions and what is left and what is right
-\item Use the better component example (the adder and accu)
-\item Maybe Chisel/VHLD comparison
+\item In two weeks (29/2)
+\item No lecture, but self study of timing material
+\item Paper and pencil exercises in the lab
+\item I am in a teaching workshop from our section (ESE)
 \end{itemize}
 \end{frame}
 
@@ -50,7 +51,6 @@ Embedded Systems Engineering}
 \item In the week that follows the exercise
 \item On time: full points, one week late: half the points
 \end{itemize}
-\item Next week guest lecture by Jens on timing
 \end{itemize}
 \end{frame}
 
@@ -476,7 +476,7 @@ val orVal = x || y
 \item In Chisel a component is called \code{Module}
 \item Components/Modules are used to organize the circuit
 \begin{itemize}
-\item Similar to using methods in Java
+\item Similar to classes and methods in Java
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -486,7 +486,7 @@ val orVal = x || y
 \begin{itemize}
 \item Ports are the \emph{interface} to a module
 \item Ports are bundles with directions
-\item Ports used to connect modules
+\item Ports are used to connect modules
 \end{itemize}
 \begin{chisel}
 class AluIO extends Bundle {
@@ -500,50 +500,55 @@ class AluIO extends Bundle {
 
 
 \begin{frame}[fragile]{An Adder Module}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components-adder}
+\end{figure}
+\begin{itemize}
+\item Practically too simple, but for the slides
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An Adder Module}
 \begin{itemize}
 \item A \code{class} that \code{extends} \code{Module}
 \item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
 \item Circuit description in the constructor
 \end{itemize}
-\begin{chisel}
-class Adder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-\end{chisel}
+\shortlist{../code/components_add.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Connections}
+
+\begin{frame}[fragile]{An Register Module}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components-register}
+\end{figure}
 \begin{itemize}
-\item Simple connections just with assignments, e.g.,
-\begin{chisel}
-  adder.io.a := ina
-  adder.io.b := inb
-\end{chisel}
-\item Note the dot access to the field \code{io} and then the IO field
+\item Practically too simple, but for the slides
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{An Register Module}
+\shortlist{../code/components_reg.txt}
+\end{frame}
 
 
-\begin{frame}[fragile]{Module Usage}
+\begin{frame}[fragile]{An Counter out of  Modules}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/components-counter}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{An Counter out of  Modules}
+\shortlist{../code/components_cnt.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using Modules/Components}
 \begin{itemize}
 \item Create with \code{new} and wrap into a \code{Module()}
 \item Interface port via the \code{io} field
 \item Note the assignment operator \code{:=} on \code{io} fields
+\item Note the dot access to the field \code{io} and then the IO field
 \end{itemize}
-\begin{chisel}
-  val adder = Module(new Adder())
-  adder.io.a := ina
-  adder.io.b := inb
-  val result = adder.io.result
-\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Example: Arithmetic Logic Unit}
@@ -562,7 +567,9 @@ class Adder extends Module {
 \shortlist{../code/components_alu.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Hierarchy of Components Example}
+
+
+\begin{frame}[fragile]{Nested Components Example}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/components}
 \end{figure}
@@ -575,12 +582,6 @@ class Adder extends Module {
 \begin{frame}[fragile]{Component CompC}
 \shortlist{../code/components_c.txt}
 \end{frame}
-
-
-
-
-
-
 
 
 
@@ -626,35 +627,37 @@ module Hello(
 \end{itemize}
 \begin{verbatim}
   reg [31:0] cntReg; // @[Hello.scala 17:23]
-  reg [31:0] _RAND_0;
   reg  blkReg; // @[Hello.scala 18:23]
 \end{verbatim}
 \end{frame}
 
 \begin{frame}[fragile]{Generated Verilog for Hello}
 \begin{itemize}
-\item The increment and comparison against maximum value
+\item The increment and IO connection
 \end{itemize}
 \begin{verbatim}
-  assign _T_1 = cntReg + 32'h1; // @[Hello.scala 20:20]
-  assign _T_2 = cntReg == 32'h2faf07f; // @[Hello.scala 21:15]
-  assign _T_3 = ~ blkReg; // @[Hello.scala 23:15]
+  wire [31:0] _cntReg_T_1 = cntReg + 32'h1; // @[Hello.scala 20:20]
   assign io_led = blkReg; // @[Hello.scala 25:10]
 \end{verbatim}
 \end{frame}
 
 \begin{frame}[fragile]{Generated Verilog for Hello}
 \begin{itemize}
-\item Verilog register code
+\item Verilog register code, including comparison against maximum value
 \end{itemize}
 \begin{verbatim}
   always @(posedge clock) begin
-    if (reset) begin
-      cntReg <= 32'h0;
-    end else if (_T_2) begin
-      cntReg <= 32'h0;
+    if (reset) begin // @[Hello.scala 17:23]
+      cntReg <= 32'h0; // @[Hello.scala 17:23]
+    end else if (cntReg == 32'h2faf07f) begin // @[Hello.scala 21:28]
+      cntReg <= 32'h0; // @[Hello.scala 22:12]
     end else begin
-      cntReg <= _T_1;
+      cntReg <= _cntReg_T_1; // @[Hello.scala 20:10]
+    end
+    if (reset) begin // @[Hello.scala 18:23]
+      blkReg <= 1'h0; // @[Hello.scala 18:23]
+    end else if (cntReg == 32'h2faf07f) begin // @[Hello.scala 21:28]
+      blkReg <= ~blkReg; // @[Hello.scala 23:12]
     end
   end
 \end{verbatim}
@@ -708,10 +711,6 @@ scalaVersion := "2.12.13"
 scalacOptions ++= Seq(
   "-feature",
   "-language:reflectiveCalls",
-)
-
-resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
 )
 \end{chisel}
 \end{frame}
