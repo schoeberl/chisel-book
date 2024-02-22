@@ -17,7 +17,7 @@ class Timer extends Module {
   when (load) {
     next := din
   } .elsewhen (!done) {
-    next := cntReg - 1.U
+    next := cntReg + 1.U
   }
   cntReg := next
   //- end
