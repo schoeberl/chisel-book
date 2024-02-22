@@ -15,23 +15,19 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO 2024, this lecture and later ones}
-\begin{itemize}
-\item This is material for barely one hour -- extend it
-\item Testing needs a for loop: explain it and some Scala (in the testing context)
-\item Maybe a better test example. At least make it a 4 Mux and write when it is done, same for the Heap example
-\item Talk about directions and what is left and what is right
-\item Maybe Chisel/VHLD comparison
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{TODO 2024, this lecture and later ones}
+%\begin{itemize}
+%\item This is material for barely one hour -- extend it
+%\item Maybe a better test example. At least make it a 4 Mux and write when it is done, same for the Heap example
+%\item Talk about directions and what is left and what is right
+%\item Maybe Chisel/VHLD comparison
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Today is Open House
-\begin{itemize}
-\item They will visit our lecture and the lab
-\end{itemize}
 \item Review components
+\item A little bit of Scala (for testing)
 \item Debugging and testing
 \item Digital designers (sometimes) call testing verification
 \begin{itemize}
@@ -42,7 +38,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{DTU Chip Day}
 \begin{itemize}
-\item Note the date: Tu 18 April afternoon
+\item Note the date: Tu 16 April afternoon
 \item Start with sandwiches and finish with beer
 \item Presentation of chip design and verification work/companies in Denmark
 \item Several chip companies will present and are participating
@@ -233,6 +229,81 @@ Embedded Systems Engineering}
 \shortlist{../code/generate.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Scala}
+\begin{itemize}
+\item Is object oriented
+\item Is functional
+\item Strongly typed with very good type inference
+\item Runs on the Java virtual machine
+\item Can call Java libraries
+\item Consider it as Java++
+\begin{itemize}
+\item Can almost be written like Java
+\item With a more lightweight syntax
+% \item Scala for Java Refugees is a nice tutorial (but link is dead)
+% \item \url{http://www.codecommit.com/blog/scala/roundup-scala-for-java-refugees}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala Hello World}
+\shortlist{../src/main/scala/HelloScala.scala}
+\begin{itemize}
+\item Compile with \code{scalac} and run with \code{scala}
+\item You can even use Scala as a scripting language
+\item Or run with \code{sbt run}
+\item Show both
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala Values and Variables}
+\begin{itemize}
+\item Scala has two type of variables: \code{val}s and \code{var}s
+\item A \code{val} cannot be reassigned, it is a constant
+\item We use a \code{val} to name a hardware component in Chisel
+\end{itemize}
+\shortlist{../code/scala_val.txt}
+\begin{itemize}
+\item Types are usually inferred
+\item But can be explicitly stated as follows
+\end{itemize}
+\shortlist{../code/scala_int_type.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Scala Variables}
+\begin{itemize}
+\item A \code{var} can be reassigned, it is like a classic variable
+\item We use a \code{var} to write a hardware generator in Chisel
+\end{itemize}
+\shortlist{../code/scala_var.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Simple Loops}
+\shortlist{../code/scala_loop.txt}
+\begin{itemize}
+\item We can use a loop for testing
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
+\shortlist{../code/scala_loop_gen.txt}
+\begin{itemize}
+\item \code{for} is Scala
+\item This loop generates several connections
+\item The connections are parallel hardware
+\item This is a shift register
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Conditions}
+\shortlist{../code/scala_condition.txt}
+\begin{itemize}
+\item Executed at runtime, when the circuit is created
+\item This is \emph{not} a mlutplexer
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}[fragile]{Testing and Debugging}
 \begin{itemize}
 \item Nobody writes perfect code ;-)
@@ -277,7 +348,7 @@ sbt test
 \end{itemize}
 \item Set input values with \code{poke}
 \item Advance the simulation with \code{step}
-\item Read the output values with \code{peek}
+\item Read the output values with \code{peekInt}
 \item Compare the values with \code{expect}
 \item Import following packages
 \shortlist{../code/test_import.txt}
@@ -429,6 +500,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{itemize}
 \shortlist{../code/test_dut_printf.txt}
 \end{frame}
+
 
 
 \begin{frame}[fragile]{Test Driven Development (TDD)}
