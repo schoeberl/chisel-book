@@ -17,20 +17,6 @@ Embedded Systems Engineering}
 
 
 
-\begin{frame}[fragile]{ChatGPT and Copilot (again)}
-\begin{itemize}
-\item ChatGPT and Copilot are allowed!
-\begin{itemize}
-\item In this course
-\item For coding
-\item And for improving your report writing
-\item In case you want to use it
-\end{itemize}
-\item You are still responsible for the code and text
-\item Write in the preface if you used it
-\item Write a section on reflecting the usage
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
@@ -43,8 +29,6 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-
-
 \begin{frame}[fragile]{Last Lab}
 \begin{itemize}
 \item A table to describe a 7-segment decoder and drive it
@@ -53,6 +37,17 @@ Embedded Systems Engineering}
 \item Show it a TA for a tick!
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{TinyTapeout}
+\begin{itemize}
+\item Do a \emph{real} chip within DE 2
+\item a multi-project waver (within a multi-project waver)
+\item I can pay a few projects
+\item \href{https://tinytapeout.com/}{TinyTapeout}
+\item \href{https://github.com/schoeberl/tt04-chisel-demo}{Chisel template}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Vectors}
 \begin{itemize}
@@ -234,7 +229,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item 20' break
 \item We are half way through the course
-\item Therefore, a midterm \href{https://docs.google.com/forms/d/e/1FAIpQLSd93nSVDE-sk75GtU3OgMB0TI7HxVB5i3KlDu0YILb39WMdIw/viewform?usp=sf_link}{evaluation}
+\item Therefore, a midterm \href{https://docs.google.com/forms/d/e/1FAIpQLSeG8Xx_CzV8667XW9J90nYniskKuNI6k1FrfsSsEyXkH8O4tg/viewform?usp=sf_link}{evaluation}
 \item Send also on Slack (from the slide sources or the website)
 \end{itemize}
 \end{frame}
@@ -371,6 +366,7 @@ Embedded Systems Engineering}
 \item First flip-flop may become metastable
 \item But will resolve within the clock period
 \end{itemize}
+\item Input can arrive at different clock cycles at different places
 \end{itemize}
 \end{frame}
 
@@ -447,7 +443,7 @@ Embedded Systems Engineering}
 \item Counters are used to generate timing
 \item An FSM can control a datapath, which is an FSMD
 \item An FSMD is a computing machine
-\item Functions to structure your code
+\item Input needs to be processed (synchronize, maybe debounce)
 \end{itemize}
 \end{frame}
 
