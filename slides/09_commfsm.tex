@@ -15,11 +15,7 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item I copied some Scala to lecture 4 (but not all, maybe just repeat)
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
@@ -42,7 +38,7 @@ Embedded Systems Engineering}
 \item Train to do a drawing and integrate it into a PDF
 \end{itemize}
 \item Timing exercise, some coding, understanding questions, drawing circuits
-\item I uploaded older exams at DTU Learn and (partially) solutions
+\item I will upload older exams at DTU Learn and (partially) solutions
 \end{itemize}
 \end{frame}
 
@@ -268,6 +264,7 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{RS 232 on the Basys 3}
 \begin{itemize}
+\item You where asking for using more Basys 3 interfaces
 \item Basys 3 has an FTDI chip for the USB interface
 \item USB interface for FPAG programming
 \item But also provides a RS 232 to the FPGA
@@ -597,6 +594,7 @@ val m = if (useA) Module(new VariantA())
 \item Use of a UART
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab7}{lab7}
 \item Is a communicating FSM problem, uses ready/valid handshake
+\item Note that it is communicating in ASCII
 \item You can discuss your solution with a TA
 \item Could be used for extended functions in the Vending Machine
 \item You can now talk with your laptop :-)
