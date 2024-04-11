@@ -15,21 +15,14 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item TODO: FIFO as example of the ready valid thing (this week)
-\item Following TODO must not be in week 8, can be later as well
-\item TODO: more from the mid-term eval, e.g., \emph{Potentially utilizing some more memory (BRAM) or potentially some of the hardware interfaces which the Basys 3 Board provides, such as USB and VGA.} This is in week 11 with serial port. Or I move more stuff into week 10.
-\item TODO: FPGA internals
-\item TODO: A bit more about the physical chip design/architecture. When a chip is shown and refers to, and i have no idea what I'm looking at, its a bit difficult to follow along. Maybe this is for Chip Design course
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Your final grade
 \item Online exam
 \item GoL in hardware
+\item Tiny Tapeout
 \item The Vending Machine project
 \item
 \item How did it go with the UART?
@@ -59,6 +52,7 @@ Embedded Systems Engineering}
 \item Given a circuit drawing, sketch the Chisel description
 \item Basically what we have done in the lab
 \item No surprises (at least not too many ;-)
+\item I have uploaded some in DTU Learn
 \end{itemize}
 \end{frame}
 
@@ -103,6 +97,40 @@ World & Cells&Mac&Rasperry&FPGA& Mac& Rasperry\\
 \end{tabular}
     \label{tab:speedup}
 \end{table}
+\end{frame}
+
+
+\begin{frame}[fragile]{What is a Chip?}
+\begin{itemize}
+\item One mid-term question was: what is a chip?
+\item Answer in the new course ``Introduction to Chip Design''
+\item But can we look at it now?
+\item Could we even \emph{make} one?
+\item Watch \href{https://youtu.be/aBDJQ9NYTEU?si=0wg30kZCIr2Rx2_n}{Matt Venn at IHP} on chip production in a \emph{fab}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Make Your Own Chip!}
+\begin{itemize}
+\item \href{https://tinytapeout.com/}{Tiny Tapeout} provides a service to get a packaged chip
+\begin{itemize}
+\item and an assembled \href{https://tinytapeout.com/specs/pcb/}{PCB}
+\item Just for \$ 300!
+\item A normal \href{https://efabless.com/open_shuttle_program}{MPW} costs around \$ 10000
+\end{itemize}
+\item Tool flow with open-source tools only
+\item Design synthesis runs as GitHub action
+\begin{itemize}
+\item No local tools installation
+\item Show it
+\end{itemize}
+\item Do a design, submit it, I pay ;-)
+\begin{itemize}
+\item Use the \href{https://github.com/schoeberl/tt06-chisel-template}{Chisel template}
+\end{itemize}
+\item Deadline is next week: this is a weekend project ;-)
+\item I will work on a project or two myself
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{A Vending Machine from 1952}
@@ -267,7 +295,9 @@ is pressed and reduce \emph{sum} by the price of the item
 \item One is OK, one is broken
 \item Which one is broken, and what it the error?
 \item Issue is that you need Verilator and a C compiler to run the tests
-\item Therefore, only if you really want to do it
+\item WSL (with Linux Ubuntu) will make it relatively easy to use Verilator (and other tools)
+\item Icarus Verilog could be easier?
+\item Therefore, only if you really, really want to do it
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab10}{Lab 10}
 \end{itemize}
 \end{frame}
