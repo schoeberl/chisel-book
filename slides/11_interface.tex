@@ -15,30 +15,34 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item TODO: FIFO as example of the ready valid thing (this week)
-\item Following TODO must not be in week 8, can be later as well
-\item TODO: more from the mid-term eval, e.g., \emph{Potentially utilizing some more memory (BRAM) or potentially some of the hardware interfaces which the Basys 3 Board provides, such as USB and VGA.} BRAM is in week 11, serial port was in week 10.
-\item TODO: FPGA internals
-\item TODO: A bit more about the physical chip design/architecture. When a chip is shown and refers to, and i have no idea what I'm looking at, its a bit difficult to follow along. Maybe this is for Chip Design course
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item TODO: Add ad for Luca's course
 \item Repeat FSMD (for the vending machine)
 \begin{itemize}
-\item I have seen some intermix of FSM and datapath
+\item I have (earlier) seen some intermix of FSM and datapath
 \item Works only for small designs
 \end{itemize}
 \item Quick reminder on FSMD
 \item Interfaces
 \item Memory (intern and extern)
+\begin{itemize}
+\item You've asked for it during the midterm eval
+\end{itemize}
 \item Busses
 \item The course evaluation should be open for feedback
 \item Lab is the vending machine
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Notes}
+\begin{itemize}
+\item Luca's course
+\item Course evaluation is open
+\item Did you do a \href{https://tinytapeout.com/}{Tiny Tapeout}?
+\begin{itemize}
+\item Next deadline is st June
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -192,8 +196,8 @@ Embedded Systems Engineering}
 \item Remember the circuit of a register (flip-flop)?
 \item Two latches: \href{https://en.wikipedia.org/wiki/Flip-flop_(electronics)#Master%E2%80%93slave_edge-triggered_D_flip-flop}{master and slave}
 \item One (enable) latch can be built with 4 NAND gates
-\item a NAND gate needs 6 transistors, an inverter 2 transistors
-\item A flip-flop needs 20 transistors (for a single bit)
+\item a NAND gate needs 4 transistors, an inverter 2 transistors
+\item A flip-flop needs 36 transistors (for a single bit)
 \item Can we do better?
 \end{itemize}
 \end{frame}
@@ -599,7 +603,7 @@ our synchronous design
 \item As usual, show and discuss with a TA
 \item Get a tick from a TA when done. This is VERY important!
 \item Add features and show again to the TA
-\item Next week: short lecture, mostly development in the lab
+\item Next week: guest lecture from Peter Jensen (SyoSil) on verification
 \end{itemize}
 \end{frame}
 
