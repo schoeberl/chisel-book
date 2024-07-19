@@ -1984,7 +1984,7 @@ we need a \code{build.sbt}:
 \index{build.sbt}
 
 \begin{chisel}
-scalaVersion := "2.13.8"
+scalaVersion := "2.13.10"
 
 scalacOptions ++= Seq(
   "-feature",
@@ -1995,7 +1995,6 @@ val chiselVersion = "3.5.6"
 addCompilerPlugin("edu.berkeley.cs" %% "chisel3-plugin" % chiselVersion cross CrossVersion.full)
 libraryDependencies += "edu.berkeley.cs" %% "chisel3" % chiselVersion
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.5.6"
-
 \end{chisel}
 
 \noindent Note that in this example, we have a concrete Chisel version number to avoid checking on
@@ -2038,6 +2037,81 @@ and then configure the FPGA.
 Note that the \emph{Hello World} is a minimal Chisel project.
 More realistic projects have their source files organized in packages and contain testers.
 %The next chapter's exercise will explore such a project.
+
+\subsection{Chisel Versions}
+
+\index{Chisel!Versions}
+
+Chisel changed the version scheme from version 5.0.0 on to a semantic versioning in the
+form of MAJOR.MINOR.PATCH. Prior to Chisel 5.0.0 the scheme was 3.MAJOR.MINOR.
+Changes in the minor version of Chisel contain new functionality, but in a backwards compatible way.
+A change in the major version may introduce breaking changes.
+To emphasize this change in the versions, Chisel skipped version 4.
+
+Starting with Chisel 5, the backend of Chisel has change from the Scala based compiler for FIRRTL
+to using \code{firtool} to generate Verilog. \code{firtool} is part of a larger project,
+the \myref{https://circt.llvm.org/}{LLVM CIRCT} project.
+The latest version of ``Chisel 3'' is 3.6 and contains both backends, the Scala based 
+compiler and \code{firtool}.
+The \code{build.sbt} for 3.6 is as follows:
+
+\begin{chisel}
+scalaVersion := "2.13.10"
+
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-language:reflectiveCalls",
+)
+
+val chiselVersion = "3.6.1"
+addCompilerPlugin("edu.berkeley.cs" % "chisel3-plugin" % chiselVersion cross CrossVersion.full)
+libraryDependencies += "edu.berkeley.cs" %% "chisel3" % chiselVersion
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "0.6.1"
+\end{chisel}
+
+With Chisel version 5, the \code{firtool} binary needs to be installed manually.
+Chisel 6 includes \code{firtool} as part of the Chisel library and is therefore the recommended
+latest version of Chisel.
+
+The change to CIRCT has implications of the future testing infrastructure.
+Future testing will be performed with a Scala API on top of
+\myref{https://www.veripool.org/verilator/}{Verilator}, which makes installation of
+Verilator mandatory. However, there is development within the CIRCT project
+to simulate within the CIRCT framework. This tool is called Arcilator.
+However, ChiselTest has been ported to Chisel 5 and Chisel 6.
+We expect a compatibility layer in Chisel 7 for a smooth transition to a new
+testing framework.
+
+From Chisel 5 on the libraries are published under \code{org.chipsalliance}.
+Therefore, the \code{build.sbt} need to be changed as follows:
+
+\begin{chisel}
+scalaVersion := "2.13.14"
+
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-language:reflectiveCalls",
+)
+
+val chiselVersion = "6.5.0"
+addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full)
+libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
+libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
+\end{chisel}
+
+This book covers, and has been tested with Chisel 3.5, 3.6, 5, and 6.
+
+%Performance comparison with Leros
+%3.5:
+%491 LCs 193 register
+%117 MHz
+%6.5:
+%491 LCs 193 register
+%117 MHz
 
 \subsection{Using a GitHub Template}
 
@@ -6069,7 +6143,7 @@ To advance the simulation by one clock cycle,
 we call \code{step()} on the DUT's implicit clock port.
 
 You can define a test within the \code{test()} function which takes the module to test as
-parameter. As an example, the following tester tests a few inputs to  a BCD table:
+parameter. As an example, the following tester tests a few inputs to a BCD table:
 
 \shortlist{code/basic_chiseltest.txt}
 
