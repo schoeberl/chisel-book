@@ -524,8 +524,8 @@ We include links to further reading in the running text, mostly to
 
 Chisel is a Scala library, and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool. Scala itself depends on the installation
-of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 1.8}
-(or a later version).
+of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 8}
+(or a later version, but less than version 21, as 21 breaks \code{sbt}).
 As Oracle has changed the license for Java, it may be easier to
 install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 
@@ -537,7 +537,7 @@ explains how to open an existing Chisel project in IntelliJ.
 
 \subsection{macOS}
 
-Install the Java OpenJDK 8 (or 11) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK 8 (or later, but less then 21) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} and git can be installed with:
 
@@ -576,7 +576,8 @@ Install a \myref{https://git-scm.com/download/win}{git client}.
 \subsection{FPGA Tools}
 
 To build hardware for an FPGA, you need a synthesize tool. The two major
-FPGA vendors, Intel\footnote{former Altera} and AMD,\footnote{former Xilinx} provide free versions of
+FPGA vendors, Altera, an Intel Company\footnote{former Intel and former Altera}
+and AMD,\footnote{former Xilinx} provide free versions of
 their tools that cover small to medium-sized FPGAs. Those medium-sized
 FPGAs are large enough to build a multicore RISC style processors.
 Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
@@ -707,7 +708,7 @@ a simple:
 $ make
 \end{chisel}
 
-This book is freely available as a PDF eBook and in classical printed form
+This book is freely available as a PDF eBook and in classical printed version from
 \myref{https://www.amazon.com/dp/168933603X/}{Amazon}.
 The eBook version features links to further resources
 and \myref{https://www.wikipedia.org/}{Wikipedia} entries.
@@ -741,7 +742,7 @@ The exercises also fit well for a selfstudy with this book.
 point with a very minimal hardware (an adder) and a test. That project is a GitHub template where you
 can base your GitHub repository on.
 \item The \myref{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel3 Cheat Sheet} summarizes the main constructs of Chisel on a single page.
-\item Scott Beamer's course \myref{https://classes.soe.ucsc.edu/cse293/Winter22/}{Agile Hardware Design}
+\item Scott Beamer's course \myref{https://classes.soe.ucsc.edu/cse228a/Winter24/}{Agile Hardware Design}
 contains advanced Chisel examples. The \myref{https://github.com/agile-hw/lectures}{lectures}
 include executable source examples and are available as Jupyter notebooks.
 %\item The \myref{https://github.com/freechipsproject/chisel3/wiki}{Chisel Wiki} contains
@@ -7533,6 +7534,13 @@ Lipsi also showcases the productivity of Chisel/Scala. It took me 14 hours to de
 hardware in Chisel and run it on an FPGA, write an assembler in Scala, write a
 Lipsi instruction set simulator in Scala for co-simulation, and write a few test cases
 in Lipsi assembler.
+
+
+\item[\myref{https://leros-dev.github.io/}{Leros}] is a small accumulator based processor
+processor, originally as a16-bit version written in VHDL~\cite{leros:fpl2011}.
+The redesign is now coded in Chisel and a 32-bit version~\cite{leros:arcs2019}.
+Morten Borup Petersen ported the LLVM C compiler to support the Leros ISA~\cite{leros:comp:2019}.
+
 
 \item[\myref{http://www.opensocfabric.org/}{OpenSoC Fabric}] is an open-source NoC
 generator written in Chisel~\cite{OpenSoC:ispass2016}. It is intended to provide a
