@@ -7270,7 +7270,11 @@ we will use plain Verilog in the examples.
 
 We will show you code examples in Chisel, VHDL, and Verilog.
 Note that this appendix is not a complete introduction into VHDL or Verilog.
-It shall just get you started to translate hardware constructs from Chisel to VHDL and Verilog.
+It shall just get you started to be able to read VHDL and Verilog and
+enable you to translate hardware constructs from Chisel to VHDL and Verilog.
+For the translation from Chisel to Verilog you can also start with the Chisel
+generated Verilog. It might be less readable than hand-written code, but a working
+starting point.
 A nice side-by-side introduction of VHDL and SystemVerilog can be found in~\cite{harris2021digital}.
 Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
 
@@ -7446,7 +7450,7 @@ Listing~\ref{lst:v:if_else} shows the same expression in Verilog within an \code
 \subsection{Advanced Chisel Features}
 
 The basic elements look similar in Chisel, Verilog, and VHDL, and the verbosity
-is also in the same range (although VHDL is a bit chattery).
+is also in the same range (although VHDL is a bit more chattery).
 However, neither VHDL nor Verilog contain object-oriented features for hardware
 description. SystemVerilog includes object-oriented programming only for writing test benches.
 Both languages are missing functional programing, which is important to
@@ -7514,6 +7518,25 @@ are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
 \code{class Example extends BlackBox with HasBlackBoxInline} is equivalent to\\
 \code{class Example extends} \code{HasBlackBoxInline}.
 
+\section{Exercise}
+
+Use one of your (small) Chisel designs and translate it manually to Verilog.
+To avoid writing a test bench in Verilog, you can reuse your test code from
+ChiselTest and instantiate the Verilog code as a black box for testing.
+You can also change your test code to instantiate your Chisel and your Verilog
+component and compare them in the same Chisel tester.
+The example in the book are tested in that way. You can take a look into the
+code from the book examples to see how this can be done.
+This form of cosimulation can actually also be driven from random test vectors
+and comparing the Chisel ``golden model'' with your Verilog translation.
+
+The VHDL integration within Chisel/Verilator is not yet so smooth, although
+a solution with GHLD plugin for yosys should be able to translate VHDL to
+Verilog, which can then be tested in Chisel similar to the Verilog designs.
+
+For VHDL there are less open-source options available.
+The code in the chapter is tested with test benches written in VHDL (generated
+by copilot) and simulated with GHDL.\footnote{\url{http://ghdl.free.fr/}}
 
 \chapter{Reserved Keywords}
 \index{Reserved keywords}
