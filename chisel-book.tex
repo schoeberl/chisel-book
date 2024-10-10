@@ -387,7 +387,7 @@ Note that Java 21 is currently not supported by \code{sbt}.
 
 \todo{We should also show more Leros code.}
 
-\todo{VHDL and SV}
+\todo{VHDL and Verilog}
 
 
 We extended the testing chapter with a description how to access internal signals. \todo{That is too
@@ -7250,9 +7250,9 @@ also contains projects for various popular FPGA boards:
 
 \appendix
 
-\chapter{VHDL and SystemVerilog}
+\chapter{VHDL and Verilog}
 
-\index{SystemVerilog}
+\index{Verilog}
 \index{VHDL}
 
 This book teaches digital design with Chisel.
@@ -7263,28 +7263,30 @@ and how to describe digital circuits in Chisel,
 switching to another language will take just a few days.
 
 The two dominating hardware description languages are
-VHDL and Verilog, with an update to SystemVerilog (SV). The recent movement
-in hardware development and testing is from VHDL to SV.
+VHDL and Verilog, with an update to SystemVerilog (SV).
+The recent movement in hardware development and testing is from VHDL to SV.
+However, as many open source tools still mainly support standard Verilog,
+we will use plain Verilog in the examples.
 
-We will show you code examples in Chisel, VHDL, and SV.
-Note that this appendix is not a complete introduction into VHDL or SV.
-It shall just get you started to translate hardware constructs from Chisel to VHDL and SV.
+We will show you code examples in Chisel, VHDL, and Verilog.
+Note that this appendix is not a complete introduction into VHDL or Verilog.
+It shall just get you started to translate hardware constructs from Chisel to VHDL and Verilog.
 A nice side-by-side introduction of VHDL and SystemVerilog can be found in~\cite{harris2021digital}.
 Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
 
 \section{Code Examples}
 
 
-We will present the VHDL and SV examples together with the Chisel version
+We will present the VHDL and Verilog examples together with the Chisel version
 of the code.
 
 \subsection{Components}
 
-\longlist{code/sv_ch_adder.txt}{A simple component in Chisel.}{lst:sv:ch:adder}
+\longlist{code/v_ch_adder.txt}{A simple component in Chisel.}{lst:v:ch:adder}
 
 \longlist{code/vhdl_adder.txt}{A simple component in VHDL.}{lst:vhdl:adder}
 
-Listing~\ref{lst:sv:ch:adder} shows a simple adder~\footnote{We should never use
+Listing~\ref{lst:v:ch:adder} shows a simple adder~\footnote{We should never use
 such small components in real designs, when the code that defines the function is just a few lines.
 In this example just one line. However, we keep it short for the presentation
 of the concept of a component.}
@@ -7301,24 +7303,23 @@ However, today that naming has lost a practical meaning.
 VHDL is case insensitive, the means \code{Adder} and \code{adder} are treated
 equally. However, current practice is to stick to lower case for identifiers.
 
-\longlist{code/sv_adder.txt}{A simple component in SystemVerilog.}{lst:sv:adder}
+\longlist{code/v_adder.txt}{A simple component in Verilog.}{lst:v:adder}
 
-Listing~\ref{lst:sv:adder} shows the adder component in SV. Similar to Chisel,
+Listing~\ref{lst:v:adder} shows the adder component in Verilog. Similar to Chisel,
 a component is also called a module.~\footnote{In fact, the naming in Chisel
 was inspired by Verilog.}
 The adder has two 8-bit inputs and one 8-bit output.
-The main body of the module uses the SV construct \code{always\_comb}
-to declare that this code block describes combinational logic.
-The difference between SV and Chisel is minimal for such a simple component.
+
+The difference between Verilog and Chisel is minimal for such a simple component.
 
 
 \subsection{Using a Component}
 
-\longlist{code/sv_use_chisel_adder.txt}{Using the \code{Adder} component in Chisel.}{lst:ch:use}
+\longlist{code/v_use_chisel_adder.txt}{Using the \code{Adder} component in Chisel.}{lst:ch:use}
 
 \longlist{code/vhdl_use_adder.txt}{Using the \code{adder} component in VHDL.}{lst:vhdl:use}
 
-\longlist{code/sv_use_adder.txt}{Using the \code{Adder} component in SV.}{lst:sv:use}
+\longlist{code/v_use_adder.txt}{Using the \code{Adder} component in Verilog.}{lst:v:use}
 
 
 Listing~\ref{lst:ch:use} shows how to create a component with \code{new} in Chisel,
@@ -7330,21 +7331,21 @@ The component declaration is very similar to the entity declaration of the adder
 The component is instantiated by calling it, prepending it with a name (\code{m})
 and connecting the input and output ports with a \code{port map} to signals.
 
-Listing~\ref{lst:sv:use} shows how to create and use a component (module)
-in SystemVerilog. Here it is created by calling it, followed by a name (\code{m}),
+Listing~\ref{lst:v:use} shows how to create and use a component (module)
+in Verilog. Here it is created by calling it, followed by a name (\code{m}),
 and connecting the wires to the ports.
 
 Note \code{a}, \code{b}, and \code{sum} represent the ports of the adder;
 \code{in1}, \code{in2}, and \code{result} are the wires/signals connected to those ports.
 The instances of the adders in all three examples where named \code{m}.
-In VHDL and SV, the name of the component is not used so often, in Chisel we need
+In VHDL and Verilog, the name of the component is not used so often, in Chisel we need
 the name to access the IO ports.
 
 \subsection{Register}
 
-\longlist{code/sv_ch_register.txt}{A register with reset and enable in Chisel.}{lst:sv:ch:register}
+\longlist{code/v_ch_register.txt}{A register with reset and enable in Chisel.}{lst:v:ch:register}
 
-Listing~\ref{lst:sv:ch:register} shows an 8-bit register with reset (to 0) and an enable input in Chisel,
+Listing~\ref{lst:v:ch:register} shows an 8-bit register with reset (to 0) and an enable input in Chisel,
 using the three-parameter version of \code{RegEnable}. The inputs are connected at the creation
 and the output is available the the returned value of \code{RegEnable}.
 Note that the \code{clock} and \code{reset} signals are implicit in Chisel.
@@ -7360,12 +7361,12 @@ In contrast to Chisel both, \code{clock} and \code{reset}, need to
 be explicitly used.
 
 
-\longlist{code/sv_register.txt}{A register with reset and enable in SystemVerilog.}{lst:sv:register}
+\longlist{code/v_register.txt}{A register with reset and enable in Verilog.}{lst:v:register}
 
 
-Listing~\ref{lst:sv:register} shows the definition of a
-register (\code{reg\_data}) with a synchronous reset and an enable input in SystemVerilog.
-The SV \code{reg} keyword declares a variable. This does not necessarily mean
+Listing~\ref{lst:v:register} shows the definition of a
+register (\code{reg\_data}) with a synchronous reset and an enable input in Verilog.
+The Verilog \code{reg} keyword declares a variable. This does not necessarily mean
 that the variable represents a register. It can also represent combinational logic
 when used in an \code{always\_comb} block.
 The \code{always_ff \@} statement with a clock implies that the code within that block
@@ -7373,22 +7374,22 @@ represents a register.
 %The \code{assign} statement is a concurrent statement that continuously
 %assigns the value of the register to the output port \code{out}.
 
-Registers are defined implicitly by a code pattern in SV
+Registers are defined implicitly by a code pattern in Verilog
 and VHDL. Whereas, in Chisel the registers are defined explicitly.
 
 \subsection{Advanced Chisel Features}
 
-The basic elements look similar in Chisel, SV, and VHDL, and the verbosity
+The basic elements look similar in Chisel, Verilog, and VHDL, and the verbosity
 is also in the same range (although VHDL is a bit chattery).
-However, neither VHDL nor SV contain object-oriented features for hardware
-description. SV include object-oriented programming only for writing test benches.
+However, neither VHDL nor Verilog contain object-oriented features for hardware
+description. Verilog includes object-oriented programming only for writing test benches.
 Both languages are missing functional programing, which is important to
 write hardware generators.
 
 Furthermore, \code{Bundle}s with directions and the possibility to flip the direction
 are also missing.
 
-Although any hardware can be equally described in Chisel, VHDL, and SV,
+Although any hardware can be equally described in Chisel, VHDL, and Verilog,
 the modern features in Chisel allow the programming of at a higher abstraction
 writing hardware generators.
 

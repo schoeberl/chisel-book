@@ -1,6 +1,6 @@
 package verilog
 
-//- start sv_ch_adder
+//- start v_ch_adder
 import chisel3._
 import chisel3.util._
 
@@ -19,7 +19,7 @@ class UseChiselAdder extends Module {
     val sum = Output(UInt(8.W))
   })
 
-  //- start sv_use_chisel_adder
+  //- start v_use_chisel_adder
   val in1 = Wire(UInt(8.W))
   val in2 = Wire(UInt(8.W))
   val result = Wire(UInt(8.W))
@@ -40,18 +40,17 @@ class Adder extends BlackBox with HasBlackBoxInline {
     val sum = Output(UInt(8.W))
   })
 
-  setInline("Adder.sv",
+  setInline("Adder.v",
     """
-//- start sv_adder
-module AdderX(
+//- start v_adder
+module Adder(
   input  [7:0] a,
   input  [7:0] b,
-  output reg [7:0] sum
+  output [7:0] sum
 );
 
-  always_comb begin
-    sum = a + b;
-  end
+  assign sum = a + b;
+
 endmodule
 //- end
   """)
@@ -63,18 +62,17 @@ class UseAdder extends BlackBox with HasBlackBoxInline {
     val sum = Output(UInt(8.W))
   })
 
-  setInline("UseAdder.sv",
+  setInline("UseAdder.v",
     """
-//- start sv_adder
+//- start v_adder
 module Adder(
   input  [7:0] a,
   input  [7:0] b,
-  output reg [7:0] sum
+  output [7:0] sum
 );
 
-  always_comb begin
-    sum = a + b;
-  end
+  assign sum = a + b;
+
 endmodule
 //- end
 
@@ -84,7 +82,7 @@ module UseAdder(
       output reg [7:0] sum
     );
 
-//- start sv_use_adder
+//- start v_use_adder
     wire [7:0] in1;
     wire [7:0] in2;
     wire [7:0] result;
@@ -126,7 +124,7 @@ class Register extends BlackBox with HasBlackBoxInline {
     val out = Output(UInt(8.W))
   })
 
-  setInline("Register.sv",
+  setInline("Register.v",
     """
 module Register(
       input wire clk,
@@ -136,12 +134,12 @@ module Register(
       output wire [7:0] out
     );
 
-//- start sv_register
+//- start v_register
   reg [7:0] reg_data;
 
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (reset)
-      reg_data <= 0;
+      reg_data <= 8'b0;
     else if (enable)
       reg_data <= data;
   end
@@ -160,7 +158,7 @@ class ChiselRegister extends Module {
 
   val data = io.data
   val enable = io.enable
-  //- start sv_ch_register
+  //- start v_ch_register
   val reg = RegEnable(data, 0.U(8.W), enable)
   //- end
   io.out := reg
