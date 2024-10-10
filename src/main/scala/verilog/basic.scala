@@ -249,3 +249,82 @@ class CombTop extends Module {
   io.out2 := cm.io.out
 }
 
+class ChiselIfElse extends Module {
+  val io = IO(new Bundle() {
+    val c1 = Input(Bool())
+    val c2 = Input(Bool())
+    val in1 = Input(UInt(8.W))
+    val in2 = Input(UInt(8.W))
+    val in3 = Input(UInt(8.W))
+    val out = Output(UInt(8.W))
+  })
+  //- start v_ch_if_else
+  when (io.c1) {
+    io.out := io.in1
+  } .elsewhen (io.c2) {
+    io.out := io.in2
+  } .otherwise {
+    io.out := io.in3
+  }
+  //- end
+}
+
+class if_else extends BlackBox with HasBlackBoxInline {
+  val io = IO(new Bundle() {
+    val c1 = Input(Bool())
+    val c2 = Input(Bool())
+    val in1 = Input(UInt(8.W))
+    val in2 = Input(UInt(8.W))
+    val in3 = Input(UInt(8.W))
+    val out = Output(UInt(8.W))
+  })
+  setInline("if_else.v",
+    """
+module if_else(
+  input wire c1,
+  input wire c2,
+  input wire [7:0] in1,
+  input wire [7:0] in2,
+  input wire [7:0] in3,
+  output reg [7:0] out
+);
+//- start v_if_else
+  always @(*) begin
+    if (c1)
+      out = in1;
+    else if (c2)
+      out = in2;
+    else
+      out = in3;
+  end
+//- end
+
+endmodule
+""")}
+class IfElseTop extends Module {
+  val io = IO(new Bundle() {
+    val c1 = Input(Bool())
+    val c2 = Input(Bool())
+    val in1 = Input(UInt(8.W))
+    val in2 = Input(UInt(8.W))
+    val in3 = Input(UInt(8.W))
+    val out = Output(UInt(8.W))
+    val out2 = Output(UInt(8.W))
+  })
+  val cm = Module(new ChiselIfElse)
+  cm.io.c1 := io.c1
+  cm.io.c2 := io.c2
+  cm.io.in1 := io.in1
+  cm.io.in2 := io.in2
+  cm.io.in3 := io.in3
+  io.out := cm.io.out
+
+  val m = Module(new if_else)
+  m.io.c1 := io.c1
+  m.io.c2 := io.c2
+  m.io.in1 := io.in1
+  m.io.in2 := io.in2
+  m.io.in3 := io.in3
+  io.out2 := m.io.out
+}
+

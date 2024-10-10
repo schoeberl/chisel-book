@@ -7416,7 +7416,32 @@ a \emph{blocking} statement and the \code{<=} a \emph{non-blocking} statement.
 This might also be a source of confusion. Use the \code{<=} assignment operator
 for registers (in an \code{always @(posedge clk)} block) and the \code{=} 
 assignment operator
-for combinational logic (in an \code{always @(*)} block)
+for combinational logic (in an \code{always @(*)} block).
+
+
+
+Another convenient construct in a combinational block is a combination of
+conditionals, known also as ``if...elseif...else'' statement.
+We will show an example with three inputs (\code{in1}, \code{in2}, and \code{in3}),
+two boolean conditions (\code{c1} and \code{2}), and the output \code{out}.
+
+\longlist{code/v_ch_if_else.txt}{An ``if...elseif...else'' statement in Chisel.}{lst:v:ch:if_else}
+
+Listing~\ref{lst:v:ch:if_else} shows the Chisel version. However, as \code{if} and
+\code{else} are conditional expressions in Scala (reserved keywords), Chisel
+uses \code{when}, \code{.elsewhen}, and \code{.otherwise}.
+
+\longlist{code/vhdl_if_else.txt}{An ``if...elseif...else'' statement in VHDL.}{lst:vhdl:if_else}
+
+Listing~\ref{lst:vhdl:if_else} shows the same construct in VHDL. Note that all input
+signals (including the condition signals) need to be part of the sensitivity list
+of the process.
+
+\longlist{code/v_if_else.txt}{An ``if...elseif...else'' statement in Verilog.}{lst:v:if_else}
+
+Listing~\ref{lst:v:if_else} shows the same expression in Verilog within an \code{always} block.
+
+
 
 \subsection{Advanced Chisel Features}
 
