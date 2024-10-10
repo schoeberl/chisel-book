@@ -24,7 +24,7 @@ class UseChiselAdder extends Module {
   val in2 = Wire(UInt(8.W))
   val result = Wire(UInt(8.W))
 
-  val m = Module(new Adder)
+  val m = Module(new ChiselAdder)
   m.io.a := in1
   m.io.b := in2
   result := m.io.sum
@@ -34,16 +34,16 @@ class UseChiselAdder extends Module {
   in2 := io.b
   io.sum := result
 }
-class Adder extends BlackBox with HasBlackBoxInline {
+class adder extends BlackBox with HasBlackBoxInline {
   val io = IO(new Bundle() {
     val a, b = Input(UInt(8.W))
     val sum = Output(UInt(8.W))
   })
 
-  setInline("Adder.v",
+  setInline("adder.v",
     """
 //- start v_adder
-module Adder(
+module adder(
   input  [7:0] a,
   input  [7:0] b,
   output [7:0] sum
@@ -65,7 +65,7 @@ class UseAdder extends BlackBox with HasBlackBoxInline {
   setInline("UseAdder.v",
     """
 //- start v_adder
-module Adder(
+module adder(
   input  [7:0] a,
   input  [7:0] b,
   output [7:0] sum
@@ -79,7 +79,7 @@ endmodule
 module UseAdder(
       input  [7:0] a,
       input  [7:0] b,
-      output reg [7:0] sum
+      output [7:0] sum
     );
 
 //- start v_use_adder
@@ -87,7 +87,7 @@ module UseAdder(
     wire [7:0] in2;
     wire [7:0] result;
 
-    Adder m(.a(in1), .b(in2), .sum(result));
+    adder m(.a(in1), .b(in2), .sum(result));
 //- end
 
     assign in1 = a;
@@ -183,3 +183,69 @@ class RegisterTop extends Module {
   cm.io.data := io.in
   io.out2 := cm.io.out
 }
+
+class comb extends BlackBox with HasBlackBoxInline {
+  val io = IO(new Bundle() {
+    val sel = Input(UInt(2.W))
+    val in = Input(UInt(4.W))
+    val out = Output(UInt(1.W))
+  })
+
+  setInline("comb.v",
+    """
+//- start v_comb
+module comb(
+  input  [1:0] sel,
+  input  [3:0] in,
+  output reg out
+);
+
+  always @(*) begin
+    case (sel)
+      2'b00: out = in[0];
+      2'b01: out = in[1];
+      2'b10: out = in[2];
+      2'b11: out = in[3];
+      default: out = 1'b0;
+    endcase
+  end
+
+endmodule
+//- end
+""")}
+
+class ChiselComb extends Module {
+  val io = IO(new Bundle() {
+    val sel = Input(UInt(2.W))
+    val in = Input(UInt(4.W))
+    val out = Output(UInt(1.W))
+  })
+  //- start v_ch_comb
+  io.out := 0.U
+  switch(io.sel) {
+    is("b00".U) { io.out := io.in(0) }
+    is("b01".U) { io.out := io.in(1) }
+    is("b10".U) { io.out := io.in(2) }
+    is("b11".U) { io.out := io.in(3) }
+  }
+  //- end
+}
+
+class CombTop extends Module {
+  val io = IO(new Bundle() {
+    val sel = Input(UInt(2.W))
+    val in = Input(UInt(4.W))
+    val out = Output(UInt(1.W))
+    val out2 = Output(UInt(1.W))
+  })
+
+  val m = Module(new comb)
+  m.io.sel := io.sel
+  m.io.in := io.in
+  io.out := m.io.out
+  val cm = Module(new ChiselComb)
+  cm.io.sel := io.sel
+  cm.io.in := io.in
+  io.out2 := cm.io.out
+}
+

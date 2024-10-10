@@ -183,3 +183,90 @@ begin
         wait;
     end process;
 end architecture;
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity Mux4to1 is
+  port (
+    sel : in std_logic_vector(1 downto 0);
+    input : in std_logic_vector(3 downto 0);
+    output : out std_logic
+  );
+end entity;
+
+architecture rtl of Mux4to1 is
+begin
+--/ start vhdl_case
+  process (sel, input)
+  begin
+    case sel is
+      when "00" => output <= input(0);
+      when "01" => output <= input(1);
+      when "10" => output <= input(2);
+      when "11" => output <= input(3);
+      when others => output <= '0';
+    end case;
+  end process;
+--/ end
+end architecture;
+
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity Mux4to1_tb is
+end entity;
+
+architecture behavioral of Mux4to1_tb is
+  signal sel_tb : std_logic_vector(1 downto 0) := "00";
+  signal in_tb : std_logic_vector(3 downto 0) := "0000";
+  signal out_tb : std_logic;
+
+  component Mux4to1
+    port (
+      sel : in std_logic_vector(1 downto 0);
+      input : in std_logic_vector(3 downto 0);
+      output : out std_logic
+    );
+  end component;
+
+begin
+  uut: Mux4to1
+    port map (
+      sel => sel_tb,
+      input => in_tb,
+      output => out_tb
+    );
+
+  process
+  begin
+    -- Test case 1
+    in_tb <= "0001"; sel_tb <= "00";
+    wait for 10 ns;
+    assert (out_tb = '1') report "Test case 1 failed" severity error;
+
+    -- Test case 2
+    in_tb <= "0010"; sel_tb <= "01";
+    wait for 10 ns;
+    assert (out_tb = '1') report "Test case 2 failed" severity error;
+
+    -- Test case 3
+    in_tb <= "0100"; sel_tb <= "10";
+    wait for 10 ns;
+    assert (out_tb = '1') report "Test case 3 failed" severity error;
+
+    -- Test case 4
+    in_tb <= "1000"; sel_tb <= "11";
+    wait for 10 ns;
+    assert (out_tb = '1') report "Test case 4 failed" severity error;
+
+    -- Test case 5
+    in_tb <= "0000"; sel_tb <= "00";
+    wait for 10 ns;
+    assert (out_tb = '0') report "Test case 5 failed" severity error;
+
+    report "All test cases passed" severity note;
+    wait;
+  end process;
+end architecture;

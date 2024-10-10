@@ -7309,17 +7309,18 @@ Listing~\ref{lst:v:adder} shows the adder component in Verilog. Similar to Chise
 a component is also called a module.~\footnote{In fact, the naming in Chisel
 was inspired by Verilog.}
 The adder has two 8-bit inputs and one 8-bit output.
-
+The \code{assign} statement is a concurrent statement that continuously
+assigns the value of the sum of \code{a} and \code{b} to the output port \code{sum}.
 The difference between Verilog and Chisel is minimal for such a simple component.
 
 
 \subsection{Using a Component}
 
-\longlist{code/v_use_chisel_adder.txt}{Using the \code{Adder} component in Chisel.}{lst:ch:use}
+\longlist{code/v_use_chisel_adder.txt}{Using the \code{ChiselAdder} component in Chisel.}{lst:ch:use}
 
 \longlist{code/vhdl_use_adder.txt}{Using the \code{adder} component in VHDL.}{lst:vhdl:use}
 
-\longlist{code/v_use_adder.txt}{Using the \code{Adder} component in Verilog.}{lst:v:use}
+\longlist{code/v_use_adder.txt}{Using the \code{adder} component in Verilog.}{lst:v:use}
 
 
 Listing~\ref{lst:ch:use} shows how to create a component with \code{new} in Chisel,
@@ -7339,7 +7340,7 @@ Note \code{a}, \code{b}, and \code{sum} represent the ports of the adder;
 \code{in1}, \code{in2}, and \code{result} are the wires/signals connected to those ports.
 The instances of the adders in all three examples where named \code{m}.
 In VHDL and Verilog, the name of the component is not used so often, in Chisel we need
-the name to access the IO ports.
+the name of the module to access the IO ports.
 
 \subsection{Register}
 
@@ -7368,24 +7369,63 @@ Listing~\ref{lst:v:register} shows the definition of a
 register (\code{reg\_data}) with a synchronous reset and an enable input in Verilog.
 The Verilog \code{reg} keyword declares a variable. This does not necessarily mean
 that the variable represents a register. It can also represent combinational logic
-when used in an \code{always\_comb} block.
-The \code{always_ff \@} statement with a clock implies that the code within that block
+when used in an \code{always @(*)} block.
+The \code{always @(posedge clk)} statement with a clock implies that the code within that block
 represents a register.
-%The \code{assign} statement is a concurrent statement that continuously
-%assigns the value of the register to the output port \code{out}.
 
 Registers are defined implicitly by a code pattern in Verilog
 and VHDL. Whereas, in Chisel the registers are defined explicitly.
+
+\subsection{Combinational Blocks}
+
+Simple combinational logic can be written by an assignment as a concurrent
+statement, in all three languages. We have seen examples in the adder components.
+However, for more complex logic, e.g. describing nested conditions, it is more convenient
+to use blocks for combinational logic. In Verilog this is an \code{always} block,
+in VHDL this is a \code{process}.
+
+
+\longlist{code/v_ch_comb.txt}{A \code{switch} statement in Chisel.}{lst:v:ch:comb}
+
+Listing~\ref{lst:v:ch:comb} shows as an example of a combinational block a \code{switch}
+statement in Chisel. This code is a 4:1 multiplexer. In Chisel the default value
+for the output needs to be assigned before the \code{switch} statement.
+
+\longlist{code/vhdl_case.txt}{A \code{case} statement in VHDL.}{lst:vhdl:comb}
+
+Listing~\ref{lst:vhdl:comb} shows the same combinational block in VHDL.
+A combinational block is a \code{process}. Start start is additionally marked with
+a \code{begin} and the end of the process with \code{end process;}
+The default value for that \code{case}
+statement is assigned in with a \code{when others} entry.
+Note that a VHDL process has a sensitive list, where all signals that appear
+on the righthand side of an expression or a a condition need to be listed.
+In our example this is \code{sel} and \code{input}.
+
+\longlist{code/v_comb.txt}{A \code{case} statement in Verilog.}{lst:v:comb}
+
+Listing~\ref{lst:v:comb} shows the same combinational block in Verilog.
+Note the marking of the start of combinational block with \code{always @(*) begin}
+and the end of the block with \code{end}. The default value for that \code{case}
+statement is assigned in with a \code{default} entry.
+This example includes to module header to show that the output \code{out}
+needs to be declared as \code{reg}, as is is assigned in an \code{always} block.
+
+Note that Verilog has two different assignment operators: the \code{=} is called
+a \emph{blocking} statement and the \code{<=} a \emph{non-blocking} statement.
+This might also be a source of confusion. Use the \code{<=} assignment operator
+for registers (in an \code{always @(posedge clk)} block) and the \code{=} 
+assignment operator
+for combinational logic (in an \code{always @(*)} block)
 
 \subsection{Advanced Chisel Features}
 
 The basic elements look similar in Chisel, Verilog, and VHDL, and the verbosity
 is also in the same range (although VHDL is a bit chattery).
 However, neither VHDL nor Verilog contain object-oriented features for hardware
-description. Verilog includes object-oriented programming only for writing test benches.
+description. SystemVerilog includes object-oriented programming only for writing test benches.
 Both languages are missing functional programing, which is important to
 write hardware generators.
-
 Furthermore, \code{Bundle}s with directions and the possibility to flip the direction
 are also missing.
 
