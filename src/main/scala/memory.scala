@@ -51,6 +51,27 @@ object ForwardingMemory extends App {
   // emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
 }
 
+//- start memory_write_first
+class MemoryWriteFirst() extends Module {
+  val io = IO(new Bundle {
+    val rdAddr = Input(UInt(10.W))
+    val rdData = Output(UInt(8.W))
+    val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
+  })
+
+  //- start memory_write_first
+  val mem = SyncReadMem(1024, UInt(8.W), SyncReadMem.WriteFirst)
+  //- end
+
+  io.rdData := mem.read(io.rdAddr)
+
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+  }
+}
+
 class TrueDualPortMemory() extends Module {
   val io = IO(new Bundle {
     val addrA = Input(UInt(10.W))
@@ -83,7 +104,7 @@ object TrueDualPortMemory extends App {
   // emitVerilog(new TrueDualPortMemory(), Array("--target-dir", "generated", "--target:fpga"))
 }
 
-class InitMemory() extends Module {
+class InitMemoryFile() extends Module {
   val io = IO(new Bundle {
     val rdAddr = Input(UInt(10.W))
     val rdData = Output(UInt(8.W))
@@ -92,7 +113,7 @@ class InitMemory() extends Module {
     val wrEna = Input(Bool())
   })
 
-  //- start memory_init
+  //- start memory_init_file
   val mem = SyncReadMem(1024, UInt(8.W))
   loadMemoryFromFile(
     mem, "./src/main/resources/init.hex", firrtl.annotations.MemoryLoadFileType.Hex
@@ -106,4 +127,30 @@ class InitMemory() extends Module {
     // alternatively, mem(io.wrAddr) := io.wrData
   }
   //- end
+}
+
+class InitMemory() extends Module {
+  val io = IO(new Bundle {
+    val rdAddr = Input(UInt(10.W))
+    val rdData = Output(UInt(8.W))
+    val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
+  })
+
+  //- start memory_init
+  val hello = "Hello, World!"
+  val helloHex = hello.map(_.toInt.toHexString).mkString("\n")
+  val file = new java.io.PrintWriter("hello.hex")
+  file.write(helloHex)
+  file.close()
+
+  val mem = SyncReadMem(1024, UInt(8.W))
+  loadMemoryFromFile(mem, "hello.hex")
+  //- end
+
+  io.rdData := mem.read(io.rdAddr)
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+  }
 }

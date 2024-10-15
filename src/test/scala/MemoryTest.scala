@@ -29,7 +29,7 @@ class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.wrEna.poke(true.B)
       dut.io.rdAddr.poke(20.U)
       dut.clock.step()
-      println(s"Memory data: ${dut.io.rdData.peekInt()}")
+      // println(s"Memory data: ${dut.io.rdData.peekInt()}")
     }
   }
 
@@ -81,7 +81,61 @@ class MemoryTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.io.rdAddr.poke(20.U)
       dut.clock.step()
       dut.io.rdData.expect(123.U)
-      println(s"Memory data: ${dut.io.rdData.peekInt()}")
+      // println(s"Memory data: ${dut.io.rdData.peekInt()}")
+    }
+  }
+
+  "Memory write first" should "pass" in {
+    test(new MemoryWriteFirst) { dut =>
+      // Fill the memory
+      dut.io.wrEna.poke(true.B)
+      for (i <- 0 to 20) {
+        dut.io.wrAddr.poke(i.U)
+        dut.io.wrData.poke((i*10).U)
+        dut.clock.step()
+      }
+      dut.io.wrEna.poke(false.B)
+
+      dut.io.rdAddr.poke(10.U)
+      dut.clock.step()
+      dut.io.rdData.expect(100.U)
+      dut.io.rdAddr.poke(5.U)
+      dut.io.rdData.expect(100.U)
+      dut.clock.step()
+      dut.io.rdData.expect(50.U)
+
+      // Same address read and write
+      dut.io.wrAddr.poke(20.U)
+      dut.io.wrData.poke(123.U)
+      dut.io.wrEna.poke(true.B)
+      dut.io.rdAddr.poke(20.U)
+      dut.clock.step()
+      dut.io.rdData.expect(123.U)
+      // println(s"Memory data: ${dut.io.rdData.peekInt()}")
+    }
+  }
+
+  "Initialized memory" should "pass" in {
+    test(new InitMemory) { dut =>
+      // Some defaults
+      dut.io.rdAddr.poke(0.U)
+      dut.io.wrEna.poke(false.B)
+      dut.io.wrAddr.poke(0.U)
+      dut.io.wrData.poke(0.U)
+      val string = "Hello, World!"
+      for (i <- 0 until string.length) {
+        dut.io.rdAddr.poke(i.U)
+        dut.clock.step()
+        dut.io.rdData.expect(string(i).U)
+      }
+      dut.io.wrAddr.poke(1.U)
+      dut.io.wrData.poke('a'.U)
+      dut.io.wrEna.poke(true.B)
+      dut.clock.step()
+      dut.io.wrEna.poke(false.B)
+      dut.io.rdAddr.poke(1.U)
+      dut.clock.step()
+      dut.io.rdData.expect('a'.U)
     }
   }
 }

@@ -18,10 +18,12 @@ class MultiClockMemory(ports: Int, n: Int = 1024, w: Int = 32) extends Module {
 
   val ram = SyncReadMem(n, UInt(w.W))
 
+  /* does not work in Chisel 3.5.6
   for (i <- 0 until ports) {
     val p = io.ps(i)
     p.datao := ram.readWrite(p.addr, p.datai, p.en, p.we, p.clk.asClock)
   }
+   */
 }
 //- end
 

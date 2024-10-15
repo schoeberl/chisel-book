@@ -3347,14 +3347,12 @@ data from memory.
 
 \longlist{code/memory_forwarding.txt}{A memory with a forwarding circuit.}{lst:memory:forward}
 
-Chisel also provides \code{Mem}, which represents a memory with synchronous
-write and an asynchronous read. As this memory type is usually not directly available
-in an FPGA, the synthesize tool will build it out of flip-flops.
-Therefore, we recommend using \code{SyncReadMem}. If asynchronous read behavior is needed and
-the resources are available in the FPGA you are using (e.g., in the shape of LUTRAM on Xilinx
-FPGAs), you can manually implement this as a \code{BlackBox}. Vendors typically provide
-code templates that can be used directly for this.
+As this pattern is common, Chisel provides an optional parameter in \code{SyncReadMem}
+to define the read-during-write behavior. \code{WriteFirst} generates Verilog code that
+includes the forwarding if needed. The other two options are \code{ReadFirst}
+and \code{Undefined}.
 
+\shortlist{code/memory_write_first.txt}
 
 Memories in FPGAs can be initialized with either binary or hexadecimal initialization files.
 The files are simple ASCII text files with the same number of lines as there are
@@ -3366,6 +3364,24 @@ emission of a separate Verilog file and works in ChiselTest.
 %\code{loadMemoryFromFileInline} results in an inlined initialization and does not
 %yet work in ChiselTest. Either way,
 Initializations are based around calls to \code{readmemb} or \code{readmemh}.
+
+To initialize on-chip memory from Scala during generation time, we need to first
+write the content into a file and then use \code{loadMemoryFromFile}.
+Listing~\ref{lst:memory:init} shows an example of initializing a memory with a string.
+
+\longlist{code/memory_init.txt}{Memory initialization.}{lst:memory:init}
+
+
+Chisel also provides \code{Mem}, which represents a memory with synchronous
+write and an asynchronous read. As this memory type is usually not directly available
+in an FPGA, the synthesize tool will build it out of flip-flops.
+Therefore, we recommend using \code{SyncReadMem}. If asynchronous read behavior is needed and
+the resources are available in the FPGA you are using (e.g., as a LUT RAM on Xilinx
+FPGAs), you can manually implement this as a \code{BlackBox}. Vendors typically provide
+code templates that can be used directly for this.
+
+
+
 
 \section{Exercises}
 
@@ -3396,8 +3412,21 @@ Sketch the block diagram for the following circuits:
 
 \shortlist{code/draw_acc.txt}
 
-\todo{Luca: More exercises would be nice. Maybe in the future?}
+As an advanced exercise try using an on-chip memory. Instantiate a \code{SyncReadMem}
+and create two communicating state machines. The first state machine writes a string
+into the memory. When done, it starts the second state machine that reads back
+the string from the memory. Test with simple \code{printf} statements in the
+reading state machine. Be careful in the reading, that the read value comes one clock cycle
+later then applying the address to the memory.
+You can extend that example by writing a Chisel test to test the memory.
 
+Sometimes, one would like to download content of a memory from a laptop,
+e.g., when building a processor to load a program. Assume you have a
+serial port (see Section~\ref{sec:uart}) available that connects your FPGA
+board to your laptop. Can you envision a protocol on the serial port
+with a state machine in the FPGA to download memory content into
+the FPGA after configuring it. Downloading at runtime also avoids synthesizing
+for the FPGA again, after the memory content changes.
 
 \chapter{Input Processing}
 \label{sec:input}
