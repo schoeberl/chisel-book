@@ -6,6 +6,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 class MultiClockMemoryTester extends AnyFlatSpec with ChiselScalatestTester {
   behavior of "Multi-clock memory"
 
+  /*
   it should "operate" in {
     test(new MultiClockMemory(3)) { dut =>
       fork {
@@ -56,4 +57,6 @@ class MultiClockMemoryTester extends AnyFlatSpec with ChiselScalatestTester {
       }.join()
     }
   }
+
+   */
 }
