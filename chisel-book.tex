@@ -5341,10 +5341,10 @@ as introduced in Section~\ref{sec:inheritance}.
 We define an \code{abstract}
 FIFO class as a \myref{https://docs.scala-lang.org/tour/generic-classes.html}{generic class}
 with a Chisel type \code{T} as parameter to be able to buffer
-any Chisel data type. In the abstract class we also test that the
+any Chisel data type (see Listing~\ref{lst:fifo:abstract}). In the abstract class we also test that the
 parameter \code{depth} has a useful value.
 
-\shortlist{code/fifo_abstract.txt}
+\longlist{code/fifo_abstract.txt}{Abstract class for FIFO veriations.}{lst:fifo:abstract}
 
 In Section~\ref{sec:fifo} we defined our own types for the interface with common
 names for signals, such as \code{write}, \code{full}, \code{din}, \code{read},
