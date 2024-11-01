@@ -1643,7 +1643,7 @@ with \code{sbt}, we can continue with a simple testing framework.
 
 \index{Chisel!Versions}
 
-Chisel changed the version scheme from version 5.0.0 on to a semantic versioning in the
+Chisel changed the version scheme from version on 5.0.0 on to a semantic versioning in the
 form of MAJOR.MINOR.PATCH. Prior to Chisel 5.0.0 the scheme was 3.MAJOR.MINOR.
 Changes in the minor version of Chisel contain new functionality, but in a backwards compatible way.
 A change in the major version may introduce breaking changes.
@@ -1704,7 +1704,43 @@ libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
 \end{chisel}
 
-This book covers, and has been tested with Chisel 3.5, 3.6, 5, and 6.
+This book covers, and has been tested with, Chisel 3.5, 3.6, 5, and 6.
+
+\subsubsection{Chisel, Scala, and Java Versions}
+
+\index{Scala!Versions}
+\index{Java!Versions}
+
+Chisel is a Scala library and therefore is dependent on a Scala version.
+Scala itself is built on top of Java (using the Java library and running on the JVM)
+and therefore depends on a specific Java version. Changes in the Java version needs
+updates in the Scala (patch) version. A safe baseline Java version is Java 8, where all Scala and
+Chisel versions work. Chisel itself has been maintained to work with Scala 2.12 and
+2.13, up to version 5.
+Chisel 6 is based on Scala 2.13 only.\footnote{Getting Chisel to work on top of Scala 3 is work in progress.}
+A safe selection is to use Scala 2.13. However, as Chisel is using a Scala compiler plugin,
+the highest supported patch version of Scala is restricted by the published compiler plugin.
+Table~\ref{tab:versions} shows the Chisel versions with the support of the highest
+Scala and Java versions.
+
+
+\begin{table}
+ \centering
+  \begin{tabular}{lll}
+    \toprule
+    Chisel & Scala & Java \\
+    \midrule
+    3.5.6 & 2.13.10 & 17 \\
+    3.6.1 & 2.13.14 & 22 \\
+    5.3.x & 2.13.14 & 22 \\
+    6.5.x & 2.13.14 & 22 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Chisel, Scala, and Java Versions.}
+ \label{tab:versions}
+\end{table}
+
+
 
 %Performance comparison with Leros
 %3.5:
