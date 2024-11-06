@@ -1715,12 +1715,14 @@ Chisel is a Scala library and therefore is dependent on a Scala version.
 Scala itself is built on top of Java (using the Java library and running on the JVM)
 and therefore depends on a specific Java version. Changes in the Java version needs
 updates in the Scala (patch) version. A safe baseline Java version is Java 8, where all Scala and
-Chisel versions work. Chisel itself has been maintained to work with Scala 2.12 and
-2.13, up to version 5.
+Chisel versions work.\footnote{see \url{https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html}}
+Chisel itself has been maintained to work with Scala 2.12 and 2.13, up to version 5.
 Chisel 6 is based on Scala 2.13 only.\footnote{Getting Chisel to work on top of Scala 3 is work in progress.}
 A safe selection is to use Scala 2.13. However, as Chisel is using a Scala compiler plugin,
-the highest supported patch version of Scala is restricted by the published compiler plugin.
-Table~\ref{tab:versions} shows the Chisel versions with the support of the highest
+the highest supported patch version of Scala is restricted by the published compiler
+plugin.\footnote{see \url{https://mvnrepository.com/artifact/edu.berkeley.cs/chisel3-plugin}
+and \url{https://mvnrepository.com/artifact/org.chipsalliance/chisel-plugin}}
+Table~\ref{tab:versions} shows Chisel versions with their support of the highest
 Scala and Java versions.
 
 
@@ -1736,7 +1738,7 @@ Scala and Java versions.
     6.5.x & 2.13.14 & 22 \\
     \bottomrule
   \end{tabular}
-  \caption{Chisel, Scala, and Java Versions.}
+  \caption{Chisel and highest supported Scala and Java versions.}
  \label{tab:versions}
 \end{table}
 
