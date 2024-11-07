@@ -25,7 +25,7 @@ checkref:
 fig:
 	make -C figures
 
-book:
+book: gencode fig
 	pdflatex $(DOC)
 	pdflatex $(DOC)
 	bibtex $(DOC)
@@ -33,7 +33,7 @@ book:
 	pdflatex $(DOC)
 	pdflatex $(DOC)
 
-genslides:
+genslides: gencode fig
 	cd slides; ./doslides.sh
 
 veryclean:
