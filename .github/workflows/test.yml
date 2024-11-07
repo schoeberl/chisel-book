@@ -19,17 +19,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Setup Verilator
-      # should include texlive-full for Latex test
       run: sudo apt-get install verilator
     - name: Setup z3
       run: sudo apt-get install z3
     - name: Setup Latex
       run: sudo apt-get install texlive-full
-    - name: Run tests
-      run: make test
-    # should run make for the test including Latex
-    # - name: Build book
-    #   run: |
-    #     make gencode
-    #     make fig
-    #     make book
+    - name: Run tests and build the book
+      run: make
