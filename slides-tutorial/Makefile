@@ -3,7 +3,10 @@
 
 all:
 	pdflatex program
-	pdflatex intro
+	pdflatex features
+	pdflatex chisel-10min
+	pdflatex chisel-30min
+	pdflatex unit1
 	pdflatex unit2
 	pdflatex unit3
 	pdflatex unit4
