@@ -33,7 +33,7 @@ book: gencode fig
 	pdflatex $(DOC)
 	pdflatex $(DOC)
 
-genslides:
+genslides: gencode fig
 	cd slides; ./doslides.sh
 
 veryclean:
