@@ -23,8 +23,10 @@ jobs:
       run: sudo apt-get install verilator
     - name: Setup z3
       run: sudo apt-get install z3
+    - name: Setup Latex
+      run: sudo apt-get install texlive-full
     - name: Run tests
-      run: sbt test
+      run: make test
     # should run make for the test including Latex
     # - name: Build book
     #   run: |

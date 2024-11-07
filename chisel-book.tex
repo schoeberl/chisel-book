@@ -363,7 +363,7 @@ based on Scala, which means it runs on the Java virtual machine and is platform 
 After 3.x Chisel the architecture of the Chisel compile pipeline has changed. To indicate that change,
 the version numbering system has change to increment that major version number more often.
 Version 4.0 is skipped and the next Chisel version is 5.0.
-From 5.0 the compiler backend is based on \myref{https://circt.llvm.org/}{CIRCT},
+From version 5.0 the compiler backend is based on \myref{https://circt.llvm.org/}{CIRCT},
 a circuit compiler, which is part of the \myref{https://llvm.org/}{LLVM} project.
 The main difference for the Chisel user is that CIRCT (and LLVM) are written in C++
 and therefore need a different executable for each operating system (processor
@@ -378,6 +378,7 @@ Testing with ChiselTest is still supported until Chisel 6.
 Chisel 6 might switch to a different simulation and testing library.
 We use Scala 2.13 and tested with Java 17.
 Note that Java 21 is currently not supported by \code{sbt}.
+\todo{Check above on JVMs.}
 
 
 \todo{Some of this might go into getting started.}
@@ -1657,7 +1658,7 @@ compiler and \code{firtool}.
 The \code{build.sbt} for 3.6 is as follows:
 
 \begin{chisel}
-scalaVersion := "2.13.10"
+scalaVersion := "2.13.14"
 
 scalacOptions ++= Seq(
   "-deprecation",
