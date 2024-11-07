@@ -25,7 +25,7 @@ checkref:
 fig:
 	make -C figures
 
-book:
+book: gencode fig
 	pdflatex $(DOC)
 	pdflatex $(DOC)
 	bibtex $(DOC)
