@@ -6527,6 +6527,7 @@ The topic of formal verification with Chisel will be covered in a future edition
 \todo{move this into the verification section when it is better written.}
 
 \chapter{Design of a Processor}
+\label{chap:leros}
 
 \index{Processor}
 \index{Leros}
@@ -7027,6 +7028,37 @@ or go crazy and superpipeline Leros for the highest possible clocking frequency.
 A third option is to design your processor from scratch. Maybe the demonstration of
 how to build the Leros processor and the needed tools have convinced you that processor
 design and implementation is no magic art, but engineering that can be very joyful.
+
+\chapter{A RISC-V Pipeline}
+\index{RISC-V}
+\index{Wildcat}
+\index{Pipelining}
+
+Pipelining is a technique to improve throughput of some processing.
+For example, in an assembly line of a car factory, each stage performs an specialized task,
+such as engine installation. When that task is done, the car moves to the next stage.
+This pipelining execute different tasks in parallel at different stages of a car manufacturing.
+
+In digital design we can also use pipelining to speedup processing of a stream of data.
+A prominent example of pipelining in digital design is building a pipelined microprocessor.
+In that case, instructions flow through the pipeline performing one operation in each stage
+by a different processor unit. In contrast to the processor presented in Chapter~\ref{chap:leros},
+where each instruction took several clock cycles, in a pipelined processor instructions
+are running in parallel in different stages.
+
+In this chapter we present Wildcat, a simple pipelined
+\myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}
+processor~\cite{wildcat:2024}.
+RISC-V is an open instruction set architecture, originally developed at the University of
+California, Berkeley.
+The focus on Wildcat is to provide readable Chisel code that can be used in education.
+
+\begin{figure*}
+  \centering
+  \includegraphics[scale=0.38]{figures/3-stages-easy}
+  \caption{The 3-stage Wildcat processor pipeline (simplified, omitting control and decoded signals).}
+  \label{fig:3-stages}
+\end{figure*}
 
 \chapter{Contributing to Chisel}
 
@@ -7605,7 +7637,7 @@ a solution with GHLD plugin for yosys should be able to translate VHDL to
 Verilog, which can then be tested in Chisel similar to the Verilog designs.
 
 For VHDL there are less open-source options available.
-The code in the chapter is tested with test benches written in VHDL (generated
+The code in this chapter is tested with test benches written in VHDL (generated
 by copilot) and simulated with GHDL.\footnote{\url{http://ghdl.free.fr/}}
 
 \chapter{Reserved Keywords}
@@ -7731,6 +7763,10 @@ Constellation can generate any topology with application-specific routes.
 \item[\myref{https://github.com/OpenXiangShan/XiangShan}{XiangShan}] is an open-source,
 out-of-order RISC-V processor~\cite{micro2022xiangshan}.
 XiangShan promotes Chisel for agile hardware design.
+
+\item[\myref{https://github.com/schoeberl/wildcat}{Wildcat}]  is a simple pipelined
+RISC-V processor~\cite{wildcat:2024}. The focus on Wildcat is to provide readable
+Chisel code that can be used in education.
 
 \end{description}
 
