@@ -187,7 +187,7 @@
 {\small
 
 %\lowertitleback{
-Copyright \copyright{} 2016--2024 Martin Schoeberl
+Copyright \copyright{} 2016--2025 Martin Schoeberl
   \medskip\\
   \begin{tabular}{lp{.8\textwidth}}
     \raisebox{-12pt}{\includegraphics[height=18pt]{figures/cc_by_sa}} &
@@ -372,14 +372,14 @@ architecture).
 
 We tested the book with following Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
 Chisel 3.6 is the last that uses the Scala based backend to produce Verilog files.
-Chisel 5 is using CIRCT and needs \code{firtool} installed.
+Chisel 5 is using CIRCT and needs \code{firtool} installed manually.
 The latest version of Chisel 6 includes the \code{firtool} binaries.
 Testing with ChiselTest is still supported until Chisel 6.
-Chisel 6 might switch to a different simulation and testing library.
-We use Scala 2.13 and tested with Java 17.
-Note that Java 21 is currently not supported by \code{sbt}.
-\todo{Check above on JVMs.}
-
+Therefore, we recommend to skip Chisel 5 and use Chisel 6.
+Chisel 6 might switch to a different simulation and testing library in the future.
+We use Scala 2.13 and tested with Java 17 and Java 21.
+Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
+3.6.1, if one wants to work with Chisel 3.
 
 \todo{Some of this might go into getting started.}
 
@@ -395,6 +395,10 @@ We extended the testing chapter with a description how to access internal signal
 little to be mentioned here. More is needed.}
 
 Assertions and Chisel formal (if finished).
+
+Organizing digital circuits as pipelines to increase performance is in between digital design
+and computer architecture.
+We added a chapter on pipelining where we use a 3-stage RISC-V pipeline as a running example.
 
 
 
@@ -3304,6 +3308,7 @@ The Chisel description of that function is relatively straight forward:
 Note that we are now shifting to the right, filling in zeros at the MSB.
 
 \section{Memory}
+\label{ref:memory}
 \index{Memory}
 \index{RAM}
 \index{SRAM}
@@ -7035,23 +7040,79 @@ design and implementation is no magic art, but engineering that can be very joyf
 \index{Pipelining}
 
 Pipelining is a technique to improve throughput of some processing.
-For example, in an assembly line of a car factory, each stage performs an specialized task,
+For example, in an assembly line of a car factory, each stage performs a specialized task,
 such as engine installation. When that task is done, the car moves to the next stage.
-This pipelining execute different tasks in parallel at different stages of a car manufacturing.
+This pipelining enables the execution of different tasks in parallel at different stages of a car
+manufacturing line.
 
-In digital design we can also use pipelining to speedup processing of a stream of data.
+We can also use pipelining in digital design to speed up data stream processing.
 A prominent example of pipelining in digital design is building a pipelined microprocessor.
-In that case, instructions flow through the pipeline performing one operation in each stage
+In that case, instructions flow through the pipeline, performing one operation at each stage
 by a different processor unit. In contrast to the processor presented in Chapter~\ref{chap:leros},
-where each instruction took several clock cycles, in a pipelined processor instructions
-are running in parallel in different stages.
+where each instruction took several clock cycles, in a pipelined processor, instructions
+run in parallel in different stages.
 
-In this chapter we present Wildcat, a simple pipelined
+In this chapter, we present Wildcat, a simple pipelined
 \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}
 processor~\cite{wildcat:2024}.
-RISC-V is an open instruction set architecture, originally developed at the University of
+RISC-V is an open instruction set architecture originally developed at the University of
 California, Berkeley.
-The focus on Wildcat is to provide readable Chisel code that can be used in education.
+Wildcat focuses on providing readable Chisel code that can be used in education.
+
+\section{Pipeline Definition}
+
+A pipeline stage performs a specific function within one clock cycle. That function is
+a combinational function. Registers are used between pipeline stages to store intermediate
+results.
+
+As registers are between those stages, we should define which register belongs to that stage:
+either the input register or the output register. For practical reasons with available on-chip
+memories we will consider the input register as part of a pipeline stage.
+
+\section{Number of Pipeline Stages}
+
+The number of pipeline stages is an architecture definition. Longer pipelines may allow
+to clock the design at a higher frequency. However, with each additional pipeline stage
+the overhead due to the registers increase and the design becomes more complex.
+
+The classic organization of a \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{reduced instruction set computer} (RISC) is as a 5-stage pipeline:
+\begin{enumerate}
+\item Instruction Fetch
+\item Instruction Decode and Register File Read
+\item Execute
+\item Memory Access
+\item Write-Back
+\end{enumerate}
+
+This organization is used in many computer architecture textbooks, e.g., \cite{Patterson20}.
+However, RISC-V pipeline designs exist from two up to several more stages.
+
+One aspect that determines the number a pipeline stages is the available on-chip memory
+for instruction and data scratchpad memory or instruction and data caches.
+Current on-chip memories have registers at their inputs (address and write data),
+see Section~\ref{ref:memory}. That input register is part of the pipeline, it is the
+pipeline register. A memory read has one clock cycle latency.
+
+To simplify the design we present a three stages RISC-V pipeline:
+
+\begin{enumerate}
+\item Instruction fetch
+\item Instruction decode, register file read, and address computation
+\item Execute and memory access
+\end{enumerate}
+
+Figure~\ref{fig:3-stages} shows our 3-stages Wildcat pipeline. For simplicity we
+assume scratchpad memories for instruction memory (IM), the register file (RF),
+and the data memory (DM). Those three on-chip memories setting a lower bound
+on the stages to three.\footnote{If we build the RF out of concrete flip-flops, we can
+reduce the number of stages to two, as we can read asynchronous from such
+a RF.}
+
+
+
+Instructions flow from the
+left to the right. And a result of an instruction is written back from right to left
+either into the register file (RF) or the data memory (DM).
 
 \begin{figure*}
   \centering
