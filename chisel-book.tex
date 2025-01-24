@@ -7062,39 +7062,38 @@ processor~\cite{wildcat:2024}.
 RISC-V is an open instruction set architecture originally developed at the University of
 California, Berkeley.
 Wildcat focuses on providing readable Chisel code that can be used in education.
-This chapter contains the most important source snippets to build a RISC-V pipeline.
+This chapter contains the most important source snippets for building a RISC-V pipeline.
 More details and tests are available in the \myref{https://github.com/schoeberl/wildcat}{Wildcat GitHub}
-repository. The repository also contains a RISC-V instruction set simulator, written in Scala
-and a single cycle version in Chisel for demonstration.
+repository. The repository also contains a RISC-V instruction set simulator, written in Scala, and a single-cycle version in Chisel for demonstration.
 
 \section{The RISC-V Instruction Set Architecture}
 
 Andrew Waterman defined the RISC-V instruction set architecture (ISA) in his
 PhD thesis~\cite{Waterman:EECS-2016-1} at the University of California, Berkeley.
-He was supervised by Krste Asanovic and Dave Patterson.
-Waterman explored RISC architectures from three decades, including MIPS, SPARC, and Alpha,
+Krste Asanovic and Dave Patterson supervised him.
+Waterman explored RISC architectures from the last three decades, including MIPS, SPARC, and Alpha,
 to distill the essence of RISC into the RISC-V ISA definition.
-The RISC-V ISA is available in open source. Therefore, many microcontroller
-providers have switched to RISC-V in the last years.
+The RISC-V ISA is available as an open source. Therefore, many microcontrollers
+providers have switched to RISC-V in the last few years.
 
-Note that RISC-V is an ISA definition; it does not define an implementation.
-The ``V'' stands for the fifth RISC project at the University of California, Berkeley
-and also indicates that vector instructions are a part of the standard.
+RISC-V is an ISA definition; it does not define an implementation.
+The ``V'' stands for the fifth RISC project at the University of California, Berkeley, and also indicates that vector instructions are a part of the standard.
 
-The RISC-V ISA definition defines two base versions: RV32I and RV64I for the integer
-instruction set for 32-bit and 64-bit architectures. That base ISA is extended by optional
-extensions, such as M for multiply and divide, F and D for floating point and many more.
-In this section we show the implementation of the base ISA: RV32I.
+The RISC-V ISA definition defines two base versions, RV32I and RV64I, for the integer
+instruction set for 32-bit and 64-bit architectures. Optional extensions, such as M,
+extend ISA for multiply and divide, F and D for floating point, and many more extend the base ISA.
+In this section, we show the implementation of base RV32I.
 
-The RV32I ISA defines a processor containing 32 registers of 32 bits size (also called
+The RV32I ISA defines a processor containing 32 registers of 32-bit size (also called
 the register file), where register X0 is always zero. Furthermore, a program counter (PC)
-that points to the instruction executed is part of the state of the processor.
-An instruction is 32 bit wide.
+that points to the instruction executed as part of the state of the processor.
+An instruction is 32-bit wide.
 Instructions and data reside in a byte-addressable memory.
+The processor state is 31 registers and the PC.
 
-A RISC architecture is also called a load-store architecture as all operands first need to
-be loaded from memory and after an operation (e.g., an addition) need to be stored
-back to memory. The base instruction set consist of following type of operations:
+A RISC architecture is also called a load-store architecture, as all operands first need to
+be loaded from memory and, after an operation (e.g., an addition) need to be stored
+back to memory. The base instruction set consists of the following types of operations:
 
 \begin{itemize}
 \item Arithmetic and logic operations between registers, where the result is written into a register.
@@ -7108,7 +7107,7 @@ puts the result into register \code{x1}.
 of a register as the base address and adds an offset to compute the effective address.
 An example of a load instruction is: \code{lw x3, 4(x1)}, where the base address is in \code{x1}
 and the offset is 4 bytes. The result is placed into register \code{x3}. Load instructions
-are available for byte, half-word, and word sizes as unsigned and sign extension versions.
+for byte, half-word, and word sizes are available as unsigned and signed extension versions.
 \item Store instructions store a value from a register into memory. The address computation is
 the same as for load instructions. An example is: \code{sw x2, 4(x1)} , where the content of
 register \code{x2} is stored into memory at address {x1 + 4}. Store instructions are
@@ -7117,14 +7116,14 @@ available for byte, half-word, and word sizes.
 Conditional branches evaluate a condition (comparison between registers) and branch if
 the condition is met. The branch offset is relative to the current PC. An example branch
 instruction is: \code{bne x2, x3, fail}.
-Jump instruction change the PC unconditionally.
+The jump instruction changes the PC unconditionally.
 A variant of the jump instruction stores the next instruction address into a register to
 enable the return from a function call. An example of such an instruction is:
 \code{jal x1, foo}, where the processor jumps unconditionally to function \code{foo}
 and stores the return address in register \code{x1}.
 \end{itemize}
 
-For a detailed description of the RISC-V ISA read the classic textbook from Patterson and
+For a detailed description of the RISC-V ISA, read the classic textbook from Patterson and
 Hennessy~\cite{Patterson20} or consult the official
 \myref{https://github.com/riscv/riscv-isa-manual}{RISV-C specification}.
 
@@ -7135,8 +7134,8 @@ a combinational function. Registers are used between pipeline stages to store in
 results.
 
 As registers are between those stages, we should define which register belongs to that stage:
-either the input register or the output register. For practical reasons with available on-chip
-memories we will consider the input register as part of a pipeline stage.
+Either the input register or the output register. For practical reasons, with available on-chip
+memories, we will consider the input register as part of a pipeline stage.
 
 \section{Number of Pipeline Stages}
 
@@ -7192,21 +7191,20 @@ either in the register file (RF) or the data memory (DM).
 \subsection{Fetch}
 
 The program counter (PC) points to the next instruction that shall be executed.
-As RISC-V has 32-bit wide instructions the PC is incremented by 4 for each sequential
-instruction. For a branch instruction the PC is set accordingly, shown by the multiplexer
+RISC-V has 32-bit wide instructions, so the PC is incremented by 4 for each sequential
+instruction. The PC is set accordingly for a branch instruction, shown by the multiplexer
 before the adder.
 
-As we see in the figure, IM contains an input register, which is part of
-the pipeline register for the fetch stage. However, the PC is also part of the pipeline
+As we can see in the figure, IM contains an input register, which is part of the fetch
+stage's pipeline register. However, the PC is also part of the pipeline
 register. Therefore, we cannot feed the output of the PC register to the IM,
-but the \emph{next} value of the PC. The address input of the IM and the PC
-contain always the same data.
+but the \emph{next} value of the PC. The IM and the PC's address input always
+contain the same data.
 
 \longlist{code/wildcat_fetch.txt}{Instruction fetch.}{lst:wildcat:fetch}
 
 Listing~\ref{lst:wildcat:fetch} shows the code of the fetch stage. The PC (\code{pcReg})
 is initialized to -4 so that the value of \code{pcNext}i 0 after reset.
-
 
 
 \chapter{Contributing to Chisel}
