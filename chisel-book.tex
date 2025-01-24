@@ -371,7 +371,7 @@ architecture).
 
 
 We tested the book with following Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
-Chisel 3.6 is the last that uses the Scala based backend to produce Verilog files.
+Chisel 3.6 is the last that uses the Scala based backend to generate Verilog files.
 Chisel 5 is using CIRCT and needs \code{firtool} installed manually.
 The latest version of Chisel 6 includes the \code{firtool} binaries.
 Testing with ChiselTest is still supported until Chisel 6.
@@ -399,6 +399,10 @@ Assertions and Chisel formal (if finished).
 Organizing digital circuits as pipelines to increase performance is in between digital design
 and computer architecture.
 We added a chapter on pipelining where we use a 3-stage RISC-V pipeline as a running example.
+
+This book has been written without any help of artificial intelligence and large language models
+to either write or rewrite text. We used Grammarly\footnote{\url{https://app.grammarly.com/}}
+for grammar checking and improvement of the writing style.
 
 
 
@@ -7062,6 +7066,67 @@ This chapter contains the most important source snippets to build a RISC-V pipel
 More details and tests are available in the \myref{https://github.com/schoeberl/wildcat}{Wildcat GitHub}
 repository. The repository also contains a RISC-V instruction set simulator, written in Scala
 and a single cycle version in Chisel for demonstration.
+
+\section{The RISC-V Instruction Set Architecture}
+
+Andrew Waterman defined the RISC-V instruction set architecture (ISA) in his
+PhD thesis~\cite{Waterman:EECS-2016-1} at the University of California, Berkeley.
+He was supervised by Krste Asanovic and Dave Patterson.
+Waterman explored RISC architectures from three decades, including MIPS, SPARC, and Alpha,
+to distill the essence of RISC into the RISC-V ISA definition.
+The RISC-V ISA is available in open source. Therefore, many microcontroller
+providers have switched to RISC-V in the last years.
+
+Note that RISC-V is an ISA definition; it does not define an implementation.
+The ``V'' stands for the fifth RISC project at the University of California, Berkeley
+and also indicates that vector instructions are a part of the standard.
+
+The RISC-V ISA definition defines two base versions: RV32I and RV64I for the integer
+instruction set for 32-bit and 64-bit architectures. That base ISA is extended by optional
+extensions, such as M for multiply and divide, F and D for floating point and many more.
+In this section we show the implementation of the base ISA: RV32I.
+
+The RV32I ISA defines a processor containing 32 registers of 32 bits size (also called
+the register file), where register X0 is always zero. Furthermore, a program counter (PC)
+that points to the instruction executed is part of the state of the processor.
+An instruction is 32 bit wide.
+Instructions and data reside in a byte-addressable memory.
+
+A RISC architecture is also called a load-store architecture as all operands first need to
+be loaded from memory and after an operation (e.g., an addition) need to be stored
+back to memory. The base instruction set consist of following type of operations:
+
+\begin{itemize}
+\item Arithmetic and logic operations between registers, where the result is written into a register.
+As an example: \code{add x1, x2, x3} adds the content of registers \code{x2} and \code{x3} and
+puts the result into register \code{x1}.
+\item Arithmetic and logic operations between a register and an immediate value (constant),
+where the result is written into a register.
+As an example: \code{add x1, x2, 42} adds \code{42} to the content of register \code{x2} and
+puts the result into register \code{x1}.
+\item A load instruction loads a value from memory into a register. The instruction uses the content
+of a register as the base address and adds an offset to compute the effective address.
+An example of a load instruction is: \code{lw x3, 4(x1)}, where the base address is in \code{x1}
+and the offset is 4 bytes. The result is placed into register \code{x3}. Load instructions
+are available for byte, half-word, and word sizes as unsigned and sign extension versions.
+\item Store instructions store a value from a register into memory. The address computation is
+the same as for load instructions. An example is: \code{sw x2, 4(x1)} , where the content of
+register \code{x2} is stored into memory at address {x1 + 4}. Store instructions are
+available for byte, half-word, and word sizes.
+\item Control instructions can change the program flow by changing the PC.
+Conditional branches evaluate a condition (comparison between registers) and branch if
+the condition is met. The branch offset is relative to the current PC. An example branch
+instruction is: \code{bne x2, x3, fail}.
+Jump instruction change the PC unconditionally.
+A variant of the jump instruction stores the next instruction address into a register to
+enable the return from a function call. An example of such an instruction is:
+\code{jal x1, foo}, where the processor jumps unconditionally to function \code{foo}
+and stores the return address in register \code{x1}.
+\end{itemize}
+
+For a detailed description of the RISC-V ISA read the classic textbook from Patterson and
+Hennessy~\cite{Patterson20} or consult the official
+\myref{https://github.com/riscv/riscv-isa-manual}{RISV-C specification}.
 
 \section{Pipeline Stage Definition}
 
