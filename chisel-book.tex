@@ -7058,8 +7058,11 @@ processor~\cite{wildcat:2024}.
 RISC-V is an open instruction set architecture originally developed at the University of
 California, Berkeley.
 Wildcat focuses on providing readable Chisel code that can be used in education.
+This chapter contains the most important source snippets to build a RISC-V pipeline.
+More details and tests are available in the \myref{https://github.com/schoeberl/wildcat}{Wildcat GitHub}
+repository.
 
-\section{Pipeline Definition}
+\section{Pipeline Stage Definition}
 
 A pipeline stage performs a specific function within one clock cycle. That function is
 a combinational function. Registers are used between pipeline stages to store intermediate
@@ -7071,9 +7074,9 @@ memories we will consider the input register as part of a pipeline stage.
 
 \section{Number of Pipeline Stages}
 
-The number of pipeline stages is an architecture definition. Longer pipelines may allow
-to clock the design at a higher frequency. However, with each additional pipeline stage
-the overhead due to the registers increase and the design becomes more complex.
+The architecture defines the number of pipeline stages. Longer pipelines may allow
+for clocking of the design at a higher frequency. However, with each additional pipeline stage,
+the overhead due to the registers increases, and the design becomes more complex.
 
 The classic organization of a \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{reduced instruction set computer} (RISC) is as a 5-stage pipeline:
 \begin{enumerate}
@@ -7087,13 +7090,12 @@ The classic organization of a \myref{https://en.wikipedia.org/wiki/Reduced_instr
 This organization is used in many computer architecture textbooks, e.g., \cite{Patterson20}.
 However, RISC-V pipeline designs exist from two up to several more stages.
 
-One aspect that determines the number a pipeline stages is the available on-chip memory
+One aspect that determines the number of pipeline stages is the available on-chip memory
 for instruction and data scratchpad memory or instruction and data caches.
-Current on-chip memories have registers at their inputs (address and write data),
-see Section~\ref{ref:memory}. That input register is part of the pipeline, it is the
+Current on-chip memories have registers at their inputs (address and write data); see Section~\ref{ref:memory}. That input register is part of the pipeline; it is the
 pipeline register. A memory read has one clock cycle latency.
 
-To simplify the design we present a three stages RISC-V pipeline:
+To simplify the design, we present a three stages RISC-V pipeline:
 
 \begin{enumerate}
 \item Instruction fetch
@@ -7101,18 +7103,18 @@ To simplify the design we present a three stages RISC-V pipeline:
 \item Execute and memory access
 \end{enumerate}
 
-Figure~\ref{fig:3-stages} shows our 3-stages Wildcat pipeline. For simplicity we
-assume scratchpad memories for instruction memory (IM), the register file (RF),
-and the data memory (DM). Those three on-chip memories setting a lower bound
+\section{The Wildcat Pipeline}
+
+Figure~\ref{fig:3-stages} shows our 3-stages Wildcat pipeline. For simplicity, we
+assume scratchpad memories are used for the instruction memory (IM), the register file (RF),
+and the data memory (DM). Those three on-chip memories set a lower bound
 on the stages to three.\footnote{If we build the RF out of concrete flip-flops, we can
-reduce the number of stages to two, as we can read asynchronous from such
-a RF.}
-
-
+reduce the number of stages to two, as we can read asynchronously from such
+an RF.}
 
 Instructions flow from the
-left to the right. And a result of an instruction is written back from right to left
-either into the register file (RF) or the data memory (DM).
+left to the right. The result of the instruction is written back from right to left,
+either in the register file (RF) or the data memory (DM).
 
 \begin{figure*}
   \centering
@@ -7120,6 +7122,10 @@ either into the register file (RF) or the data memory (DM).
   \caption{The 3-stage Wildcat processor pipeline (simplified, omitting control and decoded signals).}
   \label{fig:3-stages}
 \end{figure*}
+
+\subsection{Fetch}
+
+
 
 \chapter{Contributing to Chisel}
 
