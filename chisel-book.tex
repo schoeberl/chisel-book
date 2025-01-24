@@ -7054,7 +7054,7 @@ A prominent example of pipelining in digital design is building a pipelined micr
 In that case, instructions flow through the pipeline, performing one operation at each stage
 by a different processor unit. In contrast to the processor presented in Chapter~\ref{chap:leros},
 where each instruction took several clock cycles, in a pipelined processor, instructions
-run in parallel in different stages.
+run in parallel in different stages. The resulting (ideal) throughput is one instruction per clock cycle.
 
 In this chapter, we present Wildcat, a simple pipelined
 \myref{https://en.wikipedia.org/wiki/RISC-V}{RISC-V}
@@ -7125,7 +7125,7 @@ and stores the return address in register \code{x1}.
 
 For a detailed description of the RISC-V ISA, read the classic textbook from Patterson and
 Hennessy~\cite{Patterson20} or consult the official
-\myref{https://github.com/riscv/riscv-isa-manual}{RISV-C specification}.
+\myref{https://github.com/riscv/riscv-isa-manual}{RISC-V Instruction Set Manual}.
 
 \section{Pipeline Stage Definition}
 
@@ -7145,11 +7145,11 @@ the overhead due to the registers increases, and the design becomes more complex
 
 The classic organization of a \myref{https://en.wikipedia.org/wiki/Reduced_instruction_set_computer}{reduced instruction set computer} (RISC) is as a 5-stage pipeline:
 \begin{enumerate}
-\item Instruction Fetch
-\item Instruction Decode and Register File Read
+\item Instruction fetch
+\item Instruction decode and register file read
 \item Execute
-\item Memory Access
-\item Write-Back
+\item Memory access
+\item Write-back
 \end{enumerate}
 
 This organization is used in many computer architecture textbooks, e.g., \cite{Patterson20}.
@@ -7159,7 +7159,6 @@ One aspect that determines the number of pipeline stages is the available on-chi
 for instruction and data scratchpad memory or instruction and data caches.
 Current on-chip memories have registers at their inputs (address and write data); see Section~\ref{ref:memory}. That input register is part of the pipeline; it is the
 pipeline register. A memory read has one clock cycle latency.
-
 To simplify the design, we present a three stages RISC-V pipeline:
 
 \begin{enumerate}
@@ -7171,9 +7170,9 @@ To simplify the design, we present a three stages RISC-V pipeline:
 \section{The Wildcat Pipeline}
 
 Figure~\ref{fig:3-stages} shows our 3-stages Wildcat pipeline. For simplicity, we
-assume scratchpad memories are used for the instruction memory (IM), the register file (RF),
-and the data memory (DM). Those three on-chip memories set a lower bound
-on the stages to three.\footnote{If we build the RF out of concrete flip-flops, we can
+assume on-chip memories are used for the instruction memory (IM), the register file (RF),
+and the data memory (DM). Those three on-chip memories set the lower bound
+on the number of stages to three.\footnote{If we build the RF out of concrete flip-flops, we can
 reduce the number of stages to two, as we can read asynchronously from such
 an RF.}
 
@@ -7188,7 +7187,19 @@ either in the register file (RF) or the data memory (DM).
   \label{fig:3-stages}
 \end{figure*}
 
-\subsection{Fetch}
+\subsection{Top Level}
+
+\longlist{code/wildcat_top.txt}{Top level module of Wildcat.}{lst:wildcat:top}
+
+Listing~\ref{lst:wildcat:top} shows the abstract super class for the top-level module for
+wildcat implementations.\footnote{We share this interface with several implementation
+variants, e.g., different pipeline organizations.}
+The interface consists only of connections to instruction memory and data
+memory. We are flexible which memories we can use, e.g., scratchpad memories for
+small implementations or caches. IO devices are multiplexed with the data memory.
+The definitions of the memories and IO shall be done at the SoC top level.
+
+\subsection{Instruction Fetch}
 
 The program counter (PC) points to the next instruction that shall be executed.
 RISC-V has 32-bit wide instructions, so the PC is incremented by 4 for each sequential
@@ -7201,10 +7212,28 @@ register. Therefore, we cannot feed the output of the PC register to the IM,
 but the \emph{next} value of the PC. The IM and the PC's address input always
 contain the same data.
 
-\longlist{code/wildcat_fetch.txt}{Instruction fetch.}{lst:wildcat:fetch}
+\longlist{code/wildcat_fetch.txt}{PC generation and instruction fetch.}{lst:wildcat:fetch}
 
 Listing~\ref{lst:wildcat:fetch} shows the code of the fetch stage. The PC (\code{pcReg})
-is initialized to -4 so that the value of \code{pcNext}i 0 after reset.
+is initialized to -4 so that the value of \code{pcNext} is 0 after reset.
+The signal \code{doBranch} selects between a branch target of the current PC plus 4.
+The \code{pcNext} signal is connected to the input of the instruction memory.
+The output os the instruction memory is connected to \code{instr}.
+In case that the pipeline needs to be stalled (e.g., for a cache miss)
+the instruction is substituted by a NOP and \code{pcNext} will not be incremented.
+
+\longlist{code/wildcat_rom.txt}{A ROM as a simple instruction memory.}{lst:wildcat:rom}
+
+For simulation and small experiments in an FPGA we use a read only memory (ROM)
+preloaded at hardware generation time. Listing~\ref{lst:wildcat:rom} shows that memory.
+It uses a \code{Vec} that is initialized with the content of a Scala \code{Array}.
+The ROM contains a register for the address, which is part of the pipeline register.
+
+\subsection{Instruction Decode and Register File Read}
+
+\todo{fetch, RF read, address calculation}
+
+\subsection{Execute and Memory Access}
 
 
 \chapter{Contributing to Chisel}
