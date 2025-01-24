@@ -7060,7 +7060,8 @@ California, Berkeley.
 Wildcat focuses on providing readable Chisel code that can be used in education.
 This chapter contains the most important source snippets to build a RISC-V pipeline.
 More details and tests are available in the \myref{https://github.com/schoeberl/wildcat}{Wildcat GitHub}
-repository.
+repository. The repository also contains a RISC-V instruction set simulator, written in Scala
+and a single cycle version in Chisel for demonstration.
 
 \section{Pipeline Stage Definition}
 
@@ -7118,12 +7119,28 @@ either in the register file (RF) or the data memory (DM).
 
 \begin{figure*}
   \centering
-  \includegraphics[scale=0.38]{figures/3-stages-easy}
+  \includegraphics[scale=0.38]{figures/wildcat}
   \caption{The 3-stage Wildcat processor pipeline (simplified, omitting control and decoded signals).}
   \label{fig:3-stages}
 \end{figure*}
 
 \subsection{Fetch}
+
+The program counter (PC) points to the next instruction that shall be executed.
+As RISC-V has 32-bit wide instructions the PC is incremented by 4 for each sequential
+instruction. For a branch instruction the PC is set accordingly, shown by the multiplexer
+before the adder.
+
+As we see in the figure, IM contains an input register, which is part of
+the pipeline register for the fetch stage. However, the PC is also part of the pipeline
+register. Therefore, we cannot feed the output of the PC register to the IM,
+but the \emph{next} value of the PC. The address input of the IM and the PC
+contain always the same data.
+
+\longlist{code/wildcat_fetch.txt}{Instruction fetch.}{lst:wildcat:fetch}
+
+Listing~\ref{lst:wildcat:fetch} shows the code of the fetch stage. The PC (\code{pcReg})
+is initialized to -4 so that the value of \code{pcNext}i 0 after reset.
 
 
 
