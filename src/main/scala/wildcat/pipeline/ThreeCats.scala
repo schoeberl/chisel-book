@@ -45,6 +45,7 @@ class ThreeCats() extends Wildcat() {
 
   // Decode and register read
   val pcRegReg = RegNext(pcReg)
+  //- start wildcat_decode
   val instrReg = RegInit(0x00000033.U) // nop on reset
   instrReg := Mux(doBranch, 0x00000033.U, instr)
   val rs1 = instr(19, 15)
@@ -53,6 +54,7 @@ class ThreeCats() extends Wildcat() {
   val (rs1Val, rs2Val, debugRegs) = registerFile(rs1, rs2, wbDest, wbData, wrEna, true)
 
   val decOut = decode(instrReg)
+  //- end
 
   val decEx = Wire(new Bundle() {
     val decOut = new DecodedInstr()
@@ -88,11 +90,13 @@ class ThreeCats() extends Wildcat() {
   }
   val exFwdReg = RegInit(0.U.asTypeOf(exFwd))
 
+  //- start wildcat_mem_address
   // Forwarding to memory
   val address = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs1, wbData, rs1Val)
   val data = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs2, wbData, rs2Val)
 
   val memAddress = (address.asSInt + decOut.imm).asUInt
+  //- end
   decEx.memLow := memAddress(1, 0)
 
 
@@ -100,6 +104,7 @@ class ThreeCats() extends Wildcat() {
   val v1 = Mux(exFwdReg.valid && exFwdReg.wbDest === decExReg.rs1, exFwdReg.wbData, decExReg.rs1Val)
   val v2 = Mux(exFwdReg.valid && exFwdReg.wbDest === decExReg.rs2, exFwdReg.wbData, decExReg.rs2Val)
 
+  //- start wildcat_execute
   val res = Wire(UInt(32.W))
   val val2 = Mux(decExReg.decOut.isImm, decExReg.decOut.imm.asUInt, v2)
   res := alu(decExReg.decOut.aluOp, v1, val2)
@@ -109,6 +114,7 @@ class ThreeCats() extends Wildcat() {
   when(decExReg.decOut.isAuiPc) {
     res := (decExReg.pc.asSInt + decExReg.decOut.imm).asUInt
   }
+  //- end
 
   wbDest := decExReg.rd
   wbData := res
@@ -116,14 +122,17 @@ class ThreeCats() extends Wildcat() {
     wbData := decExReg.pc + 4.U
   }
   // Branching and jumping
+  //- start wildcat_branch
   branchTarget := (decExReg.pc.asSInt + decExReg.decOut.imm).asUInt
   when(decExReg.decOut.isJalr) {
     branchTarget := res
   }
   doBranch := ((compare(decExReg.func3, v1, v2) && decExReg.decOut.isBranch) || decExReg.decOut.isJal || decExReg.decOut.isJalr) && decExReg.valid
+  //- end
   wrEna := decExReg.valid && decExReg.decOut.rfWrite
 
   // Memory access
+  //- start wildcat_memory
   io.dmem.rdAddress := memAddress
   io.dmem.rdEnable := false.B
   io.dmem.wrAddress := memAddress
@@ -138,6 +147,7 @@ class ThreeCats() extends Wildcat() {
     io.dmem.wrData := wrd
     io.dmem.wrEnable := wre
   }
+  //- end
 
   // Forwarding register values to ALU
   exFwdReg.valid := wrEna && (wbDest =/= 0.U)

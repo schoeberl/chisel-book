@@ -19,10 +19,12 @@ object InstrType extends Enumeration {
   val R, I, S, SBT, U, UJ = Value
 }
 
+//- start wildcat_alu_enum
 object AluType extends Enumeration {
   type AluType = Value
   val ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND = Value
 }
+//- end
 
 object AluFunct7 {
   val DEFAULT = 0x00

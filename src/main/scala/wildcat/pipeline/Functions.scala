@@ -12,6 +12,7 @@ import wildcat.Opcode._
 
 object Functions {
 
+  //- start wildcat_decode_func
   def decode(instruction: UInt) = {
 
     val opcode = instruction(6, 0)
@@ -41,9 +42,11 @@ object Functions {
       is(Alu.U) {
         decOut.instrType := R.id.U
         decOut.rfWrite := true.B
-        decOut.rs1Valid := true.B // TODO: do I need this?
+        decOut.rs1Valid := true.B
         decOut.rs2Valid := true.B
       }
+      // and more cases
+      //- end
       is(Branch.U) {
         decOut.instrType := SBT.id.U
         decOut.isImm := true.B
@@ -190,15 +193,19 @@ object Functions {
   def registerFile(rs1: UInt, rs2: UInt, rd: UInt, wrData: UInt, wrEna: Bool, useMem: Boolean = true) = {
 
     if (useMem) {
-      val regs = SyncReadMem(32, UInt(32.W), SyncReadMem.WriteFirst)
       val debugRegs = RegInit(VecInit(Seq.fill(32)(0.U(32.W)))) // only for debugging, not used in synthesis
+      when(wrEna && rd =/= 0.U) {
+        debugRegs(rd) := wrData
+      }
+      //- start wildcat_regfile
+      val regs = SyncReadMem(32, UInt(32.W), SyncReadMem.WriteFirst)
       val rs1Val = regs.read(rs1)
       val rs2Val = regs.read(rs2)
       when(wrEna && rd =/= 0.U) {
         regs.write(rd, wrData)
-        debugRegs(rd) := wrData
       }
       (rs1Val, rs2Val, debugRegs)
+      //- end
     } else {
       // non need for forwarding as read address is delayed
       val regs = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))
@@ -212,6 +219,7 @@ object Functions {
   }
 
   // TODO: something missing? Looks OK now. Wait for the tests.
+  //- start wildcat_alu
   def alu(op: UInt, a: UInt, b: UInt): UInt = {
     val res = Wire(UInt(32.W))
     res := DontCare
@@ -234,6 +242,8 @@ object Functions {
       is(SLL.id.U) {
         res := a << b(4, 0)
       }
+      // and more cases
+      //- end
       is(SRL.id.U) {
         res := a >> b(4, 0)
       }

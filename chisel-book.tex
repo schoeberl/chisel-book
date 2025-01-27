@@ -384,21 +384,20 @@ Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
 \todo{Some of this might go into getting started.}
 
 
-
-
 \todo{We should also show more Leros code.}
 
-\todo{VHDL and Verilog}
-
-
-We extended the testing chapter with a description how to access internal signals. \todo{That is too
-little to be mentioned here. More is needed.}
-
-Assertions and Chisel formal (if finished).
+We extended the testing chapter with a description how to access internal signals and
+how to use assertions. Furthermore, we started to explore formal verification in Chisel.
 
 Organizing digital circuits as pipelines to increase performance is in between digital design
 and computer architecture.
 We added a chapter on pipelining where we use a 3-stage RISC-V pipeline as a running example.
+
+We are aware that Chisel is still a niche language in hardware design and one needs to
+at least be able to read VHDL and/or Verilog. However, we think that with a good knowledge
+of digital design switching to a different hardware description language should be a matter of days.
+To simplify this transition, we have added an appendix showing and comparing basic constructs
+in Chisel, VHDL, and Verilog.
 
 This book has been written without any help of artificial intelligence and large language models
 to either write or rewrite text. We used Grammarly\footnote{\url{https://app.grammarly.com/}}
@@ -6482,7 +6481,7 @@ To use formal verification you substitute \code{test(..)} by \code{verify(..)}.
 Listing~\ref{lst:formal:assert} shows how to run formal verification on our
 simple adder circuit with the (naive) assertions.
 
-It surprised the author thatChisel formal immediately found an error in the circuit or the assertions.
+It surprised the author that Chisel formal immediately found an error in the circuit or the assertions.
 To investigate the issue we can look into the waveform to find the input data
 that lead to an assertion violation. It use 0xdb and 0x65 as inputs, which result in
 a sum of 0x40. The input values simply led to an overflow of the 8-bit addition.
@@ -6497,16 +6496,16 @@ How is this related to Kevin's work?}.
 
 \todo{What are the limitations?}
 
-\begin{verbatim}
-Delays a signal for verification purposes. Any stop, assert, assign or cover statement that the result is used in will be automatically guarded by the time necessary for all past values to become available. E.g.:
-Example:
-assert(past(out) === past(past(in)))
-is equivalent to:
-Example:
-when(cyclesSinceReset >= 2.U) {
-  assert(RegNext(out) === RegNext(RegNext(in)))
-}
-\end{verbatim}
+%\begin{verbatim}
+%Delays a signal for verification purposes. Any stop, assert, assign or cover statement that the result is used in will be automatically guarded by the time necessary for all past values to become available. E.g.:
+%Example:
+%assert(past(out) === past(past(in)))
+%is equivalent to:
+%Example:
+%when(cyclesSinceReset >= 2.U) {
+%  assert(RegNext(out) === RegNext(RegNext(in)))
+%}
+%\end{verbatim}
 
 
 
@@ -6532,8 +6531,7 @@ As you work through this exercise you may experience an unpleasant feel that tes
 it is probably impossible to catch all errors.\footnote{A famous quote by Dijkstra is ``Program testing can
 be used to show the presence of bugs, but never to show their absence!''}
 However, there is hope in recent development in formal verification to complement testing.
-The topic of formal verification with Chisel will be covered in a future edition of this book.
-\todo{move this into the verification section when it is better written.}
+The topic of formal verification with Chisel will be extended in a future edition of this book.
 
 \chapter{Design of a Processor}
 \label{chap:leros}
@@ -7191,13 +7189,13 @@ either in the register file (RF) or the data memory (DM).
 
 \longlist{code/wildcat_top.txt}{Top level module of Wildcat.}{lst:wildcat:top}
 
-Listing~\ref{lst:wildcat:top} shows the abstract super class for the top-level module for
+Listing~\ref{lst:wildcat:top} shows the abstract superclass for the top-level module for
 wildcat implementations.\footnote{We share this interface with several implementation
 variants, e.g., different pipeline organizations.}
 The interface consists only of connections to instruction memory and data
-memory. We are flexible which memories we can use, e.g., scratchpad memories for
+memory. We are flexible about which memories we can use, e.g., scratchpad memories for
 small implementations or caches. IO devices are multiplexed with the data memory.
-The definitions of the memories and IO shall be done at the SoC top level.
+The definitions of the memories and IO shall be made at the top level of a system-on-chip (SoC).
 
 \subsection{Instruction Fetch}
 
@@ -7215,26 +7213,136 @@ contain the same data.
 \longlist{code/wildcat_fetch.txt}{PC generation and instruction fetch.}{lst:wildcat:fetch}
 
 Listing~\ref{lst:wildcat:fetch} shows the code of the fetch stage. The PC (\code{pcReg})
-is initialized to -4 so that the value of \code{pcNext} is 0 after reset.
+is initialized to \code{-4} so that the value of \code{pcNext} is 0 after reset.
 The signal \code{doBranch} selects between a branch target of the current PC plus 4.
 The \code{pcNext} signal is connected to the input of the instruction memory.
 The output os the instruction memory is connected to \code{instr}.
 In case that the pipeline needs to be stalled (e.g., for a cache miss)
-the instruction is substituted by a NOP and \code{pcNext} will not be incremented.
+a NOP substitutes the instruction, and \code{pcNext} will not be incremented.
 
 \longlist{code/wildcat_rom.txt}{A ROM as a simple instruction memory.}{lst:wildcat:rom}
 
-For simulation and small experiments in an FPGA we use a read only memory (ROM)
+For simulation and small experiments in an FPGA, we use a read-only memory (ROM)
 preloaded at hardware generation time. Listing~\ref{lst:wildcat:rom} shows that memory.
 It uses a \code{Vec} that is initialized with the content of a Scala \code{Array}.
 The ROM contains a register for the address, which is part of the pipeline register.
 
 \subsection{Instruction Decode and Register File Read}
 
-\todo{fetch, RF read, address calculation}
+The second pipeline stage performs the decoding of instructions, register file read, and address
+calculation for a memory operation. The pipeline register consists of the instruction register
+and the address register for the register file. In the RISC-V ISA encoding, the fields containing
+register addresses are always in the same place in the instruction. Therefore, we can 
+read the register file, even when the instruction is not yet decoded. If those values
+are not needed, they are just ignored.
 
+Listing~\ref{lst:wildcat:decode} shows the pipeline register for the decode stage (\code{instrReg}) and
+the signals \code{rs1} and \code{rs2} that are the inputs for the register file.
+The register file itself and the decode hardware are implemented as a function, a more lightweight
+form, then a module.
+
+\longlist{code/wildcat_decode.txt}{Decode stage.}{lst:wildcat:decode}
+
+The core of the register file implementation is shown in Listing~\ref{lst:wildcat:rf}.
+If possible, we use \code{SyncReadMem} to implement the register file in an on-chip memory.\footnote{If synthesizing the memory for an ASIC, e.g., with the open-source
+OpenLane flow, without using a memory compiler, the memory will be implemented as
+dedicated flip-flops.}
+Note that we use the parameter \code{SyncReadMem.WriteFirst} to enable forwarding
+when the same register is written and read in the same clock cycle instead of
+doing it explicitly, as shown in Section~\ref{ref:memory}.
+The register file has two read ports, which is uncommon in an FPGA.
+Therefore, the practical implementation will use two on-chip memories
+written with the same data, each providing one read port.
+The function returns a Scala tuple returning the two read register
+values.\footnote{It also returns debugging registers, which are ignored at
+synthesis.}
+ 
+\longlist{code/wildcat_regfile.txt}{The core of the register file function.}{lst:wildcat:rf}
+
+Listing~\ref{lst:wildcat:dec:func} shows part of the decode function.
+To decode a RISC-V instruction, we need to read the \code{opcode} field of
+the instruction and the \code{func3} field. \code{decOut} is the output of
+the decoding. As an initial step, we assign default values to all fields.
+That is followed by a large \code{switch} statement comparing the \code{opcode}
+against the constants representing the instruction type.
+The constants are defined as Scala integers so that we can share them between the
+hardware implementation of Wildcat and an instruction set simulator written in Scala.
+Therefore, the constants are converted to Chisel constants with the \code{.U} method.
+
+\longlist{code/wildcat_decode_func.txt}{The core of the register file function.}{lst:wildcat:dec:func}
+
+A similar function decodes the ALU operation from the instruction. Furthermore, a possible
+immediate value is extracted from the instruction. All those values are part of the
+decoded output.
+
+Finally, Listing~\ref{lst:wildcat:mem:address} shows the address computation for memory
+load or store instructions. The address (\code{memAdress}) is computed by using the value of
+register \code{rs1} and adding the immediate field (\code{dec.Out.imm}).
+However, the code is slightly more complicated, as we need to implement forwarding.
+Forwarding is needed if we use a register for the address that was just written by
+the preceding instruction. In that case, the value is not yet written back into the register
+file, and we \emph{forward} from the execution stage.
+The code snippet also shows where the write data comes from for a memory store operation.
+The value of register \code{rs2} is used, or a value is forwarded from the execution
+stage.
+
+
+\longlist{code/wildcat_mem_address.txt}{Address computation, including forwarding if needed.}{lst:wildcat:mem:address}
+
+ 
 \subsection{Execute and Memory Access}
 
+The third pipeline stage is responsible for either executing either an ALU operation, execute
+a control instruction (branch or jump), or perform a memory operation.
+Listing~\ref{lst:wildcat:exe} shows part of the execution stage. Depending on the instruction
+type, either the value of a register \code{v2} or the immediate value \code{decOut.imm}
+is used as the second operand for an ALU instruction. The ALU is defined in a Scala function,
+similar to the decode function. The code snippet also shows the implementation of loading the upper
+immediate and adding the upper immediate to the PC.
+
+\longlist{code/wildcat_execute.txt}{ALU operation in the execution stage.}{lst:wildcat:exe}
+
+Listing~\ref{lst:wildcat:alu} shows part of the function that implements the ALU operations.
+For the operation constants, we use a Scala \code{Enumeration}, as shown
+in Listing~\ref{lst:wildcat:alu:enum}. As with the other constants, they are shared between the
+ISA simulator and the pipeline implementation. Therefore, they need to be converted
+to Chisel constants. The listing is incomplete so as not to consume too much space.
+
+\longlist{code/wildcat_alu.txt}{The ALU function.}{lst:wildcat:alu}
+
+\longlist{code/wildcat_alu_enum.txt}{The ALU operation enumeration.}{lst:wildcat:alu:enum}
+
+Listing~\ref{lst:wildcat:branch} shows the logic for branch execution.
+The branch target is computed by adding the immediate value of the branch instruction
+to the PC of that instruction or using the register value for an indirect branch.
+Similar to the ALU, we use a function (\code{compare()}) for the compare operation
+that is needed to implement conditional branches.
+
+\longlist{code/wildcat_branch.txt}{Branch execution}{lst:wildcat:branch}
+
+
+Listing~\ref{lst:wildcat:mem} shows the memory access.
+The load operation is performed in the execution stage. The function \code{selectLoadData}
+selects depending on the instruction and the lower 2 bits of the address which part of the
+read data is used.
+
+As the input registers of the memory are part of the execution stage, the memory address
+and the store operation is computed in the decode stage.
+
+\todo{This should be moved to the decode part, also in the source code.}
+
+\longlist{code/wildcat_memory.txt}{Memory access}{lst:wildcat:mem}
+
+\section{Summary and Exercise}
+
+This chapter showed the usage of pipelining in digital design. We used the
+design of a RISC processor to demonstrate pipelining. The most important
+parts of the Wildcat RISC-V processor are shown in this chapter.
+See the complete source code, including test cases, at the
+\myref{https://github.com/schoeberl/wildcat}{Wildcat GitHub} repository.
+
+As an exercise, you can build on top of those code fragments shown and implement
+your own version of a RISC-V processor. 
 
 \chapter{Contributing to Chisel}
 
