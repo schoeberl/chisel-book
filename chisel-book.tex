@@ -203,7 +203,7 @@ Email: \url{martin@jopdesign.com}\\
 Visit the source at \url{https://github.com/schoeberl/chisel-book}
 \medskip
 
-First edition published 2019 by Kindle Direct Publishing,\\
+The first edition was published in 2019 by Kindle Direct Publishing,\\
 \url{https://kdp.amazon.com/}
 \medskip
 \medskip
@@ -280,9 +280,9 @@ The approach of this book is to present small to medium-sized typical hardware c
 
 \section*{Foreword for the Second Edition}
 
-As Chisel allows agile hardware design, so does open access and on-demand printing
-allow agile textbook publishing. Less than 6 months after the first edition of this book
-I am able to provide an improved and extended second edition.
+As Chisel allows agile hardware design, so does open access and on-demand printing,
+which allow agile textbook publishing. Less than 6 months after the first edition of this book
+I can provide an improved and extended second edition.
 
 Besides minor fixes, the main changes in the second edition are as follows.
 The testing section has been extended. The sequential building blocks chapter contains
@@ -320,8 +320,7 @@ on using functional programming to write generators.
 The appendix has been extended with a list of reserved keywords and a list
 of acronyms.
 
-Hans Jakob Damsgaard has contributed the description of how to use external components, through Chisel's \code{BlackBox}, and how to use memories for clock domain crossing
-(multi-clock memories).
+Hans Jakob Damsgaard has contributed the description of how to use external components through Chisel's \code{BlackBox} and how to use memories for clock domain crossing (multi-clock memories).
 
 \section*{Foreword for the Fourth Edition}
 
@@ -344,7 +343,7 @@ For the fifth edition, we have upgraded to the actual Chisel version 3.5.6 and S
 To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
-deprecated with Chisel 3.5 and it is recommended to switch to ChiselTest.
+deprecated with Chisel 3.5, and it is recommended to switch to ChiselTest.
 If needed, those two chapters are available in the older versions of the Chisel book,
 available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
 
@@ -370,14 +369,14 @@ and therefore need a different executable for each operating system (processor
 architecture).
 
 
-We tested the book with following Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
-Chisel 3.6 is the last that uses the Scala based backend to generate Verilog files.
+We tested the book with Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
+Chisel 3.6 is the last that uses the Scala-based backend to generate Verilog files.
 Chisel 5 is using CIRCT and needs \code{firtool} installed manually.
 The latest version of Chisel 6 includes the \code{firtool} binaries.
 Testing with ChiselTest is still supported until Chisel 6.
-Therefore, we recommend to skip Chisel 5 and use Chisel 6.
-Chisel 6 might switch to a different simulation and testing library in the future.
-We use Scala 2.13 and tested with Java 17 and Java 21.
+Therefore, we recommend that Chisel 5 be skipped and Chisel 6 used.
+Chisel 6 might switch to a different simulation and testing library.
+We used Scala 2.13 and tested it with Java 17 and Java 21.
 Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
 3.6.1, if one wants to work with Chisel 3.
 
@@ -399,18 +398,14 @@ of digital design switching to a different hardware description language should 
 To simplify this transition, we have added an appendix showing and comparing basic constructs
 in Chisel, VHDL, and Verilog.
 
-This book has been written without any help of artificial intelligence and large language models
-to either write or rewrite text. We used Grammarly\footnote{\url{https://app.grammarly.com/}}
+This book was written without any help from artificial intelligence and large language models
+to write or rewrite text. We used Grammarly\footnote{\url{https://app.grammarly.com/}}
 for grammar checking and improvement of the writing style.
-
-
-
-
 
 
 \section*{Translations}
 
-This book has been translated to Chinese, Japanese, and Vietnamese. All translations are available as free PDF
+This book has been translated into Chinese, Japanese, and Vietnamese. All translations are available as free PDF
 from the books \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page}.
 I would like to thank Yuda Wang, Qiwei Sun, and Yun Chen for the Chinese translation;
 Seiji Munetoh, Masatoshi Tanabata, and Takaaki Hagino for the Japanese translation;
@@ -425,7 +420,7 @@ I want to thank everyone who has worked on Chisel for creating such
 a cool hardware construction language. Chisel is so joyful to use and
 therefore worth writing a book about.
 I am thankful to the whole Chisel community, which is so welcoming and friendly
-and never tired to answer questions on Chisel.
+and never tired of answering questions on Chisel.
 
 I would also like to thank my students in the last years of an advanced computer
 architecture course where most of them picked up Chisel for the final project.
@@ -433,8 +428,8 @@ Thank you for moving out of your comfort zone and taking up the journey of
 learning and using a bleeding-edge hardware description language.
 Many of your questions have helped to shape this book.
 
-It was a pleasure to use Chisel in teaching a digital electronics
-course at the Technical University of Denmark since 2020.
+It was a pleasure to use Chisel in teaching digital electronics
+at the Technical University of Denmark since 2020.
 I know it is a challenge to pickup Chisel and Java in parallel in the second
 semester. Thank you to all students from this course, who had on open mind to
 pickup a modern programming language for hardware description.
@@ -442,7 +437,7 @@ pickup a modern programming language for hardware description.
 For the third edition, I would like to acknowledge Hans Jakob Damsgaard
 (\myref{https://github.com/hansemandse}{@hansemandse}) for rewriting
 all test code of this book to ChiselTest, adding ChiselTest to the testing chapter, adding the black
-box description, and an example for a multi-clock memory.
+box description, and an example of a multi-clock memory.
 
 
 \mainmatter
@@ -457,7 +452,7 @@ to enable you to build more complex, interacting digital systems in a shorter ti
 
 This book and Chisel are targeting two groups of developers:
 (1) hardware designers and (2) software programmers.
-Hardware designers who are fluent in VHDL or Verilog and using other languages such as Python,
+Hardware designers who are fluent in VHDL or Verilog and use other languages, such as Python,
 Java, or Tcl to generate hardware can move to a single hardware construction language
 where hardware generation is part of the language.
 Software programmers may become interested in hardware design,
@@ -465,7 +460,7 @@ e.g., as future chips from Intel will include programmable hardware to speed up 
 It is perfectly fine to use Chisel as your first hardware description language.
 
 Chisel brings advances in software engineering, such as object-orientated
-and functional programming, into the digital design domain.
+and functional programming in the digital design domain.
 Chisel does not only allow to express hardware at the register-transfer level
 but allows you to write hardware \emph{generators}.
 
@@ -483,8 +478,8 @@ For hardware design in Chisel, Verilog serves as an intermediate language
 for testing and synthesis.
 
 This book is not a general introduction to digital design and the fundamentals of it.
-For an introduction of the basics in digital design, such as how to build a gate out of
-CMOS transistors, refer to other digital design books.
+For an introduction to the basics of digital design, such as how to build a gate out of
+CMOS transistors refer to other digital design books.
 However, this book intends to teach digital design at an abstraction level that is
 current practice to describe ASICs or designs targeting
 \myref{https://en.wikipedia.org/wiki/Field-programmable_gate_array}{FPGA}s.\footnote{As the author is more familiar with FPGAs
@@ -516,8 +511,9 @@ This book is a tutorial in digital design and the Chisel language; it is not
 a Chisel language reference, nor is it a book on complete chip design.
 
 
-All code examples shown in this book are extracted from complete programs
-that have been compiled and tested. Therefore, the code shall not contain
+All code examples in this book are extracted from complete programs
+compiled and tested in continuous integration at GitHub.
+Therefore, the code shall not contain
 any syntax errors. The code examples are available from the
 \myref{https://github.com/schoeberl/chisel-book}{GitHub repository}
 of this book.
@@ -525,7 +521,7 @@ Besides showing Chisel code, we have also tried to show useful designs and
 principles of good hardware description style.
 
 This book is optimized for reading on a tablet (e.g., an iPad) or a laptop.
-We include links to further reading in the running text, mostly to
+We include links to further reading in the running text, primarily to
 \myref{https://en.wikipedia.org/}{Wikipedia} articles.
 
 \section{Installing Chisel and FPGA Tools}
@@ -533,9 +529,10 @@ We include links to further reading in the running text, mostly to
 Chisel is a Scala library, and the easiest way to install Chisel and Scala is
 with \code{sbt}, the Scala build tool. Scala itself depends on the installation
 of \myref{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}{Java JDK 8}
-(or a later version, but less than version 21, as 21 breaks \code{sbt}).
+(or a later version up to Java 21).
 As Oracle has changed the license for Java, it may be easier to
-install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+install OpenJDK from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}
+or use \myref{https://sdkman.io/}{SDKMAN} to manage your Java installation.
 
 More detailed setup instructions can be found in
 \myref{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}{Setup.md}
@@ -545,7 +542,7 @@ explains how to open an existing Chisel project in IntelliJ.
 
 \subsection{macOS}
 
-Install the Java OpenJDK 8 (or later, but less then 21) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK 8 (up to 21) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 On Mac OS X, with the packet manager \myref{https://brew.sh/}{Homebrew},
 \code{sbt} and git can be installed with:
 
@@ -572,7 +569,7 @@ Follow the instructions from \myref{https://www.scala-sbt.org/download.html}{sbt
 
 \subsection{Windows}
 
-Install the Java OpenJDK (8 or 11) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
+Install the Java OpenJDK (8 or up to 21) from \myref{https://adoptopenjdk.net/}{AdoptOpenJDK}.
 Chisel and Scala can also be installed and used under Windows.
 Install \myref{http://gtkwave.sourceforge.net/}{GTKWave} and
 \myref{https://www.jetbrains.com/idea/download/}{IntelliJ} (the community edition).
@@ -588,7 +585,7 @@ FPGA vendors, Altera, an Intel Company\footnote{former Intel and former Altera}
 and AMD,\footnote{former Xilinx} provide free versions of
 their tools that cover small to medium-sized FPGAs. Those medium-sized
 FPGAs are large enough to build a multicore RISC style processors.
-Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and Xilinx the
+Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and AMD the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 Both tools are available for Windows and Linux, but not for macOS.
 
@@ -658,7 +655,8 @@ That said, an integrated development environment (IDE), where a compiler is runn
 the background, can speed up coding. As Chisel is a Scala library, all IDEs
 that support Scala are also good IDEs for Chisel.
 It is possible in
-\myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ} and
+\myref{https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html}{IntelliJ},
+\myref{https://code.visualstudio.com/}{Visual Studio Code}, and
  \myref{https://www.eclipse.org/}{Eclipse}
 to generate a project from the sbt project configuration in \code{build.sbt}.
 
@@ -7251,13 +7249,13 @@ Note that we use the parameter \code{SyncReadMem.WriteFirst} to enable forwardin
 when the same register is written and read in the same clock cycle instead of
 doing it explicitly, as shown in Section~\ref{ref:memory}.
 
-In an FPGA on-chip memories are initialized to zero at configuration time.
-However, in an ASIC the content of the memory is undefined.
+In an FPGA, on-chip memories are initialized to zero during configuration time.
+However, in an ASIC, the content of the memory is undefined.
 Therefore, we need to handle the special case when reading from register 0
-to return a 0 and not the random content of the on-chip memory.
+to return a zero and not the random content of the on-chip memory.
 Note that the \code{read()} function returns the result with one clock
-cycle latency. Therefore, the multiplexer at the output of the memory
-needs to compare against the register address delayed by once clock cycle.
+cycle latency. Therefore, the multiplexer at the memory output
+needs to be compared against the register address delayed by one clock cycle.
 (This is similar to the manual forwarding on a read during write,
 as shown in Section~\ref{ref:memory}.)
 The function returns a Scala tuple returning the two read register
