@@ -881,8 +881,8 @@ which we use for the definition of the \code{Bits} vector:
 
 \shortlist{code/const_width.txt}
 
-\noindent If you find the notation of 3.U and 4.W a little bit funny, consider it as a variant of an integer
-constant with a type. This notation is similar to 3L, representing a long integer constant in C, Java, and Scala.
+\noindent If you find the notation of \code{3.U} and \code{4.W} a little bit funny, consider it as a variant of an integer
+constant with a type. For example, \code{3L}, representing a long integer constant in C, Java, and Scala.
 
 {\bf Possible pitfall:} One possible error when defining constants with a dedicated width is missing the \code{.W}
 specifier for a width. E.g., \code{1.U(32)} will \emph{not} define a 32-bit wide constant representing 1.
@@ -890,7 +890,7 @@ Instead, the expression \code{(32)} is interpreted as bit extraction from positi
 in a single bit constant of 0. Probably not what the original intention of the programmer was.
 
 
-Chisel benefits from Scala's type inference and in many places type information can be left out.
+Chisel benefits from Scala's type inference, and in many places, type information can be left out.
 The same is also valid for bit widths. In many cases, Chisel will automatically infer the correct width.
 Therefore, a Chisel description of hardware is more concise and better readable than VHDL or
 Verilog.
@@ -944,7 +944,7 @@ gates and combines the result with signal \code{c} with \emph{or} gates and name
 
 \noindent Figure~\ref{fig:logic} shows the schematic of this combinatorial expression.
 Note that this circuit may be for a vector of bits and not only single wires
-that are combined with the AND and OR circuits.
+combined with the AND and OR circuits.
 
 In this example, we do not define the type nor the width of signal \code{logic}.
 Both are inferred from the type and width of the expression.
@@ -1160,7 +1160,7 @@ till 9 and wraps around to 0 when reaching 9.
 Chisel provides two constructs to group related signals: (1) a \code{Bundle} and (2) a \code{Vec}.
 A \code{Bundle} groups signals of different types as named fields.
 A \code{Vec} represents an indexable collection of signals (elements) of the same type.
-\code{Bundle}s and \code{Vec}s create new, user defined Chisel types and can be arbitrarily nested.
+\code{Bundle}s and \code{Vec}s create new, user-defined Chisel types and can be arbitrarily nested.
 
 \subsection{Bundle}
 
@@ -1258,7 +1258,7 @@ Figure~\ref{fig:vec-reg} shows the schematic of that circuit. It contains three 
 The read index (\code{rdIdx}) selects the multiplexer connected to the output of the three
 registers. The output signal is \code{dout}
 The write index (\code{wrIdx}) selects which register will be written with the data
-from \code{din}. \code{wrIdx} is driving a decoder which selects one of the three
+from \code{din}. \code{wrIdx} is driving a decoder that selects one of the three
 enable signals of the registers.
 
 \begin{figure}[t]
@@ -1349,10 +1349,10 @@ represent hardware. Only wrapping them into a \code{Wire}, \code{Reg}, or \code{
 generates hardware. A \code{Wire} represents combinational logic, a \code{Reg}
 represents a register (collection of D flip-flops), and an \code{IO} represents ports
 for the connection of a module (like pins of a concrete integrated circuit (IC)).
-Any Chisel type can be wrapped in a \code{Wire}, \code{Reg}, or \code{IO}.
+Any Chisel type can be wrapped into a \code{Wire}, \code{Reg}, or \code{IO}.
 
 You give a hardware component a name by assigning it to a Scala immutable
-variable:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are of no use
+variable:\footnote{Scala also supports mutable variables with \codefoot{var}, but those are useless
 when describing hardware in Chisel.}
 
 \shortlist{code/wire_reg.txt}
@@ -1655,7 +1655,7 @@ Changes in the minor version of Chisel contain new functionality, but in a backw
 A change in the major version may introduce breaking changes.
 To emphasize this change in the versions, Chisel skipped version 4.
 
-Starting with Chisel 5, the backend of Chisel has change from the Scala based compiler for FIRRTL
+Starting with Chisel 5, the backend of Chisel has change from the Scala-based compiler for FIRRTL
 to using \code{firtool} to generate Verilog. \code{firtool} is part of a larger project,
 the \myref{https://circt.llvm.org/}{LLVM CIRCT} project.
 The latest version of ``Chisel 3'' is 3.6 and contains both backends, the Scala based 
@@ -1808,7 +1808,7 @@ of a processor~\cite{lipsi:arcs2018}.
 
 \myref{http://www.scalatest.org/}{ScalaTest} is a testing tool for Scala (and Java). ChiselTest is an extension
 of ScalaTest. Therefore, we first explore a simple ScalaTest example. To use it, include the library
-in your \code{build.sbt} with following line:
+in your \code{build.sbt} with the following line:
 
 \begin{chisel}
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.4" % "test"
@@ -1854,7 +1854,7 @@ However, if you want to run just a single test (suite) you can do this with:
 $ sbt "testOnly ExampleTest"
 \end{verbatim}
 
-\noindent If you misspell the class name, for example, \code{Exampletest},
+\noindent If you misspell the class name, for example, \code{ExampleTest},
 there will be a relatively silent error message: \code{No tests were executed}.
 
 \subsection{ChiselTest}
@@ -1896,7 +1896,7 @@ The method \code{test()} is invoked with the DUT as parameter and the test code 
 
 The input and output ports of the DUT are accessed with \code{dut.io}.
 You can set values via a \code{poke} on a port, which takes the value as a Chisel type of the
-input port as parameter.
+input port as a parameter.
 An output port can be read by invoking \code{peekInt()} or \code{peekBoolean()} on the port,
 which will return the value as a Scala type.
 The tester advances the simulation by one clock cycle with \code{dut.clock.step()}.
@@ -1928,7 +1928,7 @@ Result is: 2
 We see that 0 AND 1 results in 0; 3 AND 2 results in 2.
 Besides manually inspecting printouts, which is a good starting point, we can also
 express our expectations in the test bench itself by invoking
-\code{expect(value)} on the output port and the expected value as parameter.
+\code{expect(value)} on the output port and the expected value as a parameter.
 The following example shows testing with expectations:
 
 \shortlist{code/test_bench.txt}
@@ -2018,7 +2018,7 @@ You can view the waveform with the free viewer
 \myref{http://gtkwave.sourceforge.net/}{GTKWave} or with ModelSim.
 Start GTKWave and select \emph{File -- Open New Window} and navigate to the
 folder where the Chisel tester put the \code{.vcd} file. By default, the generated files
-are in \code{test\_run\_dir} then the description of the test. % this sentence is unclear
+are in \code{test\_run\_dir} within a subfolder named after the test description.
 Within this folder, you should be able to find \code{DeviceUnderTest.vcd}.
 You can select the signals from the left side and drag them into the main window.
 If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
@@ -2062,8 +2062,8 @@ as shown in the printf debugging version of the DUT.
 
 \shortlist{code/test_dut_printf.txt}
 
-\noindent When testing this module with the counter based tester, which iterates over all possible
-values, we get following output, verifying that the AND function is correct:
+\noindent When testing this module with the counter-based tester, which iterates over all possible
+values, we get the following output, verifying that the AND function is correct:
 
 \begin{verbatim}
 Elaborating design...
@@ -2089,7 +2089,7 @@ test DeviceUnderTestPrintf Success: 0 tests passed in 18 cycles
 in 0,031521 seconds 571,04 Hz
 \end{verbatim}
 
-Chisel printf supports
+Chisel \code{printf} supports
 \myref{https://www.chisel-lang.org/chisel3/docs/explanations/printing.html}{C and Scala style formatting}.
 
 
@@ -2310,11 +2310,11 @@ to the single output of the \code{Count10} component, \code{io.dout}.
 
 A medium- to high-complexity hardware design is built out of a hierarchy of
 nested components.
-Figure~\ref{fig:components} shows the structure of such an example design. Component C has
+Figure~\ref{fig:components} shows the structure of such an example design. Component \code{CompC} has
 three input ports and two output ports. The component itself is assembled out
-of two subcomponents: A and B, which are connected to the inputs and
-outputs of C. One output of A is connected to an input of B.
-Component D is at the same hierarchy level as component C and connected
+of two subcomponents: \code{CompA} and \code{CompB}, which are connected to the inputs and
+outputs of \code{CompC}. One output of \code{CompA} is connected to an input of \code{CompB}.
+Component \code{CompD} is at the same hierarchy level as component \code{CompC} and connected
 to it.
 
 \begin{figure}
@@ -2324,12 +2324,12 @@ to it.
   \label{fig:components}
 \end{figure}
 
-\longlist{code/components_ab.txt}{Definitions of component A and B}{lst:comp:ab}
+\longlist{code/components_ab.txt}{Definition of components \code{CompA} and \code{CompB}}{lst:comp:ab}
 
-Listing~\ref{lst:comp:ab} shows the definition of the two example components A and B from
+Listing~\ref{lst:comp:ab} shows the definition of the two example components \code{CompA} and \code{CompB} from
 Figure~\ref{fig:components}.
-Component A has two inputs, named \code{a} and \code{b}, and two
-outputs, named \code{x} and \code{y}. For the ports of component B
+Component \code{CompA} has two inputs, named \code{a} and \code{b}, and two
+outputs, named \code{x} and \code{y}. For the ports of component \code{CompB}
 we chose the names \code{in1}, \code{in2}, and \code{out}.
 All ports use an unsigned integer (\code{UInt}) with a bit width of 8.
 As this example code is about connecting components and building a
@@ -2340,12 +2340,13 @@ As we have no function associated with those example components,
 we used generic port names. For a real design, use descriptive
 port names such as \code{data}, \code{valid}, or \code{ready}.
 
-Component C, shown in Listing~\ref{lst:comp:c}, has three input and two output ports. It is built out of
-components A and B. We show how A and B are connected to the ports
-of C and also the connection between an output port of A and an
-input port of B.
+Component \code{CompC}, shown in Listing~\ref{lst:comp:c}, has three input and two output ports. It is built out of
+components \code{CompA} and \code{CompB}. We show how \code{CompA}
+and \code{CompB} are connected to the ports
+of \code{CompC} and also the connection between an output port of \code{CompA} and an
+input port of \code{CompB}.
 
-\longlist{code/components_c.txt}{Component C}{lst:comp:c}
+\longlist{code/components_c.txt}{Component \code{CompC}}{lst:comp:c}
 
 Components are created with \code{new}, e.g., \code{new CompA()}, and need to be wrapped
 into a \code{Module()}. The reference to that module is stored in a local variable,
@@ -2354,13 +2355,13 @@ in this example \code{val compA = Module(new CompA())}.
 With this reference, we can access the IO ports by dereferencing the \code{io} field of the module
 and then the individual fields of the IO \code{Bundle}.
 
-\longlist{code/components_d.txt}{Component D}{lst:comp:d}
+\longlist{code/components_d.txt}{Component \code{CompD}}{lst:comp:d}
 
-The simplest component (D) in our design, shown in Listing~\ref{lst:comp:d},
+The simplest component (\code{CompD}) in our design, shown in Listing~\ref{lst:comp:d},
 has just an input port, named \code{in}, and
 an output port named \code{out}.
 The final missing piece of our example design is the top-level component, which itself
-is assembled out of components C and D, shown in Listing~\ref{lst:comp:top}.
+is assembled out of components \code{CompC} and \code{CompD}, shown in Listing~\ref{lst:comp:top}.
 
 \longlist{code/components_top.txt}{Top-level component}{lst:comp:top}
 
@@ -2407,7 +2408,9 @@ The ALU is usually a combinational circuit without any state elements.
 An ALU might also have additional outputs to signal properties
 of the result, such as zero or the sign.
 
-The following code shows an ALU with 16-bit inputs and outputs that supports addition, subtraction, or, and an and
+
+The following code shows an ALU with 16-bit inputs and a 16-bit output that supports
+addition, subtraction, or, and and.
 operation, selected by a 2-bit \code{fn} signal.
 
 \shortlist{code/components_alu.txt}
@@ -2428,7 +2431,7 @@ in both directions. Chisel uses the names of the leaf fields for the connection.
 If a name is missing, it is not connected.
 
 As an example, let us assume we build a pipelined processor. The fetch
-stage has a following interface:
+stage has the following interface:
 \shortlist{code/bundle_fetch.txt}
 
 \noindent The next stage is the decode stage.
@@ -2516,7 +2519,7 @@ constructs a chain of multiplexers. Figure~\ref{fig:mux-chain} shows this chain 
 That chain introduces a priority, i.e., when \code{cond} is true, the other conditions
 are not evaluated.
 
-Note the `.' in \code{.elsewhen} that is needed to chain methods in Scala.
+Note the `.' in \code{.elsewhen} needed to chain methods in Scala.
 Those \code{.elsewhen} branches can be arbitrarily long.
 However, if the chain of conditions depends on a single signal, it is better
 to use the \code{switch} statement, which is introduced in the following
@@ -2568,7 +2571,8 @@ of the decoder with a truth table, such as Table~\ref{tab:decoder}.
 \end{table}
 
 A Chisel \code{switch} statement describes the logic as a truth table.
-To use the \code{switch} statement we need to include the package \code{chisel.util}.
+To use the \code{switch} statement, we need to include the package \code{chisel.util}.
+
 
 \shortlist{code/encdec_util.txt}
 
@@ -2587,7 +2591,7 @@ It is intended to avoid situations with incomplete assignments for combinational
 (in Chisel a \code{Wire}) that will result in unintended latches in hardware description
 languages such as VHDL and Verilog. Chisel does not allow incomplete assignments.
 
-In the example before we used unsigned integers for the signals. Maybe a clearer representation
+In the example before, we used unsigned integers for the signals. Maybe a clearer representation
 of an encode circuit uses binary notation:
 
 \shortlist{code/encdec_decbin.txt}
@@ -2657,7 +2661,7 @@ For the decoder, we found an elegant single-line statement to express the logic.
 This also enables us to describe a wide decoder. However, we are not aware
 of such an expression for the encoder.
 
-To express larger encoders, we need to write a (simple) hardware generator.
+We need to write a (simple) hardware generator to express larger encoders.
 Therefore, we need to introduce the Scala loop construct. The following two lines
 of Scala code express a loop, counting from \code{0} to \code{9}.
 
@@ -2668,7 +2672,7 @@ of Scala code express a loop, counting from \code{0} to \code{9}.
 a hardware generator. Chapter~\ref{ch:gen} describes how to write hardware generators in more detail.
 Note that the loop is executed at circuit generation time. This is not a hardware counter.
 
-For the encoder generator we will use a \code{Vec}, where each element represents one column
+For the encoder generator, we will use a \code{Vec}, where each element represents one column
 of the encoder table. The following code shows a 16-bit encoder, where the output is 4 bits wide:
 
 \shortlist{code/encdec_large.txt}
@@ -2679,11 +2683,11 @@ value when the least significant bit (LSB) is set in \code{hotIn}.
 
 \code{Vec} elements 1 till 15 are connected to a multiplexer. If the bit at position \code{i}
 is set in \code{hotIn}, the multiplexer output is the index, otherwise it is 0. For the correct
-behavior of our encoder we assume that the input signal is one-hot encoded.
+behavior of our encoder, we assume that the input signal is one-hot encoded.
 Finally we need to merge all vector elements for a single output. As the vector elements
 are \code{0} when the corresponding bit in the input is \code{0}, we can simply combine
-all elements with an OR function. In the loop we OR the current element with one vector
-element before (\code{... | v(i-1)}). When several elements are combined with a function
+all elements with an OR function. In the loop, we OR the current element with one vector
+element before (\code{... | v(i-1)}). When several elements are combined with a function,
 we call this operation also reduce. Therefore, here we perform an OR reduction.
 
 \section{Arbiter}
@@ -2691,7 +2695,7 @@ we call this operation also reduce. Therefore, here we perform an OR reduction.
 \label{sec:arbiter}
 
 
-We use an arbiter to arbitrate requests from several clients to a single shared resource.
+We use an arbiter to arbitrate requests from several clients to a shared resource.
 An example would be several processor cores sharing a single serial port (UART).
 
 \begin{figure}
@@ -2721,8 +2725,8 @@ arbiter in Section~\ref{sec:arbiter}.
 \end{figure}
 
 Figure~\ref{fig:arbiter} shows the schematic of a 4-bit arbiter.
-The individual grant requests need to check if a lower bit has already
-won the arbitration. For the first request the grant \code{g0} depends only on the
+The individual grant requests must check if a lower bit has already
+won the arbitration. For the first request, the grant \code{g0} depends only on the
 request \code{r0}. The second grant can only win the arbitration when request \code{r1}
 is asserted and request \code{r0} is deasserted. For the next requests, the lookup
 is further chained.
@@ -2732,10 +2736,10 @@ The following code shows an arbiter for 3 clients.
 \shortlist{code/arbiter3.txt}
 
 \noindent The code is the same as the schematic in Figure~\ref{fig:arbiter}
-(except we showed the code only for a 3-bit arbiter).
+(except we show the code only for a 3-bit arbiter).
 We use vectors of \code{Bool} to represent the request, grant, and not-granted chain.
 We can see that \code{grant(0)} depends only on \code{request(0)}.
-\code{notGranted} is used to chain the information that no lower bit requests
+\code{notGranted} is used to chain the information that no lower-bit requests
 have been granted.
 
 Small arbiters can also be directly described with a logic table. The following code
@@ -2745,7 +2749,7 @@ shows the table for a 3-bit arbiter.
 
 \todo{Maybe also use the pattern matching with ??? in Chisel}
 
-However, for larger arbitration circuits we will use our newly learned trick of
+However, for larger arbitration circuits, we will use our newly learned trick of
 a \code{for} loop as a generator loop. The following code shows a parameterized
 arbiter for \code{n} requests and grants. Here we use again \code{Vec} of \code{Bool}.
 
@@ -2765,16 +2769,16 @@ last request (\code{n - 1}). That wire is not used and the synthesize tool will 
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/priority-encoder}
-  \caption{With an arbiter and an encoder we can build a priority encoder.}
+  \caption{With an arbiter and an encoder, we can build a priority encoder.}
   \label{fig:priority-encoder}
 \end{figure}
 
-With our original encoder design we had to assume that the input is one-hot
+With our original encoder design, we had to assume that the input was one-hot
 encoded, meaning only one bit is allowed to be \code{1}. Inputs with several
 bits set are illegal and lead to undefined behavior.
 
 We can solve this problem by combining the encoder with an arbitration circuit, which selects only
-the highest-priority bit set. When we feed the output of the arbiter into an encoder
+the highest-priority bit set. When we feed the output of the arbiter into an encoder,
 we create a priority encoder.
 Figure~\ref{fig:priority-encoder} shows the schematic.
 
@@ -2789,15 +2793,15 @@ Figure~\ref{fig:priority-encoder} shows the schematic.
   \label{fig:comparator}
 \end{figure}
 
-As the last circuit for the chapter of combinational building blocks, we present the comparator.
+As the last circuit for the chapter on combinational building blocks, we present the comparator.
 Figure~\ref{fig:comparator} shows the schematic of a comparator. It has two multi-bit inputs and
 compares those two values. It has two outputs: (1) signaling that \code{a} and \code{b} are equal (\code{equ})
 and (2) that \code{a} is greater than \code{b}. These two outputs are enough for all possible
-comparisons. For example, the if \code{equ} or \code{gt} are asserted we know that the condition
-$a >= b$ is true. For the condition $a <= b$ we test for not \code{gt}.
+comparisons. For example, if \code{equ} or \code{gt} are asserted, we know that the condition
+$a >= b$ is true. For the condition $a <= b$, we test for not \code{gt}.
 
 The following code snippet shows the comparator. As you can see, these are just two lines of
-Chisel code. Therefore, compare functions are usually just directly used in other components and
+Chisel code. Therefore, compare functions are usually directly used in other components and
 not wrapped into a module.
 
 \shortlist{code/comparator.txt}
@@ -2810,7 +2814,7 @@ You can either define the codes for the decimal digits, which was the initial
 usage of a 7-segment display, or additionally, define encodings for the remaining bit pattern
 to be able to display all 16 values of a single digit in
 \myref{https://en.wikipedia.org/wiki/Hexadecimal}{hexadecimal}.
-When you have an FPGA board with a 7-segment display, connect 4 switches or
+When you have an FPGA board with a 7-segment display, connect four switches or
 buttons to the input of your circuit and the output to the 7-segment display.
 
 \chapter{Sequential Building Blocks}
@@ -2832,23 +2836,23 @@ the so-called registers.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/register}
-  \caption{A D flip-flop based register.}
+  \caption{A D flip-flop-based register.}
   \label{fig:register}
 \end{figure}
 
 The fundamental elements for building sequential circuits are registers. A register is a collection
 of \myref{https://en.wikipedia.org/wiki/Flip-flop_(electronics)\#D_flip-flop}{D flip-flops}.
 A D flip-flop captures the value of its input at the rising edge of the clock and stores
-it at its output. In other words, the register updates its output with the value of the input on the rising edge of the clock. % These two sentences are similar and they explain the same thing. Probably only one is needed
+it at its output. In other words, the register updates its output with the value of the input on the rising edge of the clock.
 
 \index{Clock}
 Figure~\ref{fig:register} shows the schematic symbol of a register. It contains an input
 \code{D} and an output \code{Q}. Each register also contains an input for a \code{clock} signal.
-As this global clock signal is connected to all registers in a synchronous circuit, it is usually
+This global clock signal is connected to all registers in a synchronous circuit, so it is usually
 not drawn in the schematics. The little triangle on the bottom of the box symbolizes the
-clock input and tells us that this is a register. We omit the clock signal in the following
+clock input and tells us this is a register. We omit the clock signal in the following
 schematics.
-The omission of the global clock signal is also reflected by Chisel where no explicit
+The omission of the global clock signal is also reflected by Chisel, where no explicit
 connection of a signal to the register's clock input is needed.
 In Chisel a register with input \code{d} and output \code{q} is defined with:
 
@@ -2856,7 +2860,7 @@ In Chisel a register with input \code{d} and output \code{q} is defined with:
 
 \noindent Note that we do not need to connect a clock to the register; Chisel implicitly does this.
 A register's input and output can be arbitrarily complex types
-made out of a combination of vectors and bundles.
+made from a combination of vectors and bundles.
 
 A register can also be defined and used in two steps:
 
@@ -2865,7 +2869,7 @@ A register can also be defined and used in two steps:
 First, we define the register and give it a name. Second, we connect the signal
 \code{delayIn} to the input of the register. Note also that the name of the register
 contains the string \code{Reg}. To easily distinguish between combinational
-circuits and sequential circuits, it is common practice to have the marker
+and sequential circuits, it is common practice to have the marker
 \code{Reg} as part of the name.
 
 \index{Reset}
@@ -2885,10 +2889,9 @@ assignment statement.
 \end{figure}
 
 
-The default implementation of reset in Chisel is a synchronous
+The default reset implementation in Chisel is a synchronous
 reset.\footnote{Support for asynchronous reset is available.}
-For a synchronous reset, no change is needed in the D flip-flop itself; instead, a multiplexer just
-needs to be added to the input that
+For a synchronous reset, no change is needed in the D flip-flop itself; instead, a multiplexer must be added to the input that
 selects between the initialization value under reset and the data value.
 Figure~\ref{fig:register-reset} shows the schematic of a register with a synchronous reset
 where the reset drives the multiplexer. However, because synchronous reset is used quite often,
@@ -2912,21 +2915,21 @@ by a diagram showing the signals over time. Such a diagram is called a waveform 
 Figure~\ref{fig:register-wave} shows a waveform for the register with a reset
 and some input data applied to it.
 Time advances from left to right. On top of the figure, we see the clock that drives our circuit.
-In the first clock cycle (1), before a reset, the register content is undefined.
-In the second clock cycle reset is asserted high, and on the rising edge of this clock cycle the register
-takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle
+In the first clock cycle (1), the register content is undefined before a reset.
+in the second clock cycle, reset is asserted high, and on the rising edge of this clock cycle, the register
+takes the initial value \code{0}. Input \code{inVal} is ignored. In the next clock cycle,
 \code{reset} is \code{0}, and the value of \code{inVal} is captured on the next rising
-edge. From then on \code{reset} stays \code{0}, as it should be, and the
+edge. From then on, \code{reset} stays \code{0}, as it should be, and the
 register output follows the input signal with one clock cycle delay.
 
 Waveforms are an excellent tool to specify the behavior of a circuit graphically.
-Especially in more complex circuits where many operations happen in parallel
-and data moves pipelined through the circuit, timing diagrams are convenient.
+Timing diagrams are convenient, especially in more complex circuits where many operations happen in parallel
+and data moves pipelined through the circuit.
 Chisel testers can also produce waveforms during testing that can be displayed
 with a waveform viewer and used for debugging.
 
-A common design pattern is a register with an enable signal. Only when the enable signal
-is \code{true} (high), the register captures the input; otherwise, it keeps its old value.
+A common design pattern is a register with an enable signal. When the enable signal
+is \code{true} (high) the register captures the input; otherwise, it keeps its old value.
 The enable can be implemented, similar to the synchronous reset, with
 a multiplexer at the input of the register. One input to the multiplexer is the feedback of the
 output of the register.
@@ -2935,14 +2938,14 @@ output of the register.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/register-enable}
-  \caption{A D flip-flop based register with an enable signal.}
+  \caption{A D flip-flop-based register with an enable signal.}
   \label{fig:register-enable}
 \end{figure}
 
 Figure~\ref{fig:register-enable} shows the schematic of a register with an enable signal.
 As this is also a common design pattern, modern FPGA flip-flops contain a
 dedicated enable input, and no additional (LUT) resources are needed to implement
-the register enable ibt.
+the register enable.
 
 \begin{figure}
   \centering
@@ -2978,14 +2981,14 @@ the second parameter is the initialization value, and the third parameter is the
 
 
 
-A register can also be part of an expression, without giving it a name.
+A register can also be part of an expression without giving it a name.
 The following circuit detects the rising edge of a signal by comparing its current
 value with the one from the last clock cycle (the delayed value).
 
 \shortlist{code/sequ_reg_rising.txt}
 
-Now that we have explored all basic uses of a register, we put those registers to
-good use and build more interesting sequential circuits. For the next schematics we
+Now that we have explored all the basic register uses, we put those registers to
+good use and build more interesting sequential circuits. For the next schematics, we
 will further simplify the register symbol and omit the \code{D} for the input and the
 \code{Q} for the output.
 
@@ -3001,7 +3004,7 @@ will further simplify the register symbol and omit the \code{D} for the input an
 \end{figure}
 
 One of the most basic sequential circuits is a counter. In its simplest form, a counter is a register
-where the output is connected to an adder and the adder's output is connected to the input
+where the output is connected to an adder, and the adder's output is connected to the input
 of the register. Figure~\ref{fig:counter} shows such a free-running counter.
 
 A free-running counter with a 4-bit register counts from 0 to 15 and then wraps around
@@ -3047,8 +3050,8 @@ define a function with a parameter to generate a counter for us.
 value of the function, in this example, the output of
 the counting register \code{cntReg}.
 
-Note that in all the examples our counter had values between \code{0} and
-\code{N}, including \code{N}. If we want to count 10 clock cycles we need
+Note that in all the examples, our counter had values between \code{0} and
+\code{N}, including \code{N}. To count 10 clock cycles, we need
 to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \myref{https://en.wikipedia.org/wiki/Off-by-one_error}{off-by-one error}.
 
@@ -3058,15 +3061,15 @@ to set \code{N} to 9. Setting \code{N} to 10 would be a classic example of an
 \index{Timing generation}
 
 Besides counting events, counters are often used to generate a notion of time
-(time as time on a wall clock).
+(time as wall clock time ).
 A synchronous circuit runs with a clock with a fixed frequency.
 The circuit proceeds in those clock ticks. There is no notion of time in a digital
 circuit other than counting clock ticks. If we know the clock frequency, we
 can generate circuits that generate timed events, such as blinking an LED
-at some frequency, as we have shown in the Chisel ``Hello World'' example.
+at some frequency, as shown in the Chisel ``Hello World'' example.
 
 A common practice is to generate single-cycle \emph{ticks} with a frequency $f_{tick}$
-that we need in our circuit. That tick occurs every $n$ clock cycles,
+that we need in our circuit. That tick occurs every $n$ clock cycle,
 where $n = f_{clock}/f_{tick}$ and the tick is precisely one clock cycle long.
 This tick is \emph{not} used as a derived clock, but as an enable signal for
 registers in the circuit that shall logically operate at frequency $f_{tick}$.
@@ -3076,10 +3079,9 @@ Figure~\ref{fig:tick-wave} shows an example of a tick generated every
 \begin{figure}
   \centering
   \includegraphics[scale=1]{figures/tick_wave}
-  \caption{A waveform diagram for the generation of a slow frequency tick.}
+  \caption{A waveform diagram for generating a slow frequency tick.}
   \label{fig:tick-wave}
 \end{figure}
-
 
 In the following circuit, we describe a counter that counts from \code{0}
 to the maximum value of \code{N - 1}. When the maximum value is reached,
@@ -3110,33 +3112,33 @@ slow counter that increments every tick ($n$ clock cycles).
 \index{Logical clock}
 Examples of the usage of this slower \emph{logical} clock are: blinking an LED,
 generating the baud rate for a serial bus,\footnote{\textit{Baud rate} is a measure of
-information transmission speed, often in bits per second. It must be equivalent for 
+information transmission speed, often in bits per second. It must be equivalent to 
 the transmitter and receiver.} generating signals for 7-segment
-display multiplexing, and subsampling input values for debouncing of buttons
+display multiplexing, and subsampling input values for debouncing buttons
 and switches.
 
 Although width inference should size the registers, it is better to explicitly
-specify the width with the type at register definition or with the
+specify the width with the type at the register definition or with the
 initialization value. Explicit width definition can avoid surprises when a reset value of \code{0.U}
 results in a counter with a width of a single bit.
 
 \subsection{The Nerd Counter}
 
-Some of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}, sometimes.
+Sometimes, some of us feel like being a \myref{https://en.wikipedia.org/wiki/Nerd}{nerd}.
 For example, we want to design a highly optimized version of our counter/tick generation.
-A standard counter needs following resources: one register, one adder (or subtractor),
+A standard counter needs the following resources: one register, one adder (or subtractor),
 and a comparator. We cannot do much about the register or the adder. If we count
 up, we need to compare against a number, which is a bit string. The comparator
-can be built out of inverters for the zeros in the bit string and a large AND gate.
+can be built from inverters for the zeros in the bit string and a large AND gate.
 When counting down to zero, the comparator is a large NOR gate, which might be
-a little bit cheaper than the comparator against a constant in an ASIC.
+slightly cheaper than the comparator against a constant in an ASIC.
 In an FPGA, where logic is built out of lookup tables, there is no difference between comparing
 against 0 or 1. The resource requirement is the same for the up and down counter.
 
 However, there is still one more trick a clever hardware designer can pull off.
-Counting up or down needed a comparison against all counting bits, so far.
+Counting up or down needed a comparison against all counting bits so far.
 What if we count from N-2 down to -1? A negative number has the most significant bit
-set to 1, and a positive number has this bit set to 0. We need to check this bit only to detect
+set to 1, and a positive number has this to 0. We must only check this bit to detect
 that our counter reached -1. Here it is, the counter created by a nerd:
 
 \shortlist{code/nerd_counter.txt}
@@ -3145,16 +3147,16 @@ that our counter reached -1. Here it is, the counter created by a nerd:
 \subsection{A Timer}
 \index{Timer}
 
-Another form of timer we can create, is a one-shot timer. A one-shot timer is like a
+Another form of timer we can design is a one-shot timer. A one-shot timer is like a
 kitchen timer: you set the number of minutes and press start. When the specified amount
 of time has elapsed, the alarm sounds.
 The digital timer is loaded with the time in clock cycles.
-Then it counts down until reaching zero. At zero the timer asserts \emph{done}.
+Then it counts down until reaching zero. At zero, the timer asserts \emph{done}.
 
 Figure~\ref{fig:timer} shows the block diagram of a timer. The register can be loaded with
-the value of \code{din} by asserting \code{load}. When the \code{load} signal is deasserted
+the value of \code{din} by asserting \code{load}. When the \code{load} signal is deasserted,
 counting down is selected (by selecting \code{cntReg - 1} as the input for the register).
-When the counter reaches \code{0}, the signal \code{done} is asserted and the counter stops
+When the counter reaches \code{0}, the signal \code{done} is asserted, and the counter stops
 counting by selecting the \code{0} input of the multiplexer.
 
 \begin{figure}
@@ -3166,7 +3168,7 @@ counting by selecting the \code{0} input of the multiplexer.
 
 Listing~\ref{lst:timer} shows the Chisel code for the timer. We use an 8-bit register \code{cntReg}
 that is reset to \code{0}. The boolean value \code{done} is the result of comparing \code{cntReg}
-with \code{0}. For the input multiplexer we introduce the wire \code{next} with a default
+with \code{0}. For the input multiplexer, we introduce the wire \code{next} with a default
 value of \code{0}. The \code{when/elsewhen} block introduces the other two inputs with
 the select function. The signal \code{load} has priority over the decrement selection.
 The last line connects the multiplexer, represented by \code{next}, to the input of the
@@ -3192,8 +3194,8 @@ within that period.
 
 Figure~\ref{fig:pwm} shows a PWM signal. The arrows point to the start of the periods
 of the signal. The percentage of time the signal is high is called the duty cycle.
-In the first two periods the duty cycle is 25\,\%, in the next two 50\,\%, and in the last
-two cycles it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
+In the first two periods, the duty cycle is 25\,\%; in the next two, 50\,\%, and in the last
+two cycles, it is 75\,\%. The pulse width is modulated between 25\,\% and 75\,\%.
 
 Adding a \myref{https://en.wikipedia.org/wiki/Low-pass_filter}{low-pass filter} to a PWM
 signal results in a simple
@@ -3206,11 +3208,11 @@ The following code example will generate a waveform with 3 clock cycles high eve
 
 \noindent We use a function for the PWM generator to provide a reusable, lightweight component.
 The function has two parameters: a Scala integer configuring the PWM with the number of
-clock cycles (\code{nrCycles}), and a Chisel wire (\code{din}) that gives the duty cycle (pulse width) for the
+clock cycles (\code{nrCycles}) and a Chisel wire (\code{din}) that gives the duty cycle (pulse width) for the
 PWM output signal. We use a multiplexer in this
 example to express the counter. The last line of the function compares the counter value
 with the input value \code{din} to return the PWM signal. The last expression in a Chisel function
-is the return value, in our case the wire connected to the compare function.
+is the return value, the wire connected to the compare function.
 
 We use the function \code{unsignedBitLength(n)} to specify the number of bits for the counter
 \code{cntReg} needed to represent unsigned numbers up to (and including)
@@ -3219,7 +3221,7 @@ Chisel also has a function \code{signedBitLength} to provide the number of bits
 for a signed representation of a number.
 
 
-One application of a PWM signal is to dim an LED. In that case the eye serves as low-pass
+One application of a PWM signal is to dim an LED. In that case, the eye serves as a low-pass
 filter. We expand the above example to drive the PWM generation by a triangular function.
 The result is an LED with continuously changing intensity.
 
@@ -3229,11 +3231,11 @@ We use two registers for the modulation: (1) \code{modulationReg} for counting u
 and (2) \code{upReg} as a flag to determine if we shall count up or down. We count up
 to the frequency of our clock input (100\,MHz in our example), which results in a signal
 of 0.5\,Hz. The lengthy \code{when/.elsewhen/.otherwise} expression handles the up- or
-down-counting and the switch of the direction.
+down-counting and the direction switch.
 
 As our PWM counts only up to the 1000th of the frequency to generate a 1\,kHz signal,
 we need to divide the modulation signal by 1000. As real division is very expensive in hardware,
-we simply shift by 10 to the right, which equates a division by $2^{10} = 1024$.
+we simply shift by 10 to the right, which equates to a division by $2^{10} = 1024$.
 As we have defined the PWM circuit as a function, we can simply instantiate that circuit
 with a function call. Wire \code{sig} represents the modulated PWM signal.
 
@@ -3242,7 +3244,7 @@ with a function call. Wire \code{sig} represents the modulated PWM signal.
 \begin{figure}
   \centering
   \includegraphics[scale=\scale]{figures/shiftregister}
-  \caption{A 4 stage shift register.}
+  \caption{A 4-stage shift register.}
   \label{fig:shiftregister}
 \end{figure}
 
@@ -3268,12 +3270,12 @@ send functions.
 A serial-in parallel-out configuration of a shift register transforms a serial input stream into parallel
 words. This may be used in a serial port (UART) for the receive function.
 Figure~\ref{fig:shiftreg-paraout} shows a 4-bit shift register, where each flip-flop output
-is connected to one output bit. After 4 clock cycles this circuit converts a 4-bit serial data word
-to a 4-bit parallel data word that is available in \code{q}. In this example we assume that bit 0
+is connected to one output bit. After four clock cycles, this circuit converts a 4-bit serial data word
+to a 4-bit parallel data word available in \code{q}. In this example, we assume that bit 0
 (the least significant bit) is sent first and therefore arrives in the last stage when we want to read
 the full word.
 
-In the following Chisel code we initialize the shift register \code{outReg} with 0. Then we shift in from the
+In the following Chisel code, we initialize the shift register \code{outReg} with 0. Then we shift in from the
 MSB, which means a right shift. The parallel result, \code{q}, is just the reading of the register
 \code{outReg}.
 
@@ -3302,7 +3304,7 @@ This may be used in a serial port (UART) for the transmit function.
 \end{figure}
 
 Figure~\ref{fig:shiftreg-paraload} shows a 4-bit shift register with a parallel load function.
-The Chisel description of that function is relatively straight forward:
+The Chisel description of that function is relatively straightforward:
 
 \shortlist{code/shift_paraload.txt}
 
@@ -3320,7 +3322,7 @@ as \myref{https://en.wikipedia.org/wiki/Static_random-access_memory}{SRAM}.
 For an ASIC, a memory compiler constructs memories.
 FPGAs contain on-chip memory blocks, also called block RAMs.
 Those on-chip memory blocks can be combined for larger memories.
-Memories in an FPGA usually have one read and one write port, or
+Memories in an FPGA usually have one read and one write port or
 two ports that can be switched between read and write at runtime.
 
 \index{Synchronous memory}
@@ -3338,7 +3340,7 @@ cycle after setting the address.
 
 Figure~\ref{fig:memory} shows the schematics of such a synchronous memory.
 The memory is dual-ported with one read port and one write port.
-The read port has a single input, the read address (\code{rdAddr}) and
+The read port has a single input, the read address (\code{rdAddr}), and
 one output, the read data (\code{rdData}).
 The write port has three inputs: the address (\code{wrAddr}), the data
 to be written (\code{wrData}), and a write enable (\code{wrEna}).
@@ -3356,7 +3358,7 @@ Listing~\ref{lst:memory} shows a component \code{Memory} that implements
 \longlist{code/memory.txt}{1\,KiB of synchronous memory.}{lst:memory}
 
 An interesting question is which value is returned from a read when in the same clock
-cycle a new value is written to the same address that is read out.
+cycle, a new value is written to the same address that is read out.
 We are interested in the read-during-write behavior of the memory.
 There are three possibilities: the newly written value, the old value, or undefined
 (which might be a mix of some bits from the old value and some of the newly written data).
@@ -3380,8 +3382,8 @@ the write enable to select between the forwarding path of the write data or the
 memory read data. The write data is delayed by one clock cycle with a register.
 
 Listing~\ref{lst:memory:forward} shows the Chisel code for a synchronous memory
-including the forwarding circuit. We need to store the write data into a register
-(\code{wrDataReg}) to be available in the next clock cycle in order to fit
+including the forwarding circuit. We need to store the written data in a register
+(\code{wrDataReg}) to be available in the next clock cycle to fit
 the synchronous memory that also provides the read value in the next clock
 cycle.
 We compare the two input addresses (\code{wrAddr} and \code{rdAddr})
@@ -3404,11 +3406,11 @@ The files are simple ASCII text files with the same number of lines as there are
 entries in the corresponding memory. Each character represents either a single bit
 or four bits. Traditionally, binary files use the \code{.bin} file extension, while
 hexadecimal files use \code{.hex}. Using \code{loadMemoryFromFile} will result in
-emission of a separate Verilog file and works in ChiselTest.
+the emission of a separate Verilog file and works in ChiselTest.
 %Using instead
 %\code{loadMemoryFromFileInline} results in an inlined initialization and does not
 %yet work in ChiselTest. Either way,
-Initializations are based around calls to \code{readmemb} or \code{readmemh}.
+Initializations are based on calls to \code{readmemb} or \code{readmemh}.
 
 To initialize on-chip memory from Scala during generation time, we need to first
 write the content into a file and then use \code{loadMemoryFromFile}.
@@ -3417,7 +3419,7 @@ Listing~\ref{lst:memory:init} shows an example of initializing a memory with a s
 \longlist{code/memory_init.txt}{Memory initialization.}{lst:memory:init}
 
 
-Chisel also provides \code{Mem}, which represents a memory with synchronous
+Chisel also provides \code{Mem}, representing a memory with synchronous
 write and an asynchronous read. As this memory type is usually not directly available
 in an FPGA, the synthesize tool will build it out of flip-flops.
 Therefore, we recommend using \code{SyncReadMem}. If asynchronous read behavior is needed and
@@ -3453,25 +3455,25 @@ Sketch the block diagram for the following circuits:
 
 \shortlist{code/draw_mux6.txt}
 
-\noindent Here is a slightly more complex circuit, containing a register:
+\noindent Here is a slightly more complex circuit containing a register:
 
 \shortlist{code/draw_acc.txt}
 
-As an advanced exercise try using an on-chip memory. Instantiate a \code{SyncReadMem}
+As an advanced exercise, try using an on-chip memory. Instantiate a \code{SyncReadMem}
 and create two communicating state machines. The first state machine writes a string
 into the memory. When done, it starts the second state machine that reads back
 the string from the memory. Test with simple \code{printf} statements in the
-reading state machine. Be careful in the reading, that the read value comes one clock cycle
-later then applying the address to the memory.
+reading state machine. Be careful in the reading that the read value comes one clock cycle
+later than applying the address to the memory.
 You can extend that example by writing a Chisel test to test the memory.
 
-Sometimes, one would like to download content of a memory from a laptop,
+Sometimes, one would like to download the content of a memory from a laptop,
 e.g., when building a processor to load a program. Assume you have a
-serial port (see Section~\ref{sec:uart}) available that connects your FPGA
+serial port (see Section~\ref{sec:uart}) that connects your FPGA
 board to your laptop. Can you envision a protocol on the serial port
 with a state machine in the FPGA to download memory content into
-the FPGA after configuring it. Downloading at runtime also avoids synthesizing
-for the FPGA again, after the memory content changes.
+the FPGA after configuring it? Downloading at runtime also avoids synthesizing
+for the FPGA again after the memory content changes.
 
 \chapter{Input Processing}
 \label{sec:input}
