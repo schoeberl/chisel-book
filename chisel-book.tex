@@ -7250,12 +7250,24 @@ dedicated flip-flops.}
 Note that we use the parameter \code{SyncReadMem.WriteFirst} to enable forwarding
 when the same register is written and read in the same clock cycle instead of
 doing it explicitly, as shown in Section~\ref{ref:memory}.
+
+In an FPGA on-chip memories are initialized to zero at configuration time.
+However, in an ASIC the content of the memory is undefined.
+Therefore, we need to handle the special case when reading from register 0
+to return a 0 and not the random content of the on-chip memory.
+Note that the \code{read()} function returns the result with one clock
+cycle latency. Therefore, the multiplexer at the output of the memory
+needs to compare against the register address delayed by once clock cycle.
+(This is similar to the manual forwarding on a read during write,
+as shown in Section~\ref{ref:memory}.)
+The function returns a Scala tuple returning the two read register
+values.\footnote{It also returns debugging registers as well,
+which are ignored at synthesis.}
+
 The register file has two read ports, which is uncommon in an FPGA.
 Therefore, the practical implementation will use two on-chip memories
 written with the same data, each providing one read port.
-The function returns a Scala tuple returning the two read register
-values.\footnote{It also returns debugging registers, which are ignored at
-synthesis.}
+
  
 \longlist{code/wildcat_regfile.txt}{The core of the register file function.}{lst:wildcat:rf}
 

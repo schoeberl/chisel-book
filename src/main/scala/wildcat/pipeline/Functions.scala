@@ -199,8 +199,8 @@ object Functions {
       }
       //- start wildcat_regfile
       val regs = SyncReadMem(32, UInt(32.W), SyncReadMem.WriteFirst)
-      val rs1Val = regs.read(rs1)
-      val rs2Val = regs.read(rs2)
+      val rs1Val = Mux(RegNext(rs1) === 0.U, 0.U, regs.read(rs1))
+      val rs2Val = Mux(RegNext(rs2) === 0.U, 0.U, regs.read(rs2))
       when(wrEna && rd =/= 0.U) {
         regs.write(rd, wrData)
       }
