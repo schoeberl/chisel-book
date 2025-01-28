@@ -7275,7 +7275,9 @@ A similar function decodes the ALU operation from the instruction. Furthermore, 
 immediate value is extracted from the instruction. All those values are part of the
 decoded output.
 
-Finally, Listing~\ref{lst:wildcat:mem:address} shows the address computation for memory
+
+
+Listing~\ref{lst:wildcat:mem:address} shows the address computation for memory
 load or store instructions. The address (\code{memAdress}) is computed by using the value of
 register \code{rs1} and adding the immediate field (\code{dec.Out.imm}).
 However, the code is slightly more complicated, as we need to implement forwarding.
@@ -7289,11 +7291,18 @@ stage.
 
 \longlist{code/wildcat_mem_address.txt}{Address computation, including forwarding if needed.}{lst:wildcat:mem:address}
 
+Listing~\ref{lst:wildcat:mem} shows the memory access part in decode.
+As the input registers of the memory are part of the execution stage, the memory address
+and the store operation are computed in the decode stage.
+
+\longlist{code/wildcat_memory.txt}{Memory access in decode.}{lst:wildcat:mem}
+
+
  
-\subsection{Execute and Memory Access}
+\subsection{Execute and Memory Read}
 
 The third pipeline stage is responsible for either executing either an ALU operation, execute
-a control instruction (branch or jump), or perform a memory operation.
+a control instruction (branch or jump), or perform a memory load.
 Listing~\ref{lst:wildcat:exe} shows part of the execution stage. Depending on the instruction
 type, either the value of a register \code{v2} or the immediate value \code{decOut.imm}
 is used as the second operand for an ALU instruction. The ALU is defined in a Scala function,
@@ -7302,15 +7311,16 @@ immediate and adding the upper immediate to the PC.
 
 \longlist{code/wildcat_execute.txt}{ALU operation in the execution stage.}{lst:wildcat:exe}
 
-Listing~\ref{lst:wildcat:alu} shows part of the function that implements the ALU operations.
-For the operation constants, we use a Scala \code{Enumeration}, as shown
+We use a Scala \code{Enumeration} to define as ALU operations, as shown
 in Listing~\ref{lst:wildcat:alu:enum}. As with the other constants, they are shared between the
 ISA simulator and the pipeline implementation. Therefore, they need to be converted
-to Chisel constants. The listing is incomplete so as not to consume too much space.
+to Chisel constants.
+\longlist{code/wildcat_alu_enum.txt}{The ALU operation enumeration.}{lst:wildcat:alu:enum}
+
+Listing~\ref{lst:wildcat:alu} shows the function that implements the ALU operations.
 
 \longlist{code/wildcat_alu.txt}{The ALU function.}{lst:wildcat:alu}
 
-\longlist{code/wildcat_alu_enum.txt}{The ALU operation enumeration.}{lst:wildcat:alu:enum}
 
 Listing~\ref{lst:wildcat:branch} shows the logic for branch execution.
 The branch target is computed by adding the immediate value of the branch instruction
@@ -7321,17 +7331,15 @@ that is needed to implement conditional branches.
 \longlist{code/wildcat_branch.txt}{Branch execution}{lst:wildcat:branch}
 
 
-Listing~\ref{lst:wildcat:mem} shows the memory access.
-The load operation is performed in the execution stage. The function \code{selectLoadData}
-selects depending on the instruction and the lower 2 bits of the address which part of the
-read data is used.
 
-As the input registers of the memory are part of the execution stage, the memory address
-and the store operation is computed in the decode stage.
+The memory read operation is performed in the execution stage.
+Listing~\ref{lst:wildcat:mem:read} shows the multiplexer for the load instruction.
+The function \code{selectLoadData} selects, depending on the instruction and
+the lower 2 bits of the address, which part of the read data is used. 
 
-\todo{This should be moved to the decode part, also in the source code.}
+\longlist{code/wildcat_memory_read.txt}{Memory load.}{lst:wildcat:mem:read}
 
-\longlist{code/wildcat_memory.txt}{Memory access}{lst:wildcat:mem}
+
 
 \section{Summary and Exercise}
 

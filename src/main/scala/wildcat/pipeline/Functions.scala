@@ -242,8 +242,6 @@ object Functions {
       is(SLL.id.U) {
         res := a << b(4, 0)
       }
-      // and more cases
-      //- end
       is(SRL.id.U) {
         res := a >> b(4, 0)
       }
@@ -259,6 +257,7 @@ object Functions {
     }
     res
   }
+  //- end
 
   def selectLoadData(data: UInt, func3: UInt, memLow: UInt): UInt = {
     val res = Wire(UInt(32.W))

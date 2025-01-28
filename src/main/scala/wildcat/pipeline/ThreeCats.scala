@@ -10,8 +10,8 @@ import wildcat.pipeline.Functions._
  *
  * 0. PC generation
  * 1. Fetch
- * 2. Decode, register read
- * 3. Execute, memory access
+ * 2. Decode, register read, memory address computation and write
+ * 3. Execute, memory read
  *
  * Author: Martin Schoeberl (martin@jopdesign.com)
  *
@@ -27,10 +27,18 @@ class ThreeCats() extends Wildcat() {
   val doBranch = WireDefault(false.B)
   val branchTarget = WireDefault(0.U)
 
+  // Forwarding data and register
+  val exFwd = new Bundle() {
+    val valid = Bool()
+    val wbDest = UInt(5.W)
+    val wbData = UInt(32.W)
+  }
+  val exFwdReg = RegInit(0.U.asTypeOf(exFwd))
 
   //- start wildcat_fetch
   // PC generation
-  val pcReg = RegInit(-4.S(32.W).asUInt)
+  // val pcReg = RegInit(-4.S(32.W).asUInt)
+  val pcReg = RegInit(0.S(32.W).asUInt)
   val pcNext = WireDefault(Mux(doBranch, branchTarget, pcReg + 4.U))
   pcReg := pcNext
   io.imem.address := pcNext
@@ -43,7 +51,7 @@ class ThreeCats() extends Wildcat() {
   }
   //- end
 
-  // Decode and register read
+  // Decode, register read, and memory access
   val pcRegReg = RegNext(pcReg)
   //- start wildcat_decode
   val instrReg = RegInit(0x00000033.U) // nop on reset
@@ -78,27 +86,35 @@ class ThreeCats() extends Wildcat() {
   decEx.rs2Val := rs2Val
   decEx.func3 := instrReg(14, 12)
 
-  // Execute
-  val decExReg = RegInit(0.U.asTypeOf(decEx))
-  decExReg := decEx
-
-  // Forwarding register
-  val exFwd = new Bundle() {
-    val valid = Bool()
-    val wbDest = UInt(5.W)
-    val wbData = UInt(32.W)
-  }
-  val exFwdReg = RegInit(0.U.asTypeOf(exFwd))
-
   //- start wildcat_mem_address
   // Forwarding to memory
   val address = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs1, wbData, rs1Val)
   val data = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs2, wbData, rs2Val)
 
   val memAddress = (address.asSInt + decOut.imm).asUInt
-  //- end
   decEx.memLow := memAddress(1, 0)
+  //- end
 
+  //- start wildcat_memory
+  io.dmem.rdAddress := memAddress
+  io.dmem.rdEnable := false.B
+  io.dmem.wrAddress := memAddress
+  io.dmem.wrData := data
+  io.dmem.wrEnable := VecInit(Seq.fill(4)(false.B))
+  when(decOut.isLoad && !doBranch) {
+    io.dmem.rdEnable := true.B
+  }
+  when(decOut.isStore && !doBranch) {
+    val (wrd, wre) = getWriteData(data, decEx.func3, memAddress(1, 0))
+    io.dmem.wrData := wrd
+    io.dmem.wrEnable := wre
+  }
+  //- end
+
+
+  // Execute
+  val decExReg = RegInit(0.U.asTypeOf(decEx))
+  decExReg := decEx
 
   // Forwarding
   val v1 = Mux(exFwdReg.valid && exFwdReg.wbDest === decExReg.rs1, exFwdReg.wbData, decExReg.rs1Val)
@@ -131,23 +147,13 @@ class ThreeCats() extends Wildcat() {
   //- end
   wrEna := decExReg.valid && decExReg.decOut.rfWrite
 
-  // Memory access
-  //- start wildcat_memory
-  io.dmem.rdAddress := memAddress
-  io.dmem.rdEnable := false.B
-  io.dmem.wrAddress := memAddress
-  io.dmem.wrData := data
-  io.dmem.wrEnable := VecInit(Seq.fill(4)(false.B))
+  // Memory read access
+  //- start wildcat_memory_read
   when(decExReg.decOut.isLoad && !doBranch) {
     res := selectLoadData(io.dmem.rdData, decExReg.func3, decExReg.memLow)
-    io.dmem.rdEnable := true.B
-  }
-  when(decOut.isStore && !doBranch) {
-    val (wrd, wre) = getWriteData(data, decEx.func3, memAddress(1, 0))
-    io.dmem.wrData := wrd
-    io.dmem.wrEnable := wre
   }
   //- end
+
 
   // Forwarding register values to ALU
   exFwdReg.valid := wrEna && (wbDest =/= 0.U)
