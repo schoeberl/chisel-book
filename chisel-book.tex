@@ -3486,8 +3486,8 @@ Input signals may be noisy with spikes that could trigger a transition in our
 synchronous circuit. This chapter describes circuits that deal with such input
 conditions.
 
-The latter two issues, debouncing switches, and filtering noise, can also be
-solved with external, analog components. However, it is more (cost-)efficient
+The latter two issues, debouncing switches and filtering noise, can also be
+solved with external, analog components. However, it is more cost-efficient
 to deal with those issues in the digital domain.
 
 \section{Asynchronous Input}
@@ -3499,14 +3499,14 @@ asynchronous signals. Those signals may violate the setup and hold time
 of the input of a flip-flop. This violation may result in
 \myref{https://en.wikipedia.org/wiki/Metastability_(electronics)}{metastability}
 of the flip-flop. The metastability may result in an output value between 0 and
-1, or it may result in oscillation. However, after some time the flip-flop will
+1, or it may result in oscillation. However, after some time, the flip-flop will
 stabilize at 0 or 1.
 
 Another common issue with external, asynchronous input signals is when
-that signal changes close to the clock rising edge and is used in more than one
+that signal changes close to the rising clock edge and is used in more than one
 place of the circuit. Due to different delay times, those different usages of that
 input may be registered at different clock cycles, which might violate
-some assumptions.\footnote{I experienced this issue once and it took me
+some assumptions.\footnote{I experienced this issue once, and it took me
 quite some time to find the error.}
 
 We cannot avoid metastability, but we can contain its effects.
@@ -3551,11 +3551,11 @@ input signals with a period $T > t_{bounce}$. We will only use the
 sampled signal further downstream.
 
 When sampling the input with this long period, we know that on a transition
-from 0 to 1 only one sample may fall into the bouncing region.
+from 0 to 1, only one sample may fall into the bouncing region.
 The sample before will safely read a 0, and the sample after the bouncing
 region will safely read a 1. The sample in the bouncing region will
-either be  0 or a 1. However, this does not matter as it then belongs either
-to the still 0 samples or to the already 1 samples. The critical point
+either be  0 or 1. However, this does not matter as it then belongs either
+to the still 0 samples or to the already 1 sample. The critical point
 is that we have only one transition from 0 to 1.
 
 \begin{figure}
@@ -3567,7 +3567,7 @@ is that we have only one transition from 0 to 1.
 
 Figure~\ref{fig:debounce} shows the sampling for the debouncing in action.
 The top signal shows the bouncing input, and the arrows below show the sampling
-points. The distance between those sampling points needs to be longer
+points. The distance between those sampling points must be longer
 than the maximum bouncing time. The first sample safely samples a 0, and the last
 sample in the figure samples a 1. The middle sample falls into the
 bouncing time. It may either be 0 or 1. The two possible outcomes are
@@ -3588,17 +3588,17 @@ First, we need to decide on the sampling frequency. The above example
 assumes a 100~MHz clock and results in a sampling frequency of 100~Hz
 (assuming that the bouncing time is below 10~ms). The maximum
 counter value is \code{fac}, the division factor.
-We define a register \code{btnDebReg} for the debounced signal,
+We define a register \code{btnDebReg} for the debounced signal
 without a reset value. The register \code{cntReg} serves
-as counter, and the \code{tick} signal is true when the counter has
+as a counter, and the \code{tick} signal is true when the counter has
 reached the maximum value. In that case, the \code{when} condition
-is \code{true} and (1) the counter is reset to 0 and (2) the debounce
+is \code{true}: (1) the counter is reset to 0 and (2) the debounce
 register stores the input sample. In our example, the input signal is named
-\code{btnSync} as it is the output from the input synchronizer shown
+\code{btnSync} as the output from the input synchronizer shown
 in the previous section.
 
 The debouncing circuit comes after the synchronizer circuit.
-First, we need to synchronize in the asynchronous signal, then
+First, we need to synchronize the asynchronous signal, and then
 we can further process it in the digital domain.
 
 \section{Filtering of the Input Signal}
@@ -3663,7 +3663,7 @@ If useful, those functions can be elevated to some utility class object.
 
 Any digital circuit needs a reset signal to reset registers to a defined state. The reset state is
 set in Chisel with the \code{RegInit} constructor. A reset signal is usually an asynchronous
-input to the circuit. That means when directly connected to the reset of a flip-flop it may
+input to the circuit. That means when directly connected to the reset of a flip-flop, it may
 violate timing constraints. In case of a synchronous reset it may violate setup and hold times
 of the flip-flop. Also when used as an asynchronous reset input, it still needs to be synchronized
 to the clock. Specifically, the \emph{release} of the reset signal needs to be synchronized to the clock.
@@ -3681,7 +3681,7 @@ of the contained module.
 
 \shortlist{code/sync_reset.txt}
 
-In the above example \code{SyncReset} is the top level module that contains a
+In the above example, \code{SyncReset} is the top-level module that contains a
 counter (\code{WhenCounter}). The reset signal of the top-level module is called
 \code{reset} and is connected to the input synchronizer (\code{RegNext(RegNext(reset))}).
 The output of that input synchronizer (\code{syncReset}) is connected to the reset \emph{input}
@@ -3692,55 +3692,55 @@ of the counter (\code{cnt.reset := syncReset}).
 
 Build a counter that is incremented by an input button.
 Display the counter value in binary with the LEDs on an FPGA board.
-First observe if there are issues with a bouncing input button.
+First, observe if there are issues with a bouncing input button.
 Then resolve that issue by building
 the complete input processing chain with: (1) an input synchronizer,
 (2) a debouncing circuit, (3) a majority voting circuit to suppress noise,
 and (4) an edge detection circuit to trigger the increment of the counter.
 
 As there is no guarantee that a modern button will always bounce, you can
-simulate the bouncing and the spikes by pressing the button manually in a fast succession
+simulate the bouncing and the spikes by pressing the button manually in fast succession
 and using a low sample frequency. Select, e.g., one second as sample frequency,
 i.e., if the input clock runs at 100~MHz, divide it by 100,000,000.
-Simulate a bouncing button by pressing several times in fast succession
+Simulate a bouncing button several times in fast succession
 before settling to a stable press. Test your circuit without and with the
 debouncing circuit sampling at 1~Hz.
 With the majority voting, you need to press between one and two seconds
-for a reliable increment of the counter. Also, the release of the button is
+for a reliable counter increment. Also, the release of the button is
 majority voted. Therefore, the circuit only recognizes the release when it is
 longer than 1--2 seconds.
 
-\chapter{Timing}
-
-Up to now we have abstracted away timing. Timing constraints and requirements are
-usually not expressed in hardware description languages.\footnote{VHDL and Verilog
-contain timing delay statements, however, they are not used for synthesis.
-The are used for simulation only.}
-Timing properties emerge after synthesizing a circuit. Timing constraints, such as
-period of the clock, can be set in a constraint file to guide the synthesis and optimization
-process. The constraint file is usually in the industry-standard Synopsys Design Constraints format (SDC).
-The constraints are described in \myref{https://www.tcl.tk/about/language.html}{TCL},
-a scripting language popular in digital design tools.
-The following example is from Quartus, synthesizing for an FPGA.
-The clock period is given in nanoseconds. Furthermore, it instructs Quartus to
-derive timing constraints for PLLs.
-
-\begin{verbatim}
-# Clock in input pin (50 MHz)
-create_clock -period 20 [get_ports clock]
-
-# Create generated clocks based on PLLs
-derive_pll_clocks -use_tan_name
-\end{verbatim}
-
-That constraints are also checked by the timing analysis tool after synthesis and final
-place and route to check if they can be matched. A timing violation is usually reported as
-an error.
-
-\section{Propagation Delay}
-
-\section{Setup and Hold Time}
-
+%\chapter{Timing}
+%
+%Up to now we have abstracted away timing. Timing constraints and requirements are
+%usually not expressed in hardware description languages.\footnote{VHDL and Verilog
+%contain timing delay statements, however, they are not used for synthesis.
+%The are used for simulation only.}
+%Timing properties emerge after synthesizing a circuit. Timing constraints, such as
+%period of the clock, can be set in a constraint file to guide the synthesis and optimization
+%process. The constraint file is usually in the industry-standard Synopsys Design Constraints format (SDC).
+%The constraints are described in \myref{https://www.tcl.tk/about/language.html}{TCL},
+%a scripting language popular in digital design tools.
+%The following example is from Quartus, synthesizing for an FPGA.
+%The clock period is given in nanoseconds. Furthermore, it instructs Quartus to
+%derive timing constraints for PLLs.
+%
+%\begin{verbatim}
+%# Clock in input pin (50 MHz)
+%create_clock -period 20 [get_ports clock]
+%
+%# Create generated clocks based on PLLs
+%derive_pll_clocks -use_tan_name
+%\end{verbatim}
+%
+%That constraints are also checked by the timing analysis tool after synthesis and final
+%place and route to check if they can be matched. A timing violation is usually reported as
+%an error.
+%
+%\section{Propagation Delay}
+%
+%\section{Setup and Hold Time}
+%
 
 
 \chapter{Finite-State Machines}
@@ -3795,7 +3795,7 @@ for the arrow.
 Figure~\ref{fig:diag-moore} shows the state diagram of a simple example FSM.
 The FSM has three states: \emph{green}, \emph{orange}, and \emph{red},
 indicating a level of alarm. The FSM starts at the \emph{green} level.
-When a \emph{bad event} happens the alarm level is switched to \emph{orange}.
+When a \emph{bad event} happens, the alarm level is switched to \emph{orange}.
 On a second bad event, the alarm level is switched to \emph{red}.
 In that case, we want to ring a bell; \emph{ring bell} is the only output of this FSM.
 We add the output to the \emph{red} state.
@@ -3812,7 +3812,7 @@ Although a state diagram may be visually pleasing and the function of an FSM
 can be grasped quickly, a state table may be quicker to write down.
 Table~\ref{tab:state:table} shows the state table for our alarm FSM.
 We list the current state, the input values, the resulting next state, and
-the output value for the current state. In principle, we would need to
+the output value for the current state. In principle, we need to
 specify all possible inputs for all possible states. This table would have
 $3 \times 4 = 12$ rows. We simplify the table by indicating that the \emph{clear}
 input is a don't care when a \emph{bad event} happens. That means
@@ -3842,7 +3842,7 @@ red & 0 & 1 & green & 1 \\
 \label{tab:state:table}
 \end{table}
 
-Finally, after all the design of our warning level FSM, we shall code it in Chisel.
+Finally, after the design of our warning level FSM, we shall code it in Chisel.
 Listing~\ref{lst:fsm:alarm} shows the Chisel code for the alarm FSM.
 Note that we use the Chisel type \code{Bool} for the inputs and the
 output of the FSM.
@@ -3858,7 +3858,7 @@ The FSM has two input signals and a single output signal, captured in a Chisel \
 \shortlist{code/simple_fsm_io.txt}
 
 
-\noindent At this place we could spend some discussion on optimal state encoding. Two common options
+\noindent At this place, we could spend some discussion on optimal state encoding. Two common options
 are binary or one-hot encoding. However, we leave those low-level optimizations to
 the synthesize tool and aim for readable code.\footnote{In the current version
 of Chisel, the \codefoot{ChiselEnum} type represents states in binary encoding.
@@ -3869,7 +3869,7 @@ Therefore, we use the enumeration type \code{ChiselEnum} with symbolic names for
 
 \shortlist{code/simple_fsm_states.txt}
 
-\noindent The individual state values are enumerated in a comma separated list,
+\noindent The individual state values are enumerated in a comma-separated list,
 followed by an assignment of \code{Value}.
 The register holding the state is defined with the \emph{green} state as the reset value:
 
@@ -4023,9 +4023,9 @@ detection with a Moore FSM.
 
 Figure~\ref{fig:diag:rising:moore} shows the state diagram for the rising
 edge detection with a Moore FSM. The first thing to notice is that the Moore FSM
-needs three states, compared to two states in the Mealy version.
+needs three states, compared to the two states in the Mealy version.
 The state \code{pulse} is needed to produce the single-cycle pulse.
-The FSM stays in state \code{pulse} just one clock cycle and then
+The FSM stays in state \code{pulse} for just one clock cycle and then
 proceeds either back to the start state \code{zero} or to the \code{one}
 state, waiting for the input to become 0 again.
 We show the input condition on the state transition arrows and the
@@ -4035,7 +4035,7 @@ FSM output within the state representing circles.
 
 Listing~\ref{lst:fsm:rising:moore} shows the Moore version of the rising edge detection
 circuit. It uses double the number of D flip-flops than the Mealy or directly
-coded version. The resulting next state logic is therefore also larger
+coded version. The resulting next state logic is, therefore, also larger
 than the Mealy or directly coded version.
 
 \begin{figure}
@@ -4048,7 +4048,7 @@ than the Mealy or directly coded version.
 Figure~\ref{fig:rising} shows the waveform of a Mealy and a  Moore version
 of the rising edge detection FSM. We can see that the Mealy output closely
 follows the input rising edge, while the Moore output rises after the clock tick.
-We can also see that the Moore output is one clock cycle wide, where the Mealy
+We can also see that the Moore output is one clock cycle wide, whereas the Mealy
 output is usually less than a clock cycle.
 
 From the above example, one is tempted to find Mealy FSMs the \emph{better}
@@ -4073,13 +4073,13 @@ Now it is time to write some \emph{real} FSM code.
 Pick a little bit more complex example and implement the FSM and
 write a test bench for it.
 
-A classic example for a FSM is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
-A traffic light controller has to ensure that on a switch from red to green
+A classic example of an FSM is a traffic light controller (see~\cite[Section~14.3]{dally:vhdl:2016}).
+A traffic light controller has to ensure that on a switch from red to green,
 there is a phase in between where both roads in the intersection
 have a no-go light (red and orange).
-To make this example a little bit more interesting, consider a priority road.
+Consider a priority road to make this example a bit more interesting.
 The minor road has two car detectors (on both entries into the intersection).
-Switch to green for the minor road only when a car is detected and then switch
+Switch to green for the minor road only when a car is detected, and then switch
 back to green for the priority road.
 
 \todo{Luca: Greatest common divisor with Euclide algorithm can be also a nice exercise.
@@ -4103,7 +4103,7 @@ of the design. A single FSM for the design would be too large in the first place
 To discuss communicating FSMs, we use an example
 from~\cite[Chapter~17]{dally:vhdl:2016}, the light flasher.
 The light flasher has one input \code{start} and one output
-\code{light}. The specification of the light flasher is as follows:
+\code{light}. The specifications of the light flasher are as follows:
 \begin{itemize}
 \item when \code{start} is high for one clock cycle, the flashing
 sequence starts;
@@ -4121,7 +4121,7 @@ We do not show the code for this simple-minded implementation of the light
 flasher.
 
 The problem can be solved more elegantly by factoring this large FSM into
-two smaller FSMs: the master FSM implements the flashing logic, and the timer FSM
+two smaller FSMs: the master FSM implements the flashing logic and the timer FSM
 implements the waiting. Figure~\ref{fig:flasher} shows the composition of
 the two FSMs.
 
@@ -4138,8 +4138,8 @@ The timer specification is as follows:
 \begin{itemize}
 \item when \code{timerLoad} is asserted, the timer loads a value into the down counter,
 independent of the state;
-\item \code{timerSelect} selects between 5 or 3 for the load;
-\item \code{timerDone} is asserted when the counter completed the countdown
+\item \code{timerSelect} selects between 5 and 3 for the load;
+\item \code{timerDone} is asserted when the counter completes the countdown
 and remains asserted;
 \item otherwise, the timer counts down.
 \end{itemize}
@@ -4149,7 +4149,7 @@ and remains asserted;
 \shortlist{code/flasher_timer.txt}
 
 \noindent Listing~\ref{lst:flasher:master} shows the master FSM. It has a starting
-state \code{off} and states for the complete blinking sequence. In each state it
+state \code{off} and states for the complete blinking sequence. In each state, it
 waits for the time being done. The timer is loaded whenever it is done and in the
 initial \code{off} state. Signal \code{timerSelect} selects the value for the \emph{next}
 state down counter.
@@ -4179,8 +4179,8 @@ Listing~\ref{lst:counter:fsm} code shows the down counter FSM:
 
 
 \noindent Note that the counter is loaded with 2 for 3 flashes, as it counts the
-\emph{remaining} flashes and is decremented in state \code{space} when the timer
-is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double refactored flasher.
+\emph{remaining} flashes and is decremented in the state \code{space} when the timer
+is done. Listing~\ref{lst:flasher2:master} shows the master FSM for the double-refactored flasher.
 
 \verylonglist{code/flasher2_fsm.txt}{The master FSM of the double refactored light flasher.}{lst:flasher2:master}
 
@@ -4189,7 +4189,7 @@ is also better configurable. No FSM needs to be changed if we want to change
 the length of the \emph{on} or \emph{off} intervals or the number of flashes.
 
 In this section, we have explored communicating circuits, especially FSMs, that
-only exchange control signals. To perform computation we can combine a FSM with
+only exchange control signals. To perform computation, we can combine a FSM with
 a datapath, as discussed in the next section.
 
 \section{State Machine with Datapath}
@@ -4199,8 +4199,8 @@ a datapath, as discussed in the next section.
 
 One typical example of communicating state machines is a state machine
 combined with a datapath. This combination is often called a finite-state machine
-with datapath (FSMD). The state machine controls the datapath, and the datapath
-performs the computation. The FSM input are the inputs from the environment and the outputs
+with a datapath (FSMD). The state machine controls the datapath, and the datapath
+performs the computation. The FSM inputs are the inputs from the environment and the outputs
 from the datapath. Some data from the environment is also fed into the datapath, and the
 data output comes from the datapath.
 
@@ -4217,9 +4217,9 @@ The Hamming weight is the number of symbols different from the zero symbol.
 For a binary string, this is the number of `1's.
 
 The popcount unit contains the data input \code{din} and the result output \code{popCount},
-both connected to the datapath. For the input and the output we use a ready/valid handshake.
+both connected to the datapath. For the input and the output, we use a ready/valid handshake.
 When data is available, valid is asserted. When a receiver can accept data it asserts ready.
-When both signals are asserted the transfer takes place. The handshake signals are connected
+When both signals are asserted, the transfer takes place. The handshake signals are connected
 to the FSM. The FSM is connected with the datapath with control signals towards the datapath
 and with status signals from the datapath.
 \index{Datapath}
@@ -4263,7 +4263,7 @@ ready to compute the next popcount.
 
 \longlist{code/popcnt_main.txt}{The top level of the popcount circuit.}{lst:pop:top}
 
-The top level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
+The top-level component, shown in Listing~\ref{lst:pop:top}, instantiates the FSM and the datapath
 components and connects them.
 Listing~\ref{lst:pop:data} shows the Chisel code for the datapath of the popcount
 circuit.
@@ -4327,7 +4327,7 @@ no transfer takes place.
 Figure~\ref{fig:ready_valid1} shows a timing diagram of the ready/valid
 transaction where the receiver signals \code{ready} (from clock cycle 2 on)
 before the sender has data. The data transfer happens in clock cycle 4.
-From clock cycle 5 on neither the sender has data nor the receiver is ready
+From clock cycle 5 on neither the sender has data, nor the receiver is ready
 for the next transfer.
 When the receiver can receive data in every clock cycle, it is called an
 ``always ready'' interface and \code{ready} can be hardcoded to \code{true}.
@@ -4342,11 +4342,11 @@ When the receiver can receive data in every clock cycle, it is called an
 Figure~\ref{fig:ready_valid2} shows a timing diagram of the ready/valid
 transaction where the sender signals \code{valid} (from clock cycle 2 on)
 before the receiver is ready. The data transfer happens in clock cycle 4.
-From clock cycle 5 on neither the sender has data nor the receiver is ready
+From clock cycle 5 on neither the sender has data, nor the receiver is ready
 for the next transfer.
-Similar to the ``always ready'' interface we can envision and always valid
-interface. However, in that case the data will probably not change on signaling
-\code{ready} and we would simply drop the handshake signals.
+Similar to the ``always ready'' interface, we can envision an always valid
+interface. However, in that case, the data will probably not change on signaling
+\code{ready}, and we would simply drop the handshake signals.
 
 \begin{figure}
   \centering
@@ -4355,9 +4355,9 @@ interface. However, in that case the data will probably not change on signaling
   \label{fig:ready_valid3}
 \end{figure}
 
-Figure~\ref{fig:ready_valid3} shows further variations of using the the ready/valid
+Figure~\ref{fig:ready_valid3} shows further variations of using the ready/valid
 interface. In clock cycle 2 it happens that both signals (\code{ready} and \code{valid})
-become asserted just for a single clock cycle and the data transfer
+become asserted just for a single clock cycle, and the data transfer
 of \code{D1} happens. Data can be transferred back-to-back (in every
 clock cycle) as shown in clock cycles 5 and 6 with the transfer of
 \code{D2} and \code{D3}
@@ -4373,12 +4373,12 @@ bundle, similar to the following:
 the \code{data}. The interface defined by Chisel uses the field \code{bits}
 for the data. \code{DecoupledIO} is part of the package \code{chisel3.util}.
 
-One question remains if the \code{ready} or \code{valid} may be deasserted
+One question remains if the \code{ready} or \code{valid} may be de-asserted
 after being asserted and \emph{no} data transfer has happened.
-For example a receiver might be ready for some time and not receiving data, but
+For example, a receiver might be ready for some time and not receive data, but
 due to some other events may become not ready.
 The same can be envisioned with the sender, having data valid only some
-clock cycles and becoming non-valid without a data transfer happened.
+clock cycles and becoming non-valid without a data transfer happening.
 If this behavior is allowed or not is not part of the ready/valid interface,
 but needs to be defined by the concrete usage of the interface.
 
@@ -4399,13 +4399,13 @@ by using the class \code{IrrevocableIO}.
 
 The AXI  bus~\cite{axi4standard} uses one ready/valid interface for each of the following parts of the bus:
 read address, read data, write address, and write data. AXI restricts the interface
-that once the sender assets \code{valid} it is not allowed to deasserted it
-until the data transfer happened. This is the same restriction as just described
+so that once the sender assets \code{valid}, it is not allowed to deassert it
+until the data transfer happens. This is the same restriction as just described
 in the comment of the \code{IrrevocableIO} interface.
 Furthermore, the sender is not allowed to wait for a receivers
 \code{ready} to assert \code{valid}.
 The receiver side is more relaxed. If \code{ready} is asserted, it is allowed to deassert it
-before \code{valid} is asserted. Furthermore, the receiver is allowed to wait for a asserted
+before \code{valid} is asserted. Furthermore, the receiver can wait for an asserted
 \code{valid} before asserting \code{ready}.
 
 \longlist{code/ready_valid_buffer.txt}{A register as a buffer with a ready/valid interface}{lst:rv:reg}
@@ -4416,17 +4416,16 @@ The buffer has a ready/valid interface (\code{DecoupledIO}) at the input and one
 The \code{DecoupledIO} bundle is defined from the sender's viewpoint. Therefore,
 the input of the buffer (\code{in}) needs to change the direction with \code{Flipped}.
 
-The module contains a register for the data (\code{dataReg}) and a single bit
+The module contains a register for the data (\code{dataReg}) and a single-bit
 register (\code{emptyReg}) signaling if the buffer is empty or full.
-This single bit represents a two state Moore FSM with states empty and full.
+This single bit represents a two-state Moore FSM with states empty and full.
 The input \code{ready} signal and the output \code{valid} signal depend only
 on the state of \code{emptyReg}. There is no combinational path between the
-input and the output of the buffer.
+buffer's input and output.
 
-When the buffer is empty and there is valid data at the input, the data is registered
-and the state changed to full. When the buffer is full and the consumer side signals
-to be ready, the data is considered read and the buffer is empty again.
-
+When the buffer is empty, and valid data is at the input, the data is registered
+and the state is changed to full. When the buffer is full, and the consumer side signals
+to be ready, the data is considered read, and the buffer is empty again.
 
 
 \chapter{Hardware Generators}
