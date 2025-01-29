@@ -5719,14 +5719,14 @@ and receiver.
 
 \subsection{FIFO Exploration}
 
-Write a simple FIFO with 4 buffer elements in dedicated registers.
+Write a simple FIFO with four buffer elements in dedicated registers.
 Use 2-bit read and write counters, which can just overflow.
 As a further simplification, consider the situation when the read and write
 pointers are equal to empty FIFO. This means you can maximally
 store 3 elements. This simplification avoids the counter function from
 the example in Listing~\ref{lst:fifo:reg:mem} and the handling
 of the empty or full with the same pointer values. We do not need
-empty or full flags, as this can be derived form the pointer values
+empty or full flags, as this can be derived from the pointer values
 alone. How much simpler is this design?
 
 The presented different FIFO designs have different design tradeoffs
@@ -5745,7 +5745,7 @@ Where are the sweet spots for FIFOs of 4 words, 16 words, and 256 words?
 We combine different components to build larger systems.
 To simplify the composition of components, interconnect standards such as
 \myref{https://en.wikipedia.org/wiki/Wishbone_(computer_bus)}{Wishbone}
-or AXI exist. This chapter explores different forms of interconnect.
+or AXI exists. This chapter explores different forms of interconnect.
 
 Interconnects can be used between chips (external) or within a chip, often
 then called a system-on-chip (SoC).
@@ -5772,24 +5772,24 @@ such as \myref{https://en.wikipedia.org/wiki/Zilog_Z80}{Z80} or
 The bus is split into an address bus, a data bus, and control signals
 such as \emph{read} and \emph{write}.
 The CPU drives the address and control signals. The data bus is bidirectional.
-The CPU is the master in the system and issues read or write commands.
+The CPU is the master in the system, and issues read or write commands.
 Both commands include an address (\code{addr} in the schematic) to select
 a data word from memory or a register from an I/O device.
-Not all address lines are connected at all peripheral devices.
+Not all address lines are connected to all peripheral devices.
 To select between different devices, the upper bits of the address bus are the
 input of a decoder. The outputs of the decoder are connected to the chip select (CS)
 inputs of the peripheral devices.
 
-On a read command the selected device will provide the data after some access time
+On a read command, the selected device will provide the data after some access time
 on the data bus. The peripheral device drives the data bus.
-On a write command, the processor provides the data and the peripheral has to
+On a write command, the processor provides the data, and the peripheral has to
 accept that data (often on a rising edge of a signal). The CPU drives the data bus.
 As the data bus is bi-directional and the data lines are shared between all devices,
 the outputs must contain a \myref{https://en.wikipedia.org/wiki/Three-state_logic}{tri-state}
-driver. In tri-state configuration, both output transistors are disabled and the output pin
+driver. In a tri-state configuration, both output transistors are disabled and the output pin
 is practically disconnected from logic.
 
-Note that in the simplest form the bus does not contain a clock. The timing is defined by
+Note that the bus does not have a clock in the simplest form. The timing is defined by
 read and write access times of the peripheral devices.
 
 Modern computers have different buses for different peripheral devices, for example, a dedicated memory
@@ -5797,8 +5797,8 @@ bus for external memory and I/O buses for peripheral devices.
 Furthermore, modern I/O buses, such as \myref{https://en.wikipedia.org/wiki/PCI_Express}{PCI Express},
 are serial buses and use point-to-point connections.
 
-Nevertheless, the notion of the classic processor bus with an address bus, a data bus, and chip select signals
-is still the mainstream mindset for core interconnections. We will derive an adaption of this concept for
+Nevertheless, the classic processor bus with an address bus, a data bus, and chip select signals
+is still the mainstream mindset for core interconnections. We will adapt this concept for
 on-chip interconnect in the next section.
 
 \section{An On-Chip Bus}
@@ -5811,25 +5811,25 @@ on-chip interconnect in the next section.
 \end{figure}
 
 We can translate the concept of such an external bus to an on-chip bus. However, we need to adapt some aspects.
-Shared buses with the need of tri-state drivers are not practical within a chip. Furthermore,
+Shared buses requiring tri-state drivers are not practical within a chip. Furthermore,
 wires in a chip are cheaper than wires on a PCB or at a connector. Therefore, we split the data bus
-into two collections of wires: one for the read and and one for the write signals.
+into two collections of wires: one for the read and one for the write signals.
 Furthermore, on-chip connections use a clock to define the timing.
 
 Figure~\ref{fig:bus-on-chip} shows the implementation of the bus concept within a chip.
 The address, data output, and control signals are connected from the CPU to all peripherals.
-For the data input we use a multiplexer (instead of a tri-state bus).
-The address decoder, besides generating the chip select signals, drives the selection of
+We use a multiplexer (instead of a tri-state bus) for the data input.
+Besides generating the chip select signals, the address decoder drives the selection of
 the data input multiplexer.
 
-With that simple setup we assume that each operation (read or write) can be executed in
+With that simple setup, we assume that each operation (read or write) can be executed in
 a single clock cycle. This is only possible for very small systems. We can extend this by defining
-that we expect the read result in the next clock cycle, following the read request. This fits
-well for on-chip memories with usually synchronous reads that have one clock cycle latency.
-For IO devices this additional clock cycle latency relaxes the timing constraints as well.
+that we expect the read result in the next clock cycle following the read request. This fits
+well for on-chip memories with synchronous reads with one clock cycle latency.
+For IO devices, this additional clock cycle latency also relaxes the timing constraints.
 We still assume that a write is performed in one clock cycle.
 
-If we want to communicate with devices with different or even varying latency, we need to
+If we want to communicate with devices with different or varying latency, we must
 introduce handshaking. The processor signals the start of a
 transaction with a read or write request, and the memory or peripheral device signals the end of a transaction with
 an acknowledgment signal.
@@ -5846,17 +5846,17 @@ an acknowledgment signal.
 Figure~\ref{fig:bus_ack} shows a read request with an acknowledgment.
 The processor drives the address bus (\code{address}) and the read
 signal (\code{rd}) in clock cycle 2. The signal \code{ack} needs to react
-within that first clock cycle. In our example the read data is not available within
-one clock cycle, but two clock cycles later as seen in clock cycle 4.
+within that first clock cycle. In our example, the read data is not available within
+one clock cycle but two clock cycles later, as seen in clock cycle 4.
 Data and the acknowledgment are valid for a single clock cycle.
 The benefit of that protocol specification is that it allows for a single-cycle transaction.
-However, the price is that the handshake process, including decoding is a combinational
+However, the price is that the handshake process, including decoding, is a combinational
 circuit, which can lead to issues with the maximum frequency.
 The standard Wishbone~\cite{soc:wishbone} protocol uses same-cycle
 acknowledgement. The newer version of Wishbone added a pipelined
 protocol.
 
-Same-cycle acknowledgement (or ready signal) has been criticized in~\cite{simpcon}.
+Same-cycle acknowledgment (or ready signal) has been criticized in~\cite{simpcon}.
 A single-cycle transaction is usually not realistic in a larger system. Therefore,
 we can define a specification where the acknowledge (or busy or ready) signal
 does not need to be valid in the request cycle.
@@ -5878,25 +5878,25 @@ Maybe then compare. This needs some better writing, also put it into the soc-com
 Also have a write timing diagram. And find a better font for the diagram to have nicer
 rendering in the SVG.}
 
-Here we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and fits better with modern SoC designs.
+Here, we define a simple pipelined handshake bus protocol that avoids the single-cycle combinational loop and is better suited to modern SoC designs.
  A read or write command is signaled by an assertion of \code{rd} or \code{wr}
  for a single clock cycle.
 The address and write data (if it is a write) need to be valid during
 the command. Commands are only valid for a single cycle.
-Each command needs to be acknowledged by an active \code{ack},
-earliest one cycle after the command. It can also insert wait
+Each command must be acknowledged by an active \code{ack},
+the earliest one cycle after the command. It can also insert wait
 states by delaying \code{ack}. Read data is available with the \code{ack}
 signal for one clock cycle.
 
-Figure~\ref{fig:bus_pipe_ack} shows such a bus protocol that does not need
+Figure~\ref{fig:bus_pipe_ack} shows a bus protocol that does not need
 a combinational reaction of the peripheral device. The request from the processor
 is only a single clock cycle long. The address bus and the read signal do not need to be driven
 until the acknowledgment. Compared to the former protocol, the \code{ack} signal needs to
 be valid (low or high)
-no earlier than one clock cycle after the \code{rd} command, in clock cycle 3.
-The first read sequence has two clock cycles latency in this example.
+no earlier than one clock cycle after the \code{rd} command in clock cycle 3.
+In this example, the first read sequence has two clock cycles of latency.
 It has the same latency as in the former example.
-However, as the request needs to be valid only one clock cycle, we can pipeline
+However, as the request needs to be valid for only one clock cycle, we can pipeline
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle.
 
@@ -5911,7 +5911,7 @@ a network-on-chip, that implement the described pipelined interface.
 The on-chip version of an interconnect definition can be generalized to a point-to-point
 connection. The processor and peripheral devices are connected with such a point-to-point
 interface to a switching fabric. If the system contains more than one processor (or master)
-we need arbitration within the switching fabric to decide which master is allowed to issue
+we need arbitration within the switching fabric to decide which master can issue
 read and write commands.
 
 \subsection{Example IO Device}
@@ -5920,7 +5920,7 @@ read and write commands.
 
 Listing~\ref{lst:cnt-device} shows an IO device that implements the specification of the
 pipelined interconnect. The IO device contains four loadable counters. To address those four
-counters we need two address bits. We read the value from the counter with a read transaction
+counters, we need two address bits. We read the value from the counter with a read transaction
 (\code{rd} is asserted) and get the result in the next clock cycle (in \code{dout}). We write to a counter with
 \code{wr} asserted and the value set in \code{din}.
 
@@ -5932,16 +5932,17 @@ command cycle, we need to store the address in \code{addrReg}.
 The counters themselves consist of a small register file of 4 elements (a \code{Reg} of a \code{Vec}).
 The counters are initialized to zero by using a Scala \code{Seq}, created with \code{fill}
 containing the reset values as Chisel constants. That \code{Seq} is the input to the \code{VecInit}.
-The counters are freely running and increment by one each clock cycle, except when written
-a new value.
+The counters are freely running and increment by one each clock cycle, except when 
+a new value is written.
 
 \subsection{Memory Mapped Devices}
 \index{Memory mapped IO}
 
-In our example system all devices, whether they be memory or IO devices, are connected to shared
-address lines. Therefore, they appear in the shared address space. To select individual
-devices, we use address decoding of some upper bits. This is called memory-mapped devices,
-and as part of the system design we decide on an address mapping.
+All memory or IO devices are connected to shared
+address lines in our example system. Therefore, they appear in the shared address space.
+To select individual devices, we use address decoding of some upper bits.
+These are called memory-mapped devices, and as part of the system design,
+we need to decide on the address mapping.
 
 \begin{table}
 \centering
@@ -5961,28 +5962,27 @@ Address & Device \\
 \end{table}
 
 Table~\ref{tab:addr:map} shows an example address map for a (16-bit) microcontroller.
-We assume 16-bit addresses, therefore the range of the addresses is between 0x0000 and
+We assume 16-bit addresses; therefore, the range of the addresses is between 0x0000 and
 0xffff.
-At the lowest address (the starting of program to be executed) we map a read-only
-memory (ROM) that contains the program. In the next memory area we map
-a writable memory (RAM) for the data. We decide to map all IO devices into the
-upper area of the address space (above 0xf000), so they are out of the way, in case
-we want to extend the memory. In this example we reserve 16 bytes of address for
+At the lowest address (the start of the program to be executed), we map a read-only
+memory (ROM) that contains the program. In the next memory area, we map
+a writable memory (RAM) for the data. We decided to map all IO devices into the
+upper area of the address space (above 0xf000) so they are out of the way in case
+we want to extend the memory. In this example, we reserve 16 bytes of address for
 each IO device. Note that this is a made-up example and that we have all the flexibility when
 deciding on an address map.
 
-Some IO devices do not have memory-mapped registers, as the counter example device,
+Some IO devices do not have memory-mapped registers, as the counter device,
 but a ready/valid interface, as explained in Section~\ref{sec:ready:valid}.
-The UART, as presented in Section~\ref{sec:uart}, for example, has such two
+The UART, as presented in Section~\ref{sec:uart}, for example, has two
 ready/valid interfaces: one for writing and one for reading a value.
-A common solution is to map write and read channel to one address and drive
-the according signals on the write or read command. To signal if the write channel
-is ready to receive a new data word or the read channel has a valid data, we map
-those two signals into a status register at a different address.
+A common solution is to map the write and read channel to one address and drive
+the corresponding signals on the write or read command. We map those two signals into a status register at a different address to signal if the write channel
+is ready to receive a new data word or if the read channel has valid data.
 
 Table~\ref{tab:addr:uart} shows an address mapping for the UART. At the base address (0xf000)
 we access a status register on a read and an optional control register on a write.
-At the next address (0xf001) we read from a read buffer and write into
+At the next address (0xf001), we read from a read buffer and write into
 a transmit buffer.
 
 \begin{table}
@@ -6004,7 +6004,7 @@ Both bits signal that we can perform a write or a read transaction. When the tra
 is empty (TDRE), we can write (send) new data to the transmitter (TX).
 When the receive data register is full, we can read data from the receiver (RX).
 The terminology might sound a bit like using old terms. And this is true for our
-interface. In fact, this is exactly the mapping of the first serial port for the IBM PC
+interface. This is precisely the mapping of the first serial port for the IBM PC
 built with the \myref{https://en.wikipedia.org/wiki/8250_UART}{8250} chip,
 and it is still valid.
 
@@ -6030,11 +6030,11 @@ device with the read/valid interface.
 
 \todo{Talk on what happens when reading from an empty device or writing to a full device.}
 
-For our memory-mapped devices we define a bundle:
+For our memory-mapped devices, we define a bundle:
 
 \shortlist{code/mem_io_bundle.txt}
 
-Listing~\ref{lst:rv-device} shows the memory mapped interface to a streaming
+Listing~\ref{lst:rv-device} shows the memory-mapped interface to a streaming
 device, like a serial port.
 
 \todo{continue here}
@@ -6061,33 +6061,33 @@ SoC interconnection standards.
 \subsection{Wishbone}
 \index{Wishbone}
 
-The Wishbone~\cite{soc:wishbone} specification is a definition of
+The Wishbone~\cite{soc:wishbone} specification defines
 a point-to-point communication and not a bus in the classic sense.
 Wishbone is a public domain standard used by
 several open-source IP cores. The Wishbone interface specification
-is still in the tradition of microcomputer or backplane buses.
+is still in the tradition of microcomputers or backplane buses.
 However, for an SoC interconnect, which is usually
 point-to-point\footnote{Multiplexers are used instead of buses to
 connect several slaves and masters.}, this is not the best approach.
 The master is requested to hold the address and data valid through
 the whole read or write cycle. This complicates the connection to a
-master that has the data valid only for one cycle. In this case the
-address and data have to be registered \emph{before} the Wishbone
-connect, or an expensive (in terms of time and resources) multiplexer has to be
+master with data valid only for one cycle. In this case, the
+address and data must be registered \emph{before} the Wishbone
+connect, or an expensive (in terms of time and resources) multiplexer must be
 used. A register results in one additional cycle of latency. A better
 approach would be to register the address and data in the slave. In
-that case the address decoding in the slave can be performed in the
-same cycle as when the address is registered. A similar issue, with
-respect to the master, exists for the output data from the slave: As
-it is only valid for a single cycle the data has to be registered by
-the master when the master is not reading it immediately. Therefore,
+that case, the address decoding in the slave can be performed in the
+same cycle as when the address is registered. A similar issue concerning
+the master exists for the output data from the slave: As
+it is only valid for a single cycle, the data has to be registered by
+the master when the master does not read it immediately. Therefore,
 the slave should keep the last valid data at its output even when
 the Wishbone strobe signal (\emph{wb.stb}) is not assigned anymore.
 Holding the data in the slave is usually \emph{free} in terms of
 hardware complexity---it is \emph{just} a specification issue. In
-the classic Wishbone specification there is no way to perform a pipelined read
-or write. However, the latest Wishbone specification (B4) contains
-also a pipelined definition. Note that the specification now contains two
+the classic Wishbone specification, there is no way to perform a pipelined read
+or write. However, the latest Wishbone specification (B4) also contains
+a pipelined definition. Note that the specification now includes two
 different, not necessarily compatible, specifications.
 
 \todo{Sample code for a peripheral, how to test?}
@@ -6098,13 +6098,13 @@ different, not necessarily compatible, specifications.
 The Advanced Microcontroller Bus Architecture (AMBA) \cite{soc:amba}
 is an interconnection definition from ARM. The specification
 defines three different buses: Advanced High-performance Bus (AHB),
-Advanced System Bus (ASB), and Advanced Peripheral Bus (APB). The
-AHB is used to connect on-chip memory, cache, and external memory to
+Advanced System Bus (ASB) and Advanced Peripheral Bus (APB). The
+AHB connects on-chip memory, cache, and external memory to
 the processor. Peripheral devices are connected to the APB. A bridge
 connects the AHB to the lower-bandwidth APB. An AHB bus transfer can
-be one cycle with burst operation. With the APB a bus transfer
-requires two cycles and no burst mode is available. Peripheral bus
-cycles with wait states are added in the version 3 of the APB
+be one cycle with burst operation. With the APB, a bus transfer
+requires two cycles, and no burst mode is available. Peripheral bus
+cycles with wait states are added in version 3 of the APB
 specification. ASB is the predecessor of AHB and is not recommended
 for new designs (ASB uses both clock phases for the bus signals --
 very uncommon for today's synchronous designs).
@@ -6113,9 +6113,9 @@ Amba AXI (Advanced eXtensible Interface) and ACE
 version 4~\cite{axi4standard}  is the latest
 extension to AMBA. AXI introduces out-of-order transaction
 completion with the help of a 4-bit transaction ID tag. A ready
-signal acknowledges the transaction start. The master has to hold
-the transaction information (e.g.\ address) till the interconnect
-signals ready. This enhancement ruins the elegant single-cycle
+signal acknowledges the transaction's start. The master has to hold
+the transaction information (e.g., address) till the interconnect
+signals are ready. This enhancement ruins the elegant single-cycle
 address phase from the original AHB specification.
 
 The AXI bus uses ready/valid handshaking for all signals (read address,
@@ -6133,7 +6133,7 @@ Sonics Inc.\ defined the Open Core Protocol (OCP) \cite{soc:ocp} as
 an open, freely available standard. The standard is now handled by
 the OCP International Partnership (www.ocpip.org).
 The Patmos processor~\cite{patmos:rts2018} and the
-T-CREST~\cite{t-crest:2015} multicore platform use the OCP
+T-CREST~\cite{t-crest:2015} multicore platform uses the OCP
 standard. The Patmos repository\footnote{\url{https://github.com/t-crest/patmos}}
 contains several memory controllers, many peripherals devices,
 and a network-on-chip with an OCP interface.
@@ -6143,16 +6143,16 @@ and a network-on-chip with an OCP interface.
 \subsection{Further Bus Specifications}
 
 The Avalon \cite{soc:avalon} interface specification is provided by
-Intel for a system-on-a-\\programmable-chip interconnection.
-Avalon defines a large range of interconnection devices ranging from
-a simple asynchronous interface intended for direct static RAM
-connection up to sophisticated pipeline transfers with variable
-latencies. This great flexibility provides an easy path to connect a
+Intel for a system-on-a-programmable-chip interconnection.
+Avalon defines an extensive range of interconnection devices, from
+a simple asynchronous interface for direct static RAM
+connection to sophisticated pipeline transfers with variable
+latencies. This flexibility provides an easy path to connect a
 peripheral device to Avalon. How is this flexibility possible? The
 \emph{Avalon Switch Fabric} translates between all those different
 interconnection types. The switch fabric is generated by Intel's
 SOPC Builder tool. However, it seems that this switch fabric is
-Intel proprietary thus tying this specification to Intel FPGAs.
+Intel proprietary, thus tying this specification to Intel FPGAs.
 
 The On-Chip Peripheral Bus (OPB) \cite{soc:opb} is an open standard
 provided by IBM and has been used by Xilinx several years ago.
@@ -6160,10 +6160,9 @@ The OPB specifies a bus for
 multiple masters and slaves. The implementation of the bus is not
 directly defined in the specification. A distributed ring, a
 centralized multiplexer, or a centralized AND/OR network are
-suggested. Xilinx used the AND/OR approach and all masters and
-slaves must drive the data buses to zero when inactive.
+suggested. Xilinx used the AND/OR approach, and all masters and
+slaves had to drive the data buses to zero when inactive.
 Xilinx switched to AXI for all their interconnects.
-
 
 \chapter{Debugging, Testing, and Verification}
 \label{chap:testing}
@@ -7014,11 +7013,13 @@ instruction decode, and execute. In that case three instructions would
 be in the pipeline and we can execute one instruction each clock cycle.
 Compared to the presented implementation, pipelining could about double
 the performance of Leros.
+In the next chapter we will present a pipelined processor implementing the
+RISC-V instruction set.
 
 
 \section{Exercise}
 
-This exercise assignment in one of the last Chapters is in a very free form. You are at the end
+This exercise assignment in one of the last chapters is in a very free form. You are at the end
 of your learning tour through Chisel and ready to tackle design problems that
 you find interesting.
 
@@ -7031,7 +7032,7 @@ The implementation in the repository is just one possible organization.
 You could write a Chisel simulation version of Leros with just a single pipeline stage,
 or go crazy and superpipeline Leros for the highest possible clocking frequency.
 
-A third option is to design your processor from scratch. Maybe the demonstration of
+A third option is to design your own processor from scratch. Maybe the demonstration of
 how to build the Leros processor and the needed tools have convinced you that processor
 design and implementation is no magic art, but engineering that can be very joyful.
 
