@@ -6172,25 +6172,24 @@ Xilinx switched to AXI for all their interconnects.
 \index{Testing}
 \index{Verification}
 
-In Chapter~\ref{chap:build:test} we gave a quick introduction on how to test
-Chisel designs. In this chapter we will dig deeper into the topic of testing and
+In Chapter~\ref{chap:build:test}, we gave a quick introduction to how to test
+Chisel designs. In this chapter, we will dig deeper into testing and
 verification.
 
 Testing and verification have slightly different meanings in software development
-than in digital design. In software development, testing means running tests on components
-whereas verification usually is short for formal verification (mathematical proofs or exhaustive testing
-with model checking). In digital design we use the term testing similar to software when writing
+than in digital design. In software development, testing means running tests on components,
+whereas verification is usually short for formal verification (mathematical proofs or exhaustive testing
+with model checking). In digital design, we use the term testing similar to software when writing
 \emph{test benches} that stimulate and check a \emph{device under test} (DUT). However, the term testing
-is also used in the actual test of the physical chip (on a tester using a built-in self test).
-Therefore, the digital design community slowly moves toward using the term verification for
-testing the hardware description. If we want to apply formal methods to verify hardware
-components, we call it formal verification. In this book we will stick to the term \emph{testing}
+is also used in the actual test of the physical chip (on a tester using built-in self-tests).
+Therefore, the digital design community is slowly moving toward using the term verification to
+test hardware descriptions. If we want to apply formal methods to verify hardware
+components, we call it formal verification. In this book, we will stick to the term \emph{testing}
 when we write tests for our hardware description.
-
 
 \section{Debugging}
 
-During your design and coding phase you often debug your design.
+During your design and coding phase, you often debug your design.
 \myref{https://en.wikipedia.org/wiki/Debugging}{Debugging} is the process of
 finding defects in your code. Those defects are called
 \myref{https://en.wikipedia.org/wiki/Software_bug}{bugs}.
@@ -6198,13 +6197,13 @@ Debugging is often performed in parallel with writing new code.
 
 One can debug a program by using a debugger or simply by printing interesting
 values to the terminal, called \myref{https://en.wikipedia.org/wiki/Debugging\#printf\_debugging}{printf debugging}.
-In hardware elements are \emph{executing} in parallel. Therefore a common form of hardware
+In hardware, elements are \emph{executing} in parallel. Therefore, a common form of hardware
 debugging is generating waveforms and watching how signals of interest evolve over time.
 We call this \emph{waveform debugging}.\footnote{There is no entry in Wikipedia for this;
 we should create one.}
 
 A Chisel tester can generate waveforms, which can be viewed, for example, with \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
-However, for quick checks it is also possible to print signal values during simulation of the circuit.
+However, it is also possible to print signal values during circuit simulation for quick checks.
 Values are printed at the rising edge of the clock.
 
 
@@ -6212,22 +6211,22 @@ Values are printed at the rising edge of the clock.
 
 ChiselTest is based on ScalaTest. Therefore, we can run all tests with a simple \code{sbt test}.
 ScalaTest also supports multithreaded testing out of the box, so if you have multiple
-test classes in your project, they can run in parallel. Additionally, you can make use of
+test classes in your project, they can run in parallel. Additionally, you can use
 the \code{FlatSpec} syntax to write clear test descriptions and make debugging easier.
 
 You define Chisel tests as classes that extend \code{AnyFlatSpec} with
 the\\ \code{ChiselScalatestTester} trait. ChiselTest uses \code{peek},
 \code{poke}, \code{expect}, and \code{step} methods that operate on the DUT's IO ports.
 The ChiselTest methods operate on Chisel types (i.e., \code{UInt}s,
-\code{SInt}s and \code{Bool}s). However, when peeking a value we
-usually would like to have Scala types for the test written in Scala.
+\code{SInt}s, and \code{Bool}s). However, when peeking a value, we
+usually want Scala types for the test written in Scala.
 Therefore, two additional methods exist: (1) \code{peekInt()} returns a
 Scala \code{Int} and (2) \code{peekBoolean()} returns a Scala \code{Boolean}.
 To advance the simulation by one clock cycle,
 we call \code{step()} on the DUT's implicit clock port.
 
-You can define a test within the \code{test()} function which takes the module to test as
-parameter. As an example, the following tester tests a few inputs to a BCD table:
+You can define a test within the \code{test()} function, which takes the module to test as
+a parameter. As an example, the following tester tests a few inputs to a BCD table:
 
 \shortlist{code/basic_chiseltest.txt}
 
@@ -6238,37 +6237,37 @@ single module.
 \shortlist{code/basic_chiseltest_it.txt}
 
 Simple tests start by writing test vectors with \code{poke} to the DUT, advancing the
-clock, and testing the outputs with an \code{expect}. For debugging purposes we can also
+clock, and testing the outputs with an \code{expect}. For debugging purposes, we can also
 \code{peek} values and print them out for manual inspection. The code in Listing~\ref{lst:test:cnt} tests the
-counter device that we introduced in Chapter~\ref{chap:interconnect} as an example IO device.
+counter device we introduced in Chapter~\ref{chap:interconnect} as an example IO device.
 
 \longlist{code/test_counter.txt}{Testing the counter device.}{lst:test:cnt}
 
 \subsection{Use Functions}
 
-As you can see, the test covers only a few cases, but is already very long to read.
+As you can see, the test covers only a few cases but is already very long to read.
 All those pokes and expects are cumbersome. As a first step, we shall introduce
 functions to represent a read and a write request. Those functions abstract away the manual
 ``bit banging'' at the interface pins in the testing code.
-Listing~\ref{lst:test:cnt:fun} shows a test with those functions. For a shortcut we also define
+Listing~\ref{lst:test:cnt:fun} shows a test with those functions. For a shortcut, we also define
 the function \code{step} to advance the clock.
 
 \longlist{code/test_counter_fun.txt}{Testing the counter device with fuctions.}{lst:test:cnt:fun}
 
 The \code{read} function takes an address
-as parameter and returns the read value. After poking the address and the read signal the function
+as a parameter and returns the read value. After poking the address and the read signal, the function
 advances the clock by one clock cycle and deasserts the read function. In our example device,
 the read value should be available after one clock cycle. However, we generalize the read function
-also for devices with longer latencies and the read function waits in an endless loop that \code{ack}
+also for devices with longer latencies, and the read function waits in an endless loop that \code{ack}
 will become true. Note that we use \code{peekBoolean} to read a Scala \code{Boolean}.
-However, if a device has the fault of never asserting \code{ack} after a request,
-the test will hang in an endless loop. A robuster read function shall contain a timeout for the \code{ack}
+However, if a device fails to never assert \code{ack} after a request,
+the test will hang in an endless loop. A more robust read function shall contain a timeout for the \code{ack}
 polling. Finally, we read the data from \code{rdData} with \code{peekInt()} to read a Scala integer
 value (concrete a \code{BigInt} to express integers of any size).
 
 The \code{write} function takes an address and the data parameters as Scala \code{Int}.
 Similar to the read function, the values are poked into the device, the clock is advanced by one
-clock cycle, and then the write signal deasserted. Here we also wait in an endless loop for
+clock cycle, and the write signal deasserted. We also wait in an endless loop for
 \code{ack} to become true.
 
 With those three functions available, we can write more readable tests with fewer lines of code.
@@ -6277,7 +6276,7 @@ tester.\footnote{It happened that I had an off-by-one error (\code{until 3} inst
 in the counter device that I found only with the second, more comprehensive test.}
 
 
-%\section{Advanced Testing}
+\subsection{Selecting Tests}
 
 If you have a large test suite, you may wish to run only a subset of your tests
 as part of a \myref{https://en.wikipedia.org/wiki/Continuous_integration}{continuous integration}
@@ -6304,14 +6303,12 @@ $ sbt "testOnly * -- -l Unnecessary"
 
 If your tests (and tags) are part of a package, remember to provide the full
 reference path to both.
-The following subsections present advanced testing techniques that you likely do
-not need yet. You can skip ahead to the exercise and return later if you find the need.
 
 \subsection{Accessing Internal Signals}
 
 \index{BoringUtils}
 
-When testing a circuit, the test code usually has access to the ports of the DUT only.
+When testing a circuit, the test code usually has access only to the ports of the DUT.
 This abstraction is generally good practice, as access to internal signals and state is considered
 bad practice (in hardware and software testing).
 
@@ -6332,12 +6329,12 @@ with access to the internal state.
 \longlist{code/boring_tickgen.txt}{The tick generater as DUT.}{lst:boring:tickgen}
 
 To show the access to internal signals in action, we use a very minimal example:
-a tick generator with an internal counter. Listing~\ref{lst:boring:tickgen} shows the code.
-Only the really necessary signal \code{tick} is connected to an output port.
+A tick generator with an internal counter. Listing~\ref{lst:boring:tickgen} shows the code.
+Only the necessary signal \code{tick} is connected to an output port.
 The counter is not exposed, which is good design practice.
 For example, we want to access this internal counter in our test code.
 We could add a port to expose the counter. We could even use a Scala \code{Boolean}
-flag to conditionally have this port when we are debugging and disable it
+flag to conditionally have this port when we debug and disable it
 when generating hardware.
 However, mixing debugging code into the hardware description is not good practice.
 
@@ -6345,7 +6342,7 @@ However, mixing debugging code into the hardware description is not good practic
 To get access to internal signals, we can use the \code{BoringUtils}. 
 \code{BoringUtils} allows us to \emph{bore} a connection through a module hierarchy.
 Behind the scenes, it adds the additional needed ports throughout the hierarchy.
-It does exactly what we could do manually, but avoids cluttering the original code.
+It does exactly what we could do manually but avoids cluttering the original code.
 
 At the time of this writing, \code{BoringUtils} is still considered experimental.
 Therefore, we need to include the following package when using it:
@@ -6358,7 +6355,7 @@ To support additional ports, we wrap our DUT into another top-level module for t
 Listing~\ref{lst:boring:tickgen:top} shows that top-level module with the additional port
 counter. Within the \code{TickGenTestTop}, we instantiate our original DUT and connect
 the \code{tick} port. For the \code{counter} output, first, we must assign a value to
-make the Chisel compiler happy. As we connect it later anyway to the inner module,
+make the Chisel compiler happy. As we connect it to the inner module later,
 we connect it to \code{DontCare}.
 The next line connects the \code{io.counter} to the count register in \code{tickGen}.
 We need to wrap \code{io.counter} into a Scala \code{Seq}, as \code{boring()} supports
@@ -6368,25 +6365,26 @@ connecting to several signals.
 
 Finally, Listing~\ref{lst:boring:tickgen:test} shows the testing code for our DUT.
 Note that we instantiate the top-level wrapper to use the additional output port.
-\section{Multithreaded Testing}
+
+\subsection{Multithreaded Testing}
 
 Digital hardware is inherently parallel.
 It is also helpful to represent parallelism in the testing code to test such a parallel circuit.
-E.g., one thread fills data into a circuit while another thread checks the outputs from that circuit.
+For example, one thread fills data into a circuit while another thread checks the outputs from that circuit.
 We could do this in a single thread, but then we need to mix code for different tasks
 into one function that shares the advancement of the clock.
 With multithreaded tests, each thread can independently advance the clock.
 The threads are synchronized internally at the call of \code{clock()}.
 
-ChiselTest has support for multithreaded testing through the use of \code{fork} and
+ChiselTest supports multithreaded testing by using \code{fork} and
 \code{join} calls. \code{fork} spawns a new tester thread with a block of test code
 as its parameter, while \code{join} may be called on a tester thread variable
 (returned by a \code{fork} call) to wait for it to join the main thread.
 
 Running multiple threads does present some new limitations to \code{peek}s and
 \code{poke}s in that no two threads can \code{peek} (respectively, \code{poke}) the
-same signal at the same time. Similarly, to guarantee correct operation, the threads
-are synchronized on calls to \code{step}.
+same signal at the same time. Similarly, the threads
+are synchronized on calls to \code{step} to guarantee correct operation.
 The following snippet is a small test of a FIFO that enqueues an element in one thread
 and dequeues it in the main thread:
 
@@ -6396,40 +6394,39 @@ Multiple threads are spawned with stacked calls to \code{fork}. The spawned thre
 represent a hierarchy in which the first thread should not finish before any of the
 subsequent threads.
 
-\section{Simulator Backends}
+\subsection{Simulator Backends}
 \index{Verilator}
 \index{VCS}
 
 By default, tests written with ChiselTest are run by the Treadle simulation backend.
 The benefits of Treadle are its quick startup time and the fact that it does not require any additional tools to be installed.
 
-However,
-larger system tests may either require another backend to support, for example, latches, or may
+However, large system tests may either require another backend to support, for example, latches or may
 benefit in terms of simulation time. To enable this, ChiselTest supports two other backends:
 \myref{https://www.veripool.org/wiki/verilator}{Verilator} and
-\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}. Because
-Verilator is open-source, we will use it for the examples presented in this section. Note
-that in all cases, VCS can be used as an alternative to Verilator.
+\myref{https://www.synopsys.com/verification/simulation/vcs.html}{Synopsys VCS}.
+Because Verilator is open-source, we will use it for the examples presented in this section.
+Note that VCS can be an alternative to Verilator in all shown cases.
 
-Switching to a different backend is simply a matter of adding another annotation to the
-\code{withAnnotations} call as shown in the Waveforms section. To use Verilator, add the following
-annotation:
+Switching to a different backend adds another annotation to the
+\code{withAnnotations} call, as shown in the Waveforms section.
+To use Verilator, add the following annotation:
 
 \shortlist{code/verilator_anno.txt}
 
-Additional flexibility arises from the ability to supply your own switches to the
+Additional flexibility arises from supplying your switches to the
 simulator command that starts the backend. This is done by using \code{VerilatorFlags}
 to add switches to the Verilator simulation command, or \code{VerilatorCFlags} to add
 switches to GCC. They should be in the list of annotations along with the backend
-annotation. You need to refer to the tool's user manual  to find a detailed list of command line arguments.
+annotation. You need to refer to the tool's user manual to find a detailed list of command line arguments.
 Note that \code{VerilatorFlags} and \code{VerilatorCFlags} annotations are advanced features
 that should generally not be needed. Furthermore, the flags are not guaranteed to remain stable.
 
 Note that ChiselTest 0.3.4 and later support code coverage measures directly in simulation.
-To support this, make sure to install Verilator version 4.028 or newer.
+To support this, install version 4.028 or a newer version of Verilator.
 
 Also, beware that different simulators work in different ways. Verilator is a
-synchronous simulator, which means that it runs updates only at the rising edge of the
+synchronous simulator, meaning it runs updates only at the rising edge of the
 clock and thus does not support latches. It also does not officially support multiple
 clocks. VCS, on the other hand, is an event-based simulator, which is significantly more
 detailed in its simulations and supports all synthesizable Verilog constructs.
@@ -6440,10 +6437,9 @@ most widely available tool.
 \index{Assertion}
 
 An assertion statement in a programming language allows one to state assumptions about a program.
-If the assertion condition evaluates to \code{false}, the program is usually stopped with an exception.
+If the assertion condition evaluates to \code{false}, the program usually stops with an exception.
 Chisel also supports assertions to state assumptions in the hardware. Those assertions are tested
-when simulating the digital design. If the condition evaluates to \code{false}, the simulation stops
-with an error message. Assertions are ignored when generating hardware, as there is no (easy) way that
+when simulating the digital design. The simulation stops with an error message if the condition evaluates to \code{false}. Assertions are ignored when generating hardware, as there is no (easy) way that
 hardware can communicate a failing assertion.
 
 \longlist{code/assert.txt}{Using assertions in Chisel.}{lst:assert}
@@ -6462,30 +6458,30 @@ However, as you can read in the comments, the first two assertions
 are not always true, so we cannot use them. We found this out by
 using formal verification.
 I would propose to place all assertions at the end of a module,
-so they do not clutter reading of the intended design.
+so they do not clutter the reading of the intended design.
 
 \todo{Write on overlooking edge cases, just use too small numbers and not
 test the overflow.}
 
-The assertions are executed during simulation and we need to write the test cases
-for them. However, it is hard (impossible) to write tests to trigger all possibilities.
+The assertions are executed during simulation; we must write the test cases
+for them. However, writing tests to trigger all possibilities is hard (impossible).
 To catch errors in overlooked corner cases, we can use formal verification.
 Kevin Laeufer has added formal verification to ChiselTest~\cite{kevin:formal:woset2021}.
 The very same assertions are used for formal verification.
 
-To explore formal verification with Chisel you need to install
+To explore formal verification with Chisel, install
 the open \myref{https://github.com/Z3Prover/z3}{Z3} theorem prover.
 To use formal verification you substitute \code{test(..)} by \code{verify(..)}.
 Listing~\ref{lst:formal:assert} shows how to run formal verification on our
 simple adder circuit with the (naive) assertions.
 
 It surprised the author that Chisel formal immediately found an error in the circuit or the assertions.
-To investigate the issue we can look into the waveform to find the input data
-that lead to an assertion violation. It use 0xdb and 0x65 as inputs, which result in
-a sum of 0x40. The input values simply led to an overflow of the 8-bit addition.
-With our simple test case we missed to test overflowing values.
-This verification showed that the assertions that the sum is larger or equal then
-the inputs is wrong due to possible overflow.
+To investigate the issue, we can look into the waveform to find the input data
+that leads to an assertion violation. It uses 0xdb and 0x65 as inputs, which results in
+a sum of 0x40. The input values led to an overflow of the 8-bit addition.
+With our simple test case, we missed testing overflowing values.
+This verification showed that the assertions that the sum is larger or equal to
+the inputs are wrong due to possible overflow.
 
 \longlist{code/formal_assert.txt}{Formally verifying the circuit.}{lst:formal:assert}
 
@@ -6512,23 +6508,23 @@ How is this related to Kevin's work?}.
 
 \href{https://en.wikipedia.org/wiki/Extreme_programming}{Extreme programming} is an agile
 software development style, focusing on quick turnaround times and a strong dependency on unit
-tests. In its pure form one writes the tests first, before implementing a feature. This style is not used
-so often in real live. However, exploring it may help to focus on testing as an important part of
+tests. In its pure form, one writes the tests first before implementing a feature. This style is not used
+so often in real life. However, exploring it may help to focus on testing as an important part of
 developing artifacts.
 
-Therefore, the proposed exercise is to write test benches for designs that you have not yet implemented.
+Therefore, the proposed exercise is to write test benches for designs you have not yet implemented.
 Pick one of the small projects from Chapter~\ref{sec:input}, e.g., the debouncing circuit or
-the majority based filtering design, and write tests for it. Then implement the hardware design
+the majority-based filtering design, and write tests for it. Then, implement the hardware design
 itself.
 
 Explore the experience of this little experiment. Did you implement tests that found errors in your design?
 If all tests pass, are you sure you have tests that cover a reasonable design space? How do you test
 your tests? Add a fault into your DUT and see if your tests will catch it.
 
-As you work through this exercise you may experience an unpleasant feel that testing is hard and
-it is probably impossible to catch all errors.\footnote{A famous quote by Dijkstra is ``Program testing can
+As you work through this exercise, you may experience an unpleasant feeling that testing is hard and
+it is probably impossible to catch all errors.\footnote{A famous quote by Dijkstra is, ``Program testing can
 be used to show the presence of bugs, but never to show their absence!''}
-However, there is hope in recent development in formal verification to complement testing.
+However, there is hope in recent developments in formal verification to complement testing.
 The topic of formal verification with Chisel will be extended in a future edition of this book.
 
 \chapter{Design of a Processor}
