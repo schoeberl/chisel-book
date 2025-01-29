@@ -4439,6 +4439,7 @@ Before using Chisel, I often wrote small Java programs to generate VHDL tables.
 In Chisel, the full power of Scala and Java, with its many open-source libraries,
 are available at hardware construction time. Therefore, we can write our hardware
 generators in the same language and execute them as part of the Chisel circuit generation.
+You can find further generator examples in~\cite{hwgen:chisel:2024}.
 
 \section{A Little Bit of Scala}
 \index{Scala}
@@ -7356,32 +7357,32 @@ your own version of a RISC-V processor.
 
 \index{Chisel!Contribution}
 
-Chisel is an open-source project under constant development and improvement.
+Chisel is an open-source project that is constantly being developed and improved.
 Therefore, you can also contribute to the project. Your contribution can be twofold:
-(1) publish your Chisel circuits in open-source and as a library or (2) contribute
+(1) publish your Chisel circuits in open-source and as a library, or (2) contribute
 enhancements to Chisel itself.
-Here we describe first, how to publish a library and second, how to
+Here we describe first how to publish a library and second how to
 set up your environment for Chisel library development and how to contribute
 to Chisel.
 
 \section{Publishing a Chisel Library}
 
-When you develop a circuit in open-source and share it, for example on GitHub,
-this a very educational act, as others can learn to describe hardware in Chisel from your code example.
+When you develop an open-source circuit and share it, for example, on GitHub,
+this is a very educational act, as others can learn to describe hardware in Chisel from your code example.
 However, sharing just the source code forces others to copy your code into their
 project. This leads to at least two problems: (1) \emph{Two copies are never the
 same}.\footnote{I learned this phrase from Doug Locke during discussion sessions
 developing the safety-critical specification for Java} This means that changes will
-happen to the source of one copy and they are then not in sync anymore.
+happen to the source of one copy, and they are not in sync anymore.
 (2) It is cumbersome to update the copy when the original design has been improved
 with a bug fix or a new feature.
 
 A better approach is to publish that open-source circuit as a library.
-Compiled Chisel code are simply Java class files. And those class files are
-platform independent. Therefore, this is an ideal way to share Chisel libraries.
+Compiled Chisel code is simply a Java class file. And those class files are
+platform-independent. Therefore, this is an ideal way to share Chisel libraries.
 Java (and Scala) have a long tradition and good infrastructure to support
-public sharing of libraries with unique group identifiers and version control.
-That is also the way Chisel itself and some support libraries are published.
+the public sharing of libraries with unique group identifiers and version control.
+That is also how Chisel itself and some support libraries are published.
 
 This section describes the steps needed to publish a Chisel library. As the tools you
 use for publishing may change quickly, consider finding the latest information on the
@@ -7394,15 +7395,15 @@ Internet. A good blog entry on the topic can be found
 
 \subsection{Using a Library}
 
-A Chisel library can be used in your project by adding it to \code{build.sbt}. Here as an
-example a collection of Chisel circuits in \myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}:
+A Chisel library can be used in your project by adding it to \code{build.sbt}. Here is an
+example of a collection of Chisel circuits in \myref{https://github.com/freechipsproject/ip-contributions}{ip-contributions}:
 
 \begin{verbatim}
 libraryDependencies += "edu.berkeley.cs" % "ip-contributions" % "0.5.0"
 \end{verbatim}
 
-\noindent The \code{ip-contributions} library contains also the UART and the FIFOs, described in this book.
-Modern IDEs let you automatically download the source code of the library for inspection, when configured
+\noindent The \code{ip-contributions} library also contains the UART and the FIFOs, described in this book.
+Modern IDEs let you automatically download the library's source code for inspection when configured
 in \code{build.sbt}.
 
 If you have a Chisel circuit that you would like to share, consider contributing it to \code{ip-contributions}.
@@ -7414,7 +7415,7 @@ Contribution starts with a git pull request of your addition. This will start a 
 hosting software libraries. Publishing to Maven Central is easiest via
 \myref{https://www.sonatype.com/}{Sonatype}. Sonatype offers free hosting of open-source
 projects via the \myref{https://central.sonatype.org/pages/ossrh-guide.html}{Sonatype Repository}.
-Following initial steps are needed before publishing a library:
+The following initial steps are needed before publishing a library:
 
 \begin{enumerate}
 \item Create a \myref{https://issues.sonatype.org/secure/Signup!default.jspa}{Sonatype JIRA account}
@@ -7442,12 +7443,12 @@ gpg --keyserver keyserver.ubuntu.com --send-keys keyID
 \end{verbatim}
 \end{enumerate}
 
-Note that the \code{keyID} is the long hexadecimal string that you find in your list of keys.
-If that step fails, one can upload the public key manually to a key server.
+Note that the \code{keyID} is the long hexadecimal string you find in your list of keys.
+If that step fails, one can manually upload the public key to a key server.
 
 \subsection{Library Setup}
 
-For each library you need to set up the following:
+For each library, you need to set up the following:
 
 \begin{enumerate}
 \item Install sbt plugins in \code{project/plugins.sbt}:
@@ -7455,7 +7456,7 @@ For each library you need to set up the following:
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "2.0.2")
 \end{verbatim}
-\item Add information about the library into \code{build.sbt}. Here as an example
+\item Add information about the library into \code{build.sbt}. As an example,
 the relevant section of \myref{https://github.com/freechipsproject/ip-contributions/blob/master/build.sbt}{build.sbt}
 in \code{ip-contributions}:
 \end{enumerate}
@@ -7497,7 +7498,7 @@ All is now set up to sign and publish the library to Sonatype with:
 sbt publishSigned
 \end{verbatim}
 
-In my setup the signing from \code{sbt} does not work, so I have to copy
+In my setup, the signing from \code{sbt} does not work (sometimes), so I have to copy
 out the \code{pgp} command to sign, something similar to:
 
 \begin{verbatim}
@@ -7513,7 +7514,7 @@ However, to release your library to Maven Central run:
 sbt sonatypeRelease
 \end{verbatim}
 
-A few minutes later it should be visible on \myref{https://search.maven.org/}{Maven Central
+A few minutes later, it should be visible on \myref{https://search.maven.org/}{Maven Central
 Repository Search}.
 
 \section{Contributing to Chisel}
@@ -7529,8 +7530,8 @@ the \myref{https://github.com/freechipsproject}{freechips organization at GitHub
 
 Fork the repository to which you would like to contribute into your personal GitHub account.
 You can fork the repository by pressing the \code{Fork} button in the GitHub web interface.
-Then from that fork, clone your fork of the repository.\footnote{Note that on a breaking
-FIRRTL/Chisel change, you might need to also fork and clone \code{firrtl}.}
+Then, from that fork, clone your fork of the repository.\footnote{Note that on a breaking
+FIRRTL/Chisel change, you might need also to fork and clone \code{firrtl}.}
 In our example, we change \code{chisel3}, and the clone command for my local fork is:
 
 \begin{verbatim}
@@ -7555,7 +7556,7 @@ for example, by forking/cloning an \myref{https://github.com/schoeberl/chisel-em
 renaming it, and removing the \code{.git} folder from it.
 
 Change the \code{build.sbt} to reference the locally published version of Chisel.
-Compile your Chisel test application and take a close look to ensure that it picks up the local published
+Compile your Chisel test application and take a close look to ensure that it picks up the locally published
 version of the Chisel library (there is also a SNAPSHOT version published, so if, for example,
 the Scala version is different between your Chisel library and your application code,
 it picks up the SNAPSHOT version from the server instead of your local published
@@ -7582,7 +7583,7 @@ In the Chisel project, no developer commits directly to the main repository.
 A contribution is organized via a
 \myref{https://help.github.com/articles/creating-a-pull-request-from-a-fork/}{pull request}
 from a branch in a forked version of the library.
-For further information, see the documentation at GitHub on
+For further information, see the documentation on GitHub on
 \myref{https://help.github.com/categories/collaborating-with-issues-and-pull-requests/}{collaboration with
 pull requests}.
 The Chisel group started to document
@@ -7605,7 +7606,7 @@ This exercise was just a simple exercise to get you started.
 
 If you are getting bold, you could pick one of the
 \myref{https://github.com/chipsalliance/chisel3/issues}{open issues} and try to solve it.
-Then contribute with a pull request to Chisel.
+Then, contribute with a pull request to Chisel.
 However, probably first watch the style of development in Chisel by watching the GitHub
 repositories.
 See how changes and pull requests are handled in the Chisel open-source project.
@@ -7618,26 +7619,26 @@ This book presented an introduction to digital design using the
 hardware construction language Chisel.
 We have seen several simple to medium-sized digital circuits
 described in Chisel.
-Chisel is embedded in Scala and therefore inherits the powerful
+Chisel is embedded in Scala and, therefore inherits the powerful
 abstraction of Scala.
 As this book is intended as an introduction, we have restricted
-our examples to simple uses of Scala.
-A next logical step is to learn a few basics of Scala and apply them
+our examples of simple uses of Scala.
+The next logical step is to learn a few basics of Scala and apply them
 to your Chisel project.
 
 I would be happy to receive feedback on the book, as I will further
-improve it and will publish new editions. You can contact me at
-\url{mailto:masca@dtu.dk}, or with an issue request on the GitHub
-repository. I am also happily accepting pull requests
-for the book repository for any fixes and improvements.
+improve it and publish new editions. You can contact me at
+\url{mailto:masca@dtu.dk} or with an issue request on the GitHub
+repository. I also happily accept pull requests
+for the book repository for fixes and improvements.
 
 \section*{Source Access}
 
-This book is available in open source.
+This book is available in open source, including all Chisel code presented.
 The repository also contains slides for a digital design course with Chisel and
 all Chisel examples: \url{https://github.com/schoeberl/chisel-book}
 
-A collection of medium-sized examples, most of which are referenced
+A collection of medium-sized examples, which are referenced
 in the book, is also available in open source. This collection
 also contains projects for various popular FPGA boards:
 \url{https://github.com/schoeberl/chisel-examples}
@@ -7651,7 +7652,7 @@ also contains projects for various popular FPGA boards:
 
 This book teaches digital design with Chisel.
 However, you might be confronted with other hardware
-description languages in your professional carrier.
+description languages in your professional career.
 When you understand the basic concepts of digital design
 and how to describe digital circuits in Chisel,
 switching to another language will take just a few days.
@@ -7659,15 +7660,15 @@ switching to another language will take just a few days.
 The two dominating hardware description languages are
 VHDL and Verilog, with an update to SystemVerilog (SV).
 The recent movement in hardware development and testing is from VHDL to SV.
-However, as many open source tools still mainly support standard Verilog,
+However, as many open-source tools still mainly support standard Verilog,
 we will use plain Verilog in the examples.
 
 We will show you code examples in Chisel, VHDL, and Verilog.
-Note that this appendix is not a complete introduction into VHDL or Verilog.
-It shall just get you started to be able to read VHDL and Verilog and
+Note that this appendix is not a complete introduction to VHDL or Verilog.
+It will just get you started on reading VHDL and Verilog and
 enable you to translate hardware constructs from Chisel to VHDL and Verilog.
-For the translation from Chisel to Verilog you can also start with the Chisel
-generated Verilog. It might be less readable than hand-written code, but a working
+For the translation from Chisel to Verilog, you can also start with the Chisel
+generated Verilog. It might be less readable than hand-written code, but it is a working
 starting point.
 A nice side-by-side introduction of VHDL and SystemVerilog can be found in~\cite{harris2021digital}.
 Furthermore, we will show how we can integrate legacy code in Verilog into a Chisel design.
@@ -7685,21 +7686,21 @@ of the code.
 \longlist{code/vhdl_adder.txt}{A simple component in VHDL.}{lst:vhdl:adder}
 
 Listing~\ref{lst:v:ch:adder} shows a simple adder~\footnote{We should never use
-such small components in real designs, when the code that defines the function is just a few lines.
-In this example just one line. However, we keep it short for the presentation
+such small components in real designs when the code that defines the function is just a few lines.
+In this example, just one line. However, we keep it short for the presentation
 of the concept of a component.}
 as our example component in Chisel.
-The listing also includes the \code{import} statements to make this a complete example.
+To make this a complete example, the listing also includes the \code{import} statements.
 
 Listing~\ref{lst:vhdl:adder} shows the adder component in VHLD. Similar to Chisel,
 the file starts with import statements to include some standard functions.
-In VHDL a component needs a declaration of an \code{entity} and the definition
+In VHDL, a component needs a declaration of an \code{entity} and the definition
 of an \code{architecture}. The \code{entity} declares the ports for the component.
 The \code{architecture} defines the function of the component.
 The \code{architecture} needs to be named, in our example that name is \code{rtl}.
-However, today that naming has lost a practical meaning.
-VHDL is case insensitive, the means \code{Adder} and \code{adder} are treated
-equally. However, current practice is to stick to lower case for identifiers.
+However, today, that naming has lost its practical meaning.
+VHDL is case insensitive, that means \code{Adder} and \code{adder} are treated
+equally. However, the current practice is to stick to lower cases for identifiers.
 
 \longlist{code/v_adder.txt}{A simple component in Verilog.}{lst:v:adder}
 
@@ -7722,31 +7723,31 @@ The difference between Verilog and Chisel is minimal for such a simple component
 
 
 Listing~\ref{lst:ch:use} shows how to create a component with \code{new} in Chisel,
-give it a name (\code{m}), and connect to the input and output ports to wires.
+give it a name (\code{m}), and connect the input and output ports to wires.
 
 Listing~\ref{lst:vhdl:use} shows how to declare and use the \code{adder} component in VHDL.
-As VHDL is strongly typed, a component needs to be declared before instantiated.
+VHDL is strongly typed, so a component must be declared before it is instantiated.
 The component declaration is very similar to the entity declaration of the adder itself.
 The component is instantiated by calling it, prepending it with a name (\code{m})
 and connecting the input and output ports with a \code{port map} to signals.
 
 Listing~\ref{lst:v:use} shows how to create and use a component (module)
-in Verilog. Here it is created by calling it, followed by a name (\code{m}),
+in Verilog. Here, it is created by calling it, followed by a name (\code{m}),
 and connecting the wires to the ports.
 
 Note \code{a}, \code{b}, and \code{sum} represent the ports of the adder;
 \code{in1}, \code{in2}, and \code{result} are the wires/signals connected to those ports.
-The instances of the adders in all three examples where named \code{m}.
-In VHDL and Verilog, the name of the component is not used so often, in Chisel we need
-the name of the module to access the IO ports.
+The instances of the adders in all three examples were named \code{m}.
+In VHDL and Verilog, the name of the component is not used so often; in Chisel, we need
+the module's name to access the IO ports.
 
 \subsection{Register}
 
 \longlist{code/v_ch_register.txt}{A register with reset and enable in Chisel.}{lst:v:ch:register}
 
 Listing~\ref{lst:v:ch:register} shows an 8-bit register with reset (to 0) and an enable input in Chisel,
-using the three-parameter version of \code{RegEnable}. The inputs are connected at the creation
-and the output is available the the returned value of \code{RegEnable}.
+using the three-parameter version of \code{RegEnable}. The inputs are connected at the creation,
+and the output is available as the returned value of \code{RegEnable}.
 Note that the \code{clock} and \code{reset} signals are implicit in Chisel.
 
 \longlist{code/vhdl_register.txt}{A register with reset and enable in VHDL.}{lst:vhdl:register}
@@ -7754,8 +7755,8 @@ Note that the \code{clock} and \code{reset} signals are implicit in Chisel.
 Listing~\ref{lst:vhdl:register} shows VHDL code for a
 register (\code{reg}) with a synchronous reset and an enable input.
 Note that the VHDL \code{process} includes the \code{clock}
-signals in the sensitivity list. The register is inferred by using
-clocked process and \code{rising\_edge(clock)}.
+signals in the sensitivity list. The register is inferred using
+a clocked process and \code{rising\_edge(clock)}.
 In contrast to Chisel both, \code{clock} and \code{reset}, need to
 be explicitly used.
 
@@ -7771,17 +7772,15 @@ when used in an \code{always @(*)} block.
 The \code{always @(posedge clk)} statement with a clock implies that the code within that block
 represents a register.
 
-Registers are defined implicitly by a code pattern in Verilog
-and VHDL. Whereas, in Chisel the registers are defined explicitly.
+Registers are defined implicitly by a code patterns in Verilog
+and VHDL. In Chisel the registers are defined explicitly.
 
 \subsection{Combinational Blocks}
 
 Simple combinational logic can be written by an assignment as a concurrent
-statement, in all three languages. We have seen examples in the adder components.
-However, for more complex logic, e.g. describing nested conditions, it is more convenient
-to use blocks for combinational logic. In Verilog this is an \code{always} block,
-in VHDL this is a \code{process}.
-
+statement in all three languages. We have seen examples in the adder components.
+However, for more complex logic, e.g., describing nested conditions, it is more convenient
+to use blocks for combinational logic. In Verilog, this is an \code{always} block; in VHDL this is a \code{process}.
 
 \longlist{code/v_ch_comb.txt}{A \code{switch} statement in Chisel.}{lst:v:ch:comb}
 
@@ -7792,21 +7791,21 @@ for the output needs to be assigned before the \code{switch} statement.
 \longlist{code/vhdl_case.txt}{A \code{case} statement in VHDL.}{lst:vhdl:comb}
 
 Listing~\ref{lst:vhdl:comb} shows the same combinational block in VHDL.
-A combinational block is a \code{process}. Start start is additionally marked with
+A combinational block is a \code{process}. Start is additionally marked with
 a \code{begin} and the end of the process with \code{end process;}
 The default value for that \code{case}
 statement is assigned in with a \code{when others} entry.
 Note that a VHDL process has a sensitive list, where all signals that appear
-on the righthand side of an expression or a a condition need to be listed.
-In our example this is \code{sel} and \code{input}.
+on the right hand side of an expression or a a condition need to be listed.
+In our example, this is \code{sel} and \code{input}.
 
 \longlist{code/v_comb.txt}{A \code{case} statement in Verilog.}{lst:v:comb}
 
 Listing~\ref{lst:v:comb} shows the same combinational block in Verilog.
-Note the marking of the start of combinational block with \code{always @(*) begin}
+Note the marking of the start of a combinational block with \code{always @(*) begin}
 and the end of the block with \code{end}. The default value for that \code{case}
 statement is assigned in with a \code{default} entry.
-This example includes to module header to show that the output \code{out}
+This example includes the module header to show that the output \code{out}
 needs to be declared as \code{reg}, as is is assigned in an \code{always} block.
 
 Note that Verilog has two different assignment operators: the \code{=} is called
@@ -7816,26 +7815,24 @@ for registers (in an \code{always @(posedge clk)} block) and the \code{=}
 assignment operator
 for combinational logic (in an \code{always @(*)} block).
 
-
-
 Another convenient construct in a combinational block is a combination of
-conditionals, known also as ``if...elseif...else'' statement.
+conditionals, also known as ``if...else if...else'' statements.
 We will show an example with three inputs (\code{in1}, \code{in2}, and \code{in3}),
 two boolean conditions (\code{c1} and \code{2}), and the output \code{out}.
 
-\longlist{code/v_ch_if_else.txt}{An ``if...elseif...else'' statement in Chisel.}{lst:v:ch:if_else}
+\longlist{code/v_ch_if_else.txt}{An ``if...else  if...else'' statement in Chisel.}{lst:v:ch:if_else}
 
 Listing~\ref{lst:v:ch:if_else} shows the Chisel version. However, as \code{if} and
 \code{else} are conditional expressions in Scala (reserved keywords), Chisel
 uses \code{when}, \code{.elsewhen}, and \code{.otherwise}.
 
-\longlist{code/vhdl_if_else.txt}{An ``if...elseif...else'' statement in VHDL.}{lst:vhdl:if_else}
+\longlist{code/vhdl_if_else.txt}{An ``if...else  if...else'' statement in VHDL.}{lst:vhdl:if_else}
 
 Listing~\ref{lst:vhdl:if_else} shows the same construct in VHDL. Note that all input
 signals (including the condition signals) need to be part of the sensitivity list
 of the process.
 
-\longlist{code/v_if_else.txt}{An ``if...elseif...else'' statement in Verilog.}{lst:v:if_else}
+\longlist{code/v_if_else.txt}{An ``if...else  if...else'' statement in Verilog.}{lst:v:if_else}
 
 Listing~\ref{lst:v:if_else} shows the same expression in Verilog within an \code{always} block.
 
@@ -7844,16 +7841,17 @@ Listing~\ref{lst:v:if_else} shows the same expression in Verilog within an \code
 \subsection{Advanced Chisel Features}
 
 The basic elements look similar in Chisel, Verilog, and VHDL, and the verbosity
-is also in the same range (although VHDL is a bit more chattery).
+The basic elements look similar in Chisel, Verilog, and VHDL, and the verbosity
+is also in the same range (although VHDL is a bit more chatty).
 However, neither VHDL nor Verilog contain object-oriented features for hardware
 description. SystemVerilog includes object-oriented programming only for writing test benches.
-Both languages are missing functional programing, which is important to
-write hardware generators.
+Both languages are missing functional programming, which is important when
+writing reusable hardware generators.
 Furthermore, \code{Bundle}s with directions and the possibility to flip the direction
 are also missing.
 
 Although any hardware can be equally described in Chisel, VHDL, and Verilog,
-the modern features in Chisel allow the programming of at a higher abstraction
+the modern features in Chisel allow the programming of a higher abstractions by
 writing hardware generators.
 
 \section{External Modules and Integration of Legacy Code}
@@ -7861,12 +7859,12 @@ writing hardware generators.
 
 \todo{describe Verilog and VHDL (with GHDL)}
 
-Sometimes you might wish to include a component whose description is
+Sometimes, you might wish to include a component whose description is
 written in Verilog, e.g., legacy code, or you might wish to ensure the emitted Verilog of a component
-has a very specific structure that your synthesis tool can recognize and map to an
+has a concrete structure that your synthesis tool can recognize and map to an
 available primitive. Chisel provides support for this through its \code{BlackBox} and
 \code{ExtModule} classes, which allow you to define components with Verilog sources.
-Both are parameterized with a \code{Map[String, Param]} which is translated to module
+Both are parameterized with a \code{Map[String, Param]}, translated to module
 parameters in the emitted Verilog. \code{BlackBox}es are emitted as individual Verilog
 files, while \code{ExtModule}s act as placeholders and are emitted as source-less module
 instantiations. This feature makes \code{ExtModule}s particularly useful for, e.g.,
@@ -7875,21 +7873,22 @@ Xilinx or Intel device primitives such as clock or input buffers.
 \shortlist{code/xilinx_bufgce.txt}
 \shortlist{code/altera_alt_inbuf.txt}
 
-\noindent Blackboxes, on the other hand, can represent any component. They can be
-declared in three different ways with their source either inlined or available in a
+\noindent BlackBoxes, on the other hand, can represent any component. They can be
+declared in three different ways, with their source either inlined or available in a
 separate file. As an example, consider a 32-bit adder with the following IO.
+
 \shortlist{code/blackbox_adder_io.txt}
 
 \noindent The inlined version is declared as follows:
 \shortlist{code/blackbox_adder_inline.txt}
 
 Providing the source code within a string literal (denoted by an \code{s} or an \code{f}
-before the double quotes) and using pipes allows including nicely formatted Verilog code.
+before the double quotes) and using pipes allows for the inclusion of nicely formatted Verilog code.
 Additionally, it enables support for parameterization because Scala variables can be
 inserted using the \code{\$} or \code{\$\{\}} escape characters. The \code{stripMargin}
 method removes the pipes and tabs when emitting the code.
 
-There are two alternatives to inlined blackboxes, both expecting the Verilog source in
+There are two alternatives to inlined BlackBoxes, both expecting the Verilog source in
 a separate file. They are declared as follows.
 \shortlist{code/blackbox_adder_resource.txt}
 \shortlist{code/blackbox_adder_path.txt}
@@ -7900,10 +7899,10 @@ in the\\
 The \code{HasBlackBoxPath} version can be provided with any relative path from the project
 folder.
 
-Blackboxes are instantiated the same way as other modules by wrapping them as
+BlackBoxes are instantiated like other modules by wrapping them as
 \code{Module(new BlackBoxModule)}. They cannot be tested directly but must be wrapped
-either in a named class or in an anonymous class in the tester. Both are allowed to have
-the same IO as the blackbox.
+either in a named class or an anonymous class by the tester. Both are allowed to have
+the same IO as the Blackbox.
 \shortlist{code/blackbox_named.txt}
 \shortlist{code/blackbox_anonymous.txt}
 
@@ -7914,21 +7913,21 @@ are \code{trait}s that extend Chisel's \code{BlackBox} class meaning that, e.g.,
 
 \section{Exercise}
 
-Use one of your (small) Chisel designs and translate it manually to Verilog.
+Use one of your Chisel designs and translate it manually to Verilog.
 To avoid writing a test bench in Verilog, you can reuse your test code from
 ChiselTest and instantiate the Verilog code as a black box for testing.
-You can also change your test code to instantiate your Chisel and your Verilog
-component and compare them in the same Chisel tester.
-The example in the book are tested in that way. You can take a look into the
+You can also change your test code to instantiate your Chisel and Verilog components
+and compare them in the same Chisel tester.
+The examples in the book are tested in that way. You can take a look at the
 code from the book examples to see how this can be done.
-This form of cosimulation can actually also be driven from random test vectors
+This form of cosimulation can also be driven from random test vectors
 and comparing the Chisel ``golden model'' with your Verilog translation.
 
 The VHDL integration within Chisel/Verilator is not yet so smooth, although
 a solution with GHLD plugin for yosys should be able to translate VHDL to
-Verilog, which can then be tested in Chisel similar to the Verilog designs.
+Verilog can then be tested in Chisel similar to the Verilog designs.
 
-For VHDL there are less open-source options available.
+For VHDL, there are fewer open-source options available.
 The code in this chapter is tested with test benches written in VHDL (generated
 by copilot) and simulated with GHDL.\footnote{\url{http://ghdl.free.fr/}}
 
@@ -7980,8 +7979,8 @@ Although technically possible, you should also avoid using Chisel (and Scala) op
 \index{Chisel!Examples}
 
 Chisel is not (yet) used in many projects. Therefore, open-source Chisel code
-to learn the language and the coding style is rare. Here we list several projects
-we are aware of that use Chisel and are in open source.
+to learn the language and the coding style is rare. Here, we list several projects
+we know that use Chisel and are open source.
 
 \begin{description}
 
@@ -8012,8 +8011,8 @@ the RISC-V instruction set and has been updated to Chisel 3.1.
 
 \item[\myref{https://github.com/schoeberl/lipsi}{Lipsi}] is a tiny processor intended
 for utility functions on a system-on-chip~\cite{lipsi:arcs2018}. As the code base of
-Lipsi is very small, it can serve as an easy starting point for processor design in Chisel.
-Lipsi also showcases the productivity of Chisel/Scala. It took me 14 hours to describe the
+Lipsi is very small; it can serve as an easy starting point for processor design in Chisel.
+Lipsi also showcases Chisel/Scala's productivity. It took me 14 hours to describe the
 hardware in Chisel and run it on an FPGA, write an assembler in Scala, write a
 Lipsi instruction set simulator in Scala for co-simulation, and write a few test cases
 in Lipsi assembler.
@@ -8043,7 +8042,7 @@ machine learning for the Apache TVM machine learning compiler framework.
 
 \item[\myref{https://github.com/freechipsproject/ip-contributions}{Chisel IP Contributions}]
 started to collect small Chisel components. It includes the source of the
-UART and FIFOs presented in this book.
+UART and FIFOs that are presented in this book.
 
 \item[\myref{https://github.com/ucb-bar/constellation}{Constellation}] is a NoC Generator
 developed at UC Berkeley~\cite{Constellation:2022}.
@@ -8069,9 +8068,8 @@ so I can include it in a future edition of the book.
 \chapter{Acronyms}
 
 Hardware designers and computer engineers like to use acronyms.
-However, it takes time to get used to them. Here is a list of common terms
-related to digital design and computer architecture.
-
+However, it takes time to get used to them. Here is a list of common
+digital design and computer architecture terms.
 
 \begin{description}
 \item [ADC] analog-to-digital converter
@@ -8097,7 +8095,7 @@ related to digital design and computer architecture.
 \item [HLS] high-level synthesis
 \item [IC] instruction count
 \item [IDE] integrated development environment
-\item [ILP] instruction level parallelism
+\item [ILP] instruction-level parallelism
 \item [IC] integrated circuit
 \item [IO] input/output
 \item [ISA] instruction set architecture
@@ -8110,7 +8108,7 @@ related to digital design and computer architecture.
 \item [MMIO] memory-mapped IO
 \item [MSB] most significant bit
 \item [MUX] multiplexer
-\item [OO] object oriented
+\item [OO] object-oriented
 \item [OOO] out-of-order
 \item [OS] operating system
 \item [RAM] random access memory
@@ -8127,119 +8125,12 @@ related to digital design and computer architecture.
 \end{description}
 
 
-
 \bibliographystyle{plain}
 \bibliography{chisel}
 
 \phantomsection
 \hypertarget{index}{}
 \printindex
-
-\end{document}
-
-\chapter{Headings}
-
-\todo{Collect the headings here, but only elevate them to chapter level when some
-writing is going on.}
-
-\section{Introduction}
-
- * Why Chisel, what is cool about it
- * What this book is (and what not)
- * Overview of the following Chapters
-
-\section{Basic Circuits}
-
- * Combinational expressions (basic gates with logic tables)
- * Combinational base circuits (chapter 8 in Culler)
- * Multiplexer (just the simple one for a start)
- * Registers
-
-1. base functions: +, - , and or, register (with reset, with enable)
-
-
-\section{Build Process}
-
- * A full example (blinking LED again)
- * Packages
- * Source organization (Scala)
- * Object to generate Verilog
- * sbt
-
-\section{Testing with Chisel}
-
- * iotesters
- * chiseltest
-
-\section{Components/Modules}
-
-\section{Building Blocks}
-
- * building blocks (adder, mux, ALU, counter, memory)
- * maybe split into combinational and sequential
-
-\section{Bundles and Vecs (better title needed)}
-
-\section{Medium Complex Circuits (better title needed)}
-
-3. small designs (better name): UART, FIFO, PWM, VGA, sigma delta
-
-\section{State Machines and Data Path}
-
- * Covered in stuff for Dally book lecture spring 2019
-
-\section{Memory}
-
- * Vec based ROM with address register
- * Vec based read/write
- * All other variations
- * Escape code in VHDL and Verilog for unsupported memories
-
-\section{Tips and Tricks (better title needed)}
-
-Stuff that saves a little hardware, but might not worse the less readable code
-
- * Counter to -1
- * Shared adder and subtractor
- * Mux with one hot encoding of select
- * little tricks: count down, add/sub
-
-
-\section{Scala for Hardware Developers}
-
- * Simple Scala (for, if else)
- * functions for hardware generation
- * Classes and constructor
-
- \section{More Complex Testing}
-
-  * As we know now sone Scala it is time to use the power of Scala for better testing
-
-\section{Hardware Generation}
-
- * More advanced stuff
- * Table generation (sinus, assembler)
-
- \section{Leros}
-
-  * as a more complex design
-  4. full design(s): processor
-
-\section{Chisel 2}
-
- * Some notes for reading Chisel 2 code
- * Update Lipsi to Chisel 3 to work on the 2 to 3 documentation
-
- \section{Chisel Projects}
-
-  * Projects written in Chisel, as paper reference, some words and a URL.
-
-\section{Appendix}
-
- * Basic digital circuits, e.g., transistor based inverter, half and full adder
- * With lot of links to Wikipedia
-
-
 
 \end{document}
 
