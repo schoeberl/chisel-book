@@ -6533,12 +6533,12 @@ The topic of formal verification with Chisel will be extended in a future editio
 \index{Processor}
 \index{Leros}
 
-As one of the last chapters in this book, we present a medium size project:
-the design, simulation, and testing of a microprocessor.
+As one of the last chapters in this book, we present a medium-sized project:
+The design, simulation, and testing of a microprocessor.
 To keep this project manageable, we design a simple accumulator machine.
 The processor is called \myref{https://leros-dev.github.io/}{Leros}~\cite{leros:arcs2019}
 and is available in open source at \url{https://github.com/leros-dev/leros}.
-We would like to mention that this is an advanced example and some computer
+We would like to mention that this is an advanced example, and some computer
 architecture knowledge is needed to follow the presented code examples.
 
 \section{The Instruction Set Architecture}
@@ -6594,16 +6594,16 @@ scall &  & System call (simulation hook) \\
 \label{tab:leros:isa}
 \end{table}
 
-Leros is designed to be simple, but still a good target for a C compiler.
-The description of the instructions fits on one page, see Table~\ref{tab:leros:isa}.
+Leros is designed to be simple but still a good target for a C compiler.
+The description of the instructions fits on one page; see Table~\ref{tab:leros:isa}.
 
 Leros is an accumulator machine. This means that all operations
-have the accumulator as one of the source inputs and the result is usually
+have the accumulator as one of the source inputs, and the result is usually
 written into the accumulator. The second operand of an arithmetic or logic
 operation can either be an immediate (a constant) or from one of the 256
 on-chip registers. Access to memory (load or store) is also performed via
-the accumulator: on a load the value from memory is stored in the accumulator
-and for a store the value is taken from the accumulator. The address for the
+the accumulator: on a load, the value from memory is stored in the accumulator,
+and for a store, the value is taken from the accumulator. The address for the
 memory access is stored in the address register (AR).
 
 The program counter (PC) is pointing to the current instruction in the
@@ -6615,24 +6615,24 @@ Conditional branches depend on the content of the accumulator.
 E.g., \code{brz} branches only when the content of the accumulator is 0.
 Leros branches are relative to the current instruction and can branch forward
 and backward around 2000 instructions.
-For larger control flow changes and for function calls and returns,
+For larger control flow changes and function calls and returns,
 Leros has a jump-and-link (\code{jal}) instruction.
-That instructions jumps to the address that is in the accumulator and
+That instruction jumps to the address that is in the accumulator and
 stores the address of the following instruction into a register.
 That value can then be used to return from a function with \code{jal}.
 
-The accumulator and the register file is in our current implementation
-32 bits wide.\footnote{We try to keep it configurable to be able to also
-implement 16-bit or 64-bit versions of Leros.}
+The accumulator and the register file are in our current implementation
+32-bit wide.\footnote{We try to keep it configurable also
+to implement 16-bit or 64-bit versions of Leros.}
 
 
-In Table~\ref{tab:leros:isa} shows the instruction set of Leros.
+Table~\ref{tab: Leros:isa} shows the instruction set of Leros.
 \code{A} represents the accumulator, \code{PC} is the program counter,
 \code{i} is an immediate value (0 to 255), \code{Rn} a register
 \code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
 and \code{AR} an address register for memory access.
 
-Following code snippets shows examples of Leros instructions in assembly:
+The following code snippet show examples of Leros' instructions in assembly:
 
 \begin{verbatim}
 	loadi 1
@@ -6647,21 +6647,21 @@ Following code snippets shows examples of Leros instructions in assembly:
 	scall 0
 \end{verbatim}
 
-\noindent We can see that each instruction consists for the instruction name (also call
+\noindent We can see that each instruction consists of the instruction name (also called
 opcode mnemonic) and a constant. The constant can be written in decimal or
 hexadecimal notion. The code shows immediate versions of load, arithmetic,
 and logic instructions. The last instruction (\code{scall 0}) is a system call and
 ends the execution (or simulation).
-This short program is part of Leros test suit.
-The convention of the test is that at the end of the program the accumulator shall
+This short program is part of the Leros test suit.
+The convention of the test is that at the end of the program, the accumulator shall
 contain 0.
 
 Instructions are 16 bits wide. The higher byte is used to encode the instruction,
-the lower byte contains either an immediate value, a register number,
-or a branch offset (part of the branch offset uses also bits in the upper byte).
-For example \code{00001001.00000010} is an add immediate instruction
-that adds 2 to the accumulator, where \code{00001000.00000011} adds the
-content of R3 to the accumulator. For branches we use 3 of the instruction
+and the lower byte contains either an immediate value, a register number,
+or a branch offset (part of the branch offset also uses bits in the upper byte).
+For example, \code{00001001.00000010} is an add immediate instruction
+that adds 2 to the accumulator, whereas \code{00001000.00000011} adds the
+content of R3 to the accumulator. For branches, we use 3 of the instruction
 bits for larger offsets.
 
 Listing~\ref{lst:instr} shows the encoding of the instructions in the upper 8 bits of
@@ -6713,37 +6713,37 @@ Not all instruction bits are currently used (unused are marked with -)
 \section{The Datapath}
 
 Section \ref{sec:fsmd} describes how to implement an algorithm in hardware with
-a state machine and datapath. We will use the same approach for an initial
+a state machine and datapath. We will use the same approach for the initial
 implementation of Leros.
 
 We need a datapath that allows the data flow for all instructions, possible in several
-clock cycles. We aim for a two clock cycles execution of each instruction.
-Therefore, the base state machine has just two states: \code{fetch} and \code{execute}.
+clock cycles. We aim for a executing each instruction in two clock cycles.
+Therefore, the base state machine has two states: \code{fetch} and \code{execute}.
 
-Figure~\ref{fig:leros-datapath} shows the datapath for our implementation of Leros.
+Figure~\ref{fig:leros-datapath} shows the datapath for implementing Leros.
 The figure is slightly simplified.
 The data flows from left to right. The PC points to the instruction to be fetched.
-On-chip memories have usually input registers that cannot be read.\footnote{At least
+On-chip memories usually have input registers that cannot be read.\footnote{At least
 this is true for FPGA on-chip memories} Therefore, we feed to the PC and the input register
-of the instruction memory the same value of the next PC. The next PC is for non-branching
+of the instruction memory the same value as the next PC. The next PC is for non-branching
 instructions the PC plus 1.\footnote{We count in this simple organization in 16-bit instruction
 words and not in bytes} For a relative branch, the decode component sign extends the immediate
-value and adds it to the PC. For the \code{jal} instruction the PC can also be loaded from \code{A}.
+value and adds it to the PC. For the \code{jal} instruction, the PC can also be loaded from \code{A}.
 
-In the first state an instruction is fetched from the instruction memory and decoded.
+In the first state, an instruction is fetched from the instruction memory and decoded.
 The decode component decides what will happen in the next state, the execute state.
 The decode also includes the generation of an operand for instructions with an immediate operand
 (e.g., \code{addi}, or \code{loadhi}). As this operand is consumed in the execution state,
-we need to store it in a register.
+we must store it in a register.
 
-The second memory serves as general data memory, but also stores the values for the
-255 registers. For a read or write of one of the registers, the address is part of the instruction.
-For memory load or store instructions, we use the address register \code{AR}.
+The second memory serves as general data memory but also stores the values for the
+255 registers. The address is part of the instruction for a read or write of one of the registers.
+We use the address register \code{AR} for memory load or store instructions.
 \code{AR} itself is loaded from \code{A}. The result of a load is placed into \code{A}.
 On a store, \code{A} delivers the data to be written into memory.
 
 Finally, arithmetic and logic operations are performed with the ALU. One operand
-comes from \code{A} the other is either an immediate value (from the instruction)
+comes from \code{A}, the other is either an immediate value (from the instruction)
 or a register value (from the memory).
 
 \begin{figure}
@@ -6799,8 +6799,8 @@ We use some corner case values as the test vector:
 
 \shortlist{code/leros_alu_test.txt}
 
-\noindent Full, exhaustive testing for 32-bit arguments is not possible, which was the reason we
-selected some corner cases as input values. Beside testing against corner cases, it is also useful
+\noindent Full, exhaustive testing for 32-bit arguments is not possible, which was why we
+selected some corner cases as input values. Besides testing against corner cases, it is also useful
 to test against random inputs:
 
 \shortlist{code/leros_alu_rand.txt}
@@ -6828,13 +6828,13 @@ The test shall produce a success message similar to:
 
 \index{Processor!instruction decode}
 
-From the ALU, we work backwards and implement the instruction decoder.
-Instruction decoding is basically generating the signals to drive the multiplexers
+From the ALU, we work backward and implement the instruction decoder.
+Instruction decoding is generating the signals to drive the multiplexers
 and the ALU in the next stage/state.
 However, first, we define the instruction encoding in its own Scala class and
 a \emph{shared} package. We want to share the encoding constants between
 the hardware implementation of Leros, an assembler for Leros, and an instruction
-set simulator of Leros.
+set simulator.
 
 \shortlist{code/leros_constants.txt}
 
@@ -6876,19 +6876,19 @@ store instructions.
 
 \index{Assembler}
 
-To write programs for Leros we need an assembler. However, for the very first
-test, we can hard code a few instructions, and put them into a Scala array,
+To write programs for Leros, we need an assembler. However, for the very first
+test, we can hard code a few instructions and put them into a Scala array,
 which we use to initialize the instruction memory.
 
 \shortlist{code/leros_asm_hard.txt}
 
-\noindent However, this is a very inefficient approach to test a processor.
+\noindent However, this is a very inefficient approach to testing a processor.
 Writing an assembler with an expressive language like Scala is not a big project.
 Therefore, we write a simple assembler for Leros, which is possible within about
 100 lines of code. We define a function \code{getProgram} that calls the assembler.
-For branch destinations, we need a symbol table, which we collect in a \code{Map}.
-A classic assembler runs in two passes: (1) collect the values for the symbol table
-and (2) assemble the program with the symbols collected in the first pass.
+We need a symbol table for branch destinations, which we collect in a \code{Map}.
+A classic assembler runs in two passes: (1) collects the values for the symbol table
+and (2) assembles the program with the symbols collected in the first pass.
 Therefore, we call \code{assemble} twice with a parameter to indicate which pass it is.
 
 \shortlist{code/leros_asm_call.txt}
@@ -6921,62 +6921,58 @@ The Scala array that contains the Leros program is converted to a Scala
 function \code{\_.asUInt(16.W)}.
 The instruction memory contains a register for the address (\code{memReg})
 to enable the implementation of the instruction memory as an on-chip memory
-in a FPGA.\footnote{In the current version of Chisel the generated code
+in an FPGA.\footnote{In the current version of Chisel, the generated code
 contains a large priority Mux that the FPGA synthesize tools cannot map to
 an on-chip memory. Using the MLIR backend shall fix this issue.
 Another workaround for this issue, as done in the Patmos project for the
-bootloader, is to generate Verilog code that fits the synthesize tools
+bootloader is to generate Verilog code that fits the synthesized tools
 and include it as a black box.}
-
 
 \longlist{code/leros_instruction_memory.txt}{The instruction memory of Leros.}{lst:leros-instr-mem}
 
 
 \section{A State Machine with Data Path Implementation}
 
-As stated in the beginning of the Chapter, the Leros ISA definition does not define a
-concrete implementation. Along the chapter we performed implicit design decisions.
-Here we will discuss one design option.
+As stated at the beginning of the chapter, the Leros ISA definition does not define a
+concrete implementation. Throughout the chapter, we made implicit design decisions.
+Here, we will discuss one design option.
 
-In the presented implementation we share the data memory with the register file.
+In the presented implementation, we share the data memory with the register file.
 The 256 registers are just an array in the data memory. A different implementation might
 have dedicated on-chip memories for data and the registers.
 
 We implemented Leros in the idea of a state machine with a datapath.
 This also means that each instruction takes more than one clock cycle.
-We use two states: \code{fetch} and \code{execute}.
+We use two states: \code{fetch} and \code{execute}, as shown in Listing~\ref{lst:leros:state}.
 
-\shortlist{code/leros_states.txt}
+\longlist{code/leros_states.txt}{The Leros state machine.}{lst:leros:state}
 
-
-
-\noindent The state machine just switches between the two states.
-In the \code{fetch} state we fetch an instruction from the instruction
+\noindent The state machine switches between the two states.
+In the \code{fetch} state, we fetch an instruction from the instruction
 memory and also decode that instruction. We also start a read operation
 from the data memory in the \code{fetch} state, as the data memory
 is synchronous and needs one clock cycle to deliver the read result.
 
-In the execute state we compute a new value for the accumulator
-or store the read result form the data memory into the accumulator.
-We also preform a write in the \code{execute} state.
+In the execute state, we compute a new value for the accumulator
+or store the read result from the data memory into the accumulator.
+We also perform a write in the \code{execute} state.
 
-The following code shows the instantiation of the ALU including the
+The following code shows the instantiation of the ALU, including the
 accumulator and the two main state registers: the program counter (\code{pcReg})
 and the address register (\code{addrReg}).
 
 \shortlist{code/leros_main_state.txt}
 
 The following code shows the instantiation of the instruction memory.
-Note that the instruction memory has as parameter the file name
+Note that the instruction memory has as a parameter the file name
 of the program.
 
 \shortlist{code/leros_fetch.txt}
 
 The following code shows the instantiation of the decode module.
 The input of the decode module is the instruction from the fetch
-module and the outputs are the decode signals. As we need those signals
+module, and the outputs are the decode signals. As we need those signals
 in the \code{execute} state, they are registered in \code{decReg}.
-
 
 \shortlist{code/leros_decode_inst.txt}
 
@@ -6986,9 +6982,9 @@ The memory is organized in 32-bit words. To enable byte access to those
 32-bit words, the word is split into a \code{Vec} of four 8-bit bytes.
 A \code{read()} operation returns a vector of four bytes that we
 concatenate to a 32-bit word with the \code{\#\#} operator.
-For the write, we split the write word into those four bytes and
+For the write, we split the written word into those four bytes and
 use the write mask (\code{wrMask}) to select which bytes are written.
-The \code{SyncReadMem} components contains a \code{write()} function
+The \code{SyncReadMem} components contain a \code{write()} function
 that takes a vector and a write mask as parameters.
 
 \longlist{code/leros_data_memory.txt}{The data memory module of Leros.}{lst:data:mem}
@@ -7003,15 +6999,14 @@ of the ports.
 
 Actual processors perform
 \myref{https://en.wikipedia.org/wiki/Instruction_pipelining}{instruction pipelining}.
-In an instruction pipeline more than one instruction is on the fly. For example
-with Leros we could implement three pipeline stages: instruction fetch,
-instruction decode, and execute. In that case three instructions would
-be in the pipeline and we can execute one instruction each clock cycle.
+In an instruction pipeline, more than one instruction is on the fly. For example,
+with Leros, we could implement three pipeline stages: instruction fetch,
+instruction decode, and execute. In that case, three instructions would
+be in the pipeline, and we can execute one instruction each clock cycle.
 Compared to the presented implementation, pipelining could about double
 the performance of Leros.
-In the next chapter we will present a pipelined processor implementing the
+In the next chapter, we will present a pipelined processor implementing the
 RISC-V instruction set.
-
 
 \section{Exercise}
 
@@ -7021,16 +7016,16 @@ you find interesting.
 
 One option is to reread the chapter and read along with all the source code in the
 \myref{https://github.com/leros-dev/leros}{Leros repository}, run the test cases,
-fiddle with the code by breaking it and see that tests fail.
+fiddle with the code by breaking it, and see that tests fail.
 
-Another option is to write your own implementation of Leros.
+Another option is to write your implementation of Leros.
 The implementation in the repository is just one possible organization.
-You could write a Chisel simulation version of Leros with just a single pipeline stage,
+You could write a Chisel simulation version of Leros with a single pipeline stage
 or go crazy and superpipeline Leros for the highest possible clocking frequency.
 
-A third option is to design your own processor from scratch. Maybe the demonstration of
+A third option is to design your processor from scratch. Maybe the demonstration of
 how to build the Leros processor and the needed tools have convinced you that processor
-design and implementation is no magic art, but engineering that can be very joyful.
+design and implementation are no magic art, but the engineering can be very joyful.
 
 \chapter{A RISC-V Pipeline}
 \index{RISC-V}
@@ -7212,7 +7207,7 @@ Listing~\ref{lst:wildcat:fetch} shows the code of the fetch stage. The PC (\code
 is initialized to \code{-4} so that the value of \code{pcNext} is 0 after reset.
 The signal \code{doBranch} selects between a branch target of the current PC plus 4.
 The \code{pcNext} signal is connected to the input of the instruction memory.
-The output os the instruction memory is connected to \code{instr}.
+The output of the instruction memory is connected to \code{instr}.
 In case that the pipeline needs to be stalled (e.g., for a cache miss)
 a NOP substitutes the instruction, and \code{pcNext} will not be incremented.
 
@@ -7257,7 +7252,7 @@ needs to be compared against the register address delayed by one clock cycle.
 (This is similar to the manual forwarding on a read during write,
 as shown in Section~\ref{ref:memory}.)
 The function returns a Scala tuple returning the two read register
-values.\footnote{It also returns debugging registers as well,
+values.\footnote{It also returns debugging registers,
 which are ignored at synthesis.}
 
 The register file has two read ports, which is uncommon in an FPGA.
@@ -7283,19 +7278,16 @@ A similar function decodes the ALU operation from the instruction. Furthermore, 
 immediate value is extracted from the instruction. All those values are part of the
 decoded output.
 
-
-
 Listing~\ref{lst:wildcat:mem:address} shows the address computation for memory
 load or store instructions. The address (\code{memAdress}) is computed by using the value of
 register \code{rs1} and adding the immediate field (\code{dec.Out.imm}).
 However, the code is slightly more complicated, as we need to implement forwarding.
-Forwarding is needed if we use a register for the address that was just written by
-the preceding instruction. In that case, the value is not yet written back into the register
+Forwarding is needed if we use a register for the address that was just written in
+the preceding instructions. In that case, the value is not yet written back into the register
 file, and we \emph{forward} from the execution stage.
 The code snippet also shows where the write data comes from for a memory store operation.
 The value of register \code{rs2} is used, or a value is forwarded from the execution
 stage.
-
 
 \longlist{code/wildcat_mem_address.txt}{Address computation, including forwarding if needed.}{lst:wildcat:mem:address}
 
