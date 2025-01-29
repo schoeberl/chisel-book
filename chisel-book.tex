@@ -127,8 +127,8 @@
 \fi
 
 % uncomment following for final submission
-%\renewcommand{\todo}[1]{}
-%\renewcommand{\martin}[1]{}
+\renewcommand{\todo}[1]{}
+\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -5939,11 +5939,10 @@ a new value is written.
 \subsection{Memory Mapped Devices}
 \index{Memory mapped IO}
 
-All memory or IO devices are connected to shared
-address lines in our example system. Therefore, they appear in the shared address space.
-To select individual devices, we use address decoding of some upper bits.
-These are called memory-mapped devices, and as part of the system design,
-we need to decide on the address mapping.
+Our example system connects all memory or IO devices to shared
+address lines. Therefore, they appear in the shared address space. To select individual
+devices, we use address decoding of some upper bits. These are called memory-mapped devices,
+and as part of the system design, we need to decide on the address mapping.
 
 \begin{table}
 \centering
@@ -6036,17 +6035,35 @@ For our memory-mapped devices, we define a bundle:
 \shortlist{code/mem_io_bundle.txt}
 
 Listing~\ref{lst:rv-device} shows the memory-mapped interface to a streaming
-device, like a serial port.
+device, like a serial port. The streaming device is connected to \code{tx} for the output
+and to \code{rx} for the input. The \code{mem} port is connected to a processor bus,
+using the pipelined handshake.
 
-\todo{continue here}
+The device can be accessed with one clock cycle latency, as defined being the minimal
+access latency in the pipelined handshake. Therefore, we generate the \code{ack}
+signal when it was either a read or write one clock cycle later (\code{ackReg}).
+
+The status register \code{statusReg} contains two flags: one for transmit channel ready
+(there is space in the send buffer) and receive channel valid (there is at least one byte
+in the receive buffer).
+
+On read command, we store the read address in a register (\code{addrReg})
+for use in the next clock cycle when we return the read value. Depending on the address
+we either return the value of the status register or the receive data.
+The write data is directly connected to the transmit channel, and the write signal
+(\code{wr}) signals a valid input.
+
+
+To simplify the code example, we return from a read also if there is no data in the
+receive channel. An alternative would be to wait with the \code{ack} till
+data is available. Also in the send part, we ignore if there is room in the
+send buffer. We could as well block the write by not asserting \code{ack}
+until space is available in the send buffer.
+We delegate this check into software that reads the status register before trying
+to read or write a value.
 
 
 \longlist{code/mem_io_rv.txt}{An IO device for a ready/valid device.}{lst:rv-device}
-
-
-
-
-
 
 
 \todo{decoding Chisel code, but maybe in the Leros section when building a complete system.}
@@ -6164,6 +6181,19 @@ centralized multiplexer, or a centralized AND/OR network are
 suggested. Xilinx used the AND/OR approach, and all masters and
 slaves had to drive the data buses to zero when inactive.
 Xilinx switched to AXI for all their interconnects.
+
+\section{Exercise}
+
+Use the code shown in Listing~\ref{lst:rv-device} and a streaming device to the \code{rx}
+and \code{tx}. Or write a ChiselTest simulation of such a device. Write a testbench
+to test the memory interface. Explore what happens if the test ignores the status flags,
+i.e., reading invalid data or dropping write data when the transmit channel is not ready.
+Update the \code{MemeoryMappedRV} module so that the \code{ack} signal is delayed until
+the streaming device is ready or valid. Can your testbench handle the delayed \code{ack}?
+I you are simulating both the streaming device and the memory interface does the Scala
+code become a bit awkward, you need two software state machines to handle
+two devices in parallel? You can solve this issue elegant with multithreaded testing,
+as described in the testing chapter.
 
 \chapter{Debugging, Testing, and Verification}
 \label{chap:testing}
