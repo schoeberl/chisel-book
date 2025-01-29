@@ -4434,31 +4434,31 @@ to be ready, the data is considered read, and the buffer is empty again.
 
 The strength of Chisel is that it allows us to write hardware generators.
 With older hardware description languages, such as VHDL and Verilog,
-we usually use another language, for example, Java or Python, to generate hardware.
-Before using Chisel, I have often written small Java programs to generate VHDL tables.
-In Chisel, the full power of Scala and Java with its many open-source libraries
+we usually use another language, Java or Python, to generate hardware.
+Before using Chisel, I often wrote small Java programs to generate VHDL tables.
+In Chisel, the full power of Scala and Java, with its many open-source libraries,
 are available at hardware construction time. Therefore, we can write our hardware
 generators in the same language and execute them as part of the Chisel circuit generation.
 
 \section{A Little Bit of Scala}
 \index{Scala}
 
-This subsection gives a very brief introduction into Scala. It should be enough
+This subsection gives a very brief introduction to Scala. It should be enough
 to write simple hardware generators for Chisel.
-For an in-depth introduction into Scala I recommend the textbook by Odersky et al.~\cite{Scala}.
+For an in-depth introduction to Scala, I recommend the textbook by Odersky et al.~\cite{Scala}.
 The \myref{https://www.scala-lang.org/}{Scala website} also contains an
 \myref{https://docs.scala-lang.org/overviews/scala-book/introduction.html}{online Scala book}.\footnote{The link
 points to the Scala 2 version of the book, as Chisel is still based on Scala 2.}
 
 Scala has two types of variables: \code{val}s and \code{var}s. A \code{val} gives an expression
-a name and cannot be reassigned a value. This following snippet shows the definition of
-an integer value called \code{zero}. If we try to reassign a value to \code{zero}, we get
+a name and cannot be reassigned to a value. The following snippet shows the definition of
+an integer value called \code{zero}. If we try reassigning a value to \code{zero}, we get
 a compile error.
 
 \shortlist{code/scala_val.txt}
 \index{Scala!val}
 
-\noindent In Chisel we use \code{val}s to name hardware components. Note that the \code{:=}
+\noindent In Chisel, we use \code{val}s to name hardware components. Note that the \code{:=}
 operator is a Chisel operator and not a Scala operator.
 
 Scala also provides the more classic version of a mutable variable as \code{var}. The following code defines
@@ -4470,8 +4470,8 @@ an integer variable and reassigns it a new value:
 \code{var}s to name a hardware \emph{component}.
 
 You may have wondered what type those variables have. As we assigned an integer constant
-in the above example, the type of the variable is \emph{inferred}; it is a Scala \code{Int} type.
-In most cases the Scala compiler is able to infer the type. However, if we are in the mood of
+in the above example, the variable type is \emph{inferred}; it is a Scala \code{Int} type.
+In most cases, the Scala compiler can infer the type. However, if we are in the mood of
 being more explicit, we can explicitly state the type as follows:
 
 \shortlist{code/scala_int_type.txt}
@@ -4489,19 +4489,19 @@ of a shift register.
 \noindent Note that this is not the most concise expression of a shift register.
 It is better to use a plain \code{UInt} with the right size and assign the new value for the
 register with an expression using the \code{\#\#} operator
-and proper indexing. This code snippet is just to show how a Scala \code{for} loop can be used
+and proper indexing. This code snippet shows how a Scala \code{for} loop can be used
 for circuit generation.
 
 Conditions are expressed with \code{if} and \code{else}. Note that this condition
 is evaluated at Scala runtime during circuit generation. This construct does \emph{not}
-create a multiplexer, but allows to write \emph{configurable} hardware generators.
+create a multiplexer, but allow writing \emph{configurable} hardware generators.
 
 \shortlist{code/scala_condition.txt}
 
 Scala has the notion of a \myref{https://en.wikibooks.org/wiki/Scala/Tuples}{tuple}.
 A tuple can hold a sequence of different types. The tuple is built by placing the individual fields
 within parentheses. The fields are then accessed with \code{.\_n}, starting with 1 for the first field.
-Following code creates a tuple to represent a city with the zip code and the name.
+The following code creates a tuple representing a city with the zip code and the name.
 
 \index{Scala!tuple}
 
@@ -4516,7 +4516,7 @@ One of the simpler collection types is \code{Seq}, an ordered collection of elem
 The default implementation is immutable. We index into a \code{Seq} with \code{()},
 with zero-based indexing.
 \code{Seq} is a base class with several different implementations.
-However, for most Chisel hardware generators direct use of \code{Seq}
+However, for most Chisel hardware generators, direct use of \code{Seq}
 is the preferred choice. The following code shows how to create a \code{Seq}
 that holds four Scala \code{Int} values. The second line accesses the
 second element, and \code{second} will be \code{15}.
@@ -4549,17 +4549,17 @@ We can then create two adders by simply calling the function \code{adder}.
 
 \shortlist{code/components_fn_use.txt}
 
-\noindent Note that this is a \emph{hardware generator}. That code is not executing any add operation
-during elaboration, but creates two adders (hardware instances). Or in other words, it returns
+\noindent Note that this is a \emph{hardware generator}. That code does not execute any add operation
+during elaboration but creates two adders (hardware instances). In other words, it returns
 a wire to the output of the adder.
 We have written our first hardware generator!
 
 The adder is an artificial example
 to keep it simple. Chisel has already an adder generator function, like \code{+(that: UInt)}.
 
-Functions, as lightweight hardware generators, can also contain state (using a register).
-The following example returns a one clock cycle delay element (a register).
-If a function has just a single statement, we can write it in one line and omit the curly
+As lightweight hardware generators, functions can also contain state (using a register).
+The following example returns a one-clock cycle delay element (a register).
+If a function has a single statement, we can write it in one line and omit the curly
 braces (\{\}).
 
 \shortlist{code/components_fn_delay.txt}
@@ -4574,7 +4574,7 @@ is already that function that creates the register for the delay.
 
 
 
-Functions return only one value. In order to provide more than one output, we
+Functions return only one value. To provide more than one output, we
 can wrap several output wires into a Scala tuple. The following code generates hardware that
 compares two inputs and has two outputs.
 
@@ -4583,8 +4583,8 @@ compares two inputs and has two outputs.
 \noindent With the parenthesis, we wrap the two wires that are connected to the outputs of
 the comparator circuit into a Scala tuple.
 
-When creating a comparator component
-with the \code{compare} function, it returns a tuple of two wires. We can access the two
+Creating a comparator component
+with the \code{compare} function returns a tuple of two wires. We can access the two
 wires with the \code{.\_n} syntax.
 
 \shortlist{code/fun_comp_use1.txt}
@@ -4606,7 +4606,7 @@ functions.
 \label{sec:gen:comb:logic}
 
 A logic table (truth table) is combinational logic. It is also called read-only memory (ROM),
-as we can see the input to the table as an address into such a ROM.
+we can see, the input to the table is an address into such a ROM.
 We generate a logic table with \code{VecInit}.  The following snippet of code creates
 a table to compute the square of a number \code{n}.
 
@@ -4621,9 +4621,9 @@ hardware generation.
 
 \index{Binary-coded decimal}
 \index{BCD}
-A classic example for a table generation is the conversion of a binary number
+A classic example of a table generation is the conversion of a binary number
 into a \myref{https://en.wikipedia.org/wiki/Binary-coded_decimal}{binary-coded decimal}
-(BCD) representation. BCD is used to represent a number in a decimal
+(BCD) representation. BCD represents a number in a decimal
 format using 4 bits for each decimal digit. For example, decimal \code{13} is in binary
 \code{1101} and BCD encoded as 1 and 3 in binary: \code{00010011}.
 BCD allows displaying numbers in decimal, a more user-friendly number
@@ -4651,7 +4651,7 @@ time for the logic table.
 Listing~\ref{lst:file:reader} shows how to use the Scala \code{Source}
 class form the Scala standard library to read the file \code{data.txt}, which
 contains integer constants in a textual representation.\footnote{Scala is
-based on Java and therefore all Java file reading and writing libraries can
+based on Java, and therefore, all Java file reading and writing libraries can
 be used, e.g., to read binary files.}
 \index{VecInit}
 
@@ -4686,12 +4686,12 @@ from the \code{msg} string to a Chisel \code{Vec}:
 \subsection{Type Conversion}
 \index{Type!conversion}
 
-Sometimes it is convenient to convert from one Chisel type to a different type.
-All types basically represent a collection of bits. Therefore, we can easily preform this mapping.
-As a first example let us assume we receive bytes of data and would like to repackage
-4 bytes into a 32-bit \code{UInt}. Following code maps the vector of bytes to an \code{UInt}.
-The bytes are mapped in following order to the \code{UInt}: the first byte into the lower 8 bits,
-the next byte into the next and so on.
+Sometimes converting from one Chisel type to a different type is convenient.
+All types represent a collection of bits. Therefore, we can easily perform this mapping.
+As a first example, let us assume we receive bytes of data and would like to repackage
+4 bytes into a 32-bit \code{UInt}. The following code maps the vector of bytes to an \code{UInt}.
+The bytes are mapped in the following order to the \code{UInt}: the first byte into the lower 8 bits,
+the next byte into the next, and so on.
 
 \shortlist{code/convert_vec2uint.txt}
 
@@ -4701,8 +4701,8 @@ of four bytes.
 \shortlist{code/convert_uint2vec.txt}
 
 We can also convert a \code{Bundle} to a \code{UInt}. The bundle fields are ordered
-that the last field (in this example field \code{b}) is in the lower bits of the \code{UInt}
-(here 15 to 0), folloed by the second last, and so on. Note, that this order is opposite to
+so that the last field (in this example, field \code{b}) is in the lower bits of the \code{UInt}
+(here 15 to 0), followed by the second last, and so on. Note that this order is opposite to
 the order of mapping a \code{Vec}.
 
 \shortlist{code/convert_bundle2uint.txt}
@@ -4727,7 +4727,7 @@ hardware type.
 
 The simplest way to parameterize a circuit is to define a bit width as a parameter.
 Parameters can be passed as arguments to
-the constructor of the Chisel module. The following example is a toy example of
+the constructor of the Chisel module. The following is a toy example of
 a module that implements an adder with a configurable bit width.
 The bit width \code{n} is a parameter (of Scala type \code{Int}) of the component
 passed into the constructor that can be used in the IO bundle.
@@ -4741,15 +4741,15 @@ passed into the constructor that can be used in the IO bundle.
 \subsection{Case Classes}
 \index{Case classes}
 
-If we need more parameters, we can simply add additional parameters to the constructor
-of the Chisel module. However, if we pass those parameters through several constructors
-it might become tedious to use them. Furthermore, when changing the number or type of
-parameters, we need to edit several places.
+If we need more parameters, we can add additional parameters to the constructor
+of the Chisel module. However, if we pass those parameters through several constructors,
+it might become tedious to use them. Furthermore, we need to edit several places when changing the number or type of
+parameters.
 
 Scala has a very light-weight construct to package several fields into a class:
 a \myref{https://docs.scala-lang.org/tour/case-classes.html}{case classes}.
-Case classes are like regular Scala classes, but with a very light-weight definition.
-Following code defines a case class to represent three parameters. It might be used for
+Case classes are like regular Scala classes but with a very light-weight definition.
+The following code defines a case class to represent three parameters. It might be used for
 a device with a transmit (tx) buffer and a receive buffer(rx) of a certain width.
 
 \shortlist{code/case_class.txt}
@@ -4768,11 +4768,11 @@ are valid.
 \index{Type!parameters}
 
 Having the bit width as a configuration parameter is just the starting point for
-hardware generators. Chisel type parameters enable very flexible configurations.
-That feature allows for Chisel to provide a multiplexer (\code{Mux}) that
-can accept any types for the multiplexing.
-To show how to use Chisel types for the configuration, we build a multiplexer
-that accepts arbitrary types. The following function defines the multiplexer:
+hardware generators. Chisel type-parameters enable very flexible configurations.
+That feature allows Chisel to provide a multiplexer (\code{Mux}) that
+can accept any type of multiplexing.
+We build a multiplexer that accepts arbitrary types to show how to use Chisel
+types for the configuration. The following function defines the multiplexer:
 
 \shortlist{code/param_func.txt}
 
@@ -4782,9 +4782,9 @@ a type parameter \code{T} that is \code{Data} or a subclass of \code{Data}.
 \code{Data} is the root of the Chisel type system.
 
 Our multiplexer function has three parameters: the boolean condition,
-one parameter for the true path, and one parameter for the false path.
-Both path parameters are of type \code{T}, which is
-provided at function call. The function itself is straightforward:
+one parameter for the true path, and one for the false path.
+Both path parameters are of type \code{T}, 
+provided at the function call. The function itself is straightforward:
 we define a wire with the default value of \code{fPath} and
 change the value if the condition is true to the \code{tPath}.
 This condition is a classic multiplexer function.
@@ -4820,12 +4820,12 @@ The following function shows the alternative way to code the multiplexer.
 \subsection{Modules with Type Parameters}
 
 We can also parameterize modules with Chisel types.
-Let us assume we want to design a network-on-chip to move data between
+We assume we want to design a network-on-chip to move data between
 different processing cores. However, we do not want to hardcode the
 data format in the router interface; we want to \emph{parameterize} it.
 Similar to the type parameter for a function, we add a type parameter \code{T}
 to the Module constructor. Furthermore, we need to have one constructor
-parameter of that type. Additionally, in this example, we also make the number
+parameter of that type. In this example, we also make the number
 of router ports configurable.
 
 \shortlist{code/param_mod.txt}
@@ -4855,7 +4855,7 @@ Within the bundle, we define a field \code{data} by invoking \code{cloneType}
 on the parameter.
 However, when we use a constructor parameter, this parameter becomes a
 public field of the class. When Chisel needs to clone the type of the \code{Bundle},
-e.g., when it is used in a \code{Vec}, this public field is in the way.
+e.g., when used in a \code{Vec}, this public field is in the way.
 A solution (workaround) to this issue is to make the parameter field private:
 
 \shortlist{code/param_bundle.txt}
@@ -4871,22 +4871,22 @@ a \code{Payload} as a parameter:
 
 \subsection{Optional Ports}
 
-Some hardware generator might have IO ports that are dependent on a configuration.
-As an example we implement a register file for typical 32-bit RISC processor. For debugging
-we want to be able to access all register. Therefore, we want to have an additional
-port where we can read all registers in the tester. However, at Verilog generation
+Some hardware generators might have IO ports that are dependent on a configuration.
+As an example, we implement a register file for a typical 32-bit RISC processor. For debugging,
+we want to be able to access all registers. Therefore, we want to have an additional
+port where we can read all registers in the tester. However, at Verilog generation,
 we do not want this expensive extra port.
 
 Listing~\ref{lst:reg:file} shows such a register file. It has as parameter \code{debug}
 as a Scala \code{Boolean}. In the definition of the IO bundle we use that parameter
-to either generate that port or not. In Scala this is represented as an \code{Option}.
+to either generate that port or not. In Scala, this is represented as an \code{Option}.
 An option can return a value wrapped into \code{Some} or represent the missing value
-as a \code{None}. In the main body of the module we extract the value of the option
+as a \code{None}. In the main body of the module, we extract the value of the option
 with \code{get}.
 
 \longlist{code/register_file.txt}{A register file with an optional debug port.}{lst:reg:file}
 
-Similar in the tester we need to  use options \code{get} method to get a reference
+Similar to the tester, we need to  use the \code{get} method to get a reference
 of that IO port:
 
 \shortlist{code/register_file_test.txt}
@@ -4900,10 +4900,10 @@ of that IO port:
 
 Chisel is an object-oriented language. A hardware component, the Chisel \code{Module},
 is a Scala class. Therefore, we can use inheritance to factor a common behavior
-out into a parent class. We explore how to use inheritance with an example.
+into a parent class. We explore how to use inheritance with an example.
 
-In Section~\ref{sec:counter} we have explored different forms of counters,
-which may be used for a low-frequency tick generation. Let us assume we want to
+In Section~\ref{sec:counter}, we have explored different forms of counters
+which may be used for low-frequency tick generation. Let us assume we want to
 explore those different versions, for example, to compare their resource requirement.
 We start with an abstract class to define the ticking interface, shown in Listing~\ref{lst:ticker:base}.
 
@@ -4939,7 +4939,7 @@ less hardware by avoiding the comparator.
 \longlist{code/nerd_ticker.txt}{Tick generation by counting down to -1.}{lst:ticker:nerd}
 
 We can test all three versions of the ticker by using ScalaTest specifications,
-creating instances of the different versions of the ticker and passing them
+creating instances of the different versions of the ticker, and passing them
 to the generic test bench. Listing~\ref{lst:ticker:spec} shows the test specification.
 We run only the ticker tests with:
 \begin{chisel}
@@ -4960,32 +4960,32 @@ Let us start with a simple example, the sum of a vector:
 
 \shortlist{code/fun_first.txt}
 
-First we define the hardware for the adder in function \code{add}.
+First, we define the hardware for the adder in function \code{add}.
 The vector (Chisel type \code{Vec}) is located in \code{vec}. The Scala method \code{reduce()} combines
-all elements of a collection with a binary operation, producing a single value.
+all collection elements with a binary operation, producing a single value.
 The \code{reduce()} method reduces the sequence starting from the first element.
-It takes the first two elements and performs the operation. The result is then combined
-with the next element, until a single result is left.
+It takes the first two elements and operates. The result is combined
+with the next element until a single result is left.
 
-The function to combine two elements is provided as parameter to \code{reduce}, in our case \code{add},
+The function to combine two elements is provided as a parameter to \code{reduce}, in our case \code{add},
 which returns an adder. The resulting hardware is a chain of adders computing
-the sum of the elements of vector \code{vec}.
+the sum of vector \code{vec} elements.
 Instead of defining the (simple) \code{add} function, we can provide the addition
 as anonymous function and use the Scala wildcard ``\code{\_}'' to represent the
 two operands.
 
 \shortlist{code/fun_func_lit.txt}
 
-\noindent With this one-liner we have generated the chain of adders. For the sum function
-a chain is not the ideal configuration; a tree will have a shorter combinational delay.
+\noindent With this one-liner, we have generated the chain of adders. For the sum function
+a chain is not ideal; a tree will have a shorter combinational delay.
 If we do not trust the synthesize tool to rearrange our adder chain, we can use Chisel's
-\code{reduceTree} method to generated a tree of adders:
+\code{reduceTree} method to generate a tree of adders:
 
 \shortlist{code/fun_reduce_tree.txt}
 
 \subsection{Minimum Search Example}
 
-As a more elaborate example, we will build a circuit to find the minimum value in a \code{Vec}. To express this circuit
+As a more elaborate example, we will build a circuit to find the minimum value in a \code{Vec}. To express this circuit,
 we use an anonymous function, called \emph{function literal} in Scala.  The syntax for a function
 literal is parameters in parentheses, followed by a \code{=>}, followed by the function body:
 
@@ -5027,7 +5027,7 @@ This pattern can also be seen as a pipeline of operations.
 The first function (\code{zipWithIndex})
 transforms the original sequence of \code{UInt}s to a sequence of tuples, where the first element is the
 unchanged \code{UInt} and the second element is the index value within the \code{vec} as Scala \code{Int}.
-In general a \code{zip} function merges two sequences (zips them) into a single one
+In general, a \code{zip} function merges two sequences (zips them) into a single one
 containing the two elements as tuples.
 
 % fixme: the following two sentences are unclear.
@@ -5046,13 +5046,13 @@ As we use a Scala \code{Vector} here, we cannot use \code{reduceTree}, which is 
 To keep using \code{reduceTree} the following solution uses a Chisel \code{MixedVec}
 instead of a Scala tuple.
 A Chisel \code{MixedVec} is similar to a Scala tuple as it can have different types at different positions.
-Therefore, it cannot function as, for example, multiplexer. However, we can use it as an
+Therefore, it cannot function as, for example, a multiplexer. However, we can use it as an
 indexable collection during hardware generation.
 
 \shortlist{code/fun_min4.txt}
 
 
-In the above example we create a Scala \code{Vector} of the values with their index, but now
+In the above example, we create a Scala \code{Vector} of the values with their index, but now
 using Chisel's ``tuple''. We then convert the Scala \code{Vector} into a Chisel \code{Vec}.
 Then we can again perform a tree-based reduction. Another benefit of this version is
 that we have only one multiplexer, which selects between two Chisel ``tuples'' that are actually
@@ -5064,7 +5064,7 @@ accessed with an index, like a ``normal'' \code{Vec}.
 \index{Arbiter}
 \label{sec:arbiter}
 
-With our tree reduction function we can build an arbitration tree out of just 2:1 arbiters.
+With our tree reduction function, we can build an arbitration tree out of just 2:1 arbiters.
 We can generate the arbitration circuit as follows:
 
 \shortlist{code/fun_arbiter_head.txt}
@@ -5079,15 +5079,15 @@ interface. We \emph{just} need a function that provides arbitration between two 
 
 As a first solution, we will build a priority-based arbitration, similar to the arbiter shown
 in Section~\ref{sec:arbiter}. That arbiter in Section~\ref{sec:arbiter} was a purely combinational circuit.
-However, with the ready/valid interface we are not allowed to have a combinational
-flow between a ready and a valid signal. Therefore, we need to introduce state for those signals
-and also need to register the incoming data.
+However, with the ready/valid interface, we are not allowed to have a combinational
+flow between a ready and a valid signal. Therefore, we need to introduce a state for those signals
+and register the incoming data.
 
 Listing~\ref{lst:fun:arbiter:simp} shows the 2-to-1 arbitration function. This function assumes
 that a requester who has asserted \code{valid} will only deassert it when it is read by the receiver
-(signaled with a \code{ready}). Furthermore, we are allowed to set \code{ready} in the next clock cycle
+(signaled with a \code{ready}). Furthermore, we can set \code{ready} in the next clock cycle
 depending on \code{valid} in the current clock cycle.
-This is one specific interpretation of the ready/valid protocol, which is also used in AXI.
+This is one specific interpretation of the ready/valid protocol, also used in AXI.
 
 \longlist{code/fun_arbiter_simple.txt}{A simple 2 to 1 arbiter.}{lst:fun:arbiter:simp}
 
@@ -5096,25 +5096,25 @@ signal that the data register is empty, and two flags for the \code{ready} signa
 (\code{regReadyA} and \code{regReadyB}).
 The return value of the function (\code{out}) is a wire of type \code{DecoupledIO}.
 
-When the data register is empty and one of the two inputs signals a \code{valid} input,
+When the data register is empty, and one of the two inputs signals a \code{valid} input,
 we signal a \code{ready} in the next clock cycle (via the \code{ready} register).
 Note that we can signal only one of the two inputs that the arbiter is \code{ready},
 as we have only one data register.
 When we have a registered \code{ready}, we assume that the input is still \code{valid},
 register the data, deassert \code{regEmpty}, and reset the \code{ready} flag.
 
-The output is valid, when the data register is not empty. When the receiver is \code{ready},
-the data is transmitted and the data register is empty again.
+The output is valid when the data register is not empty. When the receiver is \code{ready},
+the data is transmitted, and the data register is empty again.
 As the last statement, the function returns \code{out}, the reference to the \code{DecoupledIO}
 wire.
 
 
 \subsubsection{Fair Arbitration}
 
-In Section~\ref{sec:arbiter} we presented a combinational version of an arbitration circuit.
+In Section~\ref{sec:arbiter}, we presented a combinational version of an arbitration circuit.
 The combinational version is a priority arbiter, so one high-priority requester can
 dominate the arbitration.
-To avoid this domination, we need to introduce state to remember who won the arbitration last time.
+To avoid this domination, we must introduce some state to remember who won the arbitration last time.
 Our assumption is that if the 2:1 arbiter is fair, this results in a fair
 arbitration on a balanced arbitration tree.
 
@@ -5123,9 +5123,9 @@ arbitration on a balanced arbitration tree.
 Listing~\ref{lst:fun:arbiter} shows that fair 2:1 arbitration circuit.
 The arbiter contains one register for the data to store and one state register. To be fair, the arbiter
 switches between two idle states (\code{idleA} and \code{idleB}) when there is no request.
-In each of the two idle states it accepts only one of the inputs. Note that with just a single register for
+Each of the two idle states accepts only one of the inputs. Note that with just a single register for
 storage, the arbiter can only be ready for one of the two inputs. To allow being ready for both inputs
-and switching priority we would need a second data register to handle the case when both inputs
+and switching priority, we would need a second data register to handle the case when both inputs
 are valid in the same clock cycle.
 
 When a request is accepted, it stores the data and switches to one of the full states (\code{hasA}
@@ -5139,9 +5139,9 @@ in the next clock cycle.
 \chapter{Example Designs}
 
 In this section, we explore some small digital designs, such as
-a FIFO buffer, which are used as building blocks for a larger design.
+a FIFO buffer, which is used as a building block for a larger design.
 As another example, we design a serial interface (also called UART),
-which itself may use the FIFO buffer. Furthermore, we will generalize
+which may use the FIFO buffer. Furthermore, we will generalize
 the FIFO interface and show different possible implementations.
 
 \section{FIFO Buffer}
@@ -5153,12 +5153,12 @@ the FIFO interface and show different possible implementations.
 
 
 We can decouple a writer (sender) and a reader (receiver) by a buffer
-between the writer and reader.
+between the writer and the reader.
 A common buffer is a first-in, first-out
 (\href{https://en.wikipedia.org/wiki/FIFO_%28computing_and_electronics%29}{FIFO})
 buffer. Figure~\ref{fig:fifo} shows a writer, the FIFO, and a reader.
-Data is put into the FIFO by the writer on \code{din} with an active
-\code{write} signal. Data is read from the the FIFO by the reader on
+The writer puts Data into the FIFO on \code{din} with an active
+\code{write} signal. Data is read from the FIFO by the reader on
 \code{dout} with an active \code{read} signal.
 
 \begin{figure}
@@ -5170,38 +5170,38 @@ Data is put into the FIFO by the writer on \code{din} with an active
 
 A FIFO is initially empty, singled by the \code{empty} signal. Reading
 from an empty FIFO is usually undefined. When data is written and never
-read a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
+read, a FIFO will become \code{full}. Writing to a full FIFO is usually ignored
 and the data are lost. In other words, the signals \code{empty} and \code{full}
 serve as handshake signals
 
 Several different implementations of a FIFO are possible: For example, using on-chip
 memory and read and write pointers or simply a chain of registers with a
-tiny state machine. For small buffers (up to tens of elements) a FIFO organized
+tiny state machine. For small buffers (up to tens of elements), a FIFO organized
 with individual registers connected into a chain of buffers is a simple
 implementation with a low resource requirement.
 The code of the bubble FIFO is available in the
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples}
-repository.\footnote{For completeness, the Chisel book repository contains
-a copy of the FIFO code as well.}
+repository.\footnote{For completeness, the Chisel book repository also contains
+a copy of the FIFO code.}
 
 We start by defining the IO signals for the writer and the reader side.
 The size of the data is configurable with \code{size}.
 The write data are \code{din} and a write is signaled by \code{write}.
 The signal \code{full} performs the
 \myref{https://en.wikipedia.org/wiki/Flow_control_(data)}{flow control}
-at the writer side.
+at the writer's side.
 
 \shortlist{code/bubble_fifo_writer_io.txt}
 
-The reader side provides data with \code{dout} and the read is initiated
+The reader side provides data with \code{dout}, and the read is initiated
 with \code{read}. The \code{empty} signal is responsible for the flow control
 at the reader side.
 
 \shortlist{code/bubble_fifo_reader_io.txt}
 
-Listing~\ref{lst:fifo:stage} shows a single buffer. The buffer has a enqueueing port
+Listing~\ref{lst:fifo:stage} shows a single buffer. The buffer has an enqueueing port
 \code{enq} of type \code{WriterIO} and a dequeueing port \code{deq} of type
-\code{ReaderIO}. The state elements of the buffer is one register that holds the
+\code{ReaderIO}. The state elements of the buffer are one register that holds the
 data (\code{dataReg}) and one state register for the simple FSM (\code{stateReg}).
 The FSM has only two states: either the buffer is \code{empty} or \code{full}.
 If the buffer is \code{empty}, a write will register the input data and change
@@ -5220,24 +5220,24 @@ the same IO interface as the individual FIFO buffers.
 word and \code{depth} for the number of buffer stages.
 We can build a \code{depth} stages bubble FIFO out of \code{depth}
 \code{FifoRegister}s. We create the stages by filling them into a Scala \code{Array}.
-The Scala array has no hardware meaning, it \emph{just} serves as
+The Scala array has no hardware meaning; it \emph{just} serves as
 a container to have references to the created buffers.
-In a Scala \code{for} loop we connect the individual buffers.
+In a Scala \code{for} loop, we connect the individual buffers.
 The first buffer's enqueueing side is connected to the enqueueing IO of
-the complete FIFO and the last buffer's dequeueing side to the
+the complete FIFO, and the last buffer's dequeueing side to the
 dequeueing side of the complete FIFO.
 
-\longlist{code/bubble_fifo.txt}{A FIFO is composed of an array of FIFO bubble stages.}{lst:fifo}
+\longlist{code/bubble_fifo.txt}{A FIFO comprises an array of FIFO bubble stages.}{lst:fifo}
 
 The presented idea of connecting individual buffers to implement a FIFO
 queue is called a bubble FIFO, as the data bubbles through the queue.
-This is simple, and a good solution when the data rate is considerable slower
-than the clock rate, for example, as a decouple buffer for a serial port, which is presented
+This is a simple, and good solution when the data rate is considerably slower
+then the clock rate, for example, as a decoupling buffer for a serial port, which is presented
 in the next section.
 
 However, when the data rate approaches the clock frequency, the bubble FIFO
 has two limitations: (1) As each buffer's state has to toggle between \emph{empty} and
-\emph{full}, which means the maximum throughput of the FIFO is 2 clock cycles
+\emph{full}, which means the maximum throughput of the FIFO is two clock cycles
 per word. (2) The data needs to bubble through the complete FIFO, therefore,
 the latency from the input to the output is at least the number of buffers.
 I will present other possible implementations of FIFOs in Section~\ref{sec:more:fifo}.
@@ -5252,9 +5252,9 @@ A serial port (also called
 or \myref{https://en.wikipedia.org/wiki/RS-232}{RS-232}) is one of the easiest options
 to communicate between your laptop and an FPGA board.
 As the name implies, data is transmitted serially. An 8-bit byte is transmitted as follows:
-one start bit (0), the 8-bit data, least significant bit first, and then one or two stop
+one start bit (0), the 8-bit data, the least significant bit first, and then one or two stop
 bits (1). When no data is transmitted, the output is 1.
-Figure~\ref{fig:uart:wave} shows the timing diagram of one byte transmitted.
+Figure~\ref{fig:uart:wave} shows the transmitted timing diagram of one byte.
 
 \begin{figure}
   \centering
@@ -5267,7 +5267,7 @@ We design our UART in a modular way with minimal functionality
 per module. We present a transmitter (TX), a receiver (RX),
 a buffer, and then usage of those base components.
 
-First, we need an interface, a port definition.
+First, we need an interface and a port definition.
 For the UART design, we use a ready/valid handshake interface (extending \code{DecoupledIO}),
 with a data size of 8 bits.
 \shortlist{code/uart_channel.txt}
@@ -5277,8 +5277,8 @@ when both \code{ready} and \code{valid} are asserted.
 \longlist{code/uart_tx.txt}{A transmitter for a serial port.}{lst:uart:tx}
 
 Listing~\ref{lst:uart:tx} shows a bare-bone serial transmitter (\code{Tx}).
-The IO ports are the \code{txd} port, where the serial data is sent and
-a \code{channel} where the transmitter can receive the characters to serialize
+The IO ports are the \code{txd} port, where the serial data is sent, and
+a \code{channel}, where the transmitter can receive the characters to serialize
 and send.
 To generate the timing, we compute a constant for
 the time in clock cycles for one serial bit.
@@ -5287,7 +5287,7 @@ We use three registers:
 (1) register to shift the data (serialize them) (\code{shiftReg}),
 (2) a counter to generate the correct baud rate (\code{cntReg}), and
 (3) a counter for the number of bits that still need to be shifted out (\code{bitsReg}).
-No additional state register or FSM is needed, all state is encoded in
+No additional state register or FSM is needed; all state is encoded in
 those three registers.
 
 Counter \code{cntReg} is continuously running (counting down to 0
@@ -5309,18 +5309,18 @@ two stop bits (1). Therefore, the bit count is set to 11.
 This very minimal transmitter has no additional buffer and can
 accept a new character only when the shift register is empty
 and at the clock cycle when \code{cntReg} is 0.
-Accepting new data only when \code{cntReg} is 0 means
-that the ready flag is also deasserted when there would be
+Accepting new data only when \code{cntReg} is zero means
+that the ready flag is also de-asserted when there is
 space in the shift register. However, we do not want to add this
 ``complexity'' to the transmitter but delegate it to a buffer.
 
 \longlist{code/uart_buffer.txt}{A single-byte buffer with a ready/valid interface.}{lst:uart:buffer}
 
-Listing~\ref{lst:uart:buffer} shows a single byte buffer, similar to
+Listing~\ref{lst:uart:buffer} shows a single-byte buffer, similar to
 the FIFO register for the bubble FIFO. The input and the output
 are \code{UartIO}s.
 The buffer contains the minimal state machine
-to indicate \code{empty} or \code{full}. The buffer driven handshake
+to indicate \code{empty} or \code{full}. The buffer-driven handshake
 signals (\code{io.in.ready} and \code{io.out.valid}) depend on the state
 register.
 
@@ -5332,47 +5332,47 @@ back to state \code{empty}.
 
 \longlist{code/uart_buffered_tx.txt}{A transmitter with an additional buffer.}{lst:uart:buffered:tx}
 
-With that buffer we can extend our bare-bone transmitter.
+With that buffer, we can extend our bare-bone transmitter.
 Listing~\ref{lst:uart:buffered:tx} shows the combination of the transmitter \code{Tx}
 with a single-buffer in front. This buffer now relaxes the issue that \code{Tx}
 was \code{ready} only for single clock cycles. We delegated the solution of
 this issue to the buffer module.
-An extension of the single word buffer to a real FIFO can easily be done
-and needs no change in the transmitter or the single byte buffer.
+An extension of the single-word buffer to a real FIFO can easily be done
+and needs no change in the transmitter or the single-byte buffer.
 
 \longlist{code/uart_rx.txt}{A receiver for a serial port.}{lst:uart:rx}
 
 Listing~\ref{lst:uart:rx} shows the code for the receiver (\code{Rx}).
-A receiver is a little bit tricky, as it needs to reconstruct the timing of
+A receiver is a bit tricky, as it needs to reconstruct the timing of
 the serial data. The receiver waits for the falling edge of the start bit.
-From that event, the receiver waits 1.5 bit times to position itself into the middle
-of bit 0. Then it samples and shifts in the bits every bit time. You can observe these
+From that event, the receiver waits 1.5-bit times to position itself into the middle
+of bit 0. Then, it samples and shifts in the bits every bit of time. You can observe these
 two waiting times as \code{BIT\_CNT} and \code{START\_CNT}.
-For both sample times, the same counter (\code{cntReg}) is used.
+The same counter (\code{cntReg}) is used for both sample times.
 After 8 bits are shifted in, \code{validReg} signals an available byte.
 
 \longlist{code/uart_sender.txt}{Sending ``Hello World!" via the serial port.}{lst:uart:sender}
 
 Listing~\ref{lst:uart:sender} shows the usage of the serial port transmitter
 by sending out a friendly message. We define the message as a Scala
-string (\code{msg}) and converting it to a Chisel \code{Vec} of \code{UInt}.
+string (\code{msg}) and convert it to a Chisel \code{Vec} of \code{UInt}.
 A Scala string is a sequence that supports the \code{map} method.
 The \code{map} method takes as argument a function literal, applies this function to
 each element, and builds a sequence of the function's return values.
-If the function literal has only one argument, as it is in this case, the
+If the function literal has only one argument, as in this case, the
 argument can be represented by \code{\_}. Our function literal calls
 the Chisel method \code{.U} to convert the Scala \code{Char} to a Chisel
 \code{UInt}. The sequence is then passed to \code{VecInit} to construct
 a Chisel \code{Vec}. We index into the vector \code{text} with the counter
 \code{cntReg} to provide the individual characters to the buffered transmitter.
-With each \code{ready} signal we increase the counter until the full string
+With each \code{ready} signal, we increase the counter until the full string
 is sent out. The sender keeps \code{valid} asserted until the last character
 has been sent out.
 
 \longlist{code/uart_echo.txt}{Echoing data on the serial port.}{lst:uart:echo}
 
-Listing~\ref{lst:uart:echo} shows the usage of the receiver and the transmitter
-by connecting them together. This connection generates an \code{Echo} circuit where each
+Listing~\ref{lst:uart:echo} shows the receiver and transmitter
+usage by connecting them. This connection generates an \code{Echo} circuit where each
 received character is sent back (echoed).
 
 \section{FIFO Design Variations}
@@ -5380,7 +5380,7 @@ received character is sent back (echoed).
 
 At the beginning of this Chapter we introduced the design of a simple bubble FIFO.
 In this section we will generalize the FIFO and implement different variations of the queue.
-To make these implementations interchangeable we will use inheritance,
+To make these implementations interchangeable, we will use inheritance,
 as introduced in Section~\ref{sec:inheritance}.
 
 \subsection{Parameterizing FIFOs}
@@ -5388,7 +5388,7 @@ as introduced in Section~\ref{sec:inheritance}.
 
 We define an \code{abstract}
 FIFO class as a \myref{https://docs.scala-lang.org/tour/generic-classes.html}{generic class}
-with a Chisel type \code{T} as parameter to be able to buffer
+with a Chisel type \code{T} as a parameter to be able to buffer
 any Chisel data type (see Listing~\ref{lst:fifo:abstract}). In the abstract class we also test that the
 parameter \code{depth} has a useful value.
 
@@ -5412,7 +5412,7 @@ as \codefoot{DecoupledIO} actually extends an abstract class.}
 \noindent With the \code{DecoupledIO} interface we define the interface for our FIFOs:
 a \code{FifoIO} with an enqueue (\code{enq}) and a dequeue (\code{deq} ) port consisting
 of read/valid interfaces.
- The \code{DecoupledIO} interface is defined from the writer's (producer's) view point.
+ The \code{DecoupledIO} interface is defined from the writer's (producer's) viewpoint.
 Therefore, the enqueue port of the FIFO needs to flip the signal directions.
 
 \index{Flipped}
@@ -5421,7 +5421,7 @@ Therefore, the enqueue port of the FIFO needs to flip the signal directions.
 
 \shortlist{code/fifo_io.txt}
 
-With the abstract base class and an interface we can specialize for different
+With the abstract base class and an interface, we can specialize in different
 FIFO implementations optimized for different parameters (speed, area, power,
 or just simplicity).
 
@@ -5434,16 +5434,16 @@ ready/valid interfaces and being parametrizable with a Chisel data type.
 
 Listing~\ref{lst:fifo:bubble} shows the refactored bubble FIFO with a ready/valid
 interface. Note what we put the \code{Buffer} component inside \code{BubbleFifo}
-as private class. This helper class is only needed for this component and therefore
-we hide it and avoid polluting the name space. The buffer class has also been
-simplified. Instead of an FSM we use only a single bit (\code{fullReg}) for
+as a private class. This helper class is only needed for this component, and therefore,
+we hide it and avoid polluting the namespace. The buffer class has also been
+simplified. Instead of an FSM, we use only a single bit (\code{fullReg}) for
 the state of the buffer: full or empty.
 
 The bubble FIFO is simple, easy to understand, and uses minimal resources.
 However, as each buffer stage has to toggle between empty and full, the maximum
 bandwidth of this FIFO is one word every two clock cycles.
 
-One could consider to look at both interface sides in the buffer to be able to accept
+One could consider looking at both interface sides in the buffer to be able to accept
 a new word when the producer \code{valid} and the consumer is \code{ready}.
 However, this introduces a combinational path from the consumer handshake
 to the producer handshake, which violates the semantics of the ready/valid protocol.
@@ -5452,10 +5452,10 @@ to the producer handshake, which violates the semantics of the ready/valid proto
 
 \index{Double buffer FIFO}
 
-One solution is stay \code{ready} even when the buffer register is full.
-To be able to accept a data word from the producer, when the consumer is not
-\code{ready} we need a second buffer, we call it the shadow register.
-When the the buffer is full, new data is stored in the shadow register and \code{ready}
+One solution is to stay \code{ready} even when the buffer register is full.
+To accept a data word from the producer when the consumer is not
+\code{ready}, we need a second buffer, we call it the shadow register.
+When the buffer is full, new data is stored in the shadow register and \code{ready}
 is deasserted. When the consumer becomes \code{ready} again, data is transferred
 from the data register to the consumer and from the shadow register into
 the data register.
@@ -5465,7 +5465,7 @@ the data register.
 
 
 Listing~\ref{lst:fifo:double:buffer} shows the double buffer FIFO. As each buffer element
-can store two entries we need only half of the buffer elements (\code{depth/2}).
+can store two entries, we need only half of the buffer elements (\code{depth/2}).
 The \code{DoubleBuffer} contains two registers,
 \code{dataReg} and \code{shadowReg}. The consumer is served always from
 \code{dataReg}. The double buffer has three states: \code{empty}, \code{one},
@@ -5475,35 +5475,35 @@ or \code{one}. The buffer has valid data when it is in state \code{one} or \code
 
 If we run the FIFO at full speed, and the consumer is always \code{ready},
 the steady state of the double buffers are \code{one}. Only when the consumer
-deasserts \code{ready}, the queue fills up and the buffers enter state \code{two}.
+deasserts \code{ready}, the queue fills up, and the buffers enter state \code{two}.
 However, compared to a single bubble FIFO, a restart of the queue takes
 only half the number of clock cycles for the same buffer capacity.
 Similar the fall through latency is half of the bubble FIFO.
 
 \subsection{FIFO with Register Memory}
 
-When you come with a software engineering background you may have been
-wondering that we built hardware queues out of many small individual small buffer
-elements, all executing in parallel and handshaking with upstream and downstream
-elements. For small buffers this is probably the most efficient implementation.
+When you come with a software engineering background,, you may have been
+wondering that we built hardware queues out of many small buffer
+elements, executing in parallel and handshaking with upstream and downstream
+elements. For small buffers, this is probably the most efficient implementation.
 
 \index{Circular buffer}
 \index{Circular buffer!read pointer}
 \index{Circular buffer!write pointer}
 A queue in software is usually used by sequential code in two threads.
-We us a queue to decouple a producer and consumer thread.
-In this setting a fixed size FIFO queue is usually implemented as a
+We use a queue to decouple a producer and consumer thread.
+In this setting, a fixed size FIFO queue is usually implemented as a
 \myref{https://en.wikipedia.org/wiki/Circular_buffer}{circular buffer}.
 Two pointers point into read and write positions in a memory set aside
 for the queue. When the pointers reach the end of the memory, they
-are set back to the begin of that memory. The difference between the two
+are set back to the beginning of that memory. The difference between the two
 pointers is the number of elements in the queue. When the two pointers
 point to the same address, the queue is either empty or full.
-To distinguish between empty and full we need another flag.
+To distinguish between empty and full, we need another flag.
 
-We can implement such a memory based FIFO queue in hardware as
+We can implement such a memory-based FIFO queue in hardware as
 well. For small queues, we can use a register file (i.e., a \code{Reg(Vec())}).
-Listing~\ref{lst:fifo:reg:mem} shows a FIFO queue implemented with  memory
+Listing~\ref{lst:fifo:reg:mem} shows a FIFO queue implemented with memory
 and read and write pointers.
 
 \newpage
@@ -5511,16 +5511,16 @@ and read and write pointers.
 
 As there are two pointers that are incremented on an
 action and wrap around at the end of the buffer, we define a function \code{counter()}
-that implements those wrapping counters. With \code{log2Ceil(depth).W} we
+that implements those wrapping counters. With \code{log2Ceil(depth).W}, we
 compute the bit length for the counter. The next value is either an increment by
-1 or a wrap around to 0.
+1 or a wrap-around to 0.
 The counter is incremented only when the input \code{incr} is \code{true.B}.
 
 Furthermore, as we need also the
-possible next value (increment or 0 on wrap around), we return this value from
+possible next value (increment or 0 on wrap-around), we return this value from
 the \code{counter} function as well. In Scala we can return a \emph{tuple},
 which is simply a container to hold more than one value. The syntax to create
-a tuple is simply wrapping the comma separated values in parentheses:
+a tuple is simply wrapping the comma-separated values in parentheses:
 \index{tuple}
 
 \begin{chisel}
@@ -5528,7 +5528,7 @@ a tuple is simply wrapping the comma separated values in parentheses:
 \end{chisel}
 
 \noindent We can deconstruct such a tuple by using the parenthesis notation
-on the left hand side of the assignment:
+on the left-hand side of the assignment:
 
 \begin{chisel}
 val (x1, x2) = t
@@ -5561,8 +5561,8 @@ flags.
 
 \subsection{FIFO with On-Chip Memory}
 
-The last version of the FIFO used a register files to represent the memory,
-which is a good solution for a small FIFO. For larger FIFOs it is better to
+The last version of the FIFO used a register file to represent the memory,
+which is a good solution for a small FIFO. For larger FIFOs, it is better to
 use on-chip memory.
 Listing~\ref{lst:fifo:mem} shows a FIFO using a synchronous memory for
 storage.
@@ -5608,7 +5608,7 @@ Chisel supports multi-clock designs with the \code{withClock} and
 \code{withClockAndReset} constructs. All storage elements defined within a
 \code{withClock(clk)} block are clocked by \code{clk}. For multi-clock memories,
 the memory module should be defined outside all \code{withClock} blocks, while
-each port should have their own \code{withClock} block. A parameterized
+each port should have its own \code{withClock} block. A parameterized
 multi-clock memory is shown in Listing~\ref{lst:multiclockmem}.
 
 \verylonglist{code/multi_clock_memory.txt}{A multi-clock memory generator.}{lst:multiclockmem}
@@ -5618,7 +5618,7 @@ operations that can be performed simultaneously. Two (or more) ports cannot
 write to the same address at the same time as this may cause metastability.
 Similarly, one must make sure to define the wanted read-during-write behavior.
 The memory should be configured to either write first, in which the input data is
-forwarded to the read port, or read first in which the \emph{old} memory value
+forwarded to the read port, or read first, in which the \emph{old} memory value
 is presented on the read port.
 
 Beware, though, that multi-clock support in ChiselTest is still at a very early
@@ -5629,9 +5629,9 @@ stage. You need to manually toggle clock signals to force transitions.
 \section{Exercises}
 
 This exercise section is a little bit longer as it contains two exercises:
-(1) exploring the bubble FIFO and implement a different FIFO design;
+(1) exploring the bubble FIFO and implementing a different FIFO design;
 and (2) exploring the UART and extending it.
-Source code for both exercises is included in the
+The source code for both exercises is included in the
 \myref{https://github.com/schoeberl/chisel-examples}{chisel-examples} repository.
 
 \subsection{Explore the Bubble FIFO}
@@ -5642,16 +5642,16 @@ The VCD file can be viewed with a waveform viewer, such as
 \myref{http://gtkwave.sourceforge.net/}{GTKWave}.
 Explore the
 \myref{https://github.com/schoeberl/chisel-examples/blob/master/src/test/scala/fifo/FifoSpec.scala}{FifoSpec} in the repository.
-The repository contains a \code{Makefile} to run the examples, for the FIFO example
+The repository contains a \code{Makefile} to run the examples; for the FIFO example
 just type:
 \begin{verbatim}
 $ make fifo
 \end{verbatim}
-This make command will compile the FIFO, run the test, and starts GTKWave for waveform
-viewing.\footnote{Depending on your operating system you might need to start GKTWave
+This make command will compile the FIFO, run the test, and start GTKWave for waveform
+viewing.\footnote{Depending on your operating system, you might need to start GKTWave
 manually} Explore the tester and the generated waveform.
 
-In the first cycles, the tester writes a single word. We can observe in
+In the first cycle, the tester writes a single word. We can observe in
 the waveform how that word bubbles through the FIFO, therefore the
 name \emph{bubble FIFO}. This bubbling also means that the
 latency of a data word through the FIFO is equal to the depth of the FIFO.
@@ -5659,17 +5659,17 @@ latency of a data word through the FIFO is equal to the depth of the FIFO.
 The next test fills the FIFO until it is full. A single read follows.
 Notice how the empty word bubbles from the reader side of the FIFO
 to the writer side. When a bubble FIFO is full, it takes
-a latency of the buffer depth for a read to affect the writer side.
+a latency of the buffer depth for a read to affect the writer's side.
 
 The end of the test contains a loop that tries to write and read at maximum speed.
 We can see the bubble FIFO running at maximum bandwidth, which is two
 clock cycles per word. A buffer stage has always to toggle between empty
-and full for a single word transfer.
+and full for a single-word transfer.
 
-A bubble FIFO is simple and for small buffers has a low resource requirement.
+A bubble FIFO is simple and, for small buffers, has a low resource requirement.
 The main drawbacks of an $n$ stage bubble FIFO are: (1) maximum throughput is
 one word every two clock cycles, (2) a data word has to travel $n$ clock cycles
-from the writer end to the reader end, and (3) a full FIFO needs $n$ clock cycles
+from the writer's end to the reader's end, and (3) a full FIFO needs $n$ clock cycles
 for the restart.
 
 These drawbacks can be solved by a FIFO implementation with a
@@ -5690,16 +5690,16 @@ or \code{gtkterm} on Linux:
 \begin{verbatim}
 $ gtkterm &
 \end{verbatim}
-Configure your port to use the correct device, with a USB UART this
+Configure your port to use the correct device; with a USB UART this
 is often something like \code{/dev/ttyUSB0}. Set the baud rate to 115200
 and no parity or flow control (handshake).
-With the following command you can create the Verilog code for the UART:
+With the following command, you can create the Verilog code for the UART:
 \begin{verbatim}
 $ make uart
 \end{verbatim}
 Then use your synthesize tool to synthesize the design.
 The repository contains a Quartus project for the DE2-115 FPGA board.
-With Quartus use the play button to synthesize the design and then configure
+With Quartus, use the play button to synthesize the design and configure
 the FPGA.
 After configuration, you should see a greeting message in the terminal.
 
@@ -5710,7 +5710,7 @@ example.
 With the slow output of characters (two per second), you can write the data
 to the UART transmit register and can ignore the ready/valid handshake.
 Extend the example by writing repeated numbers 0-9 as fast as the baud rate allows.
-In this case, you have to extend your state machine to poll the UART status
+In this case, you must extend your state machine to poll the UART status
 to check if the transmit buffer is free.
 
 The example code contains only a single buffer for the \code{Tx}. Feel free to
@@ -5721,8 +5721,8 @@ and receiver.
 
 Write a simple FIFO with 4 buffer elements in dedicated registers.
 Use 2-bit read and write counters, which can just overflow.
-As a further simplification consider the situation when the read and write
-pointers are equal as empty FIFO. This means you can maximally
+As a further simplification, consider the situation when the read and write
+pointers are equal to empty FIFO. This means you can maximally
 store 3 elements. This simplification avoids the counter function from
 the example in Listing~\ref{lst:fifo:reg:mem} and the handling
 of the empty or full with the same pointer values. We do not need
@@ -5730,7 +5730,7 @@ empty or full flags, as this can be derived form the pointer values
 alone. How much simpler is this design?
 
 The presented different FIFO designs have different design tradeoffs
-relative to following properties: (1) maximum throughput,
+relative to the following properties: (1) maximum throughput,
 (2) fall through latency, (3) resource requirement, and (4)
 maximum clock frequency. Explore all FIFO variations in different sizes by
 synthesizing them for an FPGA; the source is available at
