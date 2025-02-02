@@ -24,7 +24,7 @@
 
 
 \newif\ifbook
-%\booktrue % comment out for the print book version
+\booktrue % comment out for the print book version
 
 \ifbook
 \else
@@ -585,7 +585,7 @@ FPGA vendors, Altera, an Intel Company\footnote{former Intel and former Altera}
 and AMD,\footnote{former Xilinx} provide free versions of
 their tools that cover small to medium-sized FPGAs. Those medium-sized
 FPGAs are large enough to build a multicore RISC style processors.
-Intel provides the \myref{https://www.altera.com/products/design-software/fpga-design/quartus-prime/download.html}{Quartus Prime Lite Edition} and AMD the
+Intel provides the \myref{https://www.intel.com/content/www/us/en/products/details/fpga/development-tools/quartus-prime/resource.html}{Quartus Prime Lite Edition} and AMD the
 \myref{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado Design Suite, WebPACK Edition}.
 Both tools are available for Windows and Linux, but not for macOS.
 
@@ -2024,7 +2024,7 @@ You can select the signals from the left side and drag them into the main window
 If you want to save a configuration of signals you can do so with \emph{File -- Write Save File}
 and load it later with \emph{File -- Read Save File}.
 
-The generation of waveforms can also be initiated by passing the \code{WriteVcdAnnotation}
+The generation of waveforms can also be initiated by passing the\\ \code{WriteVcdAnnotation}
 annotation to the \code{test()} function.\footnote{This is an alternative to
 using the command line options.}
 We start with a simple tester that pokes values to the inputs and advances
@@ -2510,7 +2510,7 @@ value assignment:
   \label{fig:mux-chain}
 \end{figure}
 
-Chisel also supports a chain of conditionals (like a if/elseif/else chain) with \code{.elsewhen}:
+Chisel also supports a chain of conditionals (like a if/elseif/else chain) with\\ \code{.elsewhen}:
 
 \shortlist{code/comb_elsewhen.txt}
 
@@ -6611,7 +6611,7 @@ loadhi & A$_{15-8}$ = i & Load immediate into second byte \\
 loadh2i & A$_{23-16}$ = i  & Load immediate into third byte \\
 loadh3i & A$_{31-24}$ = i & Load immediate into fourth byte \\
 store & Rn = A & Store A into register Rn \\
-jal & PC = A, Rn = PC + 2 & Jump to A and store return address in Rn \\
+jal & PC = A, Rn = PC + 2 & Jump to A and store return address\\% in Rn \\
 ldaddr & AR = A & Load address register AR with A \\
 loadind & A = mem[AR+(i $<<$ 2)] & Load a word from memory into A \\
 loadindb & A = mem[AR+i]$_{7-0}$  &  Load a byte from memory into A\\
@@ -7538,7 +7538,8 @@ In my setup, the signing from \code{sbt} does not work (sometimes), so I have to
 out the \code{pgp} command to sign, something similar to:
 
 \begin{verbatim}
-gpg --detach-sign --armor --use-agent --output path-to.asc path-to-0.1.pom
+gpg --detach-sign --armor --use-agent --output path-to.asc\\
+path-to-0.1.pom
 \end{verbatim}
 
 \noindent and repeat \code{sbt publishSigned}.
