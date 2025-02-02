@@ -5901,6 +5901,11 @@ However, as the request needs to be valid for only one clock cycle, we can pipel
 requests. Read of addresses \code{A2} and \code{A3} can be requested back to back,
 allowing a throughput of 1 data word per clock cycle.
 
+We call this interconnect \code{PipeCon} to emphasize the pipelined nature of
+the interface. The interface is defined as follows:
+
+\shortlist{code/pipe_con.txt}
+
 The Patmos processor~\cite{patmos:rts2018} uses an OCP version with exactly this
 protocol for accessing IO devices. Memory is connected via a burst interface.
 The Patmos Handbook~\cite{patmos:handbook} gives a detailed description of the
@@ -5921,7 +5926,8 @@ read and write commands.
 
 Listing~\ref{lst:cnt-device} shows an IO device that implements the specification of the
 pipelined interconnect. The IO device contains four loadable counters. To address those four
-counters, we need two address bits. We read the value from the counter with a read transaction
+counters, we need four address bits, as the addresses count in bytes, but the counters
+are 32-bit wide. We read the value from the counter with a read transaction
 (\code{rd} is asserted) and get the result in the next clock cycle (in \code{dout}). We write to a counter with
 \code{wr} asserted and the value set in \code{din}.
 

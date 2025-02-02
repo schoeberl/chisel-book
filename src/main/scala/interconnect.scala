@@ -1,17 +1,11 @@
 import chisel3._
 import chisel3.util._
 import fifo._
+import soc._
 
 //- start counter_device
 class CounterDevice extends Module {
-  val io = IO(new Bundle() {
-    val addr = Input(UInt(2.W))
-    val wr = Input(Bool())
-    val rd = Input(Bool())
-    val wrData = Input(UInt(32.W))
-    val rdData = Output(UInt(32.W))
-    val ack = Output(Bool())
-  })
+  val io = IO(new PipeCon(4))
 
   val ackReg = RegInit(false.B)
   val addrReg = RegInit(0.U(2.W))
@@ -19,7 +13,7 @@ class CounterDevice extends Module {
 
   ackReg := io.rd || io.wr
   when(io.rd) {
-    addrReg := io.addr
+    addrReg := io.address(3, 2)
   }
   io.rdData := cntRegs(addrReg)
 
@@ -27,7 +21,7 @@ class CounterDevice extends Module {
     cntRegs(i) := cntRegs(i) + 1.U
   }
   when (io.wr) {
-    cntRegs(io.addr) := io.wrData
+    cntRegs(io.address(3, 2)) := io.wrData
   }
 
   io.ack := ackReg
