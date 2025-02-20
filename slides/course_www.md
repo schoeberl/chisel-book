@@ -92,7 +92,7 @@ The Schoeberl book is open access and freely available.
 
 [Martin Schoeberl](http://www.imm.dtu.dk/%7Emasca/)
 
-## Lecture Plan (2024)
+## Lecture Plan
 
 *This lecture plan may change during the semester, adapting to the current teaching situation.*
 
@@ -131,20 +131,9 @@ The Schoeberl book is open access and freely available.
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 4 Testing and Verification
-
-**Topics:** Sequential building blocks, testing and verification in Chisel,
-waveform viewing
-
-**Slides:** [04_testing.pdf](04_testing.pdf)
-
-**Reading:** Dally: 2.1.4 and 20, Chisel: 3
-
-**Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
 
 
-
-### Week 5 Timing (self study, no lecture)
+### Week 4 Timing (Jens Sparsoe)
 
 **Topics:** Delay and Power, Timing, and Metastability
 
@@ -155,6 +144,18 @@ waveform viewing
 **Optional reading:** (Slides in DTU Learn)
 
 **Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
+
+
+### Week 5 Testing and Verification
+
+**Topics:** Sequential building blocks, testing and verification in Chisel,
+waveform viewing
+
+**Slides:** [04_testing.pdf](04_testing.pdf)
+
+**Reading:** Dally: 2.1.4 and 20, Chisel: 3
+
+**Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
 
 
 ### Week 6 State Machines
