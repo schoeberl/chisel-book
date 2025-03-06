@@ -29,7 +29,7 @@ class WhenCounter(n: Int) extends Counter(n) {
   val cntReg = RegInit(0.U(8.W))
 
   cntReg := cntReg + 1.U
-  when(cntReg === N-1.U) {
+  when(cntReg === N) {
     cntReg := 0.U
   }
   //- end
