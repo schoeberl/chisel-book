@@ -32,11 +32,11 @@ Embedded Systems Engineering}
 \item This is part of the lab grade -- show it a TA
 \begin{itemize}
 \item Deadline is next week (100 \%)
-\item In two weeks (21/3) only 50 \%
+\item In two weeks (27/3) only 50 \%
 \end{itemize}
 \item Register your group to get a number!
 \begin{itemize}
-\item Group name: VM Machine
+\item Group name: Group work
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -216,7 +216,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{frame}[fragile]{A Simple Circuit}
 \begin{itemize}
 \item What does the following circuit?
-\item Is this related to a finite-state machine?
+\item Is this related to finite-state machines?
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/fsm-rising}
@@ -237,6 +237,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item DTU does not allow the usage at the exam
 \begin{itemize}
 \item We will have the exam online without Internet access
+\item But you could run DeepSeek locally
 \end{itemize}
 \item My personal opinion:
 \begin{itemize}
@@ -251,13 +252,13 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{ChatGPT/Copilot}
 \begin{itemize}
-\item This morning I tried to solve todays lab with ChatGPT (3.5)
+\item I tried to solve todays lab with ChatGPT (3.5)
 \item It took me 4 prompts and one correction prompt
 \item The result looks correct
 \item Done in 10 minutes
-\begin{itemize}
-\item Show it
-\end{itemize}
+%\begin{itemize}
+%\item Show it
+%\end{itemize}
 \item Can one learn to code with ChatGPT? Even better?
 \item I do not know
 \end{itemize}
@@ -305,6 +306,7 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Example is a simple alarm FSM
 \item Nice visualization
 \item Will not work for large FSMs
+\item What is the transition in \code{orange} when there is \code{clear} and \code{bad event}?
 \item Complete code in the Chisel book
 \end{itemize}
 \end{frame}
@@ -409,6 +411,7 @@ red & 0 & 1 & green & 1 \\
 \begin{frame}[fragile]{State Diagram for the Moore Rising Edge Detection}
 \begin{itemize}
 \item We need three states
+\item Show code in IntelliJ
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/state-diag-rising-moore}
@@ -531,11 +534,11 @@ type, we need to pass a prototype for the vector fields. Using our
 \end{itemize}
 \item Binary to 7-segment decoder
 \item First part of your vending machine
-\item Just a single digit, only combinational logic
+\item Just a single digit, only combinational logic (start)
 \item Use the nice tester provided to develop the circuit
 \item Then synthesize it for the FPGA
 \item Test with switches
-\item Then add a counter running at 2 Hz
+\item Then add two counters to display the counting at 2 Hz
 \item Show a TA your working design
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab5}{Lab 5}
 \end{itemize}
