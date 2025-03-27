@@ -131,8 +131,6 @@ The Schoeberl book is open access and freely available.
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
 
-
-
 ### Week 4 Timing (Jens Sparsoe)
 
 **Topics:** Delay and Power, Timing, and Metastability
@@ -191,9 +189,6 @@ waveform viewing
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
 
 
-### Easter Week
-
-
 ### Week 9 Communications State Machines
 
 **Topics:** Ready/valid interface, and hardware generators
@@ -205,14 +200,17 @@ waveform viewing
 **Lab:** [Using a UART Component](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 10 Vending Machine Specification (1/2 hour) (TBD)
+### Week 10 Vending Machine Specification (1/2 hour) (TBD, maybe Interfacing)
 
 **Slides:** [10_vending.pdf](10_vending.pdf)
 
 **Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 11 Interfacing and Memory, and some Testing
+### Easter Week
+
+
+### Week 11 Interfacing and Memory, and some Testing (maybe just lab day)
 
 **Topics:** Interfaces, memory, and serial interface plus repetition on testing
 
@@ -223,7 +221,7 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 12 Verification (guest lecture)
+### Week 12 Verification (TBD, maybe VHDL and Verilog)
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
