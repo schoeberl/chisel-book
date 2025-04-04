@@ -64,10 +64,10 @@ Embedded Systems Engineering}
 \item You can draw on it
 \item Besides ad-hoc meetings, have regular project meetings
 \end{itemize}
-\item Use Slack for quick notes and quick sharing of files
+\item Use Discord for quick notes and quick sharing of files
 \item Maybe also try to share the \code{.bit} file for the FPGA board
 \item Use Google docs for taking notes, start your report
-\item If you like Latex, use overleaf
+\item If you like Latex, use Overleaf
 \item You can also work on the lab assignments at other times than the lab time ;-)
 \end{itemize}
 \end{frame}
@@ -128,8 +128,9 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{Next Labs}
 \begin{itemize}
-\item Next week: test a given Vending Machine (optional)
+\item Today: how to integrate an external component (serial port)
 \item The remaining weeks: work on the full Vending Machine
+\item Optional: test a given Vending Machine (needs Verilator and a C++ compiler)
 \end{itemize}
 \end{frame}
 
@@ -152,7 +153,7 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{itemize}
 \item Producer of data and consumer need to agree when data is transferred
 \item Producer tells when data is available/valid with a \code{valid} signal
-\item Consumer tells when it is ready toe receive data with a \code{ready} signal
+\item Consumer tells when it is ready to receive data with a \code{ready} signal
 \item When both are asserted the transfer takes place
 \item Also called \emph{flow control}
 \end{itemize}
@@ -264,14 +265,13 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 
 \begin{frame}[fragile]{RS 232 on the Basys 3}
 \begin{itemize}
-\item You where asking for using more Basys 3 interfaces
 \item Basys 3 has an FTDI chip for the USB interface
 \item USB interface for FPAG programming
 \item But also provides a RS 232 to the FPGA
 \item You can talk with your laptop
 \item Your VM could write out some text
 \item Open a terminal to watch
-\item Use Putty as terminal program
+\item Use Putty as terminal program (in Windows)
 \end{itemize}
 \end{frame}
 
@@ -397,12 +397,16 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{frame}
 
 \begin{frame}[fragile]{Scala Hello World}
-\shortlist{../src/main/scala/HelloScala.scala}
+\shortlist{../code/hello_scala.txt}
 \begin{itemize}
-\item Compile with \code{scalac} and run with \code{scala}
+\item Compile and run with  \code{sbt run}
 \item You can even use Scala as a scripting language
-\item Or run with \code{sbt run}
+\begin{itemize}
+\item With \code{scala-cli}
+\item With file extension \code{.sc}
+\end{itemize}
 \item Show both
+\item Or use your IDE (IntelliJ or VSC)
 \end{itemize}
 \end{frame}
 
