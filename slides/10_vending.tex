@@ -21,11 +21,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Your final grade
 \item Online exam
-\item GoL in hardware
-\item Tiny Tapeout
 \item The Vending Machine project
-\item
-\item How did it go with the UART?
 \end{itemize}
 \end{frame}
 
@@ -56,82 +52,40 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Game of Live}
-\begin{itemize}
-\item \href{https://en.wikipedia.org/wiki/Conway\%27s_Game_of_Life}{Conway's Game of Life}
-\item Any live cell with two or three live neighbors survives.
-\item Any dead cell with three live neighbors becomes a live cell.
-\item All other live cells die in the next generation. Similarly, all other dead cells stay dead.
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Game of Live}
-\begin{itemize}
-\item You did an implementation in Java
-\item The problem is highly parallel
-\item I will show you a Chisel (and Java) implementation
-\item FPGA version is extremely fast compared to the Java implementation
-\item \url{https://github.com/schoeberl/game-of-live}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Performance Comparison}
-\begin{table}
-  \centering
-\begin{tabular}{crrrrrr}
-    \toprule
-    & &\multicolumn{3}{c}{Execution time (us)} & \multicolumn{2}{c}{FPGA Speedup}\\
-World & Cells&Mac&Rasperry&FPGA& Mac& Rasperry\\
-\midrule
-10x10 & 100&0.10&1.783&0.0040&25&445\\
-20x20 & 400&0.33&5.137&0.0040&82&1284\\
-30x30 & 900&0.70&9.965&0.0041&170&2430\\
-40x40 & 1600&1.21&17.212&0.0040&302&4302\\
-50x50 & 2500&1.81&25.204&0.0044&411&5728\\
-60x60 & 3600&2.76&37.822&0.0045&613&8404\\
-70x70 & 4900&3.54&57.665&0.0040&884&14416\\
-80x80 & 6400&4.81&64.396&0.0047&1023&13701\\
-90x90 & 8100&6.50&81.309&0.0045&1444&18068\\
-100x100 & 10000&7.51&109.964&0.0048&1564&22909\\
-\bottomrule
-\end{tabular}
-    \label{tab:speedup}
-\end{table}
-\end{frame}
 
 
-\begin{frame}[fragile]{What is a Chip?}
-\begin{itemize}
-\item One mid-term question was: what is a chip?
-\item Answer in the new course ``Introduction to Chip Design''
-\item But can we look at it now?
-\item Could we even \emph{make} one?
-\item Watch \href{https://youtu.be/aBDJQ9NYTEU?si=0wg30kZCIr2Rx2_n}{Matt Venn at IHP} on chip production in a \emph{fab}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Make Your Own Chip!}
-\begin{itemize}
-\item \href{https://tinytapeout.com/}{Tiny Tapeout} provides a service to get a packaged chip
-\begin{itemize}
-\item and an assembled \href{https://tinytapeout.com/specs/pcb/}{PCB}
-\item Just for \$ 300!
-\item A normal \href{https://efabless.com/open_shuttle_program}{MPW} costs around \$ 10000
-\end{itemize}
-\item Tool flow with open-source tools only
-\item Design synthesis runs as GitHub action
-\begin{itemize}
-\item No local tools installation
-\item Show it
-\end{itemize}
-\item Do a design, submit it, I pay ;-)
-\begin{itemize}
-\item Use the \href{https://github.com/schoeberl/tt06-chisel-template}{Chisel template}
-\end{itemize}
-\item Deadline is next week: this is a weekend project ;-)
-\item I will work on a project or two myself
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{What is a Chip?}
+%\begin{itemize}
+%\item One mid-term question was: what is a chip?
+%\item Answer in the new course ``Introduction to Chip Design''
+%\item But can we look at it now?
+%\item Could we even \emph{make} one?
+%\item Watch \href{https://youtu.be/aBDJQ9NYTEU?si=0wg30kZCIr2Rx2_n}{Matt Venn at IHP} on chip production in a \emph{fab}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Make Your Own Chip!}
+%\begin{itemize}
+%\item \href{https://tinytapeout.com/}{Tiny Tapeout} provides a service to get a packaged chip
+%\begin{itemize}
+%\item and an assembled \href{https://tinytapeout.com/specs/pcb/}{PCB}
+%\item Just for \$ 300!
+%\item A normal \href{https://efabless.com/open_shuttle_program}{MPW} costs around \$ 10000
+%\end{itemize}
+%\item Tool flow with open-source tools only
+%\item Design synthesis runs as GitHub action
+%\begin{itemize}
+%\item No local tools installation
+%\item Show it
+%\end{itemize}
+%\item Do a design, submit it, I pay ;-)
+%\begin{itemize}
+%\item Use the \href{https://github.com/schoeberl/tt06-chisel-template}{Chisel template}
+%\end{itemize}
+%\item Deadline is next week: this is a weekend project ;-)
+%\item I will work on a project or two myself
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{A Vending Machine from 1952}
 \begin{figure}

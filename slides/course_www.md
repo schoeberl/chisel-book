@@ -200,7 +200,13 @@ waveform viewing
 **Lab:** [Using a UART Component](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 10 Vending Machine Specification (1/2 hour) (TBD, maybe Interfacing)
+### Week 10 Interfacing and Memory, Vending Machine Specification
+
+**Topics:** Interfaces, memory, and serial interface
+
+**Slides:** [11_interface.pdf](11_interface.pdf)
+
+**Reading:** Dally: 24 Chisel: 6.4
 
 **Slides:** [10_vending.pdf](10_vending.pdf)
 
@@ -210,13 +216,8 @@ waveform viewing
 ### Easter Week
 
 
-### Week 11 Interfacing and Memory, and some Testing (maybe just lab day)
+### Week 11 Full day lab
 
-**Topics:** Interfaces, memory, and serial interface plus repetition on testing
-
-**Slides:** [11_interface.pdf](11_interface.pdf)
-
-**Reading:** Dally: 24 Chisel: 6.4
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 

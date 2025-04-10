@@ -23,28 +23,26 @@ Embedded Systems Engineering}
 \item I have (earlier) seen some intermix of FSM and datapath
 \item Works only for small designs
 \end{itemize}
-\item Quick reminder on FSMD
+\item GoL: a highly parallel example (including co-simulation)
 \item Interfaces
 \item Memory (intern and extern)
-\begin{itemize}
-\item You've asked for it during the midterm eval
-\end{itemize}
+
 \item Busses
-\item The course evaluation should be open for feedback
+%\item The course evaluation should be open for feedback
 \item Lab is the vending machine
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Notes}
-\begin{itemize}
-\item Luca's course
-\item Course evaluation is open
-\item Did you do a \href{https://tinytapeout.com/}{Tiny Tapeout}?
-\begin{itemize}
-\item Next deadline is st June
-\end{itemize}
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Notes}
+%\begin{itemize}
+%\item Luca's course
+%\item Course evaluation is open
+%\item Did you do a \href{https://tinytapeout.com/}{Tiny Tapeout}?
+%\begin{itemize}
+%\item Next deadline is st June
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{I have seen similar code (not this year)}
 \begin{chisel}
@@ -173,6 +171,51 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Game of Live}
+\begin{itemize}
+\item \href{https://en.wikipedia.org/wiki/Conway\%27s_Game_of_Life}{Conway's Game of Life}
+\item Any live cell with two or three live neighbors survives.
+\item Any dead cell with three live neighbors becomes a live cell.
+\item All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Game of Live}
+\begin{itemize}
+\item You did an implementation in Java
+\item The problem is highly parallel
+\item I will show you a Chisel (and Java) implementation
+\item FPGA version is extremely fast compared to the Java implementation
+\item It contains co-simulation
+\item \url{https://github.com/schoeberl/game-of-live}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Performance Comparison}
+\begin{table}
+  \centering
+\begin{tabular}{crrrrrr}
+    \toprule
+    & &\multicolumn{3}{c}{Execution time (us)} & \multicolumn{2}{c}{FPGA Speedup}\\
+World & Cells&Mac&Rasperry&FPGA& Mac& Rasperry\\
+\midrule
+10x10 & 100&0.10&1.783&0.0040&25&445\\
+20x20 & 400&0.33&5.137&0.0040&82&1284\\
+30x30 & 900&0.70&9.965&0.0041&170&2430\\
+40x40 & 1600&1.21&17.212&0.0040&302&4302\\
+50x50 & 2500&1.81&25.204&0.0044&411&5728\\
+60x60 & 3600&2.76&37.822&0.0045&613&8404\\
+70x70 & 4900&3.54&57.665&0.0040&884&14416\\
+80x80 & 6400&4.81&64.396&0.0047&1023&13701\\
+90x90 & 8100&6.50&81.309&0.0045&1444&18068\\
+100x100 & 10000&7.51&109.964&0.0048&1564&22909\\
+\bottomrule
+\end{tabular}
+    \label{tab:speedup}
+\end{table}
+\end{frame}
+
 
 \begin{frame}[fragile]{Memory}
 \begin{itemize}
@@ -591,7 +634,8 @@ our synchronous design
 \item USB interface for FPAG programming
 \item But also provides a RS 232 to the FPGA
 \item You can talk with your laptop
-\item You have used it two weeks ago
+\item You have used it last week ago
+\item How did it go?
 \end{itemize}
 \end{frame}
 
@@ -603,7 +647,8 @@ our synchronous design
 \item As usual, show and discuss with a TA
 \item Get a tick from a TA when done. This is VERY important!
 \item Add features and show again to the TA
-\item Next week: guest lecture from Peter Jensen (SyoSil) on verification
+\item Optional: Testing two given vending machines
+\item Next week (after Easter): full lab day!
 \end{itemize}
 \end{frame}
 
@@ -622,6 +667,7 @@ our synchronous design
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item Use an FSMD for the vending machine and simple processors
+\item Hardware can be highly parallel (GoL)
 \item We need to connect to the world
 \item FPGA (or any chip) is only part of a system
 \item Bus interface to external devices (e.g., memory)
@@ -629,7 +675,6 @@ our synchronous design
 \begin{itemize}
 \item E.g., your Basys 3 board to the laptop
 \end{itemize}
-\item Testing is more than looking at waveforms
 \end{itemize}
 \end{frame}
 
