@@ -21,12 +21,12 @@ Embedded Systems Engineering}
 % \item Chisel from scratch
 \item Who is Alan Turing?
 \item Lipsi, a simple processor
-\item Show vending machine next week
-\item Report hand-in at DTU Learn (26 May)
-%\item We have well known guest lectures today
+\item Show the vending machine next week
+\item Report hand-in at DTU Learn (22 May)
 \begin{itemize}
 \item Please check now if visible
 \end{itemize}
+\item We have a guest lecture next week
 \end{itemize}
 \end{frame}
 
@@ -48,13 +48,12 @@ Embedded Systems Engineering}
 \begin{itemize}
 %\item Thank you!
 \item In general, it looks like most enjoyed DE2 :-)
-\item Some complained it was only Chisel and nothing new
+\item Some wrote that the lab was too easy
 \begin{itemize}
-\item I disagree
-\item e.g., did you already know: tick generation, FSMD, input synchronization, timing, verification, memory, UART,...
+\item I make it harder every year, maybe not fast enough ;-)
 \end{itemize}
-\item We can take a quick look
-\item You can give me additional feedback here in class
+\item We can take a look next week
+\item You can still provide feedback
 \end{itemize}
 \end{frame}
 
@@ -76,7 +75,7 @@ Embedded Systems Engineering}
 \item A finite-state machine with a datapath
 \item Can compute
 \item Your vending machine is an FSMD
-\item Can we use this to build a general processor?
+\item Can we use this to build a general-purpose processor?
 \end{itemize}
 \end{frame}
 
@@ -117,6 +116,10 @@ Embedded Systems Engineering}
 \item Code: \href{https://github.com/schoeberl/lipsi}{The Chisel Code}
 \item A simple Accumulator machine
 \item Small enough to fit into a \href{https://github.com/schoeberl/tt06-lipsi}{Tiny Tapeout tile}
+\begin{itemize}
+\item But I had to reduce the memory a LOT
+\item Got the board a few weeks ago and it is working!
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -142,11 +145,12 @@ Embedded Systems Engineering}
 \item They drive the FSM
 \item To computer (e.g., +, -, or): ALU operations
 \item To load from and store into memory
-\item To (conditionally) branch (implement if/else, loops)
+\item To (conditionally) branch (implement if/else and loops)
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Lipsi Instruction Set}
+%Fits on one page
 {\footnotesize
 \begin{table}
 \begin{tabular}{lllll}
@@ -440,11 +444,11 @@ This is done at hardware generation
 \item Basics: transistors, wire, power, time, memories
 \item Partitioning, floor planning, and individual hardening
 \item Multiclock designs and clock domain crossing
-\item A multicore SoC example (e.g., T-CREST plus AI accelerators)
+\item A multicore SoC example (e.g., RISC-V processor + IO)
 \item Network-on-Chip to connect the components
 \end{itemize}
-\item Use of open-source tools (OpenROAD)
-\item Tape out with Tiny Tapeout
+\item Use of open-source tools (OpenLane2)
+\item Tape out with Tiny Tapeout (planned)
 \begin{itemize}
 \item Each student group will receive a chip + board
 \end{itemize}
@@ -482,10 +486,10 @@ This is done at hardware generation
 \begin{itemize}
 \item You now know enough digital design to build any digital system
 \item You may get better on it with practice
-\item When you understand the principles you can easily learn SystemVerilog or VHDL in days
+\item When you understand the principles, you can easily learn SystemVerilog or VHDL in days
 \item Chisel may be the future for hardware design
-\item You might apply for a job in silicon valley with your Chisel knowledge ;-)
-\item Hope to see some of you in upcoming courses
+\item You might apply for a job in Silicon Valley with your Chisel knowledge ;-)
+\item Hope to see some of you in the upcoming courses
 \end{itemize}
 \end{frame}
 

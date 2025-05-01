@@ -218,19 +218,19 @@ waveform viewing
 
 ### Week 11 Full day lab
 
-
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 12 Verification (TBD, maybe VHDL and Verilog)
-
-**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
-
-
-### Week 13 Outro, A Simple Processor
+### Week 12 Outro, A Simple Processor
 
 **Topics:** Lipsi as a simple processor, Discussion of course, and followup courses
 
 **Slides:** [13_outro.pdf](13_outro.pdf)
+
+**Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
+
+
+### Week 13 Guest Lecture on Verification (maybe VHDL and Verilog)
+
 
 **Lab:** Finish vending machine and report
