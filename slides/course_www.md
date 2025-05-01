@@ -69,7 +69,7 @@ In all Dally sections ignore VHDL code
 
 #### Slides
 
- * TBD: RC switching model from L03 slides (in DTU Inside) 
+ * Timing and RC switching model from L04 slides (in DTU Inside) 
 
 ## Recommended Textbooks
 
