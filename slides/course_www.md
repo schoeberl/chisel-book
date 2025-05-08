@@ -230,7 +230,9 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
 
-### Week 13 Guest Lecture on Verification (maybe VHDL and Verilog)
+### Week 13 Guest Lecture on Verification and Verilog and VHDL
 
+
+**Slides:** [13a_verilog.pdf](13a_verilog.pdf)
 
 **Lab:** Finish vending machine and report

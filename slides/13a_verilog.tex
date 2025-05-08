@@ -15,14 +15,18 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
+
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Evaluation
 % \item Chisel from scratch
 \item VHDL and Verilog
-\item Lipsi, a simple processor
-\item Show the vending machine this week
+\item Show the vending machine to a TA this week
 \item Report hand-in at DTU Learn (22 May)
+\item Interesting presentations in \href{https://fossi-foundation.org/latch-up/2025}{Latch-Up 2025}
+\begin{itemize}
+\item Check the Chinese OSOC project
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -53,25 +57,158 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-%\begin{frame}[fragile]{Write in Chisel from Scratch}
-%\begin{itemize}
-%\item This was a request from the evaluation
-%\item Should not be too hard
-%\item We need just two files
-%\begin{itemize}
-%\item \code{build.sbt} for library dependencies
-%\item One Scala file
-%\end{itemize}
-%\item Let's do it now!
-%\end{itemize}
-%\end{frame}
+
+
+\begin{frame}[fragile]{Verilog Introduction}
+\begin{itemize}
+\item You learned Chisel
+\item Verilog is the industry standard 
+\item Used by tools as an exchange format
+\item Old language with a lot of quirks
+\item You mainly need to be able to read it
+\item And a few lines to connect stuff
+\item For serious work: use Chisel
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Verilog vs SystemVerilog}
+\begin{itemize}
+\item Verilog is the old standard
+\item SystemVerilog is an extension
+\item Adding a lot of features
+\begin{itemize}
+\item 200+ keywords
+\end{itemize}
+\item Mainly for verification (with UVM)
+\begin{itemize}
+\item E.g., object-oriented programming
+\end{itemize}
+\item But open-source tools do not fully support SV
+\item We stick to plain Verilog
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Verilog Syntax}
+\begin{itemize}
+\item Very C-like
+\begin{itemize}
+\item e.g, has include file
+\item defines
+\end{itemize}
+\item Module-based
+\item Ports
+\item Wires and regs
+\item Always blocks
+\item Initial blocks
+\begin{itemize}
+\item Only for simulation
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Verilog (and VHDL) by Examples}
+\begin{itemize}
+\item Will show you some examples
+\item First Chisel code, then Verilog (and VHDL)
+\item Again, we only need to be able to read some Verilog
+\item It is OK to use LLMs for generating Verilog or VHDL
+\begin{itemize}
+\item Only for simulation
+\end{itemize}
+\item You {\bf just} need to be able to fix errors ;-)
+\item See also the \href{https://marceluda.github.io/rp_dummy/EEOF2018/Verilog_Cheat_Sheet.pdf}{Verilog Cheat Sheet}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Simple Component in Chisel}
+\shortlist{../code/v_ch_adder.txt}
+\begin{itemize}
+\item This is a too small component in practice
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Simple Component in Verilog}
+\shortlist{../code/v_adder.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Simple Component in VHDL}
+\shortlist{../code/vhdl_adder.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using the \code{ChiselAdder} Component in Chisel}
+\shortlist{../code/v_use_chisel_adder.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using the \code{adder} Component in Verilog}
+\shortlist{../code/v_use_adder.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Using the \code{adder} Component in VHDL}
+\shortlist{../code/vhdl_use_adder.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Register with Reset and Enable in Chisel}
+\shortlist{../code/v_ch_register.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Register with Reset and Enable in Verilog}
+\shortlist{../code/v_register.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A Register with Reset and Enable in VHDL}
+\shortlist{../code/vhdl_register.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A \code{switch} Statement in Chisel}
+\shortlist{../code/v_ch_comb.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A \code{case} Statement in Verilog}
+\shortlist{../code/v_comb.txt}
+\end{frame}
+
+\begin{frame}[fragile]{A \code{case} Statement in VHDL}
+\shortlist{../code/vhdl_case.txt}
+\end{frame}
+
+\begin{frame}[fragile]{An ``if...else  if...else'' Statement in Chisel}
+\shortlist{../code/v_ch_if_else.txt}
+\end{frame}
+
+\begin{frame}[fragile]{An ``if...else  if...else'' Statement in Verilog}
+\shortlist{../code/v_if_else.txt}
+\end{frame}
+
+\begin{frame}[fragile]{An ``if...else  if...else'' Statement in VHDL}
+\shortlist{../code/vhdl_if_else.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Advanced Features in Chisel}
+\begin{itemize}
+\item Object-oriented code for Hardware
+\item Functional programming for generators
+\item Bundles with directions
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item xxx
+\item Hardware can be described in any HDL
+\item The abstraction is different
+\item SystemVerilog is not very well supported
+\item VHDL is dying (although there is a lot of legacy code)
+\item You might need to read (and write) some Verilog code
+\item Should be able to pick it up on the job
+\item Digital design is independent of the language
 \end{itemize}
 \end{frame}
+
+
 
 
 
