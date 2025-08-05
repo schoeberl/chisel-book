@@ -1,0 +1,299 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+\title{Agile Hardware Design: Preparation}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}[fragile]{Overview}
+\begin{itemize}
+\item Quick overview of Chisel and Scala
+\item Installation instructions
+\item Links to further reading and material
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Further Reading and Web Resources - adapt}
+\begin{itemize}
+\item \href{https://www.sciencedirect.com/science/article/pii/S014193312500050X}{Scala defined hardware generators for Chisel}
+\begin{itemize}
+\item Group building
+\item Project report hand in
+\end{itemize}
+\item \href{http://www2.imm.dtu.dk/courses/02139/}{Course website}
+\begin{itemize}
+\item General information, starting point
+\end{itemize}
+\item \href{https://github.com/schoeberl/chisel-lab}{Lab website}
+\begin{itemize}
+\item Lab material on GitHub
+\end{itemize}
+\item \href{http://www.imm.dtu.dk/~masca/chisel-book.html}{Chisel book website}
+\begin{itemize}
+\item Download the free PDF
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Chisel}
+\begin{itemize}
+\item A hardware \emph{construction} language
+\begin{itemize}
+\item Constructing Hardware in a Scala Embedded Language
+\item If it compiles, it is synthesizable hardware 
+\item Say goodbye to your unintended latches
+\end{itemize}
+\item Chisel is not a high-level synthesis language
+\item Single source for two targets
+\begin{itemize}
+\item Cycle accurate simulation (testing)
+\item Verilog for synthesis
+\end{itemize}
+\item Embedded in Scala
+\begin{itemize}
+\item Full power of Scala available
+\item We use Scala to write the generators
+\end{itemize}
+\item Developed at UC Berkeley
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The C Language Family}
+
+\Tree[.C [
+   [.{\bf Verilog} {\bf SystemVerilog} ]
+   [.C++  \emph{SystemC}  ]
+   [.Java [.Scala {\bf Chisel} ] ]
+   [.C\# ] ] ]
+ 
+\end{frame}
+
+\begin{frame}[fragile]{What Language do You Already Know?}
+\begin{itemize}
+\item ???
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Small Language}
+\begin{itemize}
+\item Chisel is a \emph{small} language
+\item On purpose
+\item Not many constructs to remember
+\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
+\item The power comes with Scala for circuit generators
+\item With Scala, Chisel can grow with you
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Flow for Chisel Defined Hardware}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{../figures/flow}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Tooling}
+\begin{itemize}
+\item ccc
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel is a Hardware Construction Language}
+\begin{itemize}
+\item The code I showed you looks much like Java code
+\item But it is \emph{not} a program in the usual sense
+\item It represents a circuit
+\item The ``program'' constructs the circuit
+\item All statements are ``executed'' in parallel
+\item Statement order has \emph{mostly} no meaning
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Free Tools for Chisel and FPGA Design}
+\begin{itemize}
+\item \href{https://adoptopenjdk.net/}{Java OpenJDK 8} (or later) already installed for Java course
+\item \href{https://www.scala-sbt.org/}{sbt, the Scala (and Java) build tool}
+\item \href{https://www.jetbrains.com/idea/download/}{IntelliJ (the free Community version)}
+\item \href{http://gtkwave.sourceforge.net/}{GTKWave}
+\item \href{https://www.xilinx.com/products/design-tools/vivado/vivado-webpack.html}{Vivado WebPACK} already installed from DE1
+% \item \href{http://www.altera.com/products/software/quartus-ii/web-edition/qts-we-index.html}{Quartus}
+\item Nice to have:
+\begin{itemize}
+\item make, git
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Setup for Different OSs}
+\begin{itemize}
+\item Windows
+\begin{itemize}
+\item Use the installers from the websites
+\end{itemize}
+\item macOS
+\begin{itemize}
+\item \code{brew install sbt}
+\item For the rest, use the installer from the websites
+\item Use an Ubuntu VM to run Vivado
+\end{itemize}
+\item Linux/Ubuntu
+\begin{itemize}
+\item \code{sudo apt install openjdk-8-jdk git make gtkwave}
+\item Install sbt
+\item IntelliJ as from the website
+\end{itemize}
+% \item If setup fails, we have you covered with the databar PCs
+\item Instruction details: \url{https://github.com/schoeberl/chisel-lab/blob/master/Setup.md}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Virtual Machine Setup for Chisel}
+\begin{itemize}
+\item If setup fails, we have you covered with a Virtual Machine
+\item Ubuntu based
+\item \href{https://patmos-download.compute.dtu.dk/de2lab.zip}{Ubuntu VM with Vivado} uid: de2lab, pwd: de2lab
+\begin{itemize}
+\item But this is VERY large (40 GB for the .zip file)
+\end{itemize}
+%\item \href{http://patmos-download.compute.dtu.dk/patmos-dev.zip}{Ubuntu VM with Quartus} uid: patmos, pwd: patmos
+\item Use the  \href{https://www.vmware.com/products/workstation-player.html} {VMWare Workstation Player} (free for Linux and Windows)
+\begin{itemize}
+\item Use the free VMWare Fusion for macOS
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{An IDE for Chisel}
+\begin{itemize}
+\item IntelliJ
+\item Install the Scala plugin
+\item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
+%\item But you are not compiling with Eclipse\\ and against the Chisel source
+\item Show it %(down to the Basys3)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{A Chisel Book}
+\begin{figure}
+    \centering
+    \href{https://github.com/schoeberl/chisel-book}{\includegraphics[scale=0.4]{../cover-small}}
+\end{figure}
+
+\begin{itemize}
+\item Available in open access (as PDF)
+\begin{itemize}
+\item Optimized for reading on a tablet (size, hyper links)
+\end{itemize}
+\item Amazon can do the printout
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Further Information}
+\begin{itemize}
+\item \url{https://www.chisel-lang.org/}
+\item \url{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}
+\item \url{https://github.com/ucb-bar/chisel-tutorial}
+\item \url{https://github.com/ucb-bar/generator-bootcamp}
+%\item Chisel 2 documentation at \url{https://github.com/schoeberl/chisel2-doc}
+%\begin{itemize}
+%\item Chisel 2.2 Tutorial
+%\item Getting Started with Chisel
+%\end{itemize}
+\item \url{http://groups.google.com/group/chisel-users}
+\item \url{https://github.com/schoeberl/chisel-book}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Your Tasks: Lab Time: Hello World in Chisel}
+\begin{itemize}
+\item Get a blinking LED working on your FPGA board
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/chisel-lab}
+\end{itemize}
+\item Follow the instructions from the lab page
+\begin{itemize}
+\item Start IntelliJ and follow the instructions from the lab page
+\item \code{sbt run}
+\item Create a Vivado project
+\item Synthesize with the Play button
+\item Configure the FPGA with the Programmer button
+\end{itemize}
+\item {\bf You have your first Chisel design running in an FPGA!}
+\begin{itemize}
+\item There is also a simulation version available
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Change the Design}
+\begin{itemize}
+\item Use IntelliJ, \code{gedit}, or the editor you like most
+\item Source is in \code{.../src/main/scala/Hello.scala}
+\item Change blinking frequency
+\item Rerun the example
+\item Optional:
+\begin{itemize}
+\item Change to an asymmetric blinking, e.g., 200 ms on every second 
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tiny Tapeout Workshop}
+\begin{itemize}
+\item What is Tiny Tapeout?
+\item Tiny Tapeout can have your design on a real chip
+\item For \$ 50 instead of \$ 10000
+\item We have a TT workshop at DTU Fr. 15th Feb.
+\item Given by Matt Venn
+\item \url{https://edu4chip.github.io/ttw2025DTU.html}
+\item DTU will buy some PCBs
+\item test your chip on a bringup party
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item The world is digital
+\item Processors do not get much faster -- we need to design custom hardware
+\item We need a modern language for hardware/systems design for efficient/fast development
+\item Chisel builds on the power of object-oriented and functional Scala
+%\item Chisel is good for hardware generators
+% \item You can get started with a hardware design in a special course or 4th semester project
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Let's have a Chat}
+\begin{itemize}
+\item I will join you in the lab
+\end{itemize}
+\end{frame}
+
+\end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
