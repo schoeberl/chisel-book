@@ -121,6 +121,7 @@ Lipsi: Probably the Smallest Processor in the World}
     \end{enumerate}
     \item Each phase must be completed before moving to the next
     \item Changes are costly once early phases are complete
+    \item I worked (long time ago) in such a team: was very boring
 \end{itemize}
 \end{frame}
 
@@ -206,64 +207,64 @@ Lipsi: Probably the Smallest Processor in the World}
 }
 \end{frame}
 % --- Slide 1 ---
-\begin{frame}{Agile Iteration Phases (1/3)}
-\textbf{Plan}
-\begin{itemize}
-    \item Define goals for the upcoming sprint (typically 1-4 weeks)
-    \item Select features or fixes from the product backlog
-    \item Break down tasks into manageable user stories
-    \item Ensure each story has clear acceptance criteria
-\end{itemize}
-
-\medskip
-\textbf{Design}
-\begin{itemize}
-    \item Create a simple, implementable hardware design
-    \item Define interfaces and parameters
-    \item Update documentation and diagrams
-    \item Keep the design minimal to support fast iteration
-    \item Think: minimal viable product
-\end{itemize}
-\end{frame}
-
-% --- Slide 2 ---
-\begin{frame}{Agile Iteration Phases (2/3)}
-\textbf{Implement}
-\begin{itemize}
-    \item Write Chisel modules for new or updated functionality
-    \item Commit early and often to version control
-    \item Follow coding standards and naming conventions
-    \item Collaborate closely to avoid merge conflicts
-\end{itemize}
-
-\medskip
-\textbf{Test}
-\begin{itemize}
-    \item Use automated tests (e.g., \texttt{chiseltest}) to validate functionality
-    \item Run both unit tests and integration tests
-    \item Include corner cases and property-based checks
-    \item Maintain high test coverage throughout development
-\end{itemize}
-\end{frame}
-
-% --- Slide 3 ---
-\begin{frame}{Agile Iteration Phases (3/3)}
-\textbf{Review / Demo}
-\begin{itemize}
-    \item Present completed work to the team or stakeholders
-    \item Demonstrate working features in simulation or on FPGA
-    \item Gather feedback on design choices and implementation
-\end{itemize}
-
-\medskip
-\textbf{Retrospective / Backlog Refinement}
-\begin{itemize}
-    \item Reflect on what worked well and what can be improved
-    \item Adjust processes, tools, and team coordination as needed
-    \item Update the product backlog with new ideas or changes
-    \item Prepare for the next sprint cycle
-\end{itemize}
-\end{frame}
+%\begin{frame}{Agile Iteration Phases (1/3)}
+%\textbf{Plan}
+%\begin{itemize}
+%    \item Define goals for the upcoming sprint (typically 1-4 weeks)
+%    \item Select features or fixes from the product backlog
+%    \item Break down tasks into manageable user stories
+%    \item Ensure each story has clear acceptance criteria
+%\end{itemize}
+%
+%\medskip
+%\textbf{Design}
+%\begin{itemize}
+%    \item Create a simple, implementable hardware design
+%    \item Define interfaces and parameters
+%    \item Update documentation and diagrams
+%    \item Keep the design minimal to support fast iteration
+%    \item Think: minimal viable product
+%\end{itemize}
+%\end{frame}
+%
+%% --- Slide 2 ---
+%\begin{frame}{Agile Iteration Phases (2/3)}
+%\textbf{Implement}
+%\begin{itemize}
+%    \item Write Chisel modules for new or updated functionality
+%    \item Commit early and often to version control
+%    \item Follow coding standards and naming conventions
+%    \item Collaborate closely to avoid merge conflicts
+%\end{itemize}
+%
+%\medskip
+%\textbf{Test}
+%\begin{itemize}
+%    \item Use automated tests (e.g., \texttt{chiseltest}) to validate functionality
+%    \item Run both unit tests and integration tests
+%    \item Include corner cases and property-based checks
+%    \item Maintain high test coverage throughout development
+%\end{itemize}
+%\end{frame}
+%
+%% --- Slide 3 ---
+%\begin{frame}{Agile Iteration Phases (3/3)}
+%\textbf{Review / Demo}
+%\begin{itemize}
+%    \item Present completed work to the team or stakeholders
+%    \item Demonstrate working features in simulation or on FPGA
+%    \item Gather feedback on design choices and implementation
+%\end{itemize}
+%
+%\medskip
+%\textbf{Retrospective / Backlog Refinement}
+%\begin{itemize}
+%    \item Reflect on what worked well and what can be improved
+%    \item Adjust processes, tools, and team coordination as needed
+%    \item Update the product backlog with new ideas or changes
+%    \item Prepare for the next sprint cycle
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}{Hardware Design Today}
 \begin{itemize}
@@ -271,6 +272,7 @@ Lipsi: Probably the Smallest Processor in the World}
     \item Hard to reuse and test modularly
     \item Long simulation cycles
     \item Not optimized for iteration or testing early
+    \item Often follows a version of the waterfall model
 \end{itemize}
 \end{frame}
 
@@ -278,8 +280,14 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{enumerate}
     \item Write modular, parameterized designs
     \item Test-first using simulation
-    \item Version control and CI
+    \item Version control and continuous integration (CI)
+    \begin{itemize}
+\item For example, using GitHub actions
+\end{itemize}
     \item Frequent review and refactor
+    \begin{itemize}
+\item With enough tests, refactoring is safe
+\end{itemize}
     \item Code reviews and pull requests
 \end{enumerate}
 \end{frame}
@@ -349,30 +357,30 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{frame}
 
 
-\begin{frame}[fragile]{Example: 2-bit Counter}
-\begin{verbatim}
-class Counter extends Module {
-  val io = IO(new Bundle {
-    val out = Output(UInt(2.W))
-  })
-  val count = RegInit(0.U(2.W))
-  count := count + 1.U
-  io.out := count
-}
-\end{verbatim}
-\end{frame}
-
-\begin{frame}[fragile]{Example Test}
-\begin{verbatim}
-test(new Counter) { c =>
-  c.io.out.expect(0.U)
-  c.clock.step()
-  c.io.out.expect(1.U)
-  c.clock.step()
-  c.io.out.expect(2.U)
-}
-\end{verbatim}
-\end{frame}
+%\begin{frame}[fragile]{Example: 2-bit Counter}
+%\begin{verbatim}
+%class Counter extends Module {
+%  val io = IO(new Bundle {
+%    val out = Output(UInt(2.W))
+%  })
+%  val count = RegInit(0.U(2.W))
+%  count := count + 1.U
+%  io.out := count
+%}
+%\end{verbatim}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Example Test}
+%\begin{verbatim}
+%test(new Counter) { c =>
+%  c.io.out.expect(0.U)
+%  c.clock.step()
+%  c.io.out.expect(1.U)
+%  c.clock.step()
+%  c.io.out.expect(2.U)
+%}
+%\end{verbatim}
+%\end{frame}
 
 
 
@@ -457,7 +465,9 @@ object HelloWorld extends App {
 \item Compile with \code{scalac} and run with \code{scala}
 \item Or with \code{sbt run}
 \item You can even use Scala as a scripting language
+\item \code{scala-cli} is a generic Scala runner
 \item Show both
+\item Use \code{scala-cli} locally along the examples presented
 \end{itemize}
 \end{frame}
 
@@ -554,6 +564,201 @@ object Example {}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Tuples}
+\begin{itemize}
+\item Scala has the notion of tuples
+\item Can hold a sequence of different types
+\item Fields are then accessed with \code{.\_n}, starting with 1
+\item Easy option to return more than one value from a function
+\end{itemize}
+\shortlist{../code/scala_tuple.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Scala Collections}
+\begin{itemize}
+\item Scala has a powerful \href{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}
+\item \code{Seq} is an ordered collection of elements (also called a sequence)
+\item The default implementation is immutable
+\item We index into a \code{Seq} with \code{()}, with zero-based indexing.
+\end{itemize}
+\shortlist{../code/scala_seq.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Functional Programming}
+\begin{itemize}
+\item Functional programming (FP) treats computation as the evaluation of functions
+\item Functions are first-class objects
+\item Can be a parameter of a function
+\item Can be returned from a function
+\item Avoid mutable state
+\item Recursion is \emph{not} the main point of FP
+\item Higher-order functions take functions as arguments
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{First-Class Functions}
+\begin{itemize}
+    \item In Scala, functions can be assigned to variables, passed as arguments, or returned
+\end{itemize}
+
+\begin{verbatim}
+// A normal function definition
+def double(x: Int): Int = x * 2
+
+println(double(5))   // prints 10
+
+// A function that takes another function
+def applyTwice(f: Int => Int, v: Int): Int = {
+  f(f(v))
+}
+
+println(applyTwice(double, 3)) // prints 12
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Function Literals (Anonymous Functions)}
+\begin{itemize}
+    \item A function literal is a shorthand for defining a function "inline"
+    \item by the \code{=>} symbol
+    \item Does not require a name (\texttt{def})
+    \item Often used with higher-order functions
+\end{itemize}
+
+\begin{verbatim}
+// Normal function
+def square(x: Int): Int = x * x
+
+// Function literal (anonymous function)
+val squareFn = (x: Int) => x * x
+
+// Using a literal directly
+val nums = List(1, 2, 3, 4)
+val squares = nums.map(x => x * x)
+println(squares) // List(1, 4, 9, 16)
+\end{verbatim}
+\end{frame}
+
+% --- Slide 3 ---
+\begin{frame}[fragile]{Higher-Order Functions}
+\begin{itemize}
+    \item Functions that take other functions as arguments
+    \item What we just used before
+    \item Useful for hardware generators (map, filter, etc.)
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4)
+val squares = nums.map(x => x * x)
+println(squares) // List(1, 4, 9, 16)
+\end{verbatim}
+
+%\begin{itemize}
+%    \item This is similar to generating a Vec of wires in Chisel:
+%\end{itemize}
+%
+%\begin{verbatim}
+%val wires = VecInit(Seq.fill(4)(Wire(UInt(8.W))))
+%\end{verbatim}
+\end{frame}
+
+% --- Slide 4 ---
+\begin{frame}[fragile]{Immutability}
+\begin{itemize}
+    \item FP encourages immutable values (using \texttt{val})
+    \item No side effects: easier to reason about hardware generation
+\end{itemize}
+
+\begin{verbatim}
+val a = 5
+// a = 6   // ERROR: reassignment not allowed
+
+val b = a + 1   // OK, creates a new value
+\end{verbatim}
+
+\begin{itemize}
+    \item In Chisel, \texttt{val} describes structure, not time-varying state
+    \item Registers (\texttt{Reg}) are explicit when you need mutable hardware state
+\end{itemize}
+\end{frame}
+
+% --- Slide 5 ---
+%\begin{frame}[fragile]{Pure Functions}
+%\begin{itemize}
+%    \item A pure function:
+%    \begin{itemize}
+%        \item Always returns the same output for the same input
+%        \item Has no side effects
+%    \end{itemize}
+%\end{itemize}
+%
+%\begin{verbatim}
+%def add(a: Int, b: Int): Int = a + b
+%\end{verbatim}
+%
+%\begin{itemize}
+%    \item Combinational hardware modules are pure
+%    \item Side effects (state, IO, randomness) are controlled explicitly
+%\end{itemize}
+%\end{frame}
+
+% --- Slide 6 ---
+\begin{frame}[fragile]{Mapping Over Collections}
+\begin{itemize}
+    \item \texttt{map} applies a function to each element of a collection
+    \item Produces a new collection of the same size
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4)
+def square(x: Int): Int = x * x
+
+val squares = nums.map(square)
+println(squares) // List(1, 4, 9, 16)
+\end{verbatim}
+
+\end{frame}
+
+% --- Slide 7 ---
+\begin{frame}[fragile]{Filtering Collections}
+\begin{itemize}
+    \item \texttt{filter} keeps only elements that satisfy a condition
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4, 5, 6)
+
+def isEven(x: Int): Boolean = (x % 2 == 0)
+val evens = nums.filter(isEven)
+
+println(evens) // List(2, 4, 6)
+\end{verbatim}
+
+\end{frame}
+
+% --- Slide 8 ---
+\begin{frame}[fragile]{Reducing Collections}
+\begin{itemize}
+    \item \texttt{reduce} combines all elements using a binary function
+    \item Useful for sums, products, and combining signals
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4)
+
+def add(x: Int, y: Int): Int = x + y
+val sum = nums.reduce(add)
+
+println(sum) // 10
+\end{verbatim}
+
+\begin{itemize}
+    \item Hardware analogy: adding a set of signals
+    \item Use \code{reduceTree} for a balanced reduction tree
+\end{itemize}
+\end{frame}
+
+
 
 \begin{frame}[fragile]{Scala Build Tool (sbt)}
 \begin{itemize}
@@ -567,17 +772,6 @@ object Example {}
 \begin{chisel}
 sbt run
 \end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{File Organization in Scala/Chisel}
-\begin{itemize}
-\item A Scala file can contain several classes (and objects)
-\item For large classes, use one file per class with the class name
-\item Scala has packages, like Java
-\item Use folders with the package names for file organization
-\item \code{sbt} looks into current folder and \code{src/main/scala/}
-\item Tests shall be in \code{src/test/scala/}
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{File Organization in Scala/Chisel}
@@ -650,13 +844,13 @@ sbt test
 \item I assume that you installed all tools and did lab0 as homework
 \item Functional programming in Scala
 \item The lab contains tests, run with \code{sbt test}
-\item Code in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Lecture 2}
 \begin{itemize}
-\item More on Chisel
+\item Introduction to Chisel
 \item Functional programming for generators
 \end{itemize}
 \end{frame}
@@ -671,17 +865,216 @@ sbt test
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel Main}
 
+
+\begin{frame}[fragile]{Chisel Data Types}
 \begin{itemize}
-\item Create one top-level Module
-\item Invoke the Verilog emitter from the Scala \code{main} (or App)
-\item Following code generates Verilog code
+\item Data types for values on wires or state elements
+\item Raw collection of bits is type \code{Bits}
+\item Simple types to represent integer numbers
+\begin{itemize}
+\item Unsigned: \code{UInt}
+\item Signedigned: \code{SInt}
+\item Subtype of \code{Bits}
 \end{itemize}
-\shortlist{../code/generate.txt}
+\item Automatic bit width inference
+\item Boolean values are of type \code{Bool}, a single bit value
+\item \emph{Interesting} way to specify constants
+\end{itemize}
+\begin{chisel}
+1.U
+"habcd".U
+"b0101".U
+-5.S
+true.B
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel Data Types}
+\begin{itemize}
+\item Bit width can be explicitly specified with a width type
+\begin{itemize}
+\item \code{SInt} will be sign extended
+\item \code{UInt} will be zero extended
+\end{itemize}
+\end{itemize}
+\begin{chisel}
+UInt(8.W)
+SInt(16.W)
+0.U(32.W)
+"habcd".U(24.W)
+-5.S(16.W)
+\end{chisel}
+\begin{itemize}
+\item Chisel data types are different from Scala builtin types (e.g., Scala's \code{Int})
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bitwise Logical Operations}
+\begin{itemize}
+\item Bitwise NOT, AND, OR, and XOR
+\item Automatic size extension to larger operand
+\end{itemize}
+\begin{chisel}
+val notVal = ~x
+val maskOut = x & "b00001111".U
+val orVal = x | y
+val xorVal = x ^ y
+\end{chisel}
+\begin{itemize}
+\item Bit reduction
+\item Results in a single bit
+\end{itemize}
+\begin{chisel}
+x.andR
+x.orR
+x.xorR
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Arithmetic Operations}
+\begin{itemize}
+\item Addition, subtraction, multiplication, division, modulos
+\item Automatic size extension to larger operand
+\end{itemize}
+\begin{chisel}
++, -, *, /, %
+\end{chisel}
+\begin{itemize}
+\item Left and right shifts
+\item Left shift extends bit width
+\item Right shift reduces bit width
+\end{itemize}
+\begin{chisel}
+<<, >>
+\end{chisel}
+\end{frame}
+
+%\begin{frame}[fragile]{Bitfield Manipulations}
+%\begin{itemize}
+%\item Extract a single bit
+%\end{itemize}
+%\begin{chisel}
+%val sign = x(31)
+%\end{chisel}
+%\begin{itemize}
+%\item Extract a sub field from end to start position
+%\end{itemize}
+%\begin{chisel}
+%val lowByte = word(7, 0)
+%\end{chisel}
+%\begin{itemize}
+%\item Concatenate bit fields
+%\end{itemize}
+%\begin{chisel}
+%val word = Cat(highByte, lowByte)
+%\end{chisel}
+%\end{frame}
+
+\begin{frame}[fragile]{Comparison}
+\begin{itemize}
+\item The usual operations
+\begin{itemize}
+\item Unusual equal and unequal operator symbols
+\item To keep the original Sala operators usable for references
+\end{itemize}
+\item Operands are \code{UInt} and \code{SInt}
+\item Operands can be \code{Bool} for equal and unequal
+\item Result is \code{Bool}
+\end{itemize}
+\begin{chisel}
+===, =/=
+>, >=, <, <=
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Boolean Logical Operations}
+\begin{itemize}
+\item Operands and result are \code{Bool}
+\item Logical NOT, AND, and OR
+\end{itemize}
+\begin{chisel}
+val notX = !x
+val bothTrue = a && b
+val orVal = x || y
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuits}
+\begin{itemize}
+\item Circuit is a graph of nodes
+\item A node is a hardware operator with zero or more inputs
+\item Textual expression to wire up nodes
+\item Named wires with some (unspecified) width
+\end{itemize}
+\begin{chisel}
+(a | b) & ~c
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Combinational Circuits}
+\begin{itemize}
+\item Simple expressions represent a circuit tree
+\item Arbitrary directed acyclic graphs need named subexpressions
+\item Using Scala's \code{val} keyword for variables that don't change
+\item Referenced multiple times
+\end{itemize}
+\begin{chisel}
+val cond = a & b
+val result = (cond & selA) | (!cond & selB)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Register}
+\begin{itemize}
+\item State elements
+\item Has it's own Chisel type \code{Reg}
+\item Positive edge triggered D flip-flop
+\item Synchronous reset
+\item Clock and reset are \emph{hidden wires}
+\end{itemize}
+\begin{chisel}
+val q = RegNext(d)
+\end{chisel}
+\begin{itemize}
+\item \code{d} is the input, \code{q} the output
+\item Register type is inferred by the input (d) type
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Register}
+\begin{itemize}
+\item Reset value as parameter on a \code{RegInit} constructor
+\end{itemize}
+\begin{chisel}
+val initReg = RegInit(0.U(8.W))
+\end{chisel}
+\begin{itemize}
+\item With this forward declaration we later assign the input
+\end{itemize}
+\begin{chisel}
+initReg := initReg + 1.U
+\end{chisel}
+\begin{itemize}
+\item A register can also be defined within an expression
+\end{itemize}
+\shortlist{../code/sequ_reg_rising.txt}
 \end{frame}
 
 
+\begin{frame}[fragile]{A Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
+\begin{itemize}
+\item A Multiplexer selects between alternatives
+\item So common that Chisel provides a construct for it
+\item Selects \code{a} when \code{sel} is \code{true.B} otherwise \code{b}
+\item Could be implemented with conditional updates
+\item Automagical type selection on input types
+\end{itemize}
+\shortlist{../code/mux.txt}
+\end{frame}
 
 \begin{frame}[fragile]{Expressions are Combinational Circuits}
 \begin{chisel}
@@ -780,24 +1173,24 @@ val counter100 = counter(100.U)
 \end{frame}
 
 
-\begin{frame}[fragile]{Functions}
-\begin{itemize}
-\item Example from Patmos execute stage
-\end{itemize}
-\begin{chisel}
-def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
-  val result = UInt(width = DATA_WIDTH)
-  // some more lines...
-  switch(func) {
-    is(FUNC_ADD) { result := sum }
-    is(FUNC_SUB) { result := op1 - op2 }
-    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
-    // some more lines
-  }
-  result
-}
-\end{chisel}
-\end{frame}
+%\begin{frame}[fragile]{Functions}
+%\begin{itemize}
+%\item Example from Patmos execute stage
+%\end{itemize}
+%\begin{chisel}
+%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+%  val result = UInt(width = DATA_WIDTH)
+%  // some more lines...
+%  switch(func) {
+%    is(FUNC_ADD) { result := sum }
+%    is(FUNC_SUB) { result := op1 - op2 }
+%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+%    // some more lines
+%  }
+%  result
+%}
+%\end{chisel}
+%\end{frame}
 
 \begin{frame}[fragile]{Functional Abstraction}
 \begin{chisel}
@@ -906,15 +1299,25 @@ val adder = Module(new Adder())
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Generic Components}
-\begin{chisel}
-val c = Mux(cond, a, b)
-\end{chisel}
+\begin{frame}[fragile]{Chisel Main}
+
 \begin{itemize}
-\item This is a multiplexer
-\item Input can be any type
+\item Create one top-level Module
+\item Invoke the Verilog emitter from the Scala \code{main} (or App)
+\item Following code generates Verilog code
 \end{itemize}
+\shortlist{../code/generate.txt}
 \end{frame}
+
+%\begin{frame}[fragile]{Generic Components}
+%\begin{chisel}
+%val c = Mux(cond, a, b)
+%\end{chisel}
+%\begin{itemize}
+%\item This is a multiplexer
+%\item Input can be any type
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
@@ -964,24 +1367,24 @@ val c = Mux(cond, a, b)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Testing}
-\begin{itemize}
-\item Within Chisel with a tester (= Scala program)
-\item May include waveform generation
-\item peek and poke to read and set values
-\begin{itemize}
-\item Remember the BASIC days ;-)
-\end{itemize}
-\item printf in simulation on rising edge
-\begin{chisel}
-printf("Counting %x\n", r1)
-\end{chisel}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing Example}
-\shortlist{../code/test_bench_simple.txt}
-\end{frame}
+%\begin{frame}[fragile]{Testing}
+%\begin{itemize}
+%\item Within Chisel with a tester (= Scala program)
+%\item May include waveform generation
+%\item peek and poke to read and set values
+%\begin{itemize}
+%\item Remember the BASIC days ;-)
+%\end{itemize}
+%\item printf in simulation on rising edge
+%\begin{chisel}
+%printf("Counting %x\n", r1)
+%\end{chisel}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Testing Example}
+%\shortlist{../code/test_bench_simple.txt}
+%\end{frame}
 
 \begin{frame}[fragile]{Component Generation}
 \begin{chisel}
@@ -1035,214 +1438,7 @@ val rom = Vec[Bits](arr)
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel Data Types}
-\begin{itemize}
-\item Data types for values on wires or state elements
-\item Raw collection of bits is type \code{Bits}
-\item Simple types to represent integer numbers
-\begin{itemize}
-\item Unsigned: \code{UInt}
-\item Signedigned: \code{SInt}
-\item Subtype of \code{Bits}
-\end{itemize}
-\item Automatic bit width inference
-\item Boolean values are of type \code{Bool}, a single bit value
-\item \emph{Interesting} way to specify constants
-\end{itemize}
-\begin{chisel}
-1.U
-"habcd".U
-"b0101".U
--5.S
-true.B
-\end{chisel}
-\end{frame}
 
-\begin{frame}[fragile]{Chisel Data Types}
-\begin{itemize}
-\item Bit width can be explicitly specified with a width type
-\begin{itemize}
-\item \code{SInt} will be sign extended
-\item \code{UInt} will be zero extended
-\end{itemize}
-\end{itemize}
-\begin{chisel}
-UInt(8.W)
-SInt(16.W)
-0.U(32.W)
-"habcd".U(24.W)
--5.S(16.W)
-\end{chisel}
-\begin{itemize}
-\item Chisel data types are different from Scala builtin types (e.g., Scala's \code{Int})
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Bitwise Logical Operations}
-\begin{itemize}
-\item Bitwise NOT, AND, OR, and XOR
-\item Automatic size extension to larger operand
-\end{itemize}
-\begin{chisel}
-val notVal = ~x
-val maskOut = x & "b00001111".U
-val orVal = x | y
-val xorVal = x ^ y
-\end{chisel}
-\begin{itemize}
-\item Bit reduction
-\item Results in a single bit
-\end{itemize}
-\begin{chisel}
-x.andR
-x.orR
-x.xorR
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Arithmetic Operations}
-\begin{itemize}
-\item Addition, subtraction, multiplication, division, modulos
-\item Automatic size extension to larger operand
-\end{itemize}
-\begin{chisel}
-+, -, *, /, %
-\end{chisel}
-\begin{itemize}
-\item Left and right shifts
-\item Left shift extends bit width
-\item Right shift reduces bit width
-\end{itemize}
-\begin{chisel}
-<<, >>
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Bitfield Manipulations}
-\begin{itemize}
-\item Extract a single bit
-\end{itemize}
-\begin{chisel}
-val sign = x(31)
-\end{chisel}
-\begin{itemize}
-\item Extract a sub field from end to start position
-\end{itemize}
-\begin{chisel}
-val lowByte = word(7, 0)
-\end{chisel}
-\begin{itemize}
-\item Concatenate bit fields
-\end{itemize}
-\begin{chisel}
-val word = Cat(highByte, lowByte)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Comparison}
-\begin{itemize}
-\item The usual operations
-\begin{itemize}
-\item Unusual equal and unequal operator symbols
-\item To keep the original Sala operators usable for references
-\end{itemize}
-\item Operands are \code{UInt} and \code{SInt}
-\item Operands can be \code{Bool} for equal and unequal
-\item Result is \code{Bool}
-\end{itemize}
-\begin{chisel}
-===, =/=
->, >=, <, <=
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Boolean Logical Operations}
-\begin{itemize}
-\item Operands and result are \code{Bool}
-\item Logical NOT, AND, and OR
-\end{itemize}
-\begin{chisel}
-val notX = !x
-val bothTrue = a && b
-val orVal = x || y
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Combinational Circuits}
-\begin{itemize}
-\item Circuit is a graph of nodes
-\item A node is a hardware operator with zero or more inputs
-\item Textual expression to wire up nodes
-\item Named wires with some (unspecified) width
-\end{itemize}
-\begin{chisel}
-(a | b) & ~c
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Combinational Circuits}
-\begin{itemize}
-\item Simple expressions represent a circuit tree
-\item Arbitrary directed acyclic graphs need named subexpressions
-\item Using Scala's \code{val} keyword for variables that don't change
-\item Referenced multiple times
-\end{itemize}
-\begin{chisel}
-val cond = a & b
-val result = (cond & selA) | (!cond & selB)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Register}
-\begin{itemize}
-\item State elements
-\item Has it's own Chisel type \code{Reg}
-\item Positive edge triggered D flip-flop
-\item Synchronous reset
-\item Clock and reset are \emph{hidden wires}
-\end{itemize}
-\begin{chisel}
-val q = RegNext(d)
-\end{chisel}
-\begin{itemize}
-\item \code{d} is the input, \code{q} the output
-\item Register type is inferred by the input (d) type
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Register}
-\begin{itemize}
-\item Reset value as parameter on a \code{RegInit} constructor
-\end{itemize}
-\begin{chisel}
-val initReg = RegInit(0.U(8.W))
-\end{chisel}
-\begin{itemize}
-\item With this forward declaration we later assign the input
-\end{itemize}
-\begin{chisel}
-initReg := initReg + 1.U
-\end{chisel}
-\begin{itemize}
-\item A register can also be defined within an expression
-\end{itemize}
-\shortlist{../code/sequ_reg_rising.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{A Multiplexer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/mux}
-\end{figure}
-\begin{itemize}
-\item A Multiplexer selects between alternatives
-\item So common that Chisel provides a construct for it
-\item Selects \code{a} when \code{sel} is \code{true.B} otherwise \code{b}
-\item Could be implemented with conditional updates
-\item Automagical type selection on input types
-\end{itemize}
-\shortlist{../code/mux.txt}
-\end{frame}
 
 \begin{frame}[fragile]{A Small Circuit}
 \begin{itemize}
@@ -1488,8 +1684,9 @@ class Hello extends Module {
 
 \begin{frame}[fragile]{Lab 2}
 \begin{itemize}
-\item Write an arbitration circuit (with \code{treeReduce()})
-\item Introduce some fairness to the arbitration circuit
+\item Write a search circuit (with \code{treeReduce()})
+\item Optional: add the generation of the index of the maximum value
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
 \end{itemize}
 \end{frame}
 
@@ -1733,34 +1930,34 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Minimal Function with Index}
-\begin{itemize}
-\item Was the example for Tjark's heap sort
-\shortlist{../code/fun_min2.txt}
-\item We need an extra bundle to hold both values
-\item A for loop is not so functional
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
-\begin{itemize}
-\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
-with second element is the index
-\item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
-\item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
-\shortlist{../code/fun_min3.txt}
-\item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Solution with a Vec}
-\begin{itemize}
-\item This results in a Chisel \code{Vec}
-\shortlist{../code/fun_min4.txt}
-\item
-\item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
-\end{itemize}
-\end{frame}
+%\begin{frame}[fragile]{Minimal Function with Index}
+%\begin{itemize}
+%\item Was the example for Tjark's heap sort
+%\shortlist{../code/fun_min2.txt}
+%\item We need an extra bundle to hold both values
+%\item A for loop is not so functional
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
+%\begin{itemize}
+%\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
+%with second element is the index
+%\item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
+%\item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
+%\shortlist{../code/fun_min3.txt}
+%\item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Solution with a Vec}
+%\begin{itemize}
+%\item This results in a Chisel \code{Vec}
+%\shortlist{../code/fun_min4.txt}
+%\item
+%\item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
+%\end{itemize}
+%\end{frame}
 
 %\begin{frame}[fragile]{An Arbiter}
 %\shortlist{../code/fun_arbiter.txt}
@@ -1806,155 +2003,11 @@ val rom = Vec[Bits](arr)
 \item Assembler in Scala/Java generates the boot ROM
 \item Table with a \code{sin} function
 \item Binary to BCD conversion
-\item Schedule table for a TDM based network-on-chip
+\item Schedule table for a TDM-based network-on-chip
 \item 
 \item More ideas?
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{Memory}
-\begin{chisel}
-val mem = Mem(Bits(width = 8), size)
-
-// write
-when(wrEna) {
-  mem(wrAddr) := wrData
-}
-
-// read
-val rdAddrReg = Reg(next = rdAddr)
-rdData := mem(rdAddrReg)
-\end{chisel}
-\begin{itemize}
-\item Write is synchronous
-\item Read can be asynchronous or synchronous
-\item But there are no asynchronous memories in an FPGA
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Better Use Synchronous Memory}
-\shortlist{../code/memory.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Factory Methods}
-\begin{itemize}
-\item Simpler component creation and use
-\item Usage similar to built in components, such as \code{Mux}
-\end{itemize}
-\begin{chisel}
-val myAdder = Adder(x, y)
-\end{chisel}
-\begin{itemize}
-\item A little bit more work on component side
-\item Define an \code{apply} method on the companion object that returns the component
-\end{itemize}
-\begin{chisel}
-object Adder {
-  def apply(a: UInt, b: UInt) = {
-    val adder = Module(new Adder)
-    adder.io.a := a
-    adder.io.b := b
-    adder.io.result
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{More on Testing}
-\begin{itemize}
-\item Using test vectors and \code{expect()} does not scale
-\item Better have co-simulation against a \emph{golden model}
-\item Then we can compare
-\item Which input values to use?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: IO Connection}
-\begin{chisel}
-class Alu extends Module {
-  val io = IO(new Bundle {
-    val fn = Input(UInt(2.W))
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  // Use shorter variable names
-  val fn = io.fn
-  val a = io.a
-  val b = io.b
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: The Function}
-\begin{chisel}
-  val result = Wire(UInt(4.W))
-  // some default value is needed
-  result := 0.U
-
-  // The ALU selection
-  switch(fn) {
-    is(0.U) { result := a + b }
-    is(1.U) { result := a - b }
-    is(2.U) { result := a | b }
-    is(3.U) { result := a & b }
-  }
-
-  // Output on the LEDs
-  io.result := result
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compute the expected result in Scala
-\end{itemize}
-\begin{chisel}
-  // This is exhaustive testing,
-  // which usually is impossible
-  for (a <- 0 to 15) {
-    for (b <- 0 to 15) {
-      for (op <- 0 to 3) {
-        val result =
-          op match {
-            case 0 => a + b
-            case 1 => a - b
-            case 2 => a | b
-            case 3 => a & b
-          }
-        val resMask = result & 0x0f
-\end{chisel}
-
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compare the Scala computed result with the hardware result
-\end{itemize}
-\begin{chisel}
-        poke(dut.io.fn, op)
-        poke(dut.io.a, a)
-        poke(dut.io.b, b)
-        step(1)
-        expect(dut.io.result, resMask)
-      }
-    }
-  }
-\end{chisel}
-\end{frame}
-
-
-\begin{frame}[fragile]{Printf Debugging}
-\begin{itemize}
-\item We can \emph{print} in the hardware
-\item Printing happens on the rising edge of the clock
-\item Good to see many parallel signals and registers
-\item \code{printf} anywhere in the module definition
-\end{itemize}
-\shortlist{../code/test_dut_printf.txt}
-\end{frame}
-
 
 \begin{frame}[fragile]{Test Driven Development (TDD)}
 \begin{itemize}
@@ -1969,9 +2022,9 @@ class Alu extends Module {
 \item Accept change as part of the development
 \end{itemize}
 \item A path to \emph{Agile Hardware Development!}
-\item Not used in its pour form
+\item Not used in its pure form
 \begin{itemize}
-\item Writing all those tests is simply considerer too much work
+\item Writing all those tests is simply considered too much work
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -1996,11 +2049,10 @@ class Alu extends Module {
 \end{itemize}
 \end{frame}
 
-
-
 \begin{frame}[fragile]{Lab 3}
 \begin{itemize}
-\item Maybe the search circuit
+\item Design a component with a generic parameter
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab3}{lab3}
 \end{itemize}
 \end{frame}
 
