@@ -1208,33 +1208,40 @@ val counter100 = counter(100.U)
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Bundles}
+\begin{frame}[fragile]{Data Aggregation with Bundles}
+\begin{itemize}
+\item A \code{Bundle} groups several named fields
+\item Like a C struct or VHDL record
+\item \code{Vec} is a vector of elements with the same type
+\item Can be arbitrary mixed
+\end{itemize}
 \begin{chisel}
-class DecodeExecute extends Bundle {
-  val rs1 = UInt(32.W)
-  val rs2 = UInt(32.W)
-  val immVal = UInt(32.W)
-  val aluOp = new AluOp()
+class AluFields extends Bundle {
+  val function = UInt(2.W)
+  val inputA = UInt(8.W)
+  val inputB = UInt(8.W)
+  val result = UInt(8.W)
 }
 \end{chisel}
-\begin{itemize}
-\item Collection of values in named fields 
-\item Like struct or record
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Vectors}
-\begin{chisel}
-val myVec = Vec(3, SInt(10.W))
-
-myVec(0) := -3.S
-val y = myVec(2)
-\end{chisel}
 \begin{itemize}
 \item Indexable vector of elements
-\item Bundles and Vecs can be arbitrarily nested
+\item Elements can be Chisel basic elements, or bundles
+\item Type is specified as second parameter
 \end{itemize}
+\begin{chisel}
+val myVec = Vec(3, SInt(10.W))
+val y = myVec(2)
+myVec(0) := -3.S
+\end{chisel}
+\begin{itemize}
+\item A register file as a register of a vector
+\end{itemize}
+\begin{chisel}
+val vecReg = Reg(Vec(32, SInt(32.W)))
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{IO Ports}
@@ -1247,6 +1254,7 @@ class Channel extends Bundle {
 \end{chisel}
 \begin{itemize}
 \item Ports are Bundles with directions
+\item Ports are used to connect modules
 \item Direction can also be assigned at instantiation:
 \end{itemize}
 \begin{chisel}
@@ -1257,7 +1265,37 @@ class ExecuteIO extends Bundle {
 \end{chisel}
 \end{frame}
 
+
+
+\begin{frame}[fragile]{Port Directions}
+\begin{itemize}
+\item Can be reversed with the \code{Flipped}
+\item Convenient to have one bundle definition working as source
+and destination used between two modules
+\end{itemize}
+\begin{chisel}
+class Channel extends Bundle {
+  val data = Input(UInt(32.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+class ChannelUsage extends Bundle {
+  val input = new Channel()
+  val output = Flipped(new Channel())
+}
+\end{chisel}
+\end{frame}
+
+
 \begin{frame}[fragile]{Modules}
+\begin{itemize}
+\item Modules are used to organize the circuit
+\item Similar to VHDL components (entity/architecture)
+\item A class that inherits from \code{Module}
+\item Circuit description in the constructor
+\item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
+\end{itemize}
 \begin{chisel}
 class Adder extends Module {
   val io = IO(new Bundle {
@@ -1270,13 +1308,19 @@ class Adder extends Module {
   io.result := addVal
 }
 \end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Module Usage}
 \begin{itemize}
-\item Organization of components
-\item IO ports defined as a Bundle named \code{io} and wrapped into an \code{IO()}
-\item Created (instantiated) with:
+\item Create with \code{new} and wrap into a \code{Module()}
+\item Interface port via the \code{io} field
+\item Note the assignment operator \code{:=} on \code{io} fields
 \end{itemize}
 \begin{chisel}
-val adder = Module(new Adder())
+  val adder = Module(new Adder())
+  adder.io.a := ina
+  adder.io.b := inb
+  val result = adder.io.result
 \end{chisel}
 \end{frame}
 
@@ -1472,126 +1516,7 @@ class Counter extends Module {
 \end{chisel}
 \end{frame}
 
-\begin{frame}[fragile]{Data Aggregation}
-\begin{itemize}
-\item A \code{Bundle} groups several named fields
-\item Like a C struct or VHDL record
-\item \code{Vec} is a vector of elements with the same type
-\item Can be arbitrary mixed
-\end{itemize}
-\begin{chisel}
-class AluFields extends Bundle {
-  val function = UInt(2.W)
-  val inputA = UInt(8.W)
-  val inputB = UInt(8.W)
-  val result = UInt(8.W)
-}
-\end{chisel}
-\end{frame}
 
-\begin{frame}[fragile]{Vectors}
-\begin{itemize}
-\item Indexable vector of elements
-\item Elements can be Chisel basic elements, or bundles
-\item Type is specified as second parameter
-\end{itemize}
-\begin{chisel}
-val myVec = Vec(3, SInt(10.W))
-val y = myVec(2)
-myVec(0) := -3.S
-\end{chisel}
-\begin{itemize}
-\item A register file as a register of a vector
-\end{itemize}
-\begin{chisel}
-val vecReg = Reg(Vec(32, SInt(32.W)))
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Ports}
-\begin{itemize}
-\item Ports used to connect modules
-\item Ports are bundles with directions
-\end{itemize}
-\begin{chisel}
-class AluIO extends Bundle {
-  val function = Input(UInt(2.W))
-  val inputA = Input(UInt(4.W))
-  val inputB = Input(UInt(4.W))
-  val result = Output(UInt(4.W))
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Port Directions}
-\begin{itemize}
-\item Can be assigned at instantiation
-\end{itemize}
-\begin{chisel}
-class ExecuteIO extends Bundle {
-  val dec = Input(new DecodeExecute())
-  val mem = Output(new ExecuteMemory())
-}
-\end{chisel}
-\begin{chisel}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Port Directions}
-\begin{itemize}
-\item Can be reversed with the \code{Flipped}
-\item Convenient to have one bundle definition working as source
-and destination used between two modules
-\end{itemize}
-\begin{chisel}
-class Channel extends Bundle {
-  val data = Input(UInt(32.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-class ChannelUsage extends Bundle {
-  val input = new Channel()
-  val output = Flipped(new Channel())
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Modules}
-\begin{itemize}
-\item Modules are used to organize the circuit
-\item Similar to VHDL components (entity/architecture)
-\item A class that inherits from \code{Module}
-\item Circuit description in the constructor
-\item Interface (port) is a \code{Bundle}, wrapped into an \code{IO()}, and stored in the field \code{io}
-\end{itemize}
-\begin{chisel}
-class Adder extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Module Usage}
-\begin{itemize}
-\item Create with \code{new} and wrap into a \code{Module()}
-\item Interface port via the \code{io} field
-\item Note the assignment operator \code{:=} on \code{io} fields
-\end{itemize}
-\begin{chisel}
-  val adder = Module(new Adder())
-  adder.io.a := ina
-  adder.io.b := inb
-  val result = adder.io.result
-\end{chisel}
-\end{frame}
 
 \begin{frame}[fragile]{Conditional Assignments}
 \begin{itemize}
