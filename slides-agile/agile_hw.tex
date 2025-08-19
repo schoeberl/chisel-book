@@ -41,7 +41,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{itemize}
 \item Utility processor for small stuff
 % \item Could be used for your vending machine
-\item In teaching an introduction to computer architecture
+\item In teaching introduction to computer architecture
 \end{itemize}
 \item The design took place on the island of Lipsi
 \end{itemize}
@@ -57,7 +57,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \begin{frame}[fragile]{Lipsi Implementation}
 \begin{itemize}
 \item Hardware described in Chisel
-\item Tester in Chisel
+\item Tester in Chisel/Scala
 \item Assembler in Scala
 \begin{itemize}
 \item Core case statement about 20 lines
@@ -1298,6 +1298,12 @@ class Adder extends Module {
 \shortlist{../code/generate.txt}
 \end{frame}
 
+\begin{frame}[fragile]{Time for a Break}
+\begin{itemize}
+\item We need some coffee and sweet stuff
+\end{itemize}
+\end{frame}
+
 %\begin{frame}[fragile]{Generic Components}
 %\begin{chisel}
 %val c = Mux(cond, a, b)
@@ -1506,9 +1512,9 @@ val counter100 = counter(100.U)
 
 \begin{frame}[fragile]{Lab 2}
 \begin{itemize}
-\item Write a search circuit (with \code{treeReduce()})
+\item Write a search for the maximum circuit (with \code{treeReduce()})
 \item Optional: add the generation of the index of the maximum value
-\item Emit Verilog with \code{emitVerilog(new Comp())}, you can synthesize it then on Thursday
+\item Emit Verilog with \code{emitVerilog(new Comp())}, so you can synthesize it at the Thursday session
 \item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
 \end{itemize}
 \end{frame}
