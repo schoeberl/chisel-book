@@ -6665,7 +6665,7 @@ The accumulator and the register file are in our current implementation
 to implement 16-bit or 64-bit versions of Leros.}
 
 
-Table~\ref{tab: Leros:isa} shows the instruction set of Leros.
+Table~\ref{tab:leros:isa} shows the instruction set of Leros.
 \code{A} represents the accumulator, \code{PC} is the program counter,
 \code{i} is an immediate value (0 to 255), \code{Rn} a register
 \code{n} (0 to 255), \code{o} a branch offset relative to the \code{PC},
@@ -7724,7 +7724,7 @@ of the code.
 
 \longlist{code/vhdl_adder.txt}{A simple component in VHDL.}{lst:vhdl:adder}
 
-Listing~\ref{lst:v:ch:adder} shows a simple adder~\footnote{We should never use
+Listing~\ref{lst:v:ch:adder} shows a simple adder\footnote{We should never use
 such small components in real designs when the code that defines the function is just a few lines.
 In this example, just one line. However, we keep it short for the presentation
 of the concept of a component.}
@@ -7744,7 +7744,7 @@ equally. However, the current practice is to stick to lower cases for identifier
 \longlist{code/v_adder.txt}{A simple component in Verilog.}{lst:v:adder}
 
 Listing~\ref{lst:v:adder} shows the adder component in Verilog. Similar to Chisel,
-a component is also called a module.~\footnote{In fact, the naming in Chisel
+a component is also called a module.\footnote{In fact, the naming in Chisel
 was inspired by Verilog.}
 The adder has two 8-bit inputs and one 8-bit output.
 The \code{assign} statement is a concurrent statement that continuously
