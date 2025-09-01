@@ -26,6 +26,8 @@ Embedded Systems Engineering}
 \end{frame}
 
 
+
+
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
 \item Waterfall and Agile design style
@@ -91,6 +93,7 @@ Embedded Systems Engineering}
     \item Testing and feedback happen late in the process
     \item High risk of discovering major flaws late
     \item Not well-suited for rapid prototyping or exploratory projects
+    \item Worked at Compaq for a banking SW in this style
 \end{itemize}
 \end{frame}
 
@@ -196,6 +199,16 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Hardware Design Today}
 \begin{itemize}
     \item VHDL / Verilog = rigid, low-level
@@ -232,6 +245,7 @@ Embedded Systems Engineering}
 \item VHDL
 \item Verilog
 \item Chisel
+\item Haskell
 \item Clash
 \item Other
 \end{itemize}
@@ -378,6 +392,28 @@ for (i <- 0 until 10) {
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Expressions and Functions}
+\begin{itemize}
+    \item Everything in Scala is an expression (returns a value)
+\end{itemize}
+
+\begin{verbatim}
+val sum = 1 + 2   // 3
+val cond = if (sum > 2) "big" else "small"
+\end{verbatim}
+
+\begin{itemize}
+    \item Defining a function:
+\end{itemize}
+
+\begin{verbatim}
+def add(a: Int, b: Int): Int = {
+  a + b
+}
+\end{verbatim}
+\end{frame}
+
+
 \begin{frame}[fragile]{Scala Arrays and Lists}
 \begin{chisel}
 // An integer array with 10 elements
@@ -397,6 +433,38 @@ println(listenum)
 \end{chisel}
 \end{frame}
 
+\begin{frame}[fragile]{Scala Collections}
+\begin{itemize}
+\item Scala has a powerful \href{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}
+\item \code{Seq} is an ordered collection of elements (also called a sequence)
+\item The default implementation is immutable
+\item We index into a \code{Seq} with \code{()}, with zero-based indexing
+\item Collections work well with functional programming
+\end{itemize}
+\shortlist{../code/scala_seq.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Lists}
+\begin{itemize}
+    \item Lists are common in Scala
+    \item Default list is immutable
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4)
+
+// head and tail
+println(nums.head)  // 1
+println(nums.tail)  // List(2, 3, 4)
+
+// append
+val nums2 = nums :+ 5
+\end{verbatim}
+
+\begin{itemize}
+\item When you append to a List it creats a new list
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Scala Classes}
 \begin{chisel}
@@ -442,15 +510,7 @@ object Example {}
 \shortlist{../code/scala_tuple.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Scala Collections}
-\begin{itemize}
-\item Scala has a powerful \href{https://docs.scala-lang.org/overviews/collections-2.13/overview.html}{collection library}
-\item \code{Seq} is an ordered collection of elements (also called a sequence)
-\item The default implementation is immutable
-\item We index into a \code{Seq} with \code{()}, with zero-based indexing.
-\end{itemize}
-\shortlist{../code/scala_seq.txt}
-\end{frame}
+
 
 \begin{frame}[fragile]{Functional Programming}
 \begin{itemize}
@@ -706,13 +766,87 @@ sbt test
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Hardware Exercise}
+\begin{itemize}
+\item Some of you come with different hardware design expertise
+\item You shall test yourself with a small exercise
+\item \href{https://github.com/schoeberl/agile-hw/blob/main/background-exercise.md}{Exercise description}
+\item Use the hardware description language of your choice
+\item Upload your solution to DTU learn till end of the week (Sunday)
+\item I will not grade it, but give you feedback on your solution
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tool Setup for Different OSs}
+\begin{itemize}
+\item Windows
+\begin{itemize}
+\item Use the installers from the websites
+\end{itemize}
+\item macOS
+\begin{itemize}
+\item \code{brew install sbt}
+\item For the rest, use the installer from the websites
+\end{itemize}
+\item Linux/Ubuntu
+\begin{itemize}
+\item \code{sudo apt install openjdk-8-jdk git make gtkwave}
+\item Install sbt
+\item IntelliJ as from the website
+\end{itemize}
+\item Instruction details: \url{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{An IDE for Chisel}
+\begin{itemize}
+\item IntelliJ
+\item Install the Scala plugin
+\item For IntelliJ: File - New - Project from Existing Sources..., open build.sbt
+%\item But you are not compiling with Eclipse\\ and against the Chisel source
+\item Show it %(down to the Basys3)
+\item Visual Studio Code with the Scala plugin (Metals)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Scala CLI}
+\begin{itemize}
+\item \href{https://scala-cli.virtuslab.org/}{scala-cli}
+\item A tool for compiling and running Scala code/scripts
+\item show it: REPL, scripts, full-blown Scala apps (in tmp)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Lab 0: Hello World in Chisel}
+\begin{itemize}
+\item Install all tools, see \href{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}{Setup.md}
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/agile-hw}
+\end{itemize}
+\item Start IntelliJ and follow the instructions from the \href{https://github.com/schoeberl/agile-hw/tree/main/lab0}{lab0} page 
+\item \code{sbt test}
+\item Explore the code, maybe change the example
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Lab 1}
 \begin{itemize}
-\item I assume that you installed all tools and did lab0 as homework
 \item Functional programming in Scala
+\item First part with Scala REPL
 \item The lab contains tests, run with \code{sbt test}
 \item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Next Week}
+\begin{itemize}
+\item Quick intro into Chisel
+\item If you know Chisel, come at 14:00
+\item First Chisel generators
 \end{itemize}
 \end{frame}
 
@@ -723,7 +857,6 @@ sbt test
 \item We need a modern language for hardware/systems design for efficient/fast development
 \item Chisel builds on the power of object-oriented and functional Scala
 \item We shall write hardware generators
-\item We have a course at DTU on this topic this fall
 \end{itemize}
 \end{frame}
 
