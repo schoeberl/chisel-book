@@ -24,7 +24,7 @@
 
 
 \newif\ifbook
-%\booktrue % comment out for the print book version
+\booktrue % comment out for the print book version
 
 \ifbook
 \else
@@ -962,8 +962,19 @@ The standard logic operations in Chisel are:
 
 \noindent The resulting width of the operation is the maximum width of the operators for
 addition and subtraction, the sum of the two widths for the multiplication, and usually
-the width of the numerator for divide and modulo operations.\footnote{The exact
-details are available in the \myref{https://github.com/chipsalliance/firrtl-spec/releases/latest/download/spec.pdf}{FIRRTL specification}.}
+the width of the numerator for divide and modulo operations.\footnote{
+  The exact details are available in the
+  \ifbook
+    FIRRTL specification\footnotemark
+  \else
+    \myref{https://github.com/chipsalliance/firrtl-spec/releases/latest/download/spec.pdf}{FIRRTL specification}.
+  \fi
+}
+\ifbook
+  \footnotetext{\url{https://github.com/chipsalliance/firrtl-spec/releases/latest/download/spec.pdf}}
+\fi
+
+
 
 A signal can also first be defined as a \code{Wire} of some type. Afterward, we can assign a
 value to the wire with the \code{:=} update operator.
