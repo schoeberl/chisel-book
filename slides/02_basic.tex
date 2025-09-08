@@ -408,12 +408,12 @@ the output of the register can be used just with the name in an expression:
 \begin{frame}[fragile]{Default Assignment}
 \begin{itemize}
 \item Practical for complex expressions
-\item Forgetting to assign a value on all conditions
+\item Forgetting to assign a value at all conditions
 \begin{itemize}
 \item Would describe a latch
 \item Runtime error in Chisel
 \end{itemize}
-\item Assign a default value is good practise
+\item Assign a default value is a good practice
 \end{itemize}
 \shortlist{../code/comb_wiredefault.txt}
 \end{frame}
@@ -423,7 +423,7 @@ the output of the register can be used just with the name in an expression:
 \item Sometimes more convenient 
 \item Still combinational logic (gates)
 \item Is converted to Boolean expressions
-\item Let the synthesize tool do the conversion!
+\item Let the synthesis tool do the conversion!
 \item We use the \code{switch} statement
 \end{itemize}
 \shortlist{../code/encdec_dec.txt}
@@ -601,7 +601,6 @@ a grant output of \code{0001}
 \item Only when \code{enable} true is a value is stored
 \end{itemize}
 \shortlist{../code/sequ_reg_ena.txt}
-
 \end{frame}
 
 \begin{frame}[fragile]{Timing Diagram for an Enable Register}

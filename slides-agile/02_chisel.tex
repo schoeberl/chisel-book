@@ -448,12 +448,14 @@ A single bit can be extracted as follows:
 \shortlist{../code/mux.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Conditional Update}
+\begin{frame}[fragile]{Combinational Circuit with Conditional Update}
 \begin{itemize}
+\item Chisel supports conditional update
+\item Value first needs to be wrapped into a \code{Wire}
+\item Updates with the Chisel update operation \code{:=}
 \item With \code{when} we can express a conditional update
 \item The resulting circuit is a multiplexer
-\item In contrast to the \code{Mux} component, we can have several assignments in the \code{when} block
-\item The rule is the the last enabled assignment counts
+\item The rule is that the last enabled assignment counts
 \begin{itemize}
 \item Here the order of statements has a meaning
 \end{itemize}
@@ -470,41 +472,47 @@ A single bit can be extracted as follows:
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chained Conditionals}
+\begin{frame}[fragile]{A Chain of Conditions}
 \begin{itemize}
-\item Chain of conditionals with \code{.elsewhen}
-\item With an optional \emph{else} path with \code{.otherwise}
-\item Note that Scala has \code{if/else}
-\begin{itemize}
-\item Does NOT result in hardware
-\item Are used to conditionally \emph{generate} hardware
-\item We will look at this later
+\item To test for different conditions
+\item Select with a priority order
+\item The first that is true counts
+\item The hardware is a chain of multiplexers
 \end{itemize}
-\item Note the ``.'' at the operators
-\end{itemize}
-\begin{chisel}
-  when (c1) { v := 1.U }
-  .elsewhen (c2) { v := 2.U }
-  .otherwise { v := 3.U }
-\end{chisel}
+\begin{columns}
+\column{0.5\textwidth}
+\shortlist{../code/comb_elsewhen.txt}
+\column{0.5\textwidth}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux-chain}
+\end{figure}
+\end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{Switch Statement}
+\begin{frame}[fragile]{Default Assignment}
 \begin{itemize}
-\item Series of comparisons
-\item Chisel allows combinational logic be updated conditionally 
-\item Chisel disallows incomplete specified logic (= latches)
-\item Chisel will report a runtime error
+\item Practical for complex expressions
+\item Forgetting to assign a value at all conditions
+\begin{itemize}
+\item Would describe a latch
+\item Runtime error in Chisel
 \end{itemize}
-\begin{chisel}
-  switch(fn) {
-    is(0.U) { result := a + b }
-    is(1.U) { result := a - b }
-    is(2.U) { result := a | b }
-    is(3.U) { result := a & b }
-  }
-\end{chisel}
+\item Assign a default value is a good practice
+\end{itemize}
+\shortlist{../code/comb_wiredefault.txt}
 \end{frame}
+
+\begin{frame}[fragile]{Logic Can Be Expressed as a Table}
+\begin{itemize}
+\item Sometimes more convenient 
+\item Still combinational logic (gates)
+\item Is converted to Boolean expressions
+\item Let the synthesis tool do the conversion!
+\item We use the \code{switch} statement
+\end{itemize}
+\shortlist{../code/encdec_dec.txt}
+\end{frame}
+
 
 
 \begin{frame}[fragile]{The World of Combinational Logic}
@@ -555,22 +563,32 @@ the output of the register can be used just with the name in an expression:
 \shortlist{../code/reg_con.txt}
 \end{frame}
 
-
+\begin{frame}[fragile]{Register with Enable}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/register-enable}
+\end{figure}
+\begin{itemize}
+\item Only when \code{enable} true is a value is stored
+\end{itemize}
+\shortlist{../code/sequ_reg_ena.txt}
+\end{frame}
 
 \begin{frame}[fragile]{Hello World in Chisel}
 \shortlist{../code/hello.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel is a Hardware Construction Language}
+\begin{frame}[fragile]{Reminder: We Construct Hardware}
 \begin{itemize}
-\item The code I showed you looks much like Java code
+\item Chisel code looks much like Java code
 \item But it is \emph{not} a program in the usual sense
 \item It represents a circuit
+\item We should be able to \emph{draw} that circuit
 \item The ``program'' constructs the circuit
 \item All statements are ``executed'' in parallel
-\item Statement order has \emph{mostly} no meaning
+\item Statement order has mostly no meaning
 \end{itemize}
 \end{frame}
+
 
 
 \begin{frame}[fragile]{Maybe here is Time for the break and lab}
