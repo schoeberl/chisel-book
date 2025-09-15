@@ -25,21 +25,113 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
+\begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Have the FBI story
-\item Link the Scrum book
-\item Repeat some Scala (and some Chisel)
-\item Add stuff from xxx slides (e.g., pattern matching)
-\item Do some initial generators
-\item the magic Mux (generics)
+\item More on agile development (Scrum)
+\item A bit more Scala and Chisel
+\item Functional programming for generators
+\item Hardware generators
+\item Object-oriented hardware design
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Overview}
+
+\begin{frame}[fragile]{Scrum}
 \begin{itemize}
-\item A bit more Scala and Chisel
-\item Functional programming for generators
+\item Agile framework for development
+\item Scrum is from rugby, restarting the play
+\item Book  by Jeff Sutherland
+\item \href{https://www.google.dk/books/edition/Scrum/RoPZCwAAQBAJ?hl=en}{Scrum
+The Art of Doing Twice the Work in Half the Time}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Venn Diagram for Agile Development}
+\begin{tikzpicture}
+  % define pleasant colors (RGB avoids reliance on driver color sets)
+  \definecolor{implColor}{RGB}{236,112,99}    % coral-ish
+  \definecolor{sellColor}{RGB}{245,176,65}    % golden
+  \definecolor{passionColor}{RGB}{88,196,180} % teal
+
+  % common style for circles
+  \tikzset{
+    venn/.style={
+      circle,
+      minimum size=4cm,    % diameter ~4.8cm
+      draw=black,
+      fill opacity=0.55,
+      text opacity=1,
+      align=center,
+      inner sep=6pt,
+      font=\small
+    }
+  }
+
+  % positions: equilateral triangle with side length = 3.0 cm
+  % height = sqrt(3)/2 * side => for side=3.0 => height ~ 2.598
+  \node[venn, fill=implColor]    (A) at (0,0)        {\parbox{3.2cm}{\centering What you can\\implement}};
+  \node[venn, fill=sellColor]    (B) at (3.0,0)      {\parbox{3.2cm}{\centering What you can\\sell}};
+  \node[venn, fill=passionColor] (C) at (1.5,2.598)  {\parbox{3.6cm}{\centering What you can be\\passionate about}};
+
+  % optional center label (all-three overlap)
+  \node at (1.5,0.95) {\small\textbf{Sweet spot}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{Sprint}
+\begin{itemize}
+\item One or two weeks development cycle
+\item Select tasks from the backlog
+\item Do them during the sprint
+\item Report after the sprint
+\item Even show to the customer, if possible
+\item Be creative about who the customer is, maybe it is me?
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Things to Implement}
+\begin{itemize}
+\item Collect list of things in a backlog (a TODO list)
+\item This is the collection for taking items for a sprint
+\item Prioritise things
+\item 80\% value out of 20\% feature
+\item The backlog list will change
+\item You will not do all things
+\item Minimum viable thing first - be able to show something
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{More on Agile}
+\begin{itemize}
+\item Be open, share stuff. Best in the open, like GitHub (see my work)
+\begin{itemize}
+\item I have (almost) all of my work on GitHub (slides, Chisel book, code...)
+\item This could be part of your CV
+\end{itemize}
+\item Do what you are passionate about
+\begin{itemize}
+\item The grade should not be what you aim for
+\end{itemize}
+\item Commit often
+\item Demonstrate often, let us make this a weekly thing
+\item Deliver value to your customer as early as possible
+\item Fake it until you make it
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scrum Meetings}
+\begin{itemize}
+\item Have regular meetings, more often than once a week
+\item Scrum is a daily standup meeting
+\item Ask questions:
+\begin{itemize}
+\item What did you do?
+\item What have you planned to do?
+\item Are there roadblocks
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -65,6 +157,7 @@ Embedded Systems Engineering}
 \item Developed at UC Berkeley
 \end{itemize}
 \end{frame}
+
 
 
 
@@ -127,18 +220,120 @@ test(new Counter) { c =>
 %\end{itemize}
 %\end{frame}
 
-\begin{frame}[fragile]{Functions}
+
+\begin{frame}{Scala Summary}
 \begin{itemize}
-\item Circuits can be encapsulated in functions
-\item Each \emph{function call} generates hardware
-\item Simple functions can be a single line
+    \item Scala combines OOP and FP
+    \item Programs are built from \texttt{object} + \texttt{main}
+    \item \texttt{val} = immutable, \texttt{var} = mutable
+    \item Strong static typing, but with type inference
+    \item Functions and expressions are first-class
+    \item Collections are central for data manipulation
 \end{itemize}
-\begin{chisel}
-  def adder(v1: UInt, v2: UInt) = v1 + v2
-  
-  val add1 = adder(a, b)
-  val add2 = adder(c, d)
-\end{chisel}
+\end{frame}
+
+% --- Week 2: Control Structures & Functions ---
+\begin{frame}[fragile]{Conditionals in Scala}
+\begin{itemize}
+    \item \texttt{if} is an expression that returns a value
+\end{itemize}
+
+\begin{verbatim}
+val x = 10
+val res = if (x > 0) "positive" else "non-positive"
+println(res)   // "positive"
+\end{verbatim}
+
+\begin{itemize}
+    \item \texttt{match} is similar to switch, but more powerful
+\end{itemize}
+
+\begin{verbatim}
+x match {
+  case 0       => "zero"
+  case 1 | 2   => "one or two"
+  case _       => "something else"
+}
+\end{verbatim}
+\end{frame}
+
+%\begin{frame}[fragile]{Functions and Recursion}
+%\begin{itemize}
+%    \item Functions can be recursive
+%\end{itemize}
+%
+%\begin{verbatim}
+%def fact(n: Int): Int =
+%  if (n == 0) 1 else n * fact(n - 1)
+%
+%println(fact(5))  // 120
+%
+%// Tail recursion optimization
+%def factTR(n: Int, acc: Int = 1): Int =
+%  if (n == 0) acc else factTR(n - 1, n * acc)
+%
+%println(factTR(5)) // 120
+%\end{verbatim}
+%\end{frame}
+
+% --- Week 3: Collections & For Comprehensions ---
+\begin{frame}[fragile]{For Comprehensions}
+\begin{itemize}
+    \item A concise way to combine \texttt{map}, \texttt{filter}, \texttt{flatMap}
+\end{itemize}
+
+\begin{verbatim}
+val nums = List(1, 2, 3, 4, 5)
+
+// keep even numbers, square them
+val result = for {
+  x <- nums
+  if x % 2 == 0
+} yield x * x
+
+println(result) // List(4, 16)
+\end{verbatim}
+\end{frame}
+
+% --- Week 4: FP + OOP ---
+\begin{frame}[fragile]{Pattern Matching}
+\begin{itemize}
+    \item Pattern matching decomposes values
+\end{itemize}
+
+\begin{verbatim}
+def describe(x: Any): String = x match {
+  case 0          => "zero"
+  case true       => "true"
+  case "hi"       => "a greeting"
+  case i: Int     => "an integer: " + i
+  case _          => "something else"
+}
+
+println(describe(42))   // "an integer: 42"
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Case Classes}
+\begin{itemize}
+    \item Lightweight classes with built-in pattern matching
+\end{itemize}
+
+\begin{verbatim}
+case class Point(x: Int, y: Int)
+
+val p = Point(1, 2)
+
+// pattern match on fields
+p match {
+  case Point(0, 0) => println("origin")
+  case Point(x, y) => println(s"($x,$y)")
+}
+\end{verbatim}
+
+\begin{itemize}
+    \item Case classes are nice for collecting parameters
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Pure Functions}
@@ -153,12 +348,28 @@ test(new Counter) { c =>
 \begin{verbatim}
 def add(a: Int, b: Int): Int = a + b
 \end{verbatim}
-
 \begin{itemize}
     \item Combinational hardware modules are pure
     \item Side effects (state, IO, randomness) are controlled explicitly
 \end{itemize}
 \end{frame}
+
+
+
+\begin{frame}[fragile]{Functions Generating Hardware}
+\begin{itemize}
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item Simple functions can be a single line
+\end{itemize}
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
+\end{frame}
+
 
 
 \begin{frame}[fragile]{Functional Abstraction}
@@ -199,24 +410,24 @@ val counter100 = counter(100.U)
 \end{frame}
 
 
-%\begin{frame}[fragile]{Functions}
-%\begin{itemize}
-%\item Example from Patmos execute stage
-%\end{itemize}
-%\begin{chisel}
-%def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
-%  val result = UInt(width = DATA_WIDTH)
-%  // some more lines...
-%  switch(func) {
-%    is(FUNC_ADD) { result := sum }
-%    is(FUNC_SUB) { result := op1 - op2 }
-%    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
-%    // some more lines
-%  }
-%  result
-%}
-%\end{chisel}
-%\end{frame}
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+\item Example from Patmos execute stage
+\end{itemize}
+\begin{chisel}
+def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
+  val result = UInt(width = DATA_WIDTH)
+  // some more lines...
+  switch(func) {
+    is(FUNC_ADD) { result := sum }
+    is(FUNC_SUB) { result := op1 - op2 }
+    is(FUNC_XOR) { result := (op1 ^ op2).toUInt }
+    // some more lines
+  }
+  result
+}
+\end{chisel}
+\end{frame}
 
 
 
@@ -242,34 +453,6 @@ val counter100 = counter(100.U)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Minimal Function with Index}
-\begin{itemize}
-\item Was the example for Tjark's heap sort
-\shortlist{../code/fun_min2.txt}
-\item We need an extra bundle to hold both values
-\item A for loop is not so functional
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
-\begin{itemize}
-\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
-with second element is the index
-\item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
-\item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
-\shortlist{../code/fun_min3.txt}
-\item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Solution with a Vec}
-\begin{itemize}
-\item This results in a Chisel \code{Vec}
-\shortlist{../code/fun_min4.txt}
-\item
-\item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
-\end{itemize}
-\end{frame}
 
 
 
@@ -308,21 +491,17 @@ with second element is the index
 %\end{frame}
 
 
-\begin{frame}[fragile]{Lab 2}
+\begin{frame}[fragile]{Lab 4}
 \begin{itemize}
 \item Write a search for the maximum circuit (with \code{treeReduce()})
 \item Optional: add the generation of the index of the maximum value
-\item Emit Verilog with \code{emitVerilog(new Comp())}, so you can synthesize it at the Thursday session
-\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
+\item Emit Verilog with \code{emitVerilog(new Comp())}, so you can synthesize it
+\item Read the generated Verilog code
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab4}{lab4}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lecture 3}
-\begin{itemize}
-\item Hardware generators
-\item Object-oriented hardware design
-\end{itemize}
-\end{frame}
+
 
 
 \begin{frame}[fragile]{Scala List for Enumeration}
@@ -468,7 +647,13 @@ val m = if (useA) Module(new VariantA())
 \end{itemize}
 \end{frame}
 
-% use this for the 4 unit version
+\begin{frame}[fragile]{Chisel has a Multiplexer}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/mux}
+\end{figure}
+\shortlist{../code/mux.txt}
+\end{frame}
+
 \begin{frame}[fragile]{Chisel has a Multiplexer}
 \begin{figure}
   \includegraphics[scale=\scale]{../figures/mux}
@@ -571,28 +756,6 @@ class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int)
 \end{itemize}
 \end{frame}
 
-
-%
-%
-%
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item TODO: s4noc connection is part of the generator story
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
-
-
-
 \begin{frame}[fragile]{Combinational (Truth) Table Generation}
 \begin{chisel}
 val arr = new Array[Bits](length)
@@ -645,6 +808,8 @@ val rom = Vec[Bits](arr)
 \item Do it also when using source control
 \item GitHub Actions
 \item I am doing it even for the Chisel book
+\item Code that does not contain a test \emph{does not exist}
+\item Chisel community does not accept a PR without a test
 \end{itemize}
 \end{frame}
 
@@ -659,25 +824,40 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab 3}
+
+\begin{frame}[fragile]{Project}
 \begin{itemize}
-\item Design a component with a generic parameter
-\item Emit Verilog with \code{emitVerilog(new Comp())}, you can synthesize it then on Thursday
-\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab3}{lab3}
+\item You shall start organizing into groups
+\begin{itemize}
+\item How shall we organize this?
+\item Google Docs? DTU Learn? GitHub?
+\end{itemize}
+\item Think about a project
+\item For inspiration, you can check Scott's students page
+\item It shall be a generator, not \emph{just} hardware code
+\item You shall try to explore Scrum methodology
+\item Have those weekly meetings on reporting
+\item We shall have some in the class
+\item The report is the README.md
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Lab 5}
+\begin{itemize}
+\item Design a component with a generic parameter
+\item Emit Verilog with \code{emitVerilog(new Comp())} to read the generated code
+\item README and setup is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab5}{lab5}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item Processors do not get much faster -- we need to design custom hardware
-\item We need a modern language for hardware/systems design for efficient/fast development
-\item Chisel builds on the power of object-oriented and functional Scala
-\item We shall write hardware generators
-\item We have a course at DTU on this topic this fall
+\item Agile development is about changes -- it shall be fun
+\item We use Scala to write hardware generators
+\item Next week: guest lecture on Clash for HW generators
 \end{itemize}
 \end{frame}
-
-
 \end{document}
 
 \begin{frame}[fragile]{Title}

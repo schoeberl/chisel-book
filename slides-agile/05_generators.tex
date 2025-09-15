@@ -1,0 +1,115 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+
+% Optional visual tweaks
+\tikzset{
+    >=Stealth,
+    every node/.style={rounded corners=2pt}
+}
+
+\title{Generators}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]{TODO}
+\begin{itemize}
+\item Have the FBI story
+\item See the links in email to Scott's pages
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Functional Generation}
+\begin{itemize}
+\item Anonymous functions, called \emph{function literal}
+\begin{chisel}
+  (param) => function body
+\end{chisel}
+\item A function for a minimum search
+\shortlist{../code/fun_min.txt}
+\item TODO: state the problem
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Minimal Function with Index}
+\begin{itemize}
+\item Was the example for Tjark's heap sort
+\shortlist{../code/fun_min2.txt}
+\item We need an extra bundle to hold both values
+\item A for loop is not so functional
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
+\begin{itemize}
+\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
+with second element is the index
+\item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
+\item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
+\shortlist{../code/fun_min3.txt}
+\item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Solution with a Vec}
+\begin{itemize}
+\item This results in a Chisel \code{Vec}
+\shortlist{../code/fun_min4.txt}
+\item
+\item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item TODO: s4noc connection is part of the generator story
+\item
+\item
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item We use Scala to write hardware generators
+\end{itemize}
+\end{frame}
+
+
+\end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
