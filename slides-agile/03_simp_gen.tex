@@ -383,7 +383,7 @@ def add(a: Int, b: Int): Int = a + b
 \end{chisel}
 \begin{itemize}
 \item Functions for repeated pieces of logic
-\item May contain state
+\item May contain state (not pure anymore)
 \item Functions may return \emph{hardware}
 \end{itemize}
 \end{frame}
@@ -464,7 +464,7 @@ def alu(func: Bits, op1: UInt, op2: UInt): Bits = {
 \end{frame}
 
 
-\begin{frame}[fragile]{A Test}
+\begin{frame}[fragile]{A Test with Expect}
 \begin{itemize}
 \item Poke values and \code{expect} some output
 \shortlist{../code/test_bench.txt}
@@ -544,7 +544,7 @@ for (j <- 0 until 32)
   cores(j) = Module(new CPU())
 \end{chisel}
 \begin{itemize}
-\item Use Scala array to collect components
+\item Use a Scala array, or a \code{Seq}, to collect components
 \item Generation with a Scala loop
 \end{itemize}
 \end{frame}
