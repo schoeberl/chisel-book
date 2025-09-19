@@ -16,107 +16,7 @@ Embedded Systems Engineering}
 \end{frame}
 
 \begin{frame}[fragile]{Outline}
-\begin{itemize}
-	 
-	What is testing for
-	Manual vs Automatic tests
-	What levels of tests exist
-		* Unit test
-		* Integration/system tests (discover bugs)
-		* Release testing (By outside people, makes sure things follow the requirements)
-		* Performance testing
-		* User testing
-		
-	TDD:
-		* Flow: 1) Identify functionality
-				2) Write test
-				3) run tests (should fail)
-				4) Implement functionality and refactor
-				5) run tests
-				6) Either succeed and go to 1) or fail and repeat 4)
-				
-		* Regression tests: All previous tests
-		* Can be used in unit tests and integration tests.
-		
-	Property Based testing:
-		* Many applications have infinite case space => cannot test all cases
-		* PBT tries to uncover classes of bugs through randomized data generation
-		* Strategy:
-			- Identify a property
-			- Define input data generator (only valid inputs)
-			- Define golden model
-			- Run many times
-		* When a bug is found, a unit/integration test (not property based) excercising that specific case is created.
-	
-	CI:
-	
-		* Tests are only useful if they are run.
-		* Problem: 
-			- People are forgetful, have different machines, do not have time, are lazy
-			- As projects grow, making sure everyone is running all tests becomes impossible.
-			- Tests may also become so complex and time-consuming that it is impractical to ask everyone to run them all
-			- Continuous integration solves the problem by automatic the running of tests
-			
-		* Solution:
-			- Have a server continuously run tests
-			- Pull requests ensure all tests succeed before code is merged
-		
-		* Benefits:
-			- Developers do not need to run all tests locally
-			- Can be repeated on all supported platforms
-			- Regressions are caught before being merged
-			- Master branch is always in a working state
-			
-		* Misc:
-			- Can run performance tests regularly
-			- Can also help with deployment
-			- Useful for single-person projects
-			
-	Systolic Array Priority List:
-		
-		* Sorting structure
-		* Push key and payload at the front
-		* Command propagates up the array, updating the ordering
-		* Pop smallest key and payload once every 2 cycles
-		* Used in e.g. network routers
-		* Low latency but expensive
-		* Easily configurable
-		
-		Commands:
-			* IDLE: Do nothing
-					
-			* PUSH: insert key/value pair into the array
-
-			* POP: extract a pair from the array
-			
-			* Push/Pop: Extract pair from array while push new pair to array
-			
-		* Should be configurable in key size, value size, and array length			
-			
-		Extension:
-			Values must be tracked in groups. 
-			each key may have multiple values
-			Each push may have varying number of values
-			newly pushed values must merge with previously pushed ones.
-	
-			Commands:
-				Push(0): do nothing
-				Pop(0): Pop lowest key/pairs
-				Push(x): Push x values with given key
-				Pop (x): Pop lowest key/pairs, push x values with given key
-				
-		* Should be configurable in max pair lengths
-		
-		* How should this be tested:
-			* Unit tests of array elements
-			* Integration tests of whole array
-			* Property based tests:
-				- If you push a value, you can eventually pop it back out
-				- If you push a set of values, you will pop them sorted
-				- Idling saves elements
-				- Extension: Successive elements of the same key come out in order
-
-\end{itemize}
+	 .
 \end{frame}
 
 \begin{frame}[fragile]{Agile Manifesto Focus}
@@ -138,9 +38,122 @@ Embedded Systems Engineering}
 
 \end{frame}
 
+\begin{frame}[fragile]{Intro}
+	What is testing for
+	Manual vs Automatic tests
+	What levels of tests exist
+		* Unit test
+		* Integration/system tests (discover bugs)
+		* Release testing (By outside people, makes sure things follow the requirements)
+		* Performance testing
+		* User testing
+\end{frame}
 
 
+\begin{frame}[fragile]{TDD}
+	* Flow: 1) Identify functionality
+			2) Write test
+			3) run tests (should fail)
+			4) Implement functionality and refactor
+			5) run tests
+			6) Either succeed and go to 1) or fail and repeat 4)
+	
+	* Regression tests: All previous tests
+	* Can be used in unit tests and integration tests.
+\end{frame}
 
+
+\begin{frame}[fragile]{Property Based testing}
+	* Many applications have infinite case space => cannot test all cases
+	* PBT tries to uncover classes of bugs through randomized data generation
+	* Strategy:
+		- Identify a property
+		- Define input data generator (only valid inputs)
+		- Define golden model
+		- Run many times
+	* When a bug is found, a unit/integration test (not property based) excercising that specific case is created.
+	
+\end{frame}
+
+
+\begin{frame}[fragile]{CI}
+	* Tests are only useful if they are run.
+	* Problem: 
+		- People are forgetful, have different machines, do not have time, are lazy
+		- As projects grow, making sure everyone is running all tests becomes impossible.
+		- Tests may also become so complex and time-consuming that it is impractical to ask everyone to run them all
+		- Continuous integration solves the problem by automatic the running of tests
+	
+	* Solution:
+		- Have a server continuously run tests
+		- Pull requests ensure all tests succeed before code is merged
+	
+	* Benefits:
+		- Developers do not need to run all tests locally
+		- Can be repeated on all supported platforms
+		- Regressions are caught before being merged
+		- Master branch is always in a working state
+	
+	* Misc:
+		- Can run performance tests regularly
+		- Can also help with deployment
+		- Useful for single-person projects
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Priority List}
+	Systolic Array Priority List:
+	
+	* Sorting structure
+	* Push key and payload at the front
+	* Command propagates up the array, updating the ordering
+	* Pop smallest key and payload once every 2 cycles
+	* Used in e.g. network routers
+	* Low latency but expensive
+	* Easily configurable
+\end{frame}
+
+
+\begin{frame}[fragile]{Commands}
+	* IDLE: Do nothing
+	
+	* PUSH: insert key/value pair into the array
+	
+	* POP: extract a pair from the array
+	
+	* Push/Pop: Extract pair from array while push new pair to array
+	
+	* Should be configurable in key size, value size, and array length	
+	
+\end{frame}
+
+
+\begin{frame}[fragile]{Extension}
+	Values must be tracked in groups. 
+	each key may have multiple values
+	Each push may have varying number of values
+	newly pushed values must merge with previously pushed ones.
+	
+	Commands:
+		Push(0): do nothing
+		Pop(0): Pop lowest key/pairs
+		Push(x): Push x values with given key
+		Pop (x): Pop lowest key/pairs, push x values with given key
+	
+	* Should be configurable in max pair lengths
+\end{frame}
+
+\begin{frame}[fragile]{Testing}
+	* How should this be tested:
+	* Unit tests of array elements
+	* Integration tests of whole array
+	* Property based tests:
+		- If you push a value, you can eventually pop it back out
+		- If you push a set of values, you will pop them sorted
+		- Idling saves elements
+		- Extension: Successive elements of the same key come out in order
+\end{frame}
 
 \end{document}
 
