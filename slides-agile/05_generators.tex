@@ -28,10 +28,38 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{TODO}
 \begin{itemize}
 \item Have the FBI story
-\item See the links in email to Scott's pages
+\item See the links in the email to Scott's pages
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Functions with More Outputs}
+\begin{itemize}
+\item We use functions to generate hardware
+\item The return value is the \emph{output} of that \emph{module}
+\item A function usually has a single return value
+\item Use a Scala tuple for more output \emph{ports}
+\shortlist{../code/fun_comp.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Functions with More Outputs}
+\begin{itemize}
+\item Access the two output wires with the \code{.\_n} syntax.
+\shortlist{../code/fun_comp_use1.txt}
+\item Or directly decompose the tuple
+\shortlist{../code/fun_comp_use2.txt}
+\item Functions can be declared as part of a \code{Module}
+\item Better place them into a Scala object collecting utility functions
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lab two Weeks Ago}
+\begin{itemize}
+\item Write a search for the minimum circuit (with \code{treeReduce()})
+\item Add the generation of the index of the minimum value
+\item This was a problem formulated by Microchip
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Functional Generation}
 \begin{itemize}
@@ -41,7 +69,7 @@ Embedded Systems Engineering}
 \end{chisel}
 \item A function for a minimum search
 \shortlist{../code/fun_min.txt}
-\item TODO: state the problem
+\item This was a very short exercise - let us extend this
 \end{itemize}
 \end{frame}
 
@@ -57,12 +85,12 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{We Can Use Tuples and zipWithIndex}
 \begin{itemize}
-\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples
-with second element is the index
+\item \code{zipWithIndex} transforms the original sequence to a sequence of tuples with second element is the index
 \item Use \code{map} to translate from Scala \code{Int} to Chisel \code{UInt}
 \item \code{reduce} does the minimum function, actually called 2 times (we could optimize this)
 \shortlist{../code/fun_min3.txt}
 \item The result is a Scala \code{Vector} and not a Chisel \code{Vec}
+\item No \code{reduceTree} available on a Scala \code{Vector}
 \end{itemize}
 \end{frame}
 
@@ -70,13 +98,81 @@ with second element is the index
 \begin{itemize}
 \item This results in a Chisel \code{Vec}
 \shortlist{../code/fun_min4.txt}
-\item
+\item \code{MixedVecInit} is like a \code{Bundle}, but indexable
 \item We should add a \code{reduceTree} to the Scala sequence version (\code{TraversableOnce})
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}[fragile]{Type Conversion}
+\begin{itemize}
+\item Sometimes we would like to see a value in different types
+\item All types represent a collection of bits
+\item Example to package 4 bytes into a 32-bit \code{UInt}
+\shortlist{../code/convert_vec2uint.txt}
+\item And converting it back to a \code{Vec}
+\shortlist{../code/convert_uint2vec.txt}
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{Type Conversion}
+\begin{itemize}
+\item Convert a \code{Bundle} to a \code{UInt}
+\shortlist{../code/convert_bundle2uint.txt}
+\item A \code{UInt} can be converted (back) to a bundle
+\shortlist{../code/convert_uint2bundle.txt}
+\item Initialize to 0 on a conversion
+\shortlist{../code/convert_zero2bundle.txt}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Simple Parameters}
+\begin{itemize}
+\item Simplest way is bit width
+\item You have seen this, also in Verilog or VHDL
+\shortlist{../code/param_adder.txt}
+\item A bit more interesting is using case classes for parameters
+\shortlist{../code/case_class.txt}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Case Classes}
+\begin{itemize}
+\item Reading the immutable fields
+\shortlist{../code/case_class_use.txt}
+\item Adding checking code to case classes
+\shortlist{../code/case_class_save.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item
+\item
+\item
+\end{itemize}
+\end{frame}
 
 
 
@@ -87,16 +183,6 @@ with second element is the index
 \item
 \end{itemize}
 \end{frame}
-
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item
-\item
-\item
-\end{itemize}
-\end{frame}
-
-
 
 
 \begin{frame}[fragile]{Summary}

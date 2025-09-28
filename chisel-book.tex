@@ -4594,7 +4594,7 @@ compares two inputs and has two outputs.
 
 \shortlist{code/fun_comp.txt}
 
-\noindent With the parenthesis, we wrap the two wires that are connected to the outputs of
+\noindent With the parentheses, we wrap the two wires that are connected to the outputs of
 the comparator circuit into a Scala tuple.
 
 Creating a comparator component
@@ -4760,9 +4760,9 @@ of the Chisel module. However, if we pass those parameters through several const
 it might become tedious to use them. Furthermore, we need to edit several places when changing the number or type of
 parameters.
 
-Scala has a very light-weight construct to package several fields into a class:
+Scala has a very lightweight construct to package several fields into a class:
 a \myref{https://docs.scala-lang.org/tour/case-classes.html}{case classes}.
-Case classes are like regular Scala classes but with a very light-weight definition.
+Case classes are like regular Scala classes, but with a very light-weight definition.
 The following code defines a case class to represent three parameters. It might be used for
 a device with a transmit (tx) buffer and a receive buffer(rx) of a certain width.
 
