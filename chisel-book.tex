@@ -4892,9 +4892,9 @@ port where we can read all registers in the tester. However, at Verilog generati
 we do not want this expensive extra port.
 
 Listing~\ref{lst:reg:file} shows such a register file. It has as parameter \code{debug}
-as a Scala \code{Boolean}. In the definition of the IO bundle we use that parameter
+as a Scala \code{Boolean}. In the definition of the IO bundle, we use that parameter
 to either generate that port or not. In Scala, this is represented as an \code{Option}.
-An option can return a value wrapped into \code{Some} or represent the missing value
+An option can return a value wrapped in \code{Some} or represent the missing value
 as a \code{None}. In the main body of the module, we extract the value of the option
 with \code{get}.
 

@@ -25,14 +25,17 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
+\begin{frame}[fragile]{Overview}
 \begin{itemize}
-\item Have the FBI story
-\item See the links in the email to Scott's pages
+\item Functions with more outputs
+\item Solution to the min/max lab
+\item Type conversions
+\item Parameters (simple and types)
+\item More Scala for generators
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Functions with More Outputs}
+\begin{frame}[fragile]{Functions with Multiple Outputs}
 \begin{itemize}
 \item We use functions to generate hardware
 \item The return value is the \emph{output} of that \emph{module}
@@ -50,6 +53,7 @@ Embedded Systems Engineering}
 \shortlist{../code/fun_comp_use2.txt}
 \item Functions can be declared as part of a \code{Module}
 \item Better place them into a Scala object collecting utility functions
+\item Functions can serve as ligthweight modules
 \end{itemize}
 \end{frame}
 
@@ -148,46 +152,198 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Module with Type Parameters}
 \begin{itemize}
-\item
-\item
-\item
+\item Assume a network-on-chip
+\item Moves data between processing cores
+\item We want to \emph{parameterize} that data type
+\item Add a type parameter \code{T} to the Module constructor
+\shortlist{../code/param_mod.txt}
 \end{itemize}
+
+
 \end{frame}
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Use that Router}
 \begin{itemize}
-\item
-\item
-\item
-\end{itemize}
-\end{frame}
-
-
-
-
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item
-\item
-\item
+\item Define data type we want to route with
+\shortlist{../code/param_mod_type.txt}
+\item Pass an instance of that bundle to the constructor of the router
+\shortlist{../code/param_mod_use.txt}
 \end{itemize}
 \end{frame}
 
 
 
-\begin{frame}[fragile]{XXX}
+
+\begin{frame}[fragile]{Parameterized Bundles}
 \begin{itemize}
-\item TODO: s4noc connection is part of the generator story
-\item
-\item
+\item We still have vectors of addresses and the payload
+\item We want to parametrize a Bundle
+\shortlist{../code/param_bundle_issue.txt}
+\item \code{dt} is the type parameter, which we use for \code{cloneType}
+\item However, it is a public field, in the way for using in a \code{Vec}
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}[fragile]{Parameterized Bundles}
+\begin{itemize}
+\item As a fix (workaround) make it private
+\shortlist{../code/param_bundle.txt}
+\item Define our router ports
+\shortlist{../code/param_mod2.txt}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Using Parameterized Bundles}
+\begin{itemize}
+\item Instantiate that router with a \code{Port} that takes
+a \code{Payload} as a parameter
+\shortlist{../code/param_mod_use2.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala Option}
+\begin{itemize}
+\item Scala's \code{Option[T]} is a wrapper around type T
+\item Potential non-existence
+\item Is either \code{Some(x)} or \code{None}
+\begin{chisel}
+val opt: Option[Int] = Some(123)
+if (o.isDefined)
+  println(o.get)
+else
+  println("None")
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Optional Ports}
+\begin{itemize}
+\item IO ports may depend on configuration
+\item In Scala, this is represented as an \code{Option}
+\item Return a value wrapped in \code{Some} or represent the missing value
+as a \code{None}
+\item Could be used for debugging
+\shortlist{../code/register_file_test.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Register File}
+\begin{chisel}
+class RegisterFile(debug: Boolean) extends Module {
+  val io = IO(new Bundle {
+    val rs1 = Input(UInt(5.W))
+    val rs2 = Input(UInt(5.W))
+...
+    val rs2Val = Output(UInt(32.W))
+    val dbgPort = if (debug)
+      Some(Output(Vec(32, UInt(32.W)))) else None
+  })
+  val regfile = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))
+  io.rs1Val := regfile(io.rs1)
+  io.rs2Val := regfile(io.rs2)
+  when(io.wrEna) {
+    regfile(io.rd) := io.wrData
+  }
+  if (debug) {
+    io.dbgPort.get := regfile
+  }}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Scala \code{tabulate}}
+\begin{itemize}
+\item More general than \code{fill}
+\item Produce a new collection by calling an anonymous function
+\item Index is the single argument
+\item Can use the \_ wildcat
+\begin{chisel}
+Seq.fill(5)(0)
+Seq.tabulate(5)(i => i * i)
+Seq.tabulate(5)(_ + 1)
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Scala's \code{apply()} Method}
+\begin{itemize}
+\item Create a new instance without \code{new}
+\begin{chisel}
+val p = Person("Jope Hacker")
+\end{chisel}
+\item is translated during compilation to
+\begin{chisel}
+val p = Person.apply("Jope Hacker")
+\end{chisel}
+\item \code{apply()} is also used as access function for arrays
+\item No special syntax for arrays
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scala's \code{apply()} Method}
+\begin{itemize}
+\item A \emph{companion object} in Scala is an object
+\begin{itemize}
+\item Declared in the same file as a class,
+\item and has the same name as the class
+\end{itemize}
+\item Add an \code{apply()} method to the companion object
+\begin{chisel}
+class Person {
+    var name = ""
+}
+
+object Person {
+    def apply(name: String): Person = {
+        var p = new Person
+        p.name = name
+        p
+    }
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Factory Methods}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built-in components, such as \code{Mux}
+\end{itemize}
+\begin{chisel}
+val myAdder = Adder(x, y)
+\end{chisel}
+\begin{itemize}
+\item A little bit more work on the component side
+\item Define an \code{apply} method on the companion object that returns the component (output port)
+\end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
+\end{frame}
+
+%\begin{frame}[fragile]{XXX}
+%\begin{itemize}
+%\item TODO: s4noc connection is part of the generator story
+%\item
+%\end{itemize}
+%\end{frame}
 
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item We use Scala to write hardware generators
+\item Get started with your project
+\item Next week: guest lecture by Emad on testing and CI
 \end{itemize}
 \end{frame}
 
