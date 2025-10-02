@@ -20,6 +20,8 @@ jobs:
         distribution: 'temurin'
     - name: Setup sbt
       uses: sbt/setup-sbt@v1
+    - name: apt update
+      run: sudo apt update
     - name: Setup Verilator
       run: sudo apt-get install verilator
     - name: Setup z3
