@@ -19,7 +19,7 @@ Embedded Systems Engineering}
 	 .
 \end{frame}
 
-\begin{frame}[fragile]{Agile Manifesto Focus}
+\begin{frame}{Agile Manifesto Focus}
 
 \begin{centering}
 	
@@ -38,121 +38,682 @@ Embedded Systems Engineering}
 
 \end{frame}
 
-\begin{frame}[fragile]{Intro}
-	What is testing for
-	Manual vs Automatic tests
-	What levels of tests exist
-		* Unit test
-		* Integration/system tests (discover bugs)
-		* Release testing (By outside people, makes sure things follow the requirements)
-		* Performance testing
-		* User testing
+\begin{frame}{Introduction}
+	
+	\begin{itemize}
+		\item What is testing?
+		\pause
+		\begin{itemize}
+			\item Evaluating if a component/system behaves as expected \onslide<5->{\textbf{by the developer}}
+			\pause
+			\item Verification: \pause Evaluating whether a system meets its specifications
+			\pause
+			\item Less intensive \& extensive for quick development
+		\end{itemize}
+		
+		\pause
+		\item Why test? 
+		\begin{itemize}
+			\item Verify functionality
+			\item Catch errors \& bugs
+			\pause
+			\item Document requirements
+			\item Catch regressions
+			\item Improve collaboration through iteration
+		\end{itemize}
+		
+		\pause
+		\item Continuous integration:
+		\begin{itemize}
+			\item Centralized server as single source of truth
+			\item Runs all tests on every merge/pull request (PR)
+			\item Ensures project is always in a working state
+			\item Maybe: Manage deployments (continuous deployment)
+		\end{itemize}
+		
+		
+	\end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{TDD}
-	* Flow: 1) Identify functionality
-			2) Write test
-			3) run tests (should fail)
-			4) Implement functionality and refactor
-			5) run tests
-			6) Either succeed and go to 1) or fail and repeat 4)
+\begin{frame}{Running Example: FIFO Queue }
 	
-	* Regression tests: All previous tests
-	* Can be used in unit tests and integration tests.
-\end{frame}
-
-
-\begin{frame}[fragile]{Property Based testing}
-	* Many applications have infinite case space => cannot test all cases
-	* PBT tries to uncover classes of bugs through randomized data generation
-	* Strategy:
-		- Identify a property
-		- Define input data generator (only valid inputs)
-		- Define golden model
-		- Run many times
-	* When a bug is found, a unit/integration test (not property based) excercising that specific case is created.
-	
-\end{frame}
-
-
-\begin{frame}[fragile]{CI}
-	* Tests are only useful if they are run.
-	* Problem: 
-		- People are forgetful, have different machines, do not have time, are lazy
-		- As projects grow, making sure everyone is running all tests becomes impossible.
-		- Tests may also become so complex and time-consuming that it is impractical to ask everyone to run them all
-		- Continuous integration solves the problem by automatic the running of tests
-	
-	* Solution:
-		- Have a server continuously run tests
-		- Pull requests ensure all tests succeed before code is merged
-	
-	* Benefits:
-		- Developers do not need to run all tests locally
-		- Can be repeated on all supported platforms
-		- Regressions are caught before being merged
-		- Master branch is always in a working state
-	
-	* Misc:
-		- Can run performance tests regularly
-		- Can also help with deployment
-		- Useful for single-person projects
-
-\end{frame}
-
-
-\begin{frame}[fragile]{Priority List}
-	Systolic Array Priority List:
-	
-	* Sorting structure
-	* Push key and payload at the front
-	* Command propagates up the array, updating the ordering
-	* Pop smallest key and payload once every 2 cycles
-	* Used in e.g. network routers
-	* Low latency but expensive
-	* Easily configurable
-\end{frame}
-
-
-\begin{frame}[fragile]{Commands}
-	* IDLE: Do nothing
-	
-	* PUSH: insert key/value pair into the array
-	
-	* POP: extract a pair from the array
-	
-	* Push/Pop: Extract pair from array while push new pair to array
-	
-	* Should be configurable in key size, value size, and array length	
+	\textbf{What is a FIFO Queue?}
+	\begin{itemize}
+		\item First-In, First-Out
+		\item First element added is the first one removed
+		\item Commonly used for buffering and data flow control
+	\end{itemize}
+	\onslide<2>{
+		\textbf{Applications}
+		\begin{itemize}
+			\item Temporary storage between producer and consumer
+			\item Clock domain crossing
+			\item Managing data streams in communication
+		\end{itemize}
+	}
+	\vspace{1em}
+	\begin{center}
+		\begin{tikzpicture}[scale=0.9]
+			% Draw FIFO boxes
+			\foreach \i in {0,...,4} {
+				\node[thick, rectangle,draw,minimum height=25, minimum width=25] (d\i) at (\i*1.4+0.5,0.5) {D\i};
+			}
+			\draw[<->, thick] (d0.east) -- (d1.west) {};
+			\draw[<->, thick] (d1.east) -- (d2.west) {};
+			\draw[<->, thick] (d2.east) -- (d3.west) {};
+			\draw[<->, thick] (d3.east) -- (d4.west) {};
+			
+			% Arrows
+			\draw[->, thick] ($(d0.west) + (-1.2,-0.2)$) -- ($(d0.west) + (0,-0.2)$) node[midway, below] {Input};
+			\draw[->, thick] ($(d0.west) + (-1.2,0)$) -- ($(d0.west) + (0,0)$) node {};
+			\draw node at ($(d0.west) + (-1.8,0)$){Push};
+			\draw[<-, thick] ($(d0.west) + (-1.2,0.2)$) -- ($(d0.west) + (0,0.2)$) node[midway, above] {Full};
+			
+			\draw[->, thick] ($(d4.east) + (0,-0.2)$) -- ($(d4.east) + (1.4,-0.2)$) node[midway, below] {Output};
+			\draw[<-, thick] ($(d4.east) + (0,0)$) -- ($(d4.east) + (1.4,0)$) node {};
+			\draw node at ($(d4.east) + (1.9,0)$){Pop};
+			\draw[->, thick] ($(d4.east) + (0,0.2)$) -- ($(d4.east) + (1.4,0.2)$) node[midway, above] {Empty};
+			
+		\end{tikzpicture}
+	\end{center}
 	
 \end{frame}
 
-
-\begin{frame}[fragile]{Extension}
-	Values must be tracked in groups. 
-	each key may have multiple values
-	Each push may have varying number of values
-	newly pushed values must merge with previously pushed ones.
-	
-	Commands:
-		Push(0): do nothing
-		Pop(0): Pop lowest key/pairs
-		Push(x): Push x values with given key
-		Pop (x): Pop lowest key/pairs, push x values with given key
-	
-	* Should be configurable in max pair lengths
+\begin{frame}{Testing Levels}
+	\begin{enumerate}
+		\item \textbf{Unit Tests}
+		\begin{itemize}
+			\item Testing individual components in isolation
+			\item Exercise basic units of functionality
+		\end{itemize}
+		
+		\item \textbf{Integration Tests}
+		\begin{itemize}
+			\item Testing component interaction
+			\item Compound units of functionality
+		\end{itemize}
+		
+		\item \textbf{System Tests}
+		\begin{itemize}
+			\item Testing the complete system
+			\item Use-case/user story tests
+		\end{itemize}
+		
+		\item \textbf{Acceptance Tests}
+		\begin{itemize}
+			\item Testing by the client
+		\end{itemize}
+		
+		\item Non-functional tests: Speed, size, documentation
+	\end{enumerate}
 \end{frame}
 
-\begin{frame}[fragile]{Testing}
-	* How should this be tested:
-	* Unit tests of array elements
-	* Integration tests of whole array
-	* Property based tests:
-		- If you push a value, you can eventually pop it back out
-		- If you push a set of values, you will pop them sorted
-		- Idling saves elements
-		- Extension: Successive elements of the same key come out in order
+\begin{frame}{Testing Levels - Unit Tests}
+	
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\begin{itemize}
+				\item Identify limited functionality
+				\item Create tests covering the functionality
+				\item Run and verified locally by developers
+			\end{itemize}
+		\end{column}
+		\begin{column}{0.5\textwidth}
+			\onslide<2->{
+				\begin{center}
+					\begin{tikzpicture}[scale=0.9]
+						
+						\node[thick, rectangle,draw,minimum height=25, minimum width=25] (d0) at (0,0) {D0};
+						
+						% Arrows
+						\draw[->, thick] ($(d0.west) + (-1.2,-0.2)$) -- ($(d0.west) + (0,-0.2)$) node[midway, below] {Input};
+						\draw[->, thick] ($(d0.west) + (-1.2,0)$) -- ($(d0.west) + (0,0)$) node {};
+						\draw node at ($(d0.west) + (-1.8,0)$){Push};
+						\draw[<-, thick] ($(d0.west) + (-1.2,0.2)$) -- ($(d0.west) + (0,0.2)$) node[midway, above] {Full};
+						
+						\draw[->, thick] ($(d0.east) + (0,-0.2)$) -- ($(d0.east) + (1.4,-0.2)$) node[midway, below] {Output};
+						\draw[<-, thick] ($(d0.east) + (0,0)$) -- ($(d0.east) + (1.4,0)$) node {};
+						\draw node at ($(d0.east) + (1.9,0)$){Pop};
+						\draw[->, thick] ($(d0.east) + (0,0.2)$) -- ($(d0.east) + (1.4,0.2)$) node[midway, above] {Empty};
+						
+					\end{tikzpicture}
+				\end{center}
+			}
+		\end{column}
+	\end{columns}
+	\pause
+	\textbf{FIFO Unit Tests (10):} Exercise: 3 mins
+	\pause
+	\begin{itemize}
+		\item Initialized to empty
+		\item On push becomes full \& !empty
+		\item On pop becomes !full \& empty
+		\item If empty, pop does nothing (pops zero?)
+		\item If empty, push updates next pop
+		\item If full, can pop
+		\item If full, push doesn't change next pop
+		\item Values pushed will be popped next cycle
+		\item Can store indefinitely
+		\item Can push and pop in simultaneously (forwarding?)
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Testing Levels - Integration Tests}
+	
+	\begin{itemize}
+		\item Identify common module interactions
+		\item Create tests covering the functionality
+		\item Run by either developers or dedicated testers
+	\end{itemize}
+	\pause
+	\textbf{FIFO Tests (9):} Exercise: 5 mins
+	\onslide<3->{
+		\begin{itemize}
+			\item Initialized to empty
+			\item On push becomes !empty
+			\item On pop becomes !full
+			\item Pushed item will pop eventually
+			\item List of items will pop in pushed order
+			\item If full, can pop and push simultaneously
+			\item Can store indefinitely
+			\item Items get to the front without popping
+			\item Two lists pushed eventually become one list
+		\end{itemize}
+	}
+	\onslide<2->{
+		\vspace{1em}
+		\begin{center}
+			\begin{tikzpicture}[scale=0.9]
+				% Draw FIFO boxes
+				\foreach \i in {0,...,4} {
+					\node[thick, rectangle,draw,minimum height=25, minimum width=25] (d\i) at (\i*1.4+0.5,0.5) {D\i};
+				}
+				\draw[<->, thick] (d0.east) -- (d1.west) {};
+				\draw[<->, thick] (d1.east) -- (d2.west) {};
+				\draw[<->, thick] (d2.east) -- (d3.west) {};
+				\draw[<->, thick] (d3.east) -- (d4.west) {};
+				
+				% Arrows
+				\draw[->, thick] ($(d0.west) + (-1.2,-0.2)$) -- ($(d0.west) + (0,-0.2)$) node[midway, below] {Input};
+				\draw[->, thick] ($(d0.west) + (-1.2,0)$) -- ($(d0.west) + (0,0)$) node {};
+				\draw node at ($(d0.west) + (-1.8,0)$){Push};
+				\draw[<-, thick] ($(d0.west) + (-1.2,0.2)$) -- ($(d0.west) + (0,0.2)$) node[midway, above] {Full};
+				
+				\draw[->, thick] ($(d4.east) + (0,-0.2)$) -- ($(d4.east) + (1.4,-0.2)$) node[midway, below] {Output};
+				\draw[<-, thick] ($(d4.east) + (0,0)$) -- ($(d4.east) + (1.4,0)$) node {};
+				\draw node at ($(d4.east) + (1.9,0)$){Pop};
+				\draw[->, thick] ($(d4.east) + (0,0.2)$) -- ($(d4.east) + (1.4,0.2)$) node[midway, above] {Empty};
+				
+			\end{tikzpicture}
+		\end{center}
+	}
+\end{frame}
+
+\begin{frame}{Test-Driven Development (TDD)}
+	
+	\textbf{What is TDD?}
+	\begin{itemize}
+		\item A software development approach where tests are written \textbf{before} the code
+		\item Follows a short cycle: \textbf{Red → Green → Refactor}
+	\end{itemize}
+	\pause
+	\vspace{1em}
+	\textbf{TDD Cycle}
+	\begin{enumerate}
+		\item \textbf{Write a test} for a small piece of functionality
+		\item \textbf{Run the test} – it should fail (Red)
+		\item \textbf{Write the code} to make the test pass (Green)
+		\item \textbf{Refactor} the code while keeping the test passing
+	\end{enumerate}
+	\pause
+	\vspace{1em}
+	\textbf{Benefits in Agile Design}
+	\begin{itemize}
+		\item Encourages modular, testable design
+		\item Provides immediate feedback and confidence in changes
+		\item Supports continuous integration and rapid iteration
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Importance of Testable Design}
+	
+	\textbf{Why Design for Testability?}
+	\begin{itemize}
+		\item \textbf{Early Bug Detection:} Easier to identify and fix issues during development
+		\item \textbf{Supports Automation:} Enables integration with CI
+		\item \textbf{Improves Maintainability:} Modular and testable components are easier to update and refactor
+		\item \textbf{Enables Agile Practices:} Prerequisite for iterative, feedback-driven development
+	\end{itemize}
+	\pause
+	
+	\textbf{In Digital Design Context:}
+	\begin{itemize}
+		\item Use of simulation testbenches for modules like FIFOs
+		\item Design-for-Testability (DFT) features:
+		\begin{itemize}
+			\item Scan chains for test setup and verification
+			\item Built-in self-test (BIST)
+		\end{itemize}
+		\item Clear separation of control and data paths for easier verification
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Scan Chain - FIFO}
+	\begin{tikzpicture}[scale=0.9]
+		% Draw FIFO boxes
+		\foreach \i in {0,...,4} {
+			\node[thick, rectangle,draw,minimum height=25, minimum width=25] (d\i) at (\i*1.4+0.5,0.5) {D\i};
+		}
+		
+		% FIFO data flow arrows
+		\draw[<->, thick] (d0.east) -- (d1.west);
+		\draw[<->, thick] (d1.east) -- (d2.west);
+		\draw[<->, thick] (d2.east) -- (d3.west);
+		\draw[<->, thick] (d3.east) -- (d4.west);
+		
+		% Input/Output arrows
+		\draw[->, thick] ($(d0.west) + (-1.2,-0.2)$) -- ($(d0.west) + (0,-0.2)$) node[midway, below] {Input};
+		\draw[->, thick] ($(d0.west) + (-1.2,0)$) -- ($(d0.west) + (0,0)$);
+		\node at ($(d0.west) + (-1.8,0)$){Push};
+		\draw[<-, thick] ($(d0.west) + (-1.2,0.2)$) -- ($(d0.west) + (0,0.2)$) node[midway, above] {Full};
+		
+		\draw[->, thick] ($(d4.east) + (0,-0.2)$) -- ($(d4.east) + (1.4,-0.2)$) node[midway, below] {Output};
+		\draw[<-, thick] ($(d4.east) + (0,0)$) -- ($(d4.east) + (1.4,0)$);
+		\node at ($(d4.east) + (1.9,0)$){Pop};
+		\draw[->, thick] ($(d4.east) + (0,0.2)$) -- ($(d4.east) + (1.4,0.2)$) node[midway, above] {Empty};
+		
+		% Scan chain path (dashed line)
+		\draw[->, dashed, thick, red] ($(d0.south) + (-1.2,-0.6)$) -- ($(d0.south) + (0,-0.3)$);
+		\draw[->, dashed, thick, red] ($(d0.south) + (0,-0.3)$) -- ($(d1.south) + (0,-0.3)$);
+		\draw[->, dashed, thick, red] ($(d1.south) + (0,-0.3)$) -- ($(d2.south) + (0,-0.3)$);
+		\draw[->, dashed, thick, red] ($(d2.south) + (0,-0.3)$) -- ($(d3.south) + (0,-0.3)$);
+		\draw[->, dashed, thick, red] ($(d3.south) + (0,-0.3)$) -- ($(d4.south) + (0,-0.3)$);
+		\draw[->, dashed, thick, red] ($(d4.south) + (0,-0.3)$) -- ($(d4.south) + (1,-0.6)$);
+		
+		% Scan input/output labels
+		\node[below, red] at ($(d0.south) + (-2,-0.5)$) {Scan In};
+		\node[below, red] at ($(d4.south) + (2,-0.5)$) {Scan Out};
+	\end{tikzpicture}
+	
+	\pause
+	\centering
+	\vspace{3em}
+	How does the scan chain change testing?
+\end{frame}
+
+\begin{frame}{Property-Based Testing (PBT)}
+	
+	\textbf{Why Property-Based Testing?}
+	\begin{itemize}
+		\item Many systems have an \textbf{infinite input space} — it's impractical to test all possible cases manually
+		\item PBT helps uncover \textbf{classes of bugs} by generating a wide range of random, valid inputs
+	\end{itemize}
+	\pause
+	\vspace{1em}
+	\textbf{Core Strategy:}
+	\begin{enumerate}
+		\item \textbf{Identify a property} that should always hold (e.g., "push followed by pop returns the same value")
+		\item \textbf{Define an input generator} that produces only valid inputs
+		\item \textbf{Implement a reference (golden) model} to compare expected behavior
+		\item \textbf{Run the test many times} with randomized inputs
+	\end{enumerate}
+	\pause
+	\vspace{1em}
+	\textbf{When a bug is found:}
+	\begin{itemize}
+		\item The failing input is \textbf{shrunk} to a minimal counterexample
+		\item A new \textbf{unit or integration test} is created to capture and prevent regression
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Property-Based Testing in Chisel}
+	\begin{itemize}
+		\item Use of ScalaCheck for PBT
+		\item Verifying hardware modules with randomized inputs
+	\end{itemize}
+	
+	\vspace{1em}
+	
+	\begin{columns}
+		\begin{column}{0.6\textwidth}
+	\textbf{Example:}
+	\begin{verbatim}
+property("Push then pop") = 
+forAll { (in: UInt) =>
+	test(new FifoBlock()) { c =>
+		c.io.push.poke(true.B)
+		c.io.inputs.poke(in)
+		c.clock.step()
+		c.io.push.valid.poke(false.B)
+		c.io.pop.poke(true.B)
+		c.io.output.expect(in)
+		c.clock.step()
+		c.io.output.expect(0)
+	}
+}
+	\end{verbatim}
+	\end{column}
+	\begin{column}{0.4\textwidth}
+		\textbf{Key Points:}
+		\begin{itemize}
+			\item \texttt{forAll} generates random valid inputs
+			\item The property asserts that pop returns the pushed value
+			\item Failing cases are minimized and can be turned into regression tests
+		\end{itemize}
+	\end{column}
+	\end{columns}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Example: Push/pop list}
+	\scriptsize
+	\begin{verbatim}
+		property("FIFO preserves order of items") = 
+		forAll { (depth: Int, inputs: List[Int]) =>
+			whenever(depth > 0 && depth <= 32 && inputs.length <= depth) {
+				test(new MyFifo(depth)) { c =>
+					// Enqueue all elements
+					for (in <- inputs) {
+						c.io.push.poke(true.B)
+						c.io.input.poke(in.U)
+						c.clock.step()
+					}
+					while (c.io.empty.peek().litToBoolean) {
+						c.clock.step()
+					}
+					
+					// Dequeue and check order
+					for (expected <- inputs) {
+						c.io.pop.poke(true.B)
+						c.io.output.expect(expected.U)
+						c.clock.step()
+					}
+				}
+			}
+		}
+	\end{verbatim}
+	
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{Arbitrary} and Shrinking}
+	
+	\textbf{Arbitrary}
+	\begin{itemize}
+		\item A type class used to define how to generate random values
+		\item Default \texttt{Arbitrary} instances for common types (e.g., \texttt{Int}, \texttt{List[Int]})
+		\item Define custom generators by creating your own \texttt{Arbitrary} instances
+	\end{itemize}
+	\pause
+	\vspace{0.5em}
+	\textbf{Example: Custom \texttt{Arbitrary} for Bounded Lists}
+	\begin{verbatim}
+implicit val smallListArb: Arbitrary[List[Int]] = 
+Arbitrary {
+	Gen.listOf(Gen.choose(0, 255)).suchThat(_.length <= 8)
+}
+	\end{verbatim}
+	\pause
+	\textbf{Shrinking}
+	\begin{itemize}
+		\item Tries to find the \textbf{smallest failing input}
+		\item Helps identify minimal failures
+	\end{itemize}
+	\textbf{Tip:} Override default shrinking  using \texttt{Shrink}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Getting Started with ScalaCheck in Chisel}
+\scriptsize
+\begin{enumerate}
+	
+	\item \textbf{Add ScalaCheck to \texttt{build.sbt}:}
+	\begin{verbatim}
+		libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.19.0" % Test
+	\end{verbatim}
+	
+	\item \textbf{Import Required Packages:}
+	\begin{verbatim}
+		import org.scalacheck._
+		import org.scalacheck.Prop.forAll
+	\end{verbatim}
+	
+	\item \textbf{Create a ScalaCheck Property Class:}
+	\begin{verbatim}
+		class FifoProps extends Properties("FIFO") with ChiselScalatestTester {
+			property("basic enqueue/dequeue") = forAll { (in: Int) =>
+				test(new MyFifo(depth = 4)) { c =>
+					...
+				}
+			}
+		}
+	\end{verbatim}
+	
+	\item \textbf{Run with \texttt{sbt test}}
+	
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Continuous Integration (CI): Motivation}
+	
+	\textbf{Tests are only useful if they are run!}
+	
+	\vspace{1em}
+	\textbf{The Problem:}
+	\begin{itemize}
+		\item Developers may forget to run tests
+		\item Different machines = inconsistent environments
+		\item Tests can be time-consuming or complex
+		\item As teams grow, ensuring everyone runs all tests becomes impractical
+	\end{itemize}
+	\pause
+	\vspace{1em}
+	\textbf{The Solution:}
+	\begin{itemize}
+		\item Use a CI server to automatically run tests on every change
+		\item Integrate with version control (e.g., GitHub Actions, GitLab CI)
+		\item Enforce test success before merging pull requests
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Continuous Integration (CI): Benefits and Extras}
+	\textbf{Key Benefits:}
+	\begin{itemize}
+		\item Developers don’t need to run all tests locally
+		\item Tests run in a clean, consistent environment
+		\item Regressions are caught \textbf{before} merging
+		\item Ensures the \texttt{master} branch is always in a working state
+	\end{itemize}
+	
+	\vspace{0.5em}
+	\textbf{Additional Advantages:}
+	\begin{itemize}
+		\item Run performance or stress tests regularly
+		\item Automate builds, documentation, and deployments
+		\item Even useful for solo developers to avoid regressions
+	\end{itemize}
+	
+	\vspace{0.5em}
+	\textbf{CI Tools:}
+	\begin{itemize}
+		\item GitHub Actions, GitLab CI/CD, Jenkins, CircleCI, Travis CI
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[fragile]{Setting Up GitHub Actions CI for Chisel}
+	\scriptsize
+	
+	\textbf{1. Create Workflow File:} \\
+	In your repo, create the file: \texttt{.github/workflows/ci.yml}
+	
+	\pause
+	\begin{columns}
+		\begin{column}{0.5\textwidth}
+			\textbf{2. Example \texttt{ci.yml} for Chisel Project:}
+			\begin{verbatim}
+name: CI
+  on:
+    pull_request:
+    push:
+  jobs:
+    test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+      - name: Setup sbt launcher
+        uses: sbt/setup-sbt@v1
+      - name: Build and Test
+        run: sbt test
+			\end{verbatim}
+		\end{column}
+		\begin{column}{0.4\textwidth}
+	
+			\pause
+			\textbf{3. Commit and Push:}
+			\begin{itemize}
+				\item Automatically run on each push or PR
+				\item Check the \texttt{Actions} tab for results
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	
+\end{frame}
+
+\begin{frame}{Lab session: Priority List}
+	
+	\textbf{Systolic Array Priority List}
+	
+	\begin{itemize}
+		\item A \textbf{sorting structure} that maintains a list of key-value pairs in priority order
+		\pause
+		\item \textbf{Push:} Insert a new key and payload at the front of the array
+		\item The key propagates through the array, \textbf{bubbling up} to its correct position
+		\item \textbf{Pop:} Remove the smallest key and its payload from the end of the array
+		\pause
+		\item \textbf{Throughput:} One pop every 2 cycles (after initial latency)
+		\item \textbf{Applications:} Used in high-speed systems like \textbf{network routers}
+		\item \textbf{Trade-offs:}
+		\begin{itemize}
+			\item Very low latency
+			\item High hardware cost (area and power)
+			\item Highly parallel and pipelined
+		\end{itemize}
+		\pause
+		\item \textbf{Configurable:} Key size, payload size, and array length
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Commands and Configuration}
+	
+	\textbf{Supported Commands:}
+	\begin{itemize}
+		\item \texttt{IDLE} – Do nothing
+		\item \texttt{PUSH} – Insert a key/payload pair into the front of the array
+		\item \texttt{POP} – Remove the smallest key/payload pair from the end
+		\item \texttt{PUSH/POP} – Simultaneously insert a new pair and remove the smallest
+	\end{itemize}
+	
+	\pause
+	\vspace{0.5em}
+	\textbf{Design Requirements:}
+	\begin{itemize}
+		\item \textbf{Configurable parameters:}
+		\begin{itemize}
+			\item \texttt{keyWidth} – Bit width of the key (used for sorting)
+			\item \texttt{valueWidth} – Bit width of the payload
+			\item \texttt{depth} – Number of stages in the systolic array
+		\end{itemize}
+		\item \textbf{Modular design:} Each stage compares and forwards data
+		\item \textbf{Testable:} Design should support unit and integration testing
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Systolic Array Priority List: Node}
+	\centering
+	
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{images/systolic node.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Systolic Array Priority List}
+\centering
+
+\begin{center}
+	\includegraphics[width=0.4\textwidth]{images/prio-list.png}
+\end{center}
+\end{frame}
+
+\begin{frame}{Testing the Priority List}
+	
+	\textbf{How should this be tested?}
+	\pause
+	\begin{itemize}
+		\item \textbf{Unit Tests:} 
+		\begin{itemize}
+			\item Test individual array elements (stages) for correct compare-and-forward behavior
+		\end{itemize}
+		
+		\item \textbf{Integration Tests:}
+		\begin{itemize}
+			\item Validate full array behavior across PUSH/POP operations
+			\item Ensure keys bubble correctly and throughput matches expectations
+		\end{itemize}
+		
+		\item \textbf{Property-Based Tests:}
+		\begin{itemize}
+			\item \textbf{Push-Pop Consistency:} Every pushed value should eventually be popped
+			\item \textbf{Sorted Output:} Popped values should be in ascending key order
+			\item \textbf{Idle Preservation:} IDLE cycles should not lose or corrupt data
+			\item \textbf{Stable Sorting:} Equal keys should preserve insertion order
+		\end{itemize}
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Extension: Grouped Value Support}
+	
+	\textbf{New Requirements:}
+	\begin{itemize}
+		\item Values must be tracked in \textbf{groups}—each key may have multiple associated values
+		\item Each \texttt{PUSH} command may insert a \textbf{variable number of values}
+		\item Newly pushed values must \textbf{merge} with existing values for the same key
+		\item System should be \textbf{configurable} in terms of maximum pair lengths
+	\end{itemize}
+	
+	\vspace{0.5em}
+	\textbf{Extended Commands:}
+	\begin{itemize}
+		\item \texttt{Push(0)} – No operation
+		\item \texttt{Pop(0)} – Pop lowest key and its value group
+		\item \texttt{Push(x)} – Push \texttt{x} values with a given key
+		\item \texttt{Pop(x)} – Pop lowest key group, then push \texttt{x} values with a new key
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame}{Summary}
+	\begin{itemize}
+		\item Testing is an integral part of agile development
+		\item Test-driven development aids fast iteration and cooperation
+		\item Property-based testing increases test quality
+		\item Continuous integration ensures code quality is maintained
+		\item Lab session: Priority List
+	\end{itemize}
 \end{frame}
 
 \end{document}
