@@ -153,7 +153,7 @@
 {\usekomafont{title}\mdseries\huge Digital Design with Chisel}
 \ \\
 \vspace{1cm}
-{\usekomafont{title}\mdseries\Large Sixth Edition}
+{\usekomafont{title}\mdseries\Large Seventh Edition}
 \cleardoublepage
 \end{flushleft}
 \newpage
@@ -165,7 +165,7 @@
 \vspace{1cm}
 {\usekomafont{title}\Huge Digital Design with Chisel\\
 \bigskip
-{\usekomafont{title}\huge Sixth Edition}\\
+{\usekomafont{title}\huge Seventh Edition}\\
 \bigskip
 \bigskip
 \bigskip
@@ -370,11 +370,11 @@ architecture).
 
 
 We tested the book with Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
-Chisel 3.6 is the last that uses the Scala-based backend to generate Verilog files.
+Chisel 3.6 is the last version that uses the Scala-based backend to generate Verilog files.
 Chisel 5 is using CIRCT and needs \code{firtool} installed manually.
 The latest version of Chisel 6 includes the \code{firtool} binaries.
 Testing with ChiselTest is still supported until Chisel 6.
-Therefore, we recommend that Chisel 5 be skipped and Chisel 6 used.
+Therefore, we recommend that Chisel 5 be skipped and Chisel 6 be used.
 Chisel 6 might switch to a different simulation and testing library.
 We used Scala 2.13 and tested it with Java 17 and Java 21.
 Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
@@ -385,23 +385,24 @@ Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
 
 \todo{We should also show more Leros code.}
 
-We extended the testing chapter with a description how to access internal signals and
+We extended the testing chapter with a description of how to access internal signals and
 how to use assertions. Furthermore, we started to explore formal verification in Chisel.
 
-Organizing digital circuits as pipelines to increase performance is in between digital design
+Organizing digital circuits as pipelines to increase performance is between digital design
 and computer architecture.
 We added a chapter on pipelining where we use a 3-stage RISC-V pipeline as a running example.
 
-We are aware that Chisel is still a niche language in hardware design and one needs to
+We are aware that Chisel is still a niche language in hardware design, and one needs to
 at least be able to read VHDL and/or Verilog. However, we think that with a good knowledge
-of digital design switching to a different hardware description language should be a matter of days.
+of digital design, switching to a different hardware description language should be a matter of days.
 To simplify this transition, we have added an appendix showing and comparing basic constructs
 in Chisel, VHDL, and Verilog.
 
-This book was written without any help from artificial intelligence and large language models
+This book was written without any help from artificial intelligence or large language models
 to write or rewrite text. We used Grammarly\footnote{\url{https://app.grammarly.com/}}
 for grammar checking and improvement of the writing style.
 
+\section*{Foreword for the Seventh Edition}
 
 \section*{Translations}
 
@@ -410,7 +411,7 @@ from the books \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page}.
 I would like to thank Yuda Wang, Qiwei Sun, and Yun Chen for the Chinese translation;
 Seiji Munetoh, Masatoshi Tanabata, and Takaaki Hagino for the Japanese translation;
 and VieLe Duc Hung for the Vietnamese translation.
-If you are interested to translate this book into another language, feel free to do it and
+If you are interested in translating this book into another language, feel free to do it and
 publish it under the same license. Please contact me then, so I can point to your translation.
 
 
@@ -6234,8 +6235,9 @@ with model checking). In digital design, we use the term testing similar to soft
 is also used in the actual test of the physical chip (on a tester using built-in self-tests).
 Therefore, the digital design community is slowly moving toward using the term verification to
 test hardware descriptions. If we want to apply formal methods to verify hardware
-components, we call it formal verification. In this book, we will stick to the term \emph{testing}
-when we write tests for our hardware description.
+components, we call it formal verification.
+In this book, we will stick to the term \emph{testing} when we write tests for our hardware description.
+Verification (testing) can be performed as dynamic verification by executing the design on a simulator or as formal verification with a model checker or an SMT solver.
 
 \section{Debugging}
 

@@ -13,7 +13,7 @@
     every node/.style={rounded corners=2pt}
 }
 
-\title{Formal Verification}
+\title{Co-Simulation and Formal Verification}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark\\
@@ -30,9 +30,179 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
+\item Co-Simulation
+\item Formal verification
+\item xxx
+\item xxx
+\item Shorter lecture today
+\item Need to catch a flight
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Co-Simulation}
+\begin{itemize}
+\item Write a \emph{golden} model for your hardware
+\item Run the hardware and the model in parallel
+\item Compare the output
+\item Input is sometimes random, or constraint random
+\item Who is writing the reference model?
+\item Same error in model and implementation?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Reference Model}
+\begin{itemize}
+\item A Java or Scala program (for Chisel)
+\item A C/C++ model
+\item Matlab/Simulink
+\item Is it cycle accurate?
+\item How to compare when not cycle accurate
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Processor Design}
+\begin{itemize}
+\item Write an ISA simulation
+\item Who did Computer Architecture?
+\item You wrote a RISC-V ISA simulation
+\item You might do a RISC-V in January
+\item There, you should do the co-simulation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cycle Accurate Example}
+\begin{itemize}
+\item \href{https://github.com/schoeberl/lipsi}{Lipsi} processor
+\item Tiny processor core
+\item Showing it as Chisel motivation
+\item Has a cycle-accurate SW model in Scala
+\item Let us explore it now
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Non-Cycle Accurate Example}
+\begin{itemize}
+\item RISC-V core \href{https://github.com/schoeberl/wildcat}{Wildcat}
+\item Shall be a teaching reference
+\item Several implementations
+\begin{itemize}
+\item ISA simulation (in Scala)
+\item Pipelines: 3, 4, and 5 stages
+\item Single cycle (= ISA simulation in Chisel)
+\item Multi-cycle planned
+\end{itemize}
+\item What to compare?
+\item How/when to compare?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Non-Cycle Accurate Example}
+\begin{itemize}
+\item What to compare:
+\begin{itemize}
+\item All data goes at some point through the register file
+\item Just compare register file content
+\item Not so much state (compared to memory content)
+\end{itemize}
+\item When to compare:
+\begin{itemize}
+\item One could track updates each clock cycle and advance only on a change
+\item When to stop? Timeout if one of the two \emph{hangs}
+\item Compare register file content at the end
+\item We had this in Computer Architecture lab
+\end{itemize}
+\item Explore it now
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
 \item xxx
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Formal Verification}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+
 
 
 
