@@ -251,14 +251,14 @@ Embedded Systems Engineering}
 	\textbf{What is TDD?}
 	\begin{itemize}
 		\item A software development approach where tests are written \textbf{before} the code
-		\item Follows a short cycle: \textbf{Red → Green → Refactor}
+		\item Follows a short cycle: \textbf{Red $\rightarrow$ Green $\rightarrow$ Refactor}
 	\end{itemize}
 	\pause
 	\vspace{1em}
 	\textbf{TDD Cycle}
 	\begin{enumerate}
 		\item \textbf{Write a test} for a small piece of functionality
-		\item \textbf{Run the test} – it should fail (Red)
+		\item \textbf{Run the test} -- it should fail (Red)
 		\item \textbf{Write the code} to make the test pass (Green)
 		\item \textbf{Refactor} the code while keeping the test passing
 	\end{enumerate}
@@ -344,7 +344,7 @@ Embedded Systems Engineering}
 	
 	\textbf{Why Property-Based Testing?}
 	\begin{itemize}
-		\item Many systems have an \textbf{infinite input space} — it's impractical to test all possible cases manually
+		\item Many systems have an \textbf{infinite input space}---it's impractical to test all possible cases manually
 		\item PBT helps uncover \textbf{classes of bugs} by generating a wide range of random, valid inputs
 	\end{itemize}
 	\pause
@@ -520,7 +520,7 @@ Arbitrary {
 \begin{frame}{Continuous Integration (CI): Benefits and Extras}
 	\textbf{Key Benefits:}
 	\begin{itemize}
-		\item Developers don’t need to run all tests locally
+		\item Developers don't need to run all tests locally
 		\item Tests run in a clean, consistent environment
 		\item Regressions are caught \textbf{before} merging
 		\item Ensures the \texttt{master} branch is always in a working state
@@ -559,19 +559,19 @@ name: CI
     push:
   jobs:
     test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 11
-      - name: Setup sbt launcher
-        uses: sbt/setup-sbt@v1
-      - name: Build and Test
-        run: sbt test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setup JDK
+          uses: actions/setup-java@v4
+          with:
+            distribution: temurin
+            java-version: 11
+        - name: Setup sbt launcher
+          uses: sbt/setup-sbt@v1
+        - name: Build and Test
+          run: sbt test
 			\end{verbatim}
 		\end{column}
 		\begin{column}{0.4\textwidth}
@@ -616,10 +616,10 @@ name: CI
 	
 	\textbf{Supported Commands:}
 	\begin{itemize}
-		\item \texttt{IDLE} – Do nothing
-		\item \texttt{PUSH} – Insert a key/payload pair into the front of the array
-		\item \texttt{POP} – Remove the smallest key/payload pair from the end
-		\item \texttt{PUSH/POP} – Simultaneously insert a new pair and remove the smallest
+		\item \texttt{IDLE} -- Do nothing
+		\item \texttt{PUSH} -- Insert a key/payload pair into the front of the array
+		\item \texttt{POP} -- Remove the smallest key/payload pair from the end
+		\item \texttt{PUSH/POP} -- Simultaneously insert a new pair and remove the smallest
 	\end{itemize}
 	
 	\pause
@@ -628,9 +628,9 @@ name: CI
 	\begin{itemize}
 		\item \textbf{Configurable parameters:}
 		\begin{itemize}
-			\item \texttt{keyWidth} – Bit width of the key (used for sorting)
-			\item \texttt{valueWidth} – Bit width of the payload
-			\item \texttt{depth} – Number of stages in the systolic array
+			\item \texttt{keyWidth} -- Bit width of the key (used for sorting)
+			\item \texttt{valueWidth} -- Bit width of the payload
+			\item \texttt{depth} -- Number of stages in the systolic array
 		\end{itemize}
 		\item \textbf{Modular design:} Each stage compares and forwards data
 		\item \textbf{Testable:} Design should support unit and integration testing
@@ -685,7 +685,7 @@ name: CI
 	
 	\textbf{New Requirements:}
 	\begin{itemize}
-		\item Values must be tracked in \textbf{groups}—each key may have multiple associated values
+		\item Values must be tracked in \textbf{groups} --- each key may have multiple associated values
 		\item Each \texttt{PUSH} command may insert a \textbf{variable number of values}
 		\item Newly pushed values must \textbf{merge} with existing values for the same key
 		\item System should be \textbf{configurable} in terms of maximum pair lengths
@@ -694,10 +694,10 @@ name: CI
 	\vspace{0.5em}
 	\textbf{Extended Commands:}
 	\begin{itemize}
-		\item \texttt{Push(0)} – No operation
-		\item \texttt{Pop(0)} – Pop lowest key and its value group
-		\item \texttt{Push(x)} – Push \texttt{x} values with a given key
-		\item \texttt{Pop(x)} – Pop lowest key group, then push \texttt{x} values with a new key
+		\item \texttt{Push(0)} -- No operation
+		\item \texttt{Pop(0)} -- Pop lowest key and its value group
+		\item \texttt{Push(x)} -- Push \texttt{x} values with a given key
+		\item \texttt{Pop(x)} -- Pop lowest key group, then push \texttt{x} values with a new key
 	\end{itemize}
 	
 \end{frame}
