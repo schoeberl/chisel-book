@@ -30,10 +30,10 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
+\item Agile is about test driven development
 \item Co-Simulation
 \item Formal verification
-\item xxx
-\item xxx
+\item Your project status
 \item Shorter lecture today
 \item Need to catch a flight
 \end{itemize}
@@ -57,6 +57,26 @@ Embedded Systems Engineering}
 \item Matlab/Simulink
 \item Is it cycle accurate?
 \item How to compare when not cycle accurate
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Game of Live Example}
+\begin{itemize}
+\item \href{https://en.wikipedia.org/wiki/Conway\%27s_Game_of_Life}{Conway's Game of Life}
+\item Any live cell with two or three live neighbors survives.
+\item Any dead cell with three live neighbors becomes a live cell.
+\item All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Game of Live Co-Simulation}
+\begin{itemize}
+\item An exercise in the Java Introduction to programming
+\item The problem is highly parallel
+\item I will show you a Chisel (and Java) implementation
+\item FPGA version is extremely fast compared to the Java implementation
+\item It contains co-simulation
+\item \url{https://github.com/schoeberl/game-of-live}
 \end{itemize}
 \end{frame}
 
@@ -109,63 +129,98 @@ Embedded Systems Engineering}
 \item One could track updates each clock cycle and advance only on a change
 \item When to stop? Timeout if one of the two \emph{hangs}
 \item Compare register file content at the end
-\item We had this in Computer Architecture lab
+\item We had this in the Computer Architecture lab
 \end{itemize}
 \item Explore it now
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{When is it Enough?}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item How much do you need to test?
+\item How confident are you?
+\item We cannot cover all input possibilities
+\item Except in trivial cases
+\begin{itemize}
+\item Parameters might help
+\item Cover all cases for a 4-bit ALU
+\item Assume the design also works for 32 bits 
+\end{itemize}
+\item Any other option?
 \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Assertions in Chisel}
+\begin{itemize}
+\item An Assertion statement states assumptions about a program
+\item You have seen \code{assert} in Scala in the first lab
+\item Can also be used in Chisel
+\item Assertion is checked during simulation time
+\item Syntax:
+\begin{chisel}
+  io.sum := io.a + io.b
+  assert(io.sum === io.a + io.b, "error message")
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\code{require} vs \code{assert}}
+\begin{itemize}
+\item Chisel \code{assert} checks value in simulation
+\begin{itemize}
+\item Emits non-synthesizable Verilog
+\item Using a Chisel expression that results in a \code{Bool}
+\item Can also have a failure message
+\end{itemize}
+\item Scala \code{assert} checks value at circuit construction
+\item Using a Scala expression that results in a \code{Boolean}
+\item Better use Scala's \code{require}
+\item \code{require} is used for input sanity checking
+\shortlist{../code/fifo_abstract.txt}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Formal Verification}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item Simulation explores (only) some test cases
+\item Formal verification explores \emph{all} possible behaviors
+\item Uses SAT/SMT solvers to prove properties
+\item Finds corner cases that simulation might miss
+\item Sounds a bit too good to be true, right?
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}{Properties in Formal Verification}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+    \item Properties describe what must always hold
+    \item Types of properties:
+    \begin{itemize}
+        \item Safety: something bad never happens
+        \item Liveness: something good eventually happens
+    \end{itemize}
+    \item Examples:
+    \begin{itemize}
+        \item FIFO never overflows (safety)
+        \item Every request is eventually granted (liveness)
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Chisel Formal}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item Extension of \code{ChiselTest} by Kevin Laeufer
+\begin{itemize}
+\item Part of his \href{https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-157.pdf}{PhD} at UC Berkeley
+\end{itemize}
+\item Chisel \code{assert} is \emph{formally} checked
+\item Use \code{verify} instead of \code{test}
+\shortlist{../code/formal_assert.txt}
+\item Install the open \href{https://github.com/Z3Prover/z3}{Z3} theorem prover for next week
+\begin{itemize}
+\item With your favorite packet manager, e.g., brew, apt,...
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -208,7 +263,11 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item xxx
+\item Co-simulation as advanced version of testing
+\item Formal verification is another tool
+\item Today's lab brought to you by Javad
+\item Next week, maybe a formal verification lab
+\item Now it is your turn to present
 \end{itemize}
 \end{frame}
 
