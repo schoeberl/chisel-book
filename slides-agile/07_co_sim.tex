@@ -13,7 +13,7 @@
     every node/.style={rounded corners=2pt}
 }
 
-\title{Co-Simulation and Formal Verification}
+\title{Co-Simulation and Scrum}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark\\
@@ -185,88 +185,163 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Simulation explores (only) some test cases
 \item Formal verification explores \emph{all} possible behaviors
-\item Uses SAT/SMT solvers to prove properties
-\item Finds corner cases that simulation might miss
 \item Sounds a bit too good to be true, right?
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Properties in Formal Verification}
-\begin{itemize}
-    \item Properties describe what must always hold
-    \item Types of properties:
-    \begin{itemize}
-        \item Safety: something bad never happens
-        \item Liveness: something good eventually happens
-    \end{itemize}
-    \item Examples:
-    \begin{itemize}
-        \item FIFO never overflows (safety)
-        \item Every request is eventually granted (liveness)
-    \end{itemize}
+\item We will look into this next week
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{Chisel Formal}
+\begin{frame}[fragile]{More on Agile Development}
 \begin{itemize}
-\item Extension of \code{ChiselTest} by Kevin Laeufer
-\begin{itemize}
-\item Part of his \href{https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-157.pdf}{PhD} at UC Berkeley
+\item Scrum is the base methodology for agile development
+\item Intended for small groups of developers
+\item Provides tools
+\item Defines roles
+\item Set of meetings
+\item Can also be adapted for single-person teams
 \end{itemize}
-\item Chisel \code{assert} is \emph{formally} checked
-\item Use \code{verify} instead of \code{test}
-\shortlist{../code/formal_assert.txt}
-\item Install the open \href{https://github.com/Z3Prover/z3}{Z3} theorem prover for next week
+\end{frame}
+
+\begin{frame}[fragile]{Lists I}
 \begin{itemize}
-\item With your favorite packet manager, e.g., brew, apt,...
+\item Product backlog
+\begin{itemize}
+\item Work to be done as a priority ordered list
+\item Defines your product.
+\item Start with enough items to get the first and maybe the second sprint started
+\item Will change as you develop (the agile part)
+\item Priorities will change
+\item Source for sprint
+\end{itemize}
+\item TODO or Sprint backlog
+\begin{itemize}
+\item Created at the start of the sprint from the Backlog
+\item The work  items to be done during the sprint
+\item Team self-organized by pulling work from the list
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Lists II}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item In progress
+\begin{itemize}
+\item Items moved from TODO into this list
+\item Includes who is working on it
+\end{itemize}
+\item Review
+\begin{itemize}
+\item Optional, if needed
+\end{itemize}
+\item Done
+\begin{itemize}
+\item All work done moves there
+\item The work done during a sprint, not the entire project
+\end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Scrum Board}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item Visualize the Lists
+\item Fill at the sprint start
+\item Can have user stories in the Y axis
+\item Can be physical with Postits
+\item Or simple a Google doc
+\item Online tool, e.g., \href{https://miro.com/agile/scrum-board/}{miro}
+\item Reviewed at the sprint end
+\item Provides transparancy
+\begin{itemize}
+\item Everyone sees what is going on
+\item No hidden agenda
 \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
 \end{itemize}
 \end{frame}
 
 
+\begin{frame}[fragile]{Scrum Roles}
+\begin{itemize}
+\item Product Owner
+\begin{itemize}
+\item Knows the domain
+\item Makes decisions (e.g., product vision)
+\item Accountable for value
+\item Not a boss
+\end{itemize}
+\item Scrum Master
+\begin{itemize}
+\item Not a manager, a servant leader
+\item Guide the team, the meetings
+\item Asks questions
+\begin{itemize}
+\item What can we change in our work?
+\item What are our b igest obstacles?
+\end{itemize}
+\end{itemize}
+\item Developers
+\begin{itemize}
+\item Do the work self organized
+\item Move topics from TODO to In Progress
+\item And then to Done
+\end{itemize}
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{Scrum Meetings I}
+\begin{itemize}
+\item Sprint planning
+\begin{itemize}
+\item Decide on the goal of the sprint
+\item Move tasks from backlog to TODO
+\end{itemize}
+\item Daily Scrum meetings
+\begin{itemize}
+\item Standup meetings, max 15'
+\item Report last day
+\item Plan and synchronize this day
+\end{itemize}
+\item Sprint review
+\begin{itemize}
+\item Demo what has been done---something that can be used
+\item Feedback at the end of the sprint
+\item Ideal with your customer
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Scrum Meetings II}
+\begin{itemize}
+\item Sprint retrospective
+\begin{itemize}
+\item Reflect on the review
+\item Find ways to improve the process
+\end{itemize}
+\item Backlog refinement
+\begin{itemize}
+\item Change the project/priorities
+\item Can happen as you feel need
+\item Cleanup backlog
+\item Shift priorities
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{What Do you Do?}
+\begin{itemize}
+\item Having meetings?
+\item Using Scrum?
+\item Using a Scrum board?
+\item Or a TODO list?
+\item Tell me
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item Co-simulation as advanced version of testing
-\item Formal verification is another tool
+\item Co-simulation as an advanced version of testing
+\item Some more talking about Scrum
 \item Today's lab brought to you by Javad
-\item Next week, maybe a formal verification lab
 \item Now it is your turn to present
 \end{itemize}
 \end{frame}
@@ -274,8 +349,15 @@ Embedded Systems Engineering}
 
 \end{document}
 
-\begin{frame}[fragile]{Title}
+\begin{frame}[fragile]{XXX}
 \begin{itemize}
-\item abc
+\item xxx
+\item xxx
+\item xxx
+\begin{itemize}
+\item xxx
+\end{itemize}
+\item xxx
+\item xxx
 \end{itemize}
 \end{frame}

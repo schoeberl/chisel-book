@@ -1,0 +1,180 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+
+% Optional visual tweaks
+\tikzset{
+    >=Stealth,
+    every node/.style={rounded corners=2pt}
+}
+
+\title{Formal Verification}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Outline}
+\begin{itemize}
+
+\item Formal verification
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{When is Simulation Enough?}
+\begin{itemize}
+\item How much do you need to test?
+\item How confident are you?
+\item We cannot cover all input possibilities
+\item Except in trivial cases
+\begin{itemize}
+\item Parameters might help
+\item Cover all cases for a 4-bit ALU
+\item Assume the design also works for 32 bits 
+\end{itemize}
+\item Any other option?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Assertions in Chisel}
+\begin{itemize}
+\item An Assertion statement states assumptions about a program
+\item You have seen \code{assert} in Scala in the first lab
+\item Can also be used in Chisel
+\item Assertion is checked during simulation time
+\item Syntax:
+\begin{chisel}
+  io.sum := io.a + io.b
+  assert(io.sum === io.a + io.b, "error message")
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\code{require} vs \code{assert}}
+\begin{itemize}
+\item Chisel \code{assert} checks value in simulation
+\begin{itemize}
+\item Emits non-synthesizable Verilog
+\item Using a Chisel expression that results in a \code{Bool}
+\item Can also have a failure message
+\end{itemize}
+\item Scala \code{assert} checks value at circuit construction
+\item Using a Scala expression that results in a \code{Boolean}
+\item Better use Scala's \code{require}
+\item \code{require} is used for input sanity checking
+\shortlist{../code/fifo_abstract.txt}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Formal Verification}
+\begin{itemize}
+\item Simulation explores (only) some test cases
+\item Formal verification explores \emph{all} possible behaviors
+\item Uses SAT/SMT solvers to prove properties
+\item Finds corner cases that simulation might miss
+\item Sounds a bit too good to be true, right?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Properties in Formal Verification}
+\begin{itemize}
+    \item Properties describe what must always hold
+    \item Types of properties:
+    \begin{itemize}
+        \item Safety: something bad never happens
+        \item Liveness: something good eventually happens
+    \end{itemize}
+    \item Examples:
+    \begin{itemize}
+        \item FIFO never overflows (safety)
+        \item Every request is eventually granted (liveness)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Chisel Formal}
+\begin{itemize}
+\item Extension of \code{ChiselTest} by Kevin Laeufer
+\begin{itemize}
+\item Part of his \href{https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-157.pdf}{PhD} at UC Berkeley
+\end{itemize}
+\item Chisel \code{assert} is \emph{formally} checked
+\item Use \code{verify} instead of \code{test}
+\shortlist{../code/formal_assert.txt}
+\item Install the open \href{https://github.com/Z3Prover/z3}{Z3} theorem prover for next week
+\begin{itemize}
+\item With your favorite packet manager, e.g., brew, apt,...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item Co-simulation as advanced version of testing
+\item Formal verification is another tool
+\end{itemize}
+\end{frame}
+
+
+\end{document}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
