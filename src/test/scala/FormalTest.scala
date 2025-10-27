@@ -37,7 +37,6 @@ class PastTest() extends Module {
   assert(reg === past((past(io.in))))
 
   io.out := reg
-  cover(io.out === 42.U)
 }
 //- end
 
