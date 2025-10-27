@@ -1,7 +1,9 @@
 
 import chisel3._
 import chiseltest._
+//- start formal_import
 import chiseltest.formal._
+//- end
 import org.scalatest.flatspec.AnyFlatSpec
 
 class FormalSimpleTest(width: Int) extends Module {
@@ -24,16 +26,22 @@ class FormalSimpleTest(width: Int) extends Module {
   assert(m.io.y === resUInt)
 }
 
+//- start formal_past_example
 class PastTest() extends Module {
   val io = IO(new Bundle() {
     val in = Input(UInt(8.W))
-    // val out = Output(UInt(8.W))
+    val out = Output(UInt(8.W))
   })
 
   val reg = RegNext(RegNext(io.in))
   assert(reg === past((past(io.in))))
-}
 
+  io.out := reg
+  cover(io.out === 42.U)
+}
+//- end
+
+//- start formal_assume_example
 class AssumeTest extends Module {
   val in = IO(Input(UInt(8.W)))
   val out = IO(Output(UInt(8.W)))
@@ -42,7 +50,24 @@ class AssumeTest extends Module {
   assert(out > 4.U)
   assert(out <= 255.U)
 }
+//- end
 
+/*
+ needs to be integrated and tested
+
+//- start formal_past
+ when (past(in) === 10.U) {
+    assert(out === 11.U)
+  }
+//- end
+//- start formal_stability
+  assert(x === past(x))
+//- end
+//- start formal_assume
+  assume(x > 0.U)
+//- end
+
+ */
 class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {
 
   "FormalSimple" should "pass" in {

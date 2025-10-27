@@ -31,16 +31,51 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Outline}
 \begin{itemize}
 
-\item Formal verification
+\item What is formal verification
+\item How can it be used to verify digital designs
+\item Chisel Formal
 
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{The New New Product Development Game}
+\begin{itemize}
+\item by Hirotaka Takeuchi and Ikujiro Nonaka
+\item Paper that started the Scrum movement (mid 80s)
+\begin{itemize}
+\item Move like a rugby team together to reach the aim
+\item Instead of a relay race, where runners wait for arrival
+\end{itemize}
+\item In production, not in software development
+\item Observing mostly Japanese, some USA companies
+\item Examined multinational companies
+\begin{itemize}
+\item Fuji-Xerox, Canon, Honda, NEC, Epson, Brother, 3M, Xerox, and Hewlett-Packard
+\end{itemize}
+\item Available at \href{https://hbr.org/1986/01/the-new-new-product-development-game}{Harward Business Review}
+\item Easy reading, give it a try
+\end{itemize}
+\end{frame}
 
-\begin{frame}[fragile]{When is Simulation Enough?}
+\begin{frame}[fragile]{New product development processes}
+\begin{enumerate}
+\item Built-in instability
+\item Self-organizing project teams
+\item Overlapping development phases
+\item ``Multilearning''
+\item Subtle control
+\item Organizational transfer of learning
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{When is Simulation and Testing Enough?}
 \begin{itemize}
 \item How much do you need to test?
 \item How confident are you?
+\begin{itemize}
+\item Did you test the corner cases?
+\item An issue when the same person did design and tests
+\end{itemize}
 \item We cannot cover all input possibilities
 \item Except in trivial cases
 \begin{itemize}
@@ -66,6 +101,10 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Assert Example}
+\shortlist{../code/assert.txt}
+\end{frame}
+
 \begin{frame}[fragile]{\code{require} vs \code{assert}}
 \begin{itemize}
 \item Chisel \code{assert} checks value in simulation
@@ -88,8 +127,14 @@ Embedded Systems Engineering}
 \item Simulation explores (only) some test cases
 \item Formal verification explores \emph{all} possible behaviors
 \item Uses SAT/SMT solvers to prove properties
+\begin{itemize}
+\item As bounded model checking (BMC)
+\end{itemize}
 \item Finds corner cases that simulation might miss
 \item Sounds a bit too good to be true, right?
+\begin{itemize}
+\item Might take a long time, days or more
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -117,61 +162,111 @@ Embedded Systems Engineering}
 \item Part of his \href{https://www2.eecs.berkeley.edu/Pubs/TechRpts/2024/EECS-2024-157.pdf}{PhD} at UC Berkeley
 \end{itemize}
 \item Chisel \code{assert} is \emph{formally} checked
-\item Use \code{verify} instead of \code{test}
-\shortlist{../code/formal_assert.txt}
-\item Install the open \href{https://github.com/Z3Prover/z3}{Z3} theorem prover for next week
+\begin{itemize}
+\item Up to a bound
+\end{itemize}
+\item If the proof fails, Chisel formal provides a counter example (as VCD waveform)
+\item Install the open \href{https://github.com/Z3Prover/z3}{Z3} theorem prover
 \begin{itemize}
 \item With your favorite packet manager, e.g., brew, apt,...
 \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Chisel Formal}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item Import the library
+\shortlist{../code/formal_import.txt}
+\item Formal is part of ChiselTest
+\item Use \code{verify} instead of \code{test}
+\shortlist{../code/formal_assert.txt}
+\item Have the asserts in your module
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Access the History}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item \code{past()} allows us to make assamptions over time
+\item If \code{in} was 10 last cycle, then \code{out} must be 11 now
+\shortlist{../code/formal_past.txt}
+\item A signal must stay stable, be the same as in the last cycle
+\shortlist{../code/formal_stability.txt}
+\item With \code{past(x)} call we get the value of \code{x} from the last clock cycle
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Past Example}
+\shortlist{../code/formal_past_example.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Assumptions}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
-\item xxx
+\item We can limit the search space
+\item Assuming that some (input) signals have restricted values
+\item Assume that a signal will never be zero:
+\shortlist{../code/formal_assume.txt}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Assume Example}
+\shortlist{../code/formal_assume_example.txt}
+\end{frame}
 
+\begin{frame}[fragile]{Limits to Bounded Model Checking}
+\begin{itemize}
+\item BMC will check your design only for the first N cycles
+\item Can fail in clock cycle N+1
+\item Only checks your assertions
+\item They need to be correct
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{Other Options}
+\begin{itemize}
+\item Synopsys and Cadence have for sure formal verifiers
+\item \href{https://github.com/YosysHQ/sby}{Sby} is a free, open-source verification tool
+\item Part of YosysHQ
+\item See Matt Venn \href{https://www.youtube.com/watch?v=B1KX2rFJqVE}{explaining it}
+\item \href{https://symbiyosys.readthedocs.io/en/latest/index.html}{SymbiYosys (sby) Documentation}
+\end{itemize}
+\end{frame}
 
+\begin{frame}[fragile]{Next Week}
+\begin{itemize}
+\item Guest lecture by Frans Skarman
+\item On Spade, a new HDL
+\item Frans developed also Surfer, the new waveform viewer
+\begin{itemize}
+\item Check out the VSC plugin (show it)
+\end{itemize}
+\item Please \href{https://docs.spade-lang.org/agile/quick_setup.html}{setup Spade}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item Co-simulation as advanced version of testing
-\item Formal verification is another tool
+\item Formal verification is the next step in testing
+\item It is another tool in your toolbox
+\item Easy to include in your continuous integration on GitHub
+\item I have prepared some \href{https://github.com/schoeberl/agile-hw/tree/main/lab8}{lab} exercises for you
 \end{itemize}
 \end{frame}
 
 
 \end{document}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\begin{itemize}
+\item xxx
+\end{itemize}
+\item xxx
+\item xxx
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Title}
 \begin{itemize}
