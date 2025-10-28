@@ -67,8 +67,10 @@ class AssumeTest extends Module {
 //- end
 
  */
-class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {
 
+//- start formal_class
+class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {
+//- end
   "FormalSimple" should "pass" in {
     verify(new FormalSimpleTest(8), Seq(BoundedCheck(1)))
   }
