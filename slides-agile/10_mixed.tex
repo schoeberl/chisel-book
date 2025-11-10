@@ -13,7 +13,7 @@
     every node/.style={rounded corners=2pt}
 }
 
-\title{Random Points (Better Title needed)}
+\title{Mixed Topics}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark\\
@@ -37,9 +37,145 @@ Embedded Systems Engineering}
 \end{frame}
 
 
+\begin{frame}[fragile]{Use a \code{var} for a Generator}
+\begin{itemize}
+\item A \code{var} can be reassigned
+\item Just keep the Chisel components connected
+\item No need to keep the references around
+\begin{chisel}
+class Delay(n: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Bool())
+        val out = Output(Bool())
+    })
+    require(n >= 0)
+    var lastConn = io.in
+    for (i <- 0 until n)
+        lastConn = RegNext(lastConn)
+    io.out := lastConn
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Do you want Recursion?}
+\begin{itemize}
+\item With a helper function
+\begin{chisel}
+class DelayRec(n: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Bool())
+        val out = Output(Bool())
+    })
+    require(n >= 0)
+    def helper(n: Int, lastConn: Bool): Bool = {
+        if (n == 0) lastConn
+        else helper(n-1, RegNext(lastConn))
+    }
+    io.out := helper(n, io.in)
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Use Methods}
+\begin{itemize}
+\item Modules and Bundles are Scala classes
+\item One can define methods on them
+\item We have seen \code{apply()} on the companion object
+\item Remember what this gave us?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Factory Method \code{apply}}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built-in components, such as \code{Mux}
+\end{itemize}
+\begin{chisel}
+val myAdder = Adder(x, y)
+\end{chisel}
+\begin{itemize}
+\item A little bit more work on the component side
+\item Define an \code{apply} method on the companion object that returns the component (output port)
+\end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Decoupled Components}
+\begin{itemize}
+\item Using the read/valid handshake
+\item Some flexibility on sending and receiving
+\item Data is transferred when ready and valid are asserted
+\item Chisel provides a standard bundle for this: \code{DecoupledIO}
+\shortlist{../code/fifo_decoupled.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Methods on \code{DecoupledIO}}
+\begin{itemize}
+\item \code{fire} is true if and only if ready and valid are asserted
+\item \code{enq(data)} sets data and sets valid to true (no check on ready)
+\item \code{noenq} deasserts valis.
+\item \code{deq/nodeq} for the receiver side
+\begin{chisel}
+when(io.in.fire()) {
+  // do the transfer
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Queues}
+\begin{itemize}
+\item FIFO style queues between a sender and a receiver
+\item Can \emph{even out} traffic
+\item Used when there is bursty traffic
+\begin{itemize}
+\item E.g., on a serial port
+\item Write faster from CPU send can send
+\item Receive data when CPU is busy with other stuff
+\end{itemize}
+\item But can fill up or drain empty
+\item Showing implementation variations in the Chisel book
+\begin{itemize}
+\item Bubble FIFO (was proposed in lab 5)
+\item double buffer, memory-based, ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel \code{Queue}}
+\begin{itemize}
+\item Chisel has a \code{Queue}
+\item Interfaces are \code{DecoupledIO}s
+\item Specify type and number of entries Queue(UInt(4.W), 8)
+\item Optional arguments
+\begin{itemize}
+\item \code{pipe}: if full, allow concurrent enqueue and dequeue
+\item \code{flow}: if empty, enqueued value available immediately for dequeue
+\end{itemize}
+\end{itemize}
+\begin{chisel}
+val q = Module(new Queue(UInt(), 16))
+q.io.enq <> producer.io.out
+consumer.io.in <> q.io.deq
+\end{chisel}
+\end{frame}
+
 \begin{frame}[fragile]{Next Week}
 \begin{itemize}
-\item Guest lecture by Hans Jakob on 
+\item Guest lecture by Hans Jakob on
+\item Chisel in Research
 \end{itemize}
 \end{frame}
 
