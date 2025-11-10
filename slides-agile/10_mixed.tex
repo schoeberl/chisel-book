@@ -78,6 +78,21 @@ class DelayRec(n: Int) extends Module {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Parameterize Number of Ports}
+\begin{itemize}
+\item Use a \code{Vec} 
+\begin{chisel}
+class Example(n: Int, w: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Vec(n, UInt(w.W)))
+        val out = Output(UInt(w.W))
+    })
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+
+
 \begin{frame}[fragile]{Use Methods}
 \begin{itemize}
 \item Modules and Bundles are Scala classes
@@ -135,22 +150,64 @@ when(io.in.fire()) {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Queues}
+\begin{frame}[fragile]{FIFO Queue}
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{../figures/fifo}
+  \caption{A writer, a FIFO buffer, and a reader.}
+  \label{fig:fifo}
+\end{figure}
 \begin{itemize}
 \item FIFO style queues between a sender and a receiver
-\item Can \emph{even out} traffic
+\item The sender/write enqueues/writes into the Queue
+\item The receiver/reader dequeues/reads from the Queue
+\item Can \emph{even out} bursty traffic
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Queues}
+\begin{itemize}
 \item Used when there is bursty traffic
 \begin{itemize}
 \item E.g., on a serial port
 \item Write faster from CPU send can send
 \item Receive data when CPU is busy with other stuff
 \end{itemize}
-\item But can fill up or drain empty
+\item But can fill up when the sender is \emph{faster}
 \item Showing implementation variations in the Chisel book
 \begin{itemize}
 \item Bubble FIFO (was proposed in lab 5)
 \item double buffer, memory-based, ...
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bubble FIFO Example}
+\begin{itemize}
+\item FIFO interface
+\shortlist{../code/fifo_io.txt}
+\item Abstract base class
+\shortlist{../code/fifo_abstract.txt}
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/fifo/fifo.scala}{FIFO code}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bubble FIFO}
+\begin{itemize}
+\item Simple, easy to understand
+\item Uses minimal resources
+\item However, each buffer stage has to toggle between empty and full
+\item Maximum bandwidth is one word every two clock cycles
+\item When full, needs N cycles for a restart
+\begin{itemize}
+\item The free element \emph{bubbles} towards the input
+\end{itemize}
+\item Better solutions
+\begin{itemize}
+\item Double buffer
+\item Memory with read and write pointer
+\end{itemize}
+\item See Section 11.3 in the Chisel book
 \end{itemize}
 \end{frame}
 
