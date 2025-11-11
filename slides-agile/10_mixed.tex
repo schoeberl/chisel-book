@@ -93,6 +93,8 @@ class Example(n: Int, w: Int) extends Module {
         val out = Output(UInt(w.W))
     })
 \end{chisel}
+\item Next week, a more flexible version
+\item Decide at runtime even on the type of a port
 \end{itemize}
 \end{frame}
 
@@ -145,7 +147,7 @@ object Adder {
 \begin{itemize}
 \item \code{fire()} is true if and only if ready and valid are asserted
 \item \code{enq(data)} sets data and sets valid to true (no check on ready)
-\item \code{noenq()} deasserts valis.
+\item \code{noenq()} deasserts valid
 \item \code{deq/nodeq} for the receiver side
 \begin{chisel}
 when(io.in.fire()) {
@@ -183,7 +185,7 @@ arb.io.in(1) <> producer1.io.out
 consumer.io.in <> arb.io.out
 \end{chisel}
 \item \code{Arbiter} is a simple priority based arbitration
-\item \code{RRArbiter} Chosen in round robin
+\item \code{RRArbiter} choses in round robin
 \begin{itemize}
 \item No details on implementation
 \item True, single cycle, round robin is combinational complex
@@ -213,7 +215,7 @@ consumer.io.in <> arb.io.out
 \end{figure}
 \begin{itemize}
 \item FIFO style queues between a sender and a receiver
-\item The sender/write enqueues/writes into the Queue
+\item The sender/writer enqueues/writes into the Queue
 \item The receiver/reader dequeues/reads from the Queue
 \item Can \emph{even out} bursty traffic
 \end{itemize}
