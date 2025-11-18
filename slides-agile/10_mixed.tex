@@ -1,0 +1,490 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+% TikZ for diagrams
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+
+% Optional visual tweaks
+\tikzset{
+    >=Stealth,
+    every node/.style={rounded corners=2pt}
+}
+
+\title{Mixed Topics}
+\author{Martin Schoeberl}
+\date{\today}
+\institute{Technical University of Denmark\\
+Embedded Systems Engineering}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+
+\begin{frame}[fragile]{Outline}
+\begin{itemize}
+
+\item Mixed collection of generator ideas
+\item My last lecture (probably)
+\item Today, intermediate project presentation and demo
+\item Next week, another guest
+\item Week 12: project work
+\item Week 13: Final project presentation and demonstration
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Use a \code{var} for a Generator}
+\begin{itemize}
+\item A \code{var} can be reassigned
+\item Just keep the Chisel components connected
+\item No need to keep the references around
+\begin{chisel}
+class Delay(n: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Bool())
+        val out = Output(Bool())
+    })
+    require(n >= 0)
+    var lastConn = io.in
+    for (i <- 0 until n)
+        lastConn = RegNext(lastConn)
+    io.out := lastConn
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Do you want Recursion?}
+\begin{itemize}
+\item With a helper function
+\begin{chisel}
+class DelayRec(n: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Bool())
+        val out = Output(Bool())
+    })
+    require(n >= 0)
+    def helper(n: Int, lastConn: Bool): Bool = {
+        if (n == 0) lastConn
+        else helper(n-1, RegNext(lastConn))
+    }
+    io.out := helper(n, io.in)
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Parameterize Number of Ports}
+\begin{itemize}
+\item Use a \code{Vec} 
+\begin{chisel}
+class Example(n: Int, w: Int) extends Module {
+    val io = IO(new Bundle {
+        val in  = Input(Vec(n, UInt(w.W)))
+        val out = Output(UInt(w.W))
+    })
+\end{chisel}
+\item Next week, a more flexible version
+\item Decide at runtime even on the type of a port
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Use Methods}
+\begin{itemize}
+\item Modules and Bundles are Scala classes
+\item One can define methods on them, like in any Scala class
+\item We have seen \code{apply()} on the companion object
+\item Remember what this gave us?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Factory Method \code{apply}}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built-in components, such as \code{Mux}
+\end{itemize}
+\begin{chisel}
+val myAdder = Adder(x, y)
+\end{chisel}
+\begin{itemize}
+\item A little bit more work on the component side
+\item Define an \code{apply} method on the companion object that returns the component (output port)
+\end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Decoupled Components}
+\begin{itemize}
+\item Using the read/valid handshake
+\item Some flexibility on sending and receiving
+\item Data is transferred when ready and valid are asserted
+\item Chisel provides a standard bundle for this: \code{DecoupledIO}
+\shortlist{../code/fifo_decoupled.txt}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Methods on \code{DecoupledIO}}
+\begin{itemize}
+\item \code{fire()} is true if and only if ready and valid are asserted
+\item \code{enq(data)} sets data and sets valid to true (no check on ready)
+\item \code{noenq()} deasserts valid
+\item \code{deq/nodeq} for the receiver side
+\begin{chisel}
+when(io.in.fire()) {
+  // do the transfer
+}
+\end{chisel}
+\item Sala convention: methods with no side effects, leaving off the empty parentheses
+\begin{chisel}
+when(io.in.fire) {
+  // do the transfer
+}
+\end{chisel}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Arbiter}
+\begin{itemize}
+\item Several components have a request for a shared resource
+\item Examples: bus, memory port, on-chip network ports
+\item Needs to select which request gets granted
+\item Different algorithms to do this
+\item Simplest is priority, but unfair
+\item Fairnis, and guaranteed progress, especially in real-time systems, is an issue
+\item I have a fair arbiter in the Chisel book (10.6.2)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel Arbiter}
+\begin{itemize}
+\item Uses \code{DecoupledIO} for inputs and the output
+\begin{chisel}
+val arb = Module(new Arbiter(UInt(), 2))
+arb.io.in(0) <> producer0.io.out
+arb.io.in(1) <> producer1.io.out
+consumer.io.in <> arb.io.out
+\end{chisel}
+\item \code{Arbiter} is a simple priority based arbitration
+\item \code{RRArbiter} choses in round robin
+\begin{itemize}
+\item No details on implementation
+\item True, single cycle, round robin is combinational complex
+\end{itemize}
+\item \code{LockingRRArbiter} grant reserved for several clock cycles
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Crossbar}
+\begin{itemize}
+\item N inputs are connected to M outputs
+\item Needs M arbitration circuits, each of N inputs
+\item Need an address for the destination
+\item Scales only to a moderate N and M
+\item Add pipelining for larger N and M
+\item Switch to a Network-on-Chip
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{FIFO Queue}
+\begin{figure}
+  \centering
+  \includegraphics[scale=\scale]{../figures/fifo}
+  \caption{A writer, a FIFO buffer, and a reader.}
+  \label{fig:fifo}
+\end{figure}
+\begin{itemize}
+\item FIFO style queues between a sender and a receiver
+\item The sender/writer enqueues/writes into the Queue
+\item The receiver/reader dequeues/reads from the Queue
+\item Can \emph{even out} bursty traffic
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Queues}
+\begin{itemize}
+\item Used when there is bursty traffic
+\begin{itemize}
+\item E.g., on a serial port
+\item Write faster from CPU than serial can send
+\item Receive data when CPU is busy with other stuff
+\end{itemize}
+\item But can fill up when the sender is continuously \emph{faster}
+\item Showing implementation variations in the Chisel book
+\begin{itemize}
+\item Bubble FIFO (was proposed in lab 5)
+\item double buffer, memory-based, ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bubble FIFO Example}
+\begin{itemize}
+\item FIFO interface
+\shortlist{../code/fifo_io.txt}
+\item Abstract base class (with some common code)
+\shortlist{../code/fifo_abstract.txt}
+\item \href{https://github.com/schoeberl/chisel-book/blob/master/src/main/scala/fifo/fifo.scala}{FIFO code}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Bubble FIFO}
+\begin{itemize}
+\item Simple, easy to understand
+\item Uses minimal resources
+\item However, each buffer stage has to toggle between empty and full
+\item Maximum bandwidth is one word every two clock cycles
+\item When full, needs N cycles for a restart
+\begin{itemize}
+\item The free element \emph{bubbles} towards the input
+\end{itemize}
+\item Better solutions
+\begin{itemize}
+\item Double buffer
+\item Memory with read and write pointers
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Use Inheritance}
+\begin{itemize}
+\item Defined an abstract base class for the FIFO and extend it
+\begin{itemize}
+\item Also use traits to inherit from several sources
+\end{itemize}
+\item Learn from software development to share code
+\item We select the implementation by the type
+\begin{chisel}
+class DoubleBufferFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+...
+class RegFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+...
+class MemFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+...
+\end{chisel}
+\item Explore the different implementation details in Section 11.3 of the Chisel book
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel \code{Queue}}
+\begin{itemize}
+\item Chisel has a \code{Queue}
+\item Interfaces are \code{DecoupledIO}s
+\item Specify type and number of entries Queue(UInt(4.W), 8)
+\item Optional arguments
+\begin{itemize}
+\item \code{pipe}: if full, allow concurrent enqueue and dequeue
+\item \code{flow}: if empty, enqueued value available immediately for dequeue
+\end{itemize}
+\item What is the implementation? Resources? Throughput?
+\end{itemize}
+\begin{chisel}
+val q = Module(new Queue(UInt(), 16))
+q.io.enq <> producer.io.out
+consumer.io.in <> q.io.deq
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Connect a Network-on-Chip}
+\begin{itemize}
+\item n x n router in bi-thorus configuration
+\item Each raouter has 4 + 1 ports: North, South, West, East, and local
+\item Use a helper function \code{connect(...)}
+\end{itemize}
+\begin{chisel}
+  def connect(r1: Int, p1: Int, r2: Int, p2: Int): Unit = {
+    net(r1).io.ports(p1).in := net(r2).io.ports(p2).out
+    net(r2).io.ports(p2).in := net(r1).io.ports(p1).out
+  }
+
+  for (i <- 0 until n) {
+    for (j <- 0 until n) {
+      val r = i * n + j
+      connect(r, EAST, i * n + (j + 1) % n, WEST)
+      connect(r, SOUTH, (i + 1) % n * n + j, NORTH)
+    }
+  }
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Why Open Source?}
+\begin{itemize}
+\item Can improve your visibility
+\item Add your GitHub repos to your CV
+\item When hiring, I look up GitHub contributions
+\item You can get help from the community
+\item I got free translations of my Chisel book
+\item Why not?
+\begin{itemize}
+\item You already use open-source tools and libraries
+\item So return some to the community
+\item Even in a company, if there is no patent
+\item Oticon contributes to Zephyr
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Open-Source Licensing}
+\begin{itemize}
+\item You own the copyright when creating code
+\begin{itemize}
+\item Hardware is different in DK, so it is blurry
+\item Maybe your employer owns the copyright (not at DTU)
+\end{itemize}
+\item A license grants others to use and change your code
+\begin{itemize}
+\item Different licenses have different permissions and restrictions
+\end{itemize}
+\item When releasing, add a license to your repo
+\begin{itemize}
+\item Have it clearly visible (e.g., as LICENSE in the project root)
+\item GitHub will detect it
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{License Types}
+\begin{itemize}
+\item BSD and MIT
+\begin{itemize}
+\item Commonly used, good for academic
+\item Basically, use my stuff, but don't sue me
+\item Can also be used in a commercial product (e.g., network stack)
+\end{itemize}
+\item GPL
+\begin{itemize}
+\item Commonly used in software
+\item Copyleft means you have to make all changes available
+\item Some companies have restrictions on using GPL software
+\end{itemize}
+\item Apache
+\begin{itemize}
+\item Similar to BDS and MIT
+\item Includes explicit patent protection
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Documentation}
+\begin{itemize}
+\item Summarize the purpose of your project
+\item Instruct how to use it
+\item List dependencies
+\item Good documentation:
+\begin{itemize}
+\item May attract users
+\item May even attract contributors
+\item Forces you to rethink your project
+\end{itemize}
+\item Start early with the documentation
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{README.md}
+\begin{itemize}
+\item Well-suited for small to medium projects
+\item Immediately visible on GitHub
+\item Use markdown for simple formatting
+\item Include figures, best in SVG
+\item I will consider the README as part of the grade
+\item Up to now, not much is going on
+\begin{itemize}
+\item Don't wait till the final week!
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{On Chat Tutor}
+\begin{itemize}
+\item AI trained on Chisel material
+\item Are you using it?
+\item \href{https://chattutor.dk/c/111/s/141/}{Chattutor}
+\item Marius will come for feedback on Tuesday, November 25th
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{On the Project}
+\begin{itemize}
+\item Today is your presentation and demonstration
+\begin{itemize}
+\item Let us use reverse the order, e.g., FFT Core first
+\end{itemize}
+\item No lab
+\item No report to be written
+\item But I expect a very detailed README.md
+\item Explain what it does, how to use
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Next Week}
+\begin{itemize}
+\item Guest lecture by Hans Jakob on
+\item Chisel in Research
+\item Includes a lab exercise
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item Collect ideas for a more productive generator code
+\item Did you find some Scala tricks that I did not present?
+\begin{itemize}
+\item You could add it to the course evaluation
+\item Easier, add to our shared Google docs
+\item Also, what you are missing
+\end{itemize}
+\item Use ready/valid interfaces (DecoupledIO)
+\item Use queues, arbitration
+\item Go open source!
+\end{itemize}
+\end{frame}
+
+\end{document}
+
+\begin{frame}[fragile]{XXX}
+\begin{itemize}
+\item xxx
+\item xxx
+\item xxx
+\begin{itemize}
+\item xxx
+\end{itemize}
+\item xxx
+\begin{chisel}
+yyy
+\end{chisel}
+\item xxx
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Title}
+\begin{itemize}
+\item abc
+\end{itemize}
+\end{frame}
