@@ -1,0 +1,1084 @@
+\input{../slides/common/slides_common}
+
+\newif\ifbook
+\input{../shared/chisel}
+
+\title{Chisel in Research}
+\author{Hans Jakob Damsgaard}
+\date{18 November 2025}
+\institute{Teledyne RESON}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{scstyle}{
+  frame=tb,
+  language=scala,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  frame=none,
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+}
+
+\usepackage{subcaption}
+\usepackage{tabularx}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\NoHyper\insertsectionhead\endNoHyper\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+    \item \textbf{Researching Approximate Computing with Chisel}
+    \begin{itemize}
+        \item What is approximate computing?
+        \item How has Chisel accelerated my research?
+        \item Reflections on code patterns and strategies
+    \end{itemize}
+    \item \textbf{Life as a PhD Student}
+    \item \textbf{Life after PhD Studies}
+    \item \textbf{Introduction to Today's Lab} with Tjark
+\end{itemize}
+\end{frame}
+
+\section{Researching Approximate Computing\\with Chisel}
+\begin{frame}[fragile]{What is Approximate Computing?}
+\framesubtitle{The Basics}
+\begin{figure}
+    \centering
+    \includegraphics[width=.8\textwidth]{images/AxC_energy_50p.pdf}
+\end{figure}
+\vspace{1em}
+\begin{centering}
+    ``\textit{Exploit \textbf{error tolerance} to trade off\\\textbf{computational accuracy} for \textbf{disproportionate\\savings} in energy, delay, circuit area, etv.}''
+
+\end{centering}
+\end{frame}
+
+\begin{frame}{What is Approximate Computing?}
+\framesubtitle{The Applications}
+\begin{itemize}
+    \onslide<1->{
+        \item Computationally intensive algorithms
+        \item Negligible output quality degradation
+    }
+    \onslide<2->{
+        \begin{itemize}
+            \item Large data aggregation (no golden result)
+            \item Audible/visual results consumed by humans
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{2em}
+\begin{figure}
+    \centering
+    \onslide<3->{
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/media.pdf}
+        \end{subfigure}
+    }
+    \hspace{1em}
+    \onslide<4->{
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/neural-network.pdf}
+        \end{subfigure}
+    }
+    \hspace{1em}
+    \onslide<5->{
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/signal.pdf}
+        \end{subfigure}
+    }
+\end{figure}
+\end{frame}
+
+\begin{frame}{How do We Approximate?}
+\framesubtitle{The Hardware Techniques}
+\begin{itemize}
+    \onslide<1->{
+        \item Circuit-level approximation
+        \begin{itemize}
+            \item Voltage over-scaling or near-threshold computing
+            \item Data path truncation or inexact synthesis
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Stochastic computing
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item Inexact arithmetic
+        \begin{itemize}
+            \item Adders, multipliers, other operators
+            \item Iterative algorithms and error compensation
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How do We Approximate?}
+\framesubtitle{Focus on Arithmetic}
+\onslide<1->{
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{images/Inexact_arith.pdf}
+    \end{figure}
+}
+\vspace{2em}
+\onslide<2->{
+    \begin{centering}
+        Selectively enabled approximation?
+
+    \end{centering}
+}
+\vspace{-2em}
+\end{frame}
+
+\begin{frame}{Error Characteristics}
+\framesubtitle{Adaptive OFLOCA}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/AdaptiveOFLOCA.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Error Characteristics}
+\framesubtitle{Adaptive Radix-2 Multiplier}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/AdaptiveRadix2Multiplier.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Error Characteristics}
+\framesubtitle{Distributions}
+\begin{figure}
+    \centering
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/hist_lsesa1.pdf}
+        \caption{LSESA1}
+    \end{subfigure}
+    \hspace{2em}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/hist_gear.pdf}
+        \caption{GeAr}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/hist_axppa.pdf}
+        \caption{AxPPA}
+    \end{subfigure}
+    \hspace{2em}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/hist_aofloca.pdf}
+        \caption{Adaptive OFLOCA}
+    \end{subfigure}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Entering \code{approx}}
+\begin{itemize}
+    \onslide<1->{
+        \item Open-source library of (in)exact arithmetic units\footnote{Available on \href{https://github.com/aproposorg/approx}{GitHub}. Histograms generated with \href{https://github.com/aproposorg/emixa}{emixa}.\\\quad\;\; High-level metrics may be generated with \href{https://github.com/chiselverify/chiselverify}{chiselverify.approximation}.}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Mostly adders and multipliers
+        \begin{itemize}
+            \item Composable full adders and approximate adders
+            \item Radix-2 and radix-4 multipliers
+            \item Custom compressor tree generator
+            \item \textit{Recursive} multipliers
+            \item Various (parallel) accumulators
+        \end{itemize}
+    }
+    \vspace{.5em}
+    \onslide<3->{
+        \item Also serves as my personal Chisel playground
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Design Strategy of \code{approx}}
+\begin{tabular*}{\textwidth}[t]{p{.4\textwidth}@{\extracolsep{\fill}}p{.58\textwidth}}
+    \begin{itemize}
+        \onslide<1->{
+            \item Common interfaces\\(in \code{package.scala})
+        }
+        \vspace{1em}
+        \onslide<2->{
+            \item Functional first\\(over imperative)
+        }
+        \vspace{1em}
+        \onslide<3->{
+            \item Immutability rules\\(for sanity)
+        }
+    \end{itemize}
+    &
+    \onslide*<1>{
+        \begin{figure}
+            \centering
+            \includegraphics[width=.3\textwidth]{images/package_scala.pdf}
+        \end{figure}
+    }
+    \onslide*<2>{
+        \begin{figure}
+            \centering
+            \includegraphics[width=.45\textwidth]{images/functional_first.pdf}
+        \end{figure}
+    }
+    \onslide*<3->{
+        \begin{figure}
+            \centering
+            \includegraphics[width=.56\textwidth]{images/immutability_rules.pdf}
+        \end{figure}
+    }
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}{Making Use of \code{approx}}
+\framesubtitle{Returning to Applications}
+\onslide<1->{
+    \begin{figure}
+        \centering
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/media.pdf}
+        \end{subfigure}
+        \hspace{1em}
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/neural-network.pdf}
+        \end{subfigure}
+        \hspace{1em}
+        \begin{subfigure}{.25\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{images/signal.pdf}
+        \end{subfigure}
+    \end{figure}
+}
+\vspace{-1em}
+\onslide*<2>{
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\textwidth]{images/diverse_clean.pdf}
+    \end{figure}
+}
+\onslide*<3>{
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\textwidth]{images/diverse_prohibited.pdf}
+    \end{figure}
+    \begin{centering}
+        Individual accelerators infeasible ...
+
+    \end{centering}
+}
+\onslide*<4->{
+    \begin{figure}
+        \centering
+        \includegraphics[width=.75\textwidth]{images/diverse_reconf.pdf}
+    \end{figure}
+    \begin{centering}
+        ... let's use a reconfigurable one!
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{What is a CGRA?}
+\framesubtitle{The Basics}
+\begin{itemize}
+    \onslide<1->{
+        \item \textit{Coarse-Grained Reconfigurable Array}
+        \begin{itemize}
+            \item (Heterogeneous) mesh of \textit{Processing Elements} (PEs)
+            \item Adaptive data path and routing
+            \item \textit{Word}-level operations (compared with FPGAs)
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Meant for computationally intensive applications
+        \begin{itemize}
+            \item Small, repeated kernel executions
+            \item Spatio-temporal dataflow (from/to memories)
+            \item Balancing performance, flexibility, and energy efficiency
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What is a CGRA?}
+\framesubtitle{Example Architecture}
+\onslide<1->{
+    \begin{figure}
+        \centering
+        \includegraphics[width=.8\textwidth]{images/CGRA.pdf}
+    \end{figure}
+}
+\onslide<2->{
+    \begin{centering}
+        Loads of architectural options!
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{What is a CGRA?}
+\framesubtitle{Architectural Diversity}
+\begin{figure}
+    \centering
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[height=2.8cm]{images/PE_ADRES_v3.pdf}
+        \caption{ADRES}
+    \end{subfigure}
+    \hspace{2em}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[height=2.8cm]{images/PE_CMA_v2.pdf}
+        \caption{CMA}
+    \end{subfigure}
+    \\
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[height=2.8cm]{images/PE_HyCUBE_v3.pdf}
+        \caption{HyCUBE}
+    \end{subfigure}
+    \hspace{2em}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[height=2.8cm]{images/PE_RF-CGRA_v2.pdf}
+        \caption{RF-CGRA}
+    \end{subfigure}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Open-Source CGRA Tools}
+\framesubtitle{Supporting Architectural Diversity}
+\begin{table}[t]
+    \centering
+    \footnotesize
+    \setlength\tabcolsep{4pt}
+    \begin{tabular}{@{}llcccc@{}}
+    \toprule
+    \textbf{Framework} & \textbf{Lang.} & \textbf{Generic?} & \textbf{Flex. ADL?} & \textbf{Mapping?} & \textbf{Working?} \\ \midrule
+    \href{https://ieeexplore.ieee.org/document/7995277/}{CGRA-ME} & C++ & \checkmark & \checkmark & $\sim$ & \checkmark\textsuperscript{\textit{a}} \\
+    \href{https://past.date-conference.com/system/files/file/date18/ubooth/121371.pdf}{CCF} & C++ & --- & --- & \checkmark & \checkmark \\
+    \href{https://woset-workshop.github.io/PDFs/2020/a22.pdf}{Pillars}\footnote{Pillars also uses Chisel!} & Scala & \checkmark & --- & $\sim$ & \checkmark \\
+    \href{https://ieeexplore.ieee.org/document/9283606/}{OpenCGRA} & Python & --- & \checkmark & \checkmark & \checkmark \\
+    \href{https://ieeexplore.ieee.org/document/9609928}{FastCGRA} & Python & --- & \checkmark & \checkmark & \checkmark\textsuperscript{\textit{b}} \\
+    \href{https://dl.acm.org/doi/10.1145/3503222.3507772}{REVAMP} & C++ & \checkmark & --- & $\sim$ & \checkmark \\
+    \href{https://woset-workshop.github.io/PDFs/2022/12-Wijerathne-paper.pdf}{Morpher} & C++ & \checkmark & --- & \checkmark & \checkmark\textsuperscript{\textit{c}} \\
+    \href{https://ieeexplore.ieee.org/document/10374147}{HETA} & C++ & --- & \checkmark & \checkmark & \checkmark\textsuperscript{\textit{c}} \\ \midrule
+    CGRAgen & Scala & \checkmark & \checkmark & \checkmark & \checkmark \\ \bottomrule
+    \end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{What is CGRAgen?}
+\framesubtitle{Overview}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/CGRAgen_flow_red.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Architecture Description}
+\begin{tabular*}{\textwidth}[t]{p{.4\textwidth}@{\extracolsep{\fill}}p{.58\textwidth}}
+    \vspace{2em}
+    \begin{itemize}
+        \onslide<1->{
+            \item Simple ADL\\(based on XML)
+            \begin{itemize}
+                \item CGRA-ME-inspired
+                \item Intg. \code{scala-xml}
+            \end{itemize}
+        }
+        \vspace{1em}
+        \onslide<2->{
+            \item Composable module\\templates
+        }
+        \vspace{1em}
+        \onslide<3->{
+            \item Five hardware\\primitives
+        }
+    \end{itemize}
+    &
+    \onslide<1->{
+        \begin{figure}
+            \includegraphics[width=.55\textwidth]{images/cgra_adl.pdf}
+        \end{figure}
+    }
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}[fragile]{Application Mapping}
+\framesubtitle{Intermediate Modeling}
+\begin{tabular*}{\textwidth}[t]{p{.5\textwidth}@{\extracolsep{\fill}}p{.49\textwidth}}
+    \begin{itemize}
+        \onslide<1->{
+            \item Application kernels as\\\textit{Dataflow Graphs}
+            \begin{itemize}
+                \item Nodes are operations
+                \item Edges are data dependencies
+            \end{itemize}
+        }
+        \vspace{1em}
+        \onslide<2->{
+            \item CGRAs as \textit{Modulo Resource Routing Graphs}
+            \begin{itemize}
+                \item Differ with target \textit{II}
+                \item Register example for\\$II=1$ and $II=2$
+                \item ALU example for $II=2$
+            \end{itemize}
+        }
+    \end{itemize}
+    &
+    \vspace{1em}
+    \onslide*<2>{
+        \begin{figure}
+            \centering
+            \begin{subfigure}{.33\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{images/RegMRRG1.pdf}
+            \end{subfigure}
+            \\
+            \begin{subfigure}{.33\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{images/RegMRRG2.pdf}
+            \end{subfigure}
+        \end{figure}
+    }
+    \onslide*<3->{
+        \begin{figure}
+            \centering
+            \includegraphics[width=.33\textwidth]{images/ALUMRRG2.pdf}
+        \end{figure}
+    }
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}{Application Mapping}
+\framesubtitle{Mapping and Approximation Algorithms}
+\begin{itemize}
+    \onslide<1->{
+        \item Topologically sort the DFG and find components
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Recursively build a mapping
+        \begin{enumerate}
+            \item Select an unmapped node
+            \item Compute all placement and routing options
+            \item Try (a subset of) these options
+            \item Unmap predecessors and successors if unsuccessful
+        \end{enumerate}
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item Aproximate through simulation
+        \begin{itemize}
+            \item Simulate arithmetic to measure (and cache) variance
+            \item ``Execute'' DFG to estimate \textit{error sensitivity}
+            \item Propagate variance and select approximation modes
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{1em}
+\onslide<4->{
+    \begin{centering}
+        Difficult to get this right; can deadlock on high utilization!\\(The problem is $NP$-hard...)
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Model to Hardware}
+\framesubtitle{\code{AbstractModule}}
+\begin{tabular*}{\textwidth}[t]{p{.44\textwidth}@{\extracolsep{\fill}}p{.54\textwidth}}
+    \begin{itemize}
+        \item Modeling hardware
+        \begin{itemize}
+            \item Name and type
+            \item Port (names, types, and directions)
+            \item Sub-modules (names and types)
+            \item Connections (port-to-port)
+        \end{itemize}
+        \vspace{1em}
+        \item Configuration cells
+    \end{itemize}
+    &
+    \onslide<2->{
+        \begin{figure}
+            \centering
+            \includegraphics[width=.52\textwidth]{images/HWGen.pdf}
+        \end{figure}
+    }
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}{Model to Hardware}
+\framesubtitle{Generation Procedure}
+\begin{tabular*}{\textwidth}[t]{p{.44\textwidth}@{\extracolsep{\fill}}p{.54\textwidth}}
+    \begin{itemize}
+        \item Bottom-up construction\\(\code{Module} class body)
+        \begin{enumerate}
+            \item Name the module
+            \item Recursively create sub-modules
+            \item Create data ports
+            \item Connect ports and sub-modules
+            \item If top, create control hardware; else, pass through
+        \end{enumerate}
+    \end{itemize}
+    &
+    \begin{figure}
+        \centering
+        \includegraphics[width=.52\textwidth]{images/HWGen.pdf}
+    \end{figure}
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}[fragile]{Model to Hardware}
+\framesubtitle{Primitives}
+\begin{tabular*}{\textwidth}[t]{p{.44\textwidth}@{\extracolsep{\fill}}p{.54\textwidth}}
+    \begin{itemize}
+        \onslide<1->{
+            \item Pre-defined, usually inlined logic
+            \begin{itemize}
+                \item Storage and routing
+                \item Arithmetic and logic
+            \end{itemize}
+        }
+        \vspace{1em}
+        \onslide<2->{
+            \item Top-level IO primitives
+            \begin{itemize}
+                \item Inputs and outputs in hierarchy
+                \item Bottom-up construction clashes?!
+            \end{itemize}
+        }
+    \end{itemize}
+    &
+    \begin{figure}
+        \centering
+        \includegraphics[width=.52\textwidth]{images/HWGen.pdf}
+    \end{figure}
+    \\
+\end{tabular*}
+\end{frame}
+
+\begin{frame}{Model to Hardware}
+\framesubtitle{Handling IO Propagation}
+\begin{itemize}
+    \onslide<1->{
+        \item Idea: make IO records \code{lazy}
+        \begin{itemize}
+            \item Collect IO in mutable \code{HashMap}s
+            \item Elaborate when ready; no early referencing
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item No traditional HDL supports this!
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item Flow must be carefully executed
+        \begin{itemize}
+            \item Inheritance $\Rightarrow$ parent constructor first
+            \item Two methods \code{build} and \code{buildConfig}
+            \item Primitives override \code{build}
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model to Hardware}
+\framesubtitle{Handling IO Propagation}
+\begin{figure}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/port_record.pdf}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=.9\textwidth]{images/port_maps.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Model to Hardware}
+\framesubtitle{Issues and Solutions}
+\begin{itemize}
+    \onslide<1->{
+        \item Chisel uses context-based signal naming
+    }
+    \onslide<2->{
+        \begin{itemize}
+            \item Generated module IO should match specification
+            \item Naming-related API frequently used
+            \item \code{noPrefix}, \code{desiredName}, \code{suggestName}, and \code{forceName}
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item Deduplication struggles with large-enough designs
+    }
+    \onslide<4->{
+        \begin{itemize}
+            \item Long generation time due to repeated elaboration
+            \item Avoid re-elaboration with Chisel \href{https://www.chisel-lang.org/docs/cookbooks/hierarchy}{Hierarchy}
+            \item All \code{Buildable}s are \code{@instantiable} with \code{@public} IO
+            \item Maintain map of \code{Definition}s and create \code{Instance}s
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Does it Work?}
+\onslide<1->{
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{images/DFG_powers.pdf}
+    \end{figure}
+}
+\vspace{-1em}
+\onslide<2->{
+    \begin{centering}
+        Seems so - up to 15\% power savings\\(mind you, on an FPGA)
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{Personal Advertisement}
+\framesubtitle{Ideas and Plans for \code{approx} (curr. Chisel 7.0.0-RC1)}
+\begin{enumerate}
+    \item Extend library collection
+    \vspace{1em}
+    \item Build floating-point sub-package
+    \begin{itemize}
+        \item IEEE 754-style reference designs
+        \item Approximated adders/multipliers
+    \end{itemize}
+    \vspace{1em}
+    \item Automate design space exploration
+    \begin{itemize}
+        \item Scripts for ASIC/FPGA area/delay analyses
+        \item Flow to establish/validate error bounds\footnote{Attempted with \href{https://github.com/chiselverify/chiselverify}{chiselverify.approximation} but should be formal.}
+    \end{itemize}
+    \vspace{1em}
+    \item Use the library for more publications
+    \begin{itemize}
+        \item Novel arithmetic unit designs
+        \item Reconfigurable or application-specific accelerators
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Personal Advertisement}
+\framesubtitle{Ideas and Plans for \code{CGRAgen} (curr. Chisel 3.5.4)}
+\begin{enumerate}
+    \item Improve design flexibility and performance
+    \begin{itemize}
+        \item Pipelining and PE-to-PE handshaking interfaces \hyperref[sfig:handshaking]{(a)}
+        \item CPU-to-CGRA and CGRA-to-memory interfaces
+    \end{itemize}
+    \vspace{.5em}
+    \item Implement advanced CGRA features
+    \begin{itemize}
+        \item Runtime context switching
+        \item Conditional execution through predication \hyperref[sfig:predication]{(b)}
+    \end{itemize}
+    \vspace{.5em}
+    \item Automate verification
+    \begin{itemize}
+        \item Flexible test and script generation with mapping integration
+    \end{itemize}
+\end{enumerate}
+\vspace{-1em}
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/Handshaking.pdf}
+        \vspace{1em}
+        \caption{PE-to-PE interface}
+        \label{sfig:handshaking}
+    \end{subfigure}
+    \hspace{3em}
+    \begin{subfigure}{.4\textwidth}
+        \centering
+        \includegraphics[width=.75\textwidth]{images/Predication.pdf}
+        \vspace{-.5em}
+        \caption{ALU with predication}
+        \label{sfig:predication}
+    \end{subfigure}
+\end{figure}
+\vspace{-1em}
+\end{frame}
+
+\begin{frame}{Turning Ideas and Plans into Reality}
+\begin{centering}
+    Open to collaboration - just reach out!
+
+    \href{https://www.linkedin.com/in/hans-jakob-damsgaard/}{LinkedIn}
+    \hspace{2em}
+    \href{https://scholar.google.com/citations?user=xZrzxjQAAAAJ}{Scholar}
+    \hspace{2em}
+    \href{https://www.github.com/hansemandse}{GitHub}
+
+\end{centering}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item Chisel is powerful also for research
+    \begin{itemize}
+        \item Concise, flexible generators
+        \item Single-language (family) development
+        \item Design and implementation time
+    \end{itemize}
+    \vspace{1em}
+    \item Define/decide on your personal design strategy
+    \vspace{1em}
+    \item Document your code; plenty of comments!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Main Publications}
+\begin{enumerate}
+\item \textbf{Damsgaard}, Ometov, Nurmi. ``Approximation Opportunities in Edge Computing Hardware: A Systematic Literature Review.'' \textit{ACM CSUR 55.12 (2023)}: 1-49.
+\item \textbf{Damsgaard}, Ometov, Nurmi. ``Verification of Approximate Hardware Designs with ChiselVerify.'' \textit{IEEE NorCAS}. 2023.
+\item \textbf{Damsgaard}, Ometov, Nurmi. ``Generating CGRA Processing Element Hardware with CGRAgen.'' \textit{26\textsuperscript{th} Euromicro DSD.} IEEE, 2023.
+\item \textbf{Damsgaard}, Ometov, Nurmi. ``Adaptive Approximate Computing with CGRAgen.'' \textit{IEEE Design \& Test 42.4 (2025)}: 41-47.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Funding Declaration}
+\begin{centering}
+    This lecture covered work conducted at Tampere University (TAU) within the APROPOS project. This project received funding from the European Union's Horizon 2020 Marie Sk\l{}odowska-Curie Innovative Training Networks under the Grant Agreement no. 956090.
+
+\end{centering}
+\vspace{1em}
+
+\begin{centering}
+    \url{https://apropos-itn.eu}
+
+\end{centering}
+\end{frame}
+
+
+
+\section{Life as a PhD Student}
+\begin{frame}{My Academic Path in Brief}
+\begin{itemize}
+    \item 2016-19 B.Sc. Electrical Engineering, DTU
+    \vspace{1em}
+    \item 2019-21 M.Sc. Computer Science and Engineering, DTU
+    \begin{itemize}
+        \item Exchange semester at UBC Vancouver
+        \item Special course on instruction prefetching
+        \item Special course on real-time NoC performance
+    \end{itemize}
+    \vspace{1em}
+    \item 2021-24 Ph.D. Computing and Electrical Engineering, TAU
+    \begin{itemize}
+        \item One of 15 students in APROPOS
+        \item Two-month research visit at IS-Wireless, Poland
+        \item Six-month research visit at AMD Research, Germany
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\note{Say something about my own experience with loneliness, the importance of a great supervisor, large degrees of self-control/motivation/passion for your topic, and the ability to limit oneself. Let the last point carry over into the next "section".}
+
+\begin{frame}{Common Misconceptions}
+\begin{itemize}
+    \onslide<1->{
+        \item The PhD journey is a lonesome ride
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item PhD students have no social life or time off
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item Your research must be \textit{revolutionizing}
+    }
+    \vspace{1em}
+    \onslide<4->{
+        \item A PhD degree limits your career options
+    }
+\end{itemize}
+\vspace{2em}
+\begin{centering}
+    \onslide<5->{{\Large No!}\\(for the most part, at least)}
+
+\end{centering}
+\end{frame}
+
+\begin{frame}{Common Misconceptions}
+\begin{itemize}
+    \item The PhD journey is a lonesome ride\\\onslide<2->{\quad$\Rightarrow$ Get yourself a great supervisor!}
+    \item PhD students have no social life or time off\\\onslide<3->{\quad$\Rightarrow$ Some (few) do not; most do.}
+    \item Your research must be \textit{revolutionizing}\\\onslide<4->{\quad$\Rightarrow$ It should be novel -- small steps are valuable too.}
+    \item A PhD degree limits your career options\\\onslide<5->{\quad$\Rightarrow$ Depends on collective agreements, but generally not.}
+\end{itemize}
+\end{frame}
+
+\note{A PhD is also a chance to travel, experience other cultures, meet interesting like-minded individuals (potential collaborators!), and geek out about techy stuff.}
+
+\begin{frame}{Reality}
+\framesubtitle{An Experience for Life}
+\begin{itemize}
+    \onslide<1->{
+        \item First and foremost: a researcher education!
+        \begin{itemize}
+            \item Plan, structure, and carry-out scientific studies
+            \item Report, publish, and present technical findings
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Study to become a field expert
+        \begin{itemize}
+            \item Contribute to advance field knowledge
+            \item Build your personal resum\'e
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+
+
+\section{Life after PhD Studies}
+\begin{frame}{Meeting Industry}
+\begin{itemize}
+    \onslide<1->{
+        \item Relatively minor experience thus far!
+        \vspace{1em}
+        \item 2024-25 SoC Verification Engineer, Nokia
+        \begin{itemize}
+            \item Large scale ASIC project; part of infrastructure IP team
+            \item Worked in SystemVerilog, UVM, and C
+        \end{itemize}
+        \vspace{1em}
+        \item 2025-{\color{white}25} Firmware Engineer, Teledyne RESON
+        \begin{itemize}
+            \item Smaller scale FPGA project; tightly integrated team
+            \item Work in VHDL, Make, Tcl, and Java
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item More well-defined tasks $\Rightarrow$ lower degree of freedom
+        \item Some opposition to open-sourcing and publishing
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What About Chisel?}
+\begin{itemize}
+    \onslide<1->{
+        \item Major pros (from my perspective) include
+        \begin{itemize}
+            \item Rapid prototyping and (initial) testing
+            \item Conciseness and readability
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Barriers met when promoting Chisel
+        \begin{itemize}
+            \item More languages (on top of RTL, TB, build automation etc.)
+            \item Loss of control from compiler dependencies
+            \item Lack of tool integration
+            \item Long-lived traditions
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{1em}
+\onslide<3->{
+    \begin{centering}
+        ... but maybe they are (partly) right?
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{Modern VHDL and SystemVerilog}
+\begin{itemize}
+    \onslide<1->{
+        \item The traditional HDLs are alive and developing\footnote{No intention to undermine this course, merely observing our field.\\\quad\;\; Generator languages tend to use only legacy language features.}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item VHDL 2019 (\href{https://ieeexplore.ieee.org/document/8938196}{IEEE 1076-2019})
+        \begin{itemize}
+            \item Improved preprocessor, interfaces, inline conditionals
+            \item Width inference, range types, type generics
+            \item Enhanced protected types and list/map types for simulation
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item SystemVerilog 2023 (\href{https://ieeexplore.ieee.org/document/10458102}{IEEE 1800-2023})
+        \begin{itemize}
+            \item Improved preprocessor, enhanced coverpoints, map functions
+            \item Note, UVM is a separate standard (\href{https://ieeexplore.ieee.org/document/9195920}{IEEE 1800.2-2020})
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{1em}
+\onslide<4->{
+    \begin{centering}
+        Beware of tool support!
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{Verification Concerns}
+\begin{itemize}
+    \onslide<1->{
+        \item Formal property-based verification
+        \begin{itemize}
+            \item \href{https://www.doulos.com/knowhow/psl/}{PSL} from VHDL 2008; \href{https://www.doulos.com/knowhow/systemverilog/systemverilog-tutorials/systemverilog-assertions-tutorial/}{SVA} from SystemVerilog 2005
+            \item Simulator support remains so-and-so (in my experience)
+            \item Model checking infeasible for large(r) designs
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item UVM dominates VHDL alternatives for ASICs; more even for FPGAs\footnote{Check out the \href{https://uobdv.github.io/Design-Verification/WilsonResearchGroupFunctionalVerificationStudy/2020-WRGFV-Study/2020-WrG-FV-Study-Webinar-Oct13.pdf}{Wilson Verification Survey}.}
+        \begin{itemize}
+            \item Highly flexible and reusable for well-defined interfaces
+            \item Fantastic tools for huge SoC-like projects
+            \item UVM has a steep learning curve - what about \href{https://osvvm.org/about-os-vvm}{OSVVM}?
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{1em}
+\onslide<3->{
+    \begin{centering}
+        And again, beware of tool support!
+
+    \end{centering}
+}
+\end{frame}
+
+
+
+\section{Introduction to Today's Lab}
+\begin{frame}{Lab Session: CSR Generation}
+\begin{itemize}
+    \onslide<1->{
+        \item What are CSRs?
+        \begin{itemize}
+            \item \textit{Control and Status Registers}
+            \item Memory-mapped configuration, control, and monitoring
+            \item All IP cores have CSRs
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item Why are CSRs problematic?
+        \begin{itemize}
+            \item In brief: \textbf{dependencies}!
+            \item Stakeholders use different views of the CSRs
+            \item CSR descriptions may be non-static during development
+            \item Changes must propagate to everyone
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<3->{
+        \item What is the solution?
+        \begin{itemize}
+            \item Maintain \textit{one} formal description of CSRs
+            \item Generate all other views (RTL, TB, SW, and documentation)
+            \item Use easily composable components
+        \end{itemize}
+    }
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lab Session: Describing CSRs}
+\begin{itemize}
+    \onslide<1->{
+        \item How \textit{should} one maintain CSR descriptions?
+        \begin{itemize}
+            \item Using established (open) standards
+            \item Stored alongside IP sources
+            \item Check out \href{https://www.accellera.org/images/downloads/standards/systemrdl/SystemRDL_2.0_Jan2018.pdf}{SystemRDL 2.0} and \href{https://www.accellera.org/images/downloads/standards/ip-xact/IPXACT-2022_user_guide.pdf}{IP-XACT}
+        \end{itemize}
+    }
+    \vspace{1em}
+    \onslide<2->{
+        \item How \textit{are} CSR descriptions maintained?
+        \begin{itemize}
+            \item Wild West of company-internal tools
+            \item Custom specification languages and formats\\(think: CSVs, Excel sheets, Word documents etc.)
+            \item Syntax-check-free generator scripts\\(popular examples: Python, Perl, Shell)
+        \end{itemize}
+    }
+\end{itemize}
+\vspace{1em}
+\onslide<3->{
+    \begin{centering}
+        Translating CSR descriptions is \textbf{tedious} and \textbf{error-prone}\\
+        (and adds \textbf{no value} to existing products)
+
+    \end{centering}
+}
+\end{frame}
+
+\begin{frame}{Lab Session: Generating CSR Hardware}
+\begin{itemize}
+    \item You will generate a CSR adapter (register interface)
+    \item Bridges between an interconnect and an IP core
+    \item Assumes legacy sources CSR descriptions in Excel
+    \item Relies on dynamic IO generation
+\end{itemize}
+\end{frame}
+
+\section{Thank you for your attention!}
+
+\end{document}
