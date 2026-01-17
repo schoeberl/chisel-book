@@ -1,0 +1,51 @@
+# sbt build artifacts
+target/
+project/target/
+.bsp/
+dist/
+
+# LaTeX build artifacts
+*.aux
+*.fdb_latexmk
+*.fls
+*.idx
+*.lof
+*.lol
+*.lot
+*.toc
+*.log
+*.out
+*.dvi
+*.pdf
+*.ps
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Test run directories
+test_run_dir/
+
+# Metals
+.metals/
+.bloop/
+
+# Scala worksheet
+*.sc.swp
+
+# Generated files
+*.class
+*.jar
+*.zip
+
+# OS specific
+.directory
+.Spotlight-V100
+.Trashes
+._*
+
