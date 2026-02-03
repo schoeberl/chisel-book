@@ -69,7 +69,7 @@ In all Dally sections ignore VHDL code
 
 #### Slides
 
- * Timing and RC switching model from L04 slides (in DTU Inside) 
+ * Timing and RC switching model from L05 slides (in DTU Inside) 
 
 ## Recommended Textbooks
 
@@ -130,21 +130,7 @@ The Schoeberl book is open access and freely available.
 
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
-
-### Week 4 Timing (Jens Sparsoe)
-
-**Topics:** Delay and Power, Timing, and Metastability
-
-**Slides:** in DTU Learn
-
-**Reading:** Dally: 15.1-15.6, and 28.1-28.4
-
-**Optional reading:** (Slides in DTU Learn)
-
-**Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
-
-
-### Week 5 Testing and Verification
+### Week 4 Testing and Verification
 
 **Topics:** Sequential building blocks, testing and verification in Chisel,
 waveform viewing
@@ -155,6 +141,17 @@ waveform viewing
 
 **Lab:** [A Simple Tester](https://github.com/schoeberl/chisel-lab)
 
+### Week 5 Timing (Kasper Hesse)
+
+**Topics:** Delay and Power, Timing, and Metastability
+
+**Slides:** in DTU Learn
+
+**Reading:** Dally: 15.1-15.6, and 28.1-28.4
+
+**Optional reading:** (Slides in DTU Learn)
+
+**Lab:** 15.1, 15.10, 15.11, 15.12, 15.19, 15.20, 15.21
 
 ### Week 6 State Machines
 
@@ -178,7 +175,7 @@ waveform viewing
 **Lab:** Dally 14.3, 14.5 (Sketch a Chisel implementation on paper), 14.28, Sketch a Chisel implementation on paper for 14.28
 
 
-### Week 8 State Machines and Refactoring
+### Week 8 State Machines and Refactoring  (Kasper Hesse)
 
 **Topics:** Refactoring of state machines, input processing, reset
 
@@ -187,6 +184,9 @@ waveform viewing
 **Reading:** Dally: 17, Chisel: 9.1, 7
 
 **Lab:** [Multiplexed Seven-Segment Display](https://github.com/schoeberl/chisel-lab)
+
+
+### Easter Week
 
 
 ### Week 9 Communications State Machines
@@ -212,10 +212,6 @@ waveform viewing
 
 **Lab:** [Testing a Vending Machine](https://github.com/schoeberl/chisel-lab)
 
-
-### Easter Week
-
-
 ### Week 11 Full day lab
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
@@ -229,8 +225,8 @@ waveform viewing
 
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
-
-### Week 13 Guest Lecture on Verification and Verilog and VHDL
+    
+### Week 13 Guest Lecture on Backend (Kasper) and Verilog and VHDL
 
 
 **Slides:** [13a_verilog.pdf](13a_verilog.pdf)

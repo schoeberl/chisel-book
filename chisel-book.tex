@@ -266,22 +266,25 @@ Staff Engineer, SiFive
 \chapter{Preface}
 
 % This text goes on the backside of the book, and in Amazon description
-This book is an introduction to digital design with a focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-orientated and functional languages, into digital design.
+This book is an introduction to digital design with a focus on using the hardware construction language Chisel. Chisel brings advances from software engineering, such as object-oriented and functional languages, into digital design.
 
 This book addresses hardware designers and software engineers. Hardware designers with knowledge of Verilog or VHDL can upgrade their productivity with a modern language for their next ASIC or FPGA design. Software engineers with knowledge of object-oriented and functional programming can leverage their knowledge to program hardware, for example, FPGA accelerators executing in the cloud.
 
 The approach of this book is to present small to medium-sized typical hardware components to explore digital design with Chisel.
 
+I have not used any large language model (LLM) to write even a single sentence. All mistakes are mine, not a halizunisation by an LLM. I use Grammarly for grammar checking and Copilot for writing code.
+
 % about me, backside
+% TODO: update the text at Amazon
 
-%Martin Schoeberl is Associate Professor at the Technical University of Denmark, where he is teaching digital electronics and computer architecture. His research interest is on hard real-time systems, time-predictable computer architecture, and real-time Java. He has more than 100 publications in peer reviewed journals, conferences, and books.
+%Martin Schoeberl is Professor at the Technical University of Denmark, where he is teaching digital electronics, computer architecture, and chip design. His research interest is on hard real-time systems, time-predictable computer architecture, and real-time Java. He has more than 100 publications in peer-reviewed journals, conferences, and books.
 
-%Martin has been four times at UC Berkeley on research stays, where he has picked up Chisel and was in close contact with the developers of Chisel. He lead the research project T-CREST where most of the components have been written in Chisel.
+%Martin has been several times at UC Berkeley on research stays, where he has picked up Chisel and was in close contact with the developers of Chisel. He lead the research project T-CREST where most of the components have been written in Chisel.
 
 \section*{Foreword for the Second Edition}
 
 As Chisel allows agile hardware design, so does open access and on-demand printing,
-which allow agile textbook publishing. Less than 6 months after the first edition of this book
+which allows agile textbook publishing. Less than 6 months after the first edition of this book
 I can provide an improved and extended second edition.
 
 Besides minor fixes, the main changes in the second edition are as follows.
@@ -300,8 +303,7 @@ Scala version (2.12.13).
 With Chisel 3.5 the testing environment \code{PeekPokeTester} as part of the \code{iotesters}
 package has been deprecated. Therefore, we have changed the testing description to the new
 \myref{https://github.com/ucb-bar/chiseltest}{ChiselTest} framework.
-As there are still many Chisel designs available that use the \code{PeekPokeTester},
-we have moved the description for it into the appendix.
+As there are still many Chisel designs available that use the \code{PeekPokeTester}, we have moved the description for it into the appendix.
 
 One of the fascinating aspects of the Chisel/Scala/Java environment is that we
 can piggyback on the available infrastructure to distribute open-source libraries.
@@ -325,10 +327,10 @@ Hans Jakob Damsgaard has contributed the description of how to use external comp
 \section*{Foreword for the Fourth Edition}
 
 For the fourth edition, we have switched to the actual Chisel version 3.5.4.
-We have added arbiter, priority encoder, and comparator to the chapter of
+We have added an arbiter, priority encoder, and comparator to the chapter on
 combinational building blocks.
 We have extended the hardware generation chapter with more functional
-examples, including building a fair arbitration tree out of a simple 2 to 1
+examples, including building a fair arbitration tree out of a simple 2-to-1
 arbitration circuits.
 We have added a new chapter on interconnect, bus interfaces,
 and how to connect an IO device as a memory-mapped device.
@@ -344,8 +346,7 @@ To make room for more advanced topics, I have removed the two appendicitis on
 Chisel 2 and the PeekPokeTester. All projects that are actively maintained have finally
 moved to Chisel 3, at least with the compatibility layer. The PeekPokeTester has been
 deprecated with Chisel 3.5, and it is recommended to switch to ChiselTest.
-If needed, those two chapters are available in the older versions of the Chisel book,
-available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
+If needed, those two chapters are available in the older versions of the Chisel book, available as PDF at the \myref{https://www.imm.dtu.dk/~masca/chisel-book.html}{web page} for this book.
 
 The fifth edition does not include major changes; it is a consolidation version.
 We did considerable proofreading for more clarity in writing. Chisel has added small convenience
@@ -359,17 +360,17 @@ to the actual version of Leros.
 
 Chisel has recently gone through some major changes. Up to Chisel 3.x, Chisel is mainly
 based on Scala, which means it runs on the Java virtual machine and is platform independent.
-After 3.x Chisel the architecture of the Chisel compile pipeline has changed. To indicate that change,
-the version numbering system has change to increment that major version number more often.
-Version 4.0 is skipped and the next Chisel version is 5.0.
-From version 5.0 the compiler backend is based on \myref{https://circt.llvm.org/}{CIRCT},
+After 3.x, the architecture of the Chisel compile pipeline has changed. To indicate that change,
+the version numbering system has changed to increment the major version number more often.
+Version 4.0 is skipped, and the next Chisel version is 5.0.
+From version 5.0, the compiler backend is based on \myref{https://circt.llvm.org/}{CIRCT},
 a circuit compiler, which is part of the \myref{https://llvm.org/}{LLVM} project.
 The main difference for the Chisel user is that CIRCT (and LLVM) are written in C++
 and therefore need a different executable for each operating system (processor
 architecture).
 
 
-We tested the book with Chisel Versions: 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
+We tested the book with Chisel Versions 3.5.6, 3.6.1, 5.3.0, and 6.5.0.
 Chisel 3.6 is the last version that uses the Scala-based backend to generate Verilog files.
 Chisel 5 is using CIRCT and needs \code{firtool} installed manually.
 The latest version of Chisel 6 includes the \code{firtool} binaries.
@@ -388,7 +389,7 @@ Chisel 3.5.6 does not support Java 21. Therefore, we recommend using Chisel
 We extended the testing chapter with a description of how to access internal signals and
 how to use assertions. Furthermore, we started to explore formal verification in Chisel.
 
-Organizing digital circuits as pipelines to increase performance is between digital design
+Organizing digital circuits as pipelines to increase performance is a key aspect of digital design
 and computer architecture.
 We added a chapter on pipelining where we use a 3-stage RISC-V pipeline as a running example.
 
