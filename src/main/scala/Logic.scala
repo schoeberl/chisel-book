@@ -67,19 +67,19 @@ class Logic extends Module {
   val bop = bt & bf
 
   //- start bool_ops
-  val and = a & b // bitwise and
-  val or = a | b  // bitwise or
-  val xor = a ^ b // bitwise xor
-  val not = ~a    // bitwise negation
+  val a_and_b = a & b // bitwise and of a and b
+  val a_or_b = a | b  // bitwise or of a and b
+  val a_xor_b = a ^ b // bitwise xor of a and b
+  val a_not = ~a    // bitwise negation of a
   //- end
 
   //- start arith_ops
-  val add = a + b // addition
-  val sub = a - b // subtraction
-  val neg = -a    // negate
-  val mul = a * b // multiplication
-  val div = a / b // division
-  val mod = a % b // modulo operation
+  val a_plus_b = a + b // addition of a and b
+  val a_minus_b = a - b // subtraction of b from a
+  val neg_a = -a    // negate a
+  val a_mul_b = a * b // multiplication of a and b
+  val a_div_b = a / b // division of a by b
+  val a_mod_b = a % b // modulo operation of a by b
   //- end
 
   //- start wire
