@@ -16,15 +16,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{Guest Lecture in Week 4}
-\begin{itemize}
-\item Next week (27/2)
-\item Jens will lecture on timing
-\item Slides will be in DTU Learn
-\item Paper and pencil exercises in the lab
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Vending machine project
@@ -33,6 +24,14 @@ Embedded Systems Engineering}
 \item Components and top-level
 \item Sequential circuits
 %\item Chisel/VHLD comparison
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Tiny Tapeout}
+\begin{itemize}
+\item This Saturday afternoon
+\item Who signed up?
+\item Just two seats are left (this morning)
 \end{itemize}
 \end{frame}
 
@@ -159,6 +158,7 @@ is pressed and reduce \emph{sum} by the price of the item
 \begin{itemize}
 \item Your group number is part of the file name (e.g., group7.pdf)
 \item Code as listing in an appendix (no .zip files)
+\item NO pictures, NO videso
 \item Hand in in DTU Learn
 \end{itemize}
 \item Content
@@ -368,17 +368,17 @@ val orVal = x || y
 
 \begin{frame}[fragile]{Power User II}
 \begin{itemize}
-\item Use the command line, shell, terminal
+\item Use the command line, shell, or terminal
 \item In Windows: PowerShell
 \begin{itemize}
-\item You may want to install the Linux subsystem
+\item You may want to install the Linux subsystem (WSL)
 \end{itemize}
 \item Universal Unix commands (Windows, Mac, Linux)
 \item Navigating the file system:
 \begin{itemize}
-\item Change directory: \code{cd}
 \item Print working directory: \code{pwd}
-\item Make a directory: \code{mkdir abc}
+\item Make a directory: \code{mkdir foo}
+\item Change directory: \code{cd foo}
 \item Create a file: \code{echo test > abc.txt}
 \item Show file content: \code{cat abc.txt}
 \item Remove a file: \code{rm abc.txt}
@@ -472,7 +472,7 @@ val orVal = x || y
 \item assigned to a field \code{io}
 \end{itemize}
 \item We build circuits as a hierarchy of components
-\item In Chisel a component is called \code{Module}
+\item In Chisel, a component is called \code{Module}
 \item Components/Modules are used to organize the circuit
 \begin{itemize}
 \item Similar to classes and methods in Java
@@ -600,13 +600,11 @@ class AluIO extends Bundle {
 \shortlist{../code/hello.txt}
 \end{frame}
 
-
-
 \begin{frame}[fragile]{Generated Verilog for Hello}
 \begin{itemize}
 \item \code{Hello} is the top-level of our blinking LED
 \item No real need to read this code
-\item But pin assignment for the synthsis
+\item But pin assignment for the synthesis
 \item Additional pins: \code{clock} and \code{reset}
 \item User pin names with a leading \code{io\_}
 \end{itemize}
@@ -618,6 +616,34 @@ module Hello(
 );
 \end{verbatim}
 \end{frame}
+
+\begin{frame}[fragile]{Pin Assignment}
+\begin{itemize}
+\item In an \code{.xdc} file
+\item Included in the Vivado project
+\item Also includes clock frequency
+\begin{itemize}
+\item Only for timing analysis
+\item You cannot \emph{set} the clock frequency
+\item It is the crystal on the PCB
+\item To change the frequency you can use a PLL
+\end{itemize}
+\end{itemize}
+{\tiny
+\begin{verbatim}
+set_property IOSTANDARD LVCMOS33 [get_ports *]
+
+## Clock signal
+set_property PACKAGE_PIN W5 [get_ports clock]
+create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clock]
+
+## LED and reset button
+set_property PACKAGE_PIN U16 [get_ports {io_led}]
+set_property PACKAGE_PIN T17 [get_ports reset]
+\end{verbatim}
+}
+\end{frame}
+
 
 \begin{frame}[fragile]{Generated Verilog for Hello}
 \begin{itemize}
