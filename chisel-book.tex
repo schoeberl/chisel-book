@@ -127,8 +127,8 @@
 \fi
 
 % uncomment following for final submission
-\renewcommand{\todo}[1]{}
-\renewcommand{\martin}[1]{}
+%\renewcommand{\todo}[1]{}
+%\renewcommand{\martin}[1]{}
 
 \makeindex
 
@@ -5279,6 +5279,8 @@ Figure~\ref{fig:uart:wave} shows the transmitted timing diagram of one byte.
   \label{fig:uart:wave}
 \end{figure}
 
+
+
 We design our UART in a modular way with minimal functionality
 per module. We present a transmitter (TX), a receiver (RX),
 a buffer, and then usage of those base components.
@@ -6129,7 +6131,15 @@ or write. However, the latest Wishbone specification (B4) also contains
 a pipelined definition. Note that the specification now includes two
 different, not necessarily compatible, specifications.
 
-\todo{Sample code for a peripheral, how to test?}
+\todo{Sample code for a peripheral, how to test? Explain figure (text from other book)}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1]{figures/wishbone}
+  \caption{Wishbone asynchronous read followed by an asynchronous write.}
+  \label{fig:wishbone}
+\end{figure}
+
 
 \subsection{AXI}
 \index{AXI}
