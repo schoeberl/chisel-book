@@ -10,3 +10,5 @@ all:
 	pdflatex tick_count_wave.tex
 	pdflatex bus_ack.tex
 	pdflatex bus_pipe_ack.tex
+	pdflatex wishbone.tex
+	pdflatex wishbone_sync.tex
