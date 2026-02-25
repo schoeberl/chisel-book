@@ -15,23 +15,30 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO 2025, this lecture and later ones}
-\begin{itemize}
-\item Discuss clock gating and clock division (as I have seen it)
-\item Usibng clock as a signal
-\item This is material for barely one hour -- extend it
-\item Maybe a better test example. At least make it a 4 Mux and write when it is done, same for the Heap example
-\item Talk about directions and what is left and what is right
-\item Maybe Chisel/VHLD comparison
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{External Lecturer in Week 5}
 \begin{itemize}
 \item Next week (5/3)
 \item Kasper will lecture on timing
 \item Slides will be in DTU Learn
 \item Paper and pencil exercises in the lab
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Let's Talk about Clocks, Baby}
+\end{frame}
+
+\begin{frame}[fragile]{Clocks}
+\begin{itemize}
+\item 95\% of designs are single clock
+\item Multiple clocks need clock domain crossing
+\begin{itemize}
+\item Not in DE2, but in Design of Digital Systems
+\end{itemize}
+\item No clock division, no chains of FFs
+\item No AND gate for clock gating
+\begin{itemize}
+\item Use a register with enable, tools can figure it out
+\end{itemize}
 \end{itemize}
 \end{frame}
 
