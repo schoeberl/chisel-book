@@ -130,12 +130,15 @@ The Schoeberl book is open access and freely available.
 
 **Lab:** [Components and sequential circuits](https://github.com/schoeberl/chisel-lab)
 
-### Week 4 Testing and Verification
+### Week 4 Testing and Verification and Verilog and VHDL
 
 **Topics:** Sequential building blocks, testing and verification in Chisel,
 waveform viewing
 
-**Slides:** [05_testing.pdf](05_testing.pdf)
+**Slides:** [04_testing.pdf](04_testing.pdf)
+
+**Slides:** [04a_verilog.pdf](04a_verilog.pdf)
+
 
 **Reading:** Dally: 2.1.4 and 20, Chisel: 3
 
@@ -226,9 +229,8 @@ waveform viewing
 **Lab:** [The Vending Machine](https://github.com/schoeberl/chisel-lab)
 
     
-### Week 13 Guest Lecture on Backend (Kasper) and Verilog and VHDL
+### Week 13 Guest Lecture on Backend (Kasper) 
 
 
-**Slides:** [13a_verilog.pdf](13a_verilog.pdf)
 
 **Lab:** Finish vending machine and report
