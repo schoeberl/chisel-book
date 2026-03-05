@@ -3,7 +3,7 @@ import chisel3._
 //- start sync_reset
 class SyncReset extends Module {
   val io = IO(new Bundle() {
-    val value = Output(UInt())
+    val value = Output(UInt(1.W))
   })
 
   val syncReset = RegNext(RegNext(reset))
