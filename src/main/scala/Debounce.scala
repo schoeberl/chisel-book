@@ -4,7 +4,7 @@ import chisel3.util._
 class Debounce(fac: Int = 100000000/100) extends Module {
   val io = IO(new Bundle {
     val btnU = Input(Bool())
-    val led = Output(UInt(8.W))
+    val led = Output(Bool())
   })
 
   val btn = io.btnU
@@ -60,7 +60,7 @@ class Debounce(fac: Int = 100000000/100) extends Module {
 class DebounceFunc(fac: Int = 100000000/100) extends Module {
   val io = IO(new Bundle {
     val btnU = Input(Bool())
-    val led = Output(UInt(8.W))
+    val led = Output(Bool())
   })
 
   //- start input_func

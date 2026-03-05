@@ -9,7 +9,8 @@ class DebounceTest extends AnyFlatSpec with ChiselScalatestTester {
     test(new Debounce(FAC)).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
       dut.io.btnU.poke(false.B)
       dut.clock.step(3)
-      dut.io.led.expect(0.U)
+      dut.io.led.expect(false.B)
+      println("false " + dut.io.led.peekBoolean())
       dut.clock.step(FAC/3)
       dut.io.btnU.poke(true.B)
       dut.clock.step(FAC/30)
@@ -17,11 +18,17 @@ class DebounceTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.clock.step(FAC/30)
       dut.io.btnU.poke(true.B)
       dut.clock.step(FAC)
-      dut.io.led.expect(0.U)
+      dut.io.led.expect(false.B)
+      println("false " + dut.io.led.peekBoolean())
       dut.clock.step(FAC)
-      dut.io.led.expect(0.U)
+      dut.io.led.expect(false.B)
+      println("false " + dut.io.led.peekBoolean())
       dut.clock.step(FAC)
-      dut.io.led.expect(1.U)
+      dut.io.led.expect(true.B)
+      println("true " + dut.io.led.peekBoolean())
+      dut.clock.step(FAC)
+      dut.io.led.expect(true.B)
+      println("true " + dut.io.led.peekBoolean())
     }
   }
 
@@ -41,7 +48,7 @@ class DebounceTest extends AnyFlatSpec with ChiselScalatestTester {
       dut.clock.step(FAC)
       dut.io.led.expect(false.B)
       dut.clock.step(FAC)
-      dut.io.led.expect(1.U)
+      dut.io.led.expect(true.B)
     }
   }
 }

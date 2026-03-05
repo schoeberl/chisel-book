@@ -48,16 +48,6 @@ libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
 libraryDependencies += "net.fornwall" % "jelf" % "0.9.0"
 
-
-/*
-scalaVersion := "2.13.16"
-val chiselVersion = "7.0.0-RC1"
-addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full)
-libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
-libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
-libraryDependencies += "net.fornwall" % "jelf" % "0.9.0"
-*/
-
 /*
 Compile / unmanagedSourceDirectories += baseDirectory.value / "add-src"
 
@@ -69,4 +59,4 @@ addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % "7.5.0" cross CrossVer
 Test / fork := true
 Test / parallelExecution := false
 
- */
+*/
