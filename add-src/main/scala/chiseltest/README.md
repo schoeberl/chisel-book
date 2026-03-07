@@ -183,15 +183,21 @@ The auto-reset feature fixed **18 tests** that were previously failing due to un
 
 ## Limitations and Caveats
 
-1. **Annotations are ignored** - `WriteVcdAnnotation`, `VerilatorBackendAnnotation`, etc. don't affect behavior (waveforms are always generated, backend is always Verilator)
+1. **VCD file generation** - ❌ **NOT SUPPORTED** in Chisel 7. ChiselSim does not provide APIs to enable VCD generation via `WriteVcdAnnotation`. Multiple approaches were tested:
+   - System properties (`chisel.svsim.vcdOutput`)
+   - Custom `HasTestingDirectory` implementations
+   - Settings.copy with trace configuration
+   - None of these approaches worked in Chisel 7.5.0
 
-2. **Formal verification is limited** - `formal.verify()`, `past()`, and other formal constructs are stubs
+2. **Annotation:** `WriteVcdAnnotation` is accepted but ignored. Multiple implementation approaches were tested (system properties, custom directories, Settings configuration) but none successfully enabled VCD output in ChiselSim 7.5.0.
 
-3. **Fork/join has minimal support** - Concurrent testing patterns execute sequentially
+3. **Formal verification is limited** - `formal.verify()`, `past()`, and other formal constructs are stubs
 
-4. **Automatic reset behavior** - By default, modules are reset before each test (mimicking Chisel 6). Disable with `override def autoResetEnabled = false`
+4. **Fork/join has minimal support** - Concurrent testing patterns execute sequentially
 
-5. **Remaining test failures** - 10 tests still fail due to:
+5. **Automatic reset behavior** - By default, modules are reset before each test (mimicking Chisel 6). Disable with `override def autoResetEnabled = false`
+
+6. **Remaining test failures** - Some tests may fail due to:
    - Module elaboration errors (unknown port widths)
    - BlackBox Verilog width mismatches
    - Formal verification stub limitations
@@ -249,11 +255,22 @@ If you're migrating tests from Chisel 6:
 | `data.expect(value)` | `toTestableData(data).expect(value)` |
 | `clock.step(n)` | `toTestableClock(clock).step(n)` |
 
+### Output Artifacts Location
+
+When using the Chisel 7 + add-src layer:
+**Output Location:** `build/chiselsim/<timestamp>/`  
+**Generated Files:**
+- `DeviceUnderTest.sv` - SystemVerilog (not FIRRTL)
+- `primary-sources/` - SystemVerilog modules
+- `workdir-verilator/` - Verilator compilation artifacts
+- `simulation` - Compiled executable
+-  Simulation logs in `build/chiselsim/<timestamp>/workdir-verilator/`
+
+
 ## Future Work
 
 - Enhanced formal verification support
 - Better fork/join concurrency handling
-- Automatic VCD generation
 - Performance optimizations
 
 ## References

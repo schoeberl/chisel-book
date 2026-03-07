@@ -3,8 +3,8 @@
 package chiseltest
 
 import chisel3._
-// Keep EphemeralSimulator imports for implicit toTestable* conversions
 import chisel3.simulator.EphemeralSimulator._
+import chisel3.simulator.ChiselSim
 import scala.language.implicitConversions
 
 /**
@@ -75,13 +75,15 @@ trait ChiselScalatestTester {
    */
   class TestBuilder[T <: Module](dutGen: => T, autoReset: Boolean, resetCyc: Int) {
     def withAnnotations(annotations: Seq[Any]): TestRunner[T] = {
-      // Annotations are ignored in Chisel 7 (for compatibility only)
-      new TestRunner(dutGen, autoReset, resetCyc)
+      new TestRunner(dutGen, autoReset, resetCyc, annotations)
     }
 
     // Allow direct execution without annotations
     def apply(body: T => Unit): Unit = {
-      simulate(dutGen) { dut =>
+      // Use ChiselSim for consistent persistent output
+      // Let ChiselSim use its default directory (build/chiselsim/*)
+      val chiselSim = new ChiselSim {}
+      chiselSim.simulate(dutGen) { dut =>
         if (autoReset) {
           applyReset(dut, resetCyc)
         }
@@ -93,9 +95,15 @@ trait ChiselScalatestTester {
   /**
    * Runner class that executes the test
    */
-  class TestRunner[T <: Module](dutGen: => T, autoReset: Boolean, resetCyc: Int) {
+  class TestRunner[T <: Module](dutGen: => T, autoReset: Boolean, resetCyc: Int, annotations: Seq[Any] = Seq()) {
     def apply(body: T => Unit): Unit = {
-      simulate(dutGen) { dut =>
+      // Keep annotations in signature for ChiselTest API compatibility.
+      val _ = annotations
+
+      // Use ChiselSim for simulation execution.
+      val chiselSim = new ChiselSim {}
+
+      chiselSim.simulate(dutGen) { dut =>
         if (autoReset) {
           applyReset(dut, resetCyc)
         }
