@@ -14,7 +14,8 @@ This compatibility layer bridges that gap by providing the familiar ChiselTest A
 
 ✅ **Automatic Reset** - Just like ChiselTest in Chisel 6, modules are automatically reset before each test  
 ✅ **Drop-in Replacement** - Same imports, same API, works immediately  
-✅ **Configurable** - Override `autoResetEnabled` or `resetCycles` to customize behavior
+✅ **Configurable** - Override `autoResetEnabled` or `resetCycles` to customize behavior  
+✅ **VCD Generation** - Waveform files can be generated with `WriteVcdAnnotation`
 
 ## Components
 
@@ -38,6 +39,7 @@ ScalaTest integration trait that provides the test runner:
 - **`TestBuilder`** - Enables method chaining with `.withAnnotations()`
 - **`TestRunner`** - Executes the actual test via `simulate()`
 - **Configurable reset** - Override `autoResetEnabled` or `resetCycles` to customize behavior
+- **VCD generation** - Supports `WriteVcdAnnotation` for waveform capture
 
 ### 3. **formal/package.scala**
 Formal verification stubs (limited support):
@@ -109,12 +111,15 @@ class MyModuleTest extends AnyFlatSpec with ChiselScalatestTester {
 }
 ```
 
-### With Annotations (Ignored but Supported)
+### With VCD Waveform Generation
 
 ```scala
 test(new MyModule).withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
-  // Test code
+  dut.io.input.poke(42.U)
+  dut.clock.step()
+  dut.io.output.expect(42.U)
 }
+// VCD file will be at: build/chiselsim/<timestamp>/workdir-verilator/trace.vcd
 ```
 
 ### Decoupled Interface Testing
@@ -183,21 +188,19 @@ The auto-reset feature fixed **18 tests** that were previously failing due to un
 
 ## Limitations and Caveats
 
-1. **VCD file generation** - ❌ **NOT SUPPORTED** in Chisel 7. ChiselSim does not provide APIs to enable VCD generation via `WriteVcdAnnotation`. Multiple approaches were tested:
-   - System properties (`chisel.svsim.vcdOutput`)
-   - Custom `HasTestingDirectory` implementations
-   - Settings.copy with trace configuration
-   - None of these approaches worked in Chisel 7.5.0
+1. **VCD file generation** - Use `WriteVcdAnnotation` to generate waveforms. The compatibility layer configures Verilator with trace support and calls `enableWaves()` at runtime. VCD files are generated at:
+   ```
+   build/chiselsim/<timestamp>/workdir-verilator/trace.vcd
+   ```
+   View with: `gtkwave build/chiselsim/*/workdir-verilator/trace.vcd`
 
-2. **Annotation:** `WriteVcdAnnotation` is accepted but ignored. Multiple implementation approaches were tested (system properties, custom directories, Settings configuration) but none successfully enabled VCD output in ChiselSim 7.5.0.
+2. **Formal verification is limited** - `formal.verify()`, `past()`, and other formal constructs are stubs
 
-3. **Formal verification is limited** - `formal.verify()`, `past()`, and other formal constructs are stubs
+3. **Fork/join has minimal support** - Concurrent testing patterns execute sequentially
 
-4. **Fork/join has minimal support** - Concurrent testing patterns execute sequentially
+4. **Automatic reset behavior** - By default, modules are reset before each test (mimicking Chisel 6). Disable with `override def autoResetEnabled = false`
 
-5. **Automatic reset behavior** - By default, modules are reset before each test (mimicking Chisel 6). Disable with `override def autoResetEnabled = false`
-
-6. **Remaining test failures** - Some tests may fail due to:
+5. **Remaining test failures** - Some tests may fail due to:
    - Module elaboration errors (unknown port widths)
    - BlackBox Verilog width mismatches
    - Formal verification stub limitations
@@ -234,6 +237,7 @@ If you're migrating tests from Chisel 6:
 1. **Import statements** - Change `import chiseltest._` to use this compatibility layer (already in place in chisel-book)
 2. **Test structure** - Should be identical; no code changes needed
 3. **Run tests** - Use `sbt test` as before
+4. **VCD generation** - Works the same way with `WriteVcdAnnotation`, but files are in a different location
 
 ## Implementation Details
 
@@ -242,9 +246,18 @@ If you're migrating tests from Chisel 6:
 1. User calls `test(dutGen)(body)` from the `ChiselScalatestTester` trait
 2. **Auto-reset** (if enabled): Asserts reset for `resetCycles` (default 1), then deasserts
 3. This returns a `TestBuilder` that accepts `.withAnnotations()` chaining
-4. The `TestRunner` eventually calls `chisel3.simulator.EphemeralSimulator.simulate(dutGen)(body)`
-5. Inside the test body, implicit conversions make Data types support `poke()`, `peek()`, `expect()`
-6. These methods delegate to ChiselSim's underlying `TestableData`, `TestableClock`, etc.
+4. The `TestRunner` checks for `WriteVcdAnnotation` and configures backend with VCD trace style
+5. Calls `chisel3.simulator.EphemeralSimulator.simulate(dutGen)(body)` with optional VCD support
+6. Inside the test body, implicit conversions make Data types support `poke()`, `peek()`, `expect()`
+7. These methods delegate to ChiselSim's underlying `TestableData`, `TestableClock`, etc.
+
+### VCD Generation Technical Details
+
+When `WriteVcdAnnotation` is detected, the compatibility layer:
+1. Creates an implicit `BackendSettingsModifications` with VCD `TraceStyle`
+2. Configures Verilator at compile time with trace support (`-DVM_TRACE_VCD=1`)
+3. Calls `chiselSim.enableWaves()` inside the simulation to start recording
+4. VCD file is written to `build/chiselsim/<timestamp>/workdir-verilator/trace.vcd`
 
 ### Mapping to ChiselSim
 
@@ -263,9 +276,9 @@ When using the Chisel 7 + add-src layer:
 - `DeviceUnderTest.sv` - SystemVerilog (not FIRRTL)
 - `primary-sources/` - SystemVerilog modules
 - `workdir-verilator/` - Verilator compilation artifacts
-- `simulation` - Compiled executable
--  Simulation logs in `build/chiselsim/<timestamp>/workdir-verilator/`
-
+  - `trace.vcd` - Waveform file (when WriteVcdAnnotation is used)
+  - `simulation` - Compiled executable
+- Simulation logs in `build/chiselsim/<timestamp>/workdir-verilator/`
 
 ## Future Work
 
