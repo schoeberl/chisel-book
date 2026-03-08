@@ -2,7 +2,7 @@ import chisel3._
 
 class PrintfCnt extends Module {
   val io = IO(new Bundle() {
-    val out = Output(UInt())
+    val out = Output(UInt(4.W))
   })
 
   val cnt = RegInit(0.U(4.W))
