@@ -21,7 +21,7 @@ class Debounce(fac: Int = 100000000/100) extends Module {
 
 
   //- start input_debounce
-  val btnDebReg = Reg(Bool())
+  val btnDebReg = RegInit(false.B)
 
   val cntReg = RegInit(0.U(32.W))
   val tick = cntReg === (fac-1).U
@@ -86,7 +86,7 @@ class DebounceFunc(fac: Int = 100000000/100) extends Module {
   val btnSync = sync(io.btnU)
 
   val tick = tickGen()
-  val btnDeb = Reg(Bool())
+  val btnDeb = RegInit(false.B)
   when (tick) {
     btnDeb := btnSync
   }
