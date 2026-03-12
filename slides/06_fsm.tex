@@ -15,12 +15,6 @@ Embedded Systems Engineering}
 \titlepage
 \end{frame}
 
-\begin{frame}[fragile]{TODO}
-\begin{itemize}
-\item Introduce ChatTutor
-\end{itemize}
-\end{frame}
-
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item A bit of testing (repetition)
@@ -30,21 +24,43 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{DTU Chip Day}
+\begin{itemize}
+\item Save the date: 14 April 2026
+\item Danish chip industry (around 20 last year)
+\item Presentations and stands
+\item Networking for jobs
+\item Free sandwiches and free beer ;-)
+\item Register and program \url{https://chipday.dk/}
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Organization and Lab Work}
 \begin{itemize}
 \item How did the testing lab work? Did you find both bugs?
 \item This week is the 7-segment decoder
-\item This is part of the lab grade -- show it a TA
+\item This is part of the lab grade -- show it to a TA
 \begin{itemize}
 \item Deadline is next week (100 \%)
-\item In two weeks (27/3) only 50 \%
+\item In two weeks (26/3) only 50 \%
 \end{itemize}
 \item Register your group to get a number!
 \begin{itemize}
-\item Group name: Group work
+\item Group name: Group
 \end{itemize}
 \end{itemize}
 \end{frame}
+
+
+
+\begin{frame}[fragile]{A Chat Tutor}
+\begin{itemize}
+\item AI trained on Chisel material
+\item Explore it for learning and doing the lab
+\item \url{https://chattutor.dk/}
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Testing with Chisel}
 \begin{itemize}
@@ -57,14 +73,14 @@ Embedded Systems Engineering}
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
-\item Import following packages
+\item Import the following packages
 \shortlist{../code/test_import.txt}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{An Example DUT}
 \begin{itemize}
-\item A device-under test (DUT)
+\item A device-under-test (DUT)
 \item Just 2-bit AND logic
 \shortlist{../code/test_dut.txt}
 \end{itemize}
@@ -73,7 +89,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{A ChiselTest}
 \begin{itemize}
 \item Extends class \code{AnyFlatSpec} with \code{ChiselScalatestTester}
-\item Has the device-under test (DUT) as parameter of the \code{test()} function
+\item Has the device-under-test (DUT) as a parameter of the \code{test()} function
 \item Test function contains the test code
 \item Testing code can use all features of Scala
 \item Is placed in \code{src/test/scala}
@@ -528,6 +544,18 @@ type, we need to pass a prototype for the vector fields. Using our
 \item A bundle may as well contain a vector
 \end{itemize}
 \shortlist{../code/bundle_vec.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Slower \emph{Clocks}}
+\begin{itemize}
+\item Last week, we talked about clock manipulation
+\item Clock division is not an option
+\item Generate a \emph{tick} signal (with a counter)
+\item At the desired frequency
+\item High for one clock cycle
+\item Use that tick signal as an enable for a DFF
+\item You will do this in today's lab
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Today's Lab}
