@@ -157,12 +157,24 @@ class Count6WaveSpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Slower \emph{Clocks}}
+\begin{itemize}
+\item Last week, we talked about clock manipulation
+\item Clock division is not an option
+\item Generate a \emph{tick} signal (with a counter)
+\item At the desired frequency
+\item High for one clock cycle
+\item Use that tick signal as an enable for a DFF
+\item You will do this in today's lab
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Generating Timing with Counters}
 \begin{itemize}
 \item Generate a \code{tick} at a lower frequency
 \item We used it in Lab 1 for the blinking LED
 \item Use it today for the lab exercise
-\item Use it for driving the free running counter at 2 Hz
+\item Use it for driving the free-running counter at 2 Hz
 \end{itemize}
 \begin{figure}
   \includegraphics[scale=0.8]{../figures/tick_wave}
@@ -544,18 +556,6 @@ type, we need to pass a prototype for the vector fields. Using our
 \item A bundle may as well contain a vector
 \end{itemize}
 \shortlist{../code/bundle_vec.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Slower \emph{Clocks}}
-\begin{itemize}
-\item Last week, we talked about clock manipulation
-\item Clock division is not an option
-\item Generate a \emph{tick} signal (with a counter)
-\item At the desired frequency
-\item High for one clock cycle
-\item Use that tick signal as an enable for a DFF
-\item You will do this in today's lab
-\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Today's Lab}
