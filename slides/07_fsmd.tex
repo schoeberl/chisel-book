@@ -21,7 +21,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Overview}
 \begin{itemize}
 \item Review \code{Vec}
-\item Counter based circuits
+\item Counter-based circuits
 \item Finite-state machines (FSMs)
 \item FSM with Datapath
 \item Input processing
@@ -33,8 +33,7 @@ Embedded Systems Engineering}
 \item A table to describe a 7-segment decoder and drive it
 \item Did you finish the exercises?
 \item Did you run it on your Basys3 board?
-\item Show it a TA for a tick!
-\item We have two rooms (117 and 127) and two TAs
+\item Only four groups are missing: show it today to a TA
 \end{itemize}
 \end{frame}
 
@@ -42,14 +41,9 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Do a \emph{real} chip within DE 2
 \item a multi-project waver (within a multi-project waver)
-\item I can pay a few projects
+\item I can pay for a few projects
 \item \href{https://tinytapeout.com/}{Tiny Tapeout}
-\item \href{https://github.com/TinyTapeout/tt10-chisel-template}{Chisel template}
-\item efabless shut down
-\begin{itemize}
-\item TT on the move to IHP
-\item TT10 will be produced on IHP (from TT workshop)
-\end{itemize}
+\item \href{https://github.com/TinyTapeout/ttihp-chisel-template}{Chisel template}
 \end{itemize}
 \end{frame}
 
@@ -60,7 +54,7 @@ Embedded Systems Engineering}
 \item Let us repeat it today
 \item A vector (\code{Vec}) is an indexable collection
 \item Similar to an array in Java
-\item Selecting an element for read is a multiplexer
+\item Selecting an element for reading is a multiplexer
 \item Selecting an element to write is an input to a multiplexer or a register enable
 \item Bundles are constructs to structure data
 \item Similar to a class in Java or a record in C/VHDL
@@ -222,19 +216,19 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{What is Better?}
 \begin{itemize}
 \item It depends ;-)
-\item Moore is on the save side
+\item Moore is on the safe side
 \item Moore is composable
 \item Mealy has \emph{faster} reaction
-\item Both are tools in you toolbox
+\item Both are tools in your toolbox
 \item Keep it simple with your vending machine and use a Moore FSM
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Working Break}
 \begin{itemize}
-\item 20' break
-\item We are half way through the course
-\item Therefore, a midterm \href{https://docs.google.com/forms/d/e/1FAIpQLSdoxImx6YXhj8-bRZAdA894BWM9xwBwvCskeXwMdXP9-xk5qA/viewform?usp=header}{evaluation}
+\item 15' break
+\item We are halfway through the course
+\item Therefore, a midterm \href{https://docs.google.com/forms/d/e/1FAIpQLSfTjXyhZ9SSa_npWwr2t6msrPWVJUkC0QuoQQcXhBi_ElWqSQ/viewform?usp=header}{evaluation}
 \item Send also on Discord
 \end{itemize}
 \end{frame}
@@ -361,7 +355,7 @@ Embedded Systems Engineering}
 \begin{frame}[fragile]{Input Processing}
 \begin{itemize}
 \item Input signals are not synchronous to the clock
-\item May violate setup and hold time of a flip-flop
+\item May violate the setup and hold time of a flip-flop
 \item Can lead to metastability
 \item Signals need to be \emph{synchronized}
 \item Using two flip-flops
@@ -371,7 +365,17 @@ Embedded Systems Engineering}
 \item First flip-flop may become metastable
 \item But will resolve within the clock period
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Input Processing Cont.}
+\begin{itemize}
 \item Input can arrive at different clock cycles at different places
+\item Also, reset needs to be synchronous
+\begin{itemize}
+\item Subsystems could reset one clock cycle apart
+\item I call this my EUR 4000 issue
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -427,7 +431,7 @@ Embedded Systems Engineering}
 \item Includes executable slides
 \item \url{https://classes.soe.ucsc.edu/cse228a/Winter24/}
 \item Includes Videos
-\item I will do a similar course for the new CE Bachelor this fall
+\item We have a similar \href{https://kurser.dtu.dk/course/02201}{course} for the new CE Bachelor this fall
 \end{itemize}
 \end{frame}
 
@@ -439,7 +443,7 @@ Embedded Systems Engineering}
 \item Just sketch the Chisel code
 \item On paper or in a plain text editor
 \item As usual, show and discuss your solution with a TA
-\item Also finish you lab from last week and get the tick
+\item Also finish your lab from last week and get the tick
 \end{itemize}
 \end{frame}
 
