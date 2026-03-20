@@ -8,7 +8,6 @@ To provide the participants with the competencies necessary to design digital ci
 
 ### List of Topics
 
- * Calculation of circuit delay and energy consumption of combinatorial circuits using R-C switch models.
  * Macromodels and timing parameters for combinatorial circuits and flip-flops. Calculation of critical path.
  * Hardware description in a hardware description language (Chisel)
  * Metastability and synchronization of asynchronous input signals.
