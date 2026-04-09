@@ -34,11 +34,11 @@ Embedded Systems Engineering}
 \item PDF with exam questions
 \item Upload solution in a single PDF
 \begin{itemize}
-\item Please use your study number as file name
+\item Please use your study number as the file name
 \item Train to do a drawing and integrate it into a PDF
 \end{itemize}
 \item Timing exercise, some coding, understanding questions, drawing circuits
-\item I will upload older exams at DTU Learn and (partially) solutions
+\item I did upload older exams at DTU Learn and (partially) solutions
 \end{itemize}
 \end{frame}
 
@@ -66,16 +66,16 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Use Discord for quick notes and quick sharing of files
 \item Maybe also try to share the \code{.bit} file for the FPGA board
-\item Use Google docs for taking notes, start your report
+\item Use Google Docs for taking notes, start your report
 \item If you like Latex, use Overleaf
 \item You can also work on the lab assignments at other times than the lab time ;-)
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{One Possible Solution for Last Lab}
+\begin{frame}[fragile]{One Possible Solution for Week 6}
 \begin{chisel}
-  val MAX_CNT = 100000.U // use a smaller value for waveform viewing
+  val MAX_CNT = 50000000.U // use a small value for waveform viewing
 
   val tickCntReg = RegInit(0.U(32.W))
   val cntReg = RegInit(0.U(4.W))
@@ -123,7 +123,18 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 \end{frame}
 
 
-
+\begin{frame}[fragile]{Display Multiplexing}
+\begin{itemize}
+\item Almost all finished the decoding lab with the counter
+\item Display multiplexing is not so different
+\begin{itemize}
+\item Just one more counter
+\end{itemize}
+\item 6 groups not yet finished
+\item Finish today
+\item Do you need some more hints?
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[fragile]{Next Labs}
@@ -294,9 +305,9 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 \begin{itemize}
 \item Main topic of today done
 \item Following is advanced material
-\item A little bit of Scala
+\item A little bit of Scala (a bit of repetition)
 \item How to write hardware generators
-\item Maybe extend your display to show decimal number
+\item Maybe extend your display to show a decimal number
 \item But first 10 minutes BREAK
 \end{itemize}
 \end{frame}
@@ -352,11 +363,11 @@ class DisplaySpec extends AnyFlatSpec with ChiselScalatestTester {
 \item Let's write a program for this
 \begin{itemize}
 \item We could use Java, Python, TCL,...
-\item With DE2 in VHDL I provided a Java program
+\item With DE2 in VHDL, I provided a Java program (show it)
 \item Now we can do this directly in Chisel/Scala
 \end{itemize}
 \item We will write our first \emph{hardware generator}
-\item First we need a little bit of Scala
+\item First, we need a little bit of Scala
 \end{itemize}
 \end{frame}
 
@@ -597,8 +608,11 @@ val m = if (useA) Module(new VariantA())
 \begin{itemize}
 \item Use of a UART
 \item \href{https://github.com/schoeberl/chisel-lab/tree/master/lab7}{lab7}
-\item Is a communicating FSM problem, uses ready/valid handshake
+\item It is a communicating FSM problem, uses a ready/valid handshake
 \item Note that it is communicating in ASCII
+\begin{itemize}
+\item Can you use a bit of Scala and a Scala String for the text?
+\end{itemize}
 \item You can discuss your solution with a TA
 \item Could be used for extended functions in the Vending Machine
 \item You can now talk with your laptop :-)
