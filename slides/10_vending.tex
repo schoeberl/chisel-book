@@ -35,18 +35,18 @@ Embedded Systems Engineering}
 \end{itemize}
 \item Written exam
 \begin{itemize}
-\item Two hour written exam
+\item Two-hour written exam
 \end{itemize}
 \end{enumerate}
 \end{frame}
 
 \begin{frame}[fragile]{Exam Topics and Questions}
 \begin{itemize}
-\item The pensum (reading lis) is on the \href{http://www2.imm.dtu.dk/courses/02139/}{web site}
+\item The pensum (reading list) is on the \href{http://www2.imm.dtu.dk/courses/02139/}{website}
 \item Compute maximum frequency and delays of a given circuit
 \item Given a Chisel description of a circuit, draw it
 \item Given a circuit drawing, sketch the Chisel description
-\item Basically what we have done in the lab
+\item Basically, what we have done in the lab
 \item No surprises (at least not too many ;-)
 \item I have uploaded some in DTU Learn
 \end{itemize}
@@ -121,7 +121,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Vending Machine Specification I}
 \begin{itemize}
-\item Sell 1 item and not returning any money
+\item Sell 1 item and not return any money
 \item Set price with 5 switches (1--31 kr.)
 \item Display price on two 7-segment displays (hex.)
 \item Accept 2 and 5 kr. (two push buttons)
@@ -144,14 +144,14 @@ is pressed and reduce \emph{sum} by the price of the item
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Optional Extras}
+\begin{frame}[fragile]{Additional Features}
 \begin{itemize}
-\item Needed for a 10 or 12
-\item Display decimal numbers
+\item Pick two or more for a 12
 \item Supplement alarm by some visuals (e.g., blinking display)
-\item Count coins and display an alarm when compartment is full ($>$ 20 coins)
+\item Count coins and display an alarm when the compartment is full ($>$ 20 coins)
 \item Have some text scrolling on the display
-\item Connect a UART to your VM and sending messages to your laptop
+\item Supplement alarm with some audio
+\item Connect a UART to your VM and send messages to your laptop
 \item ...
 \item Your ideas :-)
 \end{itemize}
@@ -165,7 +165,7 @@ is pressed and reduce \emph{sum} by the price of the item
 \begin{itemize}
 \item Does add and subtract
 \item Contains a register to hold the sum
-\item Needs some multiplexer to operate
+\item Needs a multiplexer to operate
 \end{itemize}
 \item Display needs multiplexing
 \begin{itemize}
@@ -180,10 +180,10 @@ is pressed and reduce \emph{sum} by the price of the item
 
 \begin{frame}[fragile]{Draw Figures}
 \begin{itemize}
-\item Drawings/schematics is another language to describe (digital) circuits
+\item Drawings/schematic is another language to describe (digital) circuits
 \item Draw, draw, draw boxes and arrows!
 \item Use drawing during development
-\item If you cannot draw your circuit you do not understand it
+\item If you cannot draw your circuit, you do not understand it
 \item Use drawings to communicate with the TA
 \item Have drawings in your report
 \item You will \emph{for sure} need to draw circuits at the exam ;-)
@@ -197,6 +197,7 @@ is pressed and reduce \emph{sum} by the price of the item
 \item lab 6: Hexadecimal to 7-segment decoder and counter
 \item lab 8: Multiplexed Seven-Segment Display
 \item lab 10--13: Complete Vending Machine
+\item lab 11: full ba day (4 hours)
 \item \emph{Show your working design to a TA}
 \end{itemize}
 \end{frame}
@@ -205,12 +206,15 @@ is pressed and reduce \emph{sum} by the price of the item
 \begin{itemize}
 \item One report per group
 \item A single PDF
-\begin{itemize}
+\item No pictures or videos
+\item Maximum size of the report is 2 MB
 \item Your group number is part of the file name (e.g., group7.pdf)
-\item Code as listing in an appendix (no .zip files)
-\item Hand in in DTU Inside
+\item Code as a listing in an appendix (no .zip files)
+\item Hand in at DTU Inside
 \end{itemize}
-\item Content
+\end{frame}
+
+\begin{frame}[fragile]{Final Report Content}
 \begin{itemize}
 \item Abstract
 \item Preface (Who did what)
@@ -228,8 +232,8 @@ is pressed and reduce \emph{sum} by the price of the item
 \item List of References
 \item Appendix: Chisel code
 \end{itemize}
-\end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{Material on the Lab GitHub}
 \begin{itemize}
@@ -237,17 +241,17 @@ is pressed and reduce \emph{sum} by the price of the item
 \item XDC file for Basys pins and frequency
 \item A start of a tester generating waveforms
 \item A simulation of the board
-\item Show it (in IntelliJ)
+\item Show it (in VSC with Surfer)
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{An Optional Lab}
 \begin{itemize}
-\item Testing the a Vending Machine
+\item Testing the Vending Machine
 \item Black box testing (you don't see the implementation)
 \item I give you two implementations
 \item One is OK, one is broken
-\item Which one is broken, and what it the error?
+\item Which one is broken, and what is the error?
 \item Issue is that you need Verilator and a C compiler to run the tests
 \item WSL (with Linux Ubuntu) will make it relatively easy to use Verilator (and other tools)
 \item Icarus Verilog could be easier?
