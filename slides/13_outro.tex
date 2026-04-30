@@ -22,10 +22,10 @@ Embedded Systems Engineering}
 \item Who is Alan Turing?
 \item Lipsi, a simple processor
 \item Show the vending machine next week
-\item Report hand-in at DTU Learn (22 May)
-\begin{itemize}
-\item Please check now if visible
-\end{itemize}
+\item Report hand-in at DTU Learn (26 May)
+%\begin{itemize}
+%\item Please check now if visible
+%\end{itemize}
 \item We have a guest lecture next week
 \end{itemize}
 \end{frame}
@@ -48,12 +48,8 @@ Embedded Systems Engineering}
 \begin{itemize}
 %\item Thank you!
 \item In general, it looks like most enjoyed DE2 :-)
-\item Some wrote that the lab was too easy
-\begin{itemize}
-\item I make it harder every year, maybe not fast enough ;-)
-\end{itemize}
+\item You can still provide feedback (till May 4)
 \item We can take a look next week
-\item You can still provide feedback
 \end{itemize}
 \end{frame}
 
@@ -118,7 +114,7 @@ Embedded Systems Engineering}
 \item Small enough to fit into a \href{https://github.com/schoeberl/tt06-lipsi}{Tiny Tapeout tile}
 \begin{itemize}
 \item But I had to reduce the memory a LOT
-\item Got the board a few weeks ago and it is working!
+\item Got the board a year ago and it is working!
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -143,7 +139,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item We need so-called instructions
 \item They drive the FSM
-\item To computer (e.g., +, -, or): ALU operations
+\item To compute (e.g., +, -, or): ALU operations
 \item To load from and store into memory
 \item To (conditionally) branch (implement if/else and loops)
 \end{itemize}
@@ -274,7 +270,7 @@ Encoding & Name & Operation \\
 \item Data memory for data
 \item Merge those two
 \item Instruction memory filled with a program
-\item That program is an assembler written in Scala
+\item That program is \emph{compiled} by an assembler written in Scala
 \end{itemize}
 \end{frame}
 
@@ -381,7 +377,7 @@ This is done at hardware generation
 \item See \href{https://chipday.dk/}{DTU Chip Day}
 \item FPGAs are available in the cloud
 \begin{itemize}
-\item To speedup computing
+\item To speed up computing
 \item You can rent them from Amazon
 \end{itemize}
 \item FPGAs are also used in embedded systems
@@ -421,7 +417,7 @@ This is done at hardware generation
 \item 02155 Computer Architecture and Engineering (3rd)
 \item 02114 Design of a RISC-V Microprocessor, 3 week (3rd)
 \item 02201 Agile Hardware Design (5th)
-\item 02118 Introduction into Chip Design (6th)
+\item 02118 Introduction to Chip Design (6th)
 \end{itemize}
 \item EE: add the software side to your education
 \begin{itemize}
@@ -438,7 +434,6 @@ This is done at hardware generation
 \begin{frame}[fragile]{Introduction to Chip Design}
 \begin{itemize}
 \item Regular start: spring 2026
-\item Seminar like initial iteration: spring 2025
 \item Topics:
 \begin{itemize}
 \item Basics: transistors, wire, power, time, memories
@@ -447,16 +442,11 @@ This is done at hardware generation
 \item A multicore SoC example (e.g., RISC-V processor + IO)
 \item Network-on-Chip to connect the components
 \end{itemize}
-\item Use of open-source tools (OpenLane2)
-\item Tape out with Tiny Tapeout (planned)
-\begin{itemize}
-\item Each student group will receive a chip + board
-\end{itemize}
-\item Have a (virtual) tape out at the end of the semester
-\begin{itemize}
-\item With Google/Skywater
-\item Or Edu4Chip 22 nm GF
-\end{itemize}
+\item Use of open-source tools (LibreLane)
+\item \href{https://github.com/os-chip-design/dtu-soc-2026}{Studen project}  in open source
+\item \href{https://github.com/os-chip-design/chip-design-intro}{Teaching material} in open source
+\item We do a real tapeout (getting a chip done)
+\item First student tapeout at DTU!
 \end{itemize}
 \end{frame}
 
@@ -468,8 +458,7 @@ This is done at hardware generation
 \item 02203 Design of Digital Systems
 \item 02211 Advanced Computer Architecture
 \item 02205 VLSI Design
-\item (02217 Design of Arithmetic Processors)
-\item (02204 Design of Asynchronous Circuits)
+\item (0xxxx Design of Asynchronous Circuits)
 \item 02209 Test of Digital Systems
 \item more to come...
 \end{itemize}
