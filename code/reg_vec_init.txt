@@ -1,0 +1,5 @@
+  val initReg = RegInit(VecInit(0.U(3.W), 1.U, 2.U))
+  val resetVal = initReg(sel)
+  initReg(0) := d
+  initReg(1) := e
+  initReg(2) := f

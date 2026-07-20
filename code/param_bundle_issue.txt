@@ -1,0 +1,4 @@
+class Port[T <: Data](dt: T) extends Bundle {
+  val address = UInt(8.W)
+  val data = dt.cloneType
+}

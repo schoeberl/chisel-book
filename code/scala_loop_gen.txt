@@ -1,0 +1,6 @@
+  val regVec = Reg(Vec(8, UInt(1.W)))
+
+  regVec(0) := io.din
+  for (i <- 1 until 8) {
+    regVec(i) := regVec(i-1)
+  }

@@ -1,0 +1,8 @@
+  val hello = "Hello, World!"
+  val helloHex = hello.map(_.toInt.toHexString).mkString("\n")
+  val file = new java.io.PrintWriter("hello.hex")
+  file.write(helloHex)
+  file.close()
+
+  val mem = SyncReadMem(1024, UInt(8.W))
+  loadMemoryFromFileInline(mem, "hello.hex", firrtl.annotations.MemoryLoadFileType.Hex)

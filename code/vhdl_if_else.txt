@@ -1,0 +1,10 @@
+  process(c1, c2, in1, in2, in3)
+  begin
+    if c1 = '1' then
+      output <= in1;
+    elsif c2 = '1' then
+      output <= in2;
+    else
+      output <= in3;
+    end if;
+  end process;

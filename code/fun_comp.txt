@@ -1,0 +1,5 @@
+  def compare(a: UInt, b: UInt) = {
+    val equ = a === b
+    val gt = a > b
+    (equ, gt)
+  }

@@ -1,0 +1,13 @@
+    signal reg : std_logic_vector(7 downto 0);
+
+begin
+    process (clock)
+    begin
+        if rising_edge(clock) then
+            if reset = '1' then
+                reg <= (others => '0');
+            elsif enable = '1' then
+                reg <= data;
+            end if;
+        end if;
+    end process;

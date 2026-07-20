@@ -1,0 +1,19 @@
+  switch (stateReg) {
+    is (green) {
+      when(io.badEvent) {
+        stateReg := orange
+      }
+    }
+    is (orange) {
+      when(io.badEvent) {
+        stateReg := red
+      } .elsewhen(io.clear) {
+        stateReg := green
+      }
+    }
+    is (red) {
+      when (io.clear) {
+        stateReg := green
+      }
+    }
+  }

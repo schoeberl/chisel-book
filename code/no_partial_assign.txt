@@ -1,0 +1,4 @@
+  val assignWord = Wire(UInt(16.W))
+
+  assignWord(7, 0) := lowByte
+  assignWord(15, 8) := highByte

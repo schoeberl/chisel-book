@@ -1,0 +1,11 @@
+  val grant = WireDefault("b0000".U(3.W))
+  switch (request) {
+    is ("b000".U) { grant := "b000".U}
+    is ("b001".U) { grant := "b001".U}
+    is ("b010".U) { grant := "b010".U}
+    is ("b011".U) { grant := "b001".U}
+    is ("b100".U) { grant := "b100".U}
+    is ("b101".U) { grant := "b001".U}
+    is ("b110".U) { grant := "b010".U}
+    is ("b111".U) { grant := "b001".U}
+  }

@@ -1,0 +1,3 @@
+  val param = Config(4, 2, 16)
+
+  println("The width is " + param.width)

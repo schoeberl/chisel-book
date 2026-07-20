@@ -1,0 +1,5 @@
+  val resetEnableReg = RegInit(0.U(4.W))
+
+  when (enable) {
+    resetEnableReg := inVal
+  }

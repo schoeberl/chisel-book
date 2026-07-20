@@ -1,0 +1,1 @@
+      dut.io.dbgPort.get(4).expect(123.U)

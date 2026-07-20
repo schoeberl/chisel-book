@@ -1,0 +1,33 @@
+class MemMappedRV[T <: Data](gen: T, block: Boolean = false) extends Module {
+  val io = IO(new Bundle() {
+    val mem = new MemoryMappedIO()
+    val tx = Decoupled(gen)
+    val rx = Flipped(Decoupled(gen))
+  })
+
+  val statusReg = RegInit(0.U(2.W))
+  val ackReg = RegInit(false.B)
+  val addrReg = RegInit(0.U(1.W))
+  val rdDlyReg = RegInit(false.B)
+
+  statusReg := io.rx.valid ## io.tx.ready
+
+  // ack
+  ackReg := io.mem.rd || io.mem.wr
+  io.mem.ack := ackReg
+
+  // read from status or rx
+  when (io.mem.rd) {
+    addrReg := io.mem.address
+  }
+  rdDlyReg := io.mem.rd
+  io.rx.ready := false.B
+  when (addrReg === 1.U && rdDlyReg) {
+    io.rx.ready := true.B
+  }
+  io.mem.rdData := Mux(addrReg === 0.U, statusReg, io.rx.bits)
+
+  // write to tx
+  io.tx.bits := io.mem.wrData
+  io.tx.valid := io.mem.wr
+}

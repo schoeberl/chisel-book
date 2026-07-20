@@ -1,0 +1,6 @@
+  val cntReg = RegInit(0.U(8.W))
+
+  cntReg := cntReg + 1.U
+  when(cntReg === N) {
+    cntReg := 0.U
+  }

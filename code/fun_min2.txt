@@ -1,0 +1,12 @@
+  class Two extends Bundle {
+    val v = UInt(w.W)
+    val idx = UInt(8.W)
+  }
+
+  val vecTwo = Wire(Vec(n, new Two()))
+  for (i <- 0 until n) {
+    vecTwo(i).v := vec(i)
+    vecTwo(i).idx := i.U
+  }
+
+  val res = vecTwo.reduceTree((x, y) => Mux(x.v < y.v, x, y))

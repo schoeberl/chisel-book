@@ -1,0 +1,6 @@
+  val enoughMoney = Wire(Bool())
+
+  enoughMoney := false.B
+  when (coinSum >= price) {
+    enoughMoney := true.B
+  }

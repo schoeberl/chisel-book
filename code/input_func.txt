@@ -1,0 +1,36 @@
+  def sync(v: Bool) = RegNext(RegNext(v))
+
+  def rising(v: Bool) = v & !RegNext(v)
+
+  def tickGen() = {
+    val reg = RegInit(0.U(log2Up(fac).W))
+    val tick = reg === (fac-1).U
+    reg := Mux(tick, 0.U, reg + 1.U)
+    tick
+  }
+
+  def filter(v: Bool, t: Bool) = {
+    val reg = RegInit(0.U(3.W))
+    when (t) {
+      reg := reg(1, 0) ## v
+    }
+    (reg(2) & reg(1)) | (reg(2) & reg(0)) | (reg(1) & reg(0))
+  }
+
+  val btnSync = sync(io.btnU)
+
+  val tick = tickGen()
+  val btnDeb = RegInit(false.B)
+  when (tick) {
+    btnDeb := btnSync
+  }
+
+  val btnClean = filter(btnDeb, tick)
+  val risingEdge = rising(btnClean)
+
+  // Use the rising edge of the debounced
+  // and filtered button for the counter
+  val reg = RegInit(0.U(8.W))
+  when (risingEdge) {
+    reg := reg + 1.U
+  }

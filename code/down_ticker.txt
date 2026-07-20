@@ -1,0 +1,13 @@
+class DownTicker(n: Int) extends Ticker(n) {
+
+  val N = (n-1).U
+
+  val cntReg = RegInit(N)
+
+  cntReg := cntReg - 1.U
+  when(cntReg === 0.U) {
+    cntReg := N
+  }
+
+  io.tick := cntReg === N
+}

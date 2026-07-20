@@ -1,0 +1,5 @@
+  test(new Module {
+    val io = IO(new BlackBoxAdderIO)
+    val adder = Module(new InlineBlackBoxAdder)
+    io <> adder.io
+  })

@@ -1,0 +1,8 @@
+class CombFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+
+  val memFifo = Module(new MemFifo(gen, depth))
+  val bufferFIFO = Module(new DoubleBufferFifo(gen, 2))
+  io.enq <> memFifo.io.enq
+  memFifo.io.deq <> bufferFIFO.io.enq
+  bufferFIFO.io.deq <> io.deq
+}

@@ -1,0 +1,1 @@
+  val lowByte = largeWord(7, 0)

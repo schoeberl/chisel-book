@@ -1,0 +1,7 @@
+class BlackBoxAdderIO extends Bundle {
+  val a = Input(UInt(32.W))
+  val b = Input(UInt(32.W))
+  val cin = Input(Bool())
+  val c = Output(UInt(32.W))
+  val cout = Output(Bool())
+}

@@ -1,0 +1,11 @@
+  val dataMem = Module(new DataMem((memAddrWidth)))
+
+  val memAddr = Mux(decout.isDataAccess, effAddrWord, instr(7, 0))
+  val memAddrReg = RegNext(memAddr)
+  val effAddrOffReg = RegNext(effAddrOff)
+  dataMem.io.rdAddr := memAddr
+  val dataRead = dataMem.io.rdData
+  dataMem.io.wrAddr := memAddrReg
+  dataMem.io.wrData := accu
+  dataMem.io.wr := false.B
+  dataMem.io.wrMask := "b1111".U

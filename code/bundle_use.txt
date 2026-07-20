@@ -1,0 +1,5 @@
+  val ch = Wire(new Channel())
+  ch.data := 123.U
+  ch.valid := true.B
+
+  val b = ch.valid

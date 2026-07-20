@@ -1,0 +1,1 @@
+  val router = Module(new NocRouter2(new Port(new Payload), 2))

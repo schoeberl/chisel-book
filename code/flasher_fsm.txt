@@ -1,0 +1,45 @@
+  object State extends ChiselEnum {
+    val off, flash1, space1, flash2, space2, flash3 = Value
+  }
+  import State._
+
+  val stateReg = RegInit(off)
+
+  val light = WireDefault(false.B) // FSM output
+
+  // Timer connection
+  val timerLoad = WireDefault(false.B) // start timer
+  val timerSelect = WireDefault(true.B) // 6 or 4 cycles
+  val timerDone = Wire(Bool())
+
+  timerLoad := timerDone
+
+  // Master FSM
+  switch(stateReg) {
+    is(off) {
+      timerLoad := true.B
+      timerSelect := true.B
+      when (start) { stateReg := flash1 }
+    }
+    is (flash1) {
+      timerSelect := false.B
+      light := true.B
+      when (timerDone) { stateReg := space1 }
+    }
+    is (space1) {
+      when (timerDone) { stateReg := flash2 }
+    }
+    is (flash2) {
+      timerSelect := false.B
+      light := true.B
+      when (timerDone) { stateReg := space2 }
+    }
+    is (space2) {
+      when (timerDone) { stateReg := flash3 }
+    }
+    is (flash3) {
+      timerSelect := false.B
+      light := true.B
+      when (timerDone) { stateReg := off }
+    }
+  }

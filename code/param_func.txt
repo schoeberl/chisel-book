@@ -1,0 +1,8 @@
+  def myMux[T <: Data](sel: Bool, tPath: T, fPath: T): T = {
+
+    val ret = WireDefault(fPath)
+    when (sel) {
+      ret := tPath
+    }
+    ret
+  }

@@ -1,0 +1,3 @@
+  Bits(8.W)
+  UInt(8.W)
+  SInt(10.W)

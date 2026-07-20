@@ -1,0 +1,1 @@
+  val vecBundle = Wire(Vec(8, new Channel()))

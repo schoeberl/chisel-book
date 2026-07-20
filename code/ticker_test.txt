@@ -1,0 +1,13 @@
+class TickerTest extends AnyFlatSpec with ChiselScalatestTester with TickerTestFunc {
+  "UpTicker 5" should "pass" in {
+    test(new UpTicker(5)) { dut => testFn(dut, 5) }
+  }
+
+  "DownTicker 7" should "pass" in {
+    test(new DownTicker(7)) { dut => testFn(dut, 7) }
+  }
+
+  "NerdTicker 11" should "pass" in {
+    test(new NerdTicker(11)) { dut => testFn(dut, 11) }
+  }
+}

@@ -1,0 +1,4 @@
+  val lowFrequCntReg = RegInit(0.U(4.W))
+  when (tick) {
+    lowFrequCntReg := lowFrequCntReg + 1.U
+  }

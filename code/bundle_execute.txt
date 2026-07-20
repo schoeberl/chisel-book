@@ -1,0 +1,9 @@
+class Execute extends Module {
+  val io = IO(new Bundle {
+    val aluOp = Input(UInt(5.W))
+    val regA = Input(UInt(32.W))
+    val regB = Input(UInt(32.W))
+    val result = Output(UInt(32.W))
+  })
+  // ... Implementation of execute
+}

@@ -1,0 +1,24 @@
+import chisel3._
+import chiseltest._
+import org.scalatest.flatspec.AnyFlatSpec
+
+trait TickerTestFunc {
+  def testFn[T <: Ticker](dut: T, n: Int) = {
+    // -1 means that no ticks have been seen yet
+    var count = -1
+    for (_ <- 0 to n * 3) {
+      // Check for correct output
+      if (count > 0)
+        dut.io.tick.expect(false.B)
+      else if (count == 0)
+        dut.io.tick.expect(true.B)
+      
+      // Reset the counter on a tick
+      if (dut.io.tick.peekBoolean())
+        count = n-1
+      else
+        count -= 1
+      dut.clock.step()
+    }
+  }
+}

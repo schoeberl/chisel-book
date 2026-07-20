@@ -1,0 +1,8 @@
+  val in1 = Wire(UInt(8.W))
+  val in2 = Wire(UInt(8.W))
+  val result = Wire(UInt(8.W))
+
+  val m = Module(new ChiselAdder)
+  m.io.a := in1
+  m.io.b := in2
+  result := m.io.sum

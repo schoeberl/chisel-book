@@ -1,0 +1,4 @@
+class ComplexIO extends Bundle {
+  val d = UInt(10.W)
+  val b = Bool()
+}

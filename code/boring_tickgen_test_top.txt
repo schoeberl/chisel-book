@@ -1,0 +1,11 @@
+class TickGenTestTop extends Module {
+  val io = IO(new Bundle {
+    val tick = Output(Bool())
+    val counter = Output(UInt(8.W))
+  })
+
+  val tickGen = Module(new TickGen)
+  io.tick := tickGen.io.tick
+  io.counter := DontCare
+  BoringUtils.bore(tickGen.cntReg, Seq(io.counter))
+}

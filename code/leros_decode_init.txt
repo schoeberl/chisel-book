@@ -1,0 +1,9 @@
+class Decode() extends Module {
+  val io = IO(new Bundle {
+    val din = Input(UInt(16.W))
+    val dout = Output(new DecodeOut)
+  })
+
+  import DecodeOut._
+
+  val d = DecodeOut.default

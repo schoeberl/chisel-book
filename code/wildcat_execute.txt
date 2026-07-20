@@ -1,0 +1,9 @@
+  val res = Wire(UInt(32.W))
+  val val2 = Mux(decExReg.decOut.isImm, decExReg.decOut.imm.asUInt, v2)
+  res := alu(decExReg.decOut.aluOp, v1, val2)
+  when(decExReg.decOut.isLui) {
+    res := decExReg.decOut.imm.asUInt
+  }
+  when(decExReg.decOut.isAuiPc) {
+    res := (decExReg.pc.asSInt + decExReg.decOut.imm).asUInt
+  }

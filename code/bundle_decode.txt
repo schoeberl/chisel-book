@@ -1,0 +1,10 @@
+class Decode extends Module {
+  val io = IO(new Bundle {
+    val instr = Input(UInt(32.W))
+    val pc = Input(UInt(32.W))
+    val aluOp = Output(UInt(5.W))
+    val regA = Output(UInt(32.W))
+    val regB = Output(UInt(32.W))
+  })
+  // ... Implementation of decode
+}

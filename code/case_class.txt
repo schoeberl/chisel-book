@@ -1,0 +1,1 @@
+case class Config(txDepth: Int, rxDepth: Int, width: Int)

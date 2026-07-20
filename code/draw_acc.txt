@@ -1,0 +1,8 @@
+  val regAcc = RegInit(0.U(8.W))
+
+  switch(sel) {
+    is(0.U) { regAcc := regAcc}
+    is(1.U) { regAcc := 0.U}
+    is(2.U) { regAcc := regAcc + din}
+    is(3.U) { regAcc := regAcc - din}
+  }

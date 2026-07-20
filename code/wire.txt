@@ -1,0 +1,3 @@
+  val w = Wire(UInt())
+
+  w := a & b

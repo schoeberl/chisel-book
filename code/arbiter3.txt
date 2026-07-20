@@ -1,0 +1,8 @@
+  val grant = VecInit(false.B, false.B, false.B)
+  val notGranted = VecInit(false.B, false.B)
+
+  grant(0) := request(0)
+  notGranted(0) := !grant(0)
+  grant(1) := request(1) && notGranted(0)
+  notGranted(1) := !grant(1) && notGranted(0)
+  grant(2) := request(2) && notGranted(1)

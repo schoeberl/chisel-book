@@ -1,0 +1,1 @@
+class FormalTest extends AnyFlatSpec with ChiselScalatestTester with Formal {

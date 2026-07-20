@@ -1,0 +1,6 @@
+  val w = WireDefault(0.U)
+
+  when (cond) {
+    w := 3.U
+  }
+  // ... and some more complex conditional assignments

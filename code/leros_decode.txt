@@ -1,0 +1,26 @@
+  switch(instr(15, 8)) {
+    is(ADD.U) {
+      d.op := add.U
+      d.enaMask := MaskAll
+      d.isRegOpd := true.B
+    }
+    is(ADDI.U) {
+      d.op := add.U
+      d.enaMask := MaskAll
+      d.useDecOpd := true.B
+    }
+    is(SUB.U) {
+      d.op := sub.U
+      d.enaMask := MaskAll
+      d.isRegOpd := true.B
+    }
+    is(SUBI.U) {
+      d.op := sub.U
+      d.enaMask := MaskAll
+      d.useDecOpd := true.B
+    }
+    is(SHR.U) {
+      d.op := shr.U
+      d.enaMask := MaskAll
+    }
+    // ...

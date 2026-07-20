@@ -1,0 +1,1 @@
+  val vec2 = word.asTypeOf(Vec(4, UInt(8.W)))

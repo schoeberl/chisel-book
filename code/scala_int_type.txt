@@ -1,0 +1,1 @@
+  val number: Int = 42

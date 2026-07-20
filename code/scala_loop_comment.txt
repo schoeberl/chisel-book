@@ -1,0 +1,4 @@
+  // Loops i from 0 to 9
+  for (i <- 0 until 10) {
+    // use i to index into a Wire or Vec
+  }

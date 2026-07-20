@@ -1,0 +1,3 @@
+  val city = (2000, "Frederiksberg")
+  val zipCode = city._1
+  val name = city._2

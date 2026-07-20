@@ -1,0 +1,6 @@
+  val initVal = Wire(new Channel())
+
+  initVal.data := 0.U
+  initVal.valid := false.B
+
+  val channelReg = RegInit(initVal)

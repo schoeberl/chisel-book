@@ -1,0 +1,1 @@
+  val resA = myMux(selA, 5.U, 10.U)

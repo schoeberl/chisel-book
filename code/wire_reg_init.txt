@@ -1,0 +1,1 @@
+  val reg = RegInit(0.S(8.W))

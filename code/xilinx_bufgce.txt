@@ -1,0 +1,7 @@
+class BUFGCE extends BlackBox(Map("SIM_DEVICE" -> "7SERIES")) {
+  val io = IO(new Bundle {
+    val I = Input(Clock())
+    val CE = Input(Bool())
+    val O = Output(Clock())
+  })
+}

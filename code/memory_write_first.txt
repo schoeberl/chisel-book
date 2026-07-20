@@ -1,0 +1,9 @@
+  val mem = SyncReadMem(1024, UInt(8.W), SyncReadMem.WriteFirst)
+e {
+    val rdAddr = Input(UInt(10.W))
+    val rdData = Output(UInt(8.W))
+    val wrAddr = Input(UInt(10.W))
+    val wrData = Input(UInt(8.W))
+    val wrEna = Input(Bool())
+  })
+

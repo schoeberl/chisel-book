@@ -1,0 +1,11 @@
+  // This dual-port memory generates registers (in Quartus with Cyclone V)
+  val mem = SyncReadMem(1024, UInt(8.W))
+
+  io.rdDataA := mem.read(io.addrA)
+  when(io.wrEnaA) {
+    mem.write(io.addrA, io.wrDataA)
+  }
+  io.rdDataB := mem.read(io.addrB)
+  when(io.wrEnaB) {
+    mem.write(io.addrB, io.wrDataB)
+  }

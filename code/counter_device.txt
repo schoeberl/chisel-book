@@ -1,0 +1,22 @@
+class CounterDevice extends Module {
+  val io = IO(new PipeCon(4))
+
+  val ackReg = RegInit(false.B)
+  val addrReg = RegInit(0.U(2.W))
+  val cntRegs = RegInit(VecInit(Seq.fill(4)(0.U(32.W))))
+
+  ackReg := io.rd || io.wr
+  when(io.rd) {
+    addrReg := io.address(3, 2)
+  }
+  io.rdData := cntRegs(addrReg)
+
+  for (i <- 0 until 4) {
+    cntRegs(i) := cntRegs(i) + 1.U
+  }
+  when (io.wr) {
+    cntRegs(io.address(3, 2)) := io.wrData
+  }
+
+  io.ack := ackReg
+}

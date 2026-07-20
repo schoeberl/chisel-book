@@ -1,0 +1,1 @@
+  val reg = RegEnable(data, 0.U(8.W), enable)

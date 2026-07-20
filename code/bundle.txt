@@ -1,0 +1,4 @@
+class Channel() extends Bundle {
+  val data = UInt(32.W)
+  val valid = Bool()
+}

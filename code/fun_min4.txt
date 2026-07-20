@@ -1,0 +1,7 @@
+  val scalaVector = vec.zipWithIndex
+    .map((x) => MixedVecInit(x._1, x._2.U(8.W)))
+  val resFun2 = VecInit(scalaVector)
+    .reduceTree((x, y) => Mux(x(0) < y(0), x, y))
+
+  val minVal = resFun2(0)
+  val minIdx = resFun2(1)

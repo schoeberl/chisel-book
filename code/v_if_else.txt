@@ -1,0 +1,8 @@
+  always @(*) begin
+    if (c1)
+      out = in1;
+    else if (c2)
+      out = in2;
+    else
+      out = in3;
+  end

@@ -1,0 +1,12 @@
+class TickGen extends Module {
+  val io = IO(new Bundle {
+    val tick = Output(Bool())
+  })
+
+  val cntReg = RegInit(0.U(8.W))
+  cntReg := cntReg + 1.U
+  io.tick := cntReg === 9.U
+  when(io.tick) {
+    cntReg := 0.U
+  }
+}

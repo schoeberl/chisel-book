@@ -1,0 +1,9 @@
+class DecodeOut extends Bundle {
+  val operand = UInt(32.W)
+  val enaMask = UInt(4.W)
+  val op = UInt()
+  val off = SInt(10.W)
+  val isRegOpd = Bool()
+  val useDecOpd = Bool()
+  val isStore = Bool()
+  // ... and more fields

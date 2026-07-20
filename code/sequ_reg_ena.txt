@@ -1,0 +1,5 @@
+  val enableReg = Reg(UInt(4.W))
+
+  when (enable) {
+    enableReg := inVal
+  }

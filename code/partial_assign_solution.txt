@@ -1,0 +1,12 @@
+  val assignWord = Wire(UInt(16.W))
+
+  class Split extends Bundle {
+    val high = UInt(8.W)
+    val low = UInt(8.W)
+  }
+
+  val split = Wire(new Split())
+  split.low := lowByte
+  split.high := highByte
+
+  assignWord := split.asUInt

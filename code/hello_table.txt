@@ -1,0 +1,3 @@
+  val msg = "Hello World!"
+  val text = VecInit(msg.map(_.U))
+  val len = msg.length.U

@@ -1,0 +1,9 @@
+  def myMuxAlt[T <: Data](sel: Bool, tPath: T, fPath: T): T = {
+
+    val ret = Wire(fPath.cloneType)
+    ret := fPath
+    when (sel) {
+      ret := tPath
+    }
+    ret
+  }

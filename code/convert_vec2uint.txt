@@ -1,0 +1,2 @@
+  val vec = Wire(Vec(4, UInt(8.W)))
+  val word = vec.asUInt

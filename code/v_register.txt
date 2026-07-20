@@ -1,0 +1,8 @@
+  reg [7:0] reg_data;
+
+  always @(posedge clk) begin
+    if (reset)
+      reg_data <= 8'b0;
+    else if (enable)
+      reg_data <= data;
+  end

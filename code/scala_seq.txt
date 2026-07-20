@@ -1,0 +1,2 @@
+  val numbers = Seq(1, 15, -2, 0)
+  val second = numbers(1)

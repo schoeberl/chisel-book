@@ -1,0 +1,33 @@
+  def decode(instruction: UInt) = {
+
+    val opcode = instruction(6, 0)
+    val func3 = instruction(14, 12)
+    val decOut = Wire(new DecodedInstr())
+    decOut.instrType := R.id.U
+    decOut.isImm := false.B
+    decOut.isLui := false.B
+    decOut.isAuiPc := false.B
+    decOut.isLoad := false.B
+    decOut.isStore := false.B
+    decOut.isBranch := false.B
+    decOut.isJal := false.B
+    decOut.isJalr := false.B
+    decOut.rfWrite := false.B
+    decOut.isECall := false.B
+    decOut.isCssrw := false.B
+    decOut.rs1Valid := false.B
+    decOut.rs2Valid := false.B
+    switch(opcode) {
+      is(AluImm.U) {
+        decOut.instrType := I.id.U
+        decOut.isImm := true.B
+        decOut.rfWrite := true.B
+        decOut.rs1Valid := true.B
+      }
+      is(Alu.U) {
+        decOut.instrType := R.id.U
+        decOut.rfWrite := true.B
+        decOut.rs1Valid := true.B
+        decOut.rs2Valid := true.B
+      }
+      // and more cases

@@ -1,0 +1,19 @@
+  val FREQ = 100000000 // a 100 MHz clock input
+  val MAX = FREQ/1000  // 1 kHz
+
+  val modulationReg = RegInit(0.U(32.W))
+
+  val upReg = RegInit(true.B)
+
+  when (modulationReg < FREQ.U && upReg) {
+    modulationReg := modulationReg + 1.U
+  } .elsewhen (modulationReg === FREQ.U && upReg) {
+    upReg := false.B
+  } .elsewhen (modulationReg > 0.U && !upReg) {
+    modulationReg := modulationReg - 1.U
+  } .otherwise { // 0
+    upReg := true.B
+  }
+
+  // divide modReg by 1024 (about the 1 kHz)
+  val sig = pwm(MAX, modulationReg >> 10)

@@ -1,0 +1,9 @@
+      def test(values: Seq[Int]) = {
+        for (fun <- 0 to 7) {
+          for (a <- values) {
+            for (b <- values) {
+              testOne(a, b, fun)
+            }
+          }
+        }
+      }

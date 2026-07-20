@@ -1,0 +1,12 @@
+  val mem = SyncReadMem(1024, UInt(8.W))
+  loadMemoryFromFileInline(
+    mem, "./src/main/resources/init.hex", firrtl.annotations.MemoryLoadFileType.Hex
+  )
+
+  io.rdData := mem.read(io.rdAddr)
+  // alternatively, io.rdData := mem(io.rdAddr)
+
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+    // alternatively, mem(io.wrAddr) := io.wrData
+  }

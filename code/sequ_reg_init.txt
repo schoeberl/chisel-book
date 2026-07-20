@@ -1,0 +1,3 @@
+  val valReg = RegInit(0.U(4.W))
+
+  valReg := inVal

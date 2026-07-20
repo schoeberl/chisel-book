@@ -1,0 +1,6 @@
+  val cntReg = RegInit(0.U)
+  cntDone := cntReg === 0.U
+
+  // Down counter FSM
+  when(cntLoad) { cntReg := 2.U }
+  when(cntDecr) { cntReg := cntReg - 1.U }

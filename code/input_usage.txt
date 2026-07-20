@@ -1,0 +1,8 @@
+  val risingEdge = btnClean & !RegNext(btnClean)
+
+  // Use the rising edge of the debounced and
+  // filtered button to count up
+  val reg = RegInit(0.U(8.W))
+  when (risingEdge) {
+    reg := reg + 1.U
+  }

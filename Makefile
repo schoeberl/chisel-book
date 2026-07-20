@@ -13,7 +13,7 @@ vhdl:
 
 gencode:
 	-mkdir code
-	sbt -Dsbt.main.class=sbt.ScriptMain scripts/gencode.scala
+	python3 scripts/gencode.py
 
 keywords:
 	sbt -Dsbt.main.class=sbt.ScriptMain scripts/keywords.scala

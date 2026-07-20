@@ -1,0 +1,3 @@
+  val shiftReg = Reg(UInt(4.W))
+  shiftReg := shiftReg(2, 0) ## din
+  val dout = shiftReg(3)

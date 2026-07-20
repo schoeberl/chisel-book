@@ -1,0 +1,4 @@
+class Payload extends Bundle {
+  val data = UInt(16.W)
+  val flag = Bool()
+}

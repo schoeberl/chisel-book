@@ -1,0 +1,1 @@
+  val resetEnableReg2 = RegEnable(inVal, 0.U(4.W), enable)

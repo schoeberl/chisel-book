@@ -1,0 +1,5 @@
+  // A value is a constant
+  val zero = 0
+  // No new assignment is possible
+  // The following will not compile
+  zero = 3

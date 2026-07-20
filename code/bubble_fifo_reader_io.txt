@@ -1,0 +1,5 @@
+class ReaderIO(size: Int) extends Bundle {
+  val read = Input(Bool())
+  val empty = Output(Bool())
+  val dout = Output(UInt(size.W))
+}

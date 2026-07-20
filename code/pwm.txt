@@ -1,0 +1,8 @@
+  def pwm(nrCycles: Int, din: UInt) = {
+    val cntReg = RegInit(0.U(unsignedBitLength(nrCycles-1).W))
+    cntReg := Mux(cntReg === (nrCycles-1).U, 0.U, cntReg + 1.U)
+    din > cntReg
+  }
+
+  val din = 3.U
+  val dout = pwm(10, din)

@@ -1,0 +1,5 @@
+  val io = IO(new Bundle{
+    val badEvent = Input(Bool())
+    val clear = Input(Bool())
+    val ringBell = Output(Bool())
+  })

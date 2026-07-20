@@ -1,0 +1,1 @@
+  val stateReg = RegInit(green)

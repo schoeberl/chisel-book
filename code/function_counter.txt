@@ -1,0 +1,10 @@
+  // This function returns a counter
+  def genCounter(n: Int) = {
+    val cntReg = RegInit(0.U(8.W))
+    cntReg := Mux(cntReg === n.U, 0.U, cntReg + 1.U)
+    cntReg
+  }
+
+  // now we can easily create many counters
+  val count10 = genCounter(10)
+  val count99 = genCounter(99)

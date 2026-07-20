@@ -1,0 +1,4 @@
+  class BundleVec extends Bundle {
+    val field = UInt(8.W)
+    val vector = Vec(4,UInt(8.W))
+  }

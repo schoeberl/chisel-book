@@ -1,0 +1,8 @@
+class NocRouter2[T <: Data](dt: T, n: Int) extends Module {
+  val io =IO(new Bundle {
+    val inPort = Input(Vec(n, dt))
+    val outPort = Output(Vec(n, dt))
+  })
+
+  // Route the payload according to the address
+  // ...

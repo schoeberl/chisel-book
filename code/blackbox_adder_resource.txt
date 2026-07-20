@@ -1,0 +1,4 @@
+class ResourceBlackBoxAdder extends HasBlackBoxResource {
+  val io = IO(new BlackBoxAdderIO)
+  addResource("/ResourceBlackBoxAdder.v")
+}

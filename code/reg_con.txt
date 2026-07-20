@@ -1,0 +1,2 @@
+  reg := d
+  val q = reg

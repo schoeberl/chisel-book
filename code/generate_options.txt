@@ -1,0 +1,3 @@
+object HelloOption extends App {
+  emitVerilog(new Hello(), Array("--target-dir", "generated"))
+}

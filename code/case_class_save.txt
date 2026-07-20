@@ -1,0 +1,4 @@
+case class SaveConf(txDepth: Int, rxDepth: Int, width: Int) {
+
+  assert(txDepth > 0 && rxDepth > 0 && width > 0, "parameters must be larger than 0")
+}

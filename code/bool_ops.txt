@@ -1,0 +1,4 @@
+  val a_and_b = a & b // bitwise and of a and b
+  val a_or_b = a | b  // bitwise or of a and b
+  val a_xor_b = a ^ b // bitwise xor of a and b
+  val a_not = ~a    // bitwise negation of a

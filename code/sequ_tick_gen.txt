@@ -1,0 +1,7 @@
+  val tickCounterReg = RegInit(0.U(32.W))
+  val tick = tickCounterReg === (N-1).U
+
+  tickCounterReg := tickCounterReg + 1.U
+  when (tick) {
+    tickCounterReg := 0.U
+  }

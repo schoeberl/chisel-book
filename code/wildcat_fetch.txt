@@ -1,0 +1,13 @@
+  // PC generation
+  // val pcReg = RegInit(-4.S(32.W).asUInt)
+  val pcReg = RegInit(0.S(32.W).asUInt)
+  val pcNext = WireDefault(Mux(doBranch, branchTarget, pcReg + 4.U))
+  pcReg := pcNext
+  io.imem.address := pcNext
+
+  // Fetch
+  val instr = WireDefault(io.imem.data)
+  when (io.imem.stall) {
+    instr := 0x00000013.U
+    pcNext := pcReg
+  }

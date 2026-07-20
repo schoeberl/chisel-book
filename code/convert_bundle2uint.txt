@@ -1,0 +1,7 @@
+  class MyBundle extends Bundle {
+    val a = UInt(8.W)
+    val b = UInt(16.W)
+  }
+
+  val bundle = Wire(new MyBundle)
+  val word2 = bundle.asUInt

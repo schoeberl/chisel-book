@@ -1,0 +1,4 @@
+class PathBlackBoxAdder extends HasBlackBoxPath {
+  val io = IO(new BlackBoxAdderIO)
+  addPath("./src/main/resources/PathBlackBoxAdder.v")
+}

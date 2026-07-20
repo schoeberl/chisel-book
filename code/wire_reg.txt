@@ -1,0 +1,2 @@
+  val number = Wire(UInt())
+  val reg = Reg(SInt())

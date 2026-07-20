@@ -1,0 +1,1 @@
+  val sum = vec.reduceTree(_ + _)

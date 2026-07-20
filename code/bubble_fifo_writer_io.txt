@@ -1,0 +1,5 @@
+class WriterIO(size: Int) extends Bundle {
+  val write = Input(Bool())
+  val full = Output(Bool())
+  val din = Input(UInt(size.W))
+}
