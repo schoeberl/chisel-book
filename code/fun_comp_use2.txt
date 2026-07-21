@@ -1,1 +1,0 @@
-  val (equ, gt) = compare(inA, inB)

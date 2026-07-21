@@ -1,6 +1,0 @@
-  val a_plus_b = a + b // addition of a and b
-  val a_minus_b = a - b // subtraction of b from a
-  val neg_a = -a    // negate a
-  val a_mul_b = a * b // multiplication of a and b
-  val a_div_b = a / b // division of a by b
-  val a_mod_b = a % b // modulo operation of a by b

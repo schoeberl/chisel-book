@@ -1,3 +1,0 @@
-  val delayReg = Reg(UInt(4.W))
-
-  delayReg := delayIn

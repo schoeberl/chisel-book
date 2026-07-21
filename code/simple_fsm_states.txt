@@ -1,4 +1,0 @@
-  object State extends ChiselEnum {
-    val green, orange, red = Value
-  }
-  import State._

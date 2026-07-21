@@ -1,4 +1,0 @@
-  val cntEventsReg = RegInit(0.U(4.W))
-  when(event) {
-    cntEventsReg := cntEventsReg + 1.U
-  }

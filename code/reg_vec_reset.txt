@@ -1,2 +1,0 @@
-  val resetRegFile = RegInit(VecInit(Seq.fill(32)(0.U(32.W))))
-  val rdRegFile = resetRegFile(sel)

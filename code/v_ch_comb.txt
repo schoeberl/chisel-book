@@ -1,7 +1,0 @@
-  io.out := 0.U
-  switch(io.sel) {
-    is("b00".U) { io.out := io.in(0) }
-    is("b01".U) { io.out := io.in(1) }
-    is("b10".U) { io.out := io.in(2) }
-    is("b11".U) { io.out := io.in(3) }
-  }

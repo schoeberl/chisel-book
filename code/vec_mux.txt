@@ -1,5 +1,0 @@
-  val m = Wire(Vec(3, UInt(8.W)))
-  m(0) := x
-  m(1) := y
-  m(2) := z
-  val muxOut = m(select)

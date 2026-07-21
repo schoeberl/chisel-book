@@ -1,3 +1,0 @@
-  def add(a: UInt, b:UInt) = a + b
-
-  val sum = vec.reduce(add)

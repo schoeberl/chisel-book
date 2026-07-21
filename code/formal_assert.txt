@@ -1,3 +1,0 @@
-  "AssertTest" should "pass" in {
-    verify(new Assert(), Seq(BoundedCheck(5), WriteVcdAnnotation))
-  }

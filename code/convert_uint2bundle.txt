@@ -1,1 +1,0 @@
-  val bundle2 = word2.asTypeOf(new MyBundle)

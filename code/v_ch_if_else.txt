@@ -1,7 +1,0 @@
-  when (io.c1) {
-    io.out := io.in1
-  } .elsewhen (io.c2) {
-    io.out := io.in2
-  } .otherwise {
-    io.out := io.in3
-  }

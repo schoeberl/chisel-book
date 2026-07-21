@@ -1,9 +1,0 @@
-  val vecResult = Wire(Vec(4, Bool()))
-
-  // example assignments
-  vecResult(0) := data(0)
-  vecResult(1) := data(1)
-  vecResult(2) := data(2)
-  vecResult(3) := data(3)
-
-  val uintResult = vecResult.asUInt

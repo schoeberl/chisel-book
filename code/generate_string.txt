@@ -1,4 +1,0 @@
-object HelloString extends App {
-  val s = getVerilogString(new Hello())
-  println(s)
-}

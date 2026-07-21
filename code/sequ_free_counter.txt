@@ -1,3 +1,0 @@
-  val cntReg = RegInit(0.U(4.W))
-
-  cntReg := cntReg + 1.U

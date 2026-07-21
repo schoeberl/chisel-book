@@ -1,8 +1,0 @@
-  val dec = Module(new Decode())
-  dec.io.din := instr
-  val decout = dec.io.dout
-
-  val decReg = RegInit(DecodeOut.default)
-  when (stateReg === fetch) {
-    decReg := decout
-  }

@@ -1,5 +1,0 @@
-class Arbiter[T <: Data: Manifest](n: Int, private val gen: T) extends Module {
-  val io = IO(new Bundle {
-    val in = Flipped(Vec(n, new DecoupledIO(gen)))
-    val out = new DecoupledIO(gen)
-  })

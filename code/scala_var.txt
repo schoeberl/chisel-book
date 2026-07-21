@@ -1,3 +1,0 @@
-  // We can change the value of a var variable
-  var x = 2
-  x = 3

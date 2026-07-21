@@ -1,8 +1,0 @@
-  val alu = Module(new AluAccu(size))
-  val accu = alu.io.accu
-
-  // The main architectural state
-  val pcReg = RegInit(0.U(memAddrWidth.W))
-  val addrReg = RegInit(0.U(memAddrWidth.W))
-
-  val pcNext = WireDefault(pcReg + 1.U)

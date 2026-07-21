@@ -1,1 +1,0 @@
-  val resErr = myMux(selA, 5.U, 10.S)

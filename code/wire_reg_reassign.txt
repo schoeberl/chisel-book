@@ -1,2 +1,0 @@
-  number := 10.U
-  reg := value - 3.U

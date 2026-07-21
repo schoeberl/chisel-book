@@ -48,6 +48,44 @@ libraryDependencies += "org.chipsalliance" %% "chisel" % chiselVersion
 libraryDependencies += "edu.berkeley.cs" %% "chiseltest" % "6.0.0"
 libraryDependencies += "net.fornwall" % "jelf" % "0.9.0"
 
+lazy val gencode = taskKey[Unit]("Extract code snippets from Chisel source files")
+
+gencode := {
+  import java.io._
+  import scala.io.Source
+
+  def listFiles(folder: String): Unit = {
+    val dir = new File(folder)
+    if (dir.exists()) {
+      dir.listFiles(_.isFile).foreach(f => extract(folder + f.getName))
+      dir.listFiles(_.isDirectory).foreach(f => listFiles(folder + f.getName + "/"))
+    }
+  }
+
+  def extract(f: String): Unit = {
+    println(f)
+    var code: PrintWriter = null
+    val lines = Source.fromFile(f).getLines()
+    for (l <- lines) {
+      val tokens = l.trim.split(" ")
+      if (tokens.length >= 2 && (tokens(0) == "//-" || tokens(0) == "--/")) {
+        if (tokens(1) == "start") {
+          code = new PrintWriter(new File("code/" + tokens(2) + ".txt"))
+        } else if (tokens(1) == "end") {
+          if (code != null) { code.close(); code = null }
+        }
+      } else if (code != null) {
+        code.println(l)
+      }
+    }
+    if (code != null) code.close()
+  }
+
+  listFiles("src/main/scala/")
+  listFiles("src/test/scala/")
+  listFiles("src/main/vhdl/")
+}
+
 /*
 Compile / unmanagedSourceDirectories += baseDirectory.value / "add-src"
 

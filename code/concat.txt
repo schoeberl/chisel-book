@@ -1,1 +1,0 @@
-  val word = highByte ## lowByte

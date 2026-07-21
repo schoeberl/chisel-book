@@ -1,3 +1,0 @@
-  when(decExReg.decOut.isLoad && !doBranch) {
-    res := selectLoadData(io.dmem.rdData, decExReg.func3, decExReg.memLow)
-  }

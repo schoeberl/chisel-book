@@ -1,7 +1,0 @@
-  val defVec = VecInit(1.U(3.W), 2.U, 3.U)
-  when (cond) {
-    defVec(0) := 4.U
-    defVec(1) := 5.U
-    defVec(2) := 6.U
-  }
-  val vecOut = defVec(sel)

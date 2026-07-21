@@ -1,2 +1,0 @@
-      val randArgs = Seq.fill(10)(scala.util.Random.nextInt())
-      test(randArgs)

@@ -1,6 +1,0 @@
-  // Forwarding to memory
-  val address = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs1, wbData, rs1Val)
-  val data = Mux(wrEna && (wbDest =/= 0.U) && wbDest === decEx.rs2, wbData, rs2Val)
-
-  val memAddress = (address.asSInt + decOut.imm).asUInt
-  decEx.memLow := memAddress(1, 0)

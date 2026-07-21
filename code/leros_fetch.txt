@@ -1,3 +1,0 @@
-  val mem = Module(new InstrMem(memAddrWidth, prog))
-  mem.io.addr := pcNext
-  val instr = mem.io.instr

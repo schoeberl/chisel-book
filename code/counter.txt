@@ -1,3 +1,0 @@
-  val cntReg = RegInit(0.U(8.W))
-
-  cntReg := Mux(cntReg === 9.U, 0.U, cntReg + 1.U)

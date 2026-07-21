@@ -1,1 +1,0 @@
-  val number = WireDefault(10.U(4.W))

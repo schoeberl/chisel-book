@@ -1,2 +1,0 @@
-class UartIO extends DecoupledIO(UInt(8.W)) {
-}

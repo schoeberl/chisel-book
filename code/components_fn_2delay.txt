@@ -1,1 +1,0 @@
-  val delOut = delay(delay(delIn))

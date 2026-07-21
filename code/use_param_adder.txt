@@ -1,2 +1,0 @@
-  val add8 = Module(new ParamAdder(8))
-  val add16 = Module(new ParamAdder(16))

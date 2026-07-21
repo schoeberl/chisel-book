@@ -1,5 +1,0 @@
-abstract class Ticker(n: Int) extends Module {
-  val io = IO(new Bundle{
-    val tick = Output(Bool())
-  })
-}

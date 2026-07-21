@@ -1,8 +1,0 @@
-class AssumeTest extends Module {
-  val in = IO(Input(UInt(8.W)))
-  val out = IO(Output(UInt(8.W)))
-  out := in + 1.U
-  assume(in > 3.U && in < 255.U)
-  assert(out > 4.U)
-  assert(out <= 255.U)
-}

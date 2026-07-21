@@ -1,3 +1,0 @@
-  val cmp = compare(inA, inB)
-  val equResult = cmp._1
-  val gtResult = cmp._2

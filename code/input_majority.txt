@@ -1,7 +1,0 @@
-  val shiftReg = RegInit(0.U(3.W))
-  when (tick) {
-    // shift left and input in LSB
-    shiftReg := shiftReg(1, 0) ## btnDebReg
-  }
-  // Majority voting
-  val btnClean = (shiftReg(2) & shiftReg(1)) | (shiftReg(2) & shiftReg(0)) | (shiftReg(1) & shiftReg(0))

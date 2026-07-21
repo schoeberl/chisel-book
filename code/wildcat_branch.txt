@@ -1,5 +1,0 @@
-  branchTarget := (decExReg.pc.asSInt + decExReg.decOut.imm).asUInt
-  when(decExReg.decOut.isJalr) {
-    branchTarget := res
-  }
-  doBranch := ((compare(decExReg.func3, v1, v2) && decExReg.decOut.isBranch) || decExReg.decOut.isJal || decExReg.decOut.isJalr) && decExReg.valid

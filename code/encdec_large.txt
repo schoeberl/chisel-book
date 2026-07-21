@@ -1,6 +1,0 @@
-  val v = Wire(Vec(16, UInt(4.W)))
-  v(0) := 0.U
-  for (i <- 1 until 16) {
-    v(i) := Mux(hotIn(i), i.U, 0.U) | v(i - 1)
-  }
-  val encOut = v(15)

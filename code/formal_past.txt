@@ -1,3 +1,0 @@
- when (past(in) === 10.U) {
-    assert(out === 11.U)
-  }

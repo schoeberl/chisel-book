@@ -1,2 +1,0 @@
-  val squareROM = VecInit(0.U, 1.U, 4.U, 9.U, 16.U, 25.U)
-  val square = squareROM(n)

@@ -1,9 +1,0 @@
-class BcdTableTest extends FlatSpec with ChiselScalatestTester {
-  behavior of "BCD table"
-
-  it should "output BCD encoded numbers" in {
-    test(new BcdTable) { dut =>
-      ...
-    }
-  }
-}

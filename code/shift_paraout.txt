@@ -1,3 +1,0 @@
-  val outReg = RegInit(0.U(4.W))
-  outReg := serIn ## outReg(3, 1)
-  val q = outReg

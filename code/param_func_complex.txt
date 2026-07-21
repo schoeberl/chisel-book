@@ -1,9 +1,0 @@
-  val tVal = Wire(new ComplexIO)
-  tVal.b := true.B
-  tVal.d := 42.U
-  val fVal = Wire(new ComplexIO)
-  fVal.b := false.B
-  fVal.d := 13.U
-
-  // The multiplexer with a complex type
-  val resB = myMux(selB, tVal, fVal)

@@ -1,9 +1,0 @@
-  val grant = VecInit.fill(n)(false.B)
-  val notGranted = VecInit.fill(n)(false.B)
-
-  grant(0) := request(0)
-  notGranted(0) := !grant(0)
-  for (i <- 1 until n) {
-    grant(i) := request(i) && notGranted(i-1)
-    notGranted(i) := !grant(i) && notGranted(i-1)
-  }

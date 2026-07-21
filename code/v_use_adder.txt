@@ -1,5 +1,0 @@
-    wire [7:0] in1;
-    wire [7:0] in2;
-    wire [7:0] result;
-
-    adder m(.a(in1), .b(in2), .sum(result));

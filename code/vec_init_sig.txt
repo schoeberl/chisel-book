@@ -1,2 +1,0 @@
-  val defVecSig = VecInit(d, e, f)
-  val vecOutSig = defVecSig(sel)

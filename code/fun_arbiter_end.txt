@@ -1,2 +1,0 @@
-  io.out <> io.in.reduceTree((a, b) => arbitrateSimp(a, b))
-}
