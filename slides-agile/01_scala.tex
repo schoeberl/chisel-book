@@ -39,14 +39,14 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Course Overview}
 \begin{itemize}
-\item This is a new course
+\item This is a (relatively) new course
 \begin{itemize}
 \item Please be patient
 \item I will adapt it on the go (to your needs)
 \item This is agile at work
 \end{itemize}
 \item 2 hours lecture + 2 hours lab
-\item Javad is TA
+\item Alexander is the TA
 \item We have a Discord server for discussions and questions
 \item Final project with a README as documentation
 \item Group work, explore Scrum
@@ -251,6 +251,7 @@ Embedded Systems Engineering}
 \item VHDL
 \item Verilog
 \item Chisel
+\item F\#
 \item Haskell
 \item Clash
 \item Other
@@ -278,6 +279,87 @@ Embedded Systems Engineering}
 \item Optimized for reading on a tablet (size, hyperlinks)
 \end{itemize}
 \item Amazon can do the printout
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Usage of AI}
+\begin{itemize}
+\item AI (LLM) is an engineering tool
+\item You need to know how to specify a task
+\item You need to be able to assess the result
+\item Generation is cheap
+\item Confidence is expensive
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Let us Explore AI now}
+\begin{itemize}
+\item Pick your favorite AI
+\item Ask an AI to generate a Chisel modulo-10 counter
+\item With an enable input and synchronous clear
+\item What hardware will be generated?
+\item How would you test it?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Which Solution is Good/Bad?}
+\begin{verbatim}
+// A
+when (cnt === 9.U) {
+  cnt := 0.U
+}.otherwise {
+  cnt := cnt + 1.U
+}
+// B
+cnt := (cnt + 1.U) % 10.U
+// C
+when (cnt === 10.U) {
+  cnt := 0.U
+}.otherwise {
+  cnt := cnt + 1.U
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Solutions}
+\begin{itemize}
+\item Was there something missing?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{xxx}
+\begin{itemize}
+\item yyy
 \end{itemize}
 \end{frame}
 
