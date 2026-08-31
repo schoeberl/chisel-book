@@ -282,6 +282,80 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+
+\begin{frame}[fragile]{Prerequisits}
+\begin{itemize}
+\item Advanced hardware course
+\item You should know basic digital design 
+\item DTU: DE1 and DE2, or computer systems
+\item You should know an OO language (e.g., Java)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Test Yourself: Combinational versus Sequential}
+\begin{itemize}
+\item Can you draw an AND gate?
+\item What is a register (FF)?
+\item What is the difference?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Test Yourself: Counter}
+\begin{itemize}
+\item Design a counter
+\item Using a register, adder, multiplexer, and comparator
+\item a 4-bit counter that counts 0,1,...,9,0,1,...
+\item Draw the schematics
+\item How far can one count with 5 bits?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Test Yourself: HDL}
+\begin{itemize}
+\item What does this pseudo code describe?
+\item Draw the circuit
+\end{itemize}
+\begin{verbatim}
+if rising_edge(clock):
+    if enable:
+        q := d
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Test Yourself: Combinational Hardware from Code}
+\begin{itemize}
+\item What does the following code describe?
+\begin{verbatim}
+if sel:
+    y = a
+else:
+    y = b
+\end{verbatim}
+\item What hardware is this?
+\begin{verbatim}
+y = a + b
+\end{verbatim}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Test Yourself}
+\begin{verbatim}
+        +-----+
+   +--->| + 1 |---+
+   |    +-----+   |
+   |              v
+   |          +-------+
+   +----------|  Reg  |
+              +---+---+
+                  |
+                  v
+                  q\end{verbatim}
+\begin{itemize}
+\item What does this circuit do?
+\item What determines how quickly \code{q} changes?
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Usage of AI}
 \begin{itemize}
 \item AI (LLM) is an engineering tool
@@ -289,6 +363,15 @@ Embedded Systems Engineering}
 \item You need to be able to assess the result
 \item Generation is cheap
 \item Confidence is expensive
+\item LLMs can generate Chisel
+\item You are responsible for:
+\begin{itemize}
+\item understanding the generated hardware
+\item correctness
+\item verification
+\item design decisions
+\end{itemize}
+\item You shall write some code without using LLMs
 \end{itemize}
 \end{frame}
 
@@ -324,42 +407,6 @@ when (cnt === 10.U) {
 \begin{frame}[fragile]{Solutions}
 \begin{itemize}
 \item Was there something missing?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{xxx}
-\begin{itemize}
-\item yyy
 \end{itemize}
 \end{frame}
 
