@@ -69,7 +69,7 @@ Embedded Systems Engineering}
     \end{enumerate}
     \item Each phase must be completed before moving to the next
     \item Changes are costly once early phases are complete
-    \item I worked (long time ago) in such a team: was very boring
+
 \end{itemize}
 \end{frame}
 
@@ -109,7 +109,15 @@ Embedded Systems Engineering}
     \item Testing and feedback happen late in the process
     \item High risk of discovering major flaws late
     \item Not well-suited for rapid prototyping or exploratory projects
-    \item Worked at Compaq for a banking SW in this style
+    \item Slow requirements or design can be the bottleneck
+        \item I worked (a long time ago) in such a team
+
+    \begin{itemize}
+    \item At Compaq for a banking SW
+    \item It was very boring
+    \item Read a lot of newspapers
+\end{itemize}
+
 \end{itemize}
 \end{frame}
 
@@ -124,6 +132,7 @@ Embedded Systems Engineering}
         \item Continuous integration
     \end{itemize}
     \item Hardware complexity is increasing $\rightarrow$ need for agility!
+    \item Shorter iteration cycles with AI
 \end{itemize}
 \end{frame}
 
@@ -200,7 +209,7 @@ Embedded Systems Engineering}
 \begin{frame}{Agile Iteration Phases (3/3)}
 \textbf{Review / Demo}
 \begin{itemize}
-    \item Present completed work to the team or stakeholders
+    \item Present completed work to the team or stakeholders (me)
     \item Demonstrate working features in simulation or on FPGA
     \item Gather feedback on design choices and implementation
 \end{itemize}
@@ -228,12 +237,15 @@ Embedded Systems Engineering}
 \begin{frame}{Software-Inspired Hardware Flow}
 \begin{enumerate}
     \item Write modular, parameterized designs
+    \begin{itemize}
+\item Write HW generators
+\end{itemize}
     \item Test-first using simulation
     \item Version control and continuous integration (CI)
     \begin{itemize}
-\item For example, using GitHub actions
+\item For example, using GitHub Actions
 \end{itemize}
-    \item Frequent review and refactor
+    \item Frequent review and refactoring
     \begin{itemize}
 \item With enough tests, refactoring is safe
 \end{itemize}
@@ -246,7 +258,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Python
 \item Java
-\item C
+\item C and/or C++
 \item Scala
 \item VHDL
 \item Verilog
@@ -285,7 +297,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Prerequisits}
 \begin{itemize}
-\item Advanced hardware course
+\item This is an advanced hardware course
 \item You should know basic digital design 
 \item DTU: DE1 and DE2, or computer systems
 \item You should know an OO language (e.g., Java)
@@ -408,6 +420,9 @@ when (cnt === 10.U) {
 \begin{itemize}
 \item Was there something missing?
 \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{10' Break}
 \end{frame}
 
 \begin{frame}[fragile]{Scala}
@@ -907,8 +922,8 @@ sbt test
 \item You shall test yourself with a small exercise
 \item \href{https://github.com/schoeberl/agile-hw/blob/main/background-exercise.md}{Exercise description}
 \item Use a hardware description language of your choice
-\item Upload your solution to DTU learn till the end of the week (Sunday), including a test bench
-\item I will not grade it, but give you feedback on your solution
+%\item Upload your solution to DTU learn till the end of the week (Sunday), including a test bench
+%\item I will not grade it, but give you feedback on your solution
 \end{itemize}
 \end{frame}
 
@@ -979,7 +994,6 @@ sbt test
 
 \begin{frame}[fragile]{Next Week}
 \begin{itemize}
-\item Quick poll on Chisel
 \item Introduction into Chisel (2x 1 hour lecture, 2x 1 hour lab)
 \item If you know Chisel, you can stay at home
 \item Or better contribute as TA to help out (starting 14:00)
