@@ -308,15 +308,26 @@ val rom = Vec[Bits](arr)
 
 \begin{frame}[fragile]{Slides and Further Material}
 \begin{itemize}
-\item Slides and a full course
+\item Slides and a full course, including labs
+\item The slides are part of the Chisel book source
 \item \url{https://github.com/schoeberl/agile-hw}
 \item Or Google: schoeberl github agile
 \end{itemize}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.15]{agile-hw-qr-code}
+    \includegraphics[scale=0.1]{agile-hw-qr-code}
 \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Part of ODE4EC-PIV}
+\begin{itemize}
+\item Topic is part of the Chips JU project ODE4EC-PIV
+\item \url{https://ode4ec.eu/}
+\item We have a PhD position on agile HW at DTU
+\item \url{https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/da/sites/CX_2001/job/7982}
+\item Deadline 18 September
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Summary}
@@ -328,6 +339,19 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Lab 0: Hello World in Chisel}
+\begin{itemize}
+\item Install all tools, see \href{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}{Setup.md}
+\item You need Java 17+ and \code{sbt}
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/agile-hw}
+\end{itemize}
+\item Start IntelliJ or VSC and follow the instructions from the \href{https://github.com/schoeberl/agile-hw/tree/main/lab0}{lab0} page 
+\item \code{sbt test}
+\item Explore the code; maybe change the example
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Lecture 1}
 \begin{itemize}
@@ -803,19 +827,7 @@ object HelloWorld extends App {
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab 0: Hello World in Chisel}
-\begin{itemize}
-\item Install all tools, see \href{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}{Setup.md}
-\item You need Java 17+ and \code{sbt}
-\item Clone or download the repository from:
-\begin{itemize}
-\item \url{https://github.com/schoeberl/agile-hw}
-\end{itemize}
-\item Start IntelliJ and follow the instructions from the \href{https://github.com/schoeberl/agile-hw/tree/main/lab0}{lab0} page 
-\item \code{sbt test}
-\item Explore the code, maybe change the example
-\end{itemize}
-\end{frame}
+
 
 \begin{frame}[fragile]{Scala Values and Variables}
 \begin{chisel}
