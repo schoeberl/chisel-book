@@ -782,6 +782,12 @@ class Alu extends Module {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Is it Time for a Break?}
+\begin{itemize}
+\item Fill up with coffee
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Chisel and Scala}
 \begin{itemize}
 \item Chisel is a library written in Scala
@@ -1657,12 +1663,12 @@ class Adder extends Module {
 \begin{itemize}
 \item Create one top-level Module
 \item Invoke the Verilog emitter from the Scala \code{main} (or App)
-\item Following code generates Verilog code
+\item The following code generates Verilog code
 \end{itemize}
 \shortlist{../code/generate.txt}
 \end{frame}
 
-\begin{frame}[fragile]{Time for a Break}
+\begin{frame}[fragile]{Time for a Break?}
 \begin{itemize}
 \item We need some coffee and sweet stuff
 \end{itemize}
@@ -2035,40 +2041,12 @@ val m = if (useA) Module(new VariantA())
 \end{itemize}
 \end{frame}
 
-% use this for the 4 unit version
-\begin{frame}[fragile]{Chisel has a Multiplexer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/mux}
-\end{figure}
-\shortlist{../code/mux.txt}
-\begin{itemize}
-\item So what?
-\item Wait... What type is \code{a} and \code{b}?
-\begin{itemize}
-\item Can be any Chisel type!
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel has a Generic Multiplexer}
-\begin{figure}
-  \includegraphics[scale=\scale]{../figures/mux}
-\end{figure}
-\shortlist{../code/mux.txt}
-\begin{itemize}
-\item SW people may not be impressed
-\item They have generics since Java 1.5 in 2004
-\begin{itemize}
-\item \code{List<Flowers> != List<Cars>}
-\end{itemize}
-\end{itemize}
-\end{frame}
-
 
 \begin{frame}[fragile]{Generics in Hardware Construction}
 \begin{itemize}
 \item Chisel supports generic classes with type parameters
 \item Write hardware generators independent of concrete type
+\item We have seen this in action with the Chisel \code{Mux}
 \item This is a multiplexer \emph{generator}
 \end{itemize}
 \shortlist{../code/param_func.txt}
@@ -2237,10 +2215,11 @@ val rom = Vec[Bits](arr)
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
 \item Processors do not get much faster -- we need to design custom hardware
-\item We need a modern language for hardware/systems design for efficient/fast development
+\item A great time for hardware developers!
+\item Write hardware generators and not just RTL
 \item Chisel builds on the power of object-oriented and functional Scala
-\item We shall write hardware generators
-\item We have a course at DTU on this topic this fall
+\item Hope you try to get started with Scala/Chisel generators
+\item Thank you for this afternoon!
 \end{itemize}
 \end{frame}
 
