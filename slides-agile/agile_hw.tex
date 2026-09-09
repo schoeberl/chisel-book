@@ -96,23 +96,6 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}{Software-Inspired Hardware Flow}
-\begin{enumerate}
-    \item Write modular, parameterized designs
-    \item Test-first using simulation
-    \item Version control and continuous integration (CI)
-    \begin{itemize}
-\item For example, using GitHub Actions
-\end{itemize}
-    \item Frequent review and refactor
-    \begin{itemize}
-\item With enough tests, refactoring is safe
-\end{itemize}
-    \item Code reviews and pull requests
-\end{enumerate}
-\end{frame}
-
 \begin{frame}[fragile]{Chisel}
 \begin{itemize}
 \item A hardware \emph{construction} language
@@ -238,22 +221,19 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
-\begin{chisel}
-val shiftReg = RegInit(0.U(8.W))
-
-shiftReg(0) := inVal
-
-for (i <- 1 until 8) {
-  shiftReg(i) := shiftReg(i-1)
-}
-\end{chisel}
+\begin{frame}[fragile]{Functions}
 \begin{itemize}
-\item \code{for} is Scala
-\item This loop generates several connections
-\item The connections are parallel hardware
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item Simple functions can be a single line
+\item Functions can include state (registers)
 \end{itemize}
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Conditional Circuit Generation}
@@ -280,31 +260,6 @@ val m = if (useA) Module(new VariantA())
 % use this for the 4 unit version
 \input{../slides-tutorial/generation.tex}
 
-\begin{frame}[fragile]{Combinational (Truth) Table Generation}
-\begin{chisel}
-val arr = new Array[Bits](length)
-for (i <- 0 until length) {
-  arr(i) = ...
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\begin{itemize}
-\item Generate a table in a Scala array
-\item Use that array as input for a Chisel \code{Vec}
-\item Generates a logic table at hardware construction time
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Ideas for Runtime Table Generation}
-\begin{itemize}
-\item Assembler in Scala/Java generates the boot ROM
-\item Table with a \code{sin} function
-\item Binary to BCD conversion
-\item Schedule table for a TDM-based network-on-chip
-\item Read an ELF file with a Java library
-\item More ideas?
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Slides and Further Material}
 \begin{itemize}
@@ -435,6 +390,7 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Agile Iteration Cycle}
 \centering
 \resizebox{0.65\linewidth}{!}{%
@@ -532,6 +488,32 @@ val rom = Vec[Bits](arr)
     \item Often follows a version of the waterfall model
 \end{itemize}
 \end{frame}
+
+
+\begin{frame}{Software-Inspired Hardware Flow}
+\begin{enumerate}
+    \item Write modular, parameterized designs
+    \item Test-first using simulation
+    \item Version control and continuous integration (CI)
+    \begin{itemize}
+\item For example, using GitHub Actions
+\end{itemize}
+    \item Frequent review and refactor
+    \begin{itemize}
+\item With enough tests, refactoring is safe
+\end{itemize}
+    \item Code reviews and pull requests
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{A Bit More Chisel}
+\begin{itemize}
+    \item We had some in the first 30'
+    \item Here are some more
+    \item Enough to start generators
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Scala List for Enumeration}
 \begin{chisel}
@@ -1670,6 +1652,32 @@ class Adder extends Module {
 %\item Input can be any type
 %\end{itemize}
 %\end{frame}
+
+\begin{frame}[fragile]{Combinational (Truth) Table Generation}
+\begin{chisel}
+val arr = new Array[Bits](length)
+for (i <- 0 until length) {
+  arr(i) = ...
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\begin{itemize}
+\item Generate a table in a Scala array
+\item Use that array as input for a Chisel \code{Vec}
+\item Generates a logic table at hardware construction time
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ideas for Runtime Table Generation}
+\begin{itemize}
+\item Assembler in Scala/Java generates the boot ROM
+\item Table with a \code{sin} function
+\item Binary to BCD conversion
+\item Schedule table for a TDM-based network-on-chip
+\item Read an ELF file with a Java library
+\item More ideas?
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Functions}
 \begin{itemize}
