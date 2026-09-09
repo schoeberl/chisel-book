@@ -260,11 +260,36 @@ val m = if (useA) Module(new VariantA())
 % use this for the 4 unit version
 \input{../slides-tutorial/generation.tex}
 
+\begin{frame}[fragile]{Combinational (Truth) Table Generation}
+\begin{chisel}
+val arr = new Array[Bits](length)
+for (i <- 0 until length) {
+  arr(i) = ...
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\begin{itemize}
+\item Generate a table in a Scala array
+\item Use that array as input for a Chisel \code{Vec}
+\item Generate a logic table at hardware construction time
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ideas for Runtime Table Generation}
+\begin{itemize}
+\item Assembler in Scala/Java generates the boot ROM
+\item Binary to BCD conversion
+\item Schedule table for a TDM-based network-on-chip
+\item Read an ELF file with a Java library
+%\item Table with a \code{sin} function
+\item More ideas?
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Slides and Further Material}
 \begin{itemize}
 \item Slides and a full course, including labs
-\item The slides are part of the Chisel book source
+\item The slides sources are part of the Chisel book source
 \item \url{https://github.com/schoeberl/agile-hw}
 \item Or Google: schoeberl github agile
 \end{itemize}
@@ -308,7 +333,7 @@ val m = if (useA) Module(new VariantA())
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lecture 1}
+\begin{frame}[fragile]{Session 2}
 \begin{itemize}
 \item Waterfall and Agile design style
 \item Quick overview of Chisel and Scala
@@ -747,13 +772,13 @@ class Alu extends Module {
 
 
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Chisel Summary}
 \begin{itemize}
 \item Chisel is a small language
-\item Embedding it in Scala gives the power
+\item Embedding it in Scala gives it power
 \item We can write circuit generators
 \item We can do co-simulation
-\item We just scratched the surface
+\item We will continue with Scala
 \end{itemize}
 \end{frame}
 
@@ -766,7 +791,7 @@ class Alu extends Module {
 \item Chisel code is Scala code
 \item When it is run is \emph{generates} hardware
 \begin{itemize}
-\item Verilog for synthesis and siumulation
+\item Verilog for synthesis and simulation
 \end{itemize}
 \item Chisel is an embedded domain-specific language
 \item Two languages in one can be a little bit confusing
@@ -1180,14 +1205,14 @@ sbt test
 
 \begin{frame}[fragile]{Lab 1}
 \begin{itemize}
-\item I assume that you installed all tools and did lab0 as homework
+\item I assume that you installed all tools during lab0
 \item Functional programming in Scala
-\item The lab contains tests, run with \code{sbt test}
+\item The lab contains tests; run with \code{sbt test}
 \item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lecture 2}
+\begin{frame}[fragile]{Session 3}
 \begin{itemize}
 \item Introduction to Chisel
 \item Functional programming for generators
@@ -1653,31 +1678,6 @@ class Adder extends Module {
 %\end{itemize}
 %\end{frame}
 
-\begin{frame}[fragile]{Combinational (Truth) Table Generation}
-\begin{chisel}
-val arr = new Array[Bits](length)
-for (i <- 0 until length) {
-  arr(i) = ...
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\begin{itemize}
-\item Generate a table in a Scala array
-\item Use that array as input for a Chisel \code{Vec}
-\item Generates a logic table at hardware construction time
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Ideas for Runtime Table Generation}
-\begin{itemize}
-\item Assembler in Scala/Java generates the boot ROM
-\item Table with a \code{sin} function
-\item Binary to BCD conversion
-\item Schedule table for a TDM-based network-on-chip
-\item Read an ELF file with a Java library
-\item More ideas?
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Functions}
 \begin{itemize}
@@ -1879,12 +1879,12 @@ val counter100 = counter(100.U)
 \begin{itemize}
 \item Write a search for the maximum circuit (with \code{treeReduce()})
 \item Optional: add the generation of the index of the maximum value
-\item Emit Verilog with \code{emitVerilog(new Comp())}, so you can synthesize it at the Thursday session
+\item Emit Verilog with \code{emitVerilog(new Comp())} %, so you can synthesize it at the Thursday session
 \item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lecture 3}
+\begin{frame}[fragile]{Session 4}
 \begin{itemize}
 \item Hardware generators
 \item Object-oriented hardware design
