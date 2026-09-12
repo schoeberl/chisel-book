@@ -96,245 +96,7 @@ Lipsi: Probably the Smallest Processor in the World}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Chisel}
-\begin{itemize}
-\item A hardware \emph{construction} language
-\begin{itemize}
-\item Constructing Hardware in a Scala Embedded Language
-\item If it compiles, it is synthesizable hardware 
-\item Say goodbye to your unintended latches
-\end{itemize}
-\item Chisel is not a high-level synthesis language
-\item Single source for two targets
-\begin{itemize}
-\item Cycle-accurate simulation (testing)
-\item Verilog for synthesis
-\end{itemize}
-\item Embedded in Scala
-\begin{itemize}
-\item Full power of Scala available
-\item We use Scala to write the generators
-\end{itemize}
-\item Developed at UC Berkeley
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{The C Language Family}
-
-\Tree[.C [
-   [.{\bf Verilog} {\bf SystemVerilog} ]
-   [.C++  \emph{SystemC}  ]
-   [.Java [.Scala {\bf Chisel} ] ]
-   [.C\# ] ] ]
- 
-\end{frame}
-
-\begin{frame}[fragile]{Other Language Families}
-
-\begin{columns}
-\column{0.5\textwidth}
-\begin{center}
-\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
-\end{center}
-\column{0.5\textwidth}
-\begin{center}
-\Tree[.Python [.{\bf MyHDL} ] ]
-\end{center}
-\end{columns}
-\end{frame}
-
-%\begin{frame}[fragile]{What Language do You Already Know?}
-%\begin{itemize}
-%\item ???
-%\end{itemize}
-%\end{frame}
-
-\begin{frame}[fragile]{A Small Language}
-\begin{itemize}
-\item Chisel is a \emph{small} language
-\item On purpose
-\item Not many constructs to remember
-\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
-\item The power comes with Scala for circuit generators
-\item With Scala, Chisel can grow with you
-\end{itemize}
-\end{frame}
-
-
-%\begin{frame}[fragile]{Example: 2-bit Counter}
-%\begin{verbatim}
-%class Counter extends Module {
-%  val io = IO(new Bundle {
-%    val out = Output(UInt(2.W))
-%  })
-%  val count = RegInit(0.U(2.W))
-%  count := count + 1.U
-%  io.out := count
-%}
-%\end{verbatim}
-%\end{frame}
-%
-%\begin{frame}[fragile]{Example Test}
-%\begin{verbatim}
-%test(new Counter) { c =>
-%  c.io.out.expect(0.U)
-%  c.clock.step()
-%  c.io.out.expect(1.U)
-%  c.clock.step()
-%  c.io.out.expect(2.U)
-%}
-%\end{verbatim}
-%\end{frame}
-
-
-
-\begin{frame}[fragile]{Tool Flow for Chisel Defined Hardware}
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.35]{../figures/flow}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Chisel is a Hardware Construction Language}
-\begin{itemize}
-\item The code looks much like Java code
-\item But it is \emph{not} a program in the usual sense
-\item It represents a circuit
-\item The ``program'' constructs the circuit
-\item All statements are ``executed'' in parallel
-\item Statement order has \emph{mostly} no meaning
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Chisel Book}
-\begin{figure}
-    \centering
-    \href{https://github.com/schoeberl/chisel-book}{\includegraphics[scale=0.4]{../cover-small}}
-\end{figure}
-
-\begin{itemize}
-\item Available in open access (as PDF)
-\begin{itemize}
-\item Optimized for reading on a tablet (size, hyperlinks)
-\end{itemize}
-\item Amazon can do the printout
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Functions}
-\begin{itemize}
-\item Circuits can be encapsulated in functions
-\item Each \emph{function call} generates hardware
-\item Simple functions can be a single line
-\item Functions can include state (registers)
-\end{itemize}
-\begin{chisel}
-  def adder(v1: UInt, v2: UInt) = v1 + v2
-  
-  val add1 = adder(a, b)
-  val add2 = adder(c, d)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Conditional Circuit Generation}
-\begin{chisel}
-class Base extends Module { val io = new Bundle() }
-class VariantA extends Base { }
-class VariantB extends Base { }
-
-val m = if (useA) Module(new VariantA())
-        else Module(new VariantB())
-\end{chisel}
-\begin{itemize}
-\item \code{if} and \code{else} is Scala
-\item \code{if} is an expression that returns a value
-\begin{itemize}
-\item Like ``\code{cond ? a : b;}'' in C and Java
-\end{itemize}
-\item This is not a hardware multiplexer
-\item Decides which module to generate
-\item Could even read an XML file for the configuration
-\end{itemize}
-\end{frame}
-
-% use this for the 4 unit version
-\input{../slides-tutorial/generation.tex}
-
-\begin{frame}[fragile]{Combinational (Truth) Table Generation}
-\begin{chisel}
-val arr = new Array[Bits](length)
-for (i <- 0 until length) {
-  arr(i) = ...
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
-\begin{itemize}
-\item Generate a table in a Scala array
-\item Use that array as input for a Chisel \code{Vec}
-\item Generate a logic table at hardware construction time
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Ideas for Runtime Table Generation}
-\begin{itemize}
-\item Assembler in Scala/Java generates the boot ROM
-\item Binary to BCD conversion
-\item Schedule table for a TDM-based network-on-chip
-\item Read an ELF file with a Java library
-%\item Table with a \code{sin} function
-\item More ideas?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Slides and Further Material}
-\begin{itemize}
-\item Slides and a full course, including labs
-\item Material for the following tutorial
-\item The slide sources are part of the Chisel book source
-\item \url{https://github.com/schoeberl/agile-hw}
-\item Or Google: schoeberl github agile
-\end{itemize}
-
-\begin{figure}
-    \centering
-    \includegraphics[scale=0.1]{agile-hw-qr-code}
-\end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Part of ODE4EC-PIV}
-\begin{itemize}
-\item Topic is part of the Chips JU project ODE4EC-PIV
-\item \url{https://ode4ec.eu/}
-\item We have a PhD position on agile HW at DTU
-\item \url{https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/da/sites/CX_2001/job/7982}
-\item Deadline 18 September
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Summary}
-\begin{itemize}
-\item Write reusable generators, not RTL
-\item Chisel + Scala + functional programming = HW generators
-\item We continue in room  1 with the tutorial
-\item This includes hands-on writing Scala/Chisel HW generators
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Lab 0: Hello World in Chisel}
-\begin{itemize}
-\item Install all tools, see \href{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}{Setup.md}
-\item You need Java 17+ and \code{sbt}
-\item Clone or download the repository from:
-\begin{itemize}
-\item \url{https://github.com/schoeberl/agile-hw}
-\end{itemize}
-\item Start IntelliJ or VSC and follow the instructions from the \href{https://github.com/schoeberl/agile-hw/tree/main/lab0}{lab0} page 
-\item \code{sbt test}
-\item Explore the code; maybe change the example
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Session 2}
+\begin{frame}[fragile]{Session 1}
 \begin{itemize}
 \item Waterfall and Agile design style
 \item Quick overview of Chisel and Scala
@@ -532,262 +294,161 @@ val rom = Vec[Bits](arr)
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{A Bit More Chisel}
+\begin{frame}[fragile]{Chisel}
 \begin{itemize}
-    \item We had some in the first 30'
-    \item Here are some more
-    \item Enough to start generators
+\item A hardware \emph{construction} language
+\begin{itemize}
+\item Constructing Hardware in a Scala Embedded Language
+\item If it compiles, it is synthesizable hardware 
+\item Say goodbye to your unintended latches
+\end{itemize}
+\item Chisel is not a high-level synthesis language
+\item Single source for two targets
+\begin{itemize}
+\item Cycle-accurate simulation (testing)
+\item Verilog for synthesis
+\end{itemize}
+\item Embedded in Scala
+\begin{itemize}
+\item Full power of Scala available
+\item We use Scala to write the generators
+\end{itemize}
+\item Developed at UC Berkeley
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{The C Language Family}
+
+\Tree[.C [
+   [.{\bf Verilog} {\bf SystemVerilog} ]
+   [.C++  \emph{SystemC}  ]
+   [.Java [.Scala {\bf Chisel} ] ]
+   [.C\# ] ] ]
+ 
+\end{frame}
+
+\begin{frame}[fragile]{Other Language Families}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Algol [.Ada [.{\bf VHDL} ] ] ]
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+\Tree[.Python [.{\bf MyHDL} ] ]
+\end{center}
+\end{columns}
+\end{frame}
+
+%\begin{frame}[fragile]{What Language do You Already Know?}
+%\begin{itemize}
+%\item ???
+%\end{itemize}
+%\end{frame}
+
+\begin{frame}[fragile]{A Small Language}
+\begin{itemize}
+\item Chisel is a \emph{small} language
+\item On purpose
+\item Not many constructs to remember
+\item The \href{https://github.com/freechipsproject/chisel-cheatsheet/releases/latest/download/chisel_cheatsheet.pdf}{Chisel Cheatsheet} fits on two pages
+\item The power comes with Scala for circuit generators
+\item With Scala, Chisel can grow with you
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}[fragile]{Scala List for Enumeration}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-\end{chisel}
+%\begin{frame}[fragile]{Example: 2-bit Counter}
+%\begin{verbatim}
+%class Counter extends Module {
+%  val io = IO(new Bundle {
+%    val out = Output(UInt(2.W))
+%  })
+%  val count = RegInit(0.U(2.W))
+%  count := count + 1.U
+%  io.out := count
+%}
+%\end{verbatim}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Example Test}
+%\begin{verbatim}
+%test(new Counter) { c =>
+%  c.io.out.expect(0.U)
+%  c.clock.step()
+%  c.io.out.expect(1.U)
+%  c.clock.step()
+%  c.io.out.expect(2.U)
+%}
+%\end{verbatim}
+%\end{frame}
+
+
+
+\begin{frame}[fragile]{Tool Flow for Chisel Defined Hardware}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{../figures/flow}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Chisel is a Hardware Construction Language}
 \begin{itemize}
-\item Can be used in wires and registers
-\item Symbols for a state machine
+\item The code looks much like Java code
+\item But it is \emph{not} a program in the usual sense
+\item It represents a circuit
+\item The ``program'' constructs the circuit
+\item All statements are ``executed'' in parallel
+\item Statement order has \emph{mostly} no meaning
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Finite State Machine}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-  val stateReg = RegInit(empty)
-  val dataReg = RegInit(0.U(size.W))
+\begin{frame}[fragile]{A Chisel Book}
+\begin{figure}
+    \centering
+    \href{https://github.com/schoeberl/chisel-book}{\includegraphics[scale=0.4]{../cover-small}}
+\end{figure}
 
-  when(stateReg === empty) {
-    when(io.enq.write) {
-      stateReg := full
-      dataReg := io.enq.din
-    }
-  }.elsewhen(stateReg === full) {
-    when(io.deq.read) {
-      stateReg := empty
-    }
-  }
-\end{chisel}
 \begin{itemize}
-\item A simple buffer for a bubble FIFO
+\item Available in open access (as PDF)
+\begin{itemize}
+\item Optimized for reading on a tablet (size, hyperlinks)
+\end{itemize}
+\item Amazon can do the printout
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Parameterization}
-\begin{chisel}
-class ParamChannel(n: Int) extends Bundle {
-  val data = Input(UInt(n.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-val ch32 = new ParamChannel(32)
-\end{chisel}
+\begin{frame}[fragile]{Slides and Further Material}
 \begin{itemize}
-\item Bundles and modules can be parametrized
-\item Pass a parameter in the constructor
+\item Slides and a full course, including labs
+\item Material for the following tutorial
+\item The slide sources are part of the Chisel book source
+\item \url{https://github.com/schoeberl/agile-hw}
+\item Or Google: schoeberl github agile
 \end{itemize}
 
-\end{frame}
-\begin{frame}[fragile]{A Module with a Parameter}
-\begin{chisel}
-class ParamAdder(n: Int) extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(n.W))
-    val b = Input(UInt(n.W))
-    val result = Output(UInt(n.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-
-val add8 = Module(new ParamAdder(8))
-\end{chisel}
-\begin{itemize}
-\item Parameter can also be a Chisel type
-\item Can also be a generic type:
-\item \code{class Mod[T <: Bits](param: T) extends...}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Factory Methods}
-\begin{itemize}
-\item Simpler component creation and use
-\item Usage similar to built in components, such as \code{Mux}
-\end{itemize}
-\begin{chisel}
-val myAdder = Adder(x, y)
-\end{chisel}
-\begin{itemize}
-\item A little bit more work on component side
-\item Define an \code{apply} method on the companion object that returns the component
-\end{itemize}
-\begin{chisel}
-object Adder {
-  def apply(a: UInt, b: UInt) = {
-    val adder = Module(new Adder)
-    adder.io.a := a
-    adder.io.b := b
-    adder.io.result
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{More on Testing}
-\begin{itemize}
-\item Using test vectors and \code{expect()} does not scale
-\item Better have co-simulation against a \emph{golden model}
-\item Then we can compare
-\item Which input values to use?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: IO Connection}
-\begin{chisel}
-class Alu extends Module {
-  val io = IO(new Bundle {
-    val fn = Input(UInt(2.W))
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  // Use shorter variable names
-  val fn = io.fn
-  val a = io.a
-  val b = io.b
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: The Function}
-\begin{chisel}
-  val result = Wire(UInt(4.W))
-  // some default value is needed
-  result := 0.U
-
-  // The ALU selection
-  switch(fn) {
-    is(0.U) { result := a + b }
-    is(1.U) { result := a - b }
-    is(2.U) { result := a | b }
-    is(3.U) { result := a & b }
-  }
-
-  // Output on the LEDs
-  io.result := result
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compute the expected result in Scala
-\end{itemize}
-\begin{chisel}
-  // This is exhaustive testing,
-  // which usually is impossible
-  for (a <- 0 to 15) {
-    for (b <- 0 to 15) {
-      for (op <- 0 to 3) {
-        val result =
-          op match {
-            case 0 => a + b
-            case 1 => a - b
-            case 2 => a | b
-            case 3 => a & b
-          }
-        val resMask = result & 0x0f
-\end{chisel}
-
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compare the Scala computed result with the hardware result
-\end{itemize}
-\begin{chisel}
-        poke(dut.io.fn, op)
-        poke(dut.io.a, a)
-        poke(dut.io.b, b)
-        step(1)
-        expect(dut.io.result, resMask)
-      }
-    }
-  }
-\end{chisel}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.1]{agile-hw-qr-code}
+\end{figure}
 \end{frame}
 
 
-\begin{frame}[fragile]{Printf Debugging}
+\begin{frame}[fragile]{Lab 0: Hello World in Chisel}
 \begin{itemize}
-\item We can \emph{print} in the hardware
-\item Printing happens on the rising edge of the clock
-\item Good to see many parallel signals and registers
-\item \code{printf} anywhere in the module definition
+\item Install all tools, see \href{https://github.com/schoeberl/agile-hw/blob/main/Setup.md}{Setup.md}
+\item You need Java 17+ and \code{sbt}
+\item Clone or download the repository from:
+\begin{itemize}
+\item \url{https://github.com/schoeberl/agile-hw}
 \end{itemize}
-\shortlist{../code/test_dut_printf.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{Test Driven Development (TDD)}
-\begin{itemize}
-\item Software development process
-\begin{itemize}
-\item Can we learn from SW development for HW design?
-\end{itemize}
-\item Writing the test first, then the implementation
-\item Started with extreme programming
-\begin{itemize}
-\item Frequent releases
-\item Accept change as part of the development
-\end{itemize}
-\item A path to \emph{Agile Hardware Development!}
-\item Not used in its pour form
-\begin{itemize}
-\item Writing all those tests is simply considerer too much work
-\end{itemize}
+\item Start IntelliJ or VSC and follow the instructions from the \href{https://github.com/schoeberl/agile-hw/tree/main/lab0}{lab0} page 
+\item \code{sbt test}
+\item Explore the code; maybe change the example
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Continuous Integration}
-\begin{itemize}
-\item Run your tests on each change
-\item Do it also when using source control
-\item GitHub Actions
-\item I am doing it even for the Chisel book
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing versus Debugging}
-\begin{itemize}
-\item Debugging is during code development
-\item Waveform and println are easy tools for debugging
-\item Debugging does not help for regression tests
-\item Write small test cases for regression tests
-\item Keeps your code base \emph{intact} when doing changes
-\item Better confidence in changes not introducing new bugs
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Chisel Summary}
-\begin{itemize}
-\item Chisel is a small language
-\item Embedding it in Scala gives it power
-\item We can write circuit generators
-\item We can do co-simulation
-\item We will continue with Scala
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Is it Time for a Break?}
-\begin{itemize}
-\item Fill up with coffee
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Chisel and Scala}
 \begin{itemize}
@@ -1162,6 +823,351 @@ sbt run
 \end{frame}
 
 
+
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+\item Circuits can be encapsulated in functions
+\item Each \emph{function call} generates hardware
+\item Simple functions can be a single line
+\item Functions can include state (registers)
+\end{itemize}
+\begin{chisel}
+  def adder(v1: UInt, v2: UInt) = v1 + v2
+  
+  val add1 = adder(a, b)
+  val add2 = adder(c, d)
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Conditional Circuit Generation}
+\begin{chisel}
+class Base extends Module { val io = new Bundle() }
+class VariantA extends Base { }
+class VariantB extends Base { }
+
+val m = if (useA) Module(new VariantA())
+        else Module(new VariantB())
+\end{chisel}
+\begin{itemize}
+\item \code{if} and \code{else} is Scala
+\item \code{if} is an expression that returns a value
+\begin{itemize}
+\item Like ``\code{cond ? a : b;}'' in C and Java
+\end{itemize}
+\item This is not a hardware multiplexer
+\item Decides which module to generate
+\item Could even read an XML file for the configuration
+\end{itemize}
+\end{frame}
+
+% use this for the 4 unit version
+\input{../slides-tutorial/generation.tex}
+
+\begin{frame}[fragile]{Combinational (Truth) Table Generation}
+\begin{chisel}
+val arr = new Array[Bits](length)
+for (i <- 0 until length) {
+  arr(i) = ...
+}
+val rom = Vec[Bits](arr)
+\end{chisel}
+\begin{itemize}
+\item Generate a table in a Scala array
+\item Use that array as input for a Chisel \code{Vec}
+\item Generate a logic table at hardware construction time
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ideas for Runtime Table Generation}
+\begin{itemize}
+\item Assembler in Scala/Java generates the boot ROM
+\item Binary to BCD conversion
+\item Schedule table for a TDM-based network-on-chip
+\item Read an ELF file with a Java library
+%\item Table with a \code{sin} function
+\item More ideas?
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Part of ODE4EC-PIV}
+\begin{itemize}
+\item Topic is part of the Chips JU project ODE4EC-PIV
+\item \url{https://ode4ec.eu/}
+\item We have a PhD position on agile HW at DTU
+\item \url{https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/da/sites/CX_2001/job/7982}
+\item Deadline 18 September
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Summary}
+\begin{itemize}
+\item Write reusable generators, not RTL
+\item Chisel + Scala + functional programming = HW generators
+\item We continue in room  1 with the tutorial
+\item This includes hands-on writing Scala/Chisel HW generators
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}{A Bit More Chisel}
+\begin{itemize}
+    \item We had some in the first 30'
+    \item Here are some more
+    \item Enough to start generators
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Scala List for Enumeration}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(2)
+\end{chisel}
+\begin{itemize}
+\item Can be used in wires and registers
+\item Symbols for a state machine
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Finite State Machine}
+\begin{chisel}
+  val empty :: full :: Nil = Enum(2)
+  val stateReg = RegInit(empty)
+  val dataReg = RegInit(0.U(size.W))
+
+  when(stateReg === empty) {
+    when(io.enq.write) {
+      stateReg := full
+      dataReg := io.enq.din
+    }
+  }.elsewhen(stateReg === full) {
+    when(io.deq.read) {
+      stateReg := empty
+    }
+  }
+\end{chisel}
+\begin{itemize}
+\item A simple buffer for a bubble FIFO
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Parameterization}
+\begin{chisel}
+class ParamChannel(n: Int) extends Bundle {
+  val data = Input(UInt(n.W))
+  val ready = Output(Bool())
+  val valid = Input(Bool())
+}
+
+val ch32 = new ParamChannel(32)
+\end{chisel}
+\begin{itemize}
+\item Bundles and modules can be parametrized
+\item Pass a parameter in the constructor
+\end{itemize}
+
+\end{frame}
+\begin{frame}[fragile]{A Module with a Parameter}
+\begin{chisel}
+class ParamAdder(n: Int) extends Module {
+  val io = IO(new Bundle {
+    val a = Input(UInt(n.W))
+    val b = Input(UInt(n.W))
+    val result = Output(UInt(n.W))
+  })
+
+  val addVal = io.a + io.b
+  io.result := addVal
+}
+
+val add8 = Module(new ParamAdder(8))
+\end{chisel}
+\begin{itemize}
+\item Parameter can also be a Chisel type
+\item Can also be a generic type:
+\item \code{class Mod[T <: Bits](param: T) extends...}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Factory Methods}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built in components, such as \code{Mux}
+\end{itemize}
+\begin{chisel}
+val myAdder = Adder(x, y)
+\end{chisel}
+\begin{itemize}
+\item A little bit more work on component side
+\item Define an \code{apply} method on the companion object that returns the component
+\end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{More on Testing}
+\begin{itemize}
+\item Using test vectors and \code{expect()} does not scale
+\item Better have co-simulation against a \emph{golden model}
+\item Then we can compare
+\item Which input values to use?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Tiny ALU: IO Connection}
+\begin{chisel}
+class Alu extends Module {
+  val io = IO(new Bundle {
+    val fn = Input(UInt(2.W))
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
+
+  // Use shorter variable names
+  val fn = io.fn
+  val a = io.a
+  val b = io.b
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{A Tiny ALU: The Function}
+\begin{chisel}
+  val result = Wire(UInt(4.W))
+  // some default value is needed
+  result := 0.U
+
+  // The ALU selection
+  switch(fn) {
+    is(0.U) { result := a + b }
+    is(1.U) { result := a - b }
+    is(2.U) { result := a | b }
+    is(3.U) { result := a & b }
+  }
+
+  // Output on the LEDs
+  io.result := result
+}
+\end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Testing the ALU}
+\begin{itemize}
+\item Compute the expected result in Scala
+\end{itemize}
+\begin{chisel}
+  // This is exhaustive testing,
+  // which usually is impossible
+  for (a <- 0 to 15) {
+    for (b <- 0 to 15) {
+      for (op <- 0 to 3) {
+        val result =
+          op match {
+            case 0 => a + b
+            case 1 => a - b
+            case 2 => a | b
+            case 3 => a & b
+          }
+        val resMask = result & 0x0f
+\end{chisel}
+
+\end{frame}
+
+\begin{frame}[fragile]{Testing the ALU}
+\begin{itemize}
+\item Compare the Scala computed result with the hardware result
+\end{itemize}
+\begin{chisel}
+        poke(dut.io.fn, op)
+        poke(dut.io.a, a)
+        poke(dut.io.b, b)
+        step(1)
+        expect(dut.io.result, resMask)
+      }
+    }
+  }
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Printf Debugging}
+\begin{itemize}
+\item We can \emph{print} in the hardware
+\item Printing happens on the rising edge of the clock
+\item Good to see many parallel signals and registers
+\item \code{printf} anywhere in the module definition
+\end{itemize}
+\shortlist{../code/test_dut_printf.txt}
+\end{frame}
+
+
+\begin{frame}[fragile]{Test Driven Development (TDD)}
+\begin{itemize}
+\item Software development process
+\begin{itemize}
+\item Can we learn from SW development for HW design?
+\end{itemize}
+\item Writing the test first, then the implementation
+\item Started with extreme programming
+\begin{itemize}
+\item Frequent releases
+\item Accept change as part of the development
+\end{itemize}
+\item A path to \emph{Agile Hardware Development!}
+\item Not used in its pour form
+\begin{itemize}
+\item Writing all those tests is simply considerer too much work
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Continuous Integration}
+\begin{itemize}
+\item Run your tests on each change
+\item Do it also when using source control
+\item GitHub Actions
+\item I am doing it even for the Chisel book
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Testing versus Debugging}
+\begin{itemize}
+\item Debugging is during code development
+\item Waveform and println are easy tools for debugging
+\item Debugging does not help for regression tests
+\item Write small test cases for regression tests
+\item Keeps your code base \emph{intact} when doing changes
+\item Better confidence in changes not introducing new bugs
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{Chisel Summary}
+\begin{itemize}
+\item Chisel is a small language
+\item Embedding it in Scala gives it power
+\item We can write circuit generators
+\item We can do co-simulation
+\item We will continue with Scala
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Is it Time for a Break?}
+\begin{itemize}
+\item Fill up with coffee
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{ScalaTest}
 \begin{itemize}
