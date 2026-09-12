@@ -679,12 +679,12 @@ println(squares) // List(1, 4, 9, 16)
     \item Useful for hardware generators (map, filter, etc.)
 \end{itemize}
 
-\begin{verbatim}
-val nums = List(1, 2, 3, 4)
-val squares = nums.map(x => x * x)
-println(squares) // List(1, 4, 9, 16)
-\end{verbatim}
-
+%\begin{verbatim}
+%val nums = List(1, 2, 3, 4)
+%val squares = nums.map(x => x * x)
+%println(squares) // List(1, 4, 9, 16)
+%\end{verbatim}
+%
 %\begin{itemize}
 %    \item This is similar to generating a Vec of wires in Chisel:
 %\end{itemize}
@@ -823,42 +823,15 @@ sbt run
 \end{frame}
 
 
-
-\begin{frame}[fragile]{Functions}
+\begin{frame}[fragile]{Lab 1}
 \begin{itemize}
-\item Circuits can be encapsulated in functions
-\item Each \emph{function call} generates hardware
-\item Simple functions can be a single line
-\item Functions can include state (registers)
-\end{itemize}
-\begin{chisel}
-  def adder(v1: UInt, v2: UInt) = v1 + v2
-  
-  val add1 = adder(a, b)
-  val add2 = adder(c, d)
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Conditional Circuit Generation}
-\begin{chisel}
-class Base extends Module { val io = new Bundle() }
-class VariantA extends Base { }
-class VariantB extends Base { }
-
-val m = if (useA) Module(new VariantA())
-        else Module(new VariantB())
-\end{chisel}
-\begin{itemize}
-\item \code{if} and \code{else} is Scala
-\item \code{if} is an expression that returns a value
-\begin{itemize}
-\item Like ``\code{cond ? a : b;}'' in C and Java
-\end{itemize}
-\item This is not a hardware multiplexer
-\item Decides which module to generate
-\item Could even read an XML file for the configuration
+\item I assume that you installed all tools during lab0
+\item Functional programming in Scala
+\item The lab contains tests; run with \code{sbt test}
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
 \end{itemize}
 \end{frame}
+
 
 % use this for the 4 unit version
 \input{../slides-tutorial/generation.tex}
@@ -890,278 +863,24 @@ val rom = Vec[Bits](arr)
 \end{frame}
 
 
-\begin{frame}[fragile]{Part of ODE4EC-PIV}
-\begin{itemize}
-\item Topic is part of the Chips JU project ODE4EC-PIV
-\item \url{https://ode4ec.eu/}
-\item We have a PhD position on agile HW at DTU
-\item \url{https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/da/sites/CX_2001/job/7982}
-\item Deadline 18 September
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{Summary}
+\begin{frame}[fragile]{Generator Summary}
 \begin{itemize}
 \item Write reusable generators, not RTL
 \item Chisel + Scala + functional programming = HW generators
-\item We continue in room  1 with the tutorial
-\item This includes hands-on writing Scala/Chisel HW generators
 \end{itemize}
 \end{frame}
 
 
-
-
-\begin{frame}{A Bit More Chisel}
+\begin{frame}[fragile]{Lab 2}
 \begin{itemize}
-    \item We had some in the first 30'
-    \item Here are some more
-    \item Enough to start generators
+\item Write a search for the maximum circuit (with \code{treeReduce()})
+\item Optional: add the generation of the index of the maximum value
+\item Emit Verilog with \code{emitVerilog(new Comp())} %, so you can synthesize it at the Thursday session
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[fragile]{Scala List for Enumeration}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-\end{chisel}
-\begin{itemize}
-\item Can be used in wires and registers
-\item Symbols for a state machine
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Finite State Machine}
-\begin{chisel}
-  val empty :: full :: Nil = Enum(2)
-  val stateReg = RegInit(empty)
-  val dataReg = RegInit(0.U(size.W))
-
-  when(stateReg === empty) {
-    when(io.enq.write) {
-      stateReg := full
-      dataReg := io.enq.din
-    }
-  }.elsewhen(stateReg === full) {
-    when(io.deq.read) {
-      stateReg := empty
-    }
-  }
-\end{chisel}
-\begin{itemize}
-\item A simple buffer for a bubble FIFO
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Parameterization}
-\begin{chisel}
-class ParamChannel(n: Int) extends Bundle {
-  val data = Input(UInt(n.W))
-  val ready = Output(Bool())
-  val valid = Input(Bool())
-}
-
-val ch32 = new ParamChannel(32)
-\end{chisel}
-\begin{itemize}
-\item Bundles and modules can be parametrized
-\item Pass a parameter in the constructor
-\end{itemize}
-
-\end{frame}
-\begin{frame}[fragile]{A Module with a Parameter}
-\begin{chisel}
-class ParamAdder(n: Int) extends Module {
-  val io = IO(new Bundle {
-    val a = Input(UInt(n.W))
-    val b = Input(UInt(n.W))
-    val result = Output(UInt(n.W))
-  })
-
-  val addVal = io.a + io.b
-  io.result := addVal
-}
-
-val add8 = Module(new ParamAdder(8))
-\end{chisel}
-\begin{itemize}
-\item Parameter can also be a Chisel type
-\item Can also be a generic type:
-\item \code{class Mod[T <: Bits](param: T) extends...}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Factory Methods}
-\begin{itemize}
-\item Simpler component creation and use
-\item Usage similar to built in components, such as \code{Mux}
-\end{itemize}
-\begin{chisel}
-val myAdder = Adder(x, y)
-\end{chisel}
-\begin{itemize}
-\item A little bit more work on component side
-\item Define an \code{apply} method on the companion object that returns the component
-\end{itemize}
-\begin{chisel}
-object Adder {
-  def apply(a: UInt, b: UInt) = {
-    val adder = Module(new Adder)
-    adder.io.a := a
-    adder.io.b := b
-    adder.io.result
-  }
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{More on Testing}
-\begin{itemize}
-\item Using test vectors and \code{expect()} does not scale
-\item Better have co-simulation against a \emph{golden model}
-\item Then we can compare
-\item Which input values to use?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: IO Connection}
-\begin{chisel}
-class Alu extends Module {
-  val io = IO(new Bundle {
-    val fn = Input(UInt(2.W))
-    val a = Input(UInt(4.W))
-    val b = Input(UInt(4.W))
-    val result = Output(UInt(4.W))
-  })
-
-  // Use shorter variable names
-  val fn = io.fn
-  val a = io.a
-  val b = io.b
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{A Tiny ALU: The Function}
-\begin{chisel}
-  val result = Wire(UInt(4.W))
-  // some default value is needed
-  result := 0.U
-
-  // The ALU selection
-  switch(fn) {
-    is(0.U) { result := a + b }
-    is(1.U) { result := a - b }
-    is(2.U) { result := a | b }
-    is(3.U) { result := a & b }
-  }
-
-  // Output on the LEDs
-  io.result := result
-}
-\end{chisel}
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compute the expected result in Scala
-\end{itemize}
-\begin{chisel}
-  // This is exhaustive testing,
-  // which usually is impossible
-  for (a <- 0 to 15) {
-    for (b <- 0 to 15) {
-      for (op <- 0 to 3) {
-        val result =
-          op match {
-            case 0 => a + b
-            case 1 => a - b
-            case 2 => a | b
-            case 3 => a & b
-          }
-        val resMask = result & 0x0f
-\end{chisel}
-
-\end{frame}
-
-\begin{frame}[fragile]{Testing the ALU}
-\begin{itemize}
-\item Compare the Scala computed result with the hardware result
-\end{itemize}
-\begin{chisel}
-        poke(dut.io.fn, op)
-        poke(dut.io.a, a)
-        poke(dut.io.b, b)
-        step(1)
-        expect(dut.io.result, resMask)
-      }
-    }
-  }
-\end{chisel}
-\end{frame}
-
-
-\begin{frame}[fragile]{Printf Debugging}
-\begin{itemize}
-\item We can \emph{print} in the hardware
-\item Printing happens on the rising edge of the clock
-\item Good to see many parallel signals and registers
-\item \code{printf} anywhere in the module definition
-\end{itemize}
-\shortlist{../code/test_dut_printf.txt}
-\end{frame}
-
-
-\begin{frame}[fragile]{Test Driven Development (TDD)}
-\begin{itemize}
-\item Software development process
-\begin{itemize}
-\item Can we learn from SW development for HW design?
-\end{itemize}
-\item Writing the test first, then the implementation
-\item Started with extreme programming
-\begin{itemize}
-\item Frequent releases
-\item Accept change as part of the development
-\end{itemize}
-\item A path to \emph{Agile Hardware Development!}
-\item Not used in its pour form
-\begin{itemize}
-\item Writing all those tests is simply considerer too much work
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Continuous Integration}
-\begin{itemize}
-\item Run your tests on each change
-\item Do it also when using source control
-\item GitHub Actions
-\item I am doing it even for the Chisel book
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Testing versus Debugging}
-\begin{itemize}
-\item Debugging is during code development
-\item Waveform and println are easy tools for debugging
-\item Debugging does not help for regression tests
-\item Write small test cases for regression tests
-\item Keeps your code base \emph{intact} when doing changes
-\item Better confidence in changes not introducing new bugs
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}[fragile]{Chisel Summary}
-\begin{itemize}
-\item Chisel is a small language
-\item Embedding it in Scala gives it power
-\item We can write circuit generators
-\item We can do co-simulation
-\item We will continue with Scala
-\end{itemize}
-\end{frame}
 
 \begin{frame}[fragile]{Is it Time for a Break?}
 \begin{itemize}
@@ -1216,16 +935,20 @@ sbt test
 \end{frame}
 
 
-\begin{frame}[fragile]{Lab 1}
-\begin{itemize}
-\item I assume that you installed all tools during lab0
-\item Functional programming in Scala
-\item The lab contains tests; run with \code{sbt test}
-\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab1}{lab1}
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{Session 3}
+
+%\begin{frame}[fragile]{Generic Components}
+%\begin{chisel}
+%val c = Mux(cond, a, b)
+%\end{chisel}
+%\begin{itemize}
+%\item This is a multiplexer
+%\item Input can be any type
+%\end{itemize}
+%\end{frame}
+
+
+\begin{frame}[fragile]{Chisel Introduction}
 \begin{itemize}
 \item Introduction to Chisel
 \item Functional programming for generators
@@ -1681,17 +1404,6 @@ class Adder extends Module {
 \end{itemize}
 \end{frame}
 
-%\begin{frame}[fragile]{Generic Components}
-%\begin{chisel}
-%val c = Mux(cond, a, b)
-%\end{chisel}
-%\begin{itemize}
-%\item This is a multiplexer
-%\item Input can be any type
-%\end{itemize}
-%\end{frame}
-
-
 \begin{frame}[fragile]{Functions}
 \begin{itemize}
 \item Circuits can be encapsulated in functions
@@ -1765,28 +1477,6 @@ val counter100 = counter(100.U)
 
 
 
-
-\begin{frame}[fragile]{Use Functional Programming for Generators}
-\shortlist{../code/fun_first.txt}
-\shortlist{../code/fun_func_lit.txt}
-\shortlist{../code/fun_reduce_tree.txt}
-\begin{itemize}
-\item This is a simple example
-\item What about an arbitration tree with fair arbitration?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Functional Generation}
-\begin{itemize}
-\item Anonymous functions, called \emph{function literal}
-\begin{chisel}
-  (param) => function body
-\end{chisel}
-\item A function for a minimum search
-\shortlist{../code/fun_min.txt}
-\end{itemize}
-\end{frame}
-
 %\begin{frame}[fragile]{Minimal Function with Index}
 %\begin{itemize}
 %\item Was the example for Tjark's heap sort
@@ -1831,14 +1521,14 @@ val counter100 = counter(100.U)
 \item Advance the simulation with \code{step}
 \item Read the output values with \code{peek}
 \item Compare the values with \code{expect}
-\item Import following packages:
+\item Import the following packages:
 \shortlist{../code/test_import.txt}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{An Example DUT}
 \begin{itemize}
-\item A device-under test (DUT)
+\item A device-under-test (DUT)
 \item Just 2-bit AND logic
 \shortlist{../code/test_dut.txt}
 \end{itemize}
@@ -1887,20 +1577,11 @@ val counter100 = counter(100.U)
 %\shortlist{../code/test_bench_simple.txt}
 %\end{frame}
 
-
-\begin{frame}[fragile]{Lab 2}
+\begin{frame}{A Bit More Chisel}
 \begin{itemize}
-\item Write a search for the maximum circuit (with \code{treeReduce()})
-\item Optional: add the generation of the index of the maximum value
-\item Emit Verilog with \code{emitVerilog(new Comp())} %, so you can synthesize it at the Thursday session
-\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab2}{lab2}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Session 4}
-\begin{itemize}
-\item Hardware generators
-\item Object-oriented hardware design
+    \item We had some in the first 30'
+    \item Here are some more
+    \item Enough to start generators
 \end{itemize}
 \end{frame}
 
@@ -1935,41 +1616,6 @@ val counter100 = counter(100.U)
 \begin{itemize}
 \item A simple buffer for a bubble FIFO
 \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Component Generation}
-\begin{chisel}
-val cores = new Array[Module](32)
-
-for (j <- 0 until 32)
-  cores(j) = Module(new CPU())
-\end{chisel}
-\begin{itemize}
-\item Use Scala array to collect components
-\item Generation with a Scala loop
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Logic Generation}
-\begin{itemize}
-\item Read a file into a table
-\begin{itemize}
-\item E.g., to read in ROM content for a processor
-\end{itemize}
-\item Generate a truth table algorithmically
-\begin{itemize}
-\item E.g., generate binary to BCD translation
-\end{itemize}
-\item Use the full power of Scala
-\end{itemize}
-\begin{chisel}
-val byteArray = Files.readAllBytes(Paths.get(fileName))
-val arr = new Array[Bits](byteArray.length)
-for (i <- 0 until byteArray.length) {
-  arr(i) = Bits(byteArray(i), 8)
-}
-val rom = Vec[Bits](arr)
-\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Parameterization}
@@ -2010,22 +1656,30 @@ val add8 = Module(new ParamAdder(8))
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Scala \code{for} Loop for Circuit Generation}
+\begin{frame}[fragile]{Factory Methods}
+\begin{itemize}
+\item Simpler component creation and use
+\item Usage similar to built in components, such as \code{Mux}
+\end{itemize}
 \begin{chisel}
-val shiftReg = RegInit(0.U(8.W))
-
-shiftReg(0) := inVal
-
-for (i <- 1 until 8) {
-  shiftReg(i) := shiftReg(i-1)
-}
+val myAdder = Adder(x, y)
 \end{chisel}
 \begin{itemize}
-\item \code{for} is Scala
-\item This loop generates several connections
-\item The connections are parallel hardware
+\item A little bit more work on component side
+\item Define an \code{apply} method on the companion object that returns the component
 \end{itemize}
+\begin{chisel}
+object Adder {
+  def apply(a: UInt, b: UInt) = {
+    val adder = Module(new Adder)
+    adder.io.a := a
+    adder.io.b := b
+    adder.io.result
+  }
+}
+\end{chisel}
 \end{frame}
+
 
 \begin{frame}[fragile]{Conditional Circuit Generation}
 \begin{chisel}
@@ -2049,127 +1703,101 @@ val m = if (useA) Module(new VariantA())
 \end{frame}
 
 
-\begin{frame}[fragile]{Generics in Hardware Construction}
+\begin{frame}[fragile]{More on Testing}
 \begin{itemize}
-\item Chisel supports generic classes with type parameters
-\item Write hardware generators independent of concrete type
-\item We have seen this in action with the Chisel \code{Mux}
-\item This is a multiplexer \emph{generator}
-\end{itemize}
-\shortlist{../code/param_func.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Put Generics Into Use}
-\begin{itemize}
-\item Let us implement a generic FIFO
-\item Use the generic ready/valid interface from Chisel
-\end{itemize}
-\shortlist{../code/fifo_decoupled.txt}
-\end{frame}
-
-\begin{frame}[fragile]{Define the FIFO Interface}
-\shortlist{../code/fifo_io.txt}
-\begin{itemize}
-\item We need enqueueing and dequeueing ports
-\item Note the \code{Flipped}
-\begin{itemize}
-\item It switches the direction of ports
-\item No more double definitions of an interface
-\end{itemize}
+\item Using test vectors and \code{expect()} does not scale
+\item Better have co-simulation against a \emph{golden model}
+\item Then we can compare
+\item Which input values to use?
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{But What FIFO Implementation?}
-\begin{itemize}
-\item Bubble FIFO (good for low data rate)
-\item Double buffer FIFO (fast restart)
-\item FIFO with memory and pointers (for larger buffers)
-\begin{itemize}
-\item Using flip-flops
-\item Using on-chip memory
-\end{itemize}
-\item And some more...
-\end{itemize}
-\begin{itemize}
-\item This calls for object-oriented \sout{programming} \emph{hardware construction}
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Abstract Base Class and Concrete Extension}
-\shortlist{../code/fifo_abstract.txt}
-\begin{itemize}
-\item May contain common code
-\item Extend by concrete classes
-\end{itemize}
+\begin{frame}[fragile]{A Tiny ALU: IO Connection}
 \begin{chisel}
-class BubbleFifo[T <: Data](gen: T, depth: Int) extends Fifo(gen: T, depth: Int) {
+class Alu extends Module {
+  val io = IO(new Bundle {
+    val fn = Input(UInt(2.W))
+    val a = Input(UInt(4.W))
+    val b = Input(UInt(4.W))
+    val result = Output(UInt(4.W))
+  })
+
+  // Use shorter variable names
+  val fn = io.fn
+  val a = io.a
+  val b = io.b
 \end{chisel}
 \end{frame}
 
-
-
-\begin{frame}[fragile]{Select a Concrete FIFO Implementation}
-\begin{itemize}
-\item Decide at hardware generation
-\item Can use all Scala/Java power for the decision
-\begin{itemize}
-\item Connect to a web service, get \sout{Google} Alphabet stock price, and decide on which to use ;-)
-\item For sure a silly idea, but you see what is possible...
-\item Developers may find clever use of the Scala/Java power
-\item We could present a GUI to the user to select from
-\end{itemize}
-\item We use XML files parsed at hardware generation time
-\item End of TCL, Python,... generated hardware
-\end{itemize}
-\end{frame}
-
-
-%
-%
-%
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item TODO: s4noc connection is part of the generator story
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
-%
-%\begin{frame}[fragile]{XXX}
-%\begin{itemize}
-%\item
-%\item
-%\item
-%\end{itemize}
-%\end{frame}
-
-
-
-\begin{frame}[fragile]{Combinational (Truth) Table Generation}
+\begin{frame}[fragile]{A Tiny ALU: The Function}
 \begin{chisel}
-val arr = new Array[Bits](length)
-for (i <- 0 until length) {
-  arr(i) = ...
+  val result = Wire(UInt(4.W))
+  // some default value is needed
+  result := 0.U
+
+  // The ALU selection
+  switch(fn) {
+    is(0.U) { result := a + b }
+    is(1.U) { result := a - b }
+    is(2.U) { result := a | b }
+    is(3.U) { result := a & b }
+  }
+
+  // Output on the LEDs
+  io.result := result
 }
-val rom = Vec[Bits](arr)
 \end{chisel}
-\begin{itemize}
-\item Generate a table in a Scala array
-\item Use that array as input for a Chisel \code{Vec}
-\item Generates a logic table at hardware construction time
-\end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Ideas for Runtime Table Generation}
+\begin{frame}[fragile]{Testing the ALU}
 \begin{itemize}
-\item Assembler in Scala/Java generates the boot ROM
-\item Table with a \code{sin} function
-\item Binary to BCD conversion
-\item Schedule table for a TDM-based network-on-chip
-\item 
-\item More ideas?
+\item Compute the expected result in Scala
 \end{itemize}
+\begin{chisel}
+  // This is exhaustive testing,
+  // which usually is impossible
+  for (a <- 0 to 15) {
+    for (b <- 0 to 15) {
+      for (op <- 0 to 3) {
+        val result =
+          op match {
+            case 0 => a + b
+            case 1 => a - b
+            case 2 => a | b
+            case 3 => a & b
+          }
+        val resMask = result & 0x0f
+\end{chisel}
+
 \end{frame}
+
+\begin{frame}[fragile]{Testing the ALU}
+\begin{itemize}
+\item Compare the Scala computed result with the hardware result
+\end{itemize}
+\begin{chisel}
+        poke(dut.io.fn, op)
+        poke(dut.io.a, a)
+        poke(dut.io.b, b)
+        step(1)
+        expect(dut.io.result, resMask)
+      }
+    }
+  }
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{Printf Debugging}
+\begin{itemize}
+\item We can \emph{print} in the hardware
+\item Printing happens on the rising edge of the clock
+\item Good to see many parallel signals and registers
+\item \code{printf} anywhere in the module definition
+\end{itemize}
+\shortlist{../code/test_dut_printf.txt}
+\end{frame}
+
 
 \begin{frame}[fragile]{Test Driven Development (TDD)}
 \begin{itemize}
@@ -2204,20 +1832,56 @@ val rom = Vec[Bits](arr)
 \begin{itemize}
 \item Debugging is during code development
 \item Waveform and println are easy tools for debugging
-\item Debugging does not help with regression tests
+\item Debugging does not help for regression tests
 \item Write small test cases for regression tests
 \item Keeps your code base \emph{intact} when doing changes
 \item Better confidence in changes not introducing new bugs
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab 3}
+
+
+\begin{frame}[fragile]{Chisel Summary}
 \begin{itemize}
-\item Design a component with a generic parameter
-\item Emit Verilog with \code{emitVerilog(new Comp())}, you can synthesize it then on Thursday
-\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab3}{lab3}
+\item Chisel is a small language
+\item Embedding it in Scala gives it power
+\item We can write circuit generators
+\item We can do co-simulation
+\item We will continue with Scala
 \end{itemize}
 \end{frame}
+
+
+%
+%
+%
+%\begin{frame}[fragile]{XXX}
+%\begin{itemize}
+%\item TODO: s4noc connection is part of the generator story
+%\item
+%\item
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}[fragile]{XXX}
+%\begin{itemize}
+%\item
+%\item
+%\item
+%\end{itemize}
+%\end{frame}
+
+
+\begin{frame}[fragile]{Part of ODE4EC-PIV}
+\begin{itemize}
+\item Topic is part of the Chips JU project ODE4EC-PIV
+\item \url{https://ode4ec.eu/}
+\item We have a PhD position on agile HW at DTU
+\item \url{https://efzu.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/da/sites/CX_2001/job/7982}
+\item Deadline 18 September
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
@@ -2230,6 +1894,13 @@ val rom = Vec[Bits](arr)
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Lab 3}
+\begin{itemize}
+\item Design a component with a generic parameter
+\item Emit Verilog with \code{emitVerilog(new Comp())}, you can try to synthesize it
+\item Code is in \href{https://github.com/schoeberl/agile-hw/tree/main/lab3}{lab3}
+\end{itemize}
+\end{frame}
 
 \end{document}
 
