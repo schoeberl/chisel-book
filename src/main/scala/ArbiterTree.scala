@@ -97,7 +97,7 @@ class ArbiterSimpleTree[T <: Data: Manifest](n: Int, private val gen: T) extends
     }
 
     out.valid := !regEmpty
-    when (out.ready) {
+    when (!regEmpty & out.ready) {
       regEmpty := true.B
     }
 
