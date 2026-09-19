@@ -567,7 +567,7 @@ def add(a: Int, b: Int): Int = {
 \begin{frame}[fragile]{Scala Arrays and Lists}
 \begin{chisel}
 // An integer array with 10 elements
-val numbers = new Array[Integer](10)
+val numbers = new Array[Int](10)
 for (i <- 0 until numbers.length) {
   numbers(i) = i*10
 }
@@ -624,7 +624,7 @@ class Example {
   var n = 0
   
   // A setter method
-  def set(v: Integer) = {
+  def set(v: Int) = {
     n = v
   }
   
