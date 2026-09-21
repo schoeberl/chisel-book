@@ -35,6 +35,19 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Levels of Parameterization}
+\begin{itemize}
+\item Fixed hardware
+\item Value parameter: \code{width: Int}
+\item Configuration object: \code{Config(...)}
+\item Type parameter: \code{T <: Data}
+\item Structural generation:
+    map / tabulate / reduceTree / for
+\item Architecture generator:
+    network topology, pipelines,...
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Functions with Multiple Outputs}
 \begin{itemize}
 \item We use functions to generate hardware
@@ -53,11 +66,11 @@ Embedded Systems Engineering}
 \shortlist{../code/fun_comp_use2.txt}
 \item Functions can be declared as part of a \code{Module}
 \item Better place them into a Scala object collecting utility functions
-\item Functions can serve as ligthweight modules
+\item Functions can serve as lightweight modules
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Lab two Weeks Ago}
+\begin{frame}[fragile]{Lab Last Week}
 \begin{itemize}
 \item Write a search for the minimum circuit (with \code{treeReduce()})
 \item Add the generation of the index of the minimum value
@@ -211,8 +224,8 @@ a \code{Payload} as a parameter
 \item Is either \code{Some(x)} or \code{None}
 \begin{chisel}
 val opt: Option[Int] = Some(123)
-if (o.isDefined)
-  println(o.get)
+if (opt.isDefined)
+  println(opt.get)
 else
   println("None")
 \end{chisel}
@@ -317,6 +330,12 @@ val myAdder = Adder(x, y)
 \end{chisel}
 \begin{itemize}
 \item A little bit more work on the component side
+\item Easier for the user of the component
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Factory Methods Cont.}
+\begin{itemize}
 \item Define an \code{apply} method on the companion object that returns the component (output port)
 \end{itemize}
 \begin{chisel}
@@ -329,6 +348,10 @@ object Adder {
   }
 }
 \end{chisel}
+\begin{itemize}
+\item Hides module instantiation, wiring, and exposes only the result
+\item Important generator/library-design pattern
+\end{itemize}
 \end{frame}
 
 %\begin{frame}[fragile]{XXX}
@@ -380,6 +403,12 @@ class DelayRec(n: Int) extends Module {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Break}
+\begin{itemize}
+\item Then let us build some hardware
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Parameterize Number of Ports}
 \begin{itemize}
 \item Use a \code{Vec} 
@@ -390,11 +419,10 @@ class Example(n: Int, w: Int) extends Module {
         val out = Output(UInt(w.W))
     })
 \end{chisel}
-\item Next week, a more flexible version
-\item Decide at runtime even on the type of a port
+\item The number and type of ports can be decided at elaboration time
+\item The interface itself can depend on generator parameters
 \end{itemize}
 \end{frame}
-
 
 
 \begin{frame}[fragile]{Use Methods}
@@ -404,30 +432,6 @@ class Example(n: Int, w: Int) extends Module {
 \item We have seen \code{apply()} on the companion object
 \item Remember what this gave us?
 \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Factory Method \code{apply}}
-\begin{itemize}
-\item Simpler component creation and use
-\item Usage similar to built-in components, such as \code{Mux}
-\end{itemize}
-\begin{chisel}
-val myAdder = Adder(x, y)
-\end{chisel}
-\begin{itemize}
-\item A little bit more work on the component side
-\item Define an \code{apply} method on the companion object that returns the component (output port)
-\end{itemize}
-\begin{chisel}
-object Adder {
-  def apply(a: UInt, b: UInt) = {
-    val adder = Module(new Adder)
-    adder.io.a := a
-    adder.io.b := b
-    adder.io.result
-  }
-}
-\end{chisel}
 \end{frame}
 
 \begin{frame}[fragile]{Decoupled Components}
@@ -442,8 +446,8 @@ object Adder {
 
 \begin{frame}[fragile]{Methods on \code{DecoupledIO}}
 \begin{itemize}
-\item \code{fire()} is true if and only if ready and valid are asserted
-\item \code{enq(data)} sets data and sets valid to true (no check on ready)
+\item \code{fire()} is true if and only if \code{ready} and \code{valid} are asserted
+\item \code{enq(data)} sets data and sets valid to true (no check on \code{ready})
 \item \code{noenq()} deasserts valid
 \item \code{deq/nodeq} for the receiver side
 \begin{chisel}
@@ -460,6 +464,14 @@ when(io.in.fire) {
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Methods on \code{DecoupledIO}}
+\begin{itemize}
+\item Distinction between a Scala method and generated hardware
+\item \code{io.in.fire} looks like a software method invocation
+\item But produces a Chisel \code{Bool} expression representing \code{ready \&\& valid}.
+\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Arbiter}
 \begin{itemize}
 \item Several components have a request for a shared resource
@@ -467,7 +479,7 @@ when(io.in.fire) {
 \item Needs to select which request gets granted
 \item Different algorithms to do this
 \item Simplest is priority, but unfair
-\item Fairnis, and guaranteed progress, especially in real-time systems, is an issue
+\item Fairness and guaranteed progress, especially in real-time systems, is an issue
 \item I have a fair arbiter in the Chisel book (10.6.2)
 \end{itemize}
 \end{frame}
@@ -482,10 +494,10 @@ arb.io.in(1) <> producer1.io.out
 consumer.io.in <> arb.io.out
 \end{chisel}
 \item \code{Arbiter} is a simple priority based arbitration
-\item \code{RRArbiter} choses in round robin
+\item \code{RRArbiter} chooses in round robin
 \begin{itemize}
 \item No details on implementation
-\item True, single cycle, round robin is combinational complex
+\item A single-cycle round-robin arbiter can have substantial combinational logic
 \end{itemize}
 \item \code{LockingRRArbiter} grant reserved for several clock cycles
 \end{itemize}
@@ -606,7 +618,7 @@ consumer.io.in <> q.io.deq
 \begin{frame}[fragile]{Connect a Network-on-Chip}
 \begin{itemize}
 \item n x n router in bi-thorus configuration
-\item Each raouter has 4 + 1 ports: North, South, West, East, and local
+\item Each router has 4 + 1 ports: North, South, West, East, and local
 \item Use a helper function \code{connect(...)}
 \end{itemize}
 \begin{chisel}
@@ -623,6 +635,24 @@ consumer.io.in <> q.io.deq
     }
   }
 \end{chisel}
+\end{frame}
+
+\begin{frame}[fragile]{Now we are Generating}
+\begin{itemize}
+\item The NoC example is a real generator
+\item This is what we have been working toward
+\item We aren't just parameterizing widths anymore
+\item Scala is generating the architecture
+\item 11 lines of Scala generate an entire network structure
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Generator Summary}
+\begin{itemize}
+\item Scala runs at elaboration time
+\item Chisel objects describe the hardware being constructed
+\item Generators turn parameters, types, and algorithms into hardware structure
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Why Open Source?}
@@ -674,12 +704,12 @@ consumer.io.in <> q.io.deq
 \item GPL
 \begin{itemize}
 \item Commonly used in software
-\item Copyleft means you have to make all changes available
+\item Distributing derived software can require making corresponding source available under the GPL
 \item Some companies have restrictions on using GPL software
 \end{itemize}
 \item Apache
 \begin{itemize}
-\item Similar to BDS and MIT
+\item Similar to BSD and MIT
 \item Includes explicit patent protection
 \end{itemize}
 \end{itemize}
@@ -717,7 +747,10 @@ consumer.io.in <> q.io.deq
 
 \begin{frame}[fragile]{On the Project}
 \begin{itemize}
+\item Pick a topic and fill in the Google Doc
+\item Have some inspiration from \url{https://scottbeamer.net/cse228a-sp25/project/index.html}
 \item Next week is your initial presentation
+
 \item No lab
 \end{itemize}
 \end{frame}
@@ -753,7 +786,7 @@ consumer.io.in <> q.io.deq
 \item Use ready/valid interfaces (DecoupledIO)
 \item Use queues, arbitration
 \item Go open source!
-\item Next week: guest lecture by Ioannis on LLM usage at Microhip
+\item Next week: guest lecture by Ioannis on LLM usage at Microchip
 \end{itemize}
 \end{frame}
 
