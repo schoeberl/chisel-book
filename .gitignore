@@ -1,0 +1,13 @@
+code/
+target/
+test_run_dir/
+generated/
+*.aux
+*.bbl
+*.blg
+*.log
+*.lof
+*.lot
+*.toc
+*.gz
+*.lol
