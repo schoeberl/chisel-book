@@ -13,13 +13,13 @@ Embedded Systems Engineering}
 \end{frame}
 \begin{frame}{Organization}
 \begin{itemize}
-\item You have presented your MVP
+\item You presented your MVP last week
 \item What should you improve next?
-\item Today: measure different generated designs
-\item Standup presentations:
+\item Today: let us measure different generated designs
+\item After lecture: stand-up presentations:
 \begin{itemize}
 \item 3 minutes per group, no slides
-\item What did you last week?
+\item What did you do last week?
 \item What are your parameters?
 \end{itemize}
 \end{itemize}
@@ -31,7 +31,6 @@ Embedded Systems Engineering}
 \item Revisit our MaxFinder example
 \item Measure area and timing with LibreLane
 \item Estimated fmax, latency, and throughput
-\item Use the results to plan the next sprint
 \end{itemize}
 \end{frame}
 
@@ -51,8 +50,8 @@ Embedded Systems Engineering}
 \item Find the maximum of a vector of unsigned values
 \item We used a tree reduction in lab 2
 \item Keep the function fixed: 8 inputs, each 16 bits
-\item Exact maximum, no approximation
 \item A new input vector can arrive every cycle
+\item But we keep it simple without handshaking
 \item Can we trade area for speed?
 \end{itemize}
 \end{frame}
@@ -143,12 +142,11 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Predict Before Running}
+\begin{frame}{Predict Before Running the Synthesis}
 \begin{itemize}
 \item Which architecture has the smallest area?
 \item Which one can run at the highest clock frequency?
 \item Which one has the lowest transaction latency?
-\item Discuss with your neighbor
 \item Synthesis may restructure our circuit
 \item Our RTL structure is a hypothesis, not a measurement
 \end{itemize}
@@ -189,16 +187,72 @@ io.out := inputs.reduceTree(
 
 
 
-\begin{frame}{What Is LibreLane?}
+\begin{frame}{From Vivado to LibreLane}
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+ & Vivado / FPGA & LibreLane / ASIC\\
+\midrule
+Input & RTL and constraints & RTL and constraints\\[1ex]
+Target & FPGA device & Fabrication technology\\[1ex]
+Logic & \shortstack[l]{LUTs, flip-flops,\\carry chains} & \shortstack[l]{Standard-cell gates\\and flip-flops}\\[1ex]
+Full result & Bitstream & Chip layout (GDSII)\\
+\bottomrule
+\end{tabular}
+\end{center}
 \begin{itemize}
-\item An open-source flow from RTL to chip layout
-\item Yosys maps our RTL to standard cells
-\item Static timing analysis checks the clock target
-\item OpenROAD handles physical implementation
-\item Today we stop after synthesis and pre-PnR timing
-\item Run the full flow later for selected candidates
+\item Same questions: how much hardware, how fast?
+\item Different building blocks and delay models
+\item ASIC results do not predict FPGA LUT counts or fmax
 \end{itemize}
 \end{frame}
+
+\begin{frame}{What Is LibreLane?}
+\begin{itemize}
+\item A flow that coordinates several open-source tools
+\item Yosys/ABC: synthesize and map RTL to standard cells
+\item OpenSTA: static timing analysis of the mapped netlist
+\item OpenROAD: placement, clock tree, and routing later
+\item A YAML file describes our design and constraints
+\item Each step writes its own netlist, logs, or reports
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What Are We Mapping To?}
+\begin{itemize}
+\item SKY130A: a 130 nm CMOS technology setup
+\item A PDK is a \emph{process design kit}
+\begin{itemize}
+\item Technology files and rules for implementing a chip
+\end{itemize}
+\item Our standard-cell library: \code{sky130\_fd\_sc\_hd}
+\begin{itemize}
+\item Gates, multiplexers, flip-flops, and different drive strengths
+\item Library models give each cell's area and timing behavior
+\end{itemize}
+\item A 16-bit comparison becomes a network of these cells
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{How Far Do We Run?}
+\begin{enumerate}
+\item Chisel elaboration: generate Verilog
+\item Lint and synthesis: create a mapped cell netlist
+\item Pre-placement timing analysis: estimate path delays
+\end{enumerate}
+\begin{lstlisting}[language={}]
+--to OpenROAD.STAPrePNR
+\end{lstlisting}
+\begin{itemize}
+\item We stop here: pre-PnR means before place and route
+\item Later: floorplan, placement, clock tree, routing, checks
+\item Similar to inspecting Vivado after synthesis,
+      before implementation
+\item Enough for an initial architecture comparison
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[fragile]{One Configuration for All Three Designs}
 \begin{lstlisting}[language={}]
@@ -237,16 +291,86 @@ make reports
 \end{frame}
 
 
-\begin{frame}{Which Metrics?}
+\begin{frame}{What Does the Area Estimate Count?}
 \begin{itemize}
-\item Cell area: sum of mapped standard-cell areas
-\item This is not the die area
-\item Setup slack = required time $-$ arrival time
-\item Negative slack: the clock target is not met
-\item Check the constraints and analyzed corners
-\item Exclude failed or incomplete runs from the frontier
+\item Synthesis chooses cells to implement our logic
+\item Add the library area of every mapped cell instance
+\end{itemize}
+\[
+ A_{cells} = \sum_i A(\mathrm{cell}_i)
+\]
+\begin{itemize}
+\item Includes our data registers and compare/select logic
+\item Larger drive strengths can cost more area
+\item No allowance yet for placement gaps or a clock tree
+\item Cell area in $\mu$m$^2$, not a percentage of an FPGA
+\item The final chip needs more than these logic cells
 \end{itemize}
 \end{frame}
+
+\begin{frame}{What Does the Timing Estimate Measure?}
+\begin{center}
+\begin{tikzpicture}[>=Stealth,
+ b/.style={draw,align=center,minimum height=0.8cm}]
+\node[b] (a) at (0,0) {Launch\\register};
+\node[b] (b) at (4,0) {Compare/select\\logic};
+\node[b] (c) at (8,0) {Capture\\register};
+\draw[->] (a) -- (b);
+\draw[->] (b) -- (c);
+\end{tikzpicture}
+\end{center}
+\[
+ T_{clock} \gtrsim t_{clk\rightarrow Q} + t_{logic}
+                   + t_{setup} + t_{uncertainty}
+\]
+\begin{itemize}
+\item Simplified setup check with an ideal clock
+\item Cell delays depend on input slew and output load
+\item Static timing checks paths without simulation vectors
+\item The limiting register path sets the clock-period estimate
+\item No routed-wire parasitics or implemented clock tree yet
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Clock Target, Slack, and Estimated fmax}
+\begin{itemize}
+\item We request 20 ns (50 MHz) for every design
+\item This is a constraint, not the measured result
+\item Setup slack = required time $-$ arrival time
+\item Negative slack: that path misses the target
+\item The clock report estimates a minimum usable period
+\item Its reciprocal gives the estimated fmax
+\item This clock estimate does not prove IO or hold timing
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Are There Several Timing Corners?}
+\begin{itemize}
+\item Cells behave differently with process, voltage,
+      and temperature
+\item Libraries describe several combinations, or \emph{corners}
+\item Example: \code{nom\_ss\_100C\_1v60}
+\begin{itemize}
+\item Slow-process model, $100^\circ$C, 1.60 V
+\end{itemize}
+\item Inspect every analyzed corner and find the lowest fmax
+\item Compare architectures at the same corner
+\item A typical-corner number alone can be misleading
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Is This Useful for DSE?}
+\begin{itemize}
+\item We measure mapped logic, not just count RTL operators
+\item Chain versus tree changes the depth of a path
+\item Pipelining adds registers and shortens each logic stage
+\item Hold function, library, constraints, and tools fixed
+\item The same early flow makes the comparison meaningful
+\item Physical implementation can still change the ranking
+\item Use this to select candidates for the more expensive flow
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}{Latency and Throughput}
 \begin{itemize}
@@ -290,7 +414,6 @@ less nom_ss_100C_1v60/clock.rpt
 \item Find \code{period\_min} (ns) and \code{fmax} (MHz)
 \item $f_{max} \approx 1000 / T_{min}$
 \item Compare the lowest fmax across all corner directories
-\item Open that corner's \code{max.rpt}: what sets the limit?
 \item Use \code{summary.rpt} to inspect the other checks
 \end{itemize}
 \end{frame}
@@ -309,10 +432,9 @@ Pipeline & ? & ? & ?\\
 \end{tabular}
 \end{center}
 \begin{itemize}
-\item Fill in the table before we reveal the results
 \item Use the same corner when comparing architectures
 \item Which designs meet 50 MHz? What is the area cost?
-\item Can you explain one critical path?
+\item Check Yosys results for area (estimate)
 \end{itemize}
 \end{frame}
 
@@ -333,7 +455,7 @@ Pipeline & 8996 & 6.11 & 163.69\\
 \begin{itemize}
 \item All runs use a 20 ns clock target
 \item Slow-corner clock report, before placement/routing
-\item LibreLane 3.0.3, SKY130A; 28 October 2026
+\item LibreLane 3.0.3, SKY130A
 \item Which designs meet our 50 MHz target?
 \end{itemize}
 \end{frame}
@@ -345,8 +467,6 @@ Pipeline & 8996 & 6.11 & 163.69\\
 \item Tree: fewer cells and lower transaction latency
 \item Pipeline: potential for a higher clock
 \item About 18\% more cell area for that headroom
-\item A point dominates another if no objective is worse
-      and at least one is better
 \item What changes when the throughput requirement rises?
 \end{itemize}
 \end{frame}
@@ -364,14 +484,43 @@ Pipeline & 8996 & 6.11 & 163.69\\
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Keep the Experiment Reproducible}
+\begin{frame}{More Architecture Parameters to Explore}
 \begin{itemize}
-\item Record generator parameters and generated RTL
-\item Save the configuration, tool and PDK versions
-\item Keep raw metrics and failed-run logs
-\item Copy reports before overwriting a run
-\item Explain an unexpected result using a timing report
-\item More points do not fix an unfair comparison
+\item Parallelism: generate 1, 2, or 4 processing lanes
+\begin{itemize}
+\item More hardware versus more work per cycle
+\end{itemize}
+\item Resource sharing: one multiplier or one per operation?
+\begin{itemize}
+\item Area versus cycles per result and control overhead
+\end{itemize}
+\item Pipelining: where should we insert registers?
+\begin{itemize}
+\item Clock frequency versus area and latency
+\end{itemize}
+\item Interconnect: shared bus, crossbar, or a network?
+\begin{itemize}
+\item Wiring and arbitration versus communication bandwidth
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Explore Precision and Storage}
+\begin{itemize}
+\item Arithmetic width: 8, 16, or 32 bits?
+\begin{itemize}
+\item Area and timing versus accuracy and overflow behavior
+\end{itemize}
+\item FIFO depth: how much buffering does the workload need?
+\begin{itemize}
+\item Storage cost versus stalls and throughput
+\end{itemize}
+\item Memory banking: one bank or several parallel banks?
+\begin{itemize}
+\item Access bandwidth versus conflicts and routing
+\end{itemize}
+\item Simulate the workload to measure accuracy or stalls
+\item Use suitable memory models: flops are not an SRAM macro
 \end{itemize}
 \end{frame}
 
@@ -392,14 +541,12 @@ Pipeline & 8996 & 6.11 & 163.69\\
 \item Keep the function fixed and verify each variant
 \item Measure, do not just count RTL operations
 \item Latency and throughput are different
-\item Choose a Pareto alternative using requirements
-\item Make the next sprint an experiment
+\item Maybe make the next sprint a DSE experiment
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Reading and Code}
 \begin{itemize}
-\item \href{https://github.com/schoeberl/agile-hw}{Agile Hardware Design course repository}
 \item Local example: \code{agile-hw/dse/}
 \item \code{README.md}: commands and assumptions
 \item \href{https://librelane.readthedocs.io/en/latest/getting_started/newcomers/index.html}{LibreLane newcomer tutorial}
