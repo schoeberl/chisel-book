@@ -3,8 +3,6 @@ DOC=chisel-book
 
 all: test gencode fig book genslides
 
-#	scala scripts/gencode.scala
-
 test:
 	sbt test
 
@@ -12,14 +10,14 @@ vhdl:
 	make -C src/main/vhdl
 
 gencode:
-	-mkdir code
-	sbt -Dsbt.main.class=sbt.ScriptMain scripts/gencode.scala
+	mkdir -p code
+	scala-cli run --server=false scripts/gencode.sc
 
 keywords:
-	sbt -Dsbt.main.class=sbt.ScriptMain scripts/keywords.scala
+	scala-cli run --server=false scripts/keywords.sc
 
 checkref:
-	sbt -Dsbt.main.class=sbt.ScriptMain scripts/checkref.scala
+	scala-cli run --server=false scripts/checkref.sc
 
 
 fig:

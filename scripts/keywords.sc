@@ -1,3 +1,5 @@
+//> using scala "3.7.1"
+
 // Spill out Chisel keywords for a Latex table
 // call it with: make keywords
 

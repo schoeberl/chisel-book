@@ -1,3 +1,5 @@
+//> using scala "3.7.1"
+
 // Check URLs
 // call it with: make checkref
 
@@ -14,9 +16,9 @@ for (pM <- pattern.findAllMatchIn(lines)) {
     val html = Source.fromURL(pM.toString())
     // this finds false positives (errors), but they are just a few to check manually
     html.getLines().next()
-    // println(pM + " is good")
+    // println(s"$pM is good")
   } catch {
-    case e: Exception => println(pM + " is not good")
+    case e: Exception => println(s"$pM is not good")
   }
 }
 

@@ -31,8 +31,10 @@ In case you want to cite the book:
 This book project has an accompanying repository containing
 [Chisel examples](https://github.com/schoeberl/chisel-examples).
 
-To build the Chisel book from the source you need make, latex, sbt, and
-a Java JDK (1.8 or later) installed. For some tests you also need Verilator
+To build the Chisel book from the source you need make, latex, sbt,
+[Scala CLI](https://scala-cli.virtuslab.org/install/), and a Java JDK 17 or later
+installed. CI uses Scala CLI 1.8.4; the helper scripts select Scala 3.7.1.
+For some tests you also need Verilator
 and z3 installed. Then you simply build the book with:
 
 ```

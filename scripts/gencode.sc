@@ -1,3 +1,5 @@
+//> using scala "3.7.1"
+
 // Extract code snippets from the complete Chisel examples in src
 
 import java.io._
@@ -12,7 +14,7 @@ def list(folder: String): Unit = {
   new File(folder).listFiles(_.isDirectory).map(f => list(folder + f.getName + "/"))
 }
 
-def extract(f: String) {
+def extract(f: String): Unit = {
   println(f)
   var code: PrintWriter = null
   val lines = Source.fromFile(f).getLines()

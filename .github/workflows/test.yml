@@ -20,6 +20,10 @@ jobs:
         distribution: 'temurin'
     - name: Setup sbt
       uses: sbt/setup-sbt@v1
+    - name: Setup Scala CLI
+      uses: VirtusLab/scala-cli-setup@1
+      with:
+        scala-cli-version: '1.8.4'
     - name: apt update
       run: sudo apt update
     - name: Setup Verilator
