@@ -9,12 +9,10 @@ construction language, [Chisel](https://www.chisel-lang.org/).
 In this book we focus on a slightly higher abstraction level to get you up to
 speed to build more complex, interacting digital systems.
 
-A compiled PDF version of the book is available at
+The latest release of the book is available at
 [Digital Design with Chisel PDF](http://www.imm.dtu.dk/~masca/chisel-book.pdf).
 
-[Read the latest build](https://schoeberl.github.io/chisel-book/chisel-book.pdf)
-or [download the PDF](https://github.com/schoeberl/chisel-book/releases/download/latest/chisel-book.pdf).
-GitHub Actions updates the `latest` release on each push and publishes `master` to Pages.
+The latest source pushed/compiled version is available online [here](https://schoeberl.github.io/chisel-book/chisel-book.pdf).
 
 Translations in Chinese, Japanese, and Vietnamese are also available
 [here](http://www.imm.dtu.dk/~masca/chisel-book.html).
@@ -33,8 +31,6 @@ In case you want to cite the book:
 }
 ```
 
-This book project has an accompanying repository containing
-[Chisel examples](https://github.com/schoeberl/chisel-examples).
 
 To build the Chisel book from the source you need make, latex, sbt,
 [Scala CLI](https://scala-cli.virtuslab.org/install/), and a Java JDK 17 or later
