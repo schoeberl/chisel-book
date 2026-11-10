@@ -1,0 +1,95 @@
+name: Build and publish PDF
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: book-pdf-release
+  cancel-in-progress: false
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out the source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+
+      - name: Set up Scala CLI
+        uses: VirtusLab/scala-cli-setup@v1
+        with:
+          scala-cli-version: '1.8.4'
+
+      - name: Extract code snippets
+        run: make gencode
+
+      - name: Build the book
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: chisel-book.tex
+          # Match the TeX Live version used for the local book build.
+          texlive_version: '2022'
+          extra_system_packages: make
+          pre_compile: make -C figures
+
+      - name: Prepare PDF for GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        run: |
+          mkdir -p _site
+          cp chisel-book.pdf _site/
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publish PDF as a release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          test -s chisel-book.pdf
+          printf 'Book built from commit %s on branch %s.\n\nBuild: %s/%s/actions/runs/%s\n' \
+            "$GITHUB_SHA" "$GITHUB_REF_NAME" "$GITHUB_SERVER_URL" \
+            "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > release-notes.md
+          if gh release view latest > /dev/null 2>&1; then
+            gh release upload latest chisel-book.pdf --clobber
+            gh api --method PATCH "repos/${GH_REPO}/git/refs/tags/latest" \
+              -f sha="$GITHUB_SHA" -F force=true
+            gh release edit latest --title "Latest PDF" \
+              --notes-file release-notes.md --latest
+          else
+            gh release create latest chisel-book.pdf \
+              --target "$GITHUB_SHA" --title "Latest PDF" \
+              --notes-file release-notes.md --latest
+          fi
+
+  deploy-pages:
+    if: github.ref == 'refs/heads/master'
+    needs: build-pdf
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}chisel-book.pdf
+    steps:
+      - name: Deploy PDF to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

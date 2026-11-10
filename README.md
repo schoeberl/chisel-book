@@ -11,6 +11,11 @@ speed to build more complex, interacting digital systems.
 
 A compiled PDF version of the book is available at
 [Digital Design with Chisel PDF](http://www.imm.dtu.dk/~masca/chisel-book.pdf).
+
+[Read the latest build](https://schoeberl.github.io/chisel-book/chisel-book.pdf)
+or [download the PDF](https://github.com/schoeberl/chisel-book/releases/download/latest/chisel-book.pdf).
+GitHub Actions updates the `latest` release on each push and publishes `master` to Pages.
+
 Translations in Chinese, Japanese, and Vietnamese are also available
 [here](http://www.imm.dtu.dk/~masca/chisel-book.html).
 
