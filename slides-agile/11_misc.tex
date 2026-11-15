@@ -32,6 +32,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Chisel Formal in Chisel 6 and earlier
 \item Reflections on agile hardware design
+\item Memories
 \item Last lecture
 \item Today: standup report on your project
 \item Week 12: project work
@@ -301,29 +302,196 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Memory}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Sometimes we need to store values/state
+\item State machine, register file, instruction and data memories,...
+\item Three or more options
 \begin{itemize}
-\item xxx
+\item Flip-flops
+\item (Latches)
+\item SRAM blocks
+\item External memory
 \end{itemize}
-\item xxx
-\item xxx
+\item Which to use when?
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Memory in Chisel}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
+\item Chisel has three constructs for storage elements
 \begin{itemize}
-\item xxx
+\item \code{Reg(Vec(...))}
+\item \code{Mem}
+\item \code{SyncReadMem}
 \end{itemize}
-\item xxx
-\item xxx
+\item What is the difference?
+\item What maps to what?
+\item What is the read latency?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory}
+\begin{itemize}
+\item Registers are storage elements == memory
+\item Just use a \code{Reg} of a \code{Vec}
+\item This is 1 KiB of memory
+\begin{chisel}
+  val memoryReg = Reg(Vec(1024, UInt(8.W)))
+  // writing into memory
+  memoryReg(wrAddr) := wrData
+  // reading from the memory
+  val rdData = memoryReg(rdAddr)
+\end{chisel}
+\item Simple, right?
+\item But is this a good solution?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Flip-Flop}
+\begin{itemize}
+\item Remember the circuit of a register (flip-flop)?
+\item Two latches: \href{https://en.wikipedia.org/wiki/Flip-flop_(electronics)#Master%E2%80%93slave_edge-triggered_D_flip-flop}{master and slave}
+\item One (enable) latch can be built with 4 NAND gates
+\item A NAND gate needs 4 transistors; an inverter needs 2 transistors
+\item A flip-flop needs 36 transistors (for a single bit)
+\item Can we do better?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{A Memory Cell}
+\begin{itemize}
+\item A single bit can be stored in \href{https://en.wikipedia.org/wiki/Static_random-access_memory#/media/File:SRAM_Cell_(6_Transistors).svg}{6 transistors}
+\begin{itemize}
+\item Corsscoupled invertes plus access transistors
+\end{itemize}
+\item That is how larger memories are built
+\item FPGAs have this type of on-chip memories
+\item Usually many of them in units of 2 KiB or 4 KiB
+\item We need some Chisel code to represent it
+\item More memory needs an external chip
+\item Then we need to interface this memory with the FPGA
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{SRAM Memory}
+\begin{itemize}
+\item RAM stands for random access memory
+\item SRAM stands for static RAM
+\item There is also something called DRAM for dynamic RAM
+\begin{itemize}
+\item Uses a capacitor and a transistor
+\item DRAM is smaller than SRAM
+\item But needs refreshes
+\item Different technology than technology for logic
+\end{itemize}
+\item All on-chip memory is SRAM (today)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory Interface}
+\begin{itemize}
+\item Interface
+\begin{itemize}
+\item Address input (e.g., 10 bits for 1 KiB)
+\item Write signal (e.g., we)
+\item Data input
+\item Data output
+\end{itemize}
+\item May share pins for the data input and output (tri-state)
+\item May have read and write addresses
+\begin{itemize}
+\item A so-called dual ported memory
+\item Can do a read and a write in the same clock cycle
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{On-Chip Memory}
+\begin{itemize}
+\item SRAM by itself is asynchronous
+\item No clock, just the correct timing
+\item Apply the address and after some time the data is valid
+\item But one can add input registers, which makes it a synchronous SRAM
+\item Current FPGAs have synchronous memories only
+\item This means the result of a read is available one clock cycle after the address is given
+\begin{itemize}
+\item This is different from the use of flip-flops (\code{Reg(Vec(..))})
+\end{itemize}
+\item FPGAs usually have dual-ported memories
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Synchronous Memory}
+\begin{figure}
+  \includegraphics[scale=\scale]{../figures/memory}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Use of a Chisel SyncReadMem}
+\shortlist{../code/memory.txt}
+\end{frame}
+
+\begin{frame}[fragile]{Read-During-Write}
+\begin{itemize}
+\item What happens when one writes to and reads from the same address?
+\item Which value is returned?
+\item Three possibilities:
+\begin{enumerate}
+\item The newly written value
+\item The old value
+\item Undefined (mix of old and new)
+\end{enumerate}
+\item Depends on technology, FPGA family, ...
+\item We want to have a defined read-during-write
+\item We add hardware to \emph{forward} the written value
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Condition for Forwarding}
+\begin{itemize}
+\item If read and write addresses are equal
+\item If write enable is true
+\item Multiplex the output to take the new write value instead of the (old) read value
+\item Delay that forwarded write value to have the same timing
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Memory with Forwarding}
+\begin{figure}
+  \includegraphics[scale=0.5]{../figures/memory-forwarding}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Forwarding in Chisel}
+\begin{chisel}
+  val mem = SyncReadMem(1024, UInt(8.W))
+
+  val wrDataReg = RegNext(io.wrData)
+  val doForwardReg = RegNext(io.wrAddr === io.rdAddr && io.wrEna)
+
+  val memData = mem.read(io.rdAddr)
+
+  when(io.wrEna) {
+    mem.write(io.wrAddr, io.wrData)
+  }
+
+  io.rdData := Mux(doForwardReg, wrDataReg, memData)
+\end{chisel}
+\end{frame}
+
+
+\begin{frame}[fragile]{External Memory}
+\begin{itemize}
+\item On-chip memory is limited
+\item We can add an external memory chip
+\begin{itemize}
+\item Is cheaper than FPGA on-chip memory
+\end{itemize}
+\item Sadly, the Basys 3 board has no external memory
+\item The simplest memory is an asynchronous SRAM
+\item You can add an external memory via SPI on the connectors
 \end{itemize}
 \end{frame}
 
