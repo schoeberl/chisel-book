@@ -33,8 +33,13 @@ Embedded Systems Engineering}
 \item Chisel Formal in Chisel 6 and earlier
 \item Reflections on agile hardware design
 \item Memories
-\item Last lecture
-\item Today: standup report on your project
+\item Project measurements, documentation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Next Two Weeks}
+\begin{itemize}
+\item Last lecture today
 \item Week 12: project work
 \item Week 13: Final project presentation and demonstration
 \begin{itemize}
@@ -48,10 +53,34 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{The Final Sprints}
+\begin{itemize}
+\item Make the design correct
+\item Check the hardware it generates (FPGA reports)
+\item Make the results reproducible (README instructions)
+\begin{itemize}
+\item Can someone else understand your project?
+\item Can someone else simulate your project?
+\end{itemize}
+\item What is the biggest remaining uncertainty in your project?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Four Questions About Your Design}
+\begin{itemize}
+\item Behavior: Does it do what the specification says?
+\item Structure: Did we generate the intended hardware?
+\item Cost: Does it meet our resource and timing targets?
+\item Evidence: Can someone else reproduce our results?
+\item Passing simulation is not the final answer
+\end{itemize}
+\end{frame}
+
+
 \begin{frame}[fragile]{The New New Product Development Game}
 \begin{itemize}
 \item by Hirotaka Takeuchi and Ikujiro Nonaka
-\item Paper that started the Scrum movement (mid 80s)
+\item Paper that started the Scrum movement (mid-80s)
 \begin{itemize}
 \item Move like a rugby team together to reach the aim
 \item Instead of a relay race, where runners wait for arrival
@@ -62,7 +91,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Fuji-Xerox, Canon, Honda, NEC, Epson, Brother, 3M, Xerox, and Hewlett-Packard
 \end{itemize}
-\item Available at \href{https://hbr.org/1986/01/the-new-new-product-development-game}{Harward Business Review}
+\item Available at \href{https://hbr.org/1986/01/the-new-new-product-development-game}{Harvard Business Review}
 \item Easy reading; give it a try
 \end{itemize}
 \end{frame}
@@ -182,7 +211,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Access the History}
 \begin{itemize}
-\item \code{past()} allows us to make assamptions over time
+\item \code{past()} allows us to make assertions about previous cycles
 \item If \code{in} was 10 last cycle, then \code{out} must be 11 now
 \shortlist{../code/formal_past.txt}
 \item A signal must stay stable, be the same as in the last cycle
@@ -210,7 +239,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{More Functions}
 \begin{itemize}
-\item Synthactic sugar for \code{past}
+\item Syntactic sugar for \code{past}
 \item changed
 \item fell
 \item rose
@@ -250,28 +279,6 @@ Embedded Systems Engineering}
 %\end{itemize}
 %\end{frame}
 
-\begin{frame}[fragile]{The Final Sprints}
-\begin{itemize}
-\item Make the design correct
-\item Check the hardware it generates (FPGA reports)
-\item Make the results reproducible (README instructions)
-\begin{itemize}
-\item Can someone else understand your project?
-\item Can someone else simulate your project?
-\end{itemize}
-\item What is the biggest remaining uncertainty in your project?
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Four Questions About Your Design}
-\begin{itemize}
-\item Behavior: Does it do what the specification says?
-\item Structure: Did we generate the intended hardware?
-\item Cost: Does it meet our resource and timing targets?
-\item Evidence: Can someone else reproduce our results?
-\item Passing simulation is not the final answer
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}[fragile]{Where Are Your Data Stored?}
@@ -326,7 +333,7 @@ Embedded Systems Engineering}
 \item Two latches: \href{https://en.wikipedia.org/wiki/Flip-flop_(electronics)#Master%E2%80%93slave_edge-triggered_D_flip-flop}{master and slave}
 \item One (enable) latch can be built with 4 NAND gates
 \item A NAND gate needs 4 transistors; an inverter needs 2 transistors
-\item A flip-flop needs 36 transistors (for a single bit)
+\item A flip-flop may need 36 transistors (for a single bit)
 \item Can we do better?
 \end{itemize}
 \end{frame}
@@ -335,7 +342,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item A single bit can be stored in \href{https://en.wikipedia.org/wiki/Static_random-access_memory#/media/File:SRAM_Cell_(6_Transistors).svg}{6 transistors}
 \begin{itemize}
-\item Corsscoupled invertes plus access transistors
+\item Cross-coupled inverters plus access transistors
 \end{itemize}
 \item That is how larger memories are built
 \item FPGAs have this type of on-chip memories
@@ -386,10 +393,10 @@ Embedded Systems Engineering}
 \item No clock, just the correct timing
 \item Apply the address, and after some time the data is valid
 \item But one can add input registers, which makes it a synchronous SRAM
-\item Current FPGAs have synchronous memories as block RAMs
-%\begin{itemize}
-%\item AMD still has something called LUT RAM (async)
-%\end{itemize}
+\item FPGAs have synchronous memories as block RAMs
+\begin{itemize}
+\item AMD still has something called LUT RAM (async)
+\end{itemize}
 \item This means the result of a read is available one clock cycle after the address is given
 \begin{itemize}
 \item This is different from the use of flip-flops (\code{Reg(Vec(..))})
@@ -465,9 +472,12 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Is cheaper than FPGA on-chip memory
 \end{itemize}
-\item Sadly, the Basys 3 board has no external SRAM
 \item The simplest memory is an asynchronous SRAM
-\item You can add an external memory via SPI on the connectors
+\item Sadly, the Basys 3 board has no external SRAM
+\item You can add an external memory via SPI on the PMOD
+\begin{itemize}
+\item For example: the Tiny Tapeout \href{https://store.tinytapeout.com/products/QSPI-Pmod-p716541602}{QSPI Pmod}
+\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -475,7 +485,7 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item What memory are you using?
 \item How many FFs?
-\item How much block RAM
+\item How many block RAMs?
 \item Any LUTs used as memory?
 \end{itemize}
 \end{frame}
@@ -535,7 +545,7 @@ Embedded Systems Engineering}
 \item Generator parameters
 \item How to test? (e.g., plain \code{sbt test})
 \item How to generate Verilog and run on an FPGA?
-\item How to produce reauls/measurements
+\item How to produce results/measurements
 \end{itemize}
 \end{frame}
 
