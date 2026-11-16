@@ -13,7 +13,7 @@
     every node/.style={rounded corners=2pt}
 }
 
-\title{Agile Hardware Design: Does It Work, and What Did We Build?}
+\title{Agile Hardware Design: Mixed Topics}
 \author{Martin Schoeberl}
 \date{\today}
 \institute{Technical University of Denmark\\
@@ -63,7 +63,7 @@ Embedded Systems Engineering}
 \item Fuji-Xerox, Canon, Honda, NEC, Epson, Brother, 3M, Xerox, and Hewlett-Packard
 \end{itemize}
 \item Available at \href{https://hbr.org/1986/01/the-new-new-product-development-game}{Harward Business Review}
-\item Easy reading, give it a try
+\item Easy reading; give it a try
 \end{itemize}
 \end{frame}
 
@@ -230,7 +230,7 @@ Embedded Systems Engineering}
 
 \begin{frame}[fragile]{Other Options}
 \begin{itemize}
-\item Synopsys and Cadence have for sure formal verifiers
+\item Synopsys and Cadence have formal verifiers for sure
 \item \href{https://github.com/YosysHQ/sby}{Sby} is a free, open-source verification tool
 \item Part of YosysHQ
 \item See Matt Venn \href{https://www.youtube.com/watch?v=B1KX2rFJqVE}{explaining it}
@@ -263,46 +263,18 @@ Embedded Systems Engineering}
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
+\begin{frame}[fragile]{Four Questions About Your Design}
 \begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item xxx
-\item xxx
+\item Behavior: Does it do what the specification says?
+\item Structure: Did we generate the intended hardware?
+\item Cost: Does it meet our resource and timing targets?
+\item Evidence: Can someone else reproduce our results?
+\item Passing simulation is not the final answer
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
 
-\begin{frame}[fragile]{XXX}
-\begin{itemize}
-\item xxx
-\item xxx
-\item xxx
-\begin{itemize}
-\item xxx
-\end{itemize}
-\item xxx
-\item xxx
-\end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Memory}
+\begin{frame}[fragile]{Where Are Your Data Stored?}
 \begin{itemize}
 \item Sometimes we need to store values/state
 \item State machine, register file, instruction and data memories,...
@@ -401,7 +373,7 @@ Embedded Systems Engineering}
 \item May share pins for the data input and output (tri-state)
 \item May have read and write addresses
 \begin{itemize}
-\item A so-called dual ported memory
+\item A so-called dual-ported memory
 \item Can do a read and a write in the same clock cycle
 \end{itemize}
 \end{itemize}
@@ -412,9 +384,12 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item SRAM by itself is asynchronous
 \item No clock, just the correct timing
-\item Apply the address and after some time the data is valid
+\item Apply the address, and after some time the data is valid
 \item But one can add input registers, which makes it a synchronous SRAM
-\item Current FPGAs have synchronous memories only
+\item Current FPGAs have synchronous memories as block RAMs
+%\begin{itemize}
+%\item AMD still has something called LUT RAM (async)
+%\end{itemize}
 \item This means the result of a read is available one clock cycle after the address is given
 \begin{itemize}
 \item This is different from the use of flip-flops (\code{Reg(Vec(..))})
@@ -448,6 +423,7 @@ Embedded Systems Engineering}
 \item We add hardware to \emph{forward} the written value
 \end{itemize}
 \end{frame}
+
 
 \begin{frame}[fragile]{Condition for Forwarding}
 \begin{itemize}
@@ -489,12 +465,53 @@ Embedded Systems Engineering}
 \begin{itemize}
 \item Is cheaper than FPGA on-chip memory
 \end{itemize}
-\item Sadly, the Basys 3 board has no external memory
+\item Sadly, the Basys 3 board has no external SRAM
 \item The simplest memory is an asynchronous SRAM
 \item You can add an external memory via SPI on the connectors
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Memory in Your Project}
+\begin{itemize}
+\item What memory are you using?
+\item How many FFs?
+\item How much block RAM
+\item Any LUTs used as memory?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Generator Configurations}
+\begin{itemize}
+\item Test your configurations:
+\begin{itemize}
+\item The smallest supported configuration
+\item A typical configuration
+\item A non-power-of-two size, if supported
+\item Optional features enabled and disabled
+\item Illegal configurations, which should be rejected clearly
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Would Your Tests Catch a Bug?}
+\begin{itemize}
+\item Deliberately break your design
+\item Is this caught by your tests?
+\item If they still pass, what test is missing?
+\item Write properties (asserts) and test the asserts
+\item Maybe try Chisel formal
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Measure your Hardware}
+\begin{itemize}
+\item Under different configurations
+\item Resource usage
+\item Frequency target and achieved result
+\item Latency and throughput
+\item Measurement conditions (FPGA type)
+\end{itemize}
+\end{frame}
 
 \begin{frame}[fragile]{Documentation}
 \begin{itemize}
@@ -508,6 +525,17 @@ Embedded Systems Engineering}
 \item Forces you to rethink your project
 \end{itemize}
 \item Start early with the documentation (latest today!)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Can Another Group Run Your Project?}
+\begin{itemize}
+\item Is it documented what it does?
+\item Architecture and interfaces
+\item Generator parameters
+\item How to test? (e.g., plain \code{sbt test})
+\item How to generate Verilog and run on an FPGA?
+\item How to produce reauls/measurements
 \end{itemize}
 \end{frame}
 
@@ -533,9 +561,9 @@ Embedded Systems Engineering}
 \item We had the theory on formal last week
 \item Today, simple examples with Chisel 6 and Z3
 \item Formal verification is the next step in testing
-\item It is another tool in your toolbox
-\item Easy to include in your continuous integration on GitHub
 \item There is a lab for Formal in Chisel 6 \href{https://github.com/schoeberl/agile-hw/tree/main/lab8}{lab} exercises for you
+\item Decide on the right memory for your design 
+\item Work on your README.md so others can use your design
 \end{itemize}
 \end{frame}
 
